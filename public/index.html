@@ -32,13 +32,13 @@
 
   /* ── 刊头 ─────────────────────────────── */
   .masthead {
-    display: flex; align-items: baseline; justify-content: space-between; gap: 12px;
-    padding: 14px 20px 12px; border-bottom: 1px solid var(--hair);
+    display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between;
+    gap: 4px 12px; padding: 14px 20px 12px; border-bottom: 1px solid var(--hair);
   }
   .wordmark { font-family: var(--serif); font-size: 21px; letter-spacing: .02em; }
   .wordmark i { color: var(--amber); font-style: normal; }
   .wordmark small { font-size: 12px; color: var(--paper-dim); margin-left: 10px; letter-spacing: .12em; }
-  .masthead .meta { font-size: 11px; color: var(--paper-dim); text-align: right; white-space: nowrap; }
+  .masthead .meta { font-size: 11px; color: var(--paper-dim); text-align: right; min-width: 0; }
   .dot { display: inline-block; width: 7px; height: 7px; border-radius: 50%;
          background: var(--paper-dim); margin-right: 5px; vertical-align: 1px; }
   .dot.live { background: var(--buy); animation: pulse 1.6s ease-in-out infinite; }
@@ -472,7 +472,7 @@ async function loadData() {
     const latest = await fetchData("/api/latest", "./data/latest.json");
     S.latest = latest;
     $("masthead-meta").textContent =
-      `${latest.trade_date || "—"} · ${latest.provider || "?"} · ${(latest.generated_at || "").slice(0, 16)}`;
+      `${latest.trade_date || "—"} · ${latest.provider || "?"} · ${(latest.generated_at || "").slice(5, 16)}`;
     if (latest.status === "unconfigured") {
       $("article").innerHTML = `<div class="placeholder">${esc(latest.hint || "等待配置")}</div>`;
     } else {

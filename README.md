@@ -27,9 +27,10 @@
 
 # TradingAgents: Multi-Agents LLM Financial Trading Framework
 
-> **本 fork 增加了自动化部署**：GitHub Actions 每个美股交易日收盘后自动跑多智能体分析，
-> 结果发布到 [GitHub Pages 决策看板](https://gaaiyun.github.io/TradingAgents/) 并推送微信。
-> 配置与原理见 [DEPLOY_CN.md](DEPLOY_CN.md)。上游代码零改动。
+> **本 fork 增加了产品化部署**：[研究终端网页](https://tradingagents-board.pages.dev/)
+> （Cloudflare Pages + Functions 后端）支持页面/Issue 随时点名分析 A股与美股、按 agent
+> 角色分卷阅读报告、基于报告的 LLM 问答；GitHub Actions 每个美股交易日收盘后自动跑批并
+> 微信推送。配置与架构见 [DEPLOY_CN.md](DEPLOY_CN.md)。上游代码零改动。
 
 ## News
 - [2026-07] **TradingAgents v0.3.1** released with correctness and stability fixes: Alpha Vantage look-ahead filtering, graph-router crash-safety, graph-shape-aware checkpoint resume, working crypto sentiment sources, a configurable LLM retry budget, Bedrock API-key auth, and Claude Sonnet 5 / Fable 5 support. See [CHANGELOG.md](CHANGELOG.md) for the full list.
