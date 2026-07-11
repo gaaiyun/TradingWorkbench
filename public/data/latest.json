@@ -1,8 +1,27 @@
 {
-  "status": "unconfigured",
-  "generated_at": "2026-07-11T19:05:26+08:00",
+  "status": "ok",
+  "generated_at": "2026-07-11T19:14:59+08:00",
   "trade_date": "2026-07-10",
-  "provider": "openai",
-  "hint": "未检测到 openai 的 API key。请在仓库 Settings → Secrets 配置对应密钥（如 DEEPSEEK_API_KEY / OPENAI_COMPATIBLE_API_KEY），并可用仓库变量 TRADINGAGENTS_LLM_PROVIDER / TRADINGAGENTS_LLM_BACKEND_URL 切换后端。",
-  "results": []
+  "provider": "openai_compatible",
+  "analysts": [
+    "market",
+    "news",
+    "fundamentals"
+  ],
+  "rating_tiers": [
+    "Sell",
+    "Underweight",
+    "Hold",
+    "Overweight",
+    "Buy"
+  ],
+  "results": [
+    {
+      "ticker": "NVDA",
+      "rating": "Underweight",
+      "report": "reports/NVDA/2026-07-10/complete_report.md",
+      "decision_excerpt": "**Rating**: Underweight\n\n**Executive Summary**: 基于多空辩论的综合评估，对NVDA采取Underweight评级，建议减持30-40%仓位，保留60-70%核心底仓。当前$5.11万亿市值隐含约84%营收增长预期，估值容错率趋近于零；74.9%毛利率在半导体史上无先例，存货增速+127%远超营收增速+85%，均值回归风险被市场低估。技术面50日均线突破仅一日且幅度不足1%，MACD仍在零轴下方（-1.70），上行空间1.5%对下行9.3%的盈亏比（1:6.2）不支持在当前价位维持全额敞口。建议将剩余底仓保护性止损设在$196.62（2倍ATR下方），关注台积电Q2财报作为关键催化剂。\n\n**Investment Thesis**: **核心判断：风险收益比极度不利，但长期AI基础设施逻辑未被证伪，适度减仓而非清仓**\n\n**一、估值容错率为零",
+      "error": null
+    }
+  ]
 }
