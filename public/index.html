@@ -1,306 +1,493 @@
 <!doctype html>
 <html lang="zh-CN">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-  <meta name="theme-color" content="#0b0f12">
-  <meta name="apple-mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-  <title>TradingAgents 决策看板</title>
-  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>📈</text></svg>">
-  <style>
-    :root {
-      color-scheme: dark;
-      --bg: #0b0f12; --panel: #141a1f; --panel-2: #18232a; --line: #28343d;
-      --text: #e4e8ec; --muted: #8b98a5; --cyan: #4fc3f7; --amber: #f2b84b;
-      --green: #45d18a; --red: #ff626f; --lime: #9ccc65; --orange: #ff8a65;
-    }
-    * { box-sizing: border-box; }
-    html { -webkit-text-size-adjust: 100%; }
-    body { margin: 0; background: var(--bg); color: var(--text);
-      font-family: Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif; }
-    main { max-width: 1080px; margin: 0 auto; padding: 22px 16px calc(40px + env(safe-area-inset-bottom)); }
-    header { display: flex; flex-wrap: wrap; gap: 10px 16px; align-items: baseline;
-      justify-content: space-between; border-bottom: 1px solid var(--line);
-      padding-bottom: 14px; margin-bottom: 16px; }
-    h1 { margin: 0; font-size: clamp(20px, 4.5vw, 27px); font-weight: 720; }
-    .sub { color: var(--muted); margin: 4px 0 0; font-size: 13px; }
-    .pill { border: 1px solid var(--line); background: #10161a; border-radius: 999px;
-      padding: 5px 10px; font-size: 12px; color: var(--muted); white-space: nowrap; }
-    .section-label { font-size: 13px; font-weight: 650; color: var(--muted);
-      text-transform: uppercase; letter-spacing: .04em; margin: 20px 0 10px; }
-    .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(220px, 100%), 1fr)); gap: 12px; }
-    .card { background: linear-gradient(180deg, var(--panel-2), var(--panel));
-      border: 1px solid var(--line); border-left: 3px solid var(--line);
-      border-radius: 8px; padding: 15px; }
-    .tk { font-size: 13px; color: var(--muted); margin-bottom: 6px; display: flex;
-      justify-content: space-between; gap: 8px; }
-    .tk .nm { font-weight: 650; color: var(--text); letter-spacing: .02em; }
-    .rating { font-size: 24px; font-weight: 720; }
-    .excerpt { color: var(--muted); font-size: 12px; margin-top: 8px; line-height: 1.55;
-      max-height: 74px; overflow: hidden; }
-    .card .btn { display: inline-block; margin-top: 10px; color: var(--cyan);
-      font-size: 13px; text-decoration: none; cursor: pointer; padding: 6px 0;
-      -webkit-tap-highlight-color: transparent; }
-    .card .btn:active { opacity: .6; }
-    .banner { background: linear-gradient(180deg, var(--panel-2), var(--panel));
-      border: 1px solid var(--line); border-radius: 8px; padding: 16px;
-      color: var(--amber); font-size: 14px; line-height: 1.7; }
-    /* 历史记录 */
-    .hist { display: flex; flex-direction: column; gap: 8px; }
-    .hist-row { display: flex; flex-wrap: wrap; gap: 6px 10px; align-items: center;
-      background: var(--panel); border: 1px solid var(--line); border-radius: 8px;
-      padding: 10px 12px; cursor: pointer; -webkit-tap-highlight-color: transparent; }
-    .hist-row:hover, .hist-row.active { border-color: var(--cyan); }
-    .hist-date { font-size: 13px; font-weight: 650; min-width: 84px; }
-    .tag { font-size: 12px; padding: 2px 8px; border-radius: 4px; background: #10161a;
-      border: 1px solid var(--line); }
-    /* 报告全屏阅读器 */
-    #viewer { display: none; position: fixed; inset: 0; z-index: 50;
-      background: rgba(6,9,11,.72); backdrop-filter: blur(3px); }
-    #viewer .panel { position: absolute; inset: max(10px, env(safe-area-inset-top)) 10px 10px;
-      max-width: 860px; margin: 0 auto; background: var(--panel);
-      border: 1px solid var(--line); border-radius: 10px; display: flex;
-      flex-direction: column; overflow: hidden; }
-    #viewer .bar { display: flex; justify-content: space-between; align-items: center;
-      padding: 12px 16px; border-bottom: 1px solid var(--line); }
-    #viewer .bar h2 { margin: 0; font-size: 15px; color: var(--cyan); }
-    #viewer .close { cursor: pointer; color: var(--muted); font-size: 15px;
-      padding: 6px 10px; border: 1px solid var(--line); border-radius: 6px; }
-    #viewer .body { overflow-y: auto; -webkit-overflow-scrolling: touch; padding: 16px 18px; }
-    /* markdown 渲染样式 */
-    .md { font-size: 14px; line-height: 1.75; word-break: break-word; }
-    .md h1 { font-size: 19px; border-bottom: 1px solid var(--line); padding-bottom: 8px; }
-    .md h2 { font-size: 17px; color: var(--cyan); margin-top: 22px; }
-    .md h3 { font-size: 15px; color: var(--amber); margin-top: 18px; }
-    .md h4 { font-size: 14px; }
-    .md code { background: #10161a; border: 1px solid var(--line); border-radius: 4px;
-      padding: 1px 5px; font-size: 12.5px; font-family: ui-monospace, Consolas, monospace; }
-    .md pre { background: #10161a; border: 1px solid var(--line); border-radius: 6px;
-      padding: 12px; overflow-x: auto; }
-    .md pre code { border: 0; padding: 0; }
-    .md table { border-collapse: collapse; width: 100%; margin: 10px 0; display: block;
-      overflow-x: auto; font-size: 13px; }
-    .md th, .md td { border: 1px solid var(--line); padding: 6px 9px; text-align: left; }
-    .md th { background: #10161a; color: var(--muted); }
-    .md blockquote { border-left: 3px solid var(--line); margin: 10px 0; padding: 2px 12px;
-      color: var(--muted); }
-    .md hr { border: 0; border-top: 1px solid var(--line); margin: 16px 0; }
-    /* 帮助 */
-    details { background: var(--panel); border: 1px solid var(--line); border-radius: 8px;
-      padding: 12px 16px; margin-top: 10px; }
-    summary { cursor: pointer; font-size: 14px; font-weight: 650; color: var(--cyan);
-      -webkit-tap-highlight-color: transparent; }
-    details .md { color: var(--muted); font-size: 13px; }
-    details code { background: #10161a; border: 1px solid var(--line); border-radius: 4px;
-      padding: 1px 5px; font-size: 12px; }
-    .foot { margin-top: 22px; color: var(--muted); font-size: 12px; text-align: right;
-      border-top: 1px solid var(--line); padding-top: 10px; line-height: 1.7; }
-    a { color: var(--cyan); }
-  </style>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#131311">
+<title>TradingAgents 研究终端</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' fill='%23131311'/><text x='6' y='23' font-family='Georgia' font-size='18' fill='%23d9a441'>Ta</text></svg>">
+<style>
+  :root {
+    --ink: #131311;          /* 墨底 */
+    --ink-2: #1a1a17;        /* 面板 */
+    --ink-3: #21211c;        /* 悬停 */
+    --paper: #e7e2d3;        /* 旧纸白 */
+    --paper-dim: #8d887a;    /* 灰纸 */
+    --hair: #2e2d27;         /* 发丝线 */
+    --amber: #d9a441;        /* 强调 */
+    --buy: #7fb389;
+    --hold: #b8a355;
+    --sell: #c96a5f;
+    --serif: Georgia, "Times New Roman", "Songti SC", "STSong", "SimSun", serif;
+    --mono: ui-monospace, "SF Mono", "Cascadia Mono", Consolas, "Courier New", monospace;
+  }
+  * { box-sizing: border-box; }
+  html { -webkit-text-size-adjust: 100%; }
+  body {
+    margin: 0; background: var(--ink); color: var(--paper);
+    font-family: var(--mono); font-size: 13px; line-height: 1.6;
+    font-variant-numeric: tabular-nums;
+  }
+  ::selection { background: var(--amber); color: var(--ink); }
+
+  /* ── 刊头 ─────────────────────────────── */
+  .masthead {
+    display: flex; align-items: baseline; justify-content: space-between; gap: 12px;
+    padding: 14px 20px 12px; border-bottom: 1px solid var(--hair);
+  }
+  .wordmark { font-family: var(--serif); font-size: 21px; letter-spacing: .02em; }
+  .wordmark i { color: var(--amber); font-style: normal; }
+  .wordmark small { font-size: 12px; color: var(--paper-dim); margin-left: 10px; letter-spacing: .12em; }
+  .masthead .meta { font-size: 11px; color: var(--paper-dim); text-align: right; white-space: nowrap; }
+  .dot { display: inline-block; width: 7px; height: 7px; border-radius: 50%;
+         background: var(--paper-dim); margin-right: 5px; vertical-align: 1px; }
+  .dot.live { background: var(--buy); animation: pulse 1.6s ease-in-out infinite; }
+  @keyframes pulse { 50% { opacity: .35; } }
+
+  /* ── 骨架 ─────────────────────────────── */
+  .frame { display: grid; grid-template-columns: 300px minmax(0, 1fr); min-height: calc(100vh - 54px); }
+  .rail { border-right: 1px solid var(--hair); }
+  .rail section { padding: 14px 16px 16px; border-bottom: 1px solid var(--hair); }
+  .rail h2, .main h2 {
+    margin: 0 0 10px; font-size: 11px; font-weight: 400; color: var(--paper-dim);
+    text-transform: uppercase; letter-spacing: .22em;
+  }
+  .main { padding: 18px 22px calc(120px + env(safe-area-inset-bottom)); min-width: 0; }
+
+  /* ── 表单 ─────────────────────────────── */
+  input, button, textarea {
+    font-family: var(--mono); font-size: 13px; color: var(--paper);
+    background: var(--ink-2); border: 1px solid var(--hair); border-radius: 0;
+    padding: 8px 10px; outline: none;
+  }
+  input:focus, textarea:focus { border-color: var(--amber); }
+  input::placeholder { color: #565349; }
+  .field { margin-bottom: 8px; }
+  .field label { display: block; font-size: 11px; color: var(--paper-dim); margin-bottom: 4px;
+                 letter-spacing: .08em; }
+  .field input { width: 100%; }
+  button.go {
+    width: 100%; cursor: pointer; border-color: var(--amber); color: var(--amber);
+    background: transparent; letter-spacing: .3em; padding: 9px 0 8px; transition: all .12s;
+  }
+  button.go:hover:not(:disabled) { background: var(--amber); color: var(--ink); }
+  button.go:disabled { opacity: .45; cursor: default; }
+  .hint { font-size: 11px; color: var(--paper-dim); margin-top: 8px; line-height: 1.7; }
+  .hint code { color: var(--paper); }
+  .notice { font-size: 12px; margin-top: 8px; min-height: 18px; }
+  .notice.err { color: var(--sell); }
+  .notice.ok { color: var(--buy); }
+
+  /* ── 运行 / 档案列表 ───────────────────── */
+  .runs, .arch { display: flex; flex-direction: column; }
+  .row {
+    display: flex; gap: 8px; align-items: baseline; padding: 7px 2px;
+    border-bottom: 1px dotted #24231e; cursor: pointer; text-decoration: none; color: var(--paper);
+  }
+  .row:last-child { border-bottom: 0; }
+  .row:hover { background: var(--ink-3); }
+  .row .when { color: var(--paper-dim); font-size: 11px; min-width: 74px; }
+  .row .what { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-size: 12px; }
+  .row.active .when { color: var(--amber); }
+  .r-buy { color: var(--buy); } .r-sell { color: var(--sell); } .r-hold { color: var(--hold); }
+  .r-ow { color: var(--buy); } .r-uw { color: var(--sell); } .r-err { color: var(--sell); }
+
+  /* ── 结果区 ────────────────────────────── */
+  .dateline { font-family: var(--serif); font-size: 24px; margin: 2px 0 2px; }
+  .dateline small { font-family: var(--mono); font-size: 11px; color: var(--paper-dim); margin-left: 12px; letter-spacing: .1em; }
+  .tickers { display: flex; flex-wrap: wrap; gap: 0; margin: 12px 0 0; border: 1px solid var(--hair); }
+  .tk {
+    padding: 9px 16px 8px; border-right: 1px solid var(--hair); cursor: pointer;
+    background: var(--ink-2); transition: background .12s; min-width: 118px;
+  }
+  .tk:hover { background: var(--ink-3); }
+  .tk.on { background: var(--ink); box-shadow: inset 0 -2px 0 var(--amber); }
+  .tk .sym { font-size: 13px; letter-spacing: .04em; }
+  .tk .rat { font-size: 15px; margin-top: 1px; }
+  .tk .rat.small { font-size: 11px; color: var(--sell); }
+
+  .tabs { display: flex; flex-wrap: wrap; gap: 14px; margin: 16px 0 0; border-bottom: 1px solid var(--hair); }
+  .tab { padding: 4px 1px 7px; font-size: 12px; color: var(--paper-dim); cursor: pointer;
+         border-bottom: 2px solid transparent; margin-bottom: -1px; letter-spacing: .06em; }
+  .tab:hover { color: var(--paper); }
+  .tab.on { color: var(--amber); border-bottom-color: var(--amber); }
+
+  /* ── 阅读器（衬线正文）─────────────────── */
+  .article { max-width: 760px; padding: 20px 0 8px; font-family: var(--serif);
+             font-size: 15.5px; line-height: 1.95; }
+  .article .placeholder { color: var(--paper-dim); font-family: var(--mono); font-size: 12px; }
+  .article h1 { font-size: 22px; font-weight: 600; margin: 4px 0 14px; }
+  .article h2 { font-size: 18px; font-weight: 600; margin: 26px 0 10px;
+                padding-bottom: 6px; border-bottom: 1px solid var(--hair); }
+  .article h3 { font-size: 16px; font-weight: 600; margin: 20px 0 8px; color: var(--amber); }
+  .article h4 { font-size: 15px; margin: 14px 0 6px; }
+  .article p { margin: 9px 0; }
+  .article b { color: #f2edda; }
+  .article ul, .article ol { padding-left: 22px; margin: 8px 0; }
+  .article li { margin: 3px 0; }
+  .article blockquote { border-left: 2px solid var(--amber); margin: 12px 0; padding: 2px 14px;
+                        color: var(--paper-dim); }
+  .article hr { border: 0; border-top: 1px solid var(--hair); margin: 18px 0; }
+  .article code { font-family: var(--mono); font-size: 12.5px; background: var(--ink-2);
+                  border: 1px solid var(--hair); padding: 1px 5px; }
+  .article pre { font-family: var(--mono); font-size: 12.5px; background: var(--ink-2);
+                 border: 1px solid var(--hair); padding: 12px; overflow-x: auto; line-height: 1.6; }
+  .article pre code { border: 0; padding: 0; background: none; }
+  .article table { border-collapse: collapse; margin: 12px 0; font-family: var(--mono);
+                   font-size: 12.5px; display: block; overflow-x: auto; max-width: 100%; }
+  .article th, .article td { border: 1px solid var(--hair); padding: 6px 10px; text-align: left; }
+  .article th { color: var(--paper-dim); font-weight: 400; background: var(--ink-2);
+                letter-spacing: .05em; }
+  .article a { color: var(--amber); }
+
+  /* ── 问答 dock ─────────────────────────── */
+  .dock {
+    position: fixed; left: 300px; right: 0; bottom: 0; z-index: 30;
+    border-top: 1px solid var(--hair); background: var(--ink);
+    padding-bottom: env(safe-area-inset-bottom);
+  }
+  .dock .log { display: none; max-height: 42vh; overflow-y: auto; padding: 12px 20px 4px; }
+  .dock.open .log { display: block; }
+  .msg { margin: 0 0 12px; max-width: 780px; }
+  .msg .who { font-size: 10px; color: var(--paper-dim); letter-spacing: .2em; margin-bottom: 3px; }
+  .msg.user .body { color: var(--amber); }
+  .msg .body { font-size: 13px; line-height: 1.75; white-space: pre-wrap; word-break: break-word; }
+  .dock form { display: flex; gap: 0; padding: 10px 20px; }
+  .dock .prompt { color: var(--amber); padding: 8px 10px 8px 0; user-select: none; }
+  .dock input { flex: 1; background: transparent; border: 0; border-bottom: 1px solid var(--hair);
+                padding: 8px 2px; }
+  .dock input:focus { border-bottom-color: var(--amber); }
+  .dock button { margin-left: 12px; cursor: pointer; border-color: var(--hair); color: var(--paper-dim);
+                 background: transparent; padding: 8px 14px; transition: all .12s; }
+  .dock button:hover:not(:disabled) { border-color: var(--amber); color: var(--amber); }
+  .dock button:disabled { opacity: .4; cursor: default; }
+  .dock .ctx { font-size: 10px; color: var(--paper-dim); padding: 0 20px 8px; letter-spacing: .05em; }
+
+  .foot { font-size: 11px; color: #565349; padding: 26px 0 8px; line-height: 1.8; }
+  .foot a { color: var(--paper-dim); }
+
+  /* ── 移动端 ────────────────────────────── */
+  @media (max-width: 920px) {
+    .frame { grid-template-columns: 1fr; }
+    .rail { border-right: 0; border-bottom: 1px solid var(--hair); }
+    .rail section.collapsible > h2 { cursor: pointer; margin: 0; padding: 2px 0; }
+    .main { padding: 16px 16px calc(130px + env(safe-area-inset-bottom)); }
+    .dock { left: 0; }
+    .dateline { font-size: 20px; }
+    .article { font-size: 15px; }
+    .tk { min-width: 0; flex: 1 1 auto; }
+  }
+</style>
 </head>
 <body>
-  <main>
-    <header>
-      <div>
-        <h1>📈 TradingAgents 决策看板</h1>
-        <p class="sub">多智能体 LLM：分析师团队 → 多空辩论 → 交易员 → 风控 → 基金经理 · A股/美股</p>
+
+<div class="masthead">
+  <div class="wordmark">Trading<i>Agents</i><small>多智能体研究终端</small></div>
+  <div class="meta"><span id="live-dot" class="dot"></span><span id="masthead-meta">载入中</span></div>
+</div>
+
+<div class="frame">
+  <aside class="rail">
+    <section>
+      <h2>发起分析</h2>
+      <div class="field">
+        <label>标的 · 美股代码或A股六位数字，逗号分隔</label>
+        <input id="f-tickers" placeholder="NVDA, 600519, 510050" autocomplete="off">
       </div>
-      <span id="meta" class="pill">loading…</span>
-    </header>
-
-    <div id="banner-slot"></div>
-
-    <div class="section-label" id="latest-label">最新决策</div>
-    <div id="content"><div class="banner">正在读取最新决策快照…</div></div>
-
-    <div class="section-label">历史记录</div>
-    <div id="history" class="hist"><div class="banner" style="color:var(--muted)">暂无历史。</div></div>
-
-    <div class="section-label">使用说明</div>
-    <details>
-      <summary>📱 手机/电脑随时点名分析（A股 + 美股）</summary>
-      <div class="md">
-        <p><b>方法一 · 开 Issue（推荐，手机最方便）</b>：到
-        <a href="https://github.com/gaaiyun/TradingAgents/issues/new?template=analysis.yml" target="_blank">仓库 New Issue</a>，
-        标题保持「分析: 」开头，正文填标的（逗号分隔），提交即触发。
-        约 5–20 分钟后：微信收到评级推送、Issue 下自动回复结果、本页更新。</p>
-        <p><b>方法二 · Actions 手动触发</b>：仓库 → Actions → daily-analysis → Run workflow，填 tickers。</p>
-        <p><b>标的写法</b>：美股直接写代码（<code>NVDA</code>、<code>SPY</code>）；A股写 6 位数字自动补后缀
-        （<code>600519</code>→贵州茅台、<code>510050</code>→上证50ETF、<code>300750</code>→宁德时代），
-        也可显式写 <code>600519.SS</code> / <code>000001.SZ</code>。每次最多 5 个标的。</p>
-        <p><b>自动排程</b>：每个美股交易日收盘后（北京时间清晨 ~05:35）自动分析默认标的清单并推送微信；
-        默认清单用仓库变量 <code>TRADINGAGENTS_TICKERS</code> 修改。</p>
-        <p><b>免责声明</b>：LLM 研究框架输出，不构成投资建议。</p>
+      <div class="field">
+        <label>访问码</label>
+        <input id="f-code" type="password" placeholder="········" autocomplete="off">
       </div>
-    </details>
-
-    <section id="viewer" onclick="if(event.target===this)closeViewer()">
-      <div class="panel">
-        <div class="bar">
-          <h2 id="viewer-title"></h2>
-          <span class="close" onclick="closeViewer()">✕ 关闭</span>
-        </div>
-        <div class="body"><div id="viewer-body" class="md"></div></div>
-      </div>
+      <button class="go" id="f-go">执 行</button>
+      <div class="notice" id="f-notice"></div>
+      <div class="hint">提交后由 GitHub Actions 运行完整多智能体链路（分析师→辩论→交易员→风控→基金经理），
+约 5–20 分钟；完成后微信推送、本页自动更新。A股六位代码自动补市场后缀。</div>
     </section>
+    <section>
+      <h2>运行</h2>
+      <div class="runs" id="runs"><div class="hint">—</div></div>
+    </section>
+    <section>
+      <h2>档案</h2>
+      <div class="arch" id="arch"><div class="hint">—</div></div>
+    </section>
+  </aside>
 
+  <main class="main">
+    <div class="dateline"><span id="d-date">—</span><small id="d-meta"></small></div>
+    <div class="tickers" id="tickers"></div>
+    <div class="tabs" id="tabs"></div>
+    <article class="article" id="article">
+      <div class="placeholder">选择标的与报告分卷。</div>
+    </article>
     <div class="foot">
-      TradingAgents (Tauric Research, Apache-2.0) · fork:
-      <a href="https://github.com/gaaiyun/TradingAgents" target="_blank">gaaiyun/TradingAgents</a>
-      · 仅供研究，不构成投资建议
+      TradingAgents · Tauric Research（Apache-2.0）· fork
+      <a href="https://github.com/gaaiyun/TradingAgents" target="_blank" rel="noopener">gaaiyun/TradingAgents</a>
+      · 大模型研究输出，不构成投资建议
     </div>
   </main>
+</div>
 
-  <script>
-    const TIER_COLOR = { "Buy": "var(--green)", "Overweight": "var(--lime)", "Hold": "var(--amber)",
-                         "Underweight": "var(--orange)", "Sell": "var(--red)" };
-    const esc = s => String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+<div class="dock" id="dock">
+  <div class="ctx" id="dock-ctx"></div>
+  <div class="log" id="dock-log"></div>
+  <form id="dock-form">
+    <span class="prompt">?</span>
+    <input id="dock-q" placeholder="就当前报告提问，例如：这份报告最大的风险点是什么" autocomplete="off">
+    <button id="dock-go" type="submit">问</button>
+  </form>
+</div>
 
-    // ── 轻量 Markdown 渲染（标题/加粗/斜体/代码/围栏/表格/列表/引用/链接）──
-    function mdRender(src) {
-      src = src.replace(/\r\n/g, "\n");
-      const fences = [];
-      src = src.replace(/```([\s\S]*?)```/g, (_, c) => {
-        fences.push(`<pre><code>${esc(c.replace(/^\w*\n/, ""))}</code></pre>`);
-        return ` F${fences.length - 1} `;
-      });
-      src = esc(src);
-      const lines = src.split("\n");
-      const out = [];
-      let i = 0, listStack = null, para = [];
-      const flushPara = () => { if (para.length) { out.push(`<p>${inline(para.join(" "))}</p>`); para = []; } };
-      const flushList = () => { if (listStack) { out.push(listStack === "ol" ? "</ol>" : "</ul>"); listStack = null; } };
-      const inline = t => t
-        .replace(/!\[([^\]]*)\]\(([^)]+)\)/g, "")
-        .replace(/\[([^\]]+)\]\(([^)]+)\)/g, '<a href="$2" target="_blank">$1</a>')
-        .replace(/\*\*([^*]+)\*\*/g, "<b>$1</b>")
-        .replace(/(^|[^*])\*([^*\n]+)\*/g, "$1<i>$2</i>")
-        .replace(/`([^`]+)`/g, "<code>$1</code>");
-      while (i < lines.length) {
-        const L = lines[i];
-        const fence = L.match(/^ F(\d+) $/);
-        if (fence) { flushPara(); flushList(); out.push(fences[+fence[1]]); i++; continue; }
-        if (/^\s*$/.test(L)) { flushPara(); flushList(); i++; continue; }
-        const h = L.match(/^(#{1,4})\s+(.*)/);
-        if (h) { flushPara(); flushList(); out.push(`<h${h[1].length}>${inline(h[2])}</h${h[1].length}>`); i++; continue; }
-        if (/^\s*(---+|\*\*\*+)\s*$/.test(L)) { flushPara(); flushList(); out.push("<hr>"); i++; continue; }
-        if (/^\s*&gt;\s?/.test(L)) { flushPara(); flushList();
-          out.push(`<blockquote>${inline(L.replace(/^\s*&gt;\s?/, ""))}</blockquote>`); i++; continue; }
-        // 表格：| a | b | 后跟 |---|---|
-        if (/^\s*\|.*\|\s*$/.test(L) && i + 1 < lines.length && /^\s*\|[\s:|-]+\|\s*$/.test(lines[i + 1])) {
-          flushPara(); flushList();
-          const cells = r => r.trim().replace(/^\||\|$/g, "").split("|").map(c => inline(c.trim()));
-          let html = "<table><thead><tr>" + cells(L).map(c => `<th>${c}</th>`).join("") + "</tr></thead><tbody>";
-          i += 2;
-          while (i < lines.length && /^\s*\|.*\|\s*$/.test(lines[i])) {
-            html += "<tr>" + cells(lines[i]).map(c => `<td>${c}</td>`).join("") + "</tr>"; i++;
-          }
-          out.push(html + "</tbody></table>"); continue;
-        }
-        const li = L.match(/^\s*(?:[-*+]|(\d+)\.)\s+(.*)/);
-        if (li) {
-          flushPara();
-          const want = li[1] ? "ol" : "ul";
-          if (listStack !== want) { flushList(); out.push(want === "ol" ? "<ol>" : "<ul>"); listStack = want; }
-          out.push(`<li>${inline(li[2])}</li>`); i++; continue;
-        }
-        para.push(L.trim()); i++;
+<script>
+"use strict";
+/* ── 工具 ─────────────────────────────────── */
+const $ = (id) => document.getElementById(id);
+const esc = (s) => String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");
+const RATING_CLS = { "Buy":"r-buy","Overweight":"r-ow","Hold":"r-hold","Underweight":"r-uw","Sell":"r-sell" };
+const RATING_CN  = { "Buy":"买入","Overweight":"增持","Hold":"持有","Underweight":"减持","Sell":"卖出" };
+const FILE_LABEL = [
+  ["decision","投资决策"],["complete_report","完整报告"],["market","市场技术"],
+  ["news","新闻"],["fundamentals","基本面"],["sentiment","情绪"],
+  ["bull","多方"],["bear","空方"],["manager","研究经理"],["trader","交易员"],
+  ["aggressive","风控·激进"],["conservative","风控·保守"],["neutral","风控·中性"],
+];
+
+/* 数据获取：优先走 Functions 实时代理，失败回退静态文件 */
+async function fetchData(api, fallback) {
+  for (const url of [api, fallback]) {
+    try {
+      const r = await fetch(url + (url.includes("?") ? "&" : "?") + "ts=" + Date.now(), { cache: "no-store" });
+      if (r.ok) return await (url.endsWith(".md") || api.includes("/report") ? r.text() : r.json());
+    } catch (e) { /* 下一个 */ }
+  }
+  throw new Error("数据不可用");
+}
+
+/* ── Markdown 渲染 ────────────────────────── */
+function mdRender(src) {
+  src = String(src).replace(/\r\n/g, "\n");
+  const fences = [];
+  src = src.replace(/```([\s\S]*?)```/g, (_, c) =>
+    (fences.push(`<pre><code>${esc(c.replace(/^\w*\n/, ""))}</code></pre>`), `  F${fences.length-1}  `));
+  src = esc(src);
+  const inline = t => t
+    .replace(/!\[([^\]]*)\]\(([^)]+)\)/g, "")
+    .replace(/\[([^\]]+)\]\(([^)]+)\)/g, '<a href="$2" target="_blank" rel="noopener">$1</a>')
+    .replace(/\*\*([^*]+)\*\*/g, "<b>$1</b>")
+    .replace(/(^|[^*])\*([^*\n]+)\*/g, "$1<i>$2</i>")
+    .replace(/`([^`]+)`/g, "<code>$1</code>");
+  const lines = src.split("\n"), out = []; let i = 0, list = null, para = [];
+  const fp = () => { if (para.length) { out.push(`<p>${inline(para.join(" "))}</p>`); para = []; } };
+  const fl = () => { if (list) { out.push(`</${list}>`); list = null; } };
+  while (i < lines.length) {
+    const L = lines[i];
+    const f = L.match(/ F(\d+) /);
+    if (f) { fp(); fl(); out.push(fences[+f[1]]); i++; continue; }
+    if (/^\s*$/.test(L)) { fp(); fl(); i++; continue; }
+    const h = L.match(/^(#{1,4})\s+(.*)/);
+    if (h) { fp(); fl(); out.push(`<h${h[1].length}>${inline(h[2])}</h${h[1].length}>`); i++; continue; }
+    if (/^\s*(---+|\*\*\*+)\s*$/.test(L)) { fp(); fl(); out.push("<hr>"); i++; continue; }
+    if (/^\s*&gt;\s?/.test(L)) { fp(); fl();
+      out.push(`<blockquote>${inline(L.replace(/^\s*&gt;\s?/, ""))}</blockquote>`); i++; continue; }
+    if (/^\s*\|.*\|\s*$/.test(L) && i+1 < lines.length && /^\s*\|[\s:|-]+\|\s*$/.test(lines[i+1])) {
+      fp(); fl();
+      const cells = r => r.trim().replace(/^\||\|$/g, "").split("|").map(c => inline(c.trim()));
+      let html = "<table><thead><tr>" + cells(L).map(c=>`<th>${c}</th>`).join("") + "</tr></thead><tbody>";
+      i += 2;
+      while (i < lines.length && /^\s*\|.*\|\s*$/.test(lines[i])) {
+        html += "<tr>" + cells(lines[i]).map(c=>`<td>${c}</td>`).join("") + "</tr>"; i++;
       }
-      flushPara(); flushList();
-      return out.join("\n");
+      out.push(html + "</tbody></table>"); continue;
     }
+    const li = L.match(/^\s*(?:[-*+]|(\d+)\.)\s+(.*)/);
+    if (li) { fp(); const want = li[1] ? "ol" : "ul";
+      if (list !== want) { fl(); out.push(`<${want}>`); list = want; }
+      out.push(`<li>${inline(li[2])}</li>`); i++; continue; }
+    para.push(L.trim()); i++;
+  }
+  fp(); fl();
+  return out.join("\n");
+}
 
-    async function openReport(path, ticker) {
-      const v = document.getElementById("viewer");
-      document.getElementById("viewer-title").textContent = ticker + " · 完整多智能体报告";
-      document.getElementById("viewer-body").innerHTML = "<p>加载中…</p>";
-      v.style.display = "block";
-      document.body.style.overflow = "hidden";
-      try {
-        const res = await fetch(path, { cache: "no-store" });
-        if (!res.ok) throw new Error("HTTP " + res.status);
-        document.getElementById("viewer-body").innerHTML = mdRender(await res.text());
-      } catch (e) {
-        document.getElementById("viewer-body").innerHTML = `<p>报告加载失败: ${esc(e.message)}</p>`;
-      }
-    }
-    function closeViewer() {
-      document.getElementById("viewer").style.display = "none";
-      document.body.style.overflow = "";
-    }
+/* ── 状态 ─────────────────────────────────── */
+const S = { latest: null, history: [], entry: null, ticker: null, file: null, chat: [] };
+$("f-code").value = localStorage.getItem("ta_code") || "";
 
-    function renderCards(entry, label) {
-      const content = document.getElementById("content");
-      document.getElementById("latest-label").textContent = label || "最新决策";
-      if (!entry || !entry.results || !entry.results.length) {
-        content.innerHTML = `<div class="banner">暂无分析结果。</div>`;
-        return;
-      }
-      content.innerHTML = `<section class="grid">` + entry.results.map(r => {
-        const color = TIER_COLOR[r.rating] || "var(--muted)";
-        if (r.error && r.error !== false) {
-          const msg = typeof r.error === "string" ? r.error : "运行失败";
-          return `<div class="card" style="border-left-color:var(--red)">
-            <div class="tk"><span class="nm">${esc(r.ticker)}</span></div>
-            <div class="rating" style="color:var(--red);font-size:15px">运行失败</div>
-            <div class="excerpt">${esc(msg)}</div></div>`;
-        }
-        const excerpt = (r.decision_excerpt || "").replace(/[#*`>|]/g, " ");
-        const link = r.report
-          ? `<span class="btn" onclick="openReport('${esc(r.report)}','${esc(r.ticker)}')">查看完整报告 →</span>` : "";
-        return `<div class="card" style="border-left-color:${color}">
-          <div class="tk"><span class="nm">${esc(r.ticker)}</span><span>${esc(entry.trade_date || "")}</span></div>
-          <div class="rating" style="color:${color}">${esc(r.rating || "--")}</div>
-          <div class="excerpt">${esc(excerpt)}</div>${link}</div>`;
-      }).join("") + `</section>`;
-    }
+/* ── 结果渲染 ─────────────────────────────── */
+function showEntry(entry, label) {
+  S.entry = entry;
+  $("d-date").textContent = entry?.trade_date || "—";
+  $("d-meta").textContent = label || "";
+  const box = $("tickers");
+  const results = entry?.results || [];
+  box.innerHTML = results.map((r, idx) => {
+    const cls = r.error ? "r-err" : (RATING_CLS[r.rating] || "");
+    const rat = r.error ? `<div class="rat small">失败</div>`
+      : `<div class="rat ${cls}">${esc(r.rating || "—")}<span style="font-size:11px;color:var(--paper-dim)"> ${RATING_CN[r.rating] || ""}</span></div>`;
+    return `<div class="tk" data-i="${idx}"><div class="sym">${esc(r.ticker)}</div>${rat}</div>`;
+  }).join("") || `<div class="tk"><div class="sym" style="color:var(--paper-dim)">无结果</div></div>`;
+  box.querySelectorAll(".tk[data-i]").forEach(el =>
+    el.addEventListener("click", () => selectTicker(+el.dataset.i)));
+  const firstOk = results.findIndex(r => !r.error);
+  if (firstOk >= 0) selectTicker(firstOk);
+  else { $("tabs").innerHTML = ""; $("article").innerHTML = `<div class="placeholder">该运行没有成功的标的。</div>`; }
+}
 
-    function renderHistory(history) {
-      const box = document.getElementById("history");
-      if (!history || !history.length) return;
-      box.innerHTML = history.map((h, idx) => {
-        const tags = (h.results || []).map(r => {
-          const color = r.error ? "var(--red)" : (TIER_COLOR[r.rating] || "var(--muted)");
-          const txt = r.error ? `${r.ticker} ✕` : `${r.ticker} ${r.rating || ""}`;
-          return `<span class="tag" style="color:${color}">${esc(txt)}</span>`;
-        }).join("");
-        return `<div class="hist-row" data-idx="${idx}" onclick="selectHistory(${idx}, this)">
-          <span class="hist-date">${esc(h.trade_date || "--")}</span>${tags}</div>`;
-      }).join("");
-    }
+function selectTicker(idx) {
+  const r = (S.entry?.results || [])[idx];
+  if (!r) return;
+  S.ticker = r.ticker;
+  document.querySelectorAll(".tk").forEach(el => el.classList.toggle("on", el.dataset.i == idx));
+  const files = r.files || (r.report ? { complete_report: r.report } : {});
+  const tabs = FILE_LABEL.filter(([k]) => files[k]);
+  $("tabs").innerHTML = tabs.map(([k, lab]) =>
+    `<div class="tab" data-k="${k}" data-p="${esc(files[k])}">${lab}</div>`).join("");
+  $("tabs").querySelectorAll(".tab").forEach(el =>
+    el.addEventListener("click", () => openFile(el.dataset.p, el)));
+  const first = $("tabs").querySelector(".tab");
+  if (first) openFile(first.dataset.p, first);
+  else $("article").innerHTML = `<div class="placeholder">该标的没有报告文件（可能为旧数据）。</div>`;
+}
 
-    let HISTORY = [];
-    function selectHistory(idx, el) {
-      document.querySelectorAll(".hist-row").forEach(r => r.classList.remove("active"));
-      if (el) el.classList.add("active");
-      renderCards(HISTORY[idx], `历史 · ${HISTORY[idx].trade_date || ""}`);
-      document.getElementById("latest-label").scrollIntoView({ behavior: "smooth" });
-    }
+async function openFile(path, tabEl) {
+  document.querySelectorAll(".tab").forEach(el => el.classList.toggle("on", el === tabEl));
+  S.file = path;
+  $("dock-ctx").textContent = `对话上下文 → ${S.ticker || ""} · ${path.split("/").pop()}`;
+  $("article").innerHTML = `<div class="placeholder">读取 ${esc(path)} …</div>`;
+  try {
+    const md = await fetchData(`/api/report?path=${encodeURIComponent(path)}`, `./${path}`);
+    $("article").innerHTML = mdRender(md);
+  } catch (e) {
+    $("article").innerHTML = `<div class="placeholder">报告读取失败：${esc(e.message)}</div>`;
+  }
+}
 
-    async function load() {
-      const content = document.getElementById("content");
-      try {
-        const res = await fetch(`data/latest.json?ts=${Date.now()}`, { cache: "no-store" });
-        const data = await res.json();
-        document.getElementById("meta").textContent =
-          `${data.trade_date || "--"} · ${data.provider || "?"} · ${(data.generated_at || "").slice(0, 16)}`;
-        if (data.status === "unconfigured") {
-          document.getElementById("banner-slot").innerHTML =
-            `<div class="banner">⚙️ 流水线已就绪，等待 LLM API key。<br>${esc(data.hint || "")}</div>`;
-          content.innerHTML = "";
-        } else {
-          renderCards(data, "最新决策");
-        }
-      } catch (e) {
-        content.innerHTML = `<div class="banner">快照加载失败: ${esc(e.message)}</div>`;
-      }
-      try {
-        const res = await fetch(`data/history.json?ts=${Date.now()}`, { cache: "no-store" });
-        if (res.ok) { HISTORY = await res.json(); renderHistory(HISTORY); }
-      } catch (e) { /* 历史可选 */ }
+/* ── 档案 ─────────────────────────────────── */
+function renderArchive() {
+  const box = $("arch");
+  if (!S.history.length) { box.innerHTML = `<div class="hint">—</div>`; return; }
+  box.innerHTML = S.history.slice(0, 30).map((h, i) => {
+    const what = (h.results || []).map(r => {
+      const cls = r.error ? "r-err" : (RATING_CLS[r.rating] || "");
+      return `<span class="${cls}">${esc(r.ticker)}·${r.error ? "✕" : esc(r.rating || "?")}</span>`;
+    }).join("  ");
+    return `<div class="row" data-i="${i}"><span class="when">${esc(h.trade_date || "?")}</span><span class="what">${what}</span></div>`;
+  }).join("");
+  box.querySelectorAll(".row").forEach(el => el.addEventListener("click", () => {
+    box.querySelectorAll(".row").forEach(r => r.classList.remove("active"));
+    el.classList.add("active");
+    showEntry(S.history[+el.dataset.i], "档案");
+  }));
+}
+
+/* ── 运行状态 ─────────────────────────────── */
+let pollTimer = null, hadActive = false;
+async function refreshRuns() {
+  try {
+    const data = await fetchData("/api/runs", "/api/runs");
+    const runs = data.runs || [];
+    const active = runs.some(r => r.status !== "completed");
+    $("live-dot").className = "dot" + (active ? " live" : "");
+    $("runs").innerHTML = runs.slice(0, 6).map(r => {
+      const t = new Date(r.created_at);
+      const when = `${String(t.getMonth()+1).padStart(2,"0")}-${String(t.getDate()).padStart(2,"0")} ${String(t.getHours()).padStart(2,"0")}:${String(t.getMinutes()).padStart(2,"0")}`;
+      const mark = r.status !== "completed" ? `<span style="color:var(--amber)">运行中</span>`
+        : (r.conclusion === "success" ? `<span style="color:var(--buy)">✓</span>` : `<span style="color:var(--sell)">✕</span>`);
+      return `<a class="row" href="${esc(r.url)}" target="_blank" rel="noopener">
+        <span class="when">${when}</span><span class="what">${esc(r.title)}</span>${mark}</a>`;
+    }).join("") || `<div class="hint">—</div>`;
+    if (hadActive && !active) loadData();   // 有运行刚结束 → 刷新结果
+    hadActive = active;
+    clearTimeout(pollTimer);
+    pollTimer = setTimeout(refreshRuns, active ? 20000 : 90000);
+  } catch (e) {
+    $("runs").innerHTML = `<div class="hint">运行状态不可用（本地预览模式）</div>`;
+  }
+}
+
+/* ── 发起分析 ─────────────────────────────── */
+$("f-go").addEventListener("click", async () => {
+  const tickers = $("f-tickers").value.trim();
+  const code = $("f-code").value.trim();
+  const notice = $("f-notice");
+  if (!tickers) { notice.className = "notice err"; notice.textContent = "请填写标的代码"; return; }
+  if (!code)    { notice.className = "notice err"; notice.textContent = "请填写访问码"; return; }
+  localStorage.setItem("ta_code", code);
+  $("f-go").disabled = true; notice.className = "notice"; notice.textContent = "提交中…";
+  try {
+    const r = await fetch("/api/analyze", { method: "POST",
+      headers: { "content-type": "application/json" },
+      body: JSON.stringify({ tickers, code }) });
+    const data = await r.json();
+    if (!r.ok) throw new Error(data.error || `HTTP ${r.status}`);
+    notice.className = "notice ok"; notice.textContent = `已受理 ${data.tickers} · 约 5–20 分钟`;
+    $("f-tickers").value = "";
+    setTimeout(refreshRuns, 4000);
+  } catch (e) {
+    notice.className = "notice err"; notice.textContent = e.message;
+  } finally { $("f-go").disabled = false; }
+});
+
+/* ── 问答 ─────────────────────────────────── */
+function pushMsg(role, text) {
+  S.chat.push({ role, content: text });
+  const log = $("dock-log");
+  const who = role === "user" ? "问" : "TradingAgents";
+  log.insertAdjacentHTML("beforeend",
+    `<div class="msg ${role}"><div class="who">${who}</div><div class="body">${esc(text)}</div></div>`);
+  $("dock").classList.add("open");
+  log.scrollTop = log.scrollHeight;
+}
+$("dock-form").addEventListener("submit", async (ev) => {
+  ev.preventDefault();
+  const q = $("dock-q").value.trim();
+  const code = $("f-code").value.trim();
+  if (!q) return;
+  if (!code) { pushMsg("assistant", "请先在左栏填写访问码。"); return; }
+  localStorage.setItem("ta_code", code);
+  $("dock-q").value = ""; $("dock-go").disabled = true;
+  pushMsg("user", q);
+  const holder = document.createElement("div");
+  holder.className = "msg assistant";
+  holder.innerHTML = `<div class="who">TradingAgents</div><div class="body">…</div>`;
+  $("dock-log").appendChild(holder); $("dock-log").scrollTop = 1e9;
+  try {
+    const r = await fetch("/api/chat", { method: "POST",
+      headers: { "content-type": "application/json" },
+      body: JSON.stringify({ question: q, code, report: S.file || "", history: S.chat.slice(0, -1) }) });
+    const data = await r.json();
+    if (!r.ok) throw new Error(data.error || `HTTP ${r.status}`);
+    holder.querySelector(".body").textContent = data.answer || "（空回复）";
+    S.chat.push({ role: "assistant", content: data.answer || "" });
+  } catch (e) {
+    holder.querySelector(".body").textContent = "出错：" + e.message;
+  } finally {
+    $("dock-go").disabled = false; $("dock-log").scrollTop = 1e9;
+  }
+});
+
+/* ── 启动 ─────────────────────────────────── */
+async function loadData() {
+  try {
+    const latest = await fetchData("/api/latest", "./data/latest.json");
+    S.latest = latest;
+    $("masthead-meta").textContent =
+      `${latest.trade_date || "—"} · ${latest.provider || "?"} · ${(latest.generated_at || "").slice(0, 16)}`;
+    if (latest.status === "unconfigured") {
+      $("article").innerHTML = `<div class="placeholder">${esc(latest.hint || "等待配置")}</div>`;
+    } else {
+      showEntry(latest, "最新");
     }
-    load();
-  </script>
+  } catch (e) {
+    $("masthead-meta").textContent = "数据不可用";
+  }
+  try {
+    S.history = await fetchData("/api/history", "./data/history.json");
+    renderArchive();
+  } catch (e) { /* 可选 */ }
+}
+loadData();
+refreshRuns();
+</script>
 </body>
 </html>

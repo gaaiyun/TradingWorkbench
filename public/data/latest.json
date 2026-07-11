@@ -21,7 +21,21 @@
       "rating": "Hold",
       "report": "reports/510050.SS/2026-07-10/complete_report.md",
       "decision_excerpt": "**Rating**: Hold\n\n**Executive Summary**: 维持510050.SS（华夏上证50ETF）的Hold评级，现有仓位保持不变，未建仓者可小比例试探性建仓不超过计划仓位30%。核心逻辑：多空因素势均力敌，技术面动量衰竭与基本面政策托底形成拉锯。建议以7月16日Q2 GDP数据为关键催化剂触发器：若数据符合或超预期且价格放量突破3.12布林带上轨，则上调至Overweight；若数据不及预期且跌破3.00心理关口，则下调至Underweight。短期关键支撑位2.96-3.00元，关键阻力位3.12元。建议持有周期1-3个月，待方向性信号明确后调整。\n\n**Investment Thesis**: 综合三位风险分析师的辩论，510050.SS当前处于多空因素真正均衡的胶着状态，维持Hold评级是基于证据最审慎的选择，具体理由如下：\n\n**一、技术面：动量衰竭但",
-      "error": null
+      "error": null,
+      "files": {
+        "fundamentals": "reports/510050.SS/2026-07-10/1_analysts/fundamentals.md",
+        "market": "reports/510050.SS/2026-07-10/1_analysts/market.md",
+        "news": "reports/510050.SS/2026-07-10/1_analysts/news.md",
+        "bear": "reports/510050.SS/2026-07-10/2_research/bear.md",
+        "bull": "reports/510050.SS/2026-07-10/2_research/bull.md",
+        "manager": "reports/510050.SS/2026-07-10/2_research/manager.md",
+        "trader": "reports/510050.SS/2026-07-10/3_trading/trader.md",
+        "aggressive": "reports/510050.SS/2026-07-10/4_risk/aggressive.md",
+        "conservative": "reports/510050.SS/2026-07-10/4_risk/conservative.md",
+        "neutral": "reports/510050.SS/2026-07-10/4_risk/neutral.md",
+        "decision": "reports/510050.SS/2026-07-10/5_portfolio/decision.md",
+        "complete_report": "reports/510050.SS/2026-07-10/complete_report.md"
+      }
     },
     {
       "ticker": "ISSUE",

@@ -224,3 +224,6 @@ reports/
 # 但 Pages 站点的分析报告需要随仓库持久化（历史可回看）
 !public/reports/
 !public/reports/**
+
+# wrangler 本地缓存
+.wrangler/

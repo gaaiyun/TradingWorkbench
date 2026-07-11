@@ -53,7 +53,7 @@ jobs:
       ALPHA_VANTAGE_API_KEY: ${{ secrets.ALPHA_VANTAGE_API_KEY }}
       FRED_API_KEY: ${{ secrets.FRED_API_KEY }}
       PUSHPLUS_TOKEN: ${{ secrets.PUSHPLUS_TOKEN }}
-      PAGES_URL: https://gaaiyun.github.io/TradingAgents/
+      PAGES_URL: https://tradingagents-board.pages.dev/
       CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
       CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID || vars.CLOUDFLARE_ACCOUNT_ID }}
       CLOUDFLARE_PAGES_PROJECT: ${{ vars.CLOUDFLARE_PAGES_PROJECT || 'tradingagents-board' }}
@@ -69,11 +69,15 @@ jobs:
         shell: python
         run: |
           import os, re
-          text = (os.environ.get("ISSUE_TITLE", "") + "\n" + os.environ.get("ISSUE_BODY", ""))
-          text = re.sub(r"^\s*(分析|analyze)[:：]?", "", text, flags=re.I).strip()
+          title = os.environ.get("ISSUE_TITLE", "")
+          body = os.environ.get("ISSUE_BODY", "")
+          # 解析优先级: 表单「### 标的代码」段 > 标题冒号后 > 全文兜底
+          section = re.search(r"###\s*标的代码\s*\n+([^\n#]+)", body)
+          title_part = re.sub(r"^\s*(分析|analyze)[:：]?", "", title, flags=re.I).strip()
+          text = section.group(1) if section else (title_part or body)
           # 美股字母代码（可带 .SS/.SZ/.HK 等后缀）或 6 位数字
           tokens = re.findall(r"\b([A-Za-z]{1,6}(?:\.[A-Za-z]{1,3})?|\d{6}(?:\.S[SZ])?)\b", text)
-          drop = {"THE", "AND", "FOR", "ETF", "LLM", "API", "GIT", "HTTP", "HTTPS"}
+          drop = {"THE", "AND", "FOR", "ETF", "LLM", "API", "GIT", "HTTP", "HTTPS", "ISSUE", "NEW", "RUN"}
           seen, tickers = set(), []
           for t in tokens:
               t = t.upper()

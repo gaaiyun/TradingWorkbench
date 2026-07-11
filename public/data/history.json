@@ -8,7 +8,21 @@
         "ticker": "510050.SS",
         "rating": "Hold",
         "report": "reports/510050.SS/2026-07-10/complete_report.md",
-        "error": false
+        "error": false,
+        "files": {
+          "fundamentals": "reports/510050.SS/2026-07-10/1_analysts/fundamentals.md",
+          "market": "reports/510050.SS/2026-07-10/1_analysts/market.md",
+          "news": "reports/510050.SS/2026-07-10/1_analysts/news.md",
+          "bear": "reports/510050.SS/2026-07-10/2_research/bear.md",
+          "bull": "reports/510050.SS/2026-07-10/2_research/bull.md",
+          "manager": "reports/510050.SS/2026-07-10/2_research/manager.md",
+          "trader": "reports/510050.SS/2026-07-10/3_trading/trader.md",
+          "aggressive": "reports/510050.SS/2026-07-10/4_risk/aggressive.md",
+          "conservative": "reports/510050.SS/2026-07-10/4_risk/conservative.md",
+          "neutral": "reports/510050.SS/2026-07-10/4_risk/neutral.md",
+          "decision": "reports/510050.SS/2026-07-10/5_portfolio/decision.md",
+          "complete_report": "reports/510050.SS/2026-07-10/complete_report.md"
+        }
       },
       {
         "ticker": "ISSUE",
@@ -27,7 +41,21 @@
         "ticker": "NVDA",
         "rating": "Underweight",
         "report": "reports/NVDA/2026-07-10/complete_report.md",
-        "error": false
+        "error": false,
+        "files": {
+          "fundamentals": "reports/NVDA/2026-07-10/1_analysts/fundamentals.md",
+          "market": "reports/NVDA/2026-07-10/1_analysts/market.md",
+          "news": "reports/NVDA/2026-07-10/1_analysts/news.md",
+          "bear": "reports/NVDA/2026-07-10/2_research/bear.md",
+          "bull": "reports/NVDA/2026-07-10/2_research/bull.md",
+          "manager": "reports/NVDA/2026-07-10/2_research/manager.md",
+          "trader": "reports/NVDA/2026-07-10/3_trading/trader.md",
+          "aggressive": "reports/NVDA/2026-07-10/4_risk/aggressive.md",
+          "conservative": "reports/NVDA/2026-07-10/4_risk/conservative.md",
+          "neutral": "reports/NVDA/2026-07-10/4_risk/neutral.md",
+          "decision": "reports/NVDA/2026-07-10/5_portfolio/decision.md",
+          "complete_report": "reports/NVDA/2026-07-10/complete_report.md"
+        }
       }
     ]
   }

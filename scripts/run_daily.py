@@ -139,11 +139,18 @@ def run_ticker(ticker: str, trade_date: str, analysts: list[str], reports_dir: P
     save_dir = reports_dir / ticker.upper() / trade_date
     ta.save_reports(final_state, ticker, save_path=save_dir)
 
+    # 各 agent 分报告的相对路径映射，供前端按角色分 tab 阅读
+    files: dict[str, str] = {}
+    for md in sorted(save_dir.rglob("*.md")):
+        rel = str(md.relative_to(reports_dir.parent)).replace(os.sep, "/")
+        files[md.stem] = rel
+
     decision_md = str(final_state.get("final_trade_decision", "")).strip()
     return {
         "ticker": ticker.upper(),
         "rating": rating,
-        "report": str(save_dir.relative_to(reports_dir.parent)).replace(os.sep, "/") + "/complete_report.md",
+        "report": files.get("complete_report"),
+        "files": files,
         "decision_excerpt": decision_md[:400],
         "error": None,
     }
