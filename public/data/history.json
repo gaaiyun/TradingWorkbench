@@ -1,6 +1,25 @@
 [
   {
     "trade_date": "2026-07-10",
+    "generated_at": "2026-07-11T19:33:52+08:00",
+    "provider": "openai_compatible",
+    "results": [
+      {
+        "ticker": "510050.SS",
+        "rating": "Hold",
+        "report": "reports/510050.SS/2026-07-10/complete_report.md",
+        "error": false
+      },
+      {
+        "ticker": "ISSUE",
+        "rating": null,
+        "report": null,
+        "error": true
+      }
+    ]
+  },
+  {
+    "trade_date": "2026-07-10",
     "generated_at": "2026-07-11T19:14:59+08:00",
     "provider": "openai_compatible",
     "results": [
