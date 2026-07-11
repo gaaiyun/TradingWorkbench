@@ -52,7 +52,7 @@ GitHub Actions（分析计算层）
 |---|---|---|
 | `ACCESS_CODE` | ✅ | 网页发起分析/问答的访问码 |
 | `OPENAI_COMPATIBLE_API_KEY` | ✅ | 问答功能的方舟 key |
-| `GITHUB_DISPATCH_TOKEN` | ⬜ 待配 | 网页"执行"按钮触发 Actions 用；建议 fine-grained PAT（仅本仓库，Actions: Read and write）。未配置前网页按钮会明确报错，Issue 点名不受影响 |
+| `GITHUB_DISPATCH_TOKEN` | ✅ | 网页"执行"按钮触发 Actions（fine-grained PAT, 仅本仓库 Actions 读写, 2026-10 到期需续） |
 
 ### GitHub 仓库（Actions 用）
 
