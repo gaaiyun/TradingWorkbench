@@ -221,3 +221,6 @@ __marimo__/
 # Enterprise env file (secrets) and generated run reports
 .env.enterprise
 reports/
+# 但 Pages 站点的分析报告需要随仓库持久化（历史可回看）
+!public/reports/
+!public/reports/**

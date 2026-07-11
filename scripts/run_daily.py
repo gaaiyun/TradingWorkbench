@@ -35,6 +35,53 @@ CST = timezone(timedelta(hours=8))
 
 RATING_TIERS = ["Sell", "Underweight", "Hold", "Overweight", "Buy"]
 
+HISTORY_CAP = 60
+
+
+def normalize_ticker(raw: str) -> str:
+    """标准化标的代码：A股 6 位数字自动补交易所后缀，方便手机输入。
+
+    6/5/9 开头（沪A/沪基金ETF/沪B）→ .SS；0/1/2/3 开头（深A/深基金/深B/创业板）→ .SZ。
+    已带后缀或美股字母代码原样返回。
+    """
+    t = raw.strip().upper()
+    if not t or "." in t:
+        return t
+    if t.isdigit() and len(t) == 6:
+        return t + (".SS" if t[0] in "569" else ".SZ")
+    return t
+
+
+def update_history(data_dir: Path, payload: dict, cap: int = HISTORY_CAP) -> int:
+    """把本次运行追加进 history.json（同交易日同标的组合覆盖旧条目）。"""
+    hist_path = data_dir / "history.json"
+    try:
+        history = json.loads(hist_path.read_text(encoding="utf-8"))
+        if not isinstance(history, list):
+            history = []
+    except Exception:
+        history = []
+
+    key = (payload.get("trade_date"), tuple(sorted(r["ticker"] for r in payload.get("results", []))))
+    history = [
+        h for h in history
+        if (h.get("trade_date"), tuple(sorted(r.get("ticker", "") for r in h.get("results", [])))) != key
+    ]
+    entry = {
+        "trade_date": payload.get("trade_date"),
+        "generated_at": payload.get("generated_at"),
+        "provider": payload.get("provider"),
+        "results": [
+            {"ticker": r["ticker"], "rating": r["rating"], "report": r["report"],
+             "error": bool(r.get("error"))}
+            for r in payload.get("results", [])
+        ],
+    }
+    history.insert(0, entry)
+    history = history[:cap]
+    hist_path.write_text(json.dumps(history, ensure_ascii=False, indent=2), encoding="utf-8")
+    return len(history)
+
 
 def last_us_trading_day(now_utc: datetime | None = None) -> str:
     """最近一个已收盘/进行中的美股交易日（周末回滚到周五）。"""
@@ -136,7 +183,8 @@ def main(argv: list[str] | None = None) -> int:
     data_dir.mkdir(parents=True, exist_ok=True)
 
     trade_date = args.date or last_us_trading_day()
-    tickers = [t.strip().upper() for t in args.tickers.split(",") if t.strip()]
+    tickers = [normalize_ticker(t) for t in args.tickers.split(",") if t.strip()]
+    tickers = list(dict.fromkeys(t for t in tickers if t))
     analysts = [a.strip().lower() for a in args.analysts.split(",") if a.strip()]
     generated_at = datetime.now(CST).isoformat(timespec="seconds")
 
@@ -180,7 +228,8 @@ def main(argv: list[str] | None = None) -> int:
         "results": results,
     }
     (data_dir / "latest.json").write_text(json.dumps(payload, ensure_ascii=False, indent=2), encoding="utf-8")
-    print(f"[DONE] {ok_count}/{len(results)} tickers ok, payload written")
+    hist_size = update_history(data_dir, payload)
+    print(f"[DONE] {ok_count}/{len(results)} tickers ok, payload written, history={hist_size}")
 
     if not args.no_push:
         title, content = build_push_message(trade_date, results, provider)

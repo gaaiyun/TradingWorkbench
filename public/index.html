@@ -2,9 +2,12 @@
 <html lang="zh-CN">
 <head>
   <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>TradingAgents 每日多智能体决策</title>
-  <link rel="icon" href="data:,">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#0b0f12">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <title>TradingAgents 决策看板</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>📈</text></svg>">
   <style>
     :root {
       color-scheme: dark;
@@ -13,107 +16,289 @@
       --green: #45d18a; --red: #ff626f; --lime: #9ccc65; --orange: #ff8a65;
     }
     * { box-sizing: border-box; }
+    html { -webkit-text-size-adjust: 100%; }
     body { margin: 0; background: var(--bg); color: var(--text);
-      font-family: Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif; }
-    main { max-width: 1080px; margin: 0 auto; padding: 28px 18px 42px; }
-    header { display: grid; grid-template-columns: 1fr auto; gap: 16px; align-items: end;
-      border-bottom: 1px solid var(--line); padding-bottom: 18px; margin-bottom: 18px; }
-    h1 { margin: 0 0 8px; font-size: 28px; font-weight: 720; }
-    .sub { color: var(--muted); margin: 0; font-size: 14px; }
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif; }
+    main { max-width: 1080px; margin: 0 auto; padding: 22px 16px calc(40px + env(safe-area-inset-bottom)); }
+    header { display: flex; flex-wrap: wrap; gap: 10px 16px; align-items: baseline;
+      justify-content: space-between; border-bottom: 1px solid var(--line);
+      padding-bottom: 14px; margin-bottom: 16px; }
+    h1 { margin: 0; font-size: clamp(20px, 4.5vw, 27px); font-weight: 720; }
+    .sub { color: var(--muted); margin: 4px 0 0; font-size: 13px; }
     .pill { border: 1px solid var(--line); background: #10161a; border-radius: 999px;
       padding: 5px 10px; font-size: 12px; color: var(--muted); white-space: nowrap; }
-    .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 12px; }
+    .section-label { font-size: 13px; font-weight: 650; color: var(--muted);
+      text-transform: uppercase; letter-spacing: .04em; margin: 20px 0 10px; }
+    .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(220px, 100%), 1fr)); gap: 12px; }
     .card { background: linear-gradient(180deg, var(--panel-2), var(--panel));
       border: 1px solid var(--line); border-left: 3px solid var(--line);
-      border-radius: 6px; padding: 16px; }
-    .tk { font-size: 13px; color: var(--muted); text-transform: uppercase; margin-bottom: 8px; }
-    .rating { font-size: 26px; font-weight: 720; }
-    .excerpt { color: var(--muted); font-size: 12px; margin-top: 8px; line-height: 1.5;
-      max-height: 72px; overflow: hidden; }
-    .card a { display: inline-block; margin-top: 10px; color: var(--cyan);
-      font-size: 13px; text-decoration: none; }
-    .card a:hover { text-decoration: underline; }
+      border-radius: 8px; padding: 15px; }
+    .tk { font-size: 13px; color: var(--muted); margin-bottom: 6px; display: flex;
+      justify-content: space-between; gap: 8px; }
+    .tk .nm { font-weight: 650; color: var(--text); letter-spacing: .02em; }
+    .rating { font-size: 24px; font-weight: 720; }
+    .excerpt { color: var(--muted); font-size: 12px; margin-top: 8px; line-height: 1.55;
+      max-height: 74px; overflow: hidden; }
+    .card .btn { display: inline-block; margin-top: 10px; color: var(--cyan);
+      font-size: 13px; text-decoration: none; cursor: pointer; padding: 6px 0;
+      -webkit-tap-highlight-color: transparent; }
+    .card .btn:active { opacity: .6; }
     .banner { background: linear-gradient(180deg, var(--panel-2), var(--panel));
-      border: 1px solid var(--line); border-radius: 6px; padding: 18px;
+      border: 1px solid var(--line); border-radius: 8px; padding: 16px;
       color: var(--amber); font-size: 14px; line-height: 1.7; }
-    #viewer { display: none; margin-top: 18px; background: var(--panel);
-      border: 1px solid var(--line); border-radius: 6px; padding: 20px; }
-    #viewer h2 { margin-top: 0; font-size: 16px; color: var(--cyan); }
-    #viewer pre { white-space: pre-wrap; word-break: break-word; font-size: 13px;
-      line-height: 1.65; color: var(--text); font-family: ui-monospace, Consolas, monospace; }
-    .foot { margin-top: 20px; color: var(--muted); font-size: 12px; text-align: right;
-      border-top: 1px solid var(--line); padding-top: 10px; }
-    .close { float: right; cursor: pointer; color: var(--muted); }
+    /* 历史记录 */
+    .hist { display: flex; flex-direction: column; gap: 8px; }
+    .hist-row { display: flex; flex-wrap: wrap; gap: 6px 10px; align-items: center;
+      background: var(--panel); border: 1px solid var(--line); border-radius: 8px;
+      padding: 10px 12px; cursor: pointer; -webkit-tap-highlight-color: transparent; }
+    .hist-row:hover, .hist-row.active { border-color: var(--cyan); }
+    .hist-date { font-size: 13px; font-weight: 650; min-width: 84px; }
+    .tag { font-size: 12px; padding: 2px 8px; border-radius: 4px; background: #10161a;
+      border: 1px solid var(--line); }
+    /* 报告全屏阅读器 */
+    #viewer { display: none; position: fixed; inset: 0; z-index: 50;
+      background: rgba(6,9,11,.72); backdrop-filter: blur(3px); }
+    #viewer .panel { position: absolute; inset: max(10px, env(safe-area-inset-top)) 10px 10px;
+      max-width: 860px; margin: 0 auto; background: var(--panel);
+      border: 1px solid var(--line); border-radius: 10px; display: flex;
+      flex-direction: column; overflow: hidden; }
+    #viewer .bar { display: flex; justify-content: space-between; align-items: center;
+      padding: 12px 16px; border-bottom: 1px solid var(--line); }
+    #viewer .bar h2 { margin: 0; font-size: 15px; color: var(--cyan); }
+    #viewer .close { cursor: pointer; color: var(--muted); font-size: 15px;
+      padding: 6px 10px; border: 1px solid var(--line); border-radius: 6px; }
+    #viewer .body { overflow-y: auto; -webkit-overflow-scrolling: touch; padding: 16px 18px; }
+    /* markdown 渲染样式 */
+    .md { font-size: 14px; line-height: 1.75; word-break: break-word; }
+    .md h1 { font-size: 19px; border-bottom: 1px solid var(--line); padding-bottom: 8px; }
+    .md h2 { font-size: 17px; color: var(--cyan); margin-top: 22px; }
+    .md h3 { font-size: 15px; color: var(--amber); margin-top: 18px; }
+    .md h4 { font-size: 14px; }
+    .md code { background: #10161a; border: 1px solid var(--line); border-radius: 4px;
+      padding: 1px 5px; font-size: 12.5px; font-family: ui-monospace, Consolas, monospace; }
+    .md pre { background: #10161a; border: 1px solid var(--line); border-radius: 6px;
+      padding: 12px; overflow-x: auto; }
+    .md pre code { border: 0; padding: 0; }
+    .md table { border-collapse: collapse; width: 100%; margin: 10px 0; display: block;
+      overflow-x: auto; font-size: 13px; }
+    .md th, .md td { border: 1px solid var(--line); padding: 6px 9px; text-align: left; }
+    .md th { background: #10161a; color: var(--muted); }
+    .md blockquote { border-left: 3px solid var(--line); margin: 10px 0; padding: 2px 12px;
+      color: var(--muted); }
+    .md hr { border: 0; border-top: 1px solid var(--line); margin: 16px 0; }
+    /* 帮助 */
+    details { background: var(--panel); border: 1px solid var(--line); border-radius: 8px;
+      padding: 12px 16px; margin-top: 10px; }
+    summary { cursor: pointer; font-size: 14px; font-weight: 650; color: var(--cyan);
+      -webkit-tap-highlight-color: transparent; }
+    details .md { color: var(--muted); font-size: 13px; }
+    details code { background: #10161a; border: 1px solid var(--line); border-radius: 4px;
+      padding: 1px 5px; font-size: 12px; }
+    .foot { margin-top: 22px; color: var(--muted); font-size: 12px; text-align: right;
+      border-top: 1px solid var(--line); padding-top: 10px; line-height: 1.7; }
+    a { color: var(--cyan); }
   </style>
 </head>
 <body>
   <main>
     <header>
       <div>
-        <h1>TradingAgents 决策看板</h1>
-        <p class="sub">多智能体 LLM 交易研究框架 · 分析师团队 → 多空辩论 → 交易员 → 风控 → 基金经理</p>
+        <h1>📈 TradingAgents 决策看板</h1>
+        <p class="sub">多智能体 LLM：分析师团队 → 多空辩论 → 交易员 → 风控 → 基金经理 · A股/美股</p>
       </div>
-      <div><span id="meta" class="pill">loading…</span></div>
+      <span id="meta" class="pill">loading…</span>
     </header>
 
+    <div id="banner-slot"></div>
+
+    <div class="section-label" id="latest-label">最新决策</div>
     <div id="content"><div class="banner">正在读取最新决策快照…</div></div>
-    <section id="viewer">
-      <span class="close" onclick="document.getElementById('viewer').style.display='none'">✕ 关闭</span>
-      <h2 id="viewer-title"></h2>
-      <pre id="viewer-body"></pre>
+
+    <div class="section-label">历史记录</div>
+    <div id="history" class="hist"><div class="banner" style="color:var(--muted)">暂无历史。</div></div>
+
+    <div class="section-label">使用说明</div>
+    <details>
+      <summary>📱 手机/电脑随时点名分析（A股 + 美股）</summary>
+      <div class="md">
+        <p><b>方法一 · 开 Issue（推荐，手机最方便）</b>：到
+        <a href="https://github.com/gaaiyun/TradingAgents/issues/new?template=analysis.yml" target="_blank">仓库 New Issue</a>，
+        标题保持「分析: 」开头，正文填标的（逗号分隔），提交即触发。
+        约 5–20 分钟后：微信收到评级推送、Issue 下自动回复结果、本页更新。</p>
+        <p><b>方法二 · Actions 手动触发</b>：仓库 → Actions → daily-analysis → Run workflow，填 tickers。</p>
+        <p><b>标的写法</b>：美股直接写代码（<code>NVDA</code>、<code>SPY</code>）；A股写 6 位数字自动补后缀
+        （<code>600519</code>→贵州茅台、<code>510050</code>→上证50ETF、<code>300750</code>→宁德时代），
+        也可显式写 <code>600519.SS</code> / <code>000001.SZ</code>。每次最多 5 个标的。</p>
+        <p><b>自动排程</b>：每个美股交易日收盘后（北京时间清晨 ~05:35）自动分析默认标的清单并推送微信；
+        默认清单用仓库变量 <code>TRADINGAGENTS_TICKERS</code> 修改。</p>
+        <p><b>免责声明</b>：LLM 研究框架输出，不构成投资建议。</p>
+      </div>
+    </details>
+
+    <section id="viewer" onclick="if(event.target===this)closeViewer()">
+      <div class="panel">
+        <div class="bar">
+          <h2 id="viewer-title"></h2>
+          <span class="close" onclick="closeViewer()">✕ 关闭</span>
+        </div>
+        <div class="body"><div id="viewer-body" class="md"></div></div>
+      </div>
     </section>
 
-    <div class="foot">TradingAgents (Tauric Research, Apache-2.0) · fork: gaaiyun · 仅供研究，不构成投资建议</div>
+    <div class="foot">
+      TradingAgents (Tauric Research, Apache-2.0) · fork:
+      <a href="https://github.com/gaaiyun/TradingAgents" target="_blank">gaaiyun/TradingAgents</a>
+      · 仅供研究，不构成投资建议
+    </div>
   </main>
 
   <script>
     const TIER_COLOR = { "Buy": "var(--green)", "Overweight": "var(--lime)", "Hold": "var(--amber)",
                          "Underweight": "var(--orange)", "Sell": "var(--red)" };
+    const esc = s => String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+
+    // ── 轻量 Markdown 渲染（标题/加粗/斜体/代码/围栏/表格/列表/引用/链接）──
+    function mdRender(src) {
+      src = src.replace(/\r\n/g, "\n");
+      const fences = [];
+      src = src.replace(/```([\s\S]*?)```/g, (_, c) => {
+        fences.push(`<pre><code>${esc(c.replace(/^\w*\n/, ""))}</code></pre>`);
+        return ` F${fences.length - 1} `;
+      });
+      src = esc(src);
+      const lines = src.split("\n");
+      const out = [];
+      let i = 0, listStack = null, para = [];
+      const flushPara = () => { if (para.length) { out.push(`<p>${inline(para.join(" "))}</p>`); para = []; } };
+      const flushList = () => { if (listStack) { out.push(listStack === "ol" ? "</ol>" : "</ul>"); listStack = null; } };
+      const inline = t => t
+        .replace(/!\[([^\]]*)\]\(([^)]+)\)/g, "")
+        .replace(/\[([^\]]+)\]\(([^)]+)\)/g, '<a href="$2" target="_blank">$1</a>')
+        .replace(/\*\*([^*]+)\*\*/g, "<b>$1</b>")
+        .replace(/(^|[^*])\*([^*\n]+)\*/g, "$1<i>$2</i>")
+        .replace(/`([^`]+)`/g, "<code>$1</code>");
+      while (i < lines.length) {
+        const L = lines[i];
+        const fence = L.match(/^ F(\d+) $/);
+        if (fence) { flushPara(); flushList(); out.push(fences[+fence[1]]); i++; continue; }
+        if (/^\s*$/.test(L)) { flushPara(); flushList(); i++; continue; }
+        const h = L.match(/^(#{1,4})\s+(.*)/);
+        if (h) { flushPara(); flushList(); out.push(`<h${h[1].length}>${inline(h[2])}</h${h[1].length}>`); i++; continue; }
+        if (/^\s*(---+|\*\*\*+)\s*$/.test(L)) { flushPara(); flushList(); out.push("<hr>"); i++; continue; }
+        if (/^\s*&gt;\s?/.test(L)) { flushPara(); flushList();
+          out.push(`<blockquote>${inline(L.replace(/^\s*&gt;\s?/, ""))}</blockquote>`); i++; continue; }
+        // 表格：| a | b | 后跟 |---|---|
+        if (/^\s*\|.*\|\s*$/.test(L) && i + 1 < lines.length && /^\s*\|[\s:|-]+\|\s*$/.test(lines[i + 1])) {
+          flushPara(); flushList();
+          const cells = r => r.trim().replace(/^\||\|$/g, "").split("|").map(c => inline(c.trim()));
+          let html = "<table><thead><tr>" + cells(L).map(c => `<th>${c}</th>`).join("") + "</tr></thead><tbody>";
+          i += 2;
+          while (i < lines.length && /^\s*\|.*\|\s*$/.test(lines[i])) {
+            html += "<tr>" + cells(lines[i]).map(c => `<td>${c}</td>`).join("") + "</tr>"; i++;
+          }
+          out.push(html + "</tbody></table>"); continue;
+        }
+        const li = L.match(/^\s*(?:[-*+]|(\d+)\.)\s+(.*)/);
+        if (li) {
+          flushPara();
+          const want = li[1] ? "ol" : "ul";
+          if (listStack !== want) { flushList(); out.push(want === "ol" ? "<ol>" : "<ul>"); listStack = want; }
+          out.push(`<li>${inline(li[2])}</li>`); i++; continue;
+        }
+        para.push(L.trim()); i++;
+      }
+      flushPara(); flushList();
+      return out.join("\n");
+    }
+
     async function openReport(path, ticker) {
       const v = document.getElementById("viewer");
-      document.getElementById("viewer-title").textContent = ticker + " 完整报告";
-      document.getElementById("viewer-body").textContent = "加载中…";
+      document.getElementById("viewer-title").textContent = ticker + " · 完整多智能体报告";
+      document.getElementById("viewer-body").innerHTML = "<p>加载中…</p>";
       v.style.display = "block";
+      document.body.style.overflow = "hidden";
       try {
         const res = await fetch(path, { cache: "no-store" });
-        document.getElementById("viewer-body").textContent = await res.text();
+        if (!res.ok) throw new Error("HTTP " + res.status);
+        document.getElementById("viewer-body").innerHTML = mdRender(await res.text());
       } catch (e) {
-        document.getElementById("viewer-body").textContent = "报告加载失败: " + e.message;
+        document.getElementById("viewer-body").innerHTML = `<p>报告加载失败: ${esc(e.message)}</p>`;
       }
-      v.scrollIntoView({ behavior: "smooth" });
     }
+    function closeViewer() {
+      document.getElementById("viewer").style.display = "none";
+      document.body.style.overflow = "";
+    }
+
+    function renderCards(entry, label) {
+      const content = document.getElementById("content");
+      document.getElementById("latest-label").textContent = label || "最新决策";
+      if (!entry || !entry.results || !entry.results.length) {
+        content.innerHTML = `<div class="banner">暂无分析结果。</div>`;
+        return;
+      }
+      content.innerHTML = `<section class="grid">` + entry.results.map(r => {
+        const color = TIER_COLOR[r.rating] || "var(--muted)";
+        if (r.error && r.error !== false) {
+          const msg = typeof r.error === "string" ? r.error : "运行失败";
+          return `<div class="card" style="border-left-color:var(--red)">
+            <div class="tk"><span class="nm">${esc(r.ticker)}</span></div>
+            <div class="rating" style="color:var(--red);font-size:15px">运行失败</div>
+            <div class="excerpt">${esc(msg)}</div></div>`;
+        }
+        const excerpt = (r.decision_excerpt || "").replace(/[#*`>|]/g, " ");
+        const link = r.report
+          ? `<span class="btn" onclick="openReport('${esc(r.report)}','${esc(r.ticker)}')">查看完整报告 →</span>` : "";
+        return `<div class="card" style="border-left-color:${color}">
+          <div class="tk"><span class="nm">${esc(r.ticker)}</span><span>${esc(entry.trade_date || "")}</span></div>
+          <div class="rating" style="color:${color}">${esc(r.rating || "--")}</div>
+          <div class="excerpt">${esc(excerpt)}</div>${link}</div>`;
+      }).join("") + `</section>`;
+    }
+
+    function renderHistory(history) {
+      const box = document.getElementById("history");
+      if (!history || !history.length) return;
+      box.innerHTML = history.map((h, idx) => {
+        const tags = (h.results || []).map(r => {
+          const color = r.error ? "var(--red)" : (TIER_COLOR[r.rating] || "var(--muted)");
+          const txt = r.error ? `${r.ticker} ✕` : `${r.ticker} ${r.rating || ""}`;
+          return `<span class="tag" style="color:${color}">${esc(txt)}</span>`;
+        }).join("");
+        return `<div class="hist-row" data-idx="${idx}" onclick="selectHistory(${idx}, this)">
+          <span class="hist-date">${esc(h.trade_date || "--")}</span>${tags}</div>`;
+      }).join("");
+    }
+
+    let HISTORY = [];
+    function selectHistory(idx, el) {
+      document.querySelectorAll(".hist-row").forEach(r => r.classList.remove("active"));
+      if (el) el.classList.add("active");
+      renderCards(HISTORY[idx], `历史 · ${HISTORY[idx].trade_date || ""}`);
+      document.getElementById("latest-label").scrollIntoView({ behavior: "smooth" });
+    }
+
     async function load() {
       const content = document.getElementById("content");
       try {
         const res = await fetch(`data/latest.json?ts=${Date.now()}`, { cache: "no-store" });
         const data = await res.json();
         document.getElementById("meta").textContent =
-          `${data.trade_date || "--"} · ${data.provider || "?"} · ${data.generated_at || ""}`;
+          `${data.trade_date || "--"} · ${data.provider || "?"} · ${(data.generated_at || "").slice(0, 16)}`;
         if (data.status === "unconfigured") {
-          content.innerHTML = `<div class="banner">⚙️ 流水线已就绪，等待 LLM API key。<br>${data.hint || ""}</div>`;
-          return;
+          document.getElementById("banner-slot").innerHTML =
+            `<div class="banner">⚙️ 流水线已就绪，等待 LLM API key。<br>${esc(data.hint || "")}</div>`;
+          content.innerHTML = "";
+        } else {
+          renderCards(data, "最新决策");
         }
-        if (!data.results || !data.results.length) {
-          content.innerHTML = `<div class="banner">暂无分析结果。</div>`;
-          return;
-        }
-        content.innerHTML = `<section class="grid">` + data.results.map(r => {
-          const color = TIER_COLOR[r.rating] || "var(--muted)";
-          if (r.error) {
-            return `<div class="card" style="border-left-color:var(--red)">
-              <div class="tk">${r.ticker}</div>
-              <div class="rating" style="color:var(--red);font-size:15px">运行失败</div>
-              <div class="excerpt">${r.error}</div></div>`;
-          }
-          const link = r.report ? `<a href="javascript:void(0)" onclick="openReport('${r.report}','${r.ticker}')">查看完整报告 →</a>` : "";
-          return `<div class="card" style="border-left-color:${color}">
-            <div class="tk">${r.ticker}</div>
-            <div class="rating" style="color:${color}">${r.rating || "--"}</div>
-            <div class="excerpt">${(r.decision_excerpt || "").replace(/[#*`]/g, "")}</div>${link}</div>`;
-        }).join("") + `</section>`;
       } catch (e) {
-        content.innerHTML = `<div class="banner">快照加载失败: ${e.message}</div>`;
+        content.innerHTML = `<div class="banner">快照加载失败: ${esc(e.message)}</div>`;
       }
+      try {
+        const res = await fetch(`data/history.json?ts=${Date.now()}`, { cache: "no-store" });
+        if (res.ok) { HISTORY = await res.json(); renderHistory(HISTORY); }
+      } catch (e) { /* 历史可选 */ }
     }
     load();
   </script>
