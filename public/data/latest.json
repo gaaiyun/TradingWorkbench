@@ -1,6 +1,6 @@
 {
   "status": "ok",
-  "generated_at": "2026-07-12T12:47:13+08:00",
+  "generated_at": "2026-07-12T17:40:12+08:00",
   "trade_date": "2026-07-10",
   "provider": "openai_compatible",
   "analysts": [
@@ -17,24 +17,24 @@
   ],
   "results": [
     {
-      "ticker": "000001.SZ",
-      "rating": "Underweight",
-      "report": "reports/000001.SZ/2026-07-10/complete_report.md",
+      "ticker": "002865.SZ",
+      "rating": "Sell",
+      "report": "reports/002865.SZ/2026-07-10/complete_report.md",
       "files": {
-        "fundamentals": "reports/000001.SZ/2026-07-10/1_analysts/fundamentals.md",
-        "market": "reports/000001.SZ/2026-07-10/1_analysts/market.md",
-        "news": "reports/000001.SZ/2026-07-10/1_analysts/news.md",
-        "bear": "reports/000001.SZ/2026-07-10/2_research/bear.md",
-        "bull": "reports/000001.SZ/2026-07-10/2_research/bull.md",
-        "manager": "reports/000001.SZ/2026-07-10/2_research/manager.md",
-        "trader": "reports/000001.SZ/2026-07-10/3_trading/trader.md",
-        "aggressive": "reports/000001.SZ/2026-07-10/4_risk/aggressive.md",
-        "conservative": "reports/000001.SZ/2026-07-10/4_risk/conservative.md",
-        "neutral": "reports/000001.SZ/2026-07-10/4_risk/neutral.md",
-        "decision": "reports/000001.SZ/2026-07-10/5_portfolio/decision.md",
-        "complete_report": "reports/000001.SZ/2026-07-10/complete_report.md"
+        "fundamentals": "reports/002865.SZ/2026-07-10/1_analysts/fundamentals.md",
+        "market": "reports/002865.SZ/2026-07-10/1_analysts/market.md",
+        "news": "reports/002865.SZ/2026-07-10/1_analysts/news.md",
+        "bear": "reports/002865.SZ/2026-07-10/2_research/bear.md",
+        "bull": "reports/002865.SZ/2026-07-10/2_research/bull.md",
+        "manager": "reports/002865.SZ/2026-07-10/2_research/manager.md",
+        "trader": "reports/002865.SZ/2026-07-10/3_trading/trader.md",
+        "aggressive": "reports/002865.SZ/2026-07-10/4_risk/aggressive.md",
+        "conservative": "reports/002865.SZ/2026-07-10/4_risk/conservative.md",
+        "neutral": "reports/002865.SZ/2026-07-10/4_risk/neutral.md",
+        "decision": "reports/002865.SZ/2026-07-10/5_portfolio/decision.md",
+        "complete_report": "reports/002865.SZ/2026-07-10/complete_report.md"
       },
-      "decision_excerpt": "**Rating**: Underweight\n\n**Executive Summary**: 对000001.SZ（平安银行）执行减仓操作，在股价反弹至50日均线（约10.63元）附近分批减持当前仓位的30%-50%，保留不超过原仓位50%的底仓以博取Q2 GDP数据等潜在正面催化剂。止损位参考中性分析师建议放宽至10.15-10.20元（约2-2.5倍ATR），若跌破10.05元近期低点则加速减仓。减仓释放的资金部分保持现金/低风险固收，部分配置与银行业相关性较低的防御性板块（如公用事业、必需消费品），实现组合真正分散化。建议持有期3-6个月，视净利息收入是否连续两季转正、ROE是否回升至9%以上等反转信号决定是否回补。\n\n**Investment Thesis**: 综合三方风险分析师的辩论，减仓策略方向明确，但执行细节需优化。\n\n**一、核心论据：结构性问题远未解决，反弹信号不足以",
+      "decision_excerpt": "**Rating**: Sell\n\n**Executive Summary**: 对002865.SZ采取卖出决策，核心操作为分层次快速清仓。当前55.94元至57元区间利用超卖反弹窗口先减持70%-80%仓位，锁定绝大部分本金安全；剩余20%-30%尾仓设置条件单——若放量突破57元则在58-59元清仓，若缩量失守10日均线（约55.67元）则立即市价卖出。放弃48.20元远端止损位，改为以10日均线为残余仓位的实际止损线，确保在资产负债表结构性风险暴露前完成退出。\n\n**Investment Thesis**: 三位风险分析师在卖出方向上完全一致，核心论据扎实且互为补充，综合判断如下：\n\n**一、资产负债表结构性损伤是卖出的根本理由。** 留存收益从+4.50亿元急转为-6.88亿元，意味着公司已侵蚀股东权益；流动比率仅1.037，短期债务从10.58亿元激增至19.32亿元几乎翻倍，",
       "error": null
     }
   ]

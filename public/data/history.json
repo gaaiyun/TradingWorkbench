@@ -1,6 +1,19 @@
 [
   {
     "trade_date": "2026-07-10",
+    "generated_at": "2026-07-12T17:40:12+08:00",
+    "provider": "openai_compatible",
+    "results": [
+      {
+        "ticker": "002865.SZ",
+        "rating": "Sell",
+        "report": "reports/002865.SZ/2026-07-10/complete_report.md",
+        "error": false
+      }
+    ]
+  },
+  {
+    "trade_date": "2026-07-10",
     "generated_at": "2026-07-12T12:47:13+08:00",
     "provider": "openai_compatible",
     "results": [
