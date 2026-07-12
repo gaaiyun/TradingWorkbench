@@ -1,6 +1,6 @@
 {
   "status": "ok",
-  "generated_at": "2026-07-12T17:40:12+08:00",
+  "generated_at": "2026-07-13T02:13:48+08:00",
   "trade_date": "2026-07-10",
   "provider": "openai_compatible",
   "analysts": [
@@ -17,24 +17,23 @@
   ],
   "results": [
     {
-      "ticker": "002865.SZ",
-      "rating": "Sell",
-      "report": "reports/002865.SZ/2026-07-10/complete_report.md",
+      "ticker": "ORCL",
+      "rating": "Underweight",
+      "report": "reports/ORCL/2026-07-10/complete_report.md",
       "files": {
-        "fundamentals": "reports/002865.SZ/2026-07-10/1_analysts/fundamentals.md",
-        "market": "reports/002865.SZ/2026-07-10/1_analysts/market.md",
-        "news": "reports/002865.SZ/2026-07-10/1_analysts/news.md",
-        "bear": "reports/002865.SZ/2026-07-10/2_research/bear.md",
-        "bull": "reports/002865.SZ/2026-07-10/2_research/bull.md",
-        "manager": "reports/002865.SZ/2026-07-10/2_research/manager.md",
-        "trader": "reports/002865.SZ/2026-07-10/3_trading/trader.md",
-        "aggressive": "reports/002865.SZ/2026-07-10/4_risk/aggressive.md",
-        "conservative": "reports/002865.SZ/2026-07-10/4_risk/conservative.md",
-        "neutral": "reports/002865.SZ/2026-07-10/4_risk/neutral.md",
-        "decision": "reports/002865.SZ/2026-07-10/5_portfolio/decision.md",
-        "complete_report": "reports/002865.SZ/2026-07-10/complete_report.md"
+        "fundamentals": "reports/ORCL/2026-07-10/1_analysts/fundamentals.md",
+        "market": "reports/ORCL/2026-07-10/1_analysts/market.md",
+        "bear": "reports/ORCL/2026-07-10/2_research/bear.md",
+        "bull": "reports/ORCL/2026-07-10/2_research/bull.md",
+        "manager": "reports/ORCL/2026-07-10/2_research/manager.md",
+        "trader": "reports/ORCL/2026-07-10/3_trading/trader.md",
+        "aggressive": "reports/ORCL/2026-07-10/4_risk/aggressive.md",
+        "conservative": "reports/ORCL/2026-07-10/4_risk/conservative.md",
+        "neutral": "reports/ORCL/2026-07-10/4_risk/neutral.md",
+        "decision": "reports/ORCL/2026-07-10/5_portfolio/decision.md",
+        "complete_report": "reports/ORCL/2026-07-10/complete_report.md"
       },
-      "decision_excerpt": "**Rating**: Sell\n\n**Executive Summary**: 对002865.SZ采取卖出决策，核心操作为分层次快速清仓。当前55.94元至57元区间利用超卖反弹窗口先减持70%-80%仓位，锁定绝大部分本金安全；剩余20%-30%尾仓设置条件单——若放量突破57元则在58-59元清仓，若缩量失守10日均线（约55.67元）则立即市价卖出。放弃48.20元远端止损位，改为以10日均线为残余仓位的实际止损线，确保在资产负债表结构性风险暴露前完成退出。\n\n**Investment Thesis**: 三位风险分析师在卖出方向上完全一致，核心论据扎实且互为补充，综合判断如下：\n\n**一、资产负债表结构性损伤是卖出的根本理由。** 留存收益从+4.50亿元急转为-6.88亿元，意味着公司已侵蚀股东权益；流动比率仅1.037，短期债务从10.58亿元激增至19.32亿元几乎翻倍，",
+      "decision_excerpt": "**Rating**: Underweight\n\n**Executive Summary**: 将ORCL仓位大幅削减至组合权重的1.5-2.5%，保留极小底仓以捕捉OCI增长故事兑现的非对称上行潜力，同时设置分层止损（跌破$135减半底仓，跌破$125清仓剩余）。释放资金按40%配置至MSFT/GOOGL等稳健云同行、30%跨行业高质量成长股、30%短期高信用固收/现金，实现真正的分散而非科技板块内集中。建议持有期3-6个月，以下一季度财报为关键催化剂节点决定是否回补。\n\n**Investment Thesis**: 综合三位风险分析师的辩论，减仓方向获得一致共识，但执行方式需在激进派的\"精明期权逻辑\"与保守派的\"全面清仓纪律\"之间取得平衡，最终评级为Underweight，理由如下：\n\n**一、减仓的必要性——三方共识，无可争议。** ORCL的技术面和财务结构风险是真实的而非噪音：M",
       "error": null
     }
   ]

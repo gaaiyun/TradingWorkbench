@@ -1,6 +1,19 @@
 [
   {
     "trade_date": "2026-07-10",
+    "generated_at": "2026-07-13T02:13:48+08:00",
+    "provider": "openai_compatible",
+    "results": [
+      {
+        "ticker": "ORCL",
+        "rating": "Underweight",
+        "report": "reports/ORCL/2026-07-10/complete_report.md",
+        "error": false
+      }
+    ]
+  },
+  {
+    "trade_date": "2026-07-10",
     "generated_at": "2026-07-12T17:40:12+08:00",
     "provider": "openai_compatible",
     "results": [
