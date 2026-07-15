@@ -1,6 +1,6 @@
 {
   "status": "ok",
-  "generated_at": "2026-07-15T17:07:07+08:00",
+  "generated_at": "2026-07-16T06:31:36+08:00",
   "trade_date": "2026-07-15",
   "provider": "openai_compatible",
   "analysts": [
@@ -17,24 +17,65 @@
   ],
   "results": [
     {
-      "ticker": "ORCL",
-      "rating": "Underweight",
-      "report": "reports/ORCL/2026-07-15/complete_report.md",
+      "ticker": "NVDA",
+      "rating": "Hold",
+      "report": "reports/NVDA/2026-07-15/complete_report.md",
       "files": {
-        "fundamentals": "reports/ORCL/2026-07-15/1_analysts/fundamentals.md",
-        "market": "reports/ORCL/2026-07-15/1_analysts/market.md",
-        "news": "reports/ORCL/2026-07-15/1_analysts/news.md",
-        "bear": "reports/ORCL/2026-07-15/2_research/bear.md",
-        "bull": "reports/ORCL/2026-07-15/2_research/bull.md",
-        "manager": "reports/ORCL/2026-07-15/2_research/manager.md",
-        "trader": "reports/ORCL/2026-07-15/3_trading/trader.md",
-        "aggressive": "reports/ORCL/2026-07-15/4_risk/aggressive.md",
-        "conservative": "reports/ORCL/2026-07-15/4_risk/conservative.md",
-        "neutral": "reports/ORCL/2026-07-15/4_risk/neutral.md",
-        "decision": "reports/ORCL/2026-07-15/5_portfolio/decision.md",
-        "complete_report": "reports/ORCL/2026-07-15/complete_report.md"
+        "fundamentals": "reports/NVDA/2026-07-15/1_analysts/fundamentals.md",
+        "market": "reports/NVDA/2026-07-15/1_analysts/market.md",
+        "news": "reports/NVDA/2026-07-15/1_analysts/news.md",
+        "bear": "reports/NVDA/2026-07-15/2_research/bear.md",
+        "bull": "reports/NVDA/2026-07-15/2_research/bull.md",
+        "manager": "reports/NVDA/2026-07-15/2_research/manager.md",
+        "trader": "reports/NVDA/2026-07-15/3_trading/trader.md",
+        "aggressive": "reports/NVDA/2026-07-15/4_risk/aggressive.md",
+        "conservative": "reports/NVDA/2026-07-15/4_risk/conservative.md",
+        "neutral": "reports/NVDA/2026-07-15/4_risk/neutral.md",
+        "decision": "reports/NVDA/2026-07-15/5_portfolio/decision.md",
+        "complete_report": "reports/NVDA/2026-07-15/complete_report.md"
       },
-      "decision_excerpt": "**Rating**: Underweight\n\n**Executive Summary**: 减持当前ORCL仓位的40-50%，利用短期超卖反弹至10日EMA（约143-144美元）附近加速减持，剩余仓位止损放宽至近期低点下方8-10%（约118-121美元区间）而非5%，以适应当前ATR 9.02的高波动环境。下一份财报为剩余仓位去留的决定性节点：若AI云收入增速放缓或折旧炸弹确认，立即清仓剩余仓位；若超预期则可考虑保留。不建议在当前位置新建多头头寸。建议持有期3-6个月，视财报结果和毛利率走势动态调整。\n\n**Investment Thesis**: 综合三位风险分析师的辩论，ORCL面临的中期基本面风险明确且结构性强，减持方向获得三方一致认可，但执行细节需精调。\n\n**核心做空依据（三方共识）：**\n1. **毛利率结构性压缩不可逆**：从FY2023的72.9%持续下滑至FY2",
+      "decision_excerpt": "**Rating**: Hold\n\n**Executive Summary**: 维持当前NVDA仓位不变，在212.50美元价位既不追加也不削减。台积电7月17日财报是关键二元催化剂——96%概率营收超400亿美元支撑基本面，但9%概率超410亿意味着超预期空间有限。当前上行至布林带上轨215美元仅1.2%空间，下行至200日均线192美元近10%，盈亏比不理想。建议在催化剂明朗后按分层策略调整仓位：TSMC落在400-410亿且NVDA放量站稳215美元可小幅加仓不超过10%；若低于400亿或NVDA跌破202美元（布林带中轨），削减15-20%仓位。持有期3-6周，覆盖催化剂落地及技术面确认周期。\n\n**Investment Thesis**: 综合三方风险分析师辩论及研究经理/交易员意见，NVDA在当前价位212.50美元多空证据均衡，Hold为最优决策，具体裁决如下：\n\n**1.",
+      "error": null
+    },
+    {
+      "ticker": "SPY",
+      "rating": "Underweight",
+      "report": "reports/SPY/2026-07-15/complete_report.md",
+      "files": {
+        "fundamentals": "reports/SPY/2026-07-15/1_analysts/fundamentals.md",
+        "market": "reports/SPY/2026-07-15/1_analysts/market.md",
+        "bear": "reports/SPY/2026-07-15/2_research/bear.md",
+        "bull": "reports/SPY/2026-07-15/2_research/bull.md",
+        "manager": "reports/SPY/2026-07-15/2_research/manager.md",
+        "trader": "reports/SPY/2026-07-15/3_trading/trader.md",
+        "aggressive": "reports/SPY/2026-07-15/4_risk/aggressive.md",
+        "conservative": "reports/SPY/2026-07-15/4_risk/conservative.md",
+        "neutral": "reports/SPY/2026-07-15/4_risk/neutral.md",
+        "decision": "reports/SPY/2026-07-15/5_portfolio/decision.md",
+        "complete_report": "reports/SPY/2026-07-15/complete_report.md"
+      },
+      "decision_excerpt": "**Rating**: Underweight\n\n**Executive Summary**: 在当前价$754.81逐步减仓20-30%，保留50-60%核心多头底仓，以应对$760阻力区的量价背离和MACD动量减速。止损采用分层机制：第一道防线设于布林带中轨$744附近（再减10%），硬止损设于$737（2倍ATR下方，清仓战术头寸）。建议持有期1-3个月，待SPY回踩50日SMA（$742）企稳或放量突破$760.40后再考虑回补。\n\n**Investment Thesis**: 综合三位分析师的辩论，核心共识是：当前价位风险收益比不利，应降低敞口，但不应完全清仓。具体依据如下：\n\n**一、减仓的核心依据——空头论据胜出，但趋势未破**\n\n1. **量价背离确凿**：7月15日成交量仅3,674万股，在价格逼近52周高点$760.40和布林带上轨$759.62的强阻力簇时出现无量上涨",
+      "error": null
+    },
+    {
+      "ticker": "600519.SS",
+      "rating": "Hold",
+      "report": "reports/600519.SS/2026-07-15/complete_report.md",
+      "files": {
+        "fundamentals": "reports/600519.SS/2026-07-15/1_analysts/fundamentals.md",
+        "market": "reports/600519.SS/2026-07-15/1_analysts/market.md",
+        "news": "reports/600519.SS/2026-07-15/1_analysts/news.md",
+        "bear": "reports/600519.SS/2026-07-15/2_research/bear.md",
+        "bull": "reports/600519.SS/2026-07-15/2_research/bull.md",
+        "manager": "reports/600519.SS/2026-07-15/2_research/manager.md",
+        "trader": "reports/600519.SS/2026-07-15/3_trading/trader.md",
+        "aggressive": "reports/600519.SS/2026-07-15/4_risk/aggressive.md",
+        "conservative": "reports/600519.SS/2026-07-15/4_risk/conservative.md",
+        "neutral": "reports/600519.SS/2026-07-15/4_risk/neutral.md",
+        "decision": "reports/600519.SS/2026-07-15/5_portfolio/decision.md",
+        "complete_report": "reports/600519.SS/2026-07-15/complete_report.md"
+      },
+      "decision_excerpt": "**Rating**: Hold\n\n**Executive Summary**: 维持600519.SS现有仓位不变，止损位设于1,200元，单一标的仓位上限控制在组合的8%-10%。当前多空力量在基本面层面形成有效对冲，但宏观和技术面略偏空头，既不具备激进派所描述的\"拐点确认\"条件，也未到保守派担忧的\"价值陷阱\"崩溃边缘。建议等待两大确定性信号——Q2 2026财报净利润增速回升至5%以上且销售费用率企稳、股价放量突破200日均线（约1,355.69元）——后再考虑加仓动作。\n\n**Investment Thesis**: 综合三位风险分析师的辩论，核心分歧聚焦于基本面、宏观和技术面三个维度，最终形成均衡但略偏保守的格局，Hold是最审慎的决策。\n\n**基本面：多空互有攻守，尚无法定论。** 空头最致命的论据是2026年Q1净利润增速骤降至1.48%，营收增长6.34%却仅换来1.5%的",
       "error": null
     }
   ]

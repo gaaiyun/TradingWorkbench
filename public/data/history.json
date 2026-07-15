@@ -1,6 +1,31 @@
 [
   {
     "trade_date": "2026-07-15",
+    "generated_at": "2026-07-16T06:31:36+08:00",
+    "provider": "openai_compatible",
+    "results": [
+      {
+        "ticker": "NVDA",
+        "rating": "Hold",
+        "report": "reports/NVDA/2026-07-15/complete_report.md",
+        "error": false
+      },
+      {
+        "ticker": "SPY",
+        "rating": "Underweight",
+        "report": "reports/SPY/2026-07-15/complete_report.md",
+        "error": false
+      },
+      {
+        "ticker": "600519.SS",
+        "rating": "Hold",
+        "report": "reports/600519.SS/2026-07-15/complete_report.md",
+        "error": false
+      }
+    ]
+  },
+  {
+    "trade_date": "2026-07-15",
     "generated_at": "2026-07-15T17:07:07+08:00",
     "provider": "openai_compatible",
     "results": [
