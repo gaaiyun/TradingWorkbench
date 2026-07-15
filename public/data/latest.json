@@ -1,7 +1,7 @@
 {
   "status": "ok",
-  "generated_at": "2026-07-15T06:31:56+08:00",
-  "trade_date": "2026-07-14",
+  "generated_at": "2026-07-15T17:07:07+08:00",
+  "trade_date": "2026-07-15",
   "provider": "openai_compatible",
   "analysts": [
     "market",
@@ -17,66 +17,24 @@
   ],
   "results": [
     {
-      "ticker": "NVDA",
-      "rating": "Overweight",
-      "report": "reports/NVDA/2026-07-14/complete_report.md",
-      "files": {
-        "fundamentals": "reports/NVDA/2026-07-14/1_analysts/fundamentals.md",
-        "market": "reports/NVDA/2026-07-14/1_analysts/market.md",
-        "news": "reports/NVDA/2026-07-14/1_analysts/news.md",
-        "bear": "reports/NVDA/2026-07-14/2_research/bear.md",
-        "bull": "reports/NVDA/2026-07-14/2_research/bull.md",
-        "manager": "reports/NVDA/2026-07-14/2_research/manager.md",
-        "trader": "reports/NVDA/2026-07-14/3_trading/trader.md",
-        "aggressive": "reports/NVDA/2026-07-14/4_risk/aggressive.md",
-        "conservative": "reports/NVDA/2026-07-14/4_risk/conservative.md",
-        "neutral": "reports/NVDA/2026-07-14/4_risk/neutral.md",
-        "decision": "reports/NVDA/2026-07-14/5_portfolio/decision.md",
-        "complete_report": "reports/NVDA/2026-07-14/complete_report.md"
-      },
-      "decision_excerpt": "**Rating**: Overweight\n\n**Executive Summary**: 在当前价位（约211美元）以目标仓位的35-40%建立NVDA初始多头头寸，止损设在193美元（约200日SMA上方1.2美元），目标仓位不超过组合的6%。若价格回踩10日EMA约204美元且成交量不低于5日均量80%，加仓至目标仓位的70%；当MACD线转正且价格站稳50日SMA上方3个交易日，或放量突破布林上轨215美元时，加仓至90%并保留10%弹性空间。建议持有3-6个月，以下季度财报（预计2026年7月底）为关键验证节点。\n\n**Investment Thesis**: 综合三方分析师辩论，最终评级为\"增持\"而非\"买入\"，核心逻辑如下：\n\n**看多依据占据主导权重：**\n1. 盈利能力的压倒性优势是已兑现的事实，非叙事。FY27 Q1营收816亿美元（同比+85%）、净利润583亿美元（",
-      "error": null
-    },
-    {
-      "ticker": "SPY",
+      "ticker": "ORCL",
       "rating": "Underweight",
-      "report": "reports/SPY/2026-07-14/complete_report.md",
+      "report": "reports/ORCL/2026-07-15/complete_report.md",
       "files": {
-        "fundamentals": "reports/SPY/2026-07-14/1_analysts/fundamentals.md",
-        "market": "reports/SPY/2026-07-14/1_analysts/market.md",
-        "news": "reports/SPY/2026-07-14/1_analysts/news.md",
-        "bear": "reports/SPY/2026-07-14/2_research/bear.md",
-        "bull": "reports/SPY/2026-07-14/2_research/bull.md",
-        "manager": "reports/SPY/2026-07-14/2_research/manager.md",
-        "trader": "reports/SPY/2026-07-14/3_trading/trader.md",
-        "aggressive": "reports/SPY/2026-07-14/4_risk/aggressive.md",
-        "conservative": "reports/SPY/2026-07-14/4_risk/conservative.md",
-        "neutral": "reports/SPY/2026-07-14/4_risk/neutral.md",
-        "decision": "reports/SPY/2026-07-14/5_portfolio/decision.md",
-        "complete_report": "reports/SPY/2026-07-14/complete_report.md"
+        "fundamentals": "reports/ORCL/2026-07-15/1_analysts/fundamentals.md",
+        "market": "reports/ORCL/2026-07-15/1_analysts/market.md",
+        "news": "reports/ORCL/2026-07-15/1_analysts/news.md",
+        "bear": "reports/ORCL/2026-07-15/2_research/bear.md",
+        "bull": "reports/ORCL/2026-07-15/2_research/bull.md",
+        "manager": "reports/ORCL/2026-07-15/2_research/manager.md",
+        "trader": "reports/ORCL/2026-07-15/3_trading/trader.md",
+        "aggressive": "reports/ORCL/2026-07-15/4_risk/aggressive.md",
+        "conservative": "reports/ORCL/2026-07-15/4_risk/conservative.md",
+        "neutral": "reports/ORCL/2026-07-15/4_risk/neutral.md",
+        "decision": "reports/ORCL/2026-07-15/5_portfolio/decision.md",
+        "complete_report": "reports/ORCL/2026-07-15/complete_report.md"
       },
-      "decision_excerpt": "**Rating**: Underweight\n\n**Executive Summary**: 在当前价位$751.83附近执行分批减仓，首轮减仓15%（较交易员原计划的10-15%取上限），若反弹至$756-760双重阻力区再减仓10%，核心仓位保留55-65%。设置双层防线：价格跌破$748（10 EMA）启动第二轮减仓至50%以下，跌破$741（50日均线）缩至30%。不预设低位回补目标价，重新加仓须等待估值回归（P/E降至23倍以下）或美联储确认降息路径。建议持有期3-6个月，视CPI数据、财报季AI变现及地缘局势演变动态调整。\n\n**Investment Thesis**: 三位分析师在减仓方向上形成罕见共识，分歧仅在于减仓幅度与动机。综合判断，Underweight评级基于以下五重证据链：\n\n**第一，风险收益比极度不对称——这是三位分析师唯一完全一致的结论。** 上方$759",
-      "error": null
-    },
-    {
-      "ticker": "600519.SS",
-      "rating": "Underweight",
-      "report": "reports/600519.SS/2026-07-14/complete_report.md",
-      "files": {
-        "fundamentals": "reports/600519.SS/2026-07-14/1_analysts/fundamentals.md",
-        "market": "reports/600519.SS/2026-07-14/1_analysts/market.md",
-        "news": "reports/600519.SS/2026-07-14/1_analysts/news.md",
-        "bear": "reports/600519.SS/2026-07-14/2_research/bear.md",
-        "bull": "reports/600519.SS/2026-07-14/2_research/bull.md",
-        "manager": "reports/600519.SS/2026-07-14/2_research/manager.md",
-        "trader": "reports/600519.SS/2026-07-14/3_trading/trader.md",
-        "aggressive": "reports/600519.SS/2026-07-14/4_risk/aggressive.md",
-        "conservative": "reports/600519.SS/2026-07-14/4_risk/conservative.md",
-        "neutral": "reports/600519.SS/2026-07-14/4_risk/neutral.md",
-        "decision": "reports/600519.SS/2026-07-14/5_portfolio/decision.md",
-        "complete_report": "reports/600519.SS/2026-07-14/complete_report.md"
-      },
-      "decision_excerpt": "**Rating**: Underweight\n\n**Executive Summary**: 将600519.SS（贵州茅台）仓位下调至基准权重的50%-60%，在当前价1214附近立即启动第一档减仓（1220-1230布林上轨区间），若反弹至1248（50日均线）附近未能放量突破则执行第二档减仓至40%。若收盘价跌破前低1168.63，进一步减仓至最低配置（约30%）。不建议完全清仓——4.28%股息率、487.87亿现金储备及近零杠杆资产负债表提供长期价值支撑，底仓应作为战略性持有而非短期防御。关键催化剂为7月16日中国Q2 GDP数据，若低于4.3%需进一步下调仓位。\n\n**Investment Thesis**: 综合三位风险分析师的辩论，裁定600519.SS评级为\"低配\"，核心逻辑如下：\n\n**一、基本面恶化信号明确但不宜过度外推。** 2026年Q1营业成本同比飙升35.9",
+      "decision_excerpt": "**Rating**: Underweight\n\n**Executive Summary**: 减持当前ORCL仓位的40-50%，利用短期超卖反弹至10日EMA（约143-144美元）附近加速减持，剩余仓位止损放宽至近期低点下方8-10%（约118-121美元区间）而非5%，以适应当前ATR 9.02的高波动环境。下一份财报为剩余仓位去留的决定性节点：若AI云收入增速放缓或折旧炸弹确认，立即清仓剩余仓位；若超预期则可考虑保留。不建议在当前位置新建多头头寸。建议持有期3-6个月，视财报结果和毛利率走势动态调整。\n\n**Investment Thesis**: 综合三位风险分析师的辩论，ORCL面临的中期基本面风险明确且结构性强，减持方向获得三方一致认可，但执行细节需精调。\n\n**核心做空依据（三方共识）：**\n1. **毛利率结构性压缩不可逆**：从FY2023的72.9%持续下滑至FY2",
       "error": null
     }
   ]
