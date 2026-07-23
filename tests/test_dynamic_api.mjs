@@ -72,7 +72,7 @@ test("market API builds parameterized symbol/profile/timeframe/date filters and 
   assert.match(sql, /LIMIT\s+\?/i);
   assert.deepEqual(params.slice(0, 5), ["SPY", "us-core", "5m", "2026-07-23T09:00:00.000Z", "2026-07-23T11:00:00.000Z"]);
   assert.equal(typeof params[5], "string");
-  assert.equal(params[6], 25);
+  assert.equal(params[6], 150);
 });
 
 test("market API aggregates stored 5m bars for a requested 15m timeframe", async () => {
@@ -136,6 +136,56 @@ test("market API aggregates stored 5m bars for a requested 15m timeframe", async
   });
   assert.equal(payload.indicators.bars, 2);
   assert.equal(DB.calls[0].params[2], "5m");
+});
+
+test("market API returns distinct timestamps when provider fallbacks overlap", async () => {
+  const base = {
+    symbol: "ORCL",
+    profile_id: "cn-semi-comms",
+    timeframe: "1d",
+    open: 120,
+    high: 122,
+    low: 119,
+    close: 121,
+    volume: 1000,
+    as_of: "2026-07-23T04:00:00Z",
+    freshness: "stale",
+    adjustment: "qfq",
+    quality: "good",
+  };
+  const DB = new FakeD1({ rows: { market_bars: [
+    {
+      ...base,
+      ts: "2026-07-23T04:00:00Z",
+      source: "tencent-us",
+      fetched_at: "2026-07-23T18:40:00Z",
+    },
+    {
+      ...base,
+      ts: "2026-07-23T04:00:00Z",
+      source: "eastmoney-us",
+      fetched_at: "2026-07-24T01:00:00Z",
+    },
+    {
+      ...base,
+      ts: "2026-07-22T04:00:00Z",
+      as_of: "2026-07-22T04:00:00Z",
+      source: "eastmoney-us",
+      fetched_at: "2026-07-24T01:00:00Z",
+    },
+  ] } });
+
+  const response = await marketApi.onRequestGet({
+    request: request("/api/market?symbol=ORCL&profile=cn-semi-comms&timeframe=1d&limit=2"),
+    env: { DB },
+  });
+  const payload = await response.json();
+
+  assert.deepEqual(payload.data.map(({ ts }) => ts), [
+    "2026-07-23T04:00:00Z",
+    "2026-07-22T04:00:00Z",
+  ]);
+  assert.equal(payload.data[0].source, "eastmoney-us");
 });
 
 test("news and events APIs support topic and importance filters without interpolating input", async () => {
@@ -247,7 +297,7 @@ test("dynamic queries exclude expired rows before ordering and limiting", async 
   assert.equal(payload.data[0].close, 622);
   assert.match(DB.calls[0].sql, /expires_at\s+IS\s+NULL\s+OR\s+expires_at\s*>\s*\?/i);
   assert.equal(typeof DB.calls[0].params[1], "string");
-  assert.equal(DB.calls[0].params.at(-1), 1);
+  assert.equal(DB.calls[0].params.at(-1), 6);
 });
 
 test("expired-only market, news, events, and source health return unavailable", async () => {

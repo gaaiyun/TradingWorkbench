@@ -31,6 +31,8 @@ const FRESHNESS_RANK = {
   unknown: 2,
 };
 
+const SOURCE_OVERLAP_FACTOR = 6;
+
 function laterTimestamp(left, right) {
   return String(left || "") >= String(right || "") ? left : right;
 }
@@ -63,6 +65,19 @@ function aggregateGroup(group, timeframe, bucketTimestamp) {
     adjustment: adjustments.size === 1 ? [...adjustments][0] : "unknown",
     quality: sorted.every(({ quality }) => quality === "good") ? "good" : "partial",
   };
+}
+
+function distinctMarketBars(rows, limit) {
+  const byTimestamp = new Map();
+  for (const row of rows) {
+    const current = byTimestamp.get(row.ts);
+    if (!current || String(row.fetched_at || "") > String(current.fetched_at || "")) {
+      byTimestamp.set(row.ts, row);
+    }
+  }
+  return [...byTimestamp.values()]
+    .sort((left, right) => right.ts.localeCompare(left.ts))
+    .slice(0, limit);
 }
 
 export function aggregateMarketBars(rows, timeframe, milliseconds, limit) {
@@ -103,10 +118,15 @@ export async function onRequestGet({ request, env }) {
       ? {
         ...query,
         timeframe: derived.source,
-        limit: query.limit * derived.factor,
+        limit: query.limit * derived.factor * SOURCE_OVERLAP_FACTOR,
       }
-      : query;
-    const storedRows = await queryMarketBars(db, storedQuery);
+      : {
+        ...query,
+        limit: query.limit * SOURCE_OVERLAP_FACTOR,
+      };
+    const queriedRows = await queryMarketBars(db, storedQuery);
+    const sourceLimit = derived ? query.limit * derived.factor : query.limit;
+    const storedRows = distinctMarketBars(queriedRows, sourceLimit);
     const rows = derived
       ? aggregateMarketBars(storedRows, query.timeframe, derived.milliseconds, query.limit)
       : storedRows;
