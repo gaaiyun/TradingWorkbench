@@ -167,3 +167,21 @@ test("GitHub dispatch is deferred without token and hides non-204 response bodie
   });
   assert.equal(JSON.stringify(failed).includes("private provider error body"), false);
 });
+
+test("GitHub dispatch requires repository from env and never falls back or fetches", async () => {
+  const { dispatchFullAnalysis } = await import(dispatchUrl);
+  const result = await dispatchFullAnalysis({
+    env: {
+      GITHUB_DISPATCH_TOKEN: "token",
+      GITHUB_WORKFLOW_ID: "daily-analysis.yml",
+    },
+    fetcher: async () => assert.fail("missing repository must not fetch"),
+    profile: monitorSettings().profiles[0],
+    slotId: "slot-1",
+    scheduledFor: "2026-07-23T07:20:00.000Z",
+  });
+  assert.deepEqual(result, {
+    status: "deferred",
+    errorCode: "GITHUB_DISPATCH_NOT_CONFIGURED",
+  });
+});

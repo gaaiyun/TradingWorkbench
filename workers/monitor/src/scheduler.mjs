@@ -70,11 +70,15 @@ export function dueTasksForProfile(profile, scheduledTime, holidaySets = {}) {
   );
   const schedules = profile.schedules;
   const tasks = [];
+  const usMarketLocal = localDateTimeAt(
+    scheduledTime,
+    "America/New_York",
+  );
 
   if (
     schedules.usCloseSnapshot.enabled &&
     local.time === schedules.usCloseSnapshot.time &&
-    isTradingDay(local, holidaySets.us)
+    isTradingDay(usMarketLocal, holidaySets.us)
   ) {
     tasks.push(scheduledTask(
       "usCloseSnapshot",

@@ -70,9 +70,47 @@ test("skips local weekends and the applicable CN or US holiday set", async () =>
     await dueAt(
       "2026-07-23T21:35:00.000Z",
       {},
-      { us: new Set(["2026-07-24"]) },
+      { us: new Set(["2026-07-23"]) },
     ),
     [],
+  );
+});
+
+test("US snapshot uses the New York trading date while keeping the profile-local trigger", async () => {
+  const summerFriday = await dueAt("2026-07-24T21:35:00.000Z");
+  assert.deepEqual(
+    summerFriday.map((task) => task.type),
+    ["usCloseSnapshot"],
+    "上海周六 05:35 对应纽约周五，必须执行",
+  );
+
+  const thanksgiving = await dueAt(
+    "2026-11-26T21:35:00.000Z",
+    {},
+    { us: new Set(["2026-11-26"]) },
+  );
+  assert.deepEqual(
+    thanksgiving,
+    [],
+    "上海 11 月 27 日 05:35 对应纽约感恩节，必须跳过",
+  );
+});
+
+test("US market-day conversion handles both winter and summer offsets", async () => {
+  assert.deepEqual(
+    (await dueAt("2026-01-09T21:35:00.000Z")).map((task) => task.type),
+    ["usCloseSnapshot"],
+    "冬令时下上海周六仍对应纽约周五",
+  );
+  assert.deepEqual(
+    await dueAt("2026-01-04T21:35:00.000Z"),
+    [],
+    "冬令时下上海周一对应纽约周日，应跳过",
+  );
+  assert.deepEqual(
+    await dueAt("2026-07-26T21:35:00.000Z"),
+    [],
+    "夏令时下上海周一对应纽约周日，应跳过",
   );
 });
 

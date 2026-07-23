@@ -14,7 +14,7 @@ export async function dispatchFullAnalysis({
   scheduledFor,
 }) {
   const token = env?.GITHUB_DISPATCH_TOKEN;
-  const repository = env?.GITHUB_REPOSITORY || "gaaiyun/TradingAgents";
+  const repository = env?.GITHUB_REPOSITORY;
   const workflowId = env?.GITHUB_WORKFLOW_ID;
   if (
     !configured(token) ||
