@@ -1,6 +1,9 @@
 import { RAW_BASE, gate, json } from "./_util.js";
-import { loadWorkbenchEvidence } from "./_chat_context.mjs";
-import { d1Binding } from "./_d1_repository.mjs";
+import {
+  loadWorkbenchEvidence,
+  resolveWorkbenchTarget,
+} from "./_chat_context.mjs";
+import { d1Binding, readSettingsFromD1 } from "./_d1_repository.mjs";
 import {
   claimChatRequest,
   completeChatRequest,
@@ -411,10 +414,23 @@ export async function onRequestPost({ request, env, waitUntil }) {
   if (body.symbol && !symbol) return errorJson(id, "标的代码无效", 400, "invalid_symbol");
 
   const db = d1Binding(env);
+  let resolvedSymbol = symbol;
+  if (db && profileId) {
+    try {
+      const storedSettings = await readSettingsFromD1(db);
+      resolvedSymbol = resolveWorkbenchTarget(storedSettings?.settings, {
+        profileId,
+        question: normalizedQuestion.value,
+        requestedSymbol: symbol,
+      });
+    } catch {
+      // 设置读取失败时仍使用页面当前标的，避免问答整体不可用。
+    }
+  }
   const requestHash = await hashChatValue({
     sessionId,
     profileId,
-    symbol,
+    symbol: resolvedSymbol,
     question: normalizedQuestion.value,
     report: typeof body.report === "string" ? body.report : null,
     volguard: body.volguard === true,
@@ -472,9 +488,12 @@ export async function onRequestPost({ request, env, waitUntil }) {
   }
 
   let workbenchContext = null;
-  if (db && profileId && symbol) {
+  if (db && profileId && resolvedSymbol) {
     try {
-      workbenchContext = await loadWorkbenchEvidence(db, { profileId, symbol });
+      workbenchContext = await loadWorkbenchEvidence(db, {
+        profileId,
+        symbol: resolvedSymbol,
+      });
     } catch {
       persistence = persistence === "d1" ? "degraded" : persistence;
     }
@@ -518,7 +537,7 @@ export async function onRequestPost({ request, env, waitUntil }) {
   const metadata = {
     sessionId,
     profileId,
-    symbol,
+    symbol: resolvedSymbol,
     asOf: workbenchContext?.asOf || null,
     evidence: workbenchContext?.evidence || [],
     contextHash,

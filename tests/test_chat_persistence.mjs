@@ -172,9 +172,92 @@ test("workbench evidence labels current bars, news, and events with source times
   assert.match(result.context, /\[M1\].*512480\.SS.*1\.27.*tencent/s);
   assert.match(result.context, /\[N1\].*半导体行业发布新政策.*https:\/\/example\.test\/news\/1/s);
   assert.match(result.context, /\[E1\].*15分钟价格异动.*signal-engine/s);
-  assert.equal(result.evidence.length, 3);
+  assert.equal(result.evidence.length, 4);
+  assert.equal(result.evidence.some(({ id }) => id === "I1"), true);
   assert.match(result.contextHash, /^[a-f0-9]{64}$/);
   assert.equal(result.asOf, "2026-07-24T02:15:00.000Z");
+});
+
+test("workbench evidence includes the server-side technical snapshot", async (t) => {
+  const fixture = await createD1(t);
+  if (!fixture) return;
+  const insert = fixture.sqlite.prepare(`
+    INSERT INTO market_bars (
+      symbol, profile_id, timeframe, ts, open, high, low, close, volume,
+      source, as_of, fetched_at, freshness, adjustment, quality, expires_at
+    ) VALUES (?, 'etf-semiconductor', '15m', ?, ?, ?, ?, ?, ?,
+      'tencent', ?, ?, 'fresh', 'none', 'good', '2099-01-01T00:00:00.000Z')
+  `);
+  for (let index = 0; index < 70; index += 1) {
+    const timestamp = new Date(Date.UTC(2026, 6, 20, 0, index * 15)).toISOString();
+    const close = 1 + index * 0.01;
+    insert.run(
+      "512480.SS",
+      timestamp,
+      close - 0.005,
+      close + 0.01,
+      close - 0.01,
+      close,
+      100000 + index * 100,
+      timestamp,
+      timestamp,
+    );
+  }
+
+  const result = await loadWorkbenchEvidence(fixture.DB, {
+    profileId: "etf-semiconductor",
+    symbol: "512480.SS",
+  });
+
+  assert.match(result.context, /\[I1\].*指标 512480\.SS.*MA20 1\.595.*MA60 1\.395/s);
+  assert.equal(result.evidence.some(({ id, type }) => id === "I1" && type === "indicator"), true);
+});
+
+test("A-share chat evidence reads the native five-minute bars stored by the worker", async (t) => {
+  const fixture = await createD1(t);
+  if (!fixture) return;
+  fixture.sqlite.prepare(`
+    INSERT INTO market_bars (
+      symbol, profile_id, timeframe, ts, close, volume, source, as_of, fetched_at,
+      freshness, adjustment, quality, expires_at
+    ) VALUES (
+      '512480.SS', 'etf-semiconductor', '5m', '2026-07-24T02:15:00.000Z',
+      1.27, 1200000, 'tencent', '2026-07-24T02:15:00.000Z',
+      '2026-07-24T02:15:05.000Z', 'fresh', 'none', 'good',
+      '2099-01-01T00:00:00.000Z'
+    )
+  `).run();
+
+  const result = await loadWorkbenchEvidence(fixture.DB, {
+    profileId: "etf-semiconductor",
+    symbol: "512480.SS",
+  });
+
+  assert.match(result.context, /\[M1\].*周期 5m.*收 1\.27/s);
+});
+
+test("US chat evidence reads daily bars for Oracle", async (t) => {
+  const fixture = await createD1(t);
+  if (!fixture) return;
+  fixture.sqlite.prepare(`
+    INSERT INTO market_bars (
+      symbol, profile_id, timeframe, ts, close, volume, source, as_of, fetched_at,
+      freshness, adjustment, quality, expires_at
+    ) VALUES (
+      'ORCL', 'etf-semiconductor', '1d', '2026-07-23T20:00:00.000Z',
+      246.18, 12000000, 'tencent-us', '2026-07-23T20:00:00.000Z',
+      '2026-07-23T20:01:00.000Z', 'fresh', 'qfq', 'good',
+      '2099-01-01T00:00:00.000Z'
+    )
+  `).run();
+
+  const result = await loadWorkbenchEvidence(fixture.DB, {
+    profileId: "etf-semiconductor",
+    symbol: "ORCL",
+  });
+
+  assert.match(result.context, /\[M1\].*行情 ORCL.*周期 1d.*收 246\.18/s);
+  assert.equal(result.evidence.find(({ id }) => id === "I1")?.title, "ORCL 1d 技术指标");
 });
 
 test("chat prompt receives auditable evidence IDs and returns evidence metadata", async (t) => {
@@ -221,6 +304,67 @@ test("chat prompt receives auditable evidence IDs and returns evidence metadata"
   assert.equal(payload.evidence[0].id, "M1");
   assert.equal(payload.asOf, "2026-07-24T02:15:00.000Z");
   assert.match(payload.contextHash, /^[a-f0-9]{64}$/);
+});
+
+test("question target overrides the chart selection and loads that target's evidence", async (t) => {
+  const fixture = await createD1(t);
+  if (!fixture) return;
+  fixture.sqlite.prepare(`
+    INSERT INTO workbench_settings (id, version, settings_json, updated_at)
+    VALUES (1, 2, ?, '2026-07-24T02:00:00.000Z')
+  `).run(JSON.stringify({
+    version: 2,
+    profiles: [{
+      id: "cn-semi-comms",
+      targets: [
+        { symbol: "515880.SS", name: "通信ETF" },
+        { symbol: "512480.SS", name: "半导体ETF" },
+        { symbol: "ORCL", name: "Oracle" },
+      ],
+      systemBenchmarks: [],
+    }],
+  }));
+  fixture.sqlite.prepare(`
+    INSERT INTO market_bars (
+      symbol, profile_id, timeframe, ts, close, volume, source, as_of, fetched_at,
+      freshness, adjustment, quality, expires_at
+    ) VALUES (
+      '512480.SS', 'cn-semi-comms', '15m', '2026-07-24T02:15:00.000Z',
+      1.27, 1200000, 'tencent', '2026-07-24T02:15:00.000Z',
+      '2026-07-24T02:15:05.000Z', 'fresh', 'none', 'good',
+      '2099-01-01T00:00:00.000Z'
+    )
+  `).run();
+
+  let llmPayload;
+  t.mock.method(globalThis, "fetch", async (url, init = {}) => {
+    if (String(url).includes("raw.githubusercontent.com")) return new Response("");
+    llmPayload = JSON.parse(init.body);
+    return new Response(JSON.stringify({
+      choices: [{ message: { content: "512480 的动态证据为 [M1]。" } }],
+    }));
+  });
+
+  const response = await postChat({
+    request: chatRequest({
+      requestId: "request-question-target",
+      sessionId: "session-question-target",
+      profileId: "cn-semi-comms",
+      symbol: "515880.SS",
+      question: "今天 512480 为什么涨跌？",
+    }),
+    env: {
+      DB: fixture.DB,
+      ACCESS_CODE: "access-code",
+      OPENAI_COMPATIBLE_API_KEY: "api-secret",
+    },
+  });
+  const payload = await response.json();
+
+  assert.equal(response.status, 200);
+  assert.equal(payload.symbol, "512480.SS");
+  assert.match(payload.context, /512480\.SS 动态证据账本/);
+  assert.match(llmPayload.messages.at(-1).content, /\[M1\].*512480\.SS.*1\.27/s);
 });
 
 test("duplicate chat POST replays the stored answer without another model call", async (t) => {

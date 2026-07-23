@@ -134,7 +134,16 @@ npx --yes wrangler@4.113.0 deploy --config wrangler.monitor.toml
 npx --yes wrangler@4.113.0 pages deploy public --project-name tradingagents-board --branch main
 ```
 
-当前 Cloudflare token 保存在 VolGuard 仓库的 GitHub Secret，因此 `deploy-trading-workbench` workflow 会检出 `gaaiyun/TradingWorkbench` 的 `main`，应用 migration，并部署 Worker 与 Pages。工作台自己的 `deploy-workbench` workflow 在凭据未配置时只做测试并明确跳过部署。
+VolGuard 仓库当前保存的 Cloudflare token 只有 Pages Edit 权限。
+`pages-snapshot` 会定时发布 VolGuard 和 Trading Workbench 两个 Pages 项目；
+`deploy-trading-workbench` 的默认路径也只验证并发布工作台 Pages。
+
+生产 `tradingagents-monitor` 目前由本机 Wrangler OAuth 发布。只有 token 已补充
+Workers Scripts Edit 权限时，才在手动 workflow 中勾选 `deploy_worker`；只有存在
+新 migration 且 token 具备 D1 Edit 权限时，才勾选 `apply_migrations`。要恢复完整
+自动发布，请轮换一个同时具备 Pages Edit、Workers Scripts Edit 和 D1 Edit 的最小
+权限 token。工作台自己的 `deploy-workbench` workflow 在凭据未配置时只做测试并明确
+跳过部署。
 
 ## 6. 生产健康检查
 
@@ -166,6 +175,7 @@ Invoke-RestMethod https://sh50-volguard.pages.dev/api/live
 
 - 写明价格或 K 线的数据时间；
 - 引用实际行情、指标和新闻/事件；
+- 即使当前图表不是 `512480.SS`，也应按问题中的 `512480` 读取对应证据；
 - 区分事实与推测；
 - 没有新闻或行情过期时直接说明无法可靠归因；
 - 刷新页面后，会话仍可从服务端恢复；
