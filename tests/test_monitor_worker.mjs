@@ -336,6 +336,57 @@ test("scheduled handler uses scheduledTime and waitUntil while health reveals no
   assert.equal((await worker.fetch(new Request("https://monitor.example/anything"))).status, 404);
 });
 
+test("protected manual collection backfills the configured US daily targets", async () => {
+  const { handleFetch } = await import(workerUrl);
+  const env = {
+    DB: new WorkerD1(monitorSettings()),
+    MONITOR_RUN_TOKEN: "monitor-secret",
+  };
+  const unauthorized = await handleFetch(
+    new Request("https://monitor.example/run-collection?task=usCloseSnapshot", {
+      method: "POST",
+    }),
+    env,
+  );
+  assert.equal(unauthorized.status, 401);
+
+  const requests = [];
+  const response = await handleFetch(
+    new Request("https://monitor.example/run-collection?task=usCloseSnapshot", {
+      method: "POST",
+      headers: { authorization: "Bearer monitor-secret" },
+    }),
+    env,
+    {
+      registryFactory: () => ({
+        fetchMarketData: async (request) => {
+          requests.push(request);
+          return {
+            status: "ok",
+            source: "wire",
+            bars: [barFor(request)],
+            sources: [{ source: "wire", status: "success", reason: null }],
+          };
+        },
+      }),
+    },
+  );
+  const payload = await response.json();
+
+  assert.equal(response.status, 200);
+  assert.equal(payload.status, "completed");
+  assert.equal(payload.counts.targets, 1);
+  assert.equal(payload.counts.succeeded, 1);
+  assert.equal(payload.written, 1);
+  assert.deepEqual(requests, [{
+    symbol: "SPY",
+    market: "US",
+    timeframe: "1d",
+    limit: 1500,
+  }]);
+  assert.equal(JSON.stringify(payload).includes("monitor-secret"), false);
+});
+
 test("monitor wrangler config uses five-minute cron and the same deployed D1 binding", () => {
   const pages = readFileSync(new URL("../wrangler.toml", import.meta.url), "utf8");
   const monitor = readFileSync(

@@ -118,6 +118,10 @@ flowchart TD
 
 时间槽字段包含计划时间、尝试次数、租约和 attempt token。旧执行即使在超时后返回，也不能覆盖新租约的结果。
 
+常规 Cron 只执行到期任务。运维人员需要立即修复历史覆盖时，可以调用受
+`MONITOR_RUN_TOKEN` 保护的 `/run-collection`；入口复用同一 Provider Registry、
+校验和 D1 幂等写入，不另建一套临时数据逻辑。
+
 任务语义：
 
 | 任务 | 标的 | 周期 | 输出 |

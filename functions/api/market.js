@@ -32,6 +32,7 @@ const FRESHNESS_RANK = {
 };
 
 const SOURCE_OVERLAP_FACTOR = 6;
+const DAILY_MAX_CONTIGUOUS_GAP_MS = 7 * 24 * 60 * 60 * 1000;
 
 function laterTimestamp(left, right) {
   return String(left || "") >= String(right || "") ? left : right;
@@ -78,6 +79,19 @@ function distinctMarketBars(rows, limit) {
   return [...byTimestamp.values()]
     .sort((left, right) => right.ts.localeCompare(left.ts))
     .slice(0, limit);
+}
+
+function contiguousDailyBars(rows) {
+  if (rows.length < 2) return rows;
+  const kept = [rows[0]];
+  for (let index = 1; index < rows.length; index += 1) {
+    const newer = Date.parse(kept.at(-1).ts);
+    const older = Date.parse(rows[index].ts);
+    const gap = newer - older;
+    if (!Number.isFinite(gap) || gap > DAILY_MAX_CONTIGUOUS_GAP_MS) break;
+    kept.push(rows[index]);
+  }
+  return kept;
 }
 
 function marketEnvelope(rows) {
@@ -135,7 +149,10 @@ export async function onRequestGet({ request, env }) {
       };
     const queriedRows = await queryMarketBars(db, storedQuery);
     const sourceLimit = derived ? query.limit * derived.factor : query.limit;
-    const storedRows = distinctMarketBars(queriedRows, sourceLimit);
+    const distinctRows = distinctMarketBars(queriedRows, sourceLimit);
+    const storedRows = query.timeframe === "1d"
+      ? contiguousDailyBars(distinctRows)
+      : distinctRows;
     const rows = derived
       ? aggregateMarketBars(storedRows, query.timeframe, derived.milliseconds, query.limit)
       : storedRows;

@@ -192,6 +192,43 @@ test("market API returns distinct timestamps when provider fallbacks overlap", a
   assert.equal(payload.sources[0].freshness, "fresh");
 });
 
+test("daily market API removes a disconnected legacy seed before calculating change", async () => {
+  const base = {
+    symbol: "NVDA",
+    profile_id: "cn-semi-comms",
+    timeframe: "1d",
+    open: 208,
+    high: 210,
+    low: 205,
+    close: 208.76,
+    volume: 1000,
+    source: "tencent-us",
+    as_of: "2026-07-23T04:00:00Z",
+    fetched_at: "2026-07-24T01:00:00Z",
+    freshness: "fresh",
+    adjustment: "qfq",
+    quality: "good",
+  };
+  const DB = new FakeD1({ rows: { market_bars: [
+    { ...base, ts: "2026-07-23T04:00:00Z" },
+    {
+      ...base,
+      ts: "2011-06-02T04:00:00Z",
+      close: 19.02,
+      as_of: "2011-06-02T04:00:00Z",
+    },
+  ] } });
+
+  const response = await marketApi.onRequestGet({
+    request: request("/api/market?symbol=NVDA&profile=cn-semi-comms&timeframe=1d&limit=8"),
+    env: { DB },
+  });
+  const payload = await response.json();
+
+  assert.deepEqual(payload.data.map(({ ts }) => ts), ["2026-07-23T04:00:00Z"]);
+  assert.equal(payload.indicators.bars, 1);
+});
+
 test("news and events APIs support topic and importance filters without interpolating input", async () => {
   const injectedTopic = "chips' OR 1=1 --";
   const newsRow = {

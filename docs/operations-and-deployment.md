@@ -36,6 +36,7 @@
 | 名称 | 必需 | 用途 |
 |---|---|---|
 | `GITHUB_DISPATCH_TOKEN` | 深度调度必需 | 触发 GitHub workflow |
+| `MONITOR_RUN_TOKEN` | 手工补跑必需 | 保护运维采集入口 |
 | `ALPHA_VANTAGE_API_KEY` | 否 | 美股日线可选来源 |
 | `CN_HOLIDAY_DATES` | 否 | 额外 A 股休市日 |
 | `US_HOLIDAY_DATES` | 否 | 额外美股休市日 |
@@ -127,6 +128,20 @@ Worker：
 ```powershell
 npx --yes wrangler@4.113.0 deploy --config wrangler.monitor.toml
 ```
+
+需要立即补跑美股日线时，调用 Worker 的受保护采集入口。Token 只从密码管理器或
+Worker Secret 交给请求进程，不写进仓库或日志：
+
+```powershell
+Invoke-RestMethod `
+  -Method Post `
+  -Uri "https://tradingagents-monitor.gaaiyun-risk-selfcheck.workers.dev/run-collection?task=usCloseSnapshot" `
+  -Headers @{ Authorization = "Bearer <MONITOR_RUN_TOKEN>" }
+```
+
+入口复用生产 Provider Registry 和 D1 UPSERT。重复补跑不会复制同一
+`profile + symbol + timeframe + timestamp + source` 记录。A 股盘中补跑使用
+`task=intradayCollect`。
 
 工作台：
 

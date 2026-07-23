@@ -92,6 +92,8 @@ function deferredHook() {
   return { status: "deferred", errorCode: "HOOK_NOT_IMPLEMENTED" };
 }
 
+const MANUAL_COLLECTION_TASKS = new Set(["usCloseSnapshot", "intradayCollect"]);
+
 async function executeTask({
   task,
   profile,
@@ -269,6 +271,82 @@ export async function runScheduled(scheduledTime, env, deps = {}) {
   };
 }
 
+export async function runManualCollection(taskType, env, deps = {}) {
+  if (!MANUAL_COLLECTION_TASKS.has(taskType)) {
+    return { status: "unavailable", errorCode: "INVALID_COLLECTION_TASK" };
+  }
+  if (!env?.DB || typeof env.DB.prepare !== "function") {
+    return { status: "unavailable", errorCode: "D1_NOT_CONFIGURED" };
+  }
+  let loaded;
+  try {
+    loaded = await readSettings(env.DB);
+  } catch {
+    return { status: "unavailable", errorCode: "WORKBENCH_SETTINGS_READ_FAILED" };
+  }
+  if (loaded.errorCode) return { status: "unavailable", errorCode: loaded.errorCode };
+
+  const clock = deps.now ?? (() => new Date());
+  const registryFactory = deps.registryFactory ?? ((options) =>
+    createProviderRegistry(options));
+  const registry = registryFactory({ db: env.DB, env, now: clock });
+  const totals = { targets: 0, succeeded: 0, failed: 0 };
+  let written = 0;
+  const sources = [];
+  for (const profile of loaded.settings.profiles.filter(({ enabled }) => enabled)) {
+    const result = await collectForTask({
+      taskType,
+      profile,
+      registry,
+      writeBars: deps.writeBars ?? writeMarketBars,
+      db: env.DB,
+      now: clock(),
+    });
+    written += Number(result.written || 0);
+    totals.targets += Number(result.counts?.targets || 0);
+    totals.succeeded += Number(result.counts?.succeeded || 0);
+    totals.failed += Number(result.counts?.failed || 0);
+    if (Array.isArray(result.sources)) sources.push(...result.sources);
+  }
+  const status = totals.succeeded === 0
+    ? "failed"
+    : totals.failed > 0 ? "degraded" : "completed";
+  return {
+    status,
+    ...(status === "failed" ? { errorCode: "COLLECTION_UNAVAILABLE" } : {}),
+    counts: totals,
+    written,
+    sources,
+  };
+}
+
+export async function handleFetch(request, env, deps = {}) {
+  const url = new URL(request.url);
+  if (url.pathname === "/health" && request.method === "GET") {
+    return Response.json({ ok: true, service: "monitor-worker" });
+  }
+  if (url.pathname !== "/run-collection" || request.method !== "POST") {
+    return new Response("Not found", { status: 404 });
+  }
+  const configuredToken = String(env?.MONITOR_RUN_TOKEN || "");
+  if (!configuredToken) {
+    return Response.json(
+      { status: "unavailable", errorCode: "MANUAL_RUN_NOT_CONFIGURED" },
+      { status: 503 },
+    );
+  }
+  if (request.headers.get("authorization") !== `Bearer ${configuredToken}`) {
+    return Response.json(
+      { status: "unavailable", errorCode: "UNAUTHORIZED" },
+      { status: 401 },
+    );
+  }
+  const result = await runManualCollection(url.searchParams.get("task"), env, deps);
+  return Response.json(result, {
+    status: ["completed", "degraded"].includes(result.status) ? 200 : 503,
+  });
+}
+
 const worker = {
   scheduled(event, env, ctx) {
     const run = runScheduled(event.scheduledTime, env).then((summary) => {
@@ -278,12 +356,8 @@ const worker = {
     ctx.waitUntil(run);
   },
 
-  async fetch(request) {
-    const url = new URL(request.url);
-    if (url.pathname !== "/health") {
-      return new Response("Not found", { status: 404 });
-    }
-    return Response.json({ ok: true, service: "monitor-worker" });
+  fetch(request, env) {
+    return handleFetch(request, env);
   },
 };
 
