@@ -210,6 +210,7 @@ test("workbench evidence includes the server-side technical snapshot", async (t)
   });
 
   assert.match(result.context, /\[I1\].*指标 512480\.SS.*MA20 1\.595.*MA60 1\.395/s);
+  assert.match(result.context, /样本 70根.*MACD柱 0.*关系 快线等于信号线/s);
   assert.equal(result.evidence.some(({ id, type }) => id === "I1" && type === "indicator"), true);
 });
 

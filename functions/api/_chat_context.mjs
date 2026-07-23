@@ -31,6 +31,13 @@ function periodsPerYear(timeframe) {
   return 252;
 }
 
+function macdRelation(snapshot) {
+  if (snapshot.macdHistogram === null) return "暂无可靠关系";
+  if (snapshot.macdHistogram > 0) return "快线高于信号线";
+  if (snapshot.macdHistogram < 0) return "快线低于信号线";
+  return "快线等于信号线";
+}
+
 function aliasIndex(question, alias) {
   const value = String(alias || "").trim();
   if (!value) return -1;
@@ -141,10 +148,13 @@ export async function loadWorkbenchEvidence(db, {
       `指标 ${symbol}`,
       `版本 ${snapshot.version}`,
       `时间 ${snapshot.asOf}`,
+      `样本 ${snapshot.bars}根`,
       `MA20 ${value(snapshot.ma20)}`,
       `MA60 ${value(snapshot.ma60)}`,
       `MACD ${value(snapshot.macd)}`,
       `信号线 ${value(snapshot.macdSignal)}`,
+      `MACD柱 ${value(snapshot.macdHistogram)}`,
+      `关系 ${macdRelation(snapshot)}`,
       `RSI14 ${value(snapshot.rsi14)}`,
       `ATR14 ${value(snapshot.atr14)}`,
       `20期实现波动率 ${value(snapshot.realizedVolatility20)}%`,
