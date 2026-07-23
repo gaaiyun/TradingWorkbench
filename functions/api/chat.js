@@ -323,6 +323,7 @@ export async function onRequestPost({ request, env }) {
     messages: prepared.messages,
     max_tokens: config.maxTokens,
     temperature: config.temperature,
+    ...(config.thinkingType ? { thinking: { type: config.thinkingType } } : {}),
     ...(wantsStream ? { stream: true } : {}),
   };
 

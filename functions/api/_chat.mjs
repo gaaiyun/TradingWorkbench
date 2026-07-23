@@ -258,6 +258,17 @@ export function resolveChatConfig(env = {}) {
     2,
   );
 
+  const configuredThinkingType = envText(
+    env,
+    "TRADINGAGENTS_CHAT_THINKING_TYPE",
+    "CHAT_THINKING_TYPE",
+  ).toLowerCase();
+  const thinkingType = ["enabled", "disabled", "auto"].includes(configuredThinkingType)
+    ? configuredThinkingType
+    : /^glm(?:-|$)/i.test(model)
+      ? "disabled"
+      : "";
+
   const configured = {
     accessCode: Boolean(envText(env, "ACCESS_CODE")),
     apiKey: Boolean(apiKey),
@@ -281,6 +292,7 @@ export function resolveChatConfig(env = {}) {
     timeouts,
     maxTokens,
     temperature,
+    thinkingType,
     configured,
     ready,
   };

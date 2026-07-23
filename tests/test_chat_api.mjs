@@ -36,6 +36,7 @@ test("默认配置保持 Ark 和 glm-5.2，并支持 endpoint/model/key binding 
   assert.equal(defaults.endpoint, CHAT_DEFAULTS.endpoint);
   assert.equal(defaults.model, "glm-5.2");
   assert.equal(defaults.apiKey, "api-secret");
+  assert.equal(defaults.thinkingType, "disabled");
   assert.equal(defaults.ready, true);
 
   const configured = resolveChatConfig({
@@ -48,7 +49,15 @@ test("默认配置保持 Ark 和 glm-5.2，并支持 endpoint/model/key binding 
   assert.equal(configured.endpoint, "https://relay.example/v1/chat/completions");
   assert.equal(configured.model, "relay-model");
   assert.equal(configured.apiKey, "relay-key");
+  assert.equal(configured.thinkingType, "");
   assert.equal(configured.ready, true);
+
+  const explicitThinking = resolveChatConfig({
+    ...BASE_ENV,
+    TRADINGAGENTS_CHAT_MODEL: "relay-model",
+    CHAT_THINKING_TYPE: "auto",
+  });
+  assert.equal(explicitThinking.thinkingType, "auto");
 
   const keyless = resolveChatConfig({
     ACCESS_CODE: "code",
@@ -298,6 +307,7 @@ test("非流式 POST 保持 answer/context JSON，并使用可配置上游", asy
   const payload = JSON.parse(calls[1].init.body);
   assert.equal(payload.model, "configured-model");
   assert.equal("stream" in payload, false);
+  assert.equal("thinking" in payload, false);
   assert.equal(payload.messages[0].content.includes("不受信任的数据"), true);
   assert.equal(payload.messages[0].content.includes("不输出密钥"), true);
   assert.equal(payload.messages.at(-1).content.includes("怎么看？"), true);
@@ -339,6 +349,7 @@ test("stream=true 将 OpenAI SSE 标准化为 meta/delta/done", async (t) => {
   assert.equal(response.status, 200);
   assert.match(response.headers.get("content-type"), /^text\/event-stream/);
   assert.equal(llmPayload.stream, true);
+  assert.deepEqual(llmPayload.thinking, { type: "disabled" });
   assert.match(text, /event: meta/);
   assert.match(text, /event: delta\ndata: {"content":"第一"}/);
   assert.match(text, /event: delta\ndata: {"content":"段"}/);
