@@ -6,7 +6,8 @@
     "node": ">=20"
   },
   "scripts": {
-    "test:functions": "node --test tests/test_workbench_settings.mjs tests/test_actions_api.mjs tests/test_chat_api.mjs tests/test_health_api.mjs tests/test_volguard_api.mjs tests/test_d1_migration.mjs tests/test_d1_settings_api.mjs tests/test_dynamic_api.mjs",
+    "test:functions": "node --test tests/test_workbench_settings.mjs tests/test_actions_api.mjs tests/test_chat_api.mjs tests/test_health_api.mjs tests/test_volguard_api.mjs tests/test_d1_migration.mjs tests/test_d1_settings_api.mjs tests/test_dynamic_api.mjs tests/test_provider_contracts.mjs tests/test_provider_registry.mjs tests/test_provider_health.mjs tests/test_market_bar_writer.mjs",
+    "test:providers": "node --test tests/test_provider_contracts.mjs tests/test_provider_registry.mjs tests/test_provider_health.mjs tests/test_market_bar_writer.mjs",
     "check:workbench": "node --check public/assets/workbench.js"
   }
 }

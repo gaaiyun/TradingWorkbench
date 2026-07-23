@@ -3,6 +3,10 @@ import { readFileSync } from "node:fs";
 import test from "node:test";
 
 const migrationUrl = new URL("../migrations/0001_workbench_dynamic.sql", import.meta.url);
+const healthMigrationUrl = new URL(
+  "../migrations/0002_provider_circuit_breaker.sql",
+  import.meta.url,
+);
 
 test("D1 migration defines every dynamic workbench table and its lookup indexes", () => {
   const sql = readFileSync(migrationUrl, "utf8");
@@ -66,4 +70,42 @@ test("market bar uniqueness is profile-scoped and source health rejects unknown 
     INSERT INTO source_health (source, status, expires_at)
     VALUES ('wire', 'mystery', '2099-01-01T00:00:00Z')
   `).run(), /CHECK constraint failed/i);
+});
+
+test("provider health migration adds durable circuit-breaker state without widening public status", async (t) => {
+  const sql = readFileSync(healthMigrationUrl, "utf8");
+  for (const column of [
+    "consecutive_failures",
+    "paused_until",
+    "last_error_code",
+    "last_success_at",
+  ]) {
+    assert.match(sql, new RegExp(`ADD COLUMN ${column}\\b`, "i"));
+  }
+  assert.doesNotMatch(sql, /status[^;]+circuit_open/i);
+
+  let DatabaseSync;
+  try {
+    ({ DatabaseSync } = await import("node:sqlite"));
+  } catch {
+    t.skip("node:sqlite is unavailable on this Node version");
+    return;
+  }
+  const db = new DatabaseSync(":memory:");
+  db.exec(readFileSync(migrationUrl, "utf8"));
+  db.prepare(`
+    INSERT INTO source_health (source, status, expires_at)
+    VALUES ('legacy', 'ok', '2099-01-01T00:00:00Z')
+  `).run();
+  db.exec(sql);
+  const row = db.prepare(`
+    SELECT consecutive_failures, paused_until, last_error_code, last_success_at
+    FROM source_health WHERE source = 'legacy'
+  `).get();
+  assert.deepEqual({ ...row }, {
+    consecutive_failures: 0,
+    paused_until: null,
+    last_error_code: null,
+    last_success_at: null,
+  });
 });
