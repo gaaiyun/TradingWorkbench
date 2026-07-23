@@ -3,7 +3,7 @@
   "private": true,
   "type": "module",
   "engines": {
-    "node": ">=20"
+    "node": ">=22"
   },
   "scripts": {
     "test:frontend": "node --test tests/test_workbench_frontend.mjs tests/test_workbench_navigation.mjs tests/test_workbench_options.mjs tests/test_workbench_research.mjs",

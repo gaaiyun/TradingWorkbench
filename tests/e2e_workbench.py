@@ -286,7 +286,7 @@ def run_browser():
         assert page.locator("#research-feed .feed-item").count() == 1
 
         page.locator('[data-route-link="agents"]').first.click()
-        assert page.locator("body").get_attribute("data-route") == "agents"
+        page.wait_for_function("document.body.dataset.route === 'agents'")
         assert page.locator("#deep-analysis-open").is_visible()
         assert page.locator("#agent-pipeline .is-completed").count() == 4
         page.click("#deep-analysis-open")
@@ -324,10 +324,11 @@ def run_browser():
         mobile.wait_for_selector("#market-chart")
         assert mobile.locator('[data-route-link="options"]').last.is_visible()
         mobile.locator('[data-route-link="options"]').last.click()
-        assert mobile.locator("body").get_attribute("data-route") == "options"
+        mobile.wait_for_function("document.body.dataset.route === 'options'")
         mobile.wait_for_function("document.querySelector('#options-status').textContent.includes('正常')")
         assert mobile.locator("#options-chain .options-table tbody tr").count() == 1
         mobile.locator('[data-route-link="monitor"]').last.click()
+        mobile.wait_for_function("document.body.dataset.route === 'monitor'")
         mobile.click('[data-mobile-section="watch"]')
         assert mobile.locator("body").get_attribute("data-mobile-view") == "watch"
         mobile.click('[data-mobile-section="chart"]')
