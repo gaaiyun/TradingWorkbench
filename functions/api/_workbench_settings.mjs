@@ -464,20 +464,22 @@ export function updateWorkbenchFullAnalysisTargets(value, input) {
   const symbols = normalizeWorkbenchTickers(input);
   const profile = settings.profiles[profileIndex];
   const existingBySymbol = new Map(profile.targets.map((target) => [target.symbol, target]));
-  const fullSymbols = new Set(symbols);
-  const fullTargets = symbols.map((symbol) => {
-    const existing = existingBySymbol.get(symbol);
-    return {
-      symbol,
-      name: existing?.name || symbol,
-      market: existing?.market || (symbol.endsWith(".SS") || symbol.endsWith(".SZ") ? "CN" : "US"),
-      role: existing?.role || "core",
-      analysis: "full",
-    };
-  });
-  const signalTargets = profile.targets.filter(
-    (target) => target.analysis !== "full" && !fullSymbols.has(target.symbol),
-  );
+  const signalTargets = profile.targets.filter((target) => target.analysis !== "full");
+  const signalSymbols = new Set(signalTargets.map((target) => target.symbol));
+  const fullTargets = symbols
+    .filter((symbol) => !signalSymbols.has(symbol))
+    .map((symbol) => {
+      const existing = existingBySymbol.get(symbol);
+      return {
+        symbol,
+        name: existing?.name || symbol,
+        market:
+          existing?.market ||
+          (symbol.endsWith(".SS") || symbol.endsWith(".SZ") ? "CN" : "US"),
+        role: existing?.role || "core",
+        analysis: "full",
+      };
+    });
   const profiles = settings.profiles.map((candidate, index) =>
     index === profileIndex
       ? { ...candidate, targets: [...fullTargets, ...signalTargets] }

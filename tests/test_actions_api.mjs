@@ -112,3 +112,30 @@ test("saving full-analysis tickers from the v2 page preserves signal targets and
     globalThis.fetch = originalFetch;
   }
 });
+
+test("saving an existing signal symbol does not promote it to full analysis", async () => {
+  const originalFetch = globalThis.fetch;
+  let dispatch;
+  globalThis.fetch = async (_url, init) => {
+    dispatch = JSON.parse(init.body);
+    return new Response(null, { status: 204 });
+  };
+  try {
+    const response = await saveSettings({
+      request: post(JSON.stringify({ tickers: ["515880", "NVDA"], settings: defaultSettings() })),
+      env,
+    });
+    const payload = await response.json();
+    const [profile] = JSON.parse(dispatch.inputs.settings_json).profiles;
+    const signalTargets = profile.targets.filter((target) => target.analysis === "signal");
+    const nvda = profile.targets.find((target) => target.symbol === "NVDA");
+
+    assert.equal(response.status, 202);
+    assert.equal(signalTargets.length, 8);
+    assert.equal(nvda.role, "driver");
+    assert.equal(nvda.analysis, "signal");
+    assert.deepEqual(payload.settings.tickers, ["515880.SS"]);
+  } finally {
+    globalThis.fetch = originalFetch;
+  }
+});
