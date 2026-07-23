@@ -219,6 +219,12 @@ test("scheduled refresh updates selected bars, watch quotes, feeds, and monitor 
   assert.doesNotMatch(script, /location\.reload/);
 });
 
+test("US drivers use daily data for quote strips and switch to the available daily chart", () => {
+  assert.match(script, /market === "US" \? "1d" : state\.timeframe/);
+  assert.match(script, /target\?\.market === "US" && state\.timeframe !== "1d"/);
+  assert.match(script, /state\.timeframe = "1d"/);
+});
+
 test("task timeline never maps source health rows to schedule slots by array position", () => {
   assert.equal(typeof workbenchData.buildTaskTimeline, "function");
   const profile = {

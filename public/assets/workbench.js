@@ -396,8 +396,9 @@ import {
 
   async function loadQuoteStrip() {
     const otherTargets = targets().filter(({ symbol }) => symbol !== state.selectedSymbol);
-    await Promise.allSettled(otherTargets.map(async ({ symbol }) => {
-      const envelope = normalizeEnvelope(await requestJson(marketUrl(symbol, state.timeframe, 2)));
+    await Promise.allSettled(otherTargets.map(async ({ symbol, market }) => {
+      const quoteTimeframe = market === "US" ? "1d" : state.timeframe;
+      const envelope = normalizeEnvelope(await requestJson(marketUrl(symbol, quoteTimeframe, 2)));
       const bars = sortBars(envelope.data);
       const last = bars.at(-1);
       const previous = bars.at(-2);
@@ -715,6 +716,15 @@ import {
 
   async function selectSymbol(symbol) {
     state.selectedSymbol = symbol;
+    const target = targets().find((item) => item.symbol === symbol);
+    if (target?.market === "US" && state.timeframe !== "1d") {
+      state.timeframe = "1d";
+      $$("[data-timeframe]").forEach((button) => {
+        const active = button.dataset.timeframe === "1d";
+        button.classList.toggle("is-active", active);
+        button.setAttribute("aria-selected", String(active));
+      });
+    }
     renderWatchlist();
     renderConclusion();
     state.chart.bars = [];
