@@ -10,6 +10,7 @@ import {
 import {
   WorkbenchSettingsError,
   buildWorkbenchSettings,
+  updateWorkbenchFullAnalysisTargets,
 } from "./_workbench_settings.mjs";
 
 // GET /api/settings -> main 分支上的每日分析清单。
@@ -17,7 +18,7 @@ export async function onRequestGet() {
   return proxyRaw("data/workbench-settings.json", { cacheSeconds: 5 });
 }
 
-// POST /api/settings {code, tickers} -> 校验后异步触发持久化工作流。
+// POST /api/settings {code, tickers, settings?} -> 校验后异步触发持久化工作流。
 export async function onRequestPost({ request, env }) {
   const headerCode = request.headers.get("x-access-code");
   if (headerCode !== null && !gate(env, headerCode)) {
@@ -40,7 +41,9 @@ export async function onRequestPost({ request, env }) {
 
   let settings;
   try {
-    settings = buildWorkbenchSettings(body.tickers);
+    settings = body.settings
+      ? updateWorkbenchFullAnalysisTargets(body.settings, body.tickers)
+      : buildWorkbenchSettings(body.tickers);
   } catch (error) {
     if (error instanceof WorkbenchSettingsError) {
       return json({ error: error.message, error_code: error.code }, 400);
@@ -59,7 +62,7 @@ export async function onRequestPost({ request, env }) {
       headers: { ...ghHeaders(env), "content-type": "application/json" },
       body: JSON.stringify({
         ref: "main",
-        inputs: { tickers_json: JSON.stringify(settings.tickers) },
+        inputs: { settings_json: JSON.stringify(settings) },
       }),
     },
   );
@@ -71,8 +74,9 @@ export async function onRequestPost({ request, env }) {
     );
   }
 
+  const responseSettings = { ...settings, tickers: settings.tickers };
   return json(
-    { ok: true, settings, message: "清单更新已受理，通常会在一分钟内生效" },
+    { ok: true, settings: responseSettings, message: "清单更新已受理，通常会在一分钟内生效" },
     202,
   );
 }

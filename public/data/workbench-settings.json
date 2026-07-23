@@ -1,8 +1,52 @@
 {
-  "version": 1,
-  "tickers": [
-    "NVDA",
-    "SPY",
-    "600519.SS"
+  "version": 2,
+  "profiles": [
+    {
+      "id": "cn-semi-comms",
+      "name": "A 股通信与半导体 ETF 传导监控",
+      "objective": "持续监控 A 股通信与半导体 ETF，识别美股半导体隔夜行情、行业新闻和政策变化对 A 股 ETF 的传导影响。",
+      "enabled": true,
+      "timezone": "Asia/Shanghai",
+      "targets": [
+        { "symbol": "515880.SS", "name": "通信ETF", "market": "CN", "role": "core", "analysis": "full" },
+        { "symbol": "512480.SS", "name": "半导体ETF", "market": "CN", "role": "core", "analysis": "full" },
+        { "symbol": "159995.SZ", "name": "芯片ETF", "market": "CN", "role": "comparison", "analysis": "signal" },
+        { "symbol": "SOXX", "name": "SOXX", "market": "US", "role": "driver", "analysis": "signal" },
+        { "symbol": "SMH", "name": "SMH", "market": "US", "role": "driver", "analysis": "signal" },
+        { "symbol": "NVDA", "name": "NVDA", "market": "US", "role": "driver", "analysis": "signal" },
+        { "symbol": "TSM", "name": "TSM", "market": "US", "role": "driver", "analysis": "signal" },
+        { "symbol": "AVGO", "name": "AVGO", "market": "US", "role": "driver", "analysis": "signal" },
+        { "symbol": "AMD", "name": "AMD", "market": "US", "role": "driver", "analysis": "signal" },
+        { "symbol": "ASML", "name": "ASML", "market": "US", "role": "driver", "analysis": "signal" }
+      ],
+      "systemBenchmarks": [
+        { "id": "csi-300", "name": "沪深300", "market": "CN" },
+        { "id": "nasdaq-100", "name": "纳指100", "market": "US" },
+        { "id": "usd-cny", "name": "美元人民币", "market": "FX" }
+      ],
+      "schedules": {
+        "usCloseSnapshot": { "enabled": true, "time": "05:35" },
+        "preMarketBrief": { "enabled": true, "time": "08:25" },
+        "cnIntraday": {
+          "enabled": true,
+          "windows": [
+            { "start": "09:30", "end": "11:30" },
+            { "start": "13:00", "end": "15:00" }
+          ],
+          "collectionIntervalMinutes": 5,
+          "signalIntervalMinutes": 15
+        },
+        "closeDeepAnalysis": { "enabled": true, "time": "15:20" }
+      },
+      "alerts": {
+        "channels": { "web": true, "pushPlus": true },
+        "pushMinSeverity": "high",
+        "quietHours": { "start": "22:30", "end": "07:30" }
+      },
+      "agentBudget": {
+        "intradayLightSummariesPerDay": 3,
+        "fullAnalysesPerDay": 1
+      }
+    }
   ]
 }

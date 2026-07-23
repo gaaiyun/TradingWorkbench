@@ -3,8 +3,8 @@ name: settings-update
 on:
   workflow_dispatch:
     inputs:
-      tickers_json:
-        description: "待保存的每日股票代码 JSON 数组"
+      settings_json:
+        description: "待保存的工作台 v2 设置 JSON"
         required: true
         type: string
 
@@ -27,7 +27,7 @@ jobs:
 
       - name: Validate requested settings
         env:
-          REQUESTED_TICKERS_JSON: ${{ inputs.tickers_json }}
+          REQUESTED_SETTINGS_JSON: ${{ inputs.settings_json }}
         run: |
           node --input-type=module <<'NODE'
           import { writeFile } from "node:fs/promises";
@@ -35,12 +35,9 @@ jobs:
 
           let requested;
           try {
-            requested = JSON.parse(process.env.REQUESTED_TICKERS_JSON);
+            requested = JSON.parse(process.env.REQUESTED_SETTINGS_JSON);
           } catch {
-            throw new Error("tickers_json 不是合法 JSON");
-          }
-          if (!Array.isArray(requested)) {
-            throw new Error("tickers_json 必须是 JSON 数组");
+            throw new Error("settings_json 不是合法 JSON");
           }
           const settings = buildWorkbenchSettings(requested);
           const target = `${process.env.RUNNER_TEMP}/workbench-settings.json`;

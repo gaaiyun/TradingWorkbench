@@ -356,8 +356,23 @@
     renderCoverage();
   }
 
+  function settingsTickers(settings) {
+    if (Array.isArray(settings?.tickers)) return settings.tickers;
+    const seen = new Set();
+    return (settings?.profiles || [])
+      .filter((profile) => profile.enabled)
+      .flatMap((profile) => profile.targets || [])
+      .filter((target) => target.analysis === "full")
+      .map((target) => target.symbol)
+      .filter((symbol) => {
+        if (seen.has(symbol)) return false;
+        seen.add(symbol);
+        return true;
+      });
+  }
+
   function renderSettingsSummary() {
-    const tickers = state.settings?.tickers || [];
+    const tickers = settingsTickers(state.settings);
     const checklist = $("#daily-checklist");
     if (!tickers.length) {
       checklist.innerHTML = '<div class="empty-line">远端清单为空或暂时不可用</div>';
@@ -929,7 +944,7 @@
     $("#save-settings").addEventListener("click", async () => {
       state.accessCode = $("#settings-code").value.trim();
       const notice = $("#settings-notice"); notice.textContent = "正在校验并保存…"; notice.className = "form-notice"; $("#save-settings").disabled = true;
-      try { const payload = await submitAction("/api/settings", { tickers: $("#settings-tickers").value }); state.settings = payload.settings; renderSettingsSummary(); notice.textContent = payload.message; toast("每日研究清单已受理"); }
+      try { const payload = await submitAction("/api/settings", { tickers: $("#settings-tickers").value, settings: state.settings }); state.settings = payload.settings; renderSettingsSummary(); notice.textContent = payload.message; toast("每日研究清单已受理"); }
       catch (error) { notice.textContent = error.message; notice.classList.add("is-bad"); }
       finally { $("#save-settings").disabled = false; }
     });

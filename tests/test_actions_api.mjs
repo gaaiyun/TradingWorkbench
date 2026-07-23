@@ -1,4 +1,5 @@
 import assert from "node:assert/strict";
+import { readFileSync } from "node:fs";
 import test from "node:test";
 
 import { onRequestPost as analyze } from "../functions/api/analyze.js";
@@ -8,6 +9,12 @@ const env = {
   ACCESS_CODE: "correct-code",
   GITHUB_DISPATCH_TOKEN: "dispatch-token",
 };
+
+function defaultSettings() {
+  return JSON.parse(
+    readFileSync(new URL("../public/data/workbench-settings.json", import.meta.url), "utf8"),
+  );
+}
 
 function post(body, code = "correct-code") {
   return new Request("https://workbench.test/api/action", {
@@ -71,8 +78,36 @@ test("saved settings support header authentication without persisting the code",
     const payload = await response.json();
     assert.equal(response.status, 202);
     assert.deepEqual(payload.settings.tickers, ["SPY", "000001.SZ"]);
-    assert.equal(dispatch.inputs.tickers_json, '["SPY","000001.SZ"]');
+    assert.equal(JSON.parse(dispatch.inputs.settings_json).version, 2);
     assert.equal(JSON.stringify(dispatch).includes("correct-code"), false);
+  } finally {
+    globalThis.fetch = originalFetch;
+  }
+});
+
+test("saving full-analysis tickers from the v2 page preserves signal targets and profile metadata", async () => {
+  const originalFetch = globalThis.fetch;
+  let dispatch;
+  globalThis.fetch = async (_url, init) => {
+    dispatch = JSON.parse(init.body);
+    return new Response(null, { status: 204 });
+  };
+  try {
+    const response = await saveSettings({
+      request: post(JSON.stringify({ tickers: ["515880", "512480"], settings: defaultSettings() })),
+      env,
+    });
+    const payload = await response.json();
+    const persisted = JSON.parse(dispatch.inputs.settings_json);
+    assert.equal(response.status, 202);
+    assert.equal(persisted.profiles[0].id, "cn-semi-comms");
+    assert.equal(persisted.profiles[0].objective.includes("传导影响"), true);
+    assert.deepEqual(
+      persisted.profiles[0].targets.filter((target) => target.analysis === "signal"),
+      defaultSettings().profiles[0].targets.filter((target) => target.analysis === "signal"),
+    );
+    assert.deepEqual(persisted.profiles[0].systemBenchmarks, defaultSettings().profiles[0].systemBenchmarks);
+    assert.deepEqual(payload.settings.tickers, ["515880.SS", "512480.SS"]);
   } finally {
     globalThis.fetch = originalFetch;
   }
