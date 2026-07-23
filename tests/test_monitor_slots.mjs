@@ -27,7 +27,11 @@ function d1(sqlite) {
       return {
         bind: (...params) => ({
           first: async () => sqlite.prepare(sql).get(...params) ?? null,
-          run: async () => sqlite.prepare(sql).run(...params),
+          all: async () => ({ results: [...sqlite.prepare(sql).all(...params)] }),
+          run: async () => {
+            const result = sqlite.prepare(sql).run(...params);
+            return { meta: { changes: Number(result.changes) } };
+          },
         }),
       };
     },
@@ -62,6 +66,31 @@ test("lease migration adds recovery and retry timing columns", () => {
   const sql = readFileSync(migration4Url, "utf8");
   assert.match(sql, /ADD COLUMN lease_until\b/i);
   assert.match(sql, /ADD COLUMN next_attempt_at\b/i);
+});
+
+test("lease migration backfills legacy claimed rows so the next cron can recover them", async () => {
+  const sqlite = new DatabaseSync(":memory:");
+  sqlite.exec(migration1);
+  sqlite.exec(migration2);
+  sqlite.exec(readFileSync(migration3Url, "utf8"));
+  sqlite.prepare(`
+    INSERT INTO scheduled_slots (
+      id, profile_id, slot_type, scheduled_for, status, claimed_at,
+      expires_at, attempt_count, updated_at
+    ) VALUES (
+      'legacy-claimed', 'etf-main', 'intradayCollect',
+      '2026-07-23T01:30:00.000Z', 'claimed', '2026-07-23T01:30:00.000Z',
+      '2026-10-23T00:00:00.000Z', 1, '2026-07-23T01:30:00.000Z'
+    )
+  `).run();
+  sqlite.exec(readFileSync(migration4Url, "utf8"));
+
+  const { listRetryableSlots } = await import(slotUrl);
+  const rows = await listRetryableSlots(
+    d1(sqlite),
+    new Date("2026-07-23T01:35:00.000Z"),
+  );
+  assert.deepEqual(rows.map((row) => row.id), ["legacy-claimed"]);
 });
 
 test("duplicate and concurrent claims execute a new slot only once", async () => {
@@ -116,6 +145,7 @@ test("failed slots retry up to three total attempts but completed slots never re
     assert.equal(claim.attemptCount, attempt);
     await finishScheduledSlot(db, {
       id: claimInput.id,
+      attemptCount: claim.attemptCount,
       status: "failed",
       errorCode: `FAIL_${attempt}`,
       now,
@@ -128,9 +158,11 @@ test("failed slots retry up to three total attempts but completed slots never re
     id: "slot-2",
     scheduledFor: "2026-07-23T01:35:00.000Z",
   };
-  assert.ok(await claimScheduledSlot(db, completedInput));
+  const completedClaim = await claimScheduledSlot(db, completedInput);
+  assert.ok(completedClaim);
   await finishScheduledSlot(db, {
     id: completedInput.id,
+    attemptCount: completedClaim.attemptCount,
     status: "completed",
     now: new Date("2026-07-23T01:35:00.000Z"),
   });
@@ -148,13 +180,55 @@ test("deferred hook slots are terminal and all SQL values stay parameterized", a
     },
   };
   const hostile = { ...claimInput, id: "slot-hostile", profileId: "x' OR 1=1 --" };
-  assert.ok(await claimScheduledSlot(db, hostile));
+  const hostileClaim = await claimScheduledSlot(db, hostile);
+  assert.ok(hostileClaim);
   await finishScheduledSlot(db, {
     id: hostile.id,
+    attemptCount: hostileClaim.attemptCount,
     status: "deferred",
     errorCode: "HOOK_NOT_IMPLEMENTED",
     now: claimInput.now,
   });
   assert.equal(await claimScheduledSlot(db, hostile), null);
   assert.equal(statements.some((sql) => sql.includes(hostile.profileId)), false);
+});
+
+test("attempt fencing rejects a late finisher after an expired lease is reclaimed", async () => {
+  const { claimScheduledSlot, finishScheduledSlot } = await import(slotUrl);
+  const sqlite = freshDatabase();
+  const db = d1(sqlite);
+  const first = await claimScheduledSlot(db, {
+    ...claimInput,
+    id: "slot-fenced",
+    now: new Date("2026-07-23T01:30:00.000Z"),
+  });
+  const second = await claimScheduledSlot(db, {
+    ...claimInput,
+    id: "slot-fenced",
+    now: new Date("2026-07-23T01:35:00.000Z"),
+  });
+  assert.equal(second.attemptCount, 2);
+
+  assert.deepEqual(
+    await finishScheduledSlot(db, {
+      id: "slot-fenced",
+      attemptCount: first.attemptCount,
+      status: "completed",
+      now: new Date("2026-07-23T01:36:00.000Z"),
+    }),
+    { changed: 0 },
+  );
+  assert.deepEqual({ ...sqlite.prepare(`
+    SELECT status, attempt_count FROM scheduled_slots WHERE id = 'slot-fenced'
+  `).get() }, { status: "claimed", attempt_count: 2 });
+
+  assert.deepEqual(
+    await finishScheduledSlot(db, {
+      id: "slot-fenced",
+      attemptCount: second.attemptCount,
+      status: "completed",
+      now: new Date("2026-07-23T01:36:01.000Z"),
+    }),
+    { changed: 1 },
+  );
 });

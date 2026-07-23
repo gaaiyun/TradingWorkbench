@@ -79,7 +79,9 @@ export async function finishScheduledSlot(db, input) {
         updated_at = ?,
         lease_until = NULL,
         next_attempt_at = ?
-    WHERE id = ? AND status = 'claimed'
+    WHERE id = ?
+      AND status = 'claimed'
+      AND attempt_count = ?
   `).bind(
     input.status,
     input.status === "failed" ? null : timestamp,
@@ -87,6 +89,7 @@ export async function finishScheduledSlot(db, input) {
     timestamp,
     nextAttemptAt,
     input.id,
+    input.attemptCount,
   ).run();
   return { changed: Number(result?.meta?.changes ?? 0) };
 }

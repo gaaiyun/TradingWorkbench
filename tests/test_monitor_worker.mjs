@@ -37,7 +37,8 @@ function sqliteWorkerD1(settings, { failNextFinish = false } = {}) {
               state.failNextFinish = false;
               throw new Error("simulated terminal write failure");
             }
-            return sqlite.prepare(sql).run(...params);
+            const result = sqlite.prepare(sql).run(...params);
+            return { meta: { changes: Number(result.changes) } };
           },
         }),
       };
@@ -126,9 +127,25 @@ class WorkerD1 {
           },
           async run() {
             if (/UPDATE\s+scheduled_slots/i.test(sql)) {
-              const [status, completedAt, errorCode, updatedAt, nextAttemptAt, id] =
+              const [
+                status,
+                completedAt,
+                errorCode,
+                updatedAt,
+                nextAttemptAt,
+                id,
+                attemptCount,
+              ] =
                 params;
-              Object.assign(db.slots.get(id), {
+              const row = db.slots.get(id);
+              if (
+                !row ||
+                row.status !== "claimed" ||
+                row.attempt_count !== attemptCount
+              ) {
+                return { meta: { changes: 0 } };
+              }
+              Object.assign(row, {
                 status,
                 completed_at: completedAt,
                 last_error_code: errorCode,

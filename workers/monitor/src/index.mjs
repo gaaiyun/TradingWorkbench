@@ -136,10 +136,11 @@ export async function runScheduled(scheduledTime, env, deps = {}) {
       due.push({ profile, task });
     }
   }
-  const now = deps.now?.() ?? new Date();
+  const clock = deps.now ?? (() => new Date());
+  const retryNow = clock();
   let retryable = [];
   try {
-    const rows = await listRetryableSlots(env.DB, now);
+    const rows = await listRetryableSlots(env.DB, retryNow);
     retryable = rows.flatMap((row) => {
       const profile = profilesById.get(row.profile_id);
       const task = profile ? taskFromScheduledSlot(profile, row) : null;
@@ -152,10 +153,11 @@ export async function runScheduled(scheduledTime, env, deps = {}) {
   counts.due = work.length;
   const registryFactory = deps.registryFactory ?? ((options) =>
     createProviderRegistry(options));
-  const registry = registryFactory({ db: env.DB, env, now: () => now });
+  const registry = registryFactory({ db: env.DB, env, now: clock });
 
   for (const { profile, task, slotId: retrySlotId } of work) {
     const slotId = retrySlotId ?? await slotIdForTask(profile.id, task);
+    const claimNow = clock();
     let claim;
     try {
       claim = await claimScheduledSlot(env.DB, {
@@ -163,7 +165,7 @@ export async function runScheduled(scheduledTime, env, deps = {}) {
         profileId: profile.id,
         slotType: task.type,
         scheduledFor: task.scheduledFor,
-        now,
+        now: claimNow,
       });
     } catch {
       counts.failed += 1;
@@ -185,7 +187,7 @@ export async function runScheduled(scheduledTime, env, deps = {}) {
         db: env.DB,
         registry,
         deps,
-        now,
+        now: claimNow,
       });
     } catch {
       result = { status: "failed", errorCode: "TASK_EXECUTION_FAILED" };
@@ -197,13 +199,18 @@ export async function runScheduled(scheduledTime, env, deps = {}) {
         ? "failed"
         : "completed";
     try {
-      await finishScheduledSlot(env.DB, {
+      const finishResult = await finishScheduledSlot(env.DB, {
         id: slotId,
+        attemptCount: claim.attemptCount,
         status: terminalStatus,
         errorCode: result.errorCode,
-        now,
+        now: clock(),
       });
-      counts[result.status === "degraded" ? "degraded" : terminalStatus] += 1;
+      if (finishResult.changed === 0) {
+        counts.skipped += 1;
+      } else {
+        counts[result.status === "degraded" ? "degraded" : terminalStatus] += 1;
+      }
     } catch {
       counts.failed += 1;
     }
