@@ -1,0 +1,13 @@
+name = "tradingagents-monitor"
+main = "workers/monitor/src/index.mjs"
+compatibility_date = "2026-07-23"
+
+[triggers]
+crons = ["*/5 * * * *"]
+
+[[d1_databases]]
+binding = "DB"
+database_name = "tradingagents-workbench"
+# 部署前替换为 Cloudflare 控制台创建的 D1 ID；不要提交 token 或真实密钥。
+database_id = "replace-with-d1-database-id"
+migrations_dir = "migrations"

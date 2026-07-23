@@ -10,6 +10,18 @@ on:
         description: "逗号分隔的股票代码（留空使用网页保存的每日清单）"
         required: false
         default: ""
+      profileId:
+        description: "Monitor Worker 研究配置 ID"
+        required: false
+        default: ""
+      slotId:
+        description: "Monitor Worker 确定性计划槽 ID"
+        required: false
+        default: ""
+      scheduledFor:
+        description: "Monitor Worker 原始计划时间（ISO 8601）"
+        required: false
+        default: ""
 
 permissions:
   contents: write   # 分析报告与历史 commit 回 main 持久化
@@ -71,6 +83,9 @@ jobs:
       - name: Resolve daily ticker list
         env:
           MANUAL_TICKERS: ${{ inputs.tickers || '' }}
+          MONITOR_PROFILE_ID: ${{ inputs.profileId || '' }}
+          MONITOR_SLOT_ID: ${{ inputs.slotId || '' }}
+          MONITOR_SCHEDULED_FOR: ${{ inputs.scheduledFor || '' }}
         run: |
           node --input-type=module <<'NODE'
           import { appendFile, readFile } from "node:fs/promises";
