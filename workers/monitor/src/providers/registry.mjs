@@ -70,10 +70,20 @@ export function createProviderRegistry(options = {}) {
           });
           bars.sort((left, right) => left.timestamp.localeCompare(right.timestamp));
           const quote = quoteFromBar(bars.at(-1));
-          await recordSourceSuccess(options.db, source, requestedAt).catch(() => {});
+          const status = quote.freshness === "stale"
+            ? "stale"
+            : index === 0 ? "ok" : "degraded";
+          await recordSourceSuccess(options.db, source, {
+            status,
+            asOf: quote.asOf,
+            fetchedAt: quote.fetchedAt,
+            freshness: quote.freshness,
+            adjustment: quote.adjustment,
+            quality: quote.quality,
+          }, requestedAt).catch(() => {});
           sources.push({ source, status: "success", reason: null });
           return {
-            status: quote.freshness === "stale" ? "stale" : index === 0 ? "ok" : "degraded",
+            status,
             symbol: marketRequest.symbol,
             market: marketRequest.market,
             timeframe: marketRequest.timeframe,

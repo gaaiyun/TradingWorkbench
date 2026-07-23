@@ -66,17 +66,16 @@ export async function recordSourceFailure(
   ).run();
 }
 
-export async function recordSourceSuccess(db, source, now = new Date()) {
+export async function recordSourceSuccess(db, source, metadata, now = new Date()) {
   if (!db) return;
-  const asOf = now.toISOString();
   const expiresAt = new Date(now.valueOf() + HEALTH_RETENTION_MS).toISOString();
   await db.prepare(`
     INSERT INTO source_health (
       source, status, as_of, fetched_at, freshness, adjustment, quality, detail,
       expires_at, consecutive_failures, paused_until, last_error_code, last_success_at
-    ) VALUES (?, 'ok', ?, ?, 'fresh', 'none', 'good', NULL, ?, 0, NULL, NULL, ?)
+    ) VALUES (?, ?, ?, ?, ?, ?, ?, NULL, ?, 0, NULL, NULL, ?)
     ON CONFLICT(source) DO UPDATE SET
-      status = 'ok',
+      status = excluded.status,
       as_of = excluded.as_of,
       fetched_at = excluded.fetched_at,
       freshness = excluded.freshness,
@@ -88,5 +87,15 @@ export async function recordSourceSuccess(db, source, now = new Date()) {
       paused_until = NULL,
       last_error_code = NULL,
       last_success_at = excluded.last_success_at
-  `).bind(source, asOf, asOf, expiresAt, asOf).run();
+  `).bind(
+    source,
+    metadata.status,
+    metadata.asOf,
+    metadata.fetchedAt,
+    metadata.freshness,
+    metadata.adjustment,
+    metadata.quality,
+    expiresAt,
+    metadata.fetchedAt,
+  ).run();
 }

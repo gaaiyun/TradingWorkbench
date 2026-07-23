@@ -56,7 +56,12 @@ class FakeHealthD1 {
             } else {
               this.rows.set(source, {
                 source,
-                status: "ok",
+                status: previous && sql.includes("status = 'ok'") ? "ok" : values[1],
+                as_of: values[2],
+                fetched_at: values[3],
+                freshness: values[4],
+                adjustment: values[5],
+                quality: values[6],
                 consecutive_failures: 0,
                 paused_until: null,
                 last_error_code: null,
@@ -133,18 +138,48 @@ test("a successful recovery resets the consecutive failure counter", async () =>
   const recovered = await registry.fetchMarketData(request);
   assert.equal(recovered.status, "stale");
   assert.equal(recovered.source, "tencent");
-  assert.deepEqual(db.rows.get("tencent"), {
-    source: "tencent",
-    status: "ok",
-    consecutive_failures: 0,
-    paused_until: null,
-    last_error_code: null,
-  });
+  assert.equal(db.rows.get("tencent").status, "stale");
+  assert.equal(db.rows.get("tencent").freshness, "stale");
+  assert.equal(db.rows.get("tencent").consecutive_failures, 0);
+  assert.equal(db.rows.get("tencent").paused_until, null);
+  assert.equal(db.rows.get("tencent").last_error_code, null);
 
   tencentSucceeds = false;
   await registry.fetchMarketData(request);
   assert.equal(db.rows.get("tencent").consecutive_failures, 1);
   assert.equal(db.rows.get("tencent").paused_until, null);
+});
+
+test("persists normalized stale metadata instead of reporting the source as fresh", async () => {
+  const { createProviderRegistry } = await import(registryUrl);
+  const db = new FakeHealthD1();
+  const registry = createProviderRegistry({
+    db,
+    fetch: async () => response(tencentFixture()),
+    now: () => new Date("2026-07-23T03:00:00.000Z"),
+    intradayFreshnessMs: 10 * 60 * 1000,
+  });
+
+  const result = await registry.fetchMarketData({
+    symbol: "515880.SS",
+    market: "CN",
+    timeframe: "5m",
+  });
+  const health = db.rows.get("tencent");
+
+  assert.equal(result.status, "stale");
+  assert.deepEqual(health, {
+    source: "tencent",
+    status: "stale",
+    as_of: "2026-07-23T02:00:00.000Z",
+    fetched_at: "2026-07-23T03:00:00.000Z",
+    freshness: "stale",
+    adjustment: "none",
+    quality: "good",
+    consecutive_failures: 0,
+    paused_until: null,
+    last_error_code: null,
+  });
 });
 
 test("health SQL is parameterized and stores only stable error codes", async () => {
