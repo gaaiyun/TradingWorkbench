@@ -96,8 +96,11 @@
   function renderMarkdown(markdown) {
     const localized = String(markdown || "")
       .replaceAll("**Rating:**", "**评级：**")
+      .replaceAll("**Rating**:", "**评级**：")
       .replaceAll("**Executive Summary:**", "**执行摘要：**")
+      .replaceAll("**Executive Summary**:", "**执行摘要**：")
       .replaceAll("**Investment Thesis:**", "**投资逻辑：**")
+      .replaceAll("**Investment Thesis**:", "**投资逻辑**：")
       .replace(/(^|\n)Rating:\s*/g, "$1评级：")
       .replace(/(^|\n)Executive Summary:\s*/g, "$1执行摘要：")
       .replace(/(^|\n)Investment Thesis:\s*/g, "$1投资逻辑：");
