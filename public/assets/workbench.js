@@ -7,6 +7,7 @@ import {
   computeIndicators,
   computeNextRun,
   createLatestRequestGate,
+  dailyHistoryLimit,
   filterFeedItems,
   mergeIncrementalBatch,
   normalizeEnvelope,
@@ -21,6 +22,20 @@ import {
   LineStyle,
   createChart,
 } from "../vendor/lightweight-charts.production.mjs";
+import {
+  PRIMARY_ROUTES,
+  normalizeRoute,
+  routeHref,
+} from "./workbench-router.mjs";
+import {
+  OPTIONS_FAST_REFRESH_MS,
+  normalizeVolguardPayload,
+} from "./workbench-options.mjs";
+import {
+  buildArchiveEntries,
+  buildPipelineStages,
+  latestResearchRun,
+} from "./workbench-research.mjs";
 
 (() => {
   "use strict";
@@ -42,12 +57,18 @@ import {
     settingsUpdatedAt: null,
     selectedSymbol: "515880.SS",
     timeframe: "15m",
+    historyRange: "5y",
     market: normalizeEnvelope(null),
     quotes: new Map(),
     feeds: [],
     feedEnvelope: normalizeEnvelope(null),
     monitor: normalizeEnvelope(null),
     latest: null,
+    history: [],
+    runs: [],
+    archiveEntries: [],
+    selectedReportPath: null,
+    selectedReportContent: "",
     accessCode: "",
     rememberCode: false,
     chart: { bars: [], api: null, series: null, symbol: null, timeframe: null, hydrated: false },
@@ -57,6 +78,8 @@ import {
     threads: [],
     threadId: null,
     threadStorageWarningShown: false,
+    options: normalizeVolguardPayload(null),
+    optionsNextAt: null,
   };
   const marketRequestGate = createLatestRequestGate();
 
@@ -152,6 +175,18 @@ import {
     }).format(date);
   }
 
+  function formatDate(value) {
+    if (!value) return "—";
+    const date = new Date(value);
+    if (Number.isNaN(date.valueOf())) return String(value);
+    return new Intl.DateTimeFormat("zh-CN", {
+      timeZone: state.settings?.profiles?.[0]?.timezone || "Asia/Shanghai",
+      year: "numeric",
+      month: "2-digit",
+      day: "2-digit",
+    }).format(date);
+  }
+
   function formatNumber(value, digits = 3) {
     const number = Number(value);
     return Number.isFinite(number)
@@ -165,6 +200,32 @@ import {
     if (Math.abs(number) >= 1e8) return `${(number / 1e8).toFixed(2)}亿`;
     if (Math.abs(number) >= 1e4) return `${(number / 1e4).toFixed(1)}万`;
     return formatNumber(number, 0);
+  }
+
+  function marketTone(change, market) {
+    if (!Number.isFinite(Number(change))) return "neutral";
+    if (market === "US") return Number(change) >= 0 ? "us-market-up" : "us-market-down";
+    return Number(change) >= 0 ? "market-up" : "market-down";
+  }
+
+  function marketPalette(market) {
+    return market === "US"
+      ? {
+        up: "#38b788",
+        down: "#e05f68",
+        upSoft: "#38b78855",
+        downSoft: "#e05f6855",
+        upHistogram: "#38b78877",
+        downHistogram: "#e05f6877",
+      }
+      : {
+        up: "#e05f68",
+        down: "#38b788",
+        upSoft: "#e05f6855",
+        downSoft: "#38b78855",
+        upHistogram: "#e05f6877",
+        downHistogram: "#38b78877",
+      };
   }
 
   function toast(message, error = false) {
@@ -231,6 +292,9 @@ import {
     renderWatchlist();
     renderNextRun();
     renderTimeline();
+    renderTaskBoard();
+    renderAgentWorkspace();
+    renderSettingsWorkspace();
   }
 
   function ensureSettings() {
@@ -269,7 +333,7 @@ import {
     $("#watchlist").innerHTML = list.map((target) => {
       const quote = state.quotes.get(target.symbol);
       const change = quote && Number.isFinite(Number(quote.change)) ? Number(quote.change) : null;
-      const tone = change == null ? "neutral" : change >= 0 ? "market-up" : "market-down";
+      const tone = marketTone(change, target.market);
       return `<button class="watch-row ${target.symbol === state.selectedSymbol ? "is-active" : ""}" type="button" role="option" aria-selected="${target.symbol === state.selectedSymbol}" data-symbol="${escapeHtml(target.symbol)}">
         <span class="watch-main"><span class="role-mark">${escapeHtml(roleLabels[target.role] || target.role)}</span><span><strong>${escapeHtml(target.symbol)}</strong><small>${escapeHtml(target.name || target.market)}</small></span></span>
         <span class="watch-quote"><b>${formatNumber(quote?.close)}</b><small class="${tone}">${change == null ? "—" : `${change >= 0 ? "+" : ""}${change.toFixed(2)}%`}</small></span>
@@ -280,6 +344,7 @@ import {
 
   function renderInstrument() {
     const target = targets().find((item) => item.symbol === state.selectedSymbol) || DEFAULT_TARGETS[0];
+    const isUsDaily = target.market === "US";
     const bars = state.chart.bars;
     const bar = bars.at(-1);
     const previous = bars.at(-2);
@@ -289,11 +354,23 @@ import {
     $("#instrument-role").textContent = roleLabels[target.role] || target.role;
     $("#instrument-price").textContent = formatNumber(bar?.close);
     $("#instrument-change").textContent = change == null ? "—" : `${change >= 0 ? "+" : ""}${change.toFixed(2)}%`;
-    $("#instrument-change").className = change == null ? "neutral" : change >= 0 ? "market-up" : "market-down";
+    $("#instrument-change").className = marketTone(change, target.market);
     $("#quote-open").textContent = formatNumber(bar?.open);
     $("#quote-high").textContent = formatNumber(bar?.high);
     $("#quote-low").textContent = formatNumber(bar?.low);
     $("#quote-volume").textContent = formatVolume(bar?.volume);
+    $("#history-range-tabs").hidden = !isUsDaily;
+    $$("[data-timeframe]").forEach((button) => {
+      button.disabled = isUsDaily && button.dataset.timeframe !== "1d";
+    });
+    if (isUsDaily && bars.length) {
+      const first = bars[0];
+      const source = state.market.sources?.[0];
+      const degraded = state.market.status === "degraded" || state.market.status === "stale";
+      $("#chart-coverage").textContent = `覆盖 ${formatDate(first.ts)}–${formatDate(bar.ts)} · ${bars.length} 日${degraded ? ` · ${source?.source || "来源"}降级` : ""}`;
+    } else {
+      $("#chart-coverage").textContent = "覆盖 —";
+    }
   }
 
   function updateFreshness(envelope) {
@@ -354,8 +431,12 @@ import {
     }
     let chartUpdate = { changedFromIndex: 0, strategy: "setData" };
     try {
+      const target = targets().find((item) => item.symbol === symbol);
+      const fullLimit = target?.market === "US" && timeframe === "1d"
+        ? dailyHistoryLimit(state.historyRange)
+        : 240;
       const envelope = normalizeEnvelope(await requestJson(
-        marketUrl(symbol, timeframe, incremental ? 2 : 240),
+        marketUrl(symbol, timeframe, incremental ? 2 : fullLimit),
         { signal: request.signal },
       ));
       if (!marketRequestGate.isCurrent(request, state.selectedSymbol, state.timeframe)) return;
@@ -439,6 +520,7 @@ import {
     };
     renderFeedFilters();
     renderFeed();
+    renderNewsWorkspace();
   }
 
   function renderFeedFilters() {
@@ -493,6 +575,319 @@ import {
     $("#monitor-run-status").innerHTML = `<b>最近结果</b><span>${latest ? `${escapeHtml(latest.source || "monitor")} · ${escapeHtml(latest.status || "unknown")} · ${formatTime(latest.as_of, true)}${latest.detail ? ` · ${escapeHtml(latest.detail)}` : ""}` : "尚未从 /api/monitor-status 取得结果或失败原因"}</span>`;
   }
 
+  function optionValue(value, {
+    digits = 2,
+    suffix = "",
+    signed = false,
+  } = {}) {
+    if (value === null || value === undefined || value === "") return "—";
+    const number = Number(value);
+    if (!Number.isFinite(number)) return "—";
+    const sign = signed && number > 0 ? "+" : "";
+    return `${sign}${formatNumber(number, digits)}${suffix}`;
+  }
+
+  function renderOptionMetricGrid(selector, items) {
+    $(selector).innerHTML = items.map(({ label, value, detail, tone = "" }) => `<div>
+      <span>${escapeHtml(label)}</span>
+      <strong class="${escapeHtml(tone)}">${escapeHtml(value)}</strong>
+      <small>${escapeHtml(detail)}</small>
+    </div>`).join("");
+  }
+
+  function renderOptions() {
+    const view = state.options;
+    const statusLabels = {
+      ok: view.sourceState === "market_closed"
+        ? "市场休市 · 行情源正常"
+        : view.mode === "live" ? "实时接口正常" : "数据正常",
+      degraded: "部分降级",
+      stale: view.mode === "snapshot" ? "快照降级" : "数据过期",
+      unavailable: "数据不可用",
+    };
+    $("#options-status").textContent = statusLabels[view.status] || view.status;
+    const dot = $(".option-status-strip .status-dot");
+    dot.className = `status-dot is-${view.status}`;
+    $("#options-quote-asof").textContent = formatTime(view.quoteAsOf, true);
+    $("#options-model-asof").textContent = formatTime(view.modelAsOf, true);
+
+    const change = view.market.changePct;
+    const marketTone = Number.isFinite(change) ? (change >= 0 ? "market-up" : "market-down") : "";
+    const ivGap = Number.isFinite(view.risk.ivAverage) && Number.isFinite(view.risk.hv30)
+      ? view.risk.ivAverage - view.risk.hv30
+      : null;
+    renderOptionMetricGrid("#options-risk-metrics", [
+      {
+        label: view.market.symbol,
+        value: optionValue(view.market.spot, { digits: 3 }),
+        detail: Number.isFinite(change) ? `${change >= 0 ? "+" : ""}${change.toFixed(2)}%` : "等待报价",
+        tone: marketTone,
+      },
+      {
+        label: "HV30 / IV",
+        value: `${optionValue(view.risk.hv30, { digits: 1, suffix: "%" })} / ${optionValue(view.risk.ivAverage, { digits: 1, suffix: "%" })}`,
+        detail: Number.isFinite(ivGap) ? `IV-HV ${ivGap >= 0 ? "+" : ""}${ivGap.toFixed(1)}pp` : "暂无可靠差值",
+      },
+      {
+        label: "GARCH VaR 95%",
+        value: optionValue(view.risk.var95, { digits: 2, suffix: "%" }),
+        detail: view.risk.varMethod || view.risk.varQuality || "暂无可靠模型结果",
+      },
+      {
+        label: "BSADF",
+        value: optionValue(view.risk.bsadfStat, { digits: 2 }),
+        detail: Number.isFinite(view.risk.bsadfCritical)
+          ? `临界值 ${optionValue(view.risk.bsadfCritical, { digits: 2 })}${view.risk.bsadfTriggered ? " · 已触发" : " · 未触发"}`
+          : "暂无可靠检验结果",
+        tone: view.risk.bsadfTriggered ? "negative" : "",
+      },
+    ]);
+    renderOptionMetricGrid("#options-exposure-metrics", [
+      {
+        label: "GEX",
+        value: optionValue(view.exposure.gex, { digits: 2, signed: true }),
+        detail: "净 Gamma 敞口",
+      },
+      {
+        label: "DEX",
+        value: optionValue(view.exposure.dex, { digits: 2, signed: true }),
+        detail: "净 Delta 敞口",
+      },
+      {
+        label: "PCR",
+        value: optionValue(view.exposure.pcr, { digits: 2 }),
+        detail: Number.isFinite(view.exposure.pcrOi) ? "持仓量口径" : Number.isFinite(view.exposure.pcrVolume) ? "成交量口径" : "暂无可靠口径",
+      },
+      {
+        label: "Max Pain",
+        value: optionValue(view.exposure.maxPain, { digits: 3 }),
+        detail: view.exposure.nearExpiry ? `近月 ${view.exposure.nearExpiry}` : "近月最大痛点",
+      },
+    ]);
+
+    const rows = view.options.slice(0, 80);
+    $("#options-chain-coverage").textContent = `${view.contractCount || rows.length} 条合约`;
+    if (!rows.length) {
+      $("#options-chain").className = "table-empty";
+      $("#options-chain").innerHTML = `<b>${view.status === "unavailable" ? "期权数据暂不可用" : "当前没有可展示合约"}</b><span>${view.fallbackReason ? `实时源失败：${escapeHtml(view.fallbackReason)}` : "不会用模拟期权链替代真实数据。"}</span>`;
+      return;
+    }
+    $("#options-chain").className = "options-table-wrap";
+    $("#options-chain").innerHTML = `<table class="options-table">
+      <thead><tr><th>合约</th><th>类型</th><th>到期日</th><th>行权价</th><th>最新</th><th>IV</th><th>Delta</th><th>Gamma</th><th>Vega</th><th>Theta</th><th>成交量</th><th>持仓量</th><th>买 / 卖</th></tr></thead>
+      <tbody>${rows.map((row) => `<tr>
+        <td><b>${escapeHtml(row.name || row.code)}</b><small>${escapeHtml(row.code)}</small></td>
+        <td>${escapeHtml(row.type === "call" ? "认购" : row.type === "put" ? "认沽" : row.type || "—")}</td>
+        <td>${escapeHtml(row.expiry || "—")}</td>
+        <td>${escapeHtml(optionValue(row.strike, { digits: 3 }))}</td>
+        <td>${escapeHtml(optionValue(row.last, { digits: 4 }))}</td>
+        <td>${escapeHtml(optionValue(row.iv, { digits: 2, suffix: "%" }))}</td>
+        <td>${escapeHtml(optionValue(row.delta, { digits: 3 }))}</td>
+        <td>${escapeHtml(optionValue(row.gamma, { digits: 3 }))}</td>
+        <td>${escapeHtml(optionValue(row.vega, { digits: 3 }))}</td>
+        <td>${escapeHtml(optionValue(row.theta, { digits: 3 }))}</td>
+        <td>${escapeHtml(formatVolume(row.volume))}</td>
+        <td>${escapeHtml(formatVolume(row.openInterest))}</td>
+        <td>${escapeHtml(`${optionValue(row.bid, { digits: 4 })} / ${optionValue(row.ask, { digits: 4 })}`)}</td>
+      </tr>`).join("")}</tbody>
+    </table>`;
+  }
+
+  function renderOptionsCountdown() {
+    if (!state.optionsNextAt) {
+      $("#options-next-refresh").textContent = "—";
+      return;
+    }
+    const seconds = Math.max(0, Math.ceil((state.optionsNextAt - Date.now()) / 1000));
+    $("#options-next-refresh").textContent = `${seconds}s`;
+  }
+
+  async function loadOptions({ announce = false } = {}) {
+    $("#options-refresh").disabled = true;
+    try {
+      const response = await fetch("/api/volguard", { cache: "no-store" });
+      let payload = null;
+      try { payload = await response.json(); } catch { /* handled below */ }
+      if (!response.ok) throw Object.assign(new Error(payload?.error || `HTTP ${response.status}`), { payload });
+      state.options = normalizeVolguardPayload(payload, {
+        mode: response.headers.get("x-volguard-mode") || "live",
+        fallbackReason: response.headers.get("x-volguard-fallback") || "",
+      });
+      if (announce) toast(state.options.mode === "live" ? "期权数据已刷新" : "实时源不可用，已显示快照");
+    } catch (error) {
+      state.options = normalizeVolguardPayload(null, {
+        mode: "unavailable",
+        fallbackReason: error.message,
+      });
+      if (announce) toast(`期权数据不可用：${error.message}`, true);
+    } finally {
+      state.optionsNextAt = Date.now() + OPTIONS_FAST_REFRESH_MS;
+      $("#options-refresh").disabled = false;
+      renderOptions();
+      renderOptionsCountdown();
+    }
+  }
+
+  function refreshOptionsIfVisible() {
+    if (document.body.dataset.route === "options") loadOptions();
+    else state.optionsNextAt = null;
+  }
+
+  function renderAgentWorkspace() {
+    const fullTargets = targets().filter(({ analysis }) => analysis === "full");
+    $("#agent-input-status").textContent = `${fullTargets.length} 个深度标的`;
+    $("#agent-targets-summary").className = fullTargets.length ? "agent-target-grid" : "panel-empty";
+    $("#agent-targets-summary").innerHTML = fullTargets.length
+      ? fullTargets.map((target) => `<div>
+          <span>${escapeHtml(roleLabels[target.role] || target.role)}</span>
+          <b>${escapeHtml(target.symbol)}</b>
+          <small>${escapeHtml(target.name || target.market)} · 完整分析</small>
+        </div>`).join("")
+      : "<b>尚未指定深度分析标的</b><span>在设置中把至少一个标的的分析方式改为“深度”。</span>";
+
+    const run = latestResearchRun(state.runs);
+    const stageLabels = { pending: "待运行", queued: "已排队", running: "运行中", completed: "已完成", failed: "失败", unknown: "未确认" };
+    for (const stage of buildPipelineStages(run)) {
+      const row = $(`[data-stage="${stage.id}"]`, $("#agent-pipeline"));
+      row.className = `is-${stage.status}`;
+      $("em", row).textContent = stageLabels[stage.status];
+    }
+    $("#agent-run-asof").textContent = run ? formatTime(run.created_at, true) : "没有运行记录";
+
+    const resultCount = Array.isArray(state.latest?.results)
+      ? state.latest.results.filter(({ error }) => !error).length
+      : 0;
+    if (!run && !state.latest) {
+      $("#agent-run-card").className = "panel-empty";
+      $("#agent-run-card").innerHTML = "<b>尚未开始新的研究</b><span>运行后将记录输入时间、来源、降级情况、模型、耗时和未解决问题。</span>";
+      return;
+    }
+    $("#agent-run-card").className = "run-card-grid";
+    $("#agent-run-card").innerHTML = `
+      <div><span>运行状态</span><b>${escapeHtml(run?.status || state.latest?.status || "已归档")}</b><small>${escapeHtml(run?.conclusion || "等待结论")}</small></div>
+      <div><span>研究日期</span><b>${escapeHtml(state.latest?.trade_date || "—")}</b><small>${escapeHtml(formatTime(state.latest?.generated_at || run?.created_at, true))}</small></div>
+      <div><span>模型 / Provider</span><b>${escapeHtml(state.latest?.provider || "—")}</b><small>${escapeHtml((state.latest?.analysts || []).join(" · ") || "未提供分析师清单")}</small></div>
+      <div><span>研究结果</span><b>${resultCount}</b><small>${escapeHtml(run?.workflow || "归档结果")}</small></div>`;
+  }
+
+  function renderTaskBoard() {
+    const profile = state.settings?.profiles?.[0];
+    const rows = buildTaskTimeline(profile);
+    $("#task-board").innerHTML = rows.map(({ time, label, status, detail }) => `<li class="is-${escapeHtml(status)}">
+      <time>${escapeHtml(time)}</time>
+      <div><b>${escapeHtml(label)}</b><small>${escapeHtml(detail)}</small></div>
+      <span>${escapeHtml(status === "success" ? "成功" : status === "failed" ? "失败" : status === "running" ? "运行中" : "等待结果")}</span>
+    </li>`).join("") || "<li><time>—</time><div><b>未启用研究计划</b><small>在设置中启用至少一个时段。</small></div><span>已停用</span></li>";
+  }
+
+  function renderArchiveList() {
+    state.archiveEntries = buildArchiveEntries(state.history);
+    $("#archive-count").textContent = `${state.archiveEntries.length} 份`;
+    if (!state.archiveEntries.length) {
+      $("#archive-list").className = "panel-empty";
+      $("#archive-list").innerHTML = "<b>没有可用研究档案</b><span>历史接口与静态灾备均未返回报告索引。</span>";
+      return;
+    }
+    $("#archive-list").className = "archive-list";
+    $("#archive-list").innerHTML = state.archiveEntries.map((entry, index) => `<button type="button" data-archive-index="${index}" class="${entry.report === state.selectedReportPath ? "is-active" : ""}">
+      <span><b>${escapeHtml(entry.ticker)}</b><em>${escapeHtml(entry.rating || "—")}</em></span>
+      <small>${escapeHtml(entry.tradeDate || formatTime(entry.generatedAt, true))} · ${escapeHtml(entry.provider || "unknown")}</small>
+    </button>`).join("");
+    $$("[data-archive-index]", $("#archive-list")).forEach((button) => button.addEventListener("click", () => {
+      loadArchiveReport(state.archiveEntries[Number(button.dataset.archiveIndex)]);
+    }));
+  }
+
+  async function fetchReportText(path) {
+    const encoded = encodeURIComponent(path);
+    let response = await fetch(`/api/report?path=${encoded}`, { cache: "no-store" });
+    if (!response.ok) response = await fetch(`/${path.replace(/^\/+/, "")}`, { cache: "no-store" });
+    if (!response.ok) throw new Error(`报告读取失败 (${response.status})`);
+    return response.text();
+  }
+
+  async function loadArchiveReport(entryOrPath) {
+    const entry = typeof entryOrPath === "string"
+      ? state.archiveEntries.find(({ report }) => report === entryOrPath)
+        || { report: entryOrPath, ticker: entryOrPath.split("/")[1] || "报告", rating: "" }
+      : entryOrPath;
+    if (!entry?.report) return;
+    state.selectedReportPath = entry.report;
+    state.latestReport = entry.report;
+    state.selectedReportContent = "";
+    $("#archive-report-title").textContent = `${entry.ticker} · ${entry.tradeDate || "研究报告"}`;
+    $("#archive-report-body").className = "panel-empty";
+    $("#archive-report-body").innerHTML = "<b>正在读取完整报告</b><span>同时核验报告路径和来源。</span>";
+    renderArchiveList();
+    try {
+      state.selectedReportContent = await fetchReportText(entry.report);
+      $("#archive-report-body").className = "archive-markdown";
+      $("#archive-report-body").innerHTML = renderMarkdown(state.selectedReportContent);
+    } catch (error) {
+      $("#archive-report-body").className = "panel-empty";
+      $("#archive-report-body").innerHTML = `<b>报告暂不可用</b><span>${escapeHtml(error.message)}</span>`;
+    }
+  }
+
+  async function loadResearchWorkspace() {
+    const [historyResult, runsResult] = await Promise.allSettled([
+      requestJson("/api/history"),
+      requestJson("/api/runs"),
+    ]);
+    if (historyResult.status === "fulfilled") {
+      const payload = historyResult.value;
+      state.history = Array.isArray(payload) ? payload : payload?.data || payload?.history || [];
+    } else {
+      try { state.history = await requestJson("./data/history.json"); }
+      catch { state.history = []; }
+    }
+    if (runsResult.status === "fulfilled") {
+      const payload = runsResult.value;
+      state.runs = payload?.runs || payload?.data || [];
+    } else {
+      state.runs = [];
+    }
+    renderAgentWorkspace();
+    renderTaskBoard();
+    renderArchiveList();
+  }
+
+  function renderNewsWorkspace() {
+    $("#news-workspace-asof").textContent = `${state.feeds.length} 条 · ${formatTime(state.feedEnvelope.asOf, true)}`;
+    const rows = state.feeds.slice(0, 200);
+    if (!rows.length) {
+      $("#news-workspace-list").className = "panel-empty";
+      $("#news-workspace-list").innerHTML = "<b>新闻与事件暂不可用</b><span>接口恢复前不会填充示例资讯。</span>";
+      return;
+    }
+    $("#news-workspace-list").className = "evidence-ledger";
+    $("#news-workspace-list").innerHTML = rows.map((item) => {
+      const href = safeUrl(item.url);
+      const tag = href ? "a" : "article";
+      const link = href ? ` href="${escapeHtml(href)}" target="_blank" rel="noopener noreferrer"` : "";
+      const tier = item.sourceTier || item.source_tier || (item.type === "event" ? "evidence" : "discovery");
+      return `<${tag} class="evidence-row"${link}>
+        <time>${escapeHtml(formatTime(item.at, true))}</time>
+        <div><span>${escapeHtml(item.symbol || "MARKET")} · ${escapeHtml(tier)}</span><b>${escapeHtml(item.title || "未命名事件")}</b><small>${escapeHtml(item.summary || "没有可验证摘要")}</small></div>
+        <em>${escapeHtml(item.source || "unknown")}</em>
+        <strong>${escapeHtml(String(item.importance || "medium").toUpperCase())}</strong>
+      </${tag}>`;
+    }).join("");
+  }
+
+  function renderSettingsWorkspace() {
+    const profile = state.settings?.profiles?.[0];
+    if (!profile) return;
+    const enabledTargets = profile.targets || [];
+    $("#settings-workspace-status").textContent = profile.enabled ? "已启用" : "已停用";
+    $("#settings-workspace-summary").className = "settings-summary-grid";
+    $("#settings-workspace-summary").innerHTML = `
+      <div><span>研究目标</span><b>${escapeHtml(profile.name)}</b><small>${escapeHtml(profile.objective)}</small></div>
+      <div><span>标的配置</span><b>${enabledTargets.length} 个</b><small>${escapeHtml(enabledTargets.map(({ symbol }) => symbol).join(" · "))}</small></div>
+      <div><span>盘中频率</span><b>${escapeHtml(String(profile.schedules?.cnIntraday?.collectionIntervalMinutes || 5))} / ${escapeHtml(String(profile.schedules?.cnIntraday?.signalIntervalMinutes || 15))} 分钟</b><small>采集 / 信号</small></div>
+      <div><span>提醒规则</span><b>${escapeHtml(profile.alerts?.pushMinSeverity || "high")}</b><small>${escapeHtml(`${profile.alerts?.quietHours?.start || "22:30"}–${profile.alerts?.quietHours?.end || "07:30"} 静默`)}</small></div>`;
+  }
+
   function renderNextRun() {
     const next = computeNextRun(state.settings?.profiles?.[0]);
     const text = next ? `${next.label} ${formatTime(next.at, true)}` : "下一次 —";
@@ -509,6 +904,8 @@ import {
       catch { state.latest = null; }
     }
     renderConclusion();
+    renderAgentWorkspace();
+    renderArchiveList();
   }
 
   function renderConclusion() {
@@ -530,7 +927,7 @@ import {
     const drivers = targets().filter((target) => ["driver", "benchmark"].includes(target.role)).slice(0, 4);
     const cells = drivers.filter((target) => state.quotes.has(target.symbol)).map((target) => {
       const quote = state.quotes.get(target.symbol);
-      const tone = quote.change >= 0 ? "market-up" : "market-down";
+      const tone = marketTone(quote.change, target.market);
       return `<div class="driver-cell"><span>${escapeHtml(target.symbol)} / ${escapeHtml(roleLabels[target.role])}</span><strong class="${tone}">${quote.change >= 0 ? "+" : ""}${quote.change.toFixed(2)}%</strong><small>${escapeHtml(target.name)} · 相关性 — · 最新 ${formatNumber(quote.close)}</small></div>`;
     });
     $("#driver-grid").innerHTML = cells.length ? cells.join("") : '<div class="driver-empty">没有足够真实数据计算跨市场驱动</div>';
@@ -665,6 +1062,8 @@ import {
     const bars = state.chart.bars;
     const series = state.chart.series;
     const indicators = computeIndicators(bars);
+    const selectedMarket = targets().find(({ symbol }) => symbol === state.selectedSymbol)?.market || "CN";
+    const palette = marketPalette(selectedMarket);
     $("#market-chart").setAttribute(
       "aria-label",
       `K 线、成交量、MACD 与 RSI 多窗格图；已加载 ${bars.length} 根 K 线；${bars.length >= 60 ? "MA60 历史充足" : "MA60 历史不足"}`,
@@ -672,6 +1071,12 @@ import {
     series.volume.applyOptions({ visible: state.indicators.volume });
     series.ma20.applyOptions({ visible: state.indicators.ma20 });
     series.ma60.applyOptions({ visible: state.indicators.ma60 });
+    series.candles.applyOptions({
+      upColor: palette.up,
+      downColor: palette.down,
+      wickUpColor: palette.up,
+      wickDownColor: palette.down,
+    });
     if (strategy === "none") return;
     if (!bars.length) {
       Object.values(series).forEach((item) => item.setData([]));
@@ -688,13 +1093,13 @@ import {
     const volumeData = bars.map((bar) => ({
       time: barTime(bar),
       value: Number(bar.volume) || 0,
-      color: Number(bar.close) >= Number(bar.open) ? "#e05f6855" : "#38b78855",
+      color: Number(bar.close) >= Number(bar.open) ? palette.upSoft : palette.downSoft,
     }));
     const lineData = (values) => bars.map((bar, index) => linePoint(barTime(bar), values[index]));
     const histogramData = bars.map((bar, index) => ({
       time: barTime(bar),
       value: indicators.histogram[index],
-      color: indicators.histogram[index] >= 0 ? "#e05f6877" : "#38b78877",
+      color: indicators.histogram[index] >= 0 ? palette.upHistogram : palette.downHistogram,
     }));
     const dataSets = {
       candles: candleData,
@@ -734,6 +1139,35 @@ import {
   function setMobileView(view) {
     document.body.dataset.mobileView = view;
     $$("[data-mobile-section]").forEach((button) => button.classList.toggle("is-active", button.dataset.mobileSection === view));
+  }
+
+  function navigateRoute(route) {
+    const href = routeHref(route);
+    if (location.hash === href) {
+      applyRoute();
+      return;
+    }
+    location.hash = href;
+  }
+
+  function applyRoute() {
+    const requested = String(location.hash || "").replace(/^#/, "");
+    const route = normalizeRoute(requested);
+    if (requested !== route) history.replaceState(null, "", routeHref(route));
+    document.body.dataset.route = route;
+    $$("[data-workspace]").forEach((workspace) => {
+      workspace.hidden = workspace.dataset.workspace !== route;
+    });
+    $$("[data-route-link]").forEach((link) => {
+      const active = link.dataset.routeLink === route;
+      link.classList.toggle("is-active", active);
+      if (active) link.setAttribute("aria-current", "page");
+      else link.removeAttribute("aria-current");
+    });
+    const descriptor = PRIMARY_ROUTES.find(({ id }) => id === route) || PRIMARY_ROUTES[0];
+    $("#workspace-title").textContent = descriptor.label;
+    document.title = `${descriptor.label} · Trading Workbench`;
+    window.dispatchEvent(new CustomEvent("workbench:routechange", { detail: { route } }));
   }
 
   function openDrawer(drawer, overlay) {
@@ -1228,16 +1662,8 @@ import {
 
   async function openLatestReport() {
     if (!state.latestReport) { toast("当前没有可打开的研究档案", true); return; }
-    openAssistant();
-    const node = appendChat("assistant", "正在读取完整报告…");
-    try {
-      const response = await fetch(`/${state.latestReport.replace(/^\/+/, "")}`, { cache: "no-store" });
-      if (!response.ok) throw new Error(`报告读取失败 (${response.status})`);
-      updateChatMessage(node, await response.text());
-      $("#chat-context").textContent = state.latestReport;
-    } catch (error) {
-      updateChatMessage(node, error.message, true);
-    }
+    navigateRoute("archive");
+    await loadArchiveReport(state.latestReport);
   }
 
   function updateClock() {
@@ -1271,10 +1697,16 @@ import {
 
   function bindEvents() {
     $$("[data-timeframe]").forEach((button) => button.addEventListener("click", async () => {
+      if (button.disabled) return;
       state.timeframe = button.dataset.timeframe;
       $$("[data-timeframe]").forEach((item) => { item.classList.toggle("is-active", item === button); item.setAttribute("aria-selected", String(item === button)); });
       await loadMarket();
       loadQuoteStrip();
+    }));
+    $$("[data-history-range]").forEach((button) => button.addEventListener("click", async () => {
+      state.historyRange = button.dataset.historyRange;
+      $$("[data-history-range]").forEach((item) => item.classList.toggle("is-active", item === button));
+      await loadMarket();
     }));
     $$("[data-indicator]").forEach((input) => input.addEventListener("change", () => {
       state.indicators[input.dataset.indicator] = input.checked;
@@ -1293,11 +1725,12 @@ import {
         ? `本次将运行 TradingAgents 多智能体深度分析：${fullSymbols.join("、")}`
         : "请先把至少一个标的的分析方式设为“深度”。";
     };
-    $("#settings-open").addEventListener("click", openSettings);
+    $("#settings-open").addEventListener("click", () => navigateRoute("settings"));
     $("#deep-analysis-open").addEventListener("click", openDeepAnalysis);
-    $("#mobile-settings").addEventListener("click", openSettings);
+    $("#mobile-settings").addEventListener("click", () => navigateRoute("settings"));
+    $("#settings-workspace-open").addEventListener("click", openSettings);
     $("#watchlist-edit").addEventListener("click", openSettings);
-    $("#global-status").addEventListener("click", openSettings);
+    $("#global-status").addEventListener("click", () => navigateRoute("settings"));
     $("#settings-close").addEventListener("click", () => closeDrawer("#settings-drawer", "#settings-overlay"));
     $("#settings-overlay").addEventListener("click", () => closeDrawer("#settings-drawer", "#settings-overlay"));
     $("#target-add").addEventListener("click", addTarget);
@@ -1319,6 +1752,30 @@ import {
     $("#new-thread").addEventListener("click", () => createThread());
     $("#delete-thread").addEventListener("click", deleteCurrentThread);
     $("#open-latest-report").addEventListener("click", openLatestReport);
+    $("#archive-refresh").addEventListener("click", async () => {
+      await Promise.allSettled([loadLatest(), loadResearchWorkspace()]);
+      toast("研究档案已刷新");
+    });
+    $("#archive-ask").addEventListener("click", () => {
+      if (!state.selectedReportPath) {
+        toast("请先选择一份研究报告", true);
+        return;
+      }
+      $("#chat-context").textContent = `${state.selectedReportPath} · 当前档案`;
+      openAssistant();
+    });
+    $("#news-workspace-refresh").addEventListener("click", loadFeeds);
+    $("#tasks-run-now").addEventListener("click", openDeepAnalysis);
+    $("#options-refresh").addEventListener("click", () => loadOptions({ announce: true }));
+    window.addEventListener("workbench:routechange", (event) => {
+      if (event.detail?.route === "options") loadOptions();
+      if (["agents", "tasks", "archive"].includes(event.detail?.route)) {
+        renderAgentWorkspace();
+        renderTaskBoard();
+        renderArchiveList();
+      }
+    });
+    window.addEventListener("hashchange", applyRoute);
     window.addEventListener("keydown", (event) => {
       if (event.key === "Escape") {
         closeDrawer("#settings-drawer", "#settings-overlay");
@@ -1331,13 +1788,16 @@ import {
   async function init() {
     loadThreads();
     bindEvents();
+    applyRoute();
     updateClock();
     setInterval(updateClock, 1000);
     await loadCredential();
     await loadSettings();
     await recoverThread(state.threadId);
-    await Promise.allSettled([loadMarket(), loadQuoteStrip(), loadFeeds(), loadMonitor(), loadLatest()]);
+    await Promise.allSettled([loadMarket(), loadQuoteStrip(), loadFeeds(), loadMonitor(), loadLatest(), loadResearchWorkspace()]);
     setInterval(pollWorkbenchData, 60000);
+    setInterval(refreshOptionsIfVisible, OPTIONS_FAST_REFRESH_MS);
+    setInterval(renderOptionsCountdown, 1000);
   }
 
   init().catch((error) => {

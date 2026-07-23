@@ -1,5 +1,6 @@
 import json
 import math
+import os
 import threading
 from datetime import datetime, timedelta, timezone
 from functools import partial
@@ -10,7 +11,12 @@ from urllib.parse import parse_qs, urlparse
 from playwright.sync_api import sync_playwright
 
 ROOT = Path(__file__).resolve().parents[1]
-SCREENSHOT_DIR = Path(r"G:\codex-home\visualizations\2026\07\22\019f8943-9db3-7c52-88de-0cb3773977ba")
+SCREENSHOT_DIR = Path(os.environ.get(
+    "WORKBENCH_SCREENSHOT_DIR",
+    r"G:\codex-home\visualizations\2026\07\22\019f8943-9db3-7c52-88de-0cb3773977ba"
+    if os.name == "nt"
+    else str(ROOT / "test-results" / "workbench"),
+))
 BASE_URL = "http://127.0.0.1:4207"
 SETTINGS = json.loads((ROOT / "public/data/workbench-settings.json").read_text(encoding="utf-8"))
 MARKET_REQUESTS = []
@@ -137,12 +143,78 @@ def route_api(route):
     elif path == "/api/latest":
         fulfill_json(route, {
             "status": "ok", "generated_at": "2026-07-23T06:34:48+08:00", "trade_date": "2026-07-22",
+            "provider": "openai_compatible", "analysts": ["market", "news", "fundamentals"],
             "results": [{
                 "ticker": "515880.SS", "rating": "Overweight",
                 "report": "reports/515880.SS/2026-07-22/complete_report.md",
                 "decision_excerpt": "**Executive Summary**: 美股半导体驱动偏强，但 A 股成交确认仍是加仓前提。观察通信设备与光模块链的量价共振，若开盘后相关性衰减则保持中性仓位。",
             }],
         })
+    elif path == "/api/history":
+        fulfill_json(route, [{
+            "trade_date": "2026-07-22",
+            "generated_at": "2026-07-23T06:34:48+08:00",
+            "provider": "openai_compatible",
+            "results": [{
+                "ticker": "515880.SS", "rating": "Overweight",
+                "report": "reports/515880.SS/2026-07-22/complete_report.md",
+                "error": False,
+            }],
+        }])
+    elif path == "/api/runs":
+        fulfill_json(route, {"runs": [{
+            "id": 1001, "workflow": "analysis-request", "title": "515880.SS",
+            "status": "completed", "conclusion": "success",
+            "created_at": "2026-07-23T06:34:48+08:00",
+            "url": "https://github.com/gaaiyun/TradingWorkbench/actions/runs/1001",
+        }]})
+    elif path == "/api/report":
+        route.fulfill(
+            status=200,
+            content_type="text/plain; charset=utf-8",
+            body="# 515880.SS 研究报告\n\n## 结论\n\n成交确认仍是最重要的跟踪条件。",
+        )
+    elif path == "/api/volguard":
+        route.fulfill(
+            status=200,
+            headers={
+                "content-type": "application/json; charset=utf-8",
+                "x-volguard-mode": "live",
+            },
+            body=json.dumps({
+                "schema_version": 2,
+                "quote_generated_at": "2026-07-23T15:05:00+08:00",
+                "source_asof": {
+                    "underlying": "2026-07-23T15:04:48+08:00",
+                    "options_latest": "2026-07-23T15:04:45+08:00",
+                    "slow_snapshot": "2026-07-23T15:00:00+08:00",
+                },
+                "source_status": {
+                    "overall": "live", "market_phase": "open",
+                    "options": {"state": "ok", "contracts": 1},
+                },
+                "underlying": {
+                    "symbol": "510050.SS", "last": 3.12, "change_pct": 1.25,
+                },
+                "quick_metrics": {
+                    "contract_count": 1, "put_call_oi_ratio": 0.88,
+                    "put_call_volume_ratio": 0.91, "front_max_pain": 3.1,
+                    "front_expiry": "2026-07-29",
+                },
+                "contracts": [{
+                    "code": "CON_OP_1", "name": "50ETF认购 2026-07-29 3.100",
+                    "option_type": "call", "expiry": "2026-07-29",
+                    "strike": 3.1, "last": 0.08, "volume": 100, "open_interest": 200,
+                }],
+                "slow_metrics": {
+                    "risk": {
+                        "hv30": 18.4, "iv_avg": 22.1, "var_95": 3.8,
+                        "var_method": "GARCH(1,1)", "bsadf_stat": 1.9, "bsadf_cv": 2.4,
+                    },
+                    "exposure": {"gex_net": 1.2, "dex_net": -0.4},
+                },
+            }, ensure_ascii=False),
+        )
     elif path == "/api/analyze":
         ANALYZE_REQUESTS.append(route.request.post_data_json)
         fulfill_json(route, {"ok": True, "message": "已受理，分析会在后台顺序执行", "tickers": [item["symbol"] for item in SETTINGS["profiles"][0]["targets"]]}, 202)
@@ -170,10 +242,11 @@ class QuietHandler(SimpleHTTPRequestHandler):
 def run_browser():
     SCREENSHOT_DIR.mkdir(parents=True, exist_ok=True)
     with sync_playwright() as playwright:
-        browser = playwright.chromium.launch(
-            headless=True,
-            executable_path=r"C:\Program Files (x86)\Microsoft\Edge\Application\msedge.exe",
-        )
+        launch_options = {"headless": True}
+        edge_path = Path(r"C:\Program Files (x86)\Microsoft\Edge\Application\msedge.exe")
+        if edge_path.exists():
+            launch_options["executable_path"] = str(edge_path)
+        browser = playwright.chromium.launch(**launch_options)
         page = browser.new_page(viewport={"width": 1600, "height": 1000}, device_scale_factor=1)
         capture_browser_diagnostics(page, "desktop")
         page.add_init_script("""
@@ -196,8 +269,8 @@ def run_browser():
         assert page.locator("#watchlist .watch-row").count() == 11
         assert page.locator("#market-chart").is_visible()
         assert page.locator("a[href*='tradingview.com']").count() >= 1
-        assert page.locator("#deep-analysis-open").is_visible()
-        assert page.locator(".capability-link[href='https://sh50-volguard.pages.dev/']").is_visible()
+        assert page.locator('[data-route-link="agents"]').first.is_visible()
+        assert page.locator('[data-route-link="options"]').first.is_visible()
         assert page.locator("#instrument-change").evaluate(
             "element => getComputedStyle(element).color",
         ) == "rgb(224, 95, 104)"
@@ -212,6 +285,10 @@ def run_browser():
         )
         assert page.locator("#research-feed .feed-item").count() == 1
 
+        page.locator('[data-route-link="agents"]').first.click()
+        assert page.locator("body").get_attribute("data-route") == "agents"
+        assert page.locator("#deep-analysis-open").is_visible()
+        assert page.locator("#agent-pipeline .is-completed").count() == 4
         page.click("#deep-analysis-open")
         page.wait_for_selector("#settings-drawer.is-open")
         assert "515880.SS、512480.SS" in page.locator("#settings-notice").inner_text()
@@ -245,8 +322,12 @@ def run_browser():
         mobile.route("**/api/**", route_api)
         mobile.goto(BASE_URL, wait_until="domcontentloaded")
         mobile.wait_for_selector("#market-chart")
-        assert mobile.locator("#mobile-volguard").is_visible()
-        assert mobile.locator("#mobile-volguard").get_attribute("href") == "https://sh50-volguard.pages.dev/"
+        assert mobile.locator('[data-route-link="options"]').last.is_visible()
+        mobile.locator('[data-route-link="options"]').last.click()
+        assert mobile.locator("body").get_attribute("data-route") == "options"
+        mobile.wait_for_function("document.querySelector('#options-status').textContent.includes('正常')")
+        assert mobile.locator("#options-chain .options-table tbody tr").count() == 1
+        mobile.locator('[data-route-link="monitor"]').last.click()
         mobile.click('[data-mobile-section="watch"]')
         assert mobile.locator("body").get_attribute("data-mobile-view") == "watch"
         mobile.click('[data-mobile-section="chart"]')
@@ -288,6 +369,22 @@ def run_browser():
         race.wait_for_timeout(450)
         assert race.locator("#instrument-symbol").inner_text() == "NVDA"
         assert race.locator("#instrument-price").inner_text() == "182.089"
+        assert race.locator("#instrument-change").evaluate(
+            "element => getComputedStyle(element).color",
+        ) == "rgb(56, 183, 136)"
+        assert race.locator("#history-range-tabs").is_visible()
+        assert any(
+            symbol == "NVDA" and timeframe == "1d" and limit == 1260
+            for symbol, timeframe, limit in MARKET_REQUESTS
+        )
+        race.locator('[data-history-range="3y"]').click()
+        race.wait_for_timeout(120)
+        assert any(
+            symbol == "NVDA" and timeframe == "1d" and limit == 756
+            for symbol, timeframe, limit in MARKET_REQUESTS
+        )
+        race.locator('[data-symbol="512480.SS"]').click()
+        race.wait_for_timeout(120)
         race.get_by_role("tab", name="1h").click()
         race.wait_for_timeout(40)
         race.get_by_role("tab", name="1d").click()
@@ -387,6 +484,7 @@ def run_browser():
 
         page.click("#assistant-close")
         page.click("#settings-open")
+        page.click("#settings-workspace-open")
         page.click("#clear-credential")
         assert page.input_value("#settings-code") == ""
         assert page.evaluate("sessionStorage.getItem('ta.workbench.access.session.v1')") is None

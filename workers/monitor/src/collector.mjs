@@ -46,6 +46,7 @@ export async function collectForTask({
         symbol: target.symbol,
         market: target.market,
         timeframe,
+        ...(taskType === "usCloseSnapshot" ? { limit: 1500 } : {}),
       });
       sources.push(...sourceTrail(result));
       if (

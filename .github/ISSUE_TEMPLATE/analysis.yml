@@ -15,4 +15,4 @@ body:
     attributes:
       value: |
         提交后 GitHub Actions 会自动运行，完成时机器人在本 Issue 回复评级与报告链接并关闭 Issue，微信同步推送。
-        看板地址：https://gaaiyun.github.io/TradingAgents/
+        工作台地址：https://tradingagents-board.pages.dev/

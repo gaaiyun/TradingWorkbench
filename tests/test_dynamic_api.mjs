@@ -242,7 +242,7 @@ test("news and events APIs support topic and importance filters without interpol
   const newsCall = DB.calls[0];
   assert.equal(newsCall.sql.includes(injectedTopic), false);
   assert.equal(newsCall.params.includes(injectedTopic), true);
-  assert.equal(newsCall.params.at(-1), 500);
+  assert.equal(newsCall.params.at(-1), 2000);
   assert.match(DB.calls[1].sql, /importance\s*=\s*\?/i);
   assert.deepEqual(DB.calls[1].params.slice(0, 3), ["semi", "earnings", "high"]);
 });

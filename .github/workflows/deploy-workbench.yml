@@ -39,7 +39,7 @@ jobs:
             echo "available=true" >> "$GITHUB_OUTPUT"
           else
             echo "available=false" >> "$GITHUB_OUTPUT"
-            echo "::notice::Cloudflare credentials are not configured in this repository; use the VolGuard deploy-tradingagents workflow."
+            echo "::notice::Cloudflare credentials are not configured in this repository; use the VolGuard deploy-trading-workbench workflow."
           fi
 
       - name: Test Pages Functions contracts

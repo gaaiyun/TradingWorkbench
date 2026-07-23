@@ -50,7 +50,7 @@ test("US close uses only US driver targets at 1d and persists returned bars", as
     db: {},
     now: new Date("2026-07-23T21:35:00.000Z"),
   });
-  assert.deepEqual(calls, [{ symbol: "SPY", market: "US", timeframe: "1d" }]);
+  assert.deepEqual(calls, [{ symbol: "SPY", market: "US", timeframe: "1d", limit: 1500 }]);
   assert.equal(writes.length, 1);
   assert.equal(writes[0].profileId, "etf-main");
   assert.equal(result.status, "completed");

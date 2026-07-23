@@ -346,7 +346,7 @@ test("monitor wrangler config uses five-minute cron and the same deployed D1 bin
   assert.match(monitor, /crons\s*=\s*\[\s*"\*\/5 \* \* \* \*"\s*\]/);
   assert.match(monitor, /binding\s*=\s*"DB"/);
   assert.match(monitor, /database_name\s*=\s*"tradingagents-workbench"/);
-  assert.match(monitor, /GITHUB_REPOSITORY\s*=\s*"gaaiyun\/TradingAgents"/);
+  assert.match(monitor, /GITHUB_REPOSITORY\s*=\s*"gaaiyun\/TradingWorkbench"/);
   assert.match(monitor, /GITHUB_WORKFLOW_ID\s*=\s*"daily-analysis\.yml"/);
   const monitorDatabaseId = /database_id\s*=\s*"([^"]+)"/.exec(monitor)[1];
   const pagesDatabaseId = /database_id\s*=\s*"([^"]+)"/.exec(pages)[1];

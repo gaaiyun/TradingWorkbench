@@ -6,7 +6,7 @@ const PROFILE = /^[A-Za-z0-9][A-Za-z0-9_-]{0,63}$/;
 const SOURCE = /^[A-Za-z0-9][A-Za-z0-9_.:-]{0,63}$/;
 const TIMEFRAMES = new Set(["1m", "5m", "15m", "30m", "1h", "4h", "1d"]);
 const IMPORTANCE = new Set(["low", "medium", "high", "critical"]);
-const MAX_LIMIT = 500;
+const MAX_LIMIT = 2000;
 
 export class DynamicQueryError extends Error {}
 

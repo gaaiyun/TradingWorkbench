@@ -1,5 +1,5 @@
 // Cloudflare Pages Functions 共享工具。
-export const REPO = "gaaiyun/TradingAgents";
+export const REPO = "gaaiyun/TradingWorkbench";
 export const RAW_BASE = `https://raw.githubusercontent.com/${REPO}/main/public`;
 
 export function json(data, status = 200, extraHeaders = {}) {

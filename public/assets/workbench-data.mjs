@@ -14,6 +14,16 @@ export const DEFAULT_TARGETS = Object.freeze([
 
 const VALID_STATUSES = new Set(["ok", "degraded", "stale", "unavailable"]);
 const IMPORTANCE_SCORE = { low: 0, medium: 1, high: 2, critical: 3 };
+const DAILY_HISTORY_LIMITS = Object.freeze({
+  "6m": 126,
+  "1y": 252,
+  "3y": 756,
+  "5y": 1260,
+});
+
+export function dailyHistoryLimit(range) {
+  return DAILY_HISTORY_LIMITS[range] || DAILY_HISTORY_LIMITS["5y"];
+}
 
 export function normalizeEnvelope(value) {
   if (!value || typeof value !== "object" || Array.isArray(value)) {

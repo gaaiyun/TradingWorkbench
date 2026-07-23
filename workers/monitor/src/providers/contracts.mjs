@@ -35,8 +35,15 @@ export function normalizeMarketRequest(request) {
   }
   const inferredMarket = CN_SUFFIXES.some((suffix) => symbol.endsWith(suffix)) ? "CN" : "US";
   const market = typeof request.market === "string" ? request.market.toUpperCase() : inferredMarket;
-  if (market !== inferredMarket || !TIMEFRAMES.has(request.timeframe)) invalidRequest();
-  return { symbol, market, timeframe: request.timeframe };
+  const limit = request.limit === undefined ? 320 : Number(request.limit);
+  if (
+    market !== inferredMarket
+    || !TIMEFRAMES.has(request.timeframe)
+    || !Number.isSafeInteger(limit)
+    || limit < 1
+    || limit > 2000
+  ) invalidRequest();
+  return { symbol, market, timeframe: request.timeframe, limit };
 }
 
 export function mapProviderSymbol(provider, rawSymbol) {

@@ -17,6 +17,18 @@ test("maps supported Workbench symbols for every provider", async () => {
     symbol: "515880.SS",
     market: "CN",
     timeframe: "5m",
+    limit: 320,
+  });
+  assert.deepEqual(normalizeMarketRequest({
+    symbol: "ORCL",
+    market: "US",
+    timeframe: "1d",
+    limit: 1500,
+  }), {
+    symbol: "ORCL",
+    market: "US",
+    timeframe: "1d",
+    limit: 1500,
   });
   assert.equal(mapProviderSymbol("tencent", "515880.SS"), "sh515880");
   assert.equal(mapProviderSymbol("eastmoney", "515880.SS"), "1.515880");

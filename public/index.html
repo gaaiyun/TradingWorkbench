@@ -5,21 +5,41 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <meta name="theme-color" content="#111315">
   <meta name="color-scheme" content="dark">
-  <meta name="description" content="TradingAgents 专业 ETF 研究终端">
-  <title>TradingAgents · ETF 研究终端</title>
-  <link rel="stylesheet" href="./assets/workbench.css?v=20260724c">
+  <meta name="description" content="Trading Workbench 多市场研究与风险工作台">
+  <title>Trading Workbench · 交易研究工作台</title>
+  <link rel="stylesheet" href="./assets/workbench.css?v=20260724d">
   <script type="importmap">
     { "imports": { "fancy-canvas": "./vendor/fancy-canvas/index.mjs" } }
   </script>
-  <script type="module" src="./assets/workbench.js?v=20260724c"></script>
+  <script type="module" src="./assets/workbench.js?v=20260724d"></script>
 </head>
-<body data-mobile-view="chart">
+<body data-mobile-view="chart" data-route="monitor">
   <a class="skip-link" href="#market-chart">跳到行情图表</a>
 
+  <aside class="product-sidebar" aria-label="Trading Workbench 主导航">
+    <a class="product-brand" href="#monitor" aria-label="Trading Workbench 首页">
+      <span class="product-brand-mark">TA</span>
+      <span><strong>Trading Workbench</strong><small>MARKET · AGENT · RISK</small></span>
+    </a>
+    <nav class="product-nav">
+      <a class="product-nav-link" href="#monitor" data-route-link="monitor"><span>01</span>市场监控</a>
+      <a class="product-nav-link" href="#agents" data-route-link="agents"><span>02</span>Agent 研究</a>
+      <a class="product-nav-link" href="#tasks" data-route-link="tasks"><span>03</span>研究任务</a>
+      <a class="product-nav-link" href="#archive" data-route-link="archive"><span>04</span>研究档案</a>
+      <a class="product-nav-link" href="#news" data-route-link="news"><span>05</span>新闻/事件</a>
+      <a class="product-nav-link" href="#options" data-route-link="options"><span>06</span>期权风控</a>
+      <a class="product-nav-link" href="#settings" data-route-link="settings"><span>07</span>设置</a>
+    </nav>
+    <div class="product-sidebar-foot">
+      <span>RESEARCH ONLY</span>
+      <small>不连接券商 · 不执行交易</small>
+    </div>
+  </aside>
+
   <header class="terminal-header">
-    <a class="wordmark" href="#terminal" aria-label="TradingAgents ETF 研究终端">
+    <a class="wordmark" href="#monitor" aria-label="Trading Workbench 交易研究工作台">
       <span class="wordmark-glyph">TA</span>
-      <span><strong>ETF RESEARCH</strong><small>TRADINGAGENTS / ASIA</small></span>
+      <span><strong id="workspace-title">市场监控</strong><small>TRADING WORKBENCH / ASIA</small></span>
     </a>
     <div class="session-strip" aria-label="工作台状态">
       <span class="market-session"><i></i><b>沪深</b><span id="cn-session">核验中</span></span>
@@ -27,10 +47,6 @@
       <span class="header-time" id="terminal-clock">--:--:--</span>
     </div>
     <div class="header-actions">
-      <nav class="capability-nav" aria-label="TradingAgents 产品能力">
-        <button class="capability-link" id="deep-analysis-open" type="button">多智能体分析</button>
-        <a class="capability-link" href="https://sh50-volguard.pages.dev/" target="_blank" rel="noopener noreferrer">期权风控 <span aria-hidden="true">↗</span></a>
-      </nav>
       <button class="status-control" id="global-status" type="button" aria-label="查看数据状态">
         <i class="status-dot is-loading"></i><span>连接数据源</span>
       </button>
@@ -52,7 +68,9 @@
     <span id="freshness-detail">等待服务返回真实数据</span>
   </div>
 
-  <main class="terminal" id="terminal">
+  <main class="workspace-stack" id="workbench">
+  <section class="workspace-view" data-workspace="monitor" aria-labelledby="workspace-title">
+  <div class="terminal" id="terminal">
     <div class="research-layout">
       <aside class="left-rail mobile-region" data-region="watch" aria-label="自选与任务">
         <section class="rail-section watch-section">
@@ -100,6 +118,13 @@
               <button type="button" data-timeframe="15m" role="tab" aria-selected="true" class="is-active">15m</button>
               <button type="button" data-timeframe="1h" role="tab" aria-selected="false">1h</button>
               <button type="button" data-timeframe="1d" role="tab" aria-selected="false">1d</button>
+            </div>
+            <div class="history-range-tabs" id="history-range-tabs" role="group" aria-label="美股日线区间" hidden>
+              <button type="button" data-history-range="6m">6月</button>
+              <button type="button" data-history-range="1y">1年</button>
+              <button type="button" data-history-range="3y">3年</button>
+              <button type="button" data-history-range="5y" class="is-active">5年</button>
+              <span id="chart-coverage">覆盖 —</span>
             </div>
             <div class="indicator-controls" aria-label="技术指标">
               <label><input type="checkbox" data-indicator="volume" checked>VOL</label>
@@ -157,14 +182,142 @@
         <div class="driver-empty">没有足够真实数据计算相关性</div>
       </div>
     </section>
-  </main>
-
-  <nav class="mobile-nav" aria-label="移动端分区">
+  </div>
+  <nav class="monitor-mobile-nav" aria-label="市场监控分区">
     <button type="button" data-mobile-section="watch"><span>◎</span>自选</button>
     <button type="button" data-mobile-section="chart" class="is-active"><span>⌁</span>行情</button>
     <button type="button" data-mobile-section="feed"><span>≋</span>事件</button>
-    <a id="mobile-volguard" href="https://sh50-volguard.pages.dev/" target="_blank" rel="noopener noreferrer"><span>Ω</span>期权</a>
-    <button type="button" id="mobile-settings"><span>⚙</span>设置</button>
+  </nav>
+  </section>
+
+  <section class="workspace-view page-workspace" data-workspace="agents" aria-labelledby="agents-title" hidden>
+    <header class="workspace-heading">
+      <div><span>TRADINGAGENTS PIPELINE</span><h1 id="agents-title">Agent 研究</h1><p>选择研究标的与深度，跟踪分析师、辩论、交易员和风险经理的完整链路。</p></div>
+      <button class="button primary" id="deep-analysis-open" type="button">发起多智能体分析</button>
+    </header>
+    <div class="workspace-split">
+      <section class="workbench-panel">
+        <header><div><span>RESEARCH INPUT</span><h2>研究输入</h2></div><span id="agent-input-status">等待配置</span></header>
+        <div class="panel-empty" id="agent-targets-summary"><b>正在读取研究目标</b><span>已配置为“深度”的标的会出现在这里。</span></div>
+      </section>
+      <section class="workbench-panel">
+        <header><div><span>EXECUTION</span><h2>运行状态</h2></div><span id="agent-run-asof">—</span></header>
+        <ol class="agent-pipeline" id="agent-pipeline">
+          <li data-stage="analysts"><span>01</span><div><b>分析师研究</b><small>行情、新闻、技术面与基本面证据</small></div><em>待运行</em></li>
+          <li data-stage="debate"><span>02</span><div><b>多空辩论</b><small>主张、反证与未解决问题</small></div><em>待运行</em></li>
+          <li data-stage="trader"><span>03</span><div><b>交易员综合</b><small>形成可审计的研究判断</small></div><em>待运行</em></li>
+          <li data-stage="risk"><span>04</span><div><b>风险复核</b><small>风险经理与组合经理审议</small></div><em>待运行</em></li>
+        </ol>
+      </section>
+    </div>
+    <section class="workbench-panel run-card-panel">
+      <header><div><span>RUN CARD</span><h2>本次研究记录</h2></div><a class="text-link" href="#archive">查看研究档案</a></header>
+      <div class="panel-empty" id="agent-run-card"><b>尚未开始新的研究</b><span>运行后将记录输入时间、来源、降级情况、模型、耗时和未解决问题。</span></div>
+    </section>
+  </section>
+
+  <section class="workspace-view page-workspace" data-workspace="tasks" aria-labelledby="tasks-title" hidden>
+    <header class="workspace-heading">
+      <div><span>SCHEDULE CONTROL</span><h1 id="tasks-title">研究任务</h1><p>网页配置的监控计划即时生效；每个计划时槽使用幂等键避免重复触发。</p></div>
+      <button class="button primary" id="tasks-run-now" type="button">立即运行</button>
+    </header>
+    <section class="workbench-panel">
+      <header><div><span>ASIA / SHANGHAI</span><h2>今日计划</h2></div><a class="text-link" href="#settings">编辑计划</a></header>
+      <ol class="task-board" id="task-board">
+        <li><time>05:35</time><div><b>美股收盘快照</b><small>采集半导体驱动与 ORCL 隔夜变化</small></div><span>等待状态</span></li>
+        <li><time>08:25</time><div><b>盘前传导简报</b><small>生成 A 股 ETF 盘前观察点</small></div><span>等待状态</span></li>
+        <li><time>09:30</time><div><b>A 股盘中监控</b><small>5 分钟采集，15 分钟信号</small></div><span>等待状态</span></li>
+        <li><time>15:20</time><div><b>收盘深度分析</b><small>核心 ETF 完整 TradingAgents 研究</small></div><span>等待状态</span></li>
+      </ol>
+    </section>
+  </section>
+
+  <section class="workspace-view page-workspace" data-workspace="archive" aria-labelledby="archive-title" hidden>
+    <header class="workspace-heading">
+      <div><span>RESEARCH LEDGER</span><h1 id="archive-title">研究档案</h1><p>按标的和时间保存研究报告、run card、来源证据与问答上下文。</p></div>
+      <button class="button secondary" id="archive-refresh" type="button">刷新档案</button>
+    </header>
+    <div class="archive-layout">
+      <section class="workbench-panel archive-index">
+        <header><div><span>INDEX</span><h2>报告列表</h2></div><span id="archive-count">0 份</span></header>
+        <div class="panel-empty" id="archive-list"><b>正在核验研究档案</b><span>不会用示例报告替代真实结果。</span></div>
+      </section>
+      <article class="workbench-panel archive-reader">
+        <header><div><span>REPORT</span><h2 id="archive-report-title">选择一份报告</h2></div><button class="text-button" id="archive-ask" type="button">基于报告提问</button></header>
+        <div class="panel-empty" id="archive-report-body"><b>尚未选择研究报告</b><span>报告原文、证据与运行记录将在此显示。</span></div>
+      </article>
+    </div>
+  </section>
+
+  <section class="workspace-view page-workspace" data-workspace="news" aria-labelledby="news-title" hidden>
+    <header class="workspace-heading">
+      <div><span>EVIDENCE STREAM</span><h1 id="news-title">新闻 / 事件</h1><p>官方证据层与聚合发现层分开呈现，支持来源等级、主题、标的和重要性筛选。</p></div>
+      <button class="button secondary" id="news-workspace-refresh" type="button">刷新资讯</button>
+    </header>
+    <section class="workbench-panel">
+      <header><div><span>SOURCE LEDGER</span><h2>证据流</h2></div><span id="news-workspace-asof">—</span></header>
+      <div class="news-workspace-filters" id="news-workspace-filters">
+        <span>资讯筛选会与市场监控中的新闻流保持一致。</span>
+      </div>
+      <div class="panel-empty" id="news-workspace-list"><b>正在核验新闻与事件接口</b><span>仅展示带时间、来源等级和原文链接的记录。</span></div>
+    </section>
+  </section>
+
+  <section class="workspace-view page-workspace" data-workspace="options" aria-labelledby="options-title" hidden>
+    <header class="workspace-heading">
+      <div><span>VOLGUARD RISK DESK</span><h1 id="options-title">期权风控</h1><p>快行情与慢指标采用独立时钟，清楚区分报价时间和模型计算时间。</p></div>
+      <div class="heading-actions"><button class="button secondary" id="options-refresh" type="button">刷新</button><a class="button quiet-link" href="https://sh50-volguard.pages.dev/" target="_blank" rel="noopener noreferrer">独立主站 ↗</a></div>
+    </header>
+    <div class="option-status-strip">
+      <span><i class="status-dot is-loading"></i>数据状态 <b id="options-status">等待连接</b></span>
+      <span>行情时间 <b id="options-quote-asof">—</b></span>
+      <span>指标时间 <b id="options-model-asof">—</b></span>
+      <span>下一次刷新 <b id="options-next-refresh">—</b></span>
+    </div>
+    <div class="options-grid">
+      <section class="workbench-panel options-overview">
+        <header><div><span>MARKET REGIME</span><h2>波动与风险状态</h2></div><span>BSADF · GARCH VaR</span></header>
+        <div class="metric-row" id="options-risk-metrics">
+          <div><span>标的</span><strong>—</strong><small>等待报价</small></div>
+          <div><span>HV / IV</span><strong>—</strong><small>等待波动率</small></div>
+          <div><span>GARCH VaR</span><strong>—</strong><small>等待模型</small></div>
+          <div><span>BSADF</span><strong>—</strong><small>等待模型</small></div>
+        </div>
+      </section>
+      <section class="workbench-panel options-exposure">
+        <header><div><span>DEALER EXPOSURE</span><h2>敞口与关键价位</h2></div><span>GEX · DEX · Max Pain</span></header>
+        <div class="metric-row" id="options-exposure-metrics">
+          <div><span>GEX</span><strong>—</strong><small>等待期权链</small></div>
+          <div><span>DEX</span><strong>—</strong><small>等待期权链</small></div>
+          <div><span>PCR</span><strong>—</strong><small>等待期权链</small></div>
+          <div><span>Max Pain</span><strong>—</strong><small>等待期权链</small></div>
+        </div>
+      </section>
+      <section class="workbench-panel options-chain-panel">
+        <header><div><span>OPTION CHAIN</span><h2>期权雷达</h2></div><span id="options-chain-coverage">0 条合约</span></header>
+        <div class="table-empty" id="options-chain"><b>期权数据暂不可用</b><span>接口恢复后显示到期日、执行价、IV、Greeks、成交量与持仓量。</span></div>
+      </section>
+    </div>
+  </section>
+
+  <section class="workspace-view page-workspace" data-workspace="settings" aria-labelledby="settings-workspace-title" hidden>
+    <header class="workspace-heading">
+      <div><span>WORKBENCH SETTINGS V2</span><h1 id="settings-workspace-title">设置</h1><p>维护研究目标、标的角色、任务频率、提醒阈值和写操作访问码。</p></div>
+      <button class="button primary" id="settings-workspace-open" type="button">编辑配置</button>
+    </header>
+    <section class="workbench-panel">
+      <header><div><span>ACTIVE PROFILE</span><h2>当前研究目标</h2></div><span id="settings-workspace-status">读取中</span></header>
+      <div class="panel-empty" id="settings-workspace-summary"><b>正在读取设置</b><span>配置详情将在核验后显示；编辑仍使用受访问码保护的表单。</span></div>
+    </section>
+  </section>
+  </main>
+
+  <nav class="mobile-nav" aria-label="移动端主导航">
+    <a href="#monitor" data-route-link="monitor"><span>⌁</span>监控</a>
+    <a href="#agents" data-route-link="agents"><span>AI</span>研究</a>
+    <a href="#tasks" data-route-link="tasks"><span>◷</span>任务</a>
+    <a href="#options" data-route-link="options"><span>Ω</span>期权</a>
+    <a href="#settings" data-route-link="settings" id="mobile-settings"><span>⚙</span>设置</a>
   </nav>
 
   <div class="overlay" id="settings-overlay" hidden></div>

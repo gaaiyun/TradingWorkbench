@@ -106,10 +106,11 @@ function normalizeRows(rows, context) {
 
 function tencentUrl(request) {
   const symbol = mapProviderSymbol("tencent", request.symbol);
+  const limit = request.limit || 320;
   if (request.timeframe === "5m") {
-    return `https://ifzq.gtimg.cn/appstock/app/kline/mkline?param=${symbol},m5,,320`;
+    return `https://ifzq.gtimg.cn/appstock/app/kline/mkline?param=${symbol},m5,,${limit}`;
   }
-  return `https://ifzq.gtimg.cn/appstock/app/kline/kline?param=${symbol},day,,,320`;
+  return `https://ifzq.gtimg.cn/appstock/app/kline/kline?param=${symbol},day,,,${limit}`;
 }
 
 function parseTencent(payload, request) {
@@ -129,7 +130,7 @@ function parseTencent(payload, request) {
 
 function tencentUsUrl(request) {
   const symbol = mapProviderSymbol("tencent-us", request.symbol);
-  return `https://web.ifzq.gtimg.cn/appstock/app/usfqkline/get?param=${symbol},day,,,320,qfq`;
+  return `https://web.ifzq.gtimg.cn/appstock/app/usfqkline/get?param=${symbol},day,,,${request.limit || 320},qfq`;
 }
 
 function parseTencentUs(payload, request) {
@@ -160,12 +161,12 @@ function parseTencentUs(payload, request) {
 
 function eastmoneyUsUrl(request) {
   const symbol = mapProviderSymbol("eastmoney-us", request.symbol);
-  return `https://push2his.eastmoney.com/api/qt/stock/kline/get?secid=${symbol}&klt=101&fqt=1&beg=0&end=20500101&lmt=320&fields1=f1&fields2=f51,f52,f53,f54,f55,f56`;
+  return `https://push2his.eastmoney.com/api/qt/stock/kline/get?secid=${symbol}&klt=101&fqt=1&beg=0&end=20500101&lmt=${request.limit || 320}&fields1=f1&fields2=f51,f52,f53,f54,f55,f56`;
 }
 
 function parseEastmoneyUs(payload, request) {
   if (payload?.rc !== 0 || payload?.data?.code !== request.symbol) return null;
-  return payload?.data?.klines?.slice(-320).map((line) => {
+  return payload?.data?.klines?.slice(-(request.limit || 320)).map((line) => {
     const [timestamp, open, close, high, low, volume] = String(line).split(",");
     return {
       timestamp: utcTimestamp(timestamp, "America/New_York"),
@@ -181,7 +182,7 @@ function parseEastmoneyUs(payload, request) {
 function eastmoneyUrl(request) {
   const symbol = mapProviderSymbol("eastmoney", request.symbol);
   const klt = request.timeframe === "5m" ? "5" : "101";
-  return `https://push2his.eastmoney.com/api/qt/stock/kline/get?secid=${symbol}&klt=${klt}&fqt=0&beg=0&end=20500101&lmt=320&fields1=f1&fields2=f51,f52,f53,f54,f55,f56`;
+  return `https://push2his.eastmoney.com/api/qt/stock/kline/get?secid=${symbol}&klt=${klt}&fqt=0&beg=0&end=20500101&lmt=${request.limit || 320}&fields1=f1&fields2=f51,f52,f53,f54,f55,f56`;
 }
 
 function parseEastmoney(payload, request) {

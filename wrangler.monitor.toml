@@ -6,7 +6,7 @@ compatibility_date = "2026-07-23"
 crons = ["*/5 * * * *"]
 
 [vars]
-GITHUB_REPOSITORY = "gaaiyun/TradingAgents"
+GITHUB_REPOSITORY = "gaaiyun/TradingWorkbench"
 GITHUB_WORKFLOW_ID = "daily-analysis.yml"
 
 [[d1_databases]]

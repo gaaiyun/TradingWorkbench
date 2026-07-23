@@ -159,6 +159,7 @@ test("Eastmoney US returns the latest adjusted daily window for Oracle", async (
     symbol: "ORCL",
     market: "US",
     timeframe: "1d",
+    limit: 1500,
   }, {
     ...runtime,
     fetchedAt: "2026-07-24T02:05:00.000Z",
@@ -166,11 +167,12 @@ test("Eastmoney US returns the latest adjusted daily window for Oracle", async (
     freshnessThresholdMs: 36 * 60 * 60 * 1000,
   });
 
-  assert.equal(bars.length, 320);
+  assert.equal(bars.length, 325);
   assert.equal(bars.at(-1).adjustment, "qfq");
   assert.match(requestedUrl, /eastmoney\.com/);
   assert.match(requestedUrl, /secid=106\.ORCL/);
   assert.match(requestedUrl, /fqt=1/);
+  assert.match(requestedUrl, /lmt=1500/);
 });
 
 test("Eastmoney includes its required range parameters and validates rc/data/klines", async () => {

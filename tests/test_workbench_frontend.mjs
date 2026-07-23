@@ -11,6 +11,7 @@ const {
   compactThreads,
   computeNextRun,
   createLatestRequestGate,
+  dailyHistoryLimit,
   filterFeedItems,
   mergeIncrementalBatch,
   mergeIncrementalBars,
@@ -223,6 +224,15 @@ test("US drivers use daily data for quote strips and switch to the available dai
   assert.match(script, /market === "US" \? "1d" : state\.timeframe/);
   assert.match(script, /target\?\.market === "US" && state\.timeframe !== "1d"/);
   assert.match(script, /state\.timeframe = "1d"/);
+  assert.equal(dailyHistoryLimit("6m"), 126);
+  assert.equal(dailyHistoryLimit("1y"), 252);
+  assert.equal(dailyHistoryLimit("3y"), 756);
+  assert.equal(dailyHistoryLimit("5y"), 1260);
+  assert.equal(dailyHistoryLimit("unknown"), 1260);
+  for (const range of ["6m", "1y", "3y", "5y"]) {
+    assert.match(html, new RegExp(`data-history-range="${range}"`));
+  }
+  assert.match(html, /id="chart-coverage"/);
 });
 
 test("task timeline never maps source health rows to schedule slots by array position", () => {
@@ -331,26 +341,31 @@ test("settings expose every schedule and PushPlus switch plus local credential c
   assert.match(script, /localStorage\.removeItem\(STORAGE\.deviceKey\)/);
 });
 
-test("workbench keeps first-class entry points for options risk and multi-agent analysis", () => {
-  assert.match(html, /id="deep-analysis-open"[^>]*>多智能体分析</);
-  assert.match(html, /class="capability-link"[^>]*href="https:\/\/sh50-volguard\.pages\.dev\/"/);
-  assert.match(html, /id="mobile-volguard"[^>]*href="https:\/\/sh50-volguard\.pages\.dev\/"/);
+test("options risk and multi-agent analysis are first-class workspaces", () => {
+  assert.match(html, /href="#agents"[^>]*data-route-link="agents"/);
+  assert.match(html, /href="#options"[^>]*data-route-link="options"/);
+  assert.match(html, /data-workspace="agents"/);
+  assert.match(html, /data-workspace="options"/);
+  assert.match(html, /id="deep-analysis-open"[^>]*>发起多智能体分析</);
+  assert.match(html, /id="options-risk-metrics"/);
+  assert.match(html, /id="options-exposure-metrics"/);
+  assert.match(html, /id="options-chain"/);
   assert.match(script, /#deep-analysis-open/);
   assert.match(script, /filter\(\(\{ analysis \}\) => analysis === "full"\)/);
 });
 
-test("A-share market direction uses red for gains and green for losses without changing health colors", () => {
+test("market direction follows A-share and US conventions without changing health colors", () => {
   assert.match(css, /--market-up:\s*#e05f68/);
   assert.match(css, /--market-down:\s*#38b788/);
+  assert.match(css, /--us-market-up:\s*#38b788/);
+  assert.match(css, /--us-market-down:\s*#e05f68/);
   assert.match(css, /\.market-up\s*\{\s*color:\s*var\(--market-up\)/);
   assert.match(css, /\.market-down\s*\{\s*color:\s*var\(--market-down\)/);
-  assert.match(script, /change >= 0 \? "market-up" : "market-down"/);
-  assert.match(script, /upColor:\s*"#e05f68"/);
-  assert.match(script, /downColor:\s*"#38b788"/);
-  assert.match(script, /wickUpColor:\s*"#e05f68"/);
-  assert.match(script, /wickDownColor:\s*"#38b788"/);
-  assert.match(script, /Number\(bar\.close\) >= Number\(bar\.open\) \? "#e05f6855" : "#38b78855"/);
-  assert.match(script, /indicators\.histogram\[index\] >= 0 \? "#e05f6877" : "#38b78877"/);
+  assert.match(css, /\.us-market-up\s*\{\s*color:\s*var\(--us-market-up\)/);
+  assert.match(css, /\.us-market-down\s*\{\s*color:\s*var\(--us-market-down\)/);
+  assert.match(script, /function marketTone\(change,\s*market\)/);
+  assert.match(script, /function marketPalette\(market\)/);
+  assert.match(script, /series\.candles\.applyOptions/);
   assert.match(css, /--positive:\s*#38b788/);
   assert.match(css, /--negative:\s*#e05f68/);
 });
