@@ -191,6 +191,7 @@ def run_browser():
         assert "任务结果接口未提供" in page.locator("#task-timeline").inner_text()
         page.get_by_role("tab", name="1h").click()
         assert page.get_by_role("tab", name="1h").get_attribute("aria-selected") == "true"
+        page.wait_for_selector("#research-feed .feed-item")
         page.select_option("#feed-symbol", "NVDA")
         assert page.locator("#research-feed .feed-item").count() == 1
 
@@ -234,6 +235,43 @@ def run_browser():
         mobile.wait_for_function("document.querySelector('#conclusion-asof').textContent.includes('尚无')")
         assert "美股半导体驱动偏强" not in mobile.locator("#conclusion-body").inner_text()
 
+        race = browser.new_page(viewport={"width": 1200, "height": 800}, device_scale_factor=1)
+        capture_browser_diagnostics(race, "race")
+        race.add_init_script("""
+          const nativeFetch = window.fetch.bind(window);
+          window.fetch = async (...args) => {
+            const response = await nativeFetch(...args);
+            const url = new URL(typeof args[0] === "string" ? args[0] : args[0].url, location.href);
+            const delayedSymbol = url.pathname === "/api/market"
+              && url.searchParams.get("symbol") === "512480.SS"
+              && url.searchParams.get("limit") === "240";
+            const delayedTimeframe = url.pathname === "/api/market"
+              && url.searchParams.get("timeframe") === "1h"
+              && url.searchParams.get("limit") === "240";
+            if (delayedSymbol || delayedTimeframe) {
+              await new Promise((resolve) => setTimeout(resolve, 350));
+            }
+            return response;
+          };
+        """)
+        race.route("**/api/**", route_api)
+        race.goto(BASE_URL, wait_until="domcontentloaded")
+        race.wait_for_selector("#watchlist .watch-row")
+        race.locator('[data-symbol="512480.SS"]').click()
+        race.wait_for_timeout(40)
+        race.locator('[data-symbol="NVDA"]').click()
+        race.wait_for_function("document.querySelector('#instrument-symbol').textContent === 'NVDA'")
+        race.wait_for_timeout(450)
+        assert race.locator("#instrument-symbol").inner_text() == "NVDA"
+        assert race.locator("#instrument-price").inner_text() == "182.089"
+        race.get_by_role("tab", name="1h").click()
+        race.wait_for_timeout(40)
+        race.get_by_role("tab", name="1d").click()
+        race.wait_for_timeout(450)
+        assert race.get_by_role("tab", name="1d").get_attribute("aria-selected") == "true"
+        assert "12/18" in race.locator("#freshness-asof").inner_text()
+        race.close()
+
         page.click("#settings-close")
         page.click("#assistant-open")
         page.fill("#chat-question", "第一问")
@@ -245,6 +283,22 @@ def run_browser():
         assert CHAT_REQUESTS[-1]["stream"] is True
         assert len(CHAT_REQUESTS[-1]["history"]) >= 2
         assert page.evaluate("JSON.parse(localStorage.getItem('ta.workbench.threads.v1')).length") >= 1
+        page.evaluate("""
+          let index = 0;
+          let chunkSize = 250000;
+          while (chunkSize >= 100) {
+            try {
+              localStorage.setItem(`quota-fixture-${index++}`, "x".repeat(chunkSize));
+            } catch {
+              chunkSize = Math.floor(chunkSize / 2);
+            }
+          }
+        """)
+        page.fill("#chat-question", "配额失败后仍应发送")
+        page.click("#chat-send")
+        page.wait_for_function("document.querySelectorAll('#chat-log .chat-message.user').length === 3")
+        page.wait_for_function("document.querySelectorAll('#chat-log .chat-message.assistant').length === 3")
+        assert "本地会话无法继续持久化" in page.locator("#toast-region").inner_text()
 
         page.click("#assistant-close")
         page.click("#settings-open")

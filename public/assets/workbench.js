@@ -1,10 +1,14 @@
 import {
   DEFAULT_TARGETS,
+  applySeriesBatch,
+  buildChatHistory,
   buildTaskTimeline,
+  compactThreads,
   computeIndicators,
   computeNextRun,
+  createLatestRequestGate,
   filterFeedItems,
-  mergeIncrementalBars,
+  mergeIncrementalBatch,
   normalizeEnvelope,
   selectConclusion,
 } from "./workbench-data.mjs";
@@ -52,7 +56,9 @@ import {
     latestReport: null,
     threads: [],
     threadId: null,
+    threadStorageWarningShown: false,
   };
+  const marketRequestGate = createLatestRequestGate();
 
   const escapeHtml = (value) => String(value ?? "")
     .replaceAll("&", "&amp;")
@@ -330,24 +336,45 @@ import {
   }
 
   async function loadMarket({ incremental = false } = {}) {
+    const symbol = state.selectedSymbol;
+    const timeframe = state.timeframe;
+    const request = marketRequestGate.begin(symbol, timeframe);
+    let chartUpdate = { changedFromIndex: 0, strategy: "setData" };
     try {
-      const envelope = normalizeEnvelope(await requestJson(marketUrl(state.selectedSymbol, state.timeframe, incremental ? 2 : 240)));
+      const envelope = normalizeEnvelope(await requestJson(
+        marketUrl(symbol, timeframe, incremental ? 2 : 240),
+        { signal: request.signal },
+      ));
+      if (!marketRequestGate.isCurrent(request, state.selectedSymbol, state.timeframe)) return;
       state.market = envelope;
       const incoming = sortBars(envelope.data);
-      state.chart.bars = incremental ? mergeIncrementalBars(state.chart.bars, incoming) : incoming;
+      if (incremental) {
+        chartUpdate = mergeIncrementalBatch(state.chart.bars, incoming);
+        state.chart.bars = chartUpdate.bars;
+      } else {
+        state.chart.bars = incoming;
+      }
       const last = state.chart.bars.at(-1);
       const prior = state.chart.bars.at(-2);
-      if (last) state.quotes.set(state.selectedSymbol, { close: Number(last.close), change: prior ? (Number(last.close) / Number(prior.close) - 1) * 100 : null });
+      if (last) state.quotes.set(symbol, { close: Number(last.close), change: prior ? (Number(last.close) / Number(prior.close) - 1) * 100 : null });
       updateFreshness(envelope);
-    } catch {
+    } catch (error) {
+      if (request.signal.aborted || !marketRequestGate.isCurrent(request, state.selectedSymbol, state.timeframe)) return;
       state.market = normalizeEnvelope(null);
       if (!incremental) state.chart.bars = [];
       updateFreshness(state.market);
+    } finally {
+      marketRequestGate.finish(request);
     }
+    if (!marketRequestGate.isCurrent(request, state.selectedSymbol, state.timeframe)) return;
     $("#chart-empty").hidden = state.chart.bars.length > 0;
     renderInstrument();
     renderWatchlist();
-    syncChartData({ incremental });
+    syncChartData({
+      strategy: chartUpdate.strategy,
+      changedFromIndex: chartUpdate.changedFromIndex ?? 0,
+      fitContent: !incremental,
+    });
   }
 
   async function loadQuoteStrip() {
@@ -615,7 +642,7 @@ import {
     state.chart.series = { candles, volume, ma20, ma60, macd, signal, histogram, rsi };
   }
 
-  function syncChartData({ incremental = false } = {}) {
+  function syncChartData({ strategy = "setData", changedFromIndex = 0, fitContent = false } = {}) {
     ensureChart();
     const bars = state.chart.bars;
     const series = state.chart.series;
@@ -623,6 +650,7 @@ import {
     series.volume.applyOptions({ visible: state.indicators.volume });
     series.ma20.applyOptions({ visible: state.indicators.ma20 });
     series.ma60.applyOptions({ visible: state.indicators.ma60 });
+    if (strategy === "none") return;
     if (!bars.length) {
       Object.values(series).forEach((item) => item.setData([]));
       $("#crosshair-readout").hidden = true;
@@ -656,12 +684,8 @@ import {
       histogram: histogramData,
       rsi: lineData(indicators.rsi),
     };
-    if (incremental) {
-      Object.entries(series).forEach(([key, item]) => item.update(dataSets[key].at(-1)));
-    } else {
-      Object.entries(series).forEach(([key, item]) => item.setData(dataSets[key]));
-      state.chart.api.timeScale().fitContent();
-    }
+    applySeriesBatch(series, dataSets, { strategy, changedFromIndex });
+    if (strategy === "setData" && fitContent) state.chart.api.timeScale().fitContent();
   }
 
   function initializeChart() {
@@ -875,7 +899,18 @@ import {
   }
 
   function saveThreads() {
-    localStorage.setItem(STORAGE.threads, JSON.stringify(state.threads));
+    state.threads = compactThreads(state.threads);
+    try {
+      localStorage.setItem(STORAGE.threads, JSON.stringify(state.threads));
+      state.threadStorageWarningShown = false;
+      return true;
+    } catch (error) {
+      if (!state.threadStorageWarningShown) {
+        toast("本地会话无法继续持久化；本次问答仍可继续。", true);
+        state.threadStorageWarningShown = true;
+      }
+      return false;
+    }
   }
 
   function currentThread() {
@@ -917,9 +952,9 @@ import {
   function loadThreads() {
     try {
       const stored = JSON.parse(localStorage.getItem(STORAGE.threads) || "[]");
-      state.threads = Array.isArray(stored)
-        ? stored.filter((thread) => thread && typeof thread.id === "string" && Array.isArray(thread.messages)).slice(0, 30)
-        : [];
+      state.threads = compactThreads(Array.isArray(stored)
+        ? stored.filter((thread) => thread && typeof thread.id === "string" && Array.isArray(thread.messages))
+        : []);
     } catch {
       state.threads = [];
     }
@@ -1019,7 +1054,7 @@ import {
     const question = $("#chat-question").value.trim();
     if (!question) return;
     if (!state.accessCode) { openDrawer("#settings-drawer", "#settings-overlay"); toast("研究问答需要访问码", true); return; }
-    const historyMessages = (currentThread()?.messages || []).map(({ role, content }) => ({ role, content }));
+    const historyMessages = buildChatHistory(currentThread()?.messages);
     state.chatBusy = true;
     $("#chat-send").disabled = true;
     $("#chat-question").value = "";
@@ -1102,7 +1137,7 @@ import {
     }));
     $$("[data-indicator]").forEach((input) => input.addEventListener("change", () => {
       state.indicators[input.dataset.indicator] = input.checked;
-      syncChartData({ incremental: true });
+      syncChartData({ strategy: "none" });
     }));
     $("#chart-reset").addEventListener("click", () => state.chart.api?.timeScale().fitContent());
     $("#refresh-all").addEventListener("click", refreshAll);

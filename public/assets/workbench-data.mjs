@@ -27,22 +27,139 @@ export function normalizeEnvelope(value) {
   };
 }
 
-export function mergeIncrementalBars(current, incoming) {
+function shallowEqual(left, right) {
+  if (left === right) return true;
+  if (!left || !right) return false;
+  const keys = new Set([...Object.keys(left), ...Object.keys(right)]);
+  return [...keys].every((key) => Object.is(left[key], right[key]));
+}
+
+export function mergeIncrementalBatch(current, incoming) {
   const previous = Array.isArray(current) ? current : [];
   const updates = (Array.isArray(incoming) ? incoming : [])
     .filter((bar) => bar && typeof bar.ts === "string")
     .sort((a, b) => a.ts.localeCompare(b.ts));
-  if (!updates.length) return previous;
-  const result = previous.slice();
+  if (!updates.length) return { bars: previous, changedFromIndex: null, strategy: "none" };
+  const byTimestamp = new Map(previous.map((bar) => [bar.ts, bar]));
   for (const update of updates) {
-    const last = result.at(-1);
-    if (!last || update.ts > last.ts) {
-      result.push(update);
-    } else if (update.ts === last.ts) {
-      result[result.length - 1] = update;
+    byTimestamp.set(update.ts, update);
+  }
+  const bars = [...byTimestamp.values()].sort((a, b) => a.ts.localeCompare(b.ts));
+  let changedFromIndex = null;
+  const length = Math.max(previous.length, bars.length);
+  for (let index = 0; index < length; index += 1) {
+    if (!shallowEqual(previous[index], bars[index])) {
+      changedFromIndex = index;
+      break;
     }
   }
-  return result;
+  if (changedFromIndex === null) return { bars: previous, changedFromIndex: null, strategy: "none" };
+  const pureAppend = changedFromIndex === previous.length;
+  const pureLastUpdate = bars.length === previous.length && changedFromIndex === previous.length - 1;
+  return {
+    bars,
+    changedFromIndex,
+    strategy: pureAppend || pureLastUpdate ? "update" : "setData",
+  };
+}
+
+export function mergeIncrementalBars(current, incoming) {
+  return mergeIncrementalBatch(current, incoming).bars;
+}
+
+export function applySeriesBatch(series, dataSets, { strategy, changedFromIndex = 0 }) {
+  if (strategy === "none") return;
+  const entries = Object.entries(series);
+  if (strategy === "update") {
+    const length = Math.max(0, ...Object.values(dataSets).map((points) => points.length));
+    for (let index = changedFromIndex; index < length; index += 1) {
+      entries.forEach(([key, item]) => item.update(dataSets[key][index]));
+    }
+    return;
+  }
+  entries.forEach(([key, item]) => item.setData(dataSets[key]));
+}
+
+export function createLatestRequestGate() {
+  let latestId = 0;
+  let controller = null;
+  return {
+    begin(symbol, timeframe) {
+      controller?.abort();
+      controller = new AbortController();
+      return { id: ++latestId, symbol, timeframe, signal: controller.signal };
+    },
+    isCurrent(request, symbol, timeframe) {
+      return request.id === latestId
+        && request.symbol === symbol
+        && request.timeframe === timeframe
+        && !request.signal.aborted;
+    },
+    finish(request) {
+      if (request.id === latestId) controller = null;
+    },
+  };
+}
+
+const THREAD_LIMITS = Object.freeze({
+  maxThreads: 30,
+  maxMessagesPerThread: 80,
+  maxCharsPerThread: 60000,
+  maxMessagesTotal: 300,
+  maxCharsTotal: 180000,
+});
+
+function positiveLimit(value, fallback) {
+  return Number.isInteger(value) && value >= 0 ? value : fallback;
+}
+
+function takeRecentMessages(messages, maxMessages, maxChars) {
+  const kept = [];
+  let chars = 0;
+  for (let index = messages.length - 1; index >= 0 && kept.length < maxMessages && chars < maxChars; index -= 1) {
+    const message = messages[index];
+    if (!message || !["user", "assistant"].includes(message.role)) continue;
+    const remaining = maxChars - chars;
+    const content = String(message.content || "").slice(0, remaining);
+    if (!content) continue;
+    kept.unshift({ ...message, content });
+    chars += content.length;
+  }
+  return kept;
+}
+
+export function compactThreads(threads, options = {}) {
+  const limits = {
+    maxThreads: positiveLimit(options.maxThreads, THREAD_LIMITS.maxThreads),
+    maxMessagesPerThread: positiveLimit(options.maxMessagesPerThread, THREAD_LIMITS.maxMessagesPerThread),
+    maxCharsPerThread: positiveLimit(options.maxCharsPerThread, THREAD_LIMITS.maxCharsPerThread),
+    maxMessagesTotal: positiveLimit(options.maxMessagesTotal, THREAD_LIMITS.maxMessagesTotal),
+    maxCharsTotal: positiveLimit(options.maxCharsTotal, THREAD_LIMITS.maxCharsTotal),
+  };
+  let messagesRemaining = limits.maxMessagesTotal;
+  let charsRemaining = limits.maxCharsTotal;
+  return (Array.isArray(threads) ? threads : []).slice(0, limits.maxThreads).map((thread) => {
+    const messages = takeRecentMessages(
+      Array.isArray(thread?.messages) ? thread.messages : [],
+      Math.min(limits.maxMessagesPerThread, messagesRemaining),
+      Math.min(limits.maxCharsPerThread, charsRemaining),
+    );
+    messagesRemaining -= messages.length;
+    charsRemaining -= messages.reduce((sum, message) => sum + message.content.length, 0);
+    return { ...thread, messages };
+  });
+}
+
+export function buildChatHistory(messages, options = {}) {
+  const safe = (Array.isArray(messages) ? messages : [])
+    .filter((message) => !message?.error && ["user", "assistant"].includes(message?.role))
+    .map(({ role, content }) => ({ role, content: String(content || "") }))
+    .filter(({ content }) => content.length > 0);
+  return takeRecentMessages(
+    safe,
+    positiveLimit(options.maxMessages, 20),
+    positiveLimit(options.maxChars, 12000),
+  ).map(({ role, content }) => ({ role, content }));
 }
 
 export function filterFeedItems(items, filters = {}) {

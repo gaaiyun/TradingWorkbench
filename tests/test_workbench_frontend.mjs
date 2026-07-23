@@ -6,8 +6,13 @@ import * as workbenchData from "../public/assets/workbench-data.mjs";
 
 const {
   DEFAULT_TARGETS,
+  applySeriesBatch,
+  buildChatHistory,
+  compactThreads,
   computeNextRun,
+  createLatestRequestGate,
   filterFeedItems,
+  mergeIncrementalBatch,
   mergeIncrementalBars,
   normalizeEnvelope,
 } = workbenchData;
@@ -15,6 +20,7 @@ const {
 const html = readFileSync(new URL("../public/index.html", import.meta.url), "utf8");
 const css = readFileSync(new URL("../public/assets/workbench.css", import.meta.url), "utf8");
 const script = readFileSync(new URL("../public/assets/workbench.js", import.meta.url), "utf8");
+const dataScript = readFileSync(new URL("../public/assets/workbench-data.mjs", import.meta.url), "utf8");
 
 test("research terminal exposes the continuous three-column workspace and indicator panes", () => {
   assert.match(html, /class="research-layout"/);
@@ -74,6 +80,70 @@ test("market polling replaces only the matching last bar and appends a newer bar
   assert.equal(appended.at(-1).close, 12);
 });
 
+test("incremental batches identify revisions that require dependent indicator replay", () => {
+  const current = [
+    { ts: "2026-07-23T01:00:00.000Z", close: 10 },
+    { ts: "2026-07-23T01:05:00.000Z", close: 11 },
+    { ts: "2026-07-23T01:10:00.000Z", close: 12 },
+  ];
+  const revisedAndAppended = mergeIncrementalBatch(current, [
+    { ts: "2026-07-23T01:10:00.000Z", close: 12.5 },
+    { ts: "2026-07-23T01:15:00.000Z", close: 13 },
+  ]);
+  assert.equal(revisedAndAppended.changedFromIndex, 2);
+  assert.equal(revisedAndAppended.strategy, "setData");
+  assert.deepEqual(revisedAndAppended.bars.map(({ close }) => close), [10, 11, 12.5, 13]);
+
+  const lastOnly = mergeIncrementalBatch(current, [
+    { ts: "2026-07-23T01:10:00.000Z", close: 12.5 },
+  ]);
+  assert.equal(lastOnly.changedFromIndex, 2);
+  assert.equal(lastOnly.strategy, "update");
+
+  const appendOnly = mergeIncrementalBatch(current, [
+    { ts: "2026-07-23T01:15:00.000Z", close: 13 },
+    { ts: "2026-07-23T01:20:00.000Z", close: 14 },
+  ]);
+  assert.equal(appendOnly.changedFromIndex, 3);
+  assert.equal(appendOnly.strategy, "update");
+});
+
+test("series batch application updates every affected point or replaces all dependent data", () => {
+  const calls = [];
+  const series = {
+    candles: {
+      update: (point) => calls.push(["candles.update", point.time]),
+      setData: (points) => calls.push(["candles.setData", points.length]),
+    },
+    macd: {
+      update: (point) => calls.push(["macd.update", point.time]),
+      setData: (points) => calls.push(["macd.setData", points.length]),
+    },
+  };
+  const dataSets = {
+    candles: [{ time: 1 }, { time: 2 }, { time: 3 }],
+    macd: [{ time: 1 }, { time: 2 }, { time: 3 }],
+  };
+  applySeriesBatch(series, dataSets, { strategy: "update", changedFromIndex: 1 });
+  assert.deepEqual(calls, [
+    ["candles.update", 2], ["macd.update", 2],
+    ["candles.update", 3], ["macd.update", 3],
+  ]);
+  calls.length = 0;
+  applySeriesBatch(series, dataSets, { strategy: "setData", changedFromIndex: 1 });
+  assert.deepEqual(calls, [["candles.setData", 3], ["macd.setData", 3]]);
+});
+
+test("latest market request gate aborts and rejects out-of-order symbol or timeframe responses", () => {
+  const gate = createLatestRequestGate();
+  const first = gate.begin("512480.SS", "15m");
+  const second = gate.begin("NVDA", "1d");
+  assert.equal(first.signal.aborted, true);
+  assert.equal(gate.isCurrent(first, "512480.SS", "15m"), false);
+  assert.equal(gate.isCurrent(second, "NVDA", "1h"), false);
+  assert.equal(gate.isCurrent(second, "NVDA", "1d"), true);
+});
+
 test("feed filtering supports symbol, source hierarchy, and minimum importance", () => {
   const items = [
     { symbol: "NVDA", source: "sec", importance: "high" },
@@ -126,7 +196,7 @@ test("chart uses vendored Lightweight Charts 5.2.0 with panes, axes, and increme
   assert.match(script, /createChart/);
   assert.match(script, /addSeries\([^)]*,[^)]*,\s*1\)/);
   assert.match(script, /addSeries\([^)]*,[^)]*,\s*2\)/);
-  assert.match(script, /\.update\(/);
+  assert.match(`${script}\n${dataScript}`, /\.update\(/);
   assert.doesNotMatch(script, /attributionLogo\s*:\s*false/);
 });
 
@@ -175,6 +245,49 @@ test("chat keeps persistent local threads and streams SSE with history context",
   assert.match(html, /id="thread-select"/);
   assert.match(html, /id="new-thread"/);
   assert.match(html, /id="delete-thread"/);
+});
+
+test("chat history excludes failed messages and local thread compaction enforces hard bounds", () => {
+  const history = buildChatHistory([
+    { role: "user", content: "正常问题" },
+    { role: "assistant", content: "网络错误", error: true },
+    { role: "assistant", content: "正常回答" },
+  ]);
+  assert.deepEqual(history, [
+    { role: "user", content: "正常问题" },
+    { role: "assistant", content: "正常回答" },
+  ]);
+
+  const threads = compactThreads([
+    {
+      id: "a", title: "A", updatedAt: "2026-07-24T00:00:00.000Z",
+      messages: Array.from({ length: 6 }, (_, index) => ({
+        id: `a${index}`, role: "user", content: "12345",
+        at: `2026-07-24T00:00:0${index}.000Z`,
+      })),
+    },
+    {
+      id: "b", title: "B", updatedAt: "2026-07-23T00:00:00.000Z",
+      messages: [{ id: "b1", role: "assistant", content: "12345", at: "2026-07-23T00:00:00.000Z" }],
+    },
+  ], {
+    maxThreads: 2,
+    maxMessagesPerThread: 4,
+    maxCharsPerThread: 12,
+    maxMessagesTotal: 4,
+    maxCharsTotal: 12,
+  });
+  assert.equal(threads.length, 2);
+  assert.equal(threads.flatMap(({ messages }) => messages).length <= 4, true);
+  assert.equal(threads.flatMap(({ messages }) => messages).reduce((sum, message) => sum + message.content.length, 0) <= 12, true);
+  assert.equal(threads[0].messages.length <= 4, true);
+});
+
+test("market rendering replays every changed point and storage quota failures are contained", () => {
+  assert.match(dataScript, /for\s*\(let index = changedFromIndex; index < length; index \+= 1\)/);
+  assert.match(script, /marketRequestGate\.begin\(symbol,\s*timeframe\)/);
+  assert.match(script, /marketRequestGate\.isCurrent\(request,\s*state\.selectedSymbol,\s*state\.timeframe\)/);
+  assert.match(script, /catch\s*\(error\)\s*\{[\s\S]*本地会话无法继续持久化/);
 });
 
 test("mobile chart view keeps cross-market drivers accessible", () => {
