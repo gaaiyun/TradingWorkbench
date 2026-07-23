@@ -99,6 +99,8 @@ npm run check:workbench
 部署后依次检查 `/api/live`、`/api/health`、设置保存、手工任务、流式问答和期权自动刷新。
 工作台代码或 Functions 变更推送到 `main` 后，由 `deploy-workbench.yml` 做快速发布，
 不会重复执行耗时的股票分析；日常报告仍由 `daily-analysis.yml` 生成。
+若本仓库尚未配置 Cloudflare Token，该工作流只运行接口测试并明确跳过发布；可在 VolGuard
+仓库手工运行 `deploy-tradingagents.yml`，由已有的 Cloudflare Secret 安全完成同一发布。
 
 ## 风险提示
 

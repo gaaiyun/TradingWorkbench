@@ -32,13 +32,19 @@ jobs:
         with:
           node-version: "20"
 
-      - name: Verify deployment credentials
+      - name: Check deployment credentials
+        id: cloudflare
         run: |
-          test -n "$CLOUDFLARE_API_TOKEN" || { echo "CLOUDFLARE_API_TOKEN is missing" >&2; exit 1; }
-          test -n "$CLOUDFLARE_ACCOUNT_ID" || { echo "CLOUDFLARE_ACCOUNT_ID is missing" >&2; exit 1; }
+          if [ -n "$CLOUDFLARE_API_TOKEN" ] && [ -n "$CLOUDFLARE_ACCOUNT_ID" ]; then
+            echo "available=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "available=false" >> "$GITHUB_OUTPUT"
+            echo "::notice::Cloudflare credentials are not configured in this repository; use the VolGuard deploy-tradingagents workflow."
+          fi
 
       - name: Test Pages Functions contracts
         run: npm run test:functions
 
       - name: Deploy workbench and Pages Functions
+        if: ${{ steps.cloudflare.outputs.available == 'true' }}
         run: npx --yes wrangler@4.113.0 pages deploy public --project-name "$CLOUDFLARE_PAGES_PROJECT" --branch main
