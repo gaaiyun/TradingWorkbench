@@ -289,7 +289,12 @@ export async function runManualCollection(taskType, env, deps = {}) {
   const clock = deps.now ?? (() => new Date());
   const registryFactory = deps.registryFactory ?? ((options) =>
     createProviderRegistry(options));
-  const registry = registryFactory({ db: env.DB, env, now: clock });
+  const registry = registryFactory({
+    db: env.DB,
+    env,
+    now: clock,
+    ignoreCircuitBreaker: true,
+  });
   const totals = { targets: 0, succeeded: 0, failed: 0 };
   let written = 0;
   const sources = [];

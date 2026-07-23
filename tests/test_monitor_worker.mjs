@@ -351,6 +351,7 @@ test("protected manual collection backfills the configured US daily targets", as
   assert.equal(unauthorized.status, 401);
 
   const requests = [];
+  let registryOptions;
   const response = await handleFetch(
     new Request("https://monitor.example/run-collection?task=usCloseSnapshot", {
       method: "POST",
@@ -358,17 +359,20 @@ test("protected manual collection backfills the configured US daily targets", as
     }),
     env,
     {
-      registryFactory: () => ({
-        fetchMarketData: async (request) => {
-          requests.push(request);
-          return {
-            status: "ok",
-            source: "wire",
-            bars: [barFor(request)],
-            sources: [{ source: "wire", status: "success", reason: null }],
-          };
-        },
-      }),
+      registryFactory: (options) => {
+        registryOptions = options;
+        return {
+          fetchMarketData: async (request) => {
+            requests.push(request);
+            return {
+              status: "ok",
+              source: "wire",
+              bars: [barFor(request)],
+              sources: [{ source: "wire", status: "success", reason: null }],
+            };
+          },
+        };
+      },
     },
   );
   const payload = await response.json();
@@ -378,6 +382,7 @@ test("protected manual collection backfills the configured US daily targets", as
   assert.equal(payload.counts.targets, 1);
   assert.equal(payload.counts.succeeded, 1);
   assert.equal(payload.written, 1);
+  assert.equal(registryOptions.ignoreCircuitBreaker, true);
   assert.deepEqual(requests, [{
     symbol: "SPY",
     market: "US",

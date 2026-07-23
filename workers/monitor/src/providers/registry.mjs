@@ -60,7 +60,7 @@ export function createProviderRegistry(options = {}) {
       for (let index = 0; index < order.length; index += 1) {
         const source = order[index];
         const health = await readSourceHealth(options.db, source, requestedAt).catch(() => null);
-        if (circuitIsOpen(health, requestedAt)) {
+        if (!options.ignoreCircuitBreaker && circuitIsOpen(health, requestedAt)) {
           sources.push({ source, status: "skipped", reason: "CIRCUIT_OPEN" });
           continue;
         }
