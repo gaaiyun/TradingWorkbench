@@ -80,6 +80,15 @@ function distinctMarketBars(rows, limit) {
     .slice(0, limit);
 }
 
+function marketEnvelope(rows) {
+  const latest = rows.reduce(
+    (current, row) => (!current || row.ts > current.ts ? row : current),
+    null,
+  );
+  const envelope = dynamicEnvelope(latest ? [latest] : []);
+  return { ...envelope, data: rows };
+}
+
 export function aggregateMarketBars(rows, timeframe, milliseconds, limit) {
   const groups = new Map();
   for (const row of [...rows].sort((left, right) => left.ts.localeCompare(right.ts))) {
@@ -130,7 +139,7 @@ export async function onRequestGet({ request, env }) {
     const rows = derived
       ? aggregateMarketBars(storedRows, query.timeframe, derived.milliseconds, query.limit)
       : storedRows;
-    const envelope = dynamicEnvelope(rows);
+    const envelope = marketEnvelope(rows);
     return json({
       ...envelope,
       indicators: rows.length

@@ -165,6 +165,7 @@ test("market API returns distinct timestamps when provider fallbacks overlap", a
       ts: "2026-07-23T04:00:00Z",
       source: "eastmoney-us",
       fetched_at: "2026-07-24T01:00:00Z",
+      freshness: "fresh",
     },
     {
       ...base,
@@ -186,6 +187,9 @@ test("market API returns distinct timestamps when provider fallbacks overlap", a
     "2026-07-22T04:00:00Z",
   ]);
   assert.equal(payload.data[0].source, "eastmoney-us");
+  assert.equal(payload.status, "ok");
+  assert.equal(payload.sources.length, 1);
+  assert.equal(payload.sources[0].freshness, "fresh");
 });
 
 test("news and events APIs support topic and importance filters without interpolating input", async () => {
