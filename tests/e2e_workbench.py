@@ -1,0 +1,208 @@
+import json
+import math
+import threading
+from datetime import datetime, timedelta, timezone
+from functools import partial
+from http.server import SimpleHTTPRequestHandler, ThreadingHTTPServer
+from pathlib import Path
+from urllib.parse import parse_qs, urlparse
+
+from playwright.sync_api import sync_playwright
+
+
+ROOT = Path(__file__).resolve().parents[1]
+SCREENSHOT_DIR = Path(r"G:\codex-home\visualizations\2026\07\22\019f8943-9db3-7c52-88de-0cb3773977ba")
+BASE_URL = "http://127.0.0.1:4207"
+SETTINGS = json.loads((ROOT / "public/data/workbench-settings.json").read_text(encoding="utf-8"))
+MARKET_REQUESTS = []
+ANALYZE_REQUESTS = []
+
+
+def envelope(data, status="ok", source="fixture-provider"):
+    as_of = data[-1].get("ts") if data else "2026-07-23T07:10:00.000Z"
+    return {
+        "status": status,
+        "asOf": as_of,
+        "data": data,
+        "sources": [{
+            "source": source,
+            "asOf": as_of,
+            "fetchedAt": "2026-07-23T07:10:15.000Z",
+            "freshness": "fresh" if status == "ok" else status,
+            "quality": "verified" if status == "ok" else status,
+            "adjustment": "none",
+        }],
+    }
+
+
+def bars(symbol, timeframe):
+    start = datetime(2026, 7, 22, 1, 30, tzinfo=timezone.utc)
+    base = 1.46 if symbol.endswith((".SS", ".SZ")) else 170
+    step = {"5m": 5, "15m": 15, "1h": 60, "1d": 1440}.get(timeframe, 15)
+    result = []
+    for index in range(150):
+        trend = index * base * 0.00045
+        wave = math.sin(index / 7) * base * 0.008
+        opening = base + trend + wave
+        closing = opening + math.sin(index / 3) * base * 0.002
+        result.append({
+            "symbol": symbol,
+            "timeframe": timeframe,
+            "ts": (start + timedelta(minutes=index * step)).isoformat().replace("+00:00", "Z"),
+            "open": round(opening, 4),
+            "high": round(max(opening, closing) + base * 0.003, 4),
+            "low": round(min(opening, closing) - base * 0.003, 4),
+            "close": round(closing, 4),
+            "volume": 4_200_000 + index * 12_000 + int(abs(math.sin(index)) * 900_000),
+        })
+    return result
+
+
+NEWS = [
+    {
+        "id": "n1", "symbol": "NVDA", "topic": "earnings", "title": "AI 加速卡供给链指引更新",
+        "summary": "上游封装与先进制程排产继续影响下季度交付节奏。",
+        "url": "https://example.com/nvda", "published_at": "2026-07-23T06:48:00.000Z",
+        "source": "Reuters", "as_of": "2026-07-23T06:48:00.000Z", "fetched_at": "2026-07-23T06:49:00.000Z",
+    },
+    {
+        "id": "n2", "symbol": "TSM", "topic": "supply-chain", "title": "先进制程利用率保持高位",
+        "summary": "晶圆代工产能与价格变化是 A 股半导体设备链的重要外部驱动。",
+        "url": "https://example.com/tsm", "published_at": "2026-07-23T05:30:00.000Z",
+        "source": "Company IR", "as_of": "2026-07-23T05:30:00.000Z", "fetched_at": "2026-07-23T05:31:00.000Z",
+    },
+]
+EVENTS = [
+    {
+        "id": "e1", "symbol": "515880.SS", "topic": "policy", "importance": "critical",
+        "event_at": "2026-07-23T07:00:00.000Z", "title": "通信产业政策发布窗口",
+        "description": "关注政策原文、执行范围和与预期差异。",
+        "source": "Policy Monitor", "as_of": "2026-07-23T07:00:00.000Z", "fetched_at": "2026-07-23T07:01:00.000Z",
+    },
+]
+
+
+def fulfill_json(route, payload, status=200):
+    route.fulfill(status=status, content_type="application/json; charset=utf-8", body=json.dumps(payload, ensure_ascii=False))
+
+
+def route_api(route):
+    parsed = urlparse(route.request.url)
+    query = parse_qs(parsed.query)
+    path = parsed.path
+    if path == "/api/settings":
+        if route.request.method == "PUT":
+            request = route.request.post_data_json
+            fulfill_json(route, {
+                "ok": True, "settings": request["settings"],
+                "updatedAt": "2026-07-23T07:12:00.000Z", "message": "设置已保存并即时生效",
+            })
+        else:
+            fulfill_json(route, {**SETTINGS, "updatedAt": "2026-07-23T07:00:00.000Z"})
+    elif path == "/api/market":
+        symbol = query.get("symbol", ["515880.SS"])[0]
+        timeframe = query.get("timeframe", ["15m"])[0]
+        limit = int(query.get("limit", ["240"])[0])
+        MARKET_REQUESTS.append((symbol, timeframe, limit))
+        fulfill_json(route, envelope(bars(symbol, timeframe)[-limit:]))
+    elif path == "/api/news":
+        fulfill_json(route, envelope(NEWS))
+    elif path == "/api/events":
+        fulfill_json(route, envelope(EVENTS))
+    elif path == "/api/monitor-status":
+        fulfill_json(route, envelope([
+            {"source": "cn-intraday", "status": "ok", "as_of": "2026-07-23T07:05:00.000Z", "detail": "最近采集成功", "fetched_at": "2026-07-23T07:05:02.000Z"},
+            {"source": "pre-market", "status": "ok", "as_of": "2026-07-23T00:25:00.000Z", "detail": "简报已归档", "fetched_at": "2026-07-23T00:25:10.000Z"},
+        ]))
+    elif path == "/api/latest":
+        fulfill_json(route, {
+            "status": "ok", "generated_at": "2026-07-23T06:34:48+08:00", "trade_date": "2026-07-22",
+            "results": [{
+                "ticker": "515880.SS", "rating": "Overweight",
+                "report": "reports/515880.SS/2026-07-22/complete_report.md",
+                "decision_excerpt": "**Executive Summary**: 美股半导体驱动偏强，但 A 股成交确认仍是加仓前提。观察通信设备与光模块链的量价共振，若开盘后相关性衰减则保持中性仓位。",
+            }],
+        })
+    elif path == "/api/analyze":
+        ANALYZE_REQUESTS.append(route.request.post_data_json)
+        fulfill_json(route, {"ok": True, "message": "已受理，分析会在后台顺序执行", "tickers": [item["symbol"] for item in SETTINGS["profiles"][0]["targets"]]}, 202)
+    elif path == "/api/chat":
+        fulfill_json(route, {"answer": "当前归档显示：**成交确认**仍是最重要的跟踪条件。"})
+    else:
+        fulfill_json(route, {"status": "unavailable", "asOf": None, "data": [], "sources": []})
+
+
+class QuietHandler(SimpleHTTPRequestHandler):
+    def log_message(self, _format, *args):
+        return
+
+
+def run_browser():
+    SCREENSHOT_DIR.mkdir(parents=True, exist_ok=True)
+    with sync_playwright() as playwright:
+        browser = playwright.chromium.launch(
+            headless=True,
+            executable_path=r"C:\Program Files (x86)\Microsoft\Edge\Application\msedge.exe",
+        )
+        page = browser.new_page(viewport={"width": 1600, "height": 1000}, device_scale_factor=1)
+        page.add_init_script("window.setInterval = ((native) => (fn, delay, ...args) => native(fn, delay >= 60000 ? 250 : delay, ...args))(window.setInterval)")
+        page.route("**/api/**", route_api)
+        page.goto(BASE_URL, wait_until="domcontentloaded")
+        page.wait_for_selector("#watchlist .watch-row")
+        page.wait_for_function("document.querySelector('#chart-empty').hidden === true")
+        page.screenshot(path=str(SCREENSHOT_DIR / "etf-workbench-desktop.png"), full_page=True)
+
+        assert page.locator("#watchlist .watch-row").count() == 10
+        assert page.locator("#market-chart").is_visible()
+        page.get_by_role("tab", name="1h").click()
+        assert page.get_by_role("tab", name="1h").get_attribute("aria-selected") == "true"
+        page.select_option("#feed-symbol", "NVDA")
+        assert page.locator("#research-feed .feed-item").count() == 1
+
+        page.click("#settings-open")
+        page.wait_for_selector("#settings-drawer.is-open")
+        page.select_option("#profile-timezone", "Asia/Singapore")
+        page.screenshot(path=str(SCREENSHOT_DIR / "etf-workbench-settings.png"), full_page=True)
+        page.fill("#settings-code", "fixture-code")
+        page.click("#save-settings")
+        page.wait_for_function("document.querySelector('#settings-notice').textContent.includes('保存')")
+        page.click("#run-analysis")
+        page.wait_for_function("document.querySelector('#settings-notice').textContent.includes('已受理')")
+        assert ANALYZE_REQUESTS[-1]["tickers"] == [item["symbol"] for item in SETTINGS["profiles"][0]["targets"]]
+
+        mobile = browser.new_page(viewport={"width": 390, "height": 844}, device_scale_factor=1)
+        mobile.route("**/api/**", route_api)
+        mobile.goto(BASE_URL, wait_until="domcontentloaded")
+        mobile.wait_for_selector("#market-chart")
+        mobile.click('[data-mobile-section="watch"]')
+        assert mobile.locator("body").get_attribute("data-mobile-view") == "watch"
+        mobile.click('[data-mobile-section="chart"]')
+        mobile.screenshot(path=str(SCREENSHOT_DIR / "etf-workbench-mobile.png"), full_page=True)
+
+        unavailable = browser.new_page(viewport={"width": 900, "height": 700})
+        unavailable.route("**/api/**", lambda route: fulfill_json(route, {"status": "unavailable", "asOf": None, "data": [], "sources": []}))
+        unavailable.goto(BASE_URL, wait_until="domcontentloaded")
+        unavailable.wait_for_selector("#chart-empty")
+        assert unavailable.locator("#chart-empty").is_visible()
+        assert unavailable.locator("#freshness-status").inner_text() == "UNAVAILABLE"
+
+        page.wait_for_timeout(600)
+        assert any(symbol == "515880.SS" and limit == 2 for symbol, _, limit in MARKET_REQUESTS)
+        browser.close()
+
+
+def main():
+    handler = partial(QuietHandler, directory=str(ROOT / "public"))
+    server = ThreadingHTTPServer(("127.0.0.1", 4207), handler)
+    thread = threading.Thread(target=server.serve_forever, daemon=True)
+    thread.start()
+    try:
+        run_browser()
+    finally:
+        server.shutdown()
+        server.server_close()
+        thread.join(timeout=2)
+
+
+if __name__ == "__main__":
+    main()
