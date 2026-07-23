@@ -9,6 +9,22 @@ function providerError(error, signal) {
   return new ProviderError(signal?.aborted ? "TIMEOUT" : "NETWORK_ERROR");
 }
 
+function providerHeaders(url) {
+  const headers = new Headers({
+    accept: "application/json,text/plain,*/*",
+    "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 Chrome/138 Safari/537.36",
+  });
+  const hostname = new URL(url).hostname;
+  if (hostname.endsWith("eastmoney.com")) {
+    headers.set("referer", "https://quote.eastmoney.com/");
+  } else if (hostname.endsWith("finance.yahoo.com")) {
+    headers.set("referer", "https://finance.yahoo.com/");
+  } else if (hostname.endsWith("gtimg.cn")) {
+    headers.set("referer", "https://gu.qq.com/");
+  }
+  return headers;
+}
+
 async function request(fetcher, url, { timeoutMs, format }) {
   const controller = new AbortController();
   const timer = setTimeout(
@@ -16,7 +32,10 @@ async function request(fetcher, url, { timeoutMs, format }) {
     timeoutMs,
   );
   try {
-    const response = await fetcher(url, { signal: controller.signal });
+    const response = await fetcher(url, {
+      signal: controller.signal,
+      headers: providerHeaders(url),
+    });
     if (!response?.ok) throw new ProviderError("HTTP_ERROR");
     try {
       return {

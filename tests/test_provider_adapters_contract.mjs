@@ -138,9 +138,11 @@ test("Tencent US removes a disconnected listing seed instead of returning a fals
 
 test("Eastmoney US returns the latest adjusted daily window for Oracle", async () => {
   let requestedUrl;
+  let requestedOptions;
   const adapters = createAdapters({
-    fetch: async (url) => {
+    fetch: async (url, options) => {
       requestedUrl = String(url);
+      requestedOptions = options;
       return jsonResponse({
         rc: 0,
         data: {
@@ -173,6 +175,8 @@ test("Eastmoney US returns the latest adjusted daily window for Oracle", async (
   assert.match(requestedUrl, /secid=106\.ORCL/);
   assert.match(requestedUrl, /fqt=1/);
   assert.match(requestedUrl, /lmt=1500/);
+  assert.equal(requestedOptions.headers.get("accept"), "application/json,text/plain,*/*");
+  assert.equal(requestedOptions.headers.get("referer"), "https://quote.eastmoney.com/");
 });
 
 test("Eastmoney includes its required range parameters and validates rc/data/klines", async () => {
