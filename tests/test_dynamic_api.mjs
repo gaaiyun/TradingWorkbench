@@ -192,6 +192,60 @@ test("market API returns distinct timestamps when provider fallbacks overlap", a
   assert.equal(payload.sources[0].freshness, "fresh");
 });
 
+test("daily market API keeps one provider bar per trading date", async () => {
+  const base = {
+    symbol: "SOXX",
+    profile_id: "cn-semi-comms",
+    timeframe: "1d",
+    open: 545.5,
+    high: 558.09,
+    low: 543.79,
+    close: 551.24,
+    volume: 1000,
+    freshness: "fresh",
+    adjustment: "none",
+    quality: "good",
+  };
+  const DB = new FakeD1({ rows: { market_bars: [
+    {
+      ...base,
+      ts: "2026-07-23T13:30:00Z",
+      as_of: "2026-07-23T13:30:00Z",
+      source: "yahoo",
+      fetched_at: "2026-07-24T01:00:00Z",
+    },
+    {
+      ...base,
+      ts: "2026-07-23T04:00:00Z",
+      as_of: "2026-07-23T04:00:00Z",
+      source: "tencent-us",
+      fetched_at: "2026-07-23T18:40:00Z",
+      adjustment: "qfq",
+    },
+    {
+      ...base,
+      ts: "2026-07-22T13:30:00Z",
+      as_of: "2026-07-22T13:30:00Z",
+      source: "yahoo",
+      fetched_at: "2026-07-24T01:00:00Z",
+      close: 555.52,
+    },
+  ] } });
+
+  const response = await marketApi.onRequestGet({
+    request: request("/api/market?symbol=SOXX&profile=cn-semi-comms&timeframe=1d&limit=2"),
+    env: { DB },
+  });
+  const payload = await response.json();
+
+  assert.deepEqual(payload.data.map(({ ts }) => ts), [
+    "2026-07-23T13:30:00Z",
+    "2026-07-22T13:30:00Z",
+  ]);
+  assert.equal(payload.data[0].source, "yahoo");
+  assert.equal(payload.indicators.bars, 2);
+});
+
 test("daily market API removes a disconnected legacy seed before calculating change", async () => {
   const base = {
     symbol: "NVDA",

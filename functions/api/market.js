@@ -68,12 +68,15 @@ function aggregateGroup(group, timeframe, bucketTimestamp) {
   };
 }
 
-function distinctMarketBars(rows, limit) {
+function distinctMarketBars(rows, limit, daily = false) {
   const byTimestamp = new Map();
   for (const row of rows) {
-    const current = byTimestamp.get(row.ts);
+    const key = daily && /^\d{4}-\d{2}-\d{2}/.test(row.ts)
+      ? row.ts.slice(0, 10)
+      : row.ts;
+    const current = byTimestamp.get(key);
     if (!current || String(row.fetched_at || "") > String(current.fetched_at || "")) {
-      byTimestamp.set(row.ts, row);
+      byTimestamp.set(key, row);
     }
   }
   return [...byTimestamp.values()]
@@ -149,7 +152,11 @@ export async function onRequestGet({ request, env }) {
       };
     const queriedRows = await queryMarketBars(db, storedQuery);
     const sourceLimit = derived ? query.limit * derived.factor : query.limit;
-    const distinctRows = distinctMarketBars(queriedRows, sourceLimit);
+    const distinctRows = distinctMarketBars(
+      queriedRows,
+      sourceLimit,
+      query.timeframe === "1d",
+    );
     const storedRows = query.timeframe === "1d"
       ? contiguousDailyBars(distinctRows)
       : distinctRows;
