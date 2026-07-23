@@ -97,6 +97,8 @@ npm run check:workbench
 
 发布顺序：先部署 VolGuard，使 `/api/live` 提供 schema v2；再部署 TradingAgents。
 部署后依次检查 `/api/live`、`/api/health`、设置保存、手工任务、流式问答和期权自动刷新。
+工作台代码或 Functions 变更推送到 `main` 后，由 `deploy-workbench.yml` 做快速发布，
+不会重复执行耗时的股票分析；日常报告仍由 `daily-analysis.yml` 生成。
 
 ## 风险提示
 
