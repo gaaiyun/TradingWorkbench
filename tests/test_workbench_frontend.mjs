@@ -324,3 +324,27 @@ test("settings expose every schedule and PushPlus switch plus local credential c
   assert.match(script, /function clearCredential/);
   assert.match(script, /localStorage\.removeItem\(STORAGE\.deviceKey\)/);
 });
+
+test("workbench keeps first-class entry points for options risk and multi-agent analysis", () => {
+  assert.match(html, /id="deep-analysis-open"[^>]*>多智能体分析</);
+  assert.match(html, /class="capability-link"[^>]*href="https:\/\/sh50-volguard\.pages\.dev\/"/);
+  assert.match(html, /id="mobile-volguard"[^>]*href="https:\/\/sh50-volguard\.pages\.dev\/"/);
+  assert.match(script, /#deep-analysis-open/);
+  assert.match(script, /filter\(\(\{ analysis \}\) => analysis === "full"\)/);
+});
+
+test("A-share market direction uses red for gains and green for losses without changing health colors", () => {
+  assert.match(css, /--market-up:\s*#e05f68/);
+  assert.match(css, /--market-down:\s*#38b788/);
+  assert.match(css, /\.market-up\s*\{\s*color:\s*var\(--market-up\)/);
+  assert.match(css, /\.market-down\s*\{\s*color:\s*var\(--market-down\)/);
+  assert.match(script, /change >= 0 \? "market-up" : "market-down"/);
+  assert.match(script, /upColor:\s*"#e05f68"/);
+  assert.match(script, /downColor:\s*"#38b788"/);
+  assert.match(script, /wickUpColor:\s*"#e05f68"/);
+  assert.match(script, /wickDownColor:\s*"#38b788"/);
+  assert.match(script, /Number\(bar\.close\) >= Number\(bar\.open\) \? "#e05f6855" : "#38b78855"/);
+  assert.match(script, /indicators\.histogram\[index\] >= 0 \? "#e05f6877" : "#38b78877"/);
+  assert.match(css, /--positive:\s*#38b788/);
+  assert.match(css, /--negative:\s*#e05f68/);
+});

@@ -269,7 +269,7 @@ import {
     $("#watchlist").innerHTML = list.map((target) => {
       const quote = state.quotes.get(target.symbol);
       const change = quote && Number.isFinite(Number(quote.change)) ? Number(quote.change) : null;
-      const tone = change == null ? "neutral" : change >= 0 ? "positive" : "negative";
+      const tone = change == null ? "neutral" : change >= 0 ? "market-up" : "market-down";
       return `<button class="watch-row ${target.symbol === state.selectedSymbol ? "is-active" : ""}" type="button" role="option" aria-selected="${target.symbol === state.selectedSymbol}" data-symbol="${escapeHtml(target.symbol)}">
         <span class="watch-main"><span class="role-mark">${escapeHtml(roleLabels[target.role] || target.role)}</span><span><strong>${escapeHtml(target.symbol)}</strong><small>${escapeHtml(target.name || target.market)}</small></span></span>
         <span class="watch-quote"><b>${formatNumber(quote?.close)}</b><small class="${tone}">${change == null ? "—" : `${change >= 0 ? "+" : ""}${change.toFixed(2)}%`}</small></span>
@@ -289,7 +289,7 @@ import {
     $("#instrument-role").textContent = roleLabels[target.role] || target.role;
     $("#instrument-price").textContent = formatNumber(bar?.close);
     $("#instrument-change").textContent = change == null ? "—" : `${change >= 0 ? "+" : ""}${change.toFixed(2)}%`;
-    $("#instrument-change").className = change == null ? "neutral" : change >= 0 ? "positive" : "negative";
+    $("#instrument-change").className = change == null ? "neutral" : change >= 0 ? "market-up" : "market-down";
     $("#quote-open").textContent = formatNumber(bar?.open);
     $("#quote-high").textContent = formatNumber(bar?.high);
     $("#quote-low").textContent = formatNumber(bar?.low);
@@ -520,7 +520,7 @@ import {
     }
     state.latestReport = result.report;
     const rating = String(result.rating || "neutral").toLowerCase();
-    const tone = ["buy", "overweight"].includes(rating) ? "positive" : ["sell", "underweight"].includes(rating) ? "negative" : "neutral";
+    const tone = ["buy", "overweight"].includes(rating) ? "market-up" : ["sell", "underweight"].includes(rating) ? "market-down" : "neutral";
     $("#conclusion-asof").textContent = `${result.ticker} · ${state.latest.trade_date || formatTime(state.latest.generated_at, true)}`;
     $("#conclusion-body").innerHTML = `<div class="conclusion-rating ${tone}">${escapeHtml(ratingLabels[rating] || result.rating || "待研究")}</div><p>${escapeHtml(plainText(result.decision_excerpt) || "研究档案已生成，打开完整报告查看。")}</p>`;
   }
@@ -529,7 +529,7 @@ import {
     const drivers = targets().filter((target) => ["driver", "benchmark"].includes(target.role)).slice(0, 4);
     const cells = drivers.filter((target) => state.quotes.has(target.symbol)).map((target) => {
       const quote = state.quotes.get(target.symbol);
-      const tone = quote.change >= 0 ? "positive" : "negative";
+      const tone = quote.change >= 0 ? "market-up" : "market-down";
       return `<div class="driver-cell"><span>${escapeHtml(target.symbol)} / ${escapeHtml(roleLabels[target.role])}</span><strong class="${tone}">${quote.change >= 0 ? "+" : ""}${quote.change.toFixed(2)}%</strong><small>${escapeHtml(target.name)} · 相关性 — · 最新 ${formatNumber(quote.close)}</small></div>`;
     });
     $("#driver-grid").innerHTML = cells.length ? cells.join("") : '<div class="driver-empty">没有足够真实数据计算跨市场驱动</div>';
@@ -582,11 +582,11 @@ import {
       },
     });
     const candles = chart.addSeries(CandlestickSeries, {
-      upColor: "#38b788",
-      downColor: "#e05f68",
+      upColor: "#e05f68",
+      downColor: "#38b788",
       borderVisible: false,
-      wickUpColor: "#38b788",
-      wickDownColor: "#e05f68",
+      wickUpColor: "#e05f68",
+      wickDownColor: "#38b788",
       priceLineVisible: true,
       lastValueVisible: true,
     }, 0);
@@ -687,13 +687,13 @@ import {
     const volumeData = bars.map((bar) => ({
       time: barTime(bar),
       value: Number(bar.volume) || 0,
-      color: Number(bar.close) >= Number(bar.open) ? "#38b78855" : "#e05f6855",
+      color: Number(bar.close) >= Number(bar.open) ? "#e05f6855" : "#38b78855",
     }));
     const lineData = (values) => bars.map((bar, index) => linePoint(barTime(bar), values[index]));
     const histogramData = bars.map((bar, index) => ({
       time: barTime(bar),
       value: indicators.histogram[index],
-      color: indicators.histogram[index] >= 0 ? "#38b78877" : "#e05f6877",
+      color: indicators.histogram[index] >= 0 ? "#e05f6877" : "#38b78877",
     }));
     const dataSets = {
       candles: candleData,
@@ -841,9 +841,11 @@ import {
     const notice = $("#settings-notice");
     notice.textContent = "正在提交研究任务…"; notice.className = "settings-notice";
     try {
-      const payload = await submitAction("/api/analyze", { tickers: targets().map(({ symbol }) => symbol) });
+      const fullAnalysisTargets = targets().filter(({ analysis }) => analysis === "full");
+      if (!fullAnalysisTargets.length) throw new Error("请先把至少一个标的的分析方式设为“深度”");
+      const payload = await submitAction("/api/analyze", { tickers: fullAnalysisTargets.map(({ symbol }) => symbol) });
       notice.textContent = payload.message || "服务端已受理";
-      toast("分析任务已受理");
+      toast(`多智能体分析已受理：${fullAnalysisTargets.map(({ symbol }) => symbol).join("、")}`);
       setTimeout(loadMonitor, 2500);
     } catch (error) {
       notice.classList.add("is-error");
@@ -1274,7 +1276,15 @@ import {
     ["#feed-symbol", "#feed-source", "#feed-importance"].forEach((selector) => $(selector).addEventListener("change", renderFeed));
     $$("[data-mobile-section]").forEach((button) => button.addEventListener("click", () => setMobileView(button.dataset.mobileSection)));
     const openSettings = () => openDrawer("#settings-drawer", "#settings-overlay");
+    const openDeepAnalysis = () => {
+      openSettings();
+      const fullSymbols = targets().filter(({ analysis }) => analysis === "full").map(({ symbol }) => symbol);
+      $("#settings-notice").textContent = fullSymbols.length
+        ? `本次将运行 TradingAgents 多智能体深度分析：${fullSymbols.join("、")}`
+        : "请先把至少一个标的的分析方式设为“深度”。";
+    };
     $("#settings-open").addEventListener("click", openSettings);
+    $("#deep-analysis-open").addEventListener("click", openDeepAnalysis);
     $("#mobile-settings").addEventListener("click", openSettings);
     $("#watchlist-edit").addEventListener("click", openSettings);
     $("#global-status").addEventListener("click", openSettings);
@@ -1284,7 +1294,7 @@ import {
     $("#target-search").addEventListener("keydown", (event) => { if (event.key === "Enter") { event.preventDefault(); addTarget(); } });
     $("#settings-form").addEventListener("submit", saveSettings);
     $("#run-analysis").addEventListener("click", runAnalysis);
-    $("#run-analysis-left").addEventListener("click", () => { openSettings(); $("#settings-notice").textContent = "确认标的与访问码后，点击“立即运行”。"; });
+    $("#run-analysis-left").addEventListener("click", openDeepAnalysis);
     $("#toggle-code").addEventListener("click", () => { const input = $("#settings-code"); input.type = input.type === "password" ? "text" : "password"; $("#toggle-code").textContent = input.type === "password" ? "显示" : "隐藏"; });
     $("#clear-credential").addEventListener("click", clearCredential);
     $("#assistant-open").addEventListener("click", openAssistant);

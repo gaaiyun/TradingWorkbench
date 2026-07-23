@@ -9,7 +9,6 @@ from urllib.parse import parse_qs, urlparse
 
 from playwright.sync_api import sync_playwright
 
-
 ROOT = Path(__file__).resolve().parents[1]
 SCREENSHOT_DIR = Path(r"G:\codex-home\visualizations\2026\07\22\019f8943-9db3-7c52-88de-0cb3773977ba")
 BASE_URL = "http://127.0.0.1:4207"
@@ -197,6 +196,11 @@ def run_browser():
         assert page.locator("#watchlist .watch-row").count() == 10
         assert page.locator("#market-chart").is_visible()
         assert page.locator("a[href*='tradingview.com']").count() >= 1
+        assert page.locator("#deep-analysis-open").is_visible()
+        assert page.locator(".capability-link[href='https://sh50-volguard.pages.dev/']").is_visible()
+        assert page.locator("#instrument-change").evaluate(
+            "element => getComputedStyle(element).color",
+        ) == "rgb(224, 95, 104)"
         assert "最近采集成功" not in page.locator("#task-timeline").inner_text()
         assert "任务结果接口未提供" in page.locator("#task-timeline").inner_text()
         page.get_by_role("tab", name="1h").click()
@@ -208,8 +212,9 @@ def run_browser():
         )
         assert page.locator("#research-feed .feed-item").count() == 1
 
-        page.click("#settings-open")
+        page.click("#deep-analysis-open")
         page.wait_for_selector("#settings-drawer.is-open")
+        assert "515880.SS、512480.SS" in page.locator("#settings-notice").inner_text()
         page.select_option("#profile-timezone", "Asia/Singapore")
         page.uncheck("#enable-us-close")
         page.uncheck("#enable-premarket")
@@ -229,13 +234,19 @@ def run_browser():
         assert saved_profile["alerts"]["channels"]["pushPlus"] is False
         page.click("#run-analysis")
         page.wait_for_function("document.querySelector('#settings-notice').textContent.includes('已受理')")
-        assert ANALYZE_REQUESTS[-1]["tickers"] == [item["symbol"] for item in SETTINGS["profiles"][0]["targets"]]
+        assert ANALYZE_REQUESTS[-1]["tickers"] == [
+            item["symbol"]
+            for item in SETTINGS["profiles"][0]["targets"]
+            if item["analysis"] == "full"
+        ]
 
         mobile = browser.new_page(viewport={"width": 390, "height": 844}, device_scale_factor=1)
         capture_browser_diagnostics(mobile, "mobile")
         mobile.route("**/api/**", route_api)
         mobile.goto(BASE_URL, wait_until="domcontentloaded")
         mobile.wait_for_selector("#market-chart")
+        assert mobile.locator("#mobile-volguard").is_visible()
+        assert mobile.locator("#mobile-volguard").get_attribute("href") == "https://sh50-volguard.pages.dev/"
         mobile.click('[data-mobile-section="watch"]')
         assert mobile.locator("body").get_attribute("data-mobile-view") == "watch"
         mobile.click('[data-mobile-section="chart"]')

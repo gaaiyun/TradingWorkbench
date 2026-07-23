@@ -57,6 +57,37 @@ async function readSettings(db) {
   }
 }
 
+async function needsMarketBootstrap(db) {
+  try {
+    const row = await db.prepare(`
+      SELECT COUNT(*) AS count
+      FROM market_bars
+    `).bind().first();
+    return Number(row?.count ?? 0) === 0;
+  } catch {
+    return false;
+  }
+}
+
+function bootstrapTasks(profile, scheduledTime) {
+  if (!profile.enabled) return [];
+  const scheduledFor = new Date(scheduledTime).toISOString();
+  return [
+    {
+      type: "intradayCollect",
+      schedule: "bootstrap/cn-market",
+      localSlot: "bootstrap-v1-cn-market",
+      scheduledFor,
+    },
+    {
+      type: "usCloseSnapshot",
+      schedule: "bootstrap/us-market",
+      localSlot: "bootstrap-v1-us-market",
+      scheduledFor,
+    },
+  ];
+}
+
 function deferredHook() {
   return { status: "deferred", errorCode: "HOOK_NOT_IMPLEMENTED" };
 }
@@ -139,10 +170,16 @@ export async function runScheduled(scheduledTime, env, deps = {}) {
   };
   const due = [];
   const profilesById = new Map();
+  const bootstrap = await needsMarketBootstrap(env.DB);
   for (const profile of loaded.settings.profiles) {
     profilesById.set(profile.id, profile);
     for (const task of dueTasksForProfile(profile, scheduledTime, holidaySets)) {
       due.push({ profile, task });
+    }
+    if (bootstrap) {
+      for (const task of bootstrapTasks(profile, scheduledTime)) {
+        due.push({ profile, task });
+      }
     }
   }
   const clock = deps.now ?? (() => new Date());

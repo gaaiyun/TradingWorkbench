@@ -7,11 +7,11 @@
   <meta name="color-scheme" content="dark">
   <meta name="description" content="TradingAgents 专业 ETF 研究终端">
   <title>TradingAgents · ETF 研究终端</title>
-  <link rel="stylesheet" href="./assets/workbench.css?v=20260723d">
+  <link rel="stylesheet" href="./assets/workbench.css?v=20260724b">
   <script type="importmap">
     { "imports": { "fancy-canvas": "./vendor/fancy-canvas/index.mjs" } }
   </script>
-  <script type="module" src="./assets/workbench.js?v=20260723d"></script>
+  <script type="module" src="./assets/workbench.js?v=20260724b"></script>
 </head>
 <body data-mobile-view="chart">
   <a class="skip-link" href="#market-chart">跳到行情图表</a>
@@ -27,6 +27,10 @@
       <span class="header-time" id="terminal-clock">--:--:--</span>
     </div>
     <div class="header-actions">
+      <nav class="capability-nav" aria-label="TradingAgents 产品能力">
+        <button class="capability-link" id="deep-analysis-open" type="button">多智能体分析</button>
+        <a class="capability-link" href="https://sh50-volguard.pages.dev/" target="_blank" rel="noopener noreferrer">期权风控 <span aria-hidden="true">↗</span></a>
+      </nav>
       <button class="status-control" id="global-status" type="button" aria-label="查看数据状态">
         <i class="status-dot is-loading"></i><span>连接数据源</span>
       </button>
@@ -159,6 +163,7 @@
     <button type="button" data-mobile-section="watch"><span>◎</span>自选</button>
     <button type="button" data-mobile-section="chart" class="is-active"><span>⌁</span>行情</button>
     <button type="button" data-mobile-section="feed"><span>≋</span>事件</button>
+    <a id="mobile-volguard" href="https://sh50-volguard.pages.dev/" target="_blank" rel="noopener noreferrer"><span>Ω</span>期权</a>
     <button type="button" id="mobile-settings"><span>⚙</span>设置</button>
   </nav>
 

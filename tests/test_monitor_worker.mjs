@@ -27,7 +27,9 @@ function sqliteWorkerD1(settings, { failNextFinish = false } = {}) {
     prepare(sql) {
       return {
         bind: (...params) => ({
-          first: async () => sqlite.prepare(sql).get(...params) ?? null,
+          first: async () => /COUNT\(\*\)[\s\S]+FROM\s+market_bars/i.test(sql)
+            ? { count: 1 }
+            : sqlite.prepare(sql).get(...params) ?? null,
           all: async () => ({ results: [...sqlite.prepare(sql).all(...params)] }),
           run: async () => {
             if (
@@ -47,10 +49,11 @@ function sqliteWorkerD1(settings, { failNextFinish = false } = {}) {
 }
 
 class WorkerD1 {
-  constructor(settings) {
+  constructor(settings, { barCount = 1 } = {}) {
     this.settings = settings;
     this.slots = new Map();
     this.barWrites = [];
+    this.barCount = barCount;
   }
 
   prepare(sql) {
@@ -63,6 +66,9 @@ class WorkerD1 {
               return db.settings == null
                 ? null
                 : { settings_json: JSON.stringify(db.settings) };
+            }
+            if (/COUNT\(\*\)[\s\S]+FROM\s+market_bars/i.test(sql)) {
+              return { count: db.barCount + db.barWrites.length };
             }
             if (/INSERT\s+INTO\s+scheduled_slots/i.test(sql)) {
               const [
@@ -218,6 +224,41 @@ test("core scheduled run reads D1 settings, executes due tasks, and is awaitable
     [...db.slots.values()].map((row) => row.status).sort(),
     ["completed", "deferred"],
   );
+});
+
+test("an empty production database bootstraps CN and US market snapshots outside trading hours", async () => {
+  const { runScheduled } = await import(workerUrl);
+  const db = new WorkerD1(monitorSettings(), { barCount: 0 });
+  const requests = [];
+  const result = await runScheduled(
+    Date.parse("2026-07-23T18:20:00.000Z"),
+    { DB: db },
+    {
+      registryFactory: () => ({
+        fetchMarketData: async (request) => {
+          requests.push(request);
+          return {
+            status: "ok",
+            source: "wire",
+            bars: [barFor(request)],
+            sources: [{ source: "wire", status: "success", reason: null }],
+          };
+        },
+      }),
+    },
+  );
+  assert.equal(result.status, "completed");
+  assert.equal(result.counts.due, 2);
+  assert.equal(result.counts.completed, 2);
+  assert.deepEqual(
+    requests.map(({ symbol, timeframe }) => [symbol, timeframe]),
+    [
+      ["515880.SS", "5m"],
+      ["159995.SZ", "5m"],
+      ["SPY", "1d"],
+    ],
+  );
+  assert.equal(db.barWrites.length, 3);
 });
 
 test("close scheduled run dispatches one full analysis with the claimed slot metadata", async () => {

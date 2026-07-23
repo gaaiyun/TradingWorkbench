@@ -10,6 +10,8 @@
   --quiet: #646d72;
   --positive: #38b788;
   --negative: #e05f68;
+  --market-up: #e05f68;
+  --market-down: #38b788;
   --warning: #d5a94f;
   --focus: #b9c7cc;
   --header: 52px;
@@ -68,6 +70,18 @@ a { color: inherit; }
 .market-session b { color: var(--text); font-weight: 580; }
 .header-time { padding-left: 17px; border-left: 1px solid var(--line); font: 11px "IBM Plex Mono", Consolas, monospace; }
 .header-actions { display: flex; justify-content: flex-end; align-items: center; gap: 6px; }
+.capability-nav {
+  display: flex; height: 30px; align-items: stretch; margin-right: 4px;
+  border: 1px solid var(--line); border-radius: 3px; overflow: hidden;
+}
+.capability-link {
+  display: inline-flex; align-items: center; gap: 5px; padding: 0 9px; border: 0;
+  background: transparent; color: var(--muted); text-decoration: none; white-space: nowrap;
+  font-size: 11px; transition: color 180ms ease, background 180ms ease;
+}
+.capability-link + .capability-link { border-left: 1px solid var(--line); }
+.capability-link:hover { background: var(--surface-3); color: var(--text); }
+.capability-link span { color: var(--quiet); font-size: 10px; }
 .icon-button, .header-button, .status-control, .mini-button, .text-button, .chart-reset {
   border: 1px solid var(--line); border-radius: 3px; background: transparent; color: var(--muted);
   transition: color 180ms ease, border-color 180ms ease, background 180ms ease;
@@ -144,6 +158,8 @@ a { color: inherit; }
 .watch-quote small { color: var(--quiet); }
 .positive { color: var(--positive) !important; }
 .negative { color: var(--negative) !important; }
+.market-up { color: var(--market-up) !important; }
+.market-down { color: var(--market-down) !important; }
 .neutral { color: var(--muted) !important; }
 .task-timeline { margin: 0; padding: 9px 10px 12px; list-style: none; }
 .task-timeline li { position: relative; display: grid; grid-template-columns: 43px 1fr; gap: 12px; padding: 5px 0 13px; }
@@ -348,6 +364,7 @@ a { color: inherit; }
 @keyframes pulse { 50% { opacity: .28; } }
 
 @media (max-width: 1180px) {
+  .capability-link { padding-inline: 7px; }
   .research-layout { grid-template-columns: 220px minmax(500px, 1fr) 300px; }
   .quote-stats { display: none; }
   .feed-filters { grid-template-columns: 1fr 1fr; }
@@ -367,7 +384,7 @@ a { color: inherit; }
   :root { --header: 48px; --freshness: 30px; }
   body { padding-bottom: 55px; }
   .terminal-header { padding: 0 9px; }
-  .wordmark span:last-child, .status-control span, .header-button { display: none; }
+  .wordmark span:last-child, .status-control span, .header-button, .capability-nav { display: none; }
   .header-actions { gap: 4px; }
   .freshness-bar { gap: 9px; padding: 0 9px; }
   .freshness-bar span:nth-child(3), .freshness-bar span:nth-child(4), #freshness-detail { display: none; }
@@ -399,13 +416,16 @@ a { color: inherit; }
   .driver-grid { grid-template-columns: repeat(2, 1fr); }
   .driver-cell:nth-child(2) { border-right: 0; }
   .mobile-nav {
-    position: fixed; z-index: 40; right: 0; bottom: 0; left: 0; display: grid; grid-template-columns: repeat(4, 1fr);
+    position: fixed; z-index: 40; right: 0; bottom: 0; left: 0; display: grid; grid-template-columns: repeat(5, 1fr);
     height: calc(55px + env(safe-area-inset-bottom)); padding-bottom: env(safe-area-inset-bottom);
     border-top: 1px solid var(--line-strong); background: rgba(15, 18, 20, .96); backdrop-filter: blur(12px);
   }
-  .mobile-nav button { display: grid; place-content: center; gap: 1px; border: 0; background: transparent; color: var(--quiet); font-size: 9px; }
-  .mobile-nav button span { font-size: 16px; }
-  .mobile-nav button.is-active { color: var(--text); }
+  .mobile-nav button, .mobile-nav a {
+    display: grid; place-content: center; gap: 1px; border: 0; background: transparent;
+    color: var(--quiet); font-size: 9px; text-align: center; text-decoration: none;
+  }
+  .mobile-nav button span, .mobile-nav a span { font-size: 16px; }
+  .mobile-nav button.is-active, .mobile-nav a:hover { color: var(--text); }
   .settings-drawer, .assistant-drawer { border-left: 0; }
 }
 
