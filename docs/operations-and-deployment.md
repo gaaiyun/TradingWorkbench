@@ -141,7 +141,20 @@ Invoke-RestMethod `
 
 入口复用生产 Provider Registry 和 D1 UPSERT。重复补跑不会复制同一
 `profile + symbol + timeframe + timestamp + source` 记录。A 股盘中补跑使用
-`task=intradayCollect`。
+`task=intradayCollect`。只有这个受保护入口会忽略旧的十五分钟熔断状态并强制探测；
+五分钟定时任务仍遵守三次失败后暂停十五分钟的规则。
+
+补跑成功不能只看 HTTP 200。至少逐个检查：
+
+- 返回的 `succeeded` 与目标数一致，`written` 大于零；
+- `/api/market` 的交易日唯一，没有同一天两个来源重复进入指标；
+- 最近两个交易日之间没有异常长缺口；
+- 五年范围约有 1,250 根日线，短于该范围时说明上市日期或降级原因；
+- 页面涨跌幅由相邻交易日计算，不把多年断口算成一天。
+
+Cloudflare 出口访问免费源时可能需要来源请求头。当前 adapter 会为 Yahoo、
+东方财富和腾讯分别发送 `Accept`、`Referer` 和浏览器兼容的 `User-Agent`；修改这些
+请求头后必须在生产 Worker 中补跑验证，不能用本机直连成功代替云端验收。
 
 工作台：
 
