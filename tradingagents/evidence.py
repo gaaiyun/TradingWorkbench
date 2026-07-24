@@ -9,8 +9,9 @@ from __future__ import annotations
 
 import hashlib
 import json
+from collections.abc import Mapping
 from datetime import datetime, timezone
-from typing import Any, Mapping
+from typing import Any
 
 from tradingagents.dataflows.symbol_utils import normalize_symbol
 
@@ -128,7 +129,7 @@ def build_evidence_packet(
     errors: list[str] = []
     warnings: list[str] = []
 
-    for previous, current in zip(normalized_bars, normalized_bars[1:]):
+    for previous, current in zip(normalized_bars, normalized_bars[1:], strict=False):
         previous_close = previous["close"]
         change = abs(current["close"] / previous_close - 1) if previous_close else 0
         if change < _JUMP_THRESHOLD:

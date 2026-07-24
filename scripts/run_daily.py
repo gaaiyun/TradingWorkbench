@@ -378,8 +378,8 @@ def push_wechat(title: str, content: str) -> dict:
 
 def run_ticker(ticker: str, trade_date: str, analysts: list[str], reports_dir: Path) -> dict:
     """跑单个 ticker 的完整多智能体分析，返回结果摘要 dict。"""
-    from tradingagents.default_config import DEFAULT_CONFIG
     from cli.utils import detect_asset_type, normalize_ticker_symbol
+    from tradingagents.default_config import DEFAULT_CONFIG
     from tradingagents.graph.trading_graph import TradingAgentsGraph
 
     symbol = normalize_ticker_symbol(ticker)

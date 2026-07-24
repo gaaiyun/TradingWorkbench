@@ -5,9 +5,9 @@ from types import SimpleNamespace
 
 import pytest
 
+from tradingagents.evidence import build_evidence_packet
 from tradingagents.graph.trading_graph import TradingAgentsGraph
 from tradingagents.reporting import write_report_tree
-from tradingagents.evidence import build_evidence_packet
 
 
 def _state():

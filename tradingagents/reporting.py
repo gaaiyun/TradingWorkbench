@@ -31,7 +31,6 @@ def _sanitize_final_proposals(text: str) -> str:
     ]
     if len(marker_indexes) <= 1:
         return str(text or "")
-    keep = marker_indexes[-1]
     return "\n".join(
         line for index, line in enumerate(lines)
         if index not in marker_indexes[:-1]
