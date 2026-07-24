@@ -129,7 +129,7 @@ Worker 每五分钟读取 D1 设置，按“任务 + 理论计划时间槽”生
 
 盘中每五分钟采集，每十五分钟计算价格异动和成交量 z-score。只有高等级事件进入 PushPlus；完整多智能体分析默认每天一次，避免把所有驱动标的都扩成高成本辩论。
 
-新闻发现任务在 08:25 执行，按通信、A 股半导体、美股半导体、Oracle 和工信部政策主题查询 Google News RSS。D1 只保存标题、短摘要、发布者、时间和原文链接；结果标记为 `discovery`，不会冒充原始公告。`SMH` 只有匹配 `VanEck Semiconductor ETF` 等完整实体名称时才关联到标的。
+新闻发现任务在 08:25 执行，按通信、A 股半导体、美股半导体、Oracle 和工信部政策主题查询 Google News RSS。Google 从 Cloudflare 出口不可用时，A 股与政策主题降级到工信部官方 RSS，美股主题降级到 Yahoo Finance RSS。D1 只保存标题、短摘要、发布者、时间和原文链接；聚合结果标记为 `discovery`，不会冒充原始公告。`SMH` 只有匹配 `VanEck Semiconductor ETF` 等完整实体名称时才关联到标的。
 
 ## TradingAgents 研究链
 

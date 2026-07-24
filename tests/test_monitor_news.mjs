@@ -78,6 +78,48 @@ test("news collection writes relevant discovery items and rejects bare SMH false
   assert.equal(semiconductor.expiresAt, "2027-01-19T01:30:00.000Z");
 });
 
+test("news collection falls back to one cached MIIT RSS request when Google is blocked", async () => {
+  const { collectNewsForProfile } = await import(newsUrl);
+  const calls = [];
+  const writes = [];
+  const result = await collectNewsForProfile({
+    profile: monitorSettings().profiles[0],
+    db: {},
+    fetcher: async (url) => {
+      calls.push(url);
+      if (String(url).includes("news.google.com")) {
+        return new Response("", { status: 403 });
+      }
+      return new Response(RSS, {
+        status: 200,
+        headers: { "content-type": "application/xml" },
+      });
+    },
+    writeItems: async (_db, payload) => writes.push(payload),
+    now: new Date("2026-07-23T01:30:00.000Z"),
+  });
+  const items = writes.flatMap(({ items }) => items);
+  assert.equal(result.status, "completed");
+  assert.equal(
+    calls.filter((url) => new URL(url).hostname === "www.miit.gov.cn").length,
+    1,
+    "多个 A 股主题共用同一官方 RSS 响应，避免重复下载大文档",
+  );
+  assert.equal(items.some(({ source }) => source === "工业和信息化部 RSS"), true);
+  assert.equal(
+    result.sources.some(({ source, status, reason }) =>
+      source === "google-news-rss" &&
+      status === "failed" &&
+      reason === "NEWS_HTTP_403"),
+    true,
+  );
+  assert.equal(
+    result.sources.some(({ source, status }) =>
+      source === "miit-rss" && status === "success"),
+    true,
+  );
+});
+
 test("news writer uses idempotent upserts without storing article bodies", async () => {
   const { writeNewsItems } = await import(newsUrl);
   const calls = [];

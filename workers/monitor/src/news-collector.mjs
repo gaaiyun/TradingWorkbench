@@ -1,5 +1,10 @@
 const DAY_MS = 24 * 60 * 60 * 1000;
 const RSS_LIMIT_PER_QUERY = 8;
+const MIIT_RSS_URL = [
+  "https://www.miit.gov.cn/api-gateway/jpaas-plugins-web-server/front/rss/getinfo",
+  "?webId=8d828e408d90447786ddbe128d495e9e",
+  "&columnIds=d3e2bede1bc045e2875fc7161c01db7d",
+].join("");
 
 const TARGET_ALIASES = {
   "515880.SS": ["通信ETF", "通信 ETF", "光模块", "光通信", "通信设备", "5G", "6G"],
@@ -136,6 +141,30 @@ function rssUrl(plan) {
   return `https://news.google.com/rss/search?${parameters}`;
 }
 
+function yahooRssUrl(symbol) {
+  const parameters = new URLSearchParams({
+    s: symbol,
+    region: "US",
+    lang: "en-US",
+  });
+  return `https://feeds.finance.yahoo.com/rss/2.0/headline?${parameters}`;
+}
+
+function providerCandidates(plan) {
+  const candidates = [{
+    source: "google-news-rss",
+    url: rssUrl(plan),
+  }];
+  if (["communications", "cn-semiconductor", "policy"].includes(plan.topic)) {
+    candidates.push({ source: "miit-rss", url: MIIT_RSS_URL });
+  } else if (plan.topic === "us-semiconductor") {
+    candidates.push({ source: "yahoo-finance-rss", url: yahooRssUrl("SOXX") });
+  } else if (plan.topic === "oracle") {
+    candidates.push({ source: "yahoo-finance-rss", url: yahooRssUrl("ORCL") });
+  }
+  return candidates;
+}
+
 function includesAlias(text, alias) {
   return text.toLocaleLowerCase().includes(alias.toLocaleLowerCase());
 }
@@ -182,28 +211,95 @@ async function itemId(profileId, symbol, url) {
   return `news-${hex}`;
 }
 
-async function fetchPlan(plan, fetcher) {
+class NewsFetchError extends Error {
+  constructor(code) {
+    super(code);
+    this.code = code;
+  }
+}
+
+function fetchErrorCode(error) {
+  return typeof error?.code === "string"
+    ? error.code
+    : "NEWS_NETWORK_ERROR";
+}
+
+async function fetchXml(url, fetcher) {
   const controller = new AbortController();
   const timer = setTimeout(() => controller.abort(), 8_000);
   try {
-    const response = await fetcher(rssUrl(plan), {
+    const response = await fetcher(url, {
       signal: controller.signal,
       headers: {
         accept: "application/rss+xml,application/xml,text/xml;q=0.9,*/*;q=0.5",
         "user-agent": "TradingWorkbench/1.0 (+https://github.com/gaaiyun/TradingWorkbench)",
       },
     });
-    if (!response?.ok) throw new Error("NEWS_HTTP_ERROR");
+    if (!response?.ok) {
+      throw new NewsFetchError(`NEWS_HTTP_${Number(response?.status) || 0}`);
+    }
     const contentType = response.headers.get("content-type") || "";
     if (!/(?:xml|rss|text\/plain)/i.test(contentType)) {
-      throw new Error("NEWS_MALFORMED_RESPONSE");
+      throw new NewsFetchError("NEWS_MALFORMED_RESPONSE");
     }
-    return parseGoogleNewsRss(await response.text())
-      .filter((item) => relevantToPlan(item, plan))
-      .slice(0, RSS_LIMIT_PER_QUERY);
+    return await response.text();
+  } catch (error) {
+    if (controller.signal.aborted) throw new NewsFetchError("NEWS_TIMEOUT");
+    throw error;
   } finally {
     clearTimeout(timer);
   }
+}
+
+function cachedXml(url, fetcher, cache) {
+  if (!cache.has(url)) cache.set(url, fetchXml(url, fetcher));
+  return cache.get(url);
+}
+
+async function fetchPlan(plan, fetcher, cache) {
+  const trail = [];
+  let firstSuccessfulSource = null;
+  for (const candidate of providerCandidates(plan)) {
+    try {
+      const parsed = parseGoogleNewsRss(
+        await cachedXml(candidate.url, fetcher, cache),
+      );
+      const items = parsed
+        .filter((item) => relevantToPlan(item, plan))
+        .slice(0, RSS_LIMIT_PER_QUERY);
+      trail.push({ source: candidate.source, status: "success", reason: null });
+      firstSuccessfulSource ||= candidate.source;
+      if (items.length) {
+        return { items, source: candidate.source, trail };
+      }
+    } catch (error) {
+      trail.push({
+        source: candidate.source,
+        status: "failed",
+        reason: fetchErrorCode(error),
+      });
+    }
+  }
+  if (firstSuccessfulSource) {
+    return { items: [], source: firstSuccessfulSource, trail };
+  }
+  throw new NewsFetchError(JSON.stringify(trail));
+}
+
+function itemSource(provider, item) {
+  if (provider === "miit-rss") return "工业和信息化部 RSS";
+  if (provider === "yahoo-finance-rss") {
+    let publisher = item.publisher;
+    if (!publisher || publisher === "未知发布者") {
+      try {
+        publisher = new URL(item.url).hostname.replace(/^www\./, "");
+      } catch {
+        publisher = "未知发布者";
+      }
+    }
+    return `Yahoo Finance RSS / ${publisher}`;
+  }
+  return `Google News / ${item.publisher}`;
 }
 
 export async function writeNewsItems(db, { items }) {
@@ -257,8 +353,9 @@ export async function collectNewsForProfile({
   now = new Date(),
 }) {
   const plans = queryPlans(profile);
+  const responseCache = new Map();
   const outcomes = await Promise.allSettled(
-    plans.map((plan) => fetchPlan(plan, fetcher)),
+    plans.map((plan) => fetchPlan(plan, fetcher, responseCache)),
   );
   const fetchedAt = now.toISOString();
   const expiresAt = new Date(now.valueOf() + 180 * DAY_MS).toISOString();
@@ -272,20 +369,20 @@ export async function collectNewsForProfile({
     const plan = plans[index];
     if (outcome.status === "rejected") {
       failed += 1;
-      sources.push({
-        source: "google-news-rss",
-        status: "failed",
-        reason: "NEWS_COLLECTION_ERROR",
-      });
+      try {
+        sources.push(...JSON.parse(outcome.reason?.message || "[]"));
+      } catch {
+        sources.push({
+          source: "news-collector",
+          status: "failed",
+          reason: "NEWS_COLLECTION_ERROR",
+        });
+      }
       continue;
     }
     succeeded += 1;
-    sources.push({
-      source: "google-news-rss",
-      status: "success",
-      reason: null,
-    });
-    for (const item of outcome.value) {
+    sources.push(...outcome.value.trail);
+    for (const item of outcome.value.items) {
       const symbol = matchedSymbol(item, plan.symbols)
         || plan.symbols[0]
         || null;
@@ -301,7 +398,7 @@ export async function collectNewsForProfile({
         summary: item.summary,
         url: item.url,
         publishedAt: item.publishedAt,
-        source: `Google News / ${item.publisher}`,
+        source: itemSource(outcome.value.source, item),
         asOf: item.publishedAt,
         fetchedAt,
         freshness: age >= 0 && age <= 36 * 60 * 60 * 1000 ? "fresh" : "stale",

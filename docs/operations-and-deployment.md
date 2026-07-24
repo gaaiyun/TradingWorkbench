@@ -159,6 +159,10 @@ Cloudflare 出口访问免费源时可能需要来源请求头。当前 adapter 
 东方财富和腾讯分别发送 `Accept`、`Referer` 和浏览器兼容的 `User-Agent`；修改这些
 请求头后必须在生产 Worker 中补跑验证，不能用本机直连成功代替云端验收。
 
+新闻链同样必须做云端验证。Google News RSS 可能拒绝 Cloudflare 出口，Worker 会按
+主题改用工信部 RSS 或 Yahoo Finance RSS；返回的 `sources` 应同时保留主来源失败码和
+降级来源成功状态。不能因为本机 Google 请求成功就删除这条降级链。
+
 工作台：
 
 ```powershell
