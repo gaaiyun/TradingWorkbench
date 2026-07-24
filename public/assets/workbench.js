@@ -32,6 +32,7 @@ import {
   normalizeVolguardPayload,
 } from "./workbench-options.mjs";
 import {
+  archivedResearchAfterRun,
   buildArchiveEntries,
   buildPipelineStages,
   latestResearchRun,
@@ -746,8 +747,10 @@ import {
       : "<b>尚未指定深度分析标的</b><span>在设置中把至少一个标的的分析方式改为“深度”。</span>";
 
     const run = latestResearchRun(state.runs);
+    const archivedAfterRun = archivedResearchAfterRun(run, state.latest);
+    const pipelineRun = archivedAfterRun ? { ...run, conclusion: "success" } : run;
     const stageLabels = { pending: "待运行", queued: "已排队", running: "运行中", completed: "已完成", failed: "失败", unknown: "未确认" };
-    for (const stage of buildPipelineStages(run)) {
+    for (const stage of buildPipelineStages(pipelineRun)) {
       const row = $(`[data-stage="${stage.id}"]`, $("#agent-pipeline"));
       row.className = `is-${stage.status}`;
       $("em", row).textContent = stageLabels[stage.status];
@@ -763,8 +766,14 @@ import {
       return;
     }
     $("#agent-run-card").className = "run-card-grid";
+    const runStatus = archivedAfterRun
+      ? "分析已完成"
+      : run?.status || state.latest?.status || "已归档";
+    const runConclusion = archivedAfterRun
+      ? "报告已归档 · 后续发布失败"
+      : run?.conclusion || "等待结论";
     $("#agent-run-card").innerHTML = `
-      <div><span>运行状态</span><b>${escapeHtml(run?.status || state.latest?.status || "已归档")}</b><small>${escapeHtml(run?.conclusion || "等待结论")}</small></div>
+      <div><span>运行状态</span><b>${escapeHtml(runStatus)}</b><small>${escapeHtml(runConclusion)}</small></div>
       <div><span>研究日期</span><b>${escapeHtml(state.latest?.trade_date || "—")}</b><small>${escapeHtml(formatTime(state.latest?.generated_at || run?.created_at, true))}</small></div>
       <div><span>模型 / Provider</span><b>${escapeHtml(state.latest?.provider || "—")}</b><small>${escapeHtml((state.latest?.analysts || []).join(" · ") || "未提供分析师清单")}</small></div>
       <div><span>研究结果</span><b>${resultCount}</b><small>${escapeHtml(run?.workflow || "归档结果")}</small></div>`;

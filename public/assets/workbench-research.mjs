@@ -37,6 +37,19 @@ export function buildPipelineStages(run) {
   return stages;
 }
 
+export function archivedResearchAfterRun(run, latest) {
+  if (run?.status !== "completed" || run?.conclusion !== "failure") return false;
+  const runAt = new Date(run.created_at).valueOf();
+  const generatedAt = new Date(latest?.generated_at).valueOf();
+  const hasReport = Array.isArray(latest?.results) && latest.results.some(
+    (result) => result?.error !== true && result?.report,
+  );
+  return Number.isFinite(runAt) &&
+    Number.isFinite(generatedAt) &&
+    generatedAt >= runAt &&
+    hasReport;
+}
+
 export function latestResearchRun(runs) {
   if (!Array.isArray(runs)) return null;
   return runs

@@ -2,6 +2,7 @@ import assert from "node:assert/strict";
 import test from "node:test";
 
 import {
+  archivedResearchAfterRun,
   buildArchiveEntries,
   buildPipelineStages,
   latestResearchRun,
@@ -51,6 +52,26 @@ test("workflow status maps honestly to the four visible research stages", () => 
     buildPipelineStages({ status: "completed", conclusion: "failure" }).map(({ status }) => status),
     ["failed", "unknown", "unknown", "unknown"],
   );
+});
+
+test("a persisted report distinguishes completed analysis from a later publish failure", () => {
+  const failedRun = {
+    status: "completed",
+    conclusion: "failure",
+    created_at: "2026-07-23T23:52:27Z",
+  };
+  assert.equal(archivedResearchAfterRun(failedRun, {
+    generated_at: "2026-07-24T07:53:17+08:00",
+    results: [{ ticker: "512480.SS", report: "reports/512480.SS/report.md" }],
+  }), true);
+  assert.equal(archivedResearchAfterRun(failedRun, {
+    generated_at: "2026-07-23T07:53:17+08:00",
+    results: [{ ticker: "512480.SS", report: "reports/512480.SS/report.md" }],
+  }), false);
+  assert.equal(archivedResearchAfterRun(failedRun, {
+    generated_at: "2026-07-24T07:53:17+08:00",
+    results: [],
+  }), false);
 });
 
 test("latest run selection ignores malformed rows and keeps chronological truth", () => {
