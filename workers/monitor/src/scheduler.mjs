@@ -95,6 +95,12 @@ function dueTasksAtMinute(profile, scheduledTime, holidaySets) {
     local.time === schedules.preMarketBrief.time
   ) {
     tasks.push(scheduledTask(
+      "newsCollect",
+      "preMarketBrief/news",
+      local,
+      scheduledTime,
+    ));
+    tasks.push(scheduledTask(
       "premarketBrief",
       "preMarketBrief",
       local,
@@ -139,6 +145,12 @@ function dueTasksAtMinute(profile, scheduledTime, holidaySets) {
     local.time === schedules.closeDeepAnalysis.time
   ) {
     tasks.push(scheduledTask(
+      "cnDailySnapshot",
+      "closeDeepAnalysis/cn-daily",
+      local,
+      scheduledTime,
+    ));
+    tasks.push(scheduledTask(
       "closeFullAnalysis",
       "closeDeepAnalysis",
       local,
@@ -163,6 +175,8 @@ export function dueTasksForProfile(profile, scheduledTime, holidaySets = {}) {
 
 const SCHEDULE_BY_TYPE = {
   usCloseSnapshot: "usCloseSnapshot",
+  cnDailySnapshot: "closeDeepAnalysis/cn-daily",
+  newsCollect: "preMarketBrief/news",
   premarketBrief: "preMarketBrief",
   intradayCollect: "cnIntraday/collect",
   intradaySignal: "cnIntraday/signal",

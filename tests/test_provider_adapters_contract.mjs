@@ -25,7 +25,7 @@ const runtime = {
   freshnessThresholdMs: 10 * 60 * 1000,
 };
 
-test("Tencent uses the live mkline 5m and kline 1d contracts for all configured CN symbols", async () => {
+test("Tencent uses live 5m bars and split-adjusted daily bars for configured CN symbols", async () => {
   const requests = [];
   const adapters = createAdapters({
     fetch: async (url) => {
@@ -63,11 +63,12 @@ test("Tencent uses the live mkline 5m and kline 1d contracts for all configured 
   assert.deepEqual(requests, [
     "https://ifzq.gtimg.cn/appstock/app/kline/mkline?param=sh515880,m5,,320",
     "https://ifzq.gtimg.cn/appstock/app/kline/mkline?param=sz159995,m5,,320",
-    "https://ifzq.gtimg.cn/appstock/app/kline/kline?param=sh512480,day,,,320",
+    "https://web.ifzq.gtimg.cn/appstock/app/fqkline/get?param=sh512480,day,,,320,qfq",
   ]);
   assert.equal(first.at(-1).close, 0.671);
   assert.equal(second.at(-1).close, 1.262);
   assert.equal(daily.at(-1).close, 1.106);
+  assert.equal(daily.at(-1).adjustment, "qfq");
 });
 
 test("Tencent US daily fallback returns qfq bars for Oracle and semiconductor drivers", async () => {
@@ -218,6 +219,40 @@ test("Eastmoney includes its required range parameters and validates rc/data/kli
       (error) => error instanceof ProviderError && error.code === "MALFORMED_DATA",
     );
   }
+});
+
+test("Eastmoney CN daily requests forward-adjusted history and labels adjustment", async () => {
+  let requestedUrl;
+  const adapters = createAdapters({
+    fetch: async (url) => {
+      requestedUrl = String(url);
+      return jsonResponse({
+        rc: 0,
+        data: {
+          code: "512480",
+          klines: [
+            "2026-07-02,1.400,1.350,1.434,1.335,10956644",
+            "2026-07-03,1.322,1.331,1.383,1.303,15949373",
+          ],
+        },
+      });
+    },
+    timeoutMs: 100,
+  });
+  const bars = await adapters.eastmoney({
+    symbol: "512480.SS",
+    market: "CN",
+    timeframe: "1d",
+    limit: 1500,
+  }, {
+    ...runtime,
+    freshnessThresholdMs: 36 * 60 * 60 * 1000,
+  });
+  const url = new URL(requestedUrl);
+  assert.equal(url.searchParams.get("fqt"), "1");
+  assert.equal(url.searchParams.get("lmt"), "1500");
+  assert.equal(bars.at(-1).adjustment, "qfq");
+  assert.ok(Math.abs(bars[1].close / bars[0].close - 1) < 0.1);
 });
 
 test("Yahoo drops timestamp-aligned null points but rejects an entirely bad series", async () => {

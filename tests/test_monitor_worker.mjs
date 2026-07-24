@@ -248,23 +248,26 @@ test("an empty production database bootstraps CN and US market snapshots outside
     },
   );
   assert.equal(result.status, "completed");
-  assert.equal(result.counts.due, 2);
-  assert.equal(result.counts.completed, 2);
+  assert.equal(result.counts.due, 4);
+  assert.equal(result.counts.completed, 4);
   assert.deepEqual(
     requests.map(({ symbol, timeframe }) => [symbol, timeframe]),
     [
       ["515880.SS", "5m"],
       ["159995.SZ", "5m"],
+      ["515880.SS", "1d"],
+      ["159995.SZ", "1d"],
       ["SPY", "1d"],
     ],
   );
-  assert.equal(db.barWrites.length, 3);
+  assert.equal(db.barWrites.length, 5);
 });
 
 test("close scheduled run dispatches one full analysis with the claimed slot metadata", async () => {
   const { runScheduled } = await import(workerUrl);
   const db = new WorkerD1(monitorSettings());
   const requests = [];
+  const marketRequests = [];
   const result = await runScheduled(
     Date.parse("2026-07-23T07:20:00.000Z"),
     {
@@ -274,6 +277,17 @@ test("close scheduled run dispatches one full analysis with the claimed slot met
       GITHUB_WORKFLOW_ID: "daily-analysis.yml",
     },
     {
+      registryFactory: () => ({
+        fetchMarketData: async (request) => {
+          marketRequests.push(request);
+          return {
+            status: "ok",
+            source: "wire",
+            bars: [barFor(request)],
+            sources: [{ source: "wire", status: "success", reason: null }],
+          };
+        },
+      }),
       fetcher: async (url, init) => {
         requests.push({ url, init });
         return new Response(null, { status: 204 });
@@ -281,7 +295,8 @@ test("close scheduled run dispatches one full analysis with the claimed slot met
     },
   );
   assert.equal(result.status, "completed");
-  assert.equal(result.counts.completed, 1);
+  assert.equal(result.counts.completed, 2);
+  assert.equal(marketRequests.length, 2);
   assert.equal(requests.length, 1);
   const payload = JSON.parse(requests[0].init.body);
   assert.equal(payload.inputs.profileId, "etf-main");
@@ -320,15 +335,25 @@ test("scheduled handler uses scheduledTime and waitUntil while health reveals no
   const { default: worker } = await import(workerUrl);
   const db = new WorkerD1(monitorSettings());
   let promise;
-  worker.scheduled(
-    { scheduledTime: Date.parse("2026-07-23T00:25:00.000Z") },
-    { DB: db, GITHUB_DISPATCH_TOKEN: "secret-value" },
-    { waitUntil(value) { promise = value; } },
+  const originalFetch = globalThis.fetch;
+  globalThis.fetch = async () => new Response(
+    '<?xml version="1.0"?><rss><channel></channel></rss>',
+    { status: 200, headers: { "content-type": "application/rss+xml" } },
   );
-  assert.ok(promise instanceof Promise);
-  const summary = await promise;
-  assert.equal(summary.counts.deferred, 1);
-  assert.equal(JSON.stringify(summary).includes("secret-value"), false);
+  try {
+    worker.scheduled(
+      { scheduledTime: Date.parse("2026-07-23T00:25:00.000Z") },
+      { DB: db, GITHUB_DISPATCH_TOKEN: "secret-value" },
+      { waitUntil(value) { promise = value; } },
+    );
+    assert.ok(promise instanceof Promise);
+    const summary = await promise;
+    assert.equal(summary.counts.completed, 1);
+    assert.equal(summary.counts.deferred, 1);
+    assert.equal(JSON.stringify(summary).includes("secret-value"), false);
+  } finally {
+    globalThis.fetch = originalFetch;
+  }
 
   const response = await worker.fetch(new Request("https://monitor.example/health"));
   assert.equal(response.status, 200);
@@ -392,6 +417,78 @@ test("protected manual collection backfills the configured US daily targets", as
   assert.equal(JSON.stringify(payload).includes("monitor-secret"), false);
 });
 
+test("protected manual collection backfills configured CN daily targets", async () => {
+  const { handleFetch } = await import(workerUrl);
+  const requests = [];
+  const response = await handleFetch(
+    new Request("https://monitor.example/run-collection?task=cnDailySnapshot", {
+      method: "POST",
+      headers: { authorization: "Bearer monitor-secret" },
+    }),
+    {
+      DB: new WorkerD1(monitorSettings()),
+      MONITOR_RUN_TOKEN: "monitor-secret",
+    },
+    {
+      registryFactory: () => ({
+        fetchMarketData: async (request) => {
+          requests.push(request);
+          return {
+            status: "ok",
+            source: "wire",
+            bars: [barFor(request)],
+            sources: [{ source: "wire", status: "success", reason: null }],
+          };
+        },
+      }),
+      collectNews: async () => ({
+        status: "completed",
+        written: 0,
+        counts: { queries: 1, succeeded: 1, failed: 0, items: 0 },
+        sources: [{ source: "google-news-rss", status: "success", reason: null }],
+      }),
+    },
+  );
+  const payload = await response.json();
+  assert.equal(response.status, 200);
+  assert.equal(payload.status, "completed");
+  assert.deepEqual(requests, [
+    { symbol: "515880.SS", market: "CN", timeframe: "1d", limit: 1500 },
+    { symbol: "159995.SZ", market: "CN", timeframe: "1d", limit: 1500 },
+  ]);
+});
+
+test("protected manual news collection reports discovery query counts", async () => {
+  const { handleFetch } = await import(workerUrl);
+  let receivedProfile;
+  const response = await handleFetch(
+    new Request("https://monitor.example/run-collection?task=newsCollect", {
+      method: "POST",
+      headers: { authorization: "Bearer monitor-secret" },
+    }),
+    {
+      DB: new WorkerD1(monitorSettings()),
+      MONITOR_RUN_TOKEN: "monitor-secret",
+    },
+    {
+      collectNews: async ({ profile }) => {
+        receivedProfile = profile;
+        return {
+          status: "completed",
+          written: 12,
+          counts: { queries: 3, succeeded: 3, failed: 0, items: 12 },
+          sources: [{ source: "google-news-rss", status: "success", reason: null }],
+        };
+      },
+    },
+  );
+  const payload = await response.json();
+  assert.equal(response.status, 200);
+  assert.equal(receivedProfile.id, "etf-main");
+  assert.deepEqual(payload.counts, { targets: 3, succeeded: 3, failed: 0 });
+  assert.equal(payload.written, 12);
+});
+
 test("monitor wrangler config uses five-minute cron and the same deployed D1 binding", () => {
   const pages = readFileSync(new URL("../wrangler.toml", import.meta.url), "utf8");
   const monitor = readFileSync(
@@ -428,7 +525,7 @@ test("daily workflow accepts monitor dispatch metadata and keeps legacy manual i
   for (const step of ["Setup Pages", "Upload site artifact", "Deploy to GitHub Pages"]) {
     assert.match(
       workflow,
-      new RegExp(`- name: ${step}\\n\\s+if: \\$\\{\\{ env\\.ENABLE_GITHUB_PAGES == 'true' \\}\\}`),
+      new RegExp(`- name: ${step}\\r?\\n\\s+if: \\$\\{\\{ env\\.ENABLE_GITHUB_PAGES == 'true' \\}\\}`),
     );
   }
 });

@@ -365,7 +365,7 @@ test("the legacy workbench view derives its ticker list from enabled v2 full-ana
     new URL("../public/assets/workbench.js", import.meta.url),
     "utf8",
   );
-  const helper = /function settingsTickers\(settings\) \{([\s\S]*?)\n  \}\n\n  function renderSettingsSummary/.exec(
+  const helper = /function settingsTickers\(settings\) \{([\s\S]*?)\r?\n  \}\r?\n\r?\n  function renderSettingsSummary/.exec(
     script,
   );
   assert.match(script, /function settingsTickers\(settings\)/);

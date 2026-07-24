@@ -129,13 +129,13 @@ function tencentUrl(request) {
   if (request.timeframe === "5m") {
     return `https://ifzq.gtimg.cn/appstock/app/kline/mkline?param=${symbol},m5,,${limit}`;
   }
-  return `https://ifzq.gtimg.cn/appstock/app/kline/kline?param=${symbol},day,,,${limit}`;
+  return `https://web.ifzq.gtimg.cn/appstock/app/fqkline/get?param=${symbol},day,,,${limit},qfq`;
 }
 
 function parseTencent(payload, request) {
   if (payload?.code !== 0) return null;
   const symbol = mapProviderSymbol("tencent", request.symbol);
-  const series = request.timeframe === "5m" ? "m5" : "day";
+  const series = request.timeframe === "5m" ? "m5" : "qfqday";
   const rows = payload?.data?.[symbol]?.[series];
   return rows?.map(([timestamp, open, close, high, low, volume]) => ({
     timestamp: utcTimestamp(timestamp, "Asia/Shanghai"),
@@ -201,14 +201,15 @@ function parseEastmoneyUs(payload, request) {
 function eastmoneyUrl(request) {
   const symbol = mapProviderSymbol("eastmoney", request.symbol);
   const klt = request.timeframe === "5m" ? "5" : "101";
-  return `https://push2his.eastmoney.com/api/qt/stock/kline/get?secid=${symbol}&klt=${klt}&fqt=0&beg=0&end=20500101&lmt=${request.limit || 320}&fields1=f1&fields2=f51,f52,f53,f54,f55,f56`;
+  const adjustment = request.timeframe === "1d" ? "1" : "0";
+  return `https://push2his.eastmoney.com/api/qt/stock/kline/get?secid=${symbol}&klt=${klt}&fqt=${adjustment}&beg=0&end=20500101&lmt=${request.limit || 320}&fields1=f1&fields2=f51,f52,f53,f54,f55,f56`;
 }
 
 function parseEastmoney(payload, request) {
   if (payload?.rc !== 0 || payload?.data?.code !== request.symbol.slice(0, 6)) {
     return null;
   }
-  return payload?.data?.klines?.map((line) => {
+  return payload?.data?.klines?.slice(-(request.limit || 320)).map((line) => {
     const [timestamp, open, close, high, low, volume] = String(line).split(",");
     return {
       timestamp: utcTimestamp(timestamp, "Asia/Shanghai"),
@@ -326,7 +327,14 @@ export function createAdapters({ fetch: fetcher, apiKey, timeoutMs }) {
   return {
     tencent: async (marketRequest, runtime) => normalizeRows(
       parseTencent(await fetchJson(tencentUrl(marketRequest)), marketRequest),
-      contextFor(marketRequest, "tencent", runtime.fetchedAt, runtime.now, runtime.freshnessThresholdMs),
+      contextFor(
+        marketRequest,
+        "tencent",
+        runtime.fetchedAt,
+        runtime.now,
+        runtime.freshnessThresholdMs,
+        marketRequest.timeframe === "1d" ? "qfq" : "none",
+      ),
     ),
     "tencent-us": async (marketRequest, runtime) => normalizeRows(
       parseTencentUs(await fetchJson(tencentUsUrl(marketRequest)), marketRequest),
@@ -352,7 +360,14 @@ export function createAdapters({ fetch: fetcher, apiKey, timeoutMs }) {
     ),
     eastmoney: async (marketRequest, runtime) => normalizeRows(
       parseEastmoney(await fetchJson(eastmoneyUrl(marketRequest)), marketRequest),
-      contextFor(marketRequest, "eastmoney", runtime.fetchedAt, runtime.now, runtime.freshnessThresholdMs),
+      contextFor(
+        marketRequest,
+        "eastmoney",
+        runtime.fetchedAt,
+        runtime.now,
+        runtime.freshnessThresholdMs,
+        marketRequest.timeframe === "1d" ? "qfq" : "none",
+      ),
     ),
     yahoo: async (marketRequest, runtime) => {
       const load = async (host) => normalizeRows(

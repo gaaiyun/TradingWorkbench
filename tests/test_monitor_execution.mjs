@@ -82,6 +82,27 @@ test("intraday uses only CN core/comparison targets at 5m and keeps partial succ
   assert.equal(result.sources.some((source) => source.reason === "UPSTREAM"), true);
 });
 
+test("CN daily snapshot backfills only CN core/comparison targets at 1d", async () => {
+  const { collectForTask } = await import(collectorUrl);
+  const calls = [];
+  const writes = [];
+  const result = await collectForTask({
+    taskType: "cnDailySnapshot",
+    profile: monitorSettings().profiles[0],
+    registry: registryWith({}, calls),
+    writeBars: async (_db, payload) => writes.push(payload),
+    db: {},
+    now: new Date("2026-07-23T07:20:00.000Z"),
+  });
+  assert.deepEqual(calls, [
+    { symbol: "515880.SS", market: "CN", timeframe: "1d", limit: 1500 },
+    { symbol: "159995.SZ", market: "CN", timeframe: "1d", limit: 1500 },
+  ]);
+  assert.equal(writes.length, 2);
+  assert.equal(result.status, "completed");
+  assert.equal(result.written, 2);
+});
+
 test("collector isolates thrown provider errors and fails stably only when all targets fail", async () => {
   const { collectForTask } = await import(collectorUrl);
   const calls = [];

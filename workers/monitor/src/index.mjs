@@ -1,6 +1,10 @@
 import { parseWorkbenchSettings } from "../../../functions/api/_workbench_settings.mjs";
 import { collectForTask } from "./collector.mjs";
 import { dispatchFullAnalysis } from "./github-dispatch.mjs";
+import {
+  collectNewsForProfile,
+  writeNewsItems,
+} from "./news-collector.mjs";
 import { createProviderRegistry } from "./providers/registry.mjs";
 import { writeMarketBars } from "./providers/market-bar-writer.mjs";
 import {
@@ -80,9 +84,21 @@ function bootstrapTasks(profile, scheduledTime) {
       scheduledFor,
     },
     {
+      type: "cnDailySnapshot",
+      schedule: "bootstrap/cn-daily",
+      localSlot: "bootstrap-v1-cn-daily",
+      scheduledFor,
+    },
+    {
       type: "usCloseSnapshot",
       schedule: "bootstrap/us-market",
       localSlot: "bootstrap-v1-us-market",
+      scheduledFor,
+    },
+    {
+      type: "newsCollect",
+      schedule: "bootstrap/news",
+      localSlot: "bootstrap-v1-news",
       scheduledFor,
     },
   ];
@@ -92,7 +108,12 @@ function deferredHook() {
   return { status: "deferred", errorCode: "HOOK_NOT_IMPLEMENTED" };
 }
 
-const MANUAL_COLLECTION_TASKS = new Set(["usCloseSnapshot", "intradayCollect"]);
+const MANUAL_COLLECTION_TASKS = new Set([
+  "usCloseSnapshot",
+  "cnDailySnapshot",
+  "intradayCollect",
+  "newsCollect",
+]);
 
 async function executeTask({
   task,
@@ -104,6 +125,16 @@ async function executeTask({
   deps,
   now,
 }) {
+  if (task.type === "newsCollect") {
+    const collectNews = deps.collectNews ?? collectNewsForProfile;
+    return collectNews({
+      profile,
+      db,
+      fetcher: deps.newsFetcher ?? globalThis.fetch,
+      writeItems: deps.writeNews ?? writeNewsItems,
+      now,
+    });
+  }
   if (task.type === "premarketBrief") {
     return deferredHook();
   }
@@ -299,16 +330,24 @@ export async function runManualCollection(taskType, env, deps = {}) {
   let written = 0;
   const sources = [];
   for (const profile of loaded.settings.profiles.filter(({ enabled }) => enabled)) {
-    const result = await collectForTask({
-      taskType,
-      profile,
-      registry,
-      writeBars: deps.writeBars ?? writeMarketBars,
-      db: env.DB,
-      now: clock(),
-    });
+    const result = taskType === "newsCollect"
+      ? await (deps.collectNews ?? collectNewsForProfile)({
+        profile,
+        db: env.DB,
+        fetcher: deps.newsFetcher ?? globalThis.fetch,
+        writeItems: deps.writeNews ?? writeNewsItems,
+        now: clock(),
+      })
+      : await collectForTask({
+        taskType,
+        profile,
+        registry,
+        writeBars: deps.writeBars ?? writeMarketBars,
+        db: env.DB,
+        now: clock(),
+      });
     written += Number(result.written || 0);
-    totals.targets += Number(result.counts?.targets || 0);
+    totals.targets += Number(result.counts?.targets ?? result.counts?.queries ?? 0);
     totals.succeeded += Number(result.counts?.succeeded || 0);
     totals.failed += Number(result.counts?.failed || 0);
     if (Array.isArray(result.sources)) sources.push(...result.sources);

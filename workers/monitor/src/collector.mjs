@@ -3,7 +3,7 @@ function targetsForTask(profile, taskType) {
     return profile.targets.filter((target) =>
       target.market === "US" && target.role === "driver");
   }
-  if (taskType === "intradayCollect") {
+  if (taskType === "intradayCollect" || taskType === "cnDailySnapshot") {
     return profile.targets.filter((target) =>
       target.market === "CN" &&
       (target.role === "core" || target.role === "comparison"));
@@ -24,7 +24,9 @@ export async function collectForTask({
   db,
   now,
 }) {
-  const timeframe = taskType === "usCloseSnapshot" ? "1d" : "5m";
+  const timeframe = taskType === "usCloseSnapshot" || taskType === "cnDailySnapshot"
+    ? "1d"
+    : "5m";
   const targets = targetsForTask(profile, taskType);
   if (targets.length === 0) {
     return {
@@ -46,7 +48,7 @@ export async function collectForTask({
         symbol: target.symbol,
         market: target.market,
         timeframe,
-        ...(taskType === "usCloseSnapshot" ? { limit: 1500 } : {}),
+        ...(timeframe === "1d" ? { limit: 1500 } : {}),
       });
       sources.push(...sourceTrail(result));
       if (

@@ -133,6 +133,37 @@ test("routes CN symbols through Tencent first and returns normalized bars and qu
   ]);
 });
 
+test("routes CN daily history through adjusted Eastmoney before shorter fallbacks", async () => {
+  const { createProviderRegistry } = await import(registryUrl);
+  const urls = [];
+  const registry = createProviderRegistry({
+    fetch: async (url) => {
+      urls.push(String(url));
+      return jsonResponse({
+        rc: 0,
+        data: {
+          code: "512480",
+          klines: [
+            "2026-07-22,1.143,1.152,1.210,1.138,22913899",
+            "2026-07-23,1.163,1.106,1.167,1.091,18378028",
+          ],
+        },
+      });
+    },
+    now: () => new Date("2026-07-24T02:05:00.000Z"),
+  });
+  const result = await registry.fetchMarketData({
+    symbol: "512480.SS",
+    market: "CN",
+    timeframe: "1d",
+    limit: 1500,
+  });
+  assert.equal(result.source, "eastmoney");
+  assert.equal(result.bars.at(-1).adjustment, "qfq");
+  assert.match(urls[0], /eastmoney\.com/);
+  assert.match(urls[0], /fqt=1/);
+});
+
 test("falls back from Tencent to Eastmoney with a degraded status and stable reason", async () => {
   const { createProviderRegistry } = await import(registryUrl);
   const urls = [];

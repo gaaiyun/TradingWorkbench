@@ -8,7 +8,11 @@ import {
 } from "./health.mjs";
 
 function providerOrder(request, apiKey) {
-  if (request.market === "CN") return ["tencent", "eastmoney", "yahoo"];
+  if (request.market === "CN") {
+    return request.timeframe === "1d"
+      ? ["eastmoney", "tencent", "yahoo"]
+      : ["tencent", "eastmoney", "yahoo"];
+  }
   const providers = request.timeframe === "1d"
     ? ["yahoo", "eastmoney-us", "tencent-us"]
     : ["yahoo"];

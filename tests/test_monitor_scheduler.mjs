@@ -21,11 +21,11 @@ test("maps configured one-off schedule times from the planned event", async () =
   );
   assert.deepEqual(
     (await dueAt("2026-07-23T00:25:00.000Z")).map((task) => task.type),
-    ["premarketBrief"],
+    ["newsCollect", "premarketBrief"],
   );
   assert.deepEqual(
     (await dueAt("2026-07-23T07:20:00.000Z")).map((task) => task.type),
-    ["closeFullAnalysis"],
+    ["cnDailySnapshot", "closeFullAnalysis"],
   );
 });
 
@@ -118,8 +118,14 @@ test("uses IANA DST conversion without repeating or losing ordinary local slots"
   const profile = { timezone: "America/New_York" };
   const beforeDst = await dueAt("2026-03-06T13:25:00.000Z", profile);
   const afterDst = await dueAt("2026-03-09T12:25:00.000Z", profile);
-  assert.deepEqual(beforeDst.map((task) => task.localSlot), ["2026-03-06T08:25"]);
-  assert.deepEqual(afterDst.map((task) => task.localSlot), ["2026-03-09T08:25"]);
+  assert.deepEqual(
+    beforeDst.filter(({ type }) => type === "premarketBrief").map((task) => task.localSlot),
+    ["2026-03-06T08:25"],
+  );
+  assert.deepEqual(
+    afterDst.filter(({ type }) => type === "premarketBrief").map((task) => task.localSlot),
+    ["2026-03-09T08:25"],
+  );
 
   const { localDateTimeAt } = await import(schedulerUrl);
   assert.equal(

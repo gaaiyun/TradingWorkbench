@@ -129,7 +129,7 @@ Worker：
 npx --yes wrangler@4.113.0 deploy --config wrangler.monitor.toml
 ```
 
-需要立即补跑美股日线时，调用 Worker 的受保护采集入口。Token 只从密码管理器或
+需要立即补跑行情或新闻时，调用 Worker 的受保护采集入口。Token 只从密码管理器或
 Worker Secret 交给请求进程，不写进仓库或日志：
 
 ```powershell
@@ -141,7 +141,8 @@ Invoke-RestMethod `
 
 入口复用生产 Provider Registry 和 D1 UPSERT。重复补跑不会复制同一
 `profile + symbol + timeframe + timestamp + source` 记录。A 股盘中补跑使用
-`task=intradayCollect`。只有这个受保护入口会忽略旧的十五分钟熔断状态并强制探测；
+`task=intradayCollect`，A 股日线使用 `task=cnDailySnapshot`，新闻使用
+`task=newsCollect`。只有这个受保护入口会忽略旧的十五分钟熔断状态并强制探测；
 五分钟定时任务仍遵守三次失败后暂停十五分钟的规则。
 
 补跑成功不能只看 HTTP 200。至少逐个检查：
@@ -151,6 +152,8 @@ Invoke-RestMethod `
 - 最近两个交易日之间没有异常长缺口；
 - 五年范围约有 1,250 根日线，短于该范围时说明上市日期或降级原因；
 - 页面涨跌幅由相邻交易日计算，不把多年断口算成一天。
+- `512480.SS` 在 2026-07-03 附近不得出现拆分导致的约 50% 假跌幅，日线来源应标记为 `qfq`。
+- `/api/news` 返回发布者、发布时间、主题和原文链接；`quality=discovery` 不能在报告中当作官方公告。
 
 Cloudflare 出口访问免费源时可能需要来源请求头。当前 adapter 会为 Yahoo、
 东方财富和腾讯分别发送 `Accept`、`Referer` 和浏览器兼容的 `User-Agent`；修改这些

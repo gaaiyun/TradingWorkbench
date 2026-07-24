@@ -127,9 +127,11 @@ flowchart TD
 | 任务 | 标的 | 周期 | 输出 |
 |---|---|---|---|
 | 美股收盘快照 | `role=driver` 且 `market=US` | 1d | 美股驱动日线 |
+| 新闻发现 | 当前 profile 的主题与实体别名 | 每交易日 08:25 | D1 新闻证据流 |
 | 盘前简报 | 当前 profile | 轻量 | 盘前上下文 |
 | A 股盘中采集 | `core/comparison` 且 `market=CN` | 5m | D1 行情 |
 | A 股盘中信号 | 同上 | 15m | 价格/成交量事件 |
+| A 股日线回填 | `core/comparison` 且 `market=CN` | 每交易日 15:20 | 最多 1500 根前复权日线 |
 | 收盘深度分析 | `analysis=full` | 完整 Agent | GitHub run 和报告 |
 
 ## 5. Provider Registry
