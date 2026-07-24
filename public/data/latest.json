@@ -1,7 +1,7 @@
 {
   "status": "ok",
-  "generated_at": "2026-07-23T06:34:48+08:00",
-  "trade_date": "2026-07-22",
+  "generated_at": "2026-07-24T07:53:17+08:00",
+  "trade_date": "2026-07-23",
   "provider": "openai_compatible",
   "analysts": [
     "market",
@@ -17,66 +17,24 @@
   ],
   "results": [
     {
-      "ticker": "NVDA",
-      "rating": "Overweight",
-      "report": "reports/NVDA/2026-07-22/complete_report.md",
+      "ticker": "512480.SS",
+      "rating": "Underweight",
+      "report": "reports/512480.SS/2026-07-23/complete_report.md",
       "files": {
-        "fundamentals": "reports/NVDA/2026-07-22/1_analysts/fundamentals.md",
-        "market": "reports/NVDA/2026-07-22/1_analysts/market.md",
-        "news": "reports/NVDA/2026-07-22/1_analysts/news.md",
-        "bear": "reports/NVDA/2026-07-22/2_research/bear.md",
-        "bull": "reports/NVDA/2026-07-22/2_research/bull.md",
-        "manager": "reports/NVDA/2026-07-22/2_research/manager.md",
-        "trader": "reports/NVDA/2026-07-22/3_trading/trader.md",
-        "aggressive": "reports/NVDA/2026-07-22/4_risk/aggressive.md",
-        "conservative": "reports/NVDA/2026-07-22/4_risk/conservative.md",
-        "neutral": "reports/NVDA/2026-07-22/4_risk/neutral.md",
-        "decision": "reports/NVDA/2026-07-22/5_portfolio/decision.md",
-        "complete_report": "reports/NVDA/2026-07-22/complete_report.md"
+        "fundamentals": "reports/512480.SS/2026-07-23/1_analysts/fundamentals.md",
+        "market": "reports/512480.SS/2026-07-23/1_analysts/market.md",
+        "news": "reports/512480.SS/2026-07-23/1_analysts/news.md",
+        "bear": "reports/512480.SS/2026-07-23/2_research/bear.md",
+        "bull": "reports/512480.SS/2026-07-23/2_research/bull.md",
+        "manager": "reports/512480.SS/2026-07-23/2_research/manager.md",
+        "trader": "reports/512480.SS/2026-07-23/3_trading/trader.md",
+        "aggressive": "reports/512480.SS/2026-07-23/4_risk/aggressive.md",
+        "conservative": "reports/512480.SS/2026-07-23/4_risk/conservative.md",
+        "neutral": "reports/512480.SS/2026-07-23/4_risk/neutral.md",
+        "decision": "reports/512480.SS/2026-07-23/5_portfolio/decision.md",
+        "complete_report": "reports/512480.SS/2026-07-23/complete_report.md"
       },
-      "decision_excerpt": "**Rating**: Overweight\n\n**Executive Summary**: 基于三方风险分析师辩论的综合研判，维持Overweight评级并批准第一批试探性建仓（Buy），但对交易参数作出关键调整。入场价维持$210，但止损位从$205放宽至$201（约1.2倍ATR），以避免在高波动标的中被日内噪音扫损。首批仓位30%可接受，目标总仓位从1.5-2倍下调至1.2-1.5倍核心持仓权重，反映当前宏观逆风与技术面未完全确认的现实。第二批加仓区间从$195-200上调至$200-206，第三批需连续2日收盘站上$215方可执行。时间框架3-6个月。\n\n**Investment Thesis**: **核心裁决：长期基本面碾压级优势成立，短期风险收益比需通过参数调整来优化，而非否定方向。**\n\n**一、多空论点强度评估：**\n\n多头的根本优势在于\"眼前确定性\"碾压\"远期假设性风",
-      "error": null
-    },
-    {
-      "ticker": "SPY",
-      "rating": "Hold",
-      "report": "reports/SPY/2026-07-22/complete_report.md",
-      "files": {
-        "fundamentals": "reports/SPY/2026-07-22/1_analysts/fundamentals.md",
-        "market": "reports/SPY/2026-07-22/1_analysts/market.md",
-        "news": "reports/SPY/2026-07-22/1_analysts/news.md",
-        "bear": "reports/SPY/2026-07-22/2_research/bear.md",
-        "bull": "reports/SPY/2026-07-22/2_research/bull.md",
-        "manager": "reports/SPY/2026-07-22/2_research/manager.md",
-        "trader": "reports/SPY/2026-07-22/3_trading/trader.md",
-        "aggressive": "reports/SPY/2026-07-22/4_risk/aggressive.md",
-        "conservative": "reports/SPY/2026-07-22/4_risk/conservative.md",
-        "neutral": "reports/SPY/2026-07-22/4_risk/neutral.md",
-        "decision": "reports/SPY/2026-07-22/5_portfolio/decision.md",
-        "complete_report": "reports/SPY/2026-07-22/complete_report.md"
-      },
-      "decision_excerpt": "**Rating**: Hold\n\n**Executive Summary**: 维持现有SPY仓位，不追加多头。以50 SMA（744.04）为多空分水岭：若日线有效跌破744，分批减仓15-20%（非保守派建议的30-40%，避免假跌破洗盘），第一目标布林带下轨731-735区域。取消激进派建议的突破755无条件加仓10-15%机制；若财报季放量突破755且MACD柱状图转正，仅试探性加仓5%，冲击760受阻即获利了结。同时利用VIX低位，以不超过组合1-2%资金买入行权价735附近、1-2个月期限的Put作为尾部风险对冲。时间窗口3-6周，覆盖财报季核心周期。\n\n**Investment Thesis**: 三位分析师的核心分歧在于：SPY在747.41处应采取何种仓位调整策略。综合辩论证据，最终维持Hold评级，理由如下：\n\n**一、风险收益比1:4.2是压倒性约束，阻止任何新增多",
-      "error": null
-    },
-    {
-      "ticker": "600519.SS",
-      "rating": "Hold",
-      "report": "reports/600519.SS/2026-07-22/complete_report.md",
-      "files": {
-        "fundamentals": "reports/600519.SS/2026-07-22/1_analysts/fundamentals.md",
-        "market": "reports/600519.SS/2026-07-22/1_analysts/market.md",
-        "news": "reports/600519.SS/2026-07-22/1_analysts/news.md",
-        "bear": "reports/600519.SS/2026-07-22/2_research/bear.md",
-        "bull": "reports/600519.SS/2026-07-22/2_research/bull.md",
-        "manager": "reports/600519.SS/2026-07-22/2_research/manager.md",
-        "trader": "reports/600519.SS/2026-07-22/3_trading/trader.md",
-        "aggressive": "reports/600519.SS/2026-07-22/4_risk/aggressive.md",
-        "conservative": "reports/600519.SS/2026-07-22/4_risk/conservative.md",
-        "neutral": "reports/600519.SS/2026-07-22/4_risk/neutral.md",
-        "decision": "reports/600519.SS/2026-07-22/5_portfolio/decision.md",
-        "complete_report": "reports/600519.SS/2026-07-22/complete_report.md"
-      },
-      "decision_excerpt": "**Rating**: Hold\n\n**Executive Summary**: 维持600519.SS（贵州茅台）Hold评级，保持当前5%-8%仓位不变，止损设于¥1,250。当前多空力量处于相对均衡的僵持期：技术面200日均线（¥1,351）尚未突破且ATR飙升60%至33.08，基本面Q1营业成本同比飙升35.93%导致净利润增速仅1.47%，宏观面中美利差走阔对北向资金构成真实压制。但1,779亿元现金储备、近4%股息率、17.44倍历史低位PE及89.91%毛利率提供了坚实下行保护。等待价格放量突破¥1,352确认反转，或跌破¥1,250触发减仓，预计观察期3-6个月。\n\n**Investment Thesis**: 综合三位风险分析师的辩论及研究经理的框架，最终维持Hold评级，核心逻辑如下：\n\n**技术面：空头略占上风但多头信号不可忽视。** 激进分析师力推的MACD V型",
+      "decision_excerpt": "**Rating**: Underweight\n\n**Executive Summary**: 对512480.SS执行分批减仓策略：立即在当前价格1.15附近削减50%仓位以快速释放风险，若3-5个交易日内价格反弹至1.20-1.25区间（10日EMA附近），再减持20%，保留30%战略底仓。剩余底仓止损从严设定在1.08元（而非激进派的1.05或保守派的1.12），在数据异常未获官方澄清、MACD未出现金叉且价格未站稳10日EMA之前，不新增任何仓位。预计执行周期1-3个月。\n\n**Investment Thesis**: 综合三位风险分析师的辩论，512480.SS（GTJA Allianz CSI All-share Semi-conductor Product and Equipment ETF）的核心风险可归纳为四个维度，均指向显著减仓的必要性：\n\n**第一，数据完整性存疑是根",
       "error": null
     }
   ]

@@ -1,5 +1,18 @@
 [
   {
+    "trade_date": "2026-07-23",
+    "generated_at": "2026-07-24T07:53:17+08:00",
+    "provider": "openai_compatible",
+    "results": [
+      {
+        "ticker": "512480.SS",
+        "rating": "Underweight",
+        "report": "reports/512480.SS/2026-07-23/complete_report.md",
+        "error": false
+      }
+    ]
+  },
+  {
     "trade_date": "2026-07-22",
     "generated_at": "2026-07-23T06:34:48+08:00",
     "provider": "openai_compatible",

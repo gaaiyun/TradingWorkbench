@@ -1,9 +1,258 @@
 {
   "version": 1,
-  "status": "unavailable",
-  "generated_at": null,
-  "trade_date": null,
-  "global": null,
-  "tickers": {},
-  "items": []
+  "status": "partial",
+  "generated_at": "2026-07-24T07:53:17+08:00",
+  "trade_date": "2026-07-23",
+  "global": {
+    "status": "ok",
+    "query_type": "global",
+    "ticker": null,
+    "start_date": "2026-07-16",
+    "end_date": "2026-07-23",
+    "fetched_at": "2026-07-23T23:53:19Z",
+    "items": [
+      {
+        "title": "Does Walmart pay dividends? Its yield & payouts explained",
+        "summary": "",
+        "url": "https://finance.yahoo.com/m/e695faec-bc6d-3ffe-8718-4bc2e64eee2e/does-walmart-pay-dividends%3F.html",
+        "source": "TheStreet",
+        "published_at": "2026-07-23T23:19:42Z",
+        "fetched_at": "2026-07-23T23:53:19Z",
+        "ticker": null,
+        "source_tier": "aggregator"
+      },
+      {
+        "title": "Dow Jones Futures: Market Sells Off On Oil Prices, Google, Tesla; Intel Rises Late, SpaceX Starship Launch Delayed",
+        "summary": "",
+        "url": "https://finance.yahoo.com/m/96fdd7c6-3e7b-334a-a08e-b91b60ced4b6/dow-jones-futures%3A-market.html",
+        "source": "Investor's Business Daily",
+        "published_at": "2026-07-23T23:18:18Z",
+        "fetched_at": "2026-07-23T23:53:19Z",
+        "ticker": null,
+        "source_tier": "aggregator"
+      },
+      {
+        "title": "Walmart shares its quiet plan to take down Amazon",
+        "summary": "",
+        "url": "https://finance.yahoo.com/m/15c5ae5d-a9c8-35ae-a62b-ef1ddbbf19ac/walmart-shares-its-quiet-plan.html",
+        "source": "TheStreet",
+        "published_at": "2026-07-23T23:17:00Z",
+        "fetched_at": "2026-07-23T23:53:19Z",
+        "ticker": null,
+        "source_tier": "aggregator"
+      },
+      {
+        "title": "Freeport-McMoRan (FCX) Beats In Q2 As Lower Copper Sales Outlook Tests Valuation",
+        "summary": "",
+        "url": "https://finance.yahoo.com/markets/stocks/articles/freeport-mcmoran-fcx-beats-q2-231447355.html",
+        "source": "Simply Wall St.",
+        "published_at": "2026-07-23T23:14:47Z",
+        "fetched_at": "2026-07-23T23:53:19Z",
+        "ticker": null,
+        "source_tier": "aggregator"
+      },
+      {
+        "title": "Teck Resources Ltd (TECK) Q2 2026 Earnings Call Highlights: Record EBITDA and Strong Cash Flow ...",
+        "summary": "",
+        "url": "https://finance.yahoo.com/markets/stocks/articles/teck-resources-ltd-teck-q2-230151233.html",
+        "source": "GuruFocus.com",
+        "published_at": "2026-07-23T23:01:51Z",
+        "fetched_at": "2026-07-23T23:53:19Z",
+        "ticker": null,
+        "source_tier": "aggregator"
+      },
+      {
+        "title": "Brent Crude Oil Price Could Surge to $100 After Iran’s Red Sea Attack",
+        "summary": "",
+        "url": "https://finance.yahoo.com/m/047de5c4-ec73-30c1-8088-c72e00274978/brent-crude-oil-price-could.html",
+        "source": "BeInCrypto",
+        "published_at": "2026-07-23T22:54:39Z",
+        "fetched_at": "2026-07-23T23:53:19Z",
+        "ticker": null,
+        "source_tier": "aggregator"
+      },
+      {
+        "title": "Judge temporarily halts Paramount-Warner Bros. Discovery merger",
+        "summary": "",
+        "url": "https://finance.yahoo.com/m/cd0d7130-25d0-3bbd-9d45-ec7088719dc2/judge-temporarily-halts.html",
+        "source": "CBS News",
+        "published_at": "2026-07-23T22:40:12Z",
+        "fetched_at": "2026-07-23T23:53:19Z",
+        "ticker": null,
+        "source_tier": "aggregator"
+      },
+      {
+        "title": "NVR and Champion Homes Stocks Trade Down, What You Need To Know",
+        "summary": "",
+        "url": "https://finance.yahoo.com/markets/stocks/articles/nvr-champion-homes-stocks-trade-223631767.html",
+        "source": "StockStory",
+        "published_at": "2026-07-23T22:36:31Z",
+        "fetched_at": "2026-07-23T23:53:19Z",
+        "ticker": null,
+        "source_tier": "aggregator"
+      },
+      {
+        "title": "S&P 500, Dow, Nasdaq End Lower Over Capex Concerns, Surging Oil — CBRS, AMD, GOOGL, TSLA, MSTR In Focus",
+        "summary": "",
+        "url": "https://finance.yahoo.com/m/4bfbce32-2080-3020-bb31-7e442b2bd0e9/s%26p-500%2C-dow%2C-nasdaq-end.html",
+        "source": "Stocktwits",
+        "published_at": "2026-07-23T22:34:00Z",
+        "fetched_at": "2026-07-23T23:53:19Z",
+        "ticker": null,
+        "source_tier": "aggregator"
+      },
+      {
+        "title": "Trump Says Iran Will Be Held Responsible for Future Houthi Attacks",
+        "summary": "",
+        "url": "https://finance.yahoo.com/m/1acaa0e8-f8aa-3100-93f8-1262617e3f72/trump-says-iran-will-be-held.html",
+        "source": "The Wall Street Journal",
+        "published_at": "2026-07-23T22:30:00Z",
+        "fetched_at": "2026-07-23T23:53:19Z",
+        "ticker": null,
+        "source_tier": "aggregator"
+      }
+    ],
+    "source_statuses": [
+      {
+        "source": "Yahoo Finance",
+        "status": "ok",
+        "item_count": 39
+      },
+      {
+        "source": "Federal Reserve",
+        "status": "ok",
+        "item_count": 2
+      }
+    ]
+  },
+  "tickers": {
+    "512480.SS": {
+      "status": "partial_empty",
+      "query_type": "ticker",
+      "ticker": "512480.SS",
+      "start_date": "2026-07-23",
+      "end_date": "2026-07-23",
+      "fetched_at": "2026-07-23T23:53:20Z",
+      "items": [],
+      "source_statuses": [
+        {
+          "source": "Yahoo Finance",
+          "status": "empty",
+          "item_count": 0
+        },
+        {
+          "source": "Google News RSS",
+          "status": "failed",
+          "item_count": 0
+        },
+        {
+          "source": "SEC EDGAR",
+          "status": "empty",
+          "item_count": 0
+        }
+      ]
+    }
+  },
+  "items": [
+    {
+      "title": "Does Walmart pay dividends? Its yield & payouts explained",
+      "summary": "",
+      "url": "https://finance.yahoo.com/m/e695faec-bc6d-3ffe-8718-4bc2e64eee2e/does-walmart-pay-dividends%3F.html",
+      "source": "TheStreet",
+      "published_at": "2026-07-23T23:19:42Z",
+      "fetched_at": "2026-07-23T23:53:19Z",
+      "ticker": null,
+      "source_tier": "aggregator"
+    },
+    {
+      "title": "Dow Jones Futures: Market Sells Off On Oil Prices, Google, Tesla; Intel Rises Late, SpaceX Starship Launch Delayed",
+      "summary": "",
+      "url": "https://finance.yahoo.com/m/96fdd7c6-3e7b-334a-a08e-b91b60ced4b6/dow-jones-futures%3A-market.html",
+      "source": "Investor's Business Daily",
+      "published_at": "2026-07-23T23:18:18Z",
+      "fetched_at": "2026-07-23T23:53:19Z",
+      "ticker": null,
+      "source_tier": "aggregator"
+    },
+    {
+      "title": "Walmart shares its quiet plan to take down Amazon",
+      "summary": "",
+      "url": "https://finance.yahoo.com/m/15c5ae5d-a9c8-35ae-a62b-ef1ddbbf19ac/walmart-shares-its-quiet-plan.html",
+      "source": "TheStreet",
+      "published_at": "2026-07-23T23:17:00Z",
+      "fetched_at": "2026-07-23T23:53:19Z",
+      "ticker": null,
+      "source_tier": "aggregator"
+    },
+    {
+      "title": "Freeport-McMoRan (FCX) Beats In Q2 As Lower Copper Sales Outlook Tests Valuation",
+      "summary": "",
+      "url": "https://finance.yahoo.com/markets/stocks/articles/freeport-mcmoran-fcx-beats-q2-231447355.html",
+      "source": "Simply Wall St.",
+      "published_at": "2026-07-23T23:14:47Z",
+      "fetched_at": "2026-07-23T23:53:19Z",
+      "ticker": null,
+      "source_tier": "aggregator"
+    },
+    {
+      "title": "Teck Resources Ltd (TECK) Q2 2026 Earnings Call Highlights: Record EBITDA and Strong Cash Flow ...",
+      "summary": "",
+      "url": "https://finance.yahoo.com/markets/stocks/articles/teck-resources-ltd-teck-q2-230151233.html",
+      "source": "GuruFocus.com",
+      "published_at": "2026-07-23T23:01:51Z",
+      "fetched_at": "2026-07-23T23:53:19Z",
+      "ticker": null,
+      "source_tier": "aggregator"
+    },
+    {
+      "title": "Brent Crude Oil Price Could Surge to $100 After Iran’s Red Sea Attack",
+      "summary": "",
+      "url": "https://finance.yahoo.com/m/047de5c4-ec73-30c1-8088-c72e00274978/brent-crude-oil-price-could.html",
+      "source": "BeInCrypto",
+      "published_at": "2026-07-23T22:54:39Z",
+      "fetched_at": "2026-07-23T23:53:19Z",
+      "ticker": null,
+      "source_tier": "aggregator"
+    },
+    {
+      "title": "Judge temporarily halts Paramount-Warner Bros. Discovery merger",
+      "summary": "",
+      "url": "https://finance.yahoo.com/m/cd0d7130-25d0-3bbd-9d45-ec7088719dc2/judge-temporarily-halts.html",
+      "source": "CBS News",
+      "published_at": "2026-07-23T22:40:12Z",
+      "fetched_at": "2026-07-23T23:53:19Z",
+      "ticker": null,
+      "source_tier": "aggregator"
+    },
+    {
+      "title": "NVR and Champion Homes Stocks Trade Down, What You Need To Know",
+      "summary": "",
+      "url": "https://finance.yahoo.com/markets/stocks/articles/nvr-champion-homes-stocks-trade-223631767.html",
+      "source": "StockStory",
+      "published_at": "2026-07-23T22:36:31Z",
+      "fetched_at": "2026-07-23T23:53:19Z",
+      "ticker": null,
+      "source_tier": "aggregator"
+    },
+    {
+      "title": "S&P 500, Dow, Nasdaq End Lower Over Capex Concerns, Surging Oil — CBRS, AMD, GOOGL, TSLA, MSTR In Focus",
+      "summary": "",
+      "url": "https://finance.yahoo.com/m/4bfbce32-2080-3020-bb31-7e442b2bd0e9/s%26p-500%2C-dow%2C-nasdaq-end.html",
+      "source": "Stocktwits",
+      "published_at": "2026-07-23T22:34:00Z",
+      "fetched_at": "2026-07-23T23:53:19Z",
+      "ticker": null,
+      "source_tier": "aggregator"
+    },
+    {
+      "title": "Trump Says Iran Will Be Held Responsible for Future Houthi Attacks",
+      "summary": "",
+      "url": "https://finance.yahoo.com/m/1acaa0e8-f8aa-3100-93f8-1262617e3f72/trump-says-iran-will-be-held.html",
+      "source": "The Wall Street Journal",
+      "published_at": "2026-07-23T22:30:00Z",
+      "fetched_at": "2026-07-23T23:53:19Z",
+      "ticker": null,
+      "source_tier": "aggregator"
+    }
+  ]
 }
