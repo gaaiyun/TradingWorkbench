@@ -12,7 +12,7 @@ class CryptoAssetModeTests(unittest.TestCase):
 
     def test_defaults_non_crypto_symbols_to_stock(self):
         self.assertEqual(detect_asset_type("AAPL"), AssetType.STOCK)
-        self.assertEqual(detect_asset_type("SPY"), AssetType.STOCK)
+        self.assertEqual(detect_asset_type("SPY"), AssetType.US_ETF)
 
     def test_filters_out_fundamentals_analyst_for_crypto(self):
         analysts = [

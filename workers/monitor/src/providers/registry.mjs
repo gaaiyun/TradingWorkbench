@@ -13,6 +13,7 @@ function providerOrder(request, apiKey) {
       ? ["eastmoney", "tencent", "yahoo"]
       : ["tencent", "eastmoney", "yahoo"];
   }
+  if (request.market === "HK") return ["yahoo"];
   const providers = request.timeframe === "1d"
     ? ["yahoo", "eastmoney-us", "tencent-us"]
     : ["yahoo"];

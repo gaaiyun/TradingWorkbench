@@ -189,7 +189,7 @@ test("saving an existing signal symbol does not promote it to full analysis", as
     const nvda = profile.targets.find((target) => target.symbol === "NVDA");
 
     assert.equal(response.status, 202);
-    assert.equal(signalTargets.length, 9);
+    assert.equal(signalTargets.length, 11);
     assert.equal(nvda.role, "driver");
     assert.equal(nvda.analysis, "signal");
     assert.deepEqual(payload.settings.tickers, ["515880.SS"]);

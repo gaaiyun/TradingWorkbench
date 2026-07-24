@@ -78,6 +78,38 @@ test("news collection writes relevant discovery items and rejects bare SMH false
   assert.equal(semiconductor.expiresAt, "2027-01-19T01:30:00.000Z");
 });
 
+test("news routing recognizes Alphabet and Bitdeer while requiring full aliases", async () => {
+  const { collectNewsForProfile } = await import(newsUrl);
+  const writes = [];
+  const profile = {
+    ...monitorSettings().profiles[0],
+    targets: [
+      { symbol: "GOOGL" },
+      { symbol: "3887.HK" },
+    ],
+  };
+  const rss = `<?xml version="1.0"?><rss><channel>
+    <item><title>Alphabet Cloud earnings update</title><link>https://example.com/googl</link><pubDate>Thu, 23 Jul 2026 01:20:00 GMT</pubDate><description>Google Cloud and AI investment.</description><source>Reuters</source></item>
+    <item><title>Bitdeer Technologies expands mining capacity</title><link>https://example.com/bitdeer</link><pubDate>Thu, 23 Jul 2026 01:10:00 GMT</pubDate><description>Bitdeer reports a new data center plan.</description><source>HKEXnews</source></item>
+    <item><title>Google maps traffic update</title><link>https://example.com/maps</link><pubDate>Thu, 23 Jul 2026 01:00:00 GMT</pubDate><description>Ordinary local news.</description><source>Local Daily</source></item>
+  </channel></rss>`;
+  await collectNewsForProfile({
+    profile,
+    db: {},
+    fetcher: async () => new Response(rss, {
+      status: 200,
+      headers: { "content-type": "application/rss+xml" },
+    }),
+    writeItems: async (_db, payload) => writes.push(payload),
+    now: new Date("2026-07-23T01:30:00.000Z"),
+  });
+  const items = writes.flatMap(({ items: rows }) => rows);
+  assert.equal(items.some((item) => item.symbol === "GOOGL"), true);
+  assert.equal(items.some((item) => item.symbol === "3887.HK"), true);
+  assert.equal(items.some((item) => item.url.endsWith("/maps")), false);
+  assert.equal(items.every((item) => item.sourceTier === "discovery"), true);
+});
+
 test("news collection falls back to one cached MIIT RSS request when Google is blocked", async () => {
   const { collectNewsForProfile } = await import(newsUrl);
   const calls = [];

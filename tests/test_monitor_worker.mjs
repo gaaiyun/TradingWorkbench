@@ -14,6 +14,7 @@ function sqliteWorkerD1(settings, { failNextFinish = false } = {}) {
     "0002_provider_circuit_breaker.sql",
     "0003_monitor_scheduled_slots.sql",
     "0004_monitor_slot_leases.sql",
+    "0010_news_evidence_metadata.sql",
   ]) {
     sqlite.exec(readFileSync(new URL(`../migrations/${migration}`, import.meta.url), "utf8"));
   }

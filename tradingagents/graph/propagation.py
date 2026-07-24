@@ -6,6 +6,7 @@ from tradingagents.agents.utils.agent_states import (
     InvestDebateState,
     RiskDebateState,
 )
+from tradingagents.evidence import validate_evidence_packet
 
 
 class Propagator:
@@ -22,6 +23,7 @@ class Propagator:
         asset_type: str = "stock",
         past_context: str = "",
         instrument_context: str = "",
+        evidence_packet: dict[str, Any] | None = None,
     ) -> dict[str, Any]:
         """Create the initial state for the agent graph.
 
@@ -31,6 +33,13 @@ class Propagator:
         fall back to ticker-only context via
         ``get_instrument_context_from_state``.
         """
+        analysis_status = "not_rated"
+        if evidence_packet is not None:
+            validate_evidence_packet(evidence_packet)
+            analysis_status = (
+                "rated" if evidence_packet.get("status") == "ok"
+                else evidence_packet.get("status", "not_rated")
+            )
         return {
             "messages": [("human", company_name)],
             "company_of_interest": company_name,
@@ -66,6 +75,8 @@ class Propagator:
             "fundamentals_report": "",
             "sentiment_report": "",
             "news_report": "",
+            "evidence_packet": evidence_packet,
+            "analysis_status": analysis_status,
         }
 
     def get_graph_args(self, callbacks: list | None = None) -> dict[str, Any]:

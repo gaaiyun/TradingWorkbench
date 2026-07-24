@@ -13,3 +13,10 @@ class AnalystType(str, Enum):
 class AssetType(str, Enum):
     STOCK = "stock"
     CRYPTO = "crypto"
+    CN_ETF = "cn_etf"
+    US_ETF = "us_etf"
+    CN_EQUITY = "cn_equity"
+    US_EQUITY = "us_equity"
+    HK_EQUITY = "hk_equity"
+    BENCHMARK = "benchmark"
+    CRYPTO_DRIVER = "crypto_driver"

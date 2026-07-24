@@ -2,6 +2,7 @@ import { normalizeWorkbenchTicker } from "../../../../functions/api/_workbench_s
 
 const TIMEFRAMES = new Set(["5m", "1d"]);
 const CN_SUFFIXES = [".SS", ".SZ"];
+const HK_SUFFIX = ".HK";
 const EASTMONEY_US_MARKETS = {
   SOXX: "105",
   SMH: "105",
@@ -33,7 +34,9 @@ export function normalizeMarketRequest(request) {
   } catch {
     invalidRequest();
   }
-  const inferredMarket = CN_SUFFIXES.some((suffix) => symbol.endsWith(suffix)) ? "CN" : "US";
+  const inferredMarket = CN_SUFFIXES.some((suffix) => symbol.endsWith(suffix))
+    ? "CN"
+    : symbol.endsWith(HK_SUFFIX) ? "HK" : "US";
   const market = typeof request.market === "string" ? request.market.toUpperCase() : inferredMarket;
   const limit = request.limit === undefined ? 320 : Number(request.limit);
   if (
@@ -58,14 +61,14 @@ export function mapProviderSymbol(provider, rawSymbol) {
   if (provider === "tencent" && match) {
     return `${match[2] === "SS" ? "sh" : "sz"}${match[1]}`;
   }
-  if (provider === "tencent-us" && !match) return `us${symbol}`;
+  if (provider === "tencent-us" && !match && !symbol.endsWith(HK_SUFFIX)) return `us${symbol}`;
   if (provider === "eastmoney-us" && EASTMONEY_US_MARKETS[symbol]) {
     return `${EASTMONEY_US_MARKETS[symbol]}.${symbol}`;
   }
   if (provider === "eastmoney" && match) {
     return `${match[2] === "SS" ? "1" : "0"}.${match[1]}`;
   }
-  if (provider === "stooq" && !match) return `${symbol.toLowerCase()}.us`;
+  if (provider === "stooq" && !match && !symbol.endsWith(HK_SUFFIX)) return `${symbol.toLowerCase()}.us`;
   invalidRequest();
 }
 

@@ -21,7 +21,7 @@ from __future__ import annotations
 from enum import Enum
 from typing import Literal
 
-from pydantic import BaseModel, Field, field_validator
+from pydantic import BaseModel, Field, field_validator, model_validator
 
 # LLMs sometimes write a placeholder string ("None", "N/A", ...) into an optional
 # numeric field instead of omitting it. Coerce those to None so the structured
@@ -215,7 +215,26 @@ class PortfolioDecision(BaseModel):
     )
     price_target: float | None = Field(
         default=None,
-        description="Optional target price in the instrument's quote currency.",
+        description=(
+            "Optional target price in the instrument's quote currency. Supply it "
+            "only when method, inputs, range, and scenario probabilities are all available."
+        ),
+    )
+    price_target_method: str | None = Field(
+        default=None,
+        description="Valuation or scenario method used to derive the target price.",
+    )
+    price_target_inputs: str | None = Field(
+        default=None,
+        description="Reproducible numerical inputs and Evidence IDs used by the method.",
+    )
+    price_target_range: str | None = Field(
+        default=None,
+        description="Bear-to-bull target range in the instrument's quote currency.",
+    )
+    scenario_probabilities: str | None = Field(
+        default=None,
+        description="Scenario probabilities that sum approximately to 100%.",
     )
     time_horizon: str | None = Field(
         default=None,
@@ -226,6 +245,17 @@ class PortfolioDecision(BaseModel):
     @classmethod
     def _nullish_float_to_none(cls, v):
         return _coerce_optional_float(v)
+
+    @model_validator(mode="after")
+    def _drop_unreproducible_target(self):
+        if self.price_target is not None and not all([
+            self.price_target_method,
+            self.price_target_inputs,
+            self.price_target_range,
+            self.scenario_probabilities,
+        ]):
+            self.price_target = None
+        return self
 
 
 def render_pm_decision(decision: PortfolioDecision) -> str:
@@ -244,7 +274,14 @@ def render_pm_decision(decision: PortfolioDecision) -> str:
         f"**Investment Thesis**: {decision.investment_thesis}",
     ]
     if decision.price_target is not None:
-        parts.extend(["", f"**Price Target**: {decision.price_target}"])
+        parts.extend([
+            "",
+            f"**Price Target**: {decision.price_target}",
+            f"**Target Method**: {decision.price_target_method}",
+            f"**Target Inputs**: {decision.price_target_inputs}",
+            f"**Target Range**: {decision.price_target_range}",
+            f"**Scenario Probabilities**: {decision.scenario_probabilities}",
+        ])
     if decision.time_horizon:
         parts.extend(["", f"**Time Horizon**: {decision.time_horizon}"])
     return "\n".join(parts)

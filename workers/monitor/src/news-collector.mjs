@@ -18,6 +18,8 @@ const TARGET_ALIASES = {
   AMD: ["Advanced Micro Devices", "AMD"],
   ASML: ["ASML"],
   ORCL: ["Oracle", "甲骨文", "Oracle Cloud"],
+  GOOGL: ["Alphabet", "Google LLC", "Google Cloud", "谷歌", "GOOGL"],
+  "3887.HK": ["Bitdeer", "Bitdeer Technologies", "比特小鹿", "03887", "3887.HK"],
 };
 
 function decodeEntities(value) {
@@ -121,6 +123,24 @@ function queryPlans(profile) {
       locale: "en-US",
     });
   }
+  const alphabet = availableSymbols(profile, ["GOOGL"]);
+  if (alphabet.length) {
+    plans.push({
+      topic: "alphabet",
+      symbols: alphabet,
+      query: '(Alphabet OR "Google Cloud" OR GOOGL OR 谷歌) (cloud OR AI OR earnings) when:7d',
+      locale: "en-US",
+    });
+  }
+  const bitdeer = availableSymbols(profile, ["3887.HK"]);
+  if (bitdeer.length) {
+    plans.push({
+      topic: "bitdeer",
+      symbols: bitdeer,
+      query: '("Bitdeer" OR "Bitdeer Technologies" OR 比特小鹿 OR 03887) when:30d',
+      locale: "en-US",
+    });
+  }
   plans.push({
     topic: "policy",
     symbols: availableSymbols(profile, ["515880.SS", "512480.SS", "159995.SZ"]),
@@ -166,7 +186,13 @@ function providerCandidates(plan) {
 }
 
 function includesAlias(text, alias) {
-  return text.toLocaleLowerCase().includes(alias.toLocaleLowerCase());
+  const value = String(text || "");
+  const candidate = String(alias || "");
+  if (/^[A-Za-z0-9][A-Za-z0-9.-]{1,15}$/.test(candidate)) {
+    const escaped = candidate.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+    return new RegExp(`(?<![A-Za-z0-9])${escaped}(?![A-Za-z0-9])`, "i").test(value);
+  }
+  return value.toLocaleLowerCase().includes(candidate.toLocaleLowerCase());
 }
 
 function matchedSymbol(item, symbols) {
@@ -308,7 +334,7 @@ export async function writeNewsItems(db, { items }) {
   await db.prepare(`
     INSERT INTO news_items (
       id, symbol, profile_id, topic, title, summary, url, published_at,
-      source, as_of, fetched_at, freshness, adjustment, quality, expires_at
+      source, source_tier, as_of, fetched_at, freshness, adjustment, quality, expires_at
     )
     SELECT
       json_extract(value, '$.id'),
@@ -320,6 +346,7 @@ export async function writeNewsItems(db, { items }) {
       json_extract(value, '$.url'),
       json_extract(value, '$.publishedAt'),
       json_extract(value, '$.source'),
+      COALESCE(json_extract(value, '$.sourceTier'), 'discovery'),
       json_extract(value, '$.asOf'),
       json_extract(value, '$.fetchedAt'),
       json_extract(value, '$.freshness'),
@@ -336,6 +363,7 @@ export async function writeNewsItems(db, { items }) {
       url = excluded.url,
       published_at = excluded.published_at,
       source = excluded.source,
+      source_tier = excluded.source_tier,
       as_of = excluded.as_of,
       fetched_at = excluded.fetched_at,
       freshness = excluded.freshness,
@@ -399,6 +427,7 @@ export async function collectNewsForProfile({
         url: item.url,
         publishedAt: item.publishedAt,
         source: itemSource(outcome.value.source, item),
+        sourceTier: outcome.value.source === "miit-rss" ? "evidence" : "discovery",
         asOf: item.publishedAt,
         fetchedAt,
         freshness: age >= 0 && age <= 36 * 60 * 60 * 1000 ? "fresh" : "stale",

@@ -33,6 +33,13 @@ test("normalizes A-share and US symbols while preserving first-seen order", () =
   );
 });
 
+test("normalizes Google aliases and Hong Kong symbols for the workbench", () => {
+  assert.deepEqual(
+    normalizeWorkbenchTickers(["googl", "GOOG", "03887", "03887.HK", "3887"]),
+    ["GOOGL", "GOOG", "3887.HK"],
+  );
+});
+
 test("the checked-in v2 settings contain the only default research profile", () => {
   const raw = defaultSettingsInput();
   const settings = parseWorkbenchSettings(raw);
@@ -60,6 +67,8 @@ test("the checked-in v2 settings contain the only default research profile", () 
       { symbol: "AMD", name: "AMD", role: "driver", analysis: "signal" },
       { symbol: "ASML", name: "ASML", role: "driver", analysis: "signal" },
       { symbol: "ORCL", name: "Oracle", role: "driver", analysis: "signal" },
+      { symbol: "GOOGL", name: "Alphabet", role: "driver", analysis: "signal" },
+      { symbol: "3887.HK", name: "比特小鹿", role: "driver", analysis: "signal" },
     ],
   );
   assert.deepEqual(
@@ -137,7 +146,7 @@ test("de-duplicates normalized target symbols before enforcing the twelve-target
     analysis: "signal",
   });
   const normalized = buildWorkbenchSettings(duplicate);
-  assert.equal(normalized.profiles[0].targets.length, 11);
+  assert.equal(normalized.profiles[0].targets.length, 13);
   assert.equal(normalized.profiles[0].targets[0].name, "通信ETF");
 
   const tooMany = defaultSettingsInput();
@@ -148,10 +157,17 @@ test("de-duplicates normalized target symbols before enforcing the twelve-target
     role: "driver",
     analysis: "signal",
   });
-  assert.equal(buildWorkbenchSettings(tooMany).profiles[0].targets.length, 12);
+  assert.equal(buildWorkbenchSettings(tooMany).profiles[0].targets.length, 14);
   tooMany.profiles[0].targets.push({
     symbol: "MSFT",
     name: "Microsoft",
+    market: "US",
+    role: "driver",
+    analysis: "signal",
+  });
+  tooMany.profiles[0].targets.push({
+    symbol: "INTU",
+    name: "Intuit",
     market: "US",
     role: "driver",
     analysis: "signal",
@@ -166,7 +182,7 @@ test("does not count provider-neutral system benchmarks toward the target cap", 
     name: `系统基准 ${index}`,
     market: "GLOBAL",
   }));
-  assert.equal(buildWorkbenchSettings(input).profiles[0].targets.length, 11);
+  assert.equal(buildWorkbenchSettings(input).profiles[0].targets.length, 13);
 });
 
 test("ships semantic schedules, high-severity web and PushPlus alerts, and bounded agent work", () => {
@@ -340,7 +356,7 @@ test("rejects empty, unsupported, and exchange-mismatched symbols", () => {
   assertSettingsError("EMPTY_TICKERS", () => normalizeWorkbenchTickers("  ,， "));
   assertSettingsError("INVALID_TICKER", () => normalizeWorkbenchTickers(["BTC-USD"]));
   assertSettingsError("INVALID_TICKER", () => normalizeWorkbenchTickers(["600519.SZ"]));
-  assertSettingsError("INVALID_TICKER", () => normalizeWorkbenchTickers(["0700.HK"]));
+  assert.equal(normalizeWorkbenchTickers(["0700.HK"])[0], "0700.HK");
 });
 
 test("rejects more than ten unique symbols instead of truncating", () => {

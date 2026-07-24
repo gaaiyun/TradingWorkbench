@@ -19,6 +19,7 @@ const migrations = [
   "../migrations/0003_monitor_scheduled_slots.sql",
   "../migrations/0004_monitor_slot_leases.sql",
   "../migrations/0005_chat_persistence.sql",
+  "../migrations/0010_news_evidence_metadata.sql",
 ];
 
 async function createD1(t) {

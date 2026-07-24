@@ -715,6 +715,10 @@ class TestPortfolioManagerInjection:
             executive_summary="Build position gradually over the next two weeks.",
             investment_thesis="AI capex cycle remains intact; institutional flows constructive.",
             price_target=215.0,
+            price_target_method="Scenario-weighted earnings multiple",
+            price_target_inputs="Base EPS 10.0; 21.5x multiple",
+            price_target_range="190-235",
+            scenario_probabilities="Bear 25%; base 50%; bull 25%",
             time_horizon="3-6 months",
         )
         llm = _structured_pm_llm(captured, decision)

@@ -234,10 +234,71 @@ def normalize_ticker(raw: str) -> str:
     """
     t = raw.strip().upper()
     if not t or "." in t:
-        return t
+        return "3887.HK" if t == "03887.HK" else t
+    if t in {"03887", "3887"}:
+        return "3887.HK"
     if t.isdigit() and len(t) == 6:
         return t + (".SS" if t[0] in "569" else ".SZ")
     return t
+
+
+def build_runtime_evidence(ticker: str, trade_date: str) -> dict[str, Any]:
+    """Build a small point-in-time packet before any model call.
+
+    This preflight deliberately uses adjusted history and corporate actions.
+    If the vendor returns a split-contaminated series, the run is marked
+    non-rateable instead of allowing the LLM to turn the jump into a Sell.
+    """
+    import yfinance as yf
+
+    from cli.utils import detect_asset_type, normalize_ticker_symbol
+    from tradingagents.evidence import build_evidence_packet
+
+    symbol = normalize_ticker_symbol(ticker)
+    asset_type = detect_asset_type(symbol).value
+    cutoff = f"{trade_date}T23:59:59Z"
+    history = yf.Ticker(symbol).history(period="6mo", auto_adjust=True, actions=True)
+    bars: list[dict[str, Any]] = []
+    if history is not None and not history.empty:
+        for index, row in history.iterrows():
+            timestamp = index.to_pydatetime()
+            if timestamp.tzinfo is None:
+                timestamp = timestamp.replace(tzinfo=timezone.utc)
+            timestamp = timestamp.astimezone(timezone.utc)
+            if timestamp.date().isoformat() > trade_date:
+                continue
+            bars.append({
+                "ts": timestamp.isoformat(),
+                "open": row.get("Open"),
+                "high": row.get("High"),
+                "low": row.get("Low"),
+                "close": row.get("Close"),
+                "volume": row.get("Volume"),
+                "adjustment": "qfq",
+            })
+    actions: list[dict[str, Any]] = []
+    if history is not None and "Stock Splits" in history.columns:
+        for index, value in history["Stock Splits"].items():
+            if value and float(value) != 0 and index.date().isoformat() <= trade_date:
+                actions.append({
+                    "type": "split",
+                    "exDate": index.date().isoformat(),
+                    "ratio": float(value),
+                    "source": "yahoo-actions",
+                })
+    return build_evidence_packet(
+        ticker=symbol,
+        asset_type=asset_type,
+        as_of=cutoff,
+        bars=bars,
+        corporate_actions=actions,
+        sources=[{
+            "source": "yahoo-finance",
+            "asOf": cutoff,
+            "fetchedAt": datetime.now(timezone.utc).isoformat(),
+            "sourceTier": "discovery",
+        }],
+    )
 
 
 def update_history(data_dir: Path, payload: dict, cap: int = HISTORY_CAP) -> int:
@@ -318,14 +379,34 @@ def push_wechat(title: str, content: str) -> dict:
 def run_ticker(ticker: str, trade_date: str, analysts: list[str], reports_dir: Path) -> dict:
     """跑单个 ticker 的完整多智能体分析，返回结果摘要 dict。"""
     from tradingagents.default_config import DEFAULT_CONFIG
+    from cli.utils import detect_asset_type, normalize_ticker_symbol
     from tradingagents.graph.trading_graph import TradingAgentsGraph
 
+    symbol = normalize_ticker_symbol(ticker)
+    evidence_packet = build_runtime_evidence(symbol, trade_date)
+    if not evidence_packet.get("canRate"):
+        return {
+            "ticker": symbol,
+            "rating": None,
+            "report": None,
+            "files": {},
+            "decision_excerpt": "",
+            "analysis_status": evidence_packet.get("status", "not_rated"),
+            "audit_status": "invalidated" if evidence_packet.get("status") == "data_validation_failed" else "legacy_unverified",
+            "error": "evidence validation failed; model run skipped",
+        }
+    asset_type = detect_asset_type(symbol).value
     config = DEFAULT_CONFIG.copy()
     ta = TradingAgentsGraph(selected_analysts=analysts, debug=False, config=config)
-    final_state, rating = ta.propagate(ticker, trade_date)
+    final_state, rating = ta.propagate(
+        symbol,
+        trade_date,
+        asset_type=asset_type,
+        evidence_packet=evidence_packet,
+    )
 
-    save_dir = reports_dir / ticker.upper() / trade_date
-    ta.save_reports(final_state, ticker, save_path=save_dir)
+    save_dir = reports_dir / symbol / trade_date
+    ta.save_reports(final_state, symbol, save_path=save_dir, evidence_packet=evidence_packet)
 
     # 各 agent 分报告的相对路径映射，供前端按角色分 tab 阅读
     files: dict[str, str] = {}
@@ -335,11 +416,13 @@ def run_ticker(ticker: str, trade_date: str, analysts: list[str], reports_dir: P
 
     decision_md = str(final_state.get("final_trade_decision", "")).strip()
     return {
-        "ticker": ticker.upper(),
+        "ticker": symbol,
         "rating": rating,
         "report": files.get("complete_report"),
         "files": files,
         "decision_excerpt": decision_md[:400],
+        "analysis_status": final_state.get("analysis_status", "rated"),
+        "audit_status": "verified",
         "error": None,
     }
 

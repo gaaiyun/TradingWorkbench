@@ -1,9 +1,11 @@
 export const WORKBENCH_SETTINGS_VERSION = 2;
 export const MAX_WORKBENCH_TICKERS = 10;
-export const MAX_WORKBENCH_TARGETS = 12;
+export const MAX_WORKBENCH_TARGETS = 14;
 
 const A_SHARE = /^(\d{6})(?:\.(SS|SH|SZ))?$/;
 const US_EQUITY = /^([A-Z]{1,5})(?:[.-]([A-Z]))?$/;
+const HK_EQUITY = /^(\d{4,5})\.HK$/;
+const HK_BARE = /^(\d{4,5})$/;
 const TARGET_ROLES = new Set(["core", "comparison", "driver", "benchmark"]);
 const ANALYSIS_DEPTHS = new Set(["full", "signal"]);
 const ALERT_SEVERITIES = new Set(["low", "medium", "high", "critical"]);
@@ -26,6 +28,8 @@ function fail(code, message) {
  *
  * A-share bare codes are mapped to Yahoo Finance suffixes. US class-share
  * separators are normalized to the Yahoo-compatible dash form (BRK.B -> BRK-B).
+ * Hong Kong inputs accept both Yahoo's ``.HK`` form and common broker codes;
+ * 03887 is the zero-padded alias for 3887.HK.
  */
 export function normalizeWorkbenchTicker(raw) {
   if (typeof raw !== "string") {
@@ -36,6 +40,14 @@ export function normalizeWorkbenchTicker(raw) {
   if (!ticker) {
     fail("INVALID_TICKER", "标的代码不能为空");
   }
+
+  if (ticker === "03887" || ticker === "03887.HK" || ticker === "3887") {
+    return "3887.HK";
+  }
+  const hkEquity = HK_EQUITY.exec(ticker);
+  if (hkEquity) return `${hkEquity[1]}.HK`;
+  const hkBare = HK_BARE.exec(ticker);
+  if (hkBare) return `${hkBare[1]}.HK`;
 
   const aShare = A_SHARE.exec(ticker);
   if (aShare) {
@@ -60,7 +72,7 @@ export function normalizeWorkbenchTicker(raw) {
     return shareClass ? `${root}-${shareClass}` : root;
   }
 
-  fail("INVALID_TICKER", `仅支持 A 股或美股代码：${ticker}`);
+  fail("INVALID_TICKER", `仅支持 A 股、美股或港股代码：${ticker}`);
 }
 
 function tickerItems(input) {

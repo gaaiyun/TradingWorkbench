@@ -218,6 +218,7 @@ a { color: inherit; }
 .archive-layout { display: grid; grid-template-columns: 330px minmax(0, 1fr); gap: 14px; }
 .archive-index, .archive-reader { min-height: 620px; }
 .archive-list { max-height: 620px; overflow: auto; }
+.archive-index-actions { display: inline-flex; align-items: center; gap: 12px; }
 .archive-list button {
   display: block; width: 100%; padding: 11px 12px; border: 0; border-bottom: 1px solid var(--line);
   background: transparent; color: var(--muted); text-align: left;
@@ -227,6 +228,25 @@ a { color: inherit; }
 .archive-list b { font: 580 10px "IBM Plex Mono", Consolas, monospace; }
 .archive-list em { color: var(--muted); font: normal 9px "IBM Plex Mono", Consolas, monospace; }
 .archive-list small { display: block; margin-top: 4px; color: var(--quiet); font-size: 8px; }
+.archive-list button.is-audit-invalidated { border-left: 2px solid var(--danger); }
+.archive-list button.is-audit-legacy_unverified { border-left: 2px solid var(--warning); }
+.audit-badge { font-weight: 600; letter-spacing: .02em; }
+.audit-verified { color: var(--positive); }
+.audit-legacy_unverified { color: var(--warning); }
+.audit-invalidated, .audit-invalid_record { color: var(--negative); }
+.report-warning {
+  margin: 0 0 18px;
+  padding: 12px 14px;
+  border: 1px solid var(--warning);
+  color: var(--warning);
+  background: color-mix(in srgb, var(--warning) 8%, transparent);
+  font-size: 12px;
+}
+.report-warning.audit-invalidated, .report-warning.audit-invalid_record {
+  border-color: var(--negative);
+  color: var(--negative);
+  background: color-mix(in srgb, var(--negative) 8%, transparent);
+}
 .archive-reader { min-width: 0; }
 .archive-markdown { max-height: 760px; overflow: auto; padding: 22px 24px 40px; color: var(--muted); font-size: 11px; line-height: 1.75; }
 .archive-markdown h1, .archive-markdown h2, .archive-markdown h3 { color: var(--text); line-height: 1.35; }

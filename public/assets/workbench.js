@@ -35,6 +35,7 @@ import {
   archivedResearchAfterRun,
   buildArchiveEntries,
   buildPipelineStages,
+  filterAuditedResults,
   latestResearchRun,
 } from "./workbench-research.mjs";
 
@@ -67,6 +68,8 @@ import {
     latest: null,
     history: [],
     runs: [],
+    reportAudit: null,
+    showAuditReports: false,
     archiveEntries: [],
     selectedReportPath: null,
     selectedReportContent: "",
@@ -345,14 +348,14 @@ import {
 
   function renderInstrument() {
     const target = targets().find((item) => item.symbol === state.selectedSymbol) || DEFAULT_TARGETS[0];
-    const isUs = target.market === "US";
+    const isDailyMarket = target.market !== "CN";
     const isDaily = state.timeframe === "1d";
     const bars = state.chart.bars;
     const bar = bars.at(-1);
     const previous = bars.at(-2);
     const change = bar && previous && Number(previous.close) !== 0 ? (Number(bar.close) / Number(previous.close) - 1) * 100 : null;
     $("#instrument-symbol").textContent = target.symbol;
-    $("#instrument-name").textContent = `${target.name} · ${target.market === "CN" ? "A 股" : "US"}`;
+    $("#instrument-name").textContent = `${target.name} · ${target.market === "CN" ? "A 股" : target.market === "HK" ? "港股" : "美股"}`;
     $("#instrument-role").textContent = roleLabels[target.role] || target.role;
     $("#instrument-price").textContent = formatNumber(bar?.close);
     $("#instrument-change").textContent = change == null ? "—" : `${change >= 0 ? "+" : ""}${change.toFixed(2)}%`;
@@ -363,7 +366,7 @@ import {
     $("#quote-volume").textContent = formatVolume(bar?.volume);
     $("#history-range-tabs").hidden = !isDaily;
     $$("[data-timeframe]").forEach((button) => {
-      button.disabled = isUs && button.dataset.timeframe !== "1d";
+      button.disabled = isDailyMarket && button.dataset.timeframe !== "1d";
     });
     if (isDaily && bars.length) {
       const first = bars[0];
@@ -480,7 +483,7 @@ import {
   async function loadQuoteStrip() {
     const otherTargets = targets().filter(({ symbol }) => symbol !== state.selectedSymbol);
     await Promise.allSettled(otherTargets.map(async ({ symbol, market }) => {
-      const quoteTimeframe = market === "US" ? "1d" : state.timeframe;
+      const quoteTimeframe = market === "CN" ? state.timeframe : "1d";
       const envelope = normalizeEnvelope(await requestJson(marketUrl(symbol, quoteTimeframe, 2)));
       const bars = sortBars(envelope.data);
       const last = bars.at(-1);
@@ -791,17 +794,33 @@ import {
   }
 
   function renderArchiveList() {
-    state.archiveEntries = buildArchiveEntries(state.history);
-    $("#archive-count").textContent = `${state.archiveEntries.length} 份`;
+    state.archiveEntries = buildArchiveEntries(state.history, state.reportAudit, {
+      includeInvalidated: state.showAuditReports,
+    });
+    $("#archive-count").textContent = `${state.archiveEntries.length} 份${state.showAuditReports ? " · 历史审计" : ""}`;
+    const auditToggle = $("#archive-show-audit");
+    if (auditToggle) {
+      auditToggle.textContent = state.showAuditReports ? "返回可用档案" : "历史审计";
+      auditToggle.setAttribute("aria-pressed", String(state.showAuditReports));
+    }
     if (!state.archiveEntries.length) {
       $("#archive-list").className = "panel-empty";
-      $("#archive-list").innerHTML = "<b>没有可用研究档案</b><span>历史接口与静态灾备均未返回报告索引。</span>";
+      $("#archive-list").innerHTML = state.showAuditReports
+        ? "<b>没有历史审计档案</b><span>审计索引尚未返回可查看的旧报告。</span>"
+        : "<b>没有可用研究档案</b><span>失效报告已隐藏；可切换“历史审计”查看原文。</span>";
       return;
     }
     $("#archive-list").className = "archive-list";
-    $("#archive-list").innerHTML = state.archiveEntries.map((entry, index) => `<button type="button" data-archive-index="${index}" class="${entry.report === state.selectedReportPath ? "is-active" : ""}">
+    const auditLabels = {
+      verified: "已验证",
+      legacy_unverified: "历史未验证",
+      invalidated: "已失效",
+      invalid_record: "记录无效",
+      unverified: "未登记",
+    };
+    $("#archive-list").innerHTML = state.archiveEntries.map((entry, index) => `<button type="button" data-archive-index="${index}" class="${entry.report === state.selectedReportPath ? "is-active" : ""} is-audit-${escapeHtml(entry.auditStatus)}">
       <span><b>${escapeHtml(entry.ticker)}</b><em>${escapeHtml(entry.rating || "—")}</em></span>
-      <small>${escapeHtml(entry.tradeDate || formatTime(entry.generatedAt, true))} · ${escapeHtml(entry.provider || "unknown")}</small>
+      <small>${escapeHtml(entry.tradeDate || formatTime(entry.generatedAt, true))} · ${escapeHtml(entry.provider || "unknown")} · <strong class="audit-badge audit-${escapeHtml(entry.auditStatus)}">${escapeHtml(auditLabels[entry.auditStatus] || "未登记")}</strong></small>
     </button>`).join("");
     $$("[data-archive-index]", $("#archive-list")).forEach((button) => button.addEventListener("click", () => {
       loadArchiveReport(state.archiveEntries[Number(button.dataset.archiveIndex)]);
@@ -827,12 +846,17 @@ import {
     state.selectedReportContent = "";
     $("#archive-report-title").textContent = `${entry.ticker} · ${entry.tradeDate || "研究报告"}`;
     $("#archive-report-body").className = "panel-empty";
-    $("#archive-report-body").innerHTML = "<b>正在读取完整报告</b><span>同时核验报告路径和来源。</span>";
+    const auditNotice = entry.auditStatus === "invalidated"
+      ? "这份报告已失效，仅用于历史审计，不进入最新观点或问答上下文。"
+      : entry.auditStatus === "legacy_unverified"
+        ? "这份报告属于历史未验证档案，原文保留，但不能作为当前证据结论。"
+        : "同时核验报告路径和来源。";
+    $("#archive-report-body").innerHTML = `<b>正在读取完整报告</b><span>${escapeHtml(auditNotice)}</span>`;
     renderArchiveList();
     try {
       state.selectedReportContent = await fetchReportText(entry.report);
       $("#archive-report-body").className = "archive-markdown";
-      $("#archive-report-body").innerHTML = renderMarkdown(state.selectedReportContent);
+      $("#archive-report-body").innerHTML = `${entry.auditStatus && entry.auditStatus !== "verified" ? `<div class="report-warning audit-${escapeHtml(entry.auditStatus)}">${escapeHtml(auditNotice)}</div>` : ""}${renderMarkdown(state.selectedReportContent)}`;
     } catch (error) {
       $("#archive-report-body").className = "panel-empty";
       $("#archive-report-body").innerHTML = `<b>报告暂不可用</b><span>${escapeHtml(error.message)}</span>`;
@@ -840,9 +864,10 @@ import {
   }
 
   async function loadResearchWorkspace() {
-    const [historyResult, runsResult] = await Promise.allSettled([
+    const [historyResult, runsResult, auditResult] = await Promise.allSettled([
       requestJson("/api/history"),
       requestJson("/api/runs"),
+      requestJson("/api/report-audit"),
     ]);
     if (historyResult.status === "fulfilled") {
       const payload = historyResult.value;
@@ -856,6 +881,15 @@ import {
       state.runs = payload?.runs || payload?.data || [];
     } else {
       state.runs = [];
+    }
+    if (auditResult.status === "fulfilled") {
+      state.reportAudit = auditResult.value?.data || auditResult.value;
+    } else {
+      try { state.reportAudit = await requestJson("./data/report-audit.json"); }
+      catch { state.reportAudit = null; }
+    }
+    if (state.latest) {
+      state.latest = { ...state.latest, results: filterAuditedResults(state.latest.results, state.reportAudit) };
     }
     renderAgentWorkspace();
     renderTaskBoard();
@@ -912,6 +946,9 @@ import {
     } catch {
       try { state.latest = await requestJson("./data/latest.json"); }
       catch { state.latest = null; }
+    }
+    if (state.latest) {
+      state.latest = { ...state.latest, results: filterAuditedResults(state.latest.results, state.reportAudit) };
     }
     renderConclusion();
     renderAgentWorkspace();
@@ -1132,7 +1169,7 @@ import {
   async function selectSymbol(symbol) {
     state.selectedSymbol = symbol;
     const target = targets().find((item) => item.symbol === symbol);
-    if (target?.market === "US" && state.timeframe !== "1d") {
+    if (target?.market !== "CN" && state.timeframe !== "1d") {
       state.timeframe = "1d";
       $$("[data-timeframe]").forEach((button) => {
         const active = button.dataset.timeframe === "1d";
@@ -1765,6 +1802,10 @@ import {
     $("#archive-refresh").addEventListener("click", async () => {
       await Promise.allSettled([loadLatest(), loadResearchWorkspace()]);
       toast("研究档案已刷新");
+    });
+    $("#archive-show-audit").addEventListener("click", () => {
+      state.showAuditReports = !state.showAuditReports;
+      renderArchiveList();
     });
     $("#archive-ask").addEventListener("click", () => {
       if (!state.selectedReportPath) {

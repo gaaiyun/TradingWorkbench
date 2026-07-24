@@ -15,8 +15,14 @@ from tradingagents.dataflows.symbol_utils import (
 @pytest.mark.unit
 class TestNormalizeSymbol(unittest.TestCase):
     def test_plain_equities_unchanged(self):
-        for sym in ("AAPL", "MSFT", "TSM", "BRK.B", "0700.HK", "^GSPC", "GC=F"):
+        for sym in ("AAPL", "MSFT", "TSM", "BRK.B", "0700.HK", "3887.HK", "^GSPC", "GC=F"):
             self.assertEqual(normalize_symbol(sym), sym)
+
+    def test_hong_kong_and_google_aliases(self):
+        self.assertEqual(normalize_symbol("03887"), "3887.HK")
+        self.assertEqual(normalize_symbol("03887.HK"), "3887.HK")
+        self.assertEqual(normalize_symbol("GOOGL"), "GOOGL")
+        self.assertEqual(normalize_symbol("GOOG"), "GOOG")
 
     def test_lowercases_are_upper(self):
         self.assertEqual(normalize_symbol("aapl"), "AAPL")

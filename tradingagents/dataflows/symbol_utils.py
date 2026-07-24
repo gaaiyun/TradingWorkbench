@@ -51,6 +51,9 @@ _CRYPTO_BASES = frozenset(
 # index CFD names resolve to the underlying Yahoo index symbol. Extend by
 # adding rows — no call site changes required.
 _ALIASES = {
+    # Hong Kong listings: broker feeds commonly retain the leading zero while
+    # Yahoo uses the four-digit listing code.
+    "03887": "3887.HK", "03887.HK": "3887.HK", "3887": "3887.HK",
     # Precious metals (spot names -> COMEX/NYMEX futures)
     "XAUUSD": "GC=F", "XAU": "GC=F", "GOLD": "GC=F",
     "XAGUSD": "SI=F", "XAG": "SI=F", "SILVER": "SI=F",

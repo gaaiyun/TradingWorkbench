@@ -1,7 +1,7 @@
 function targetsForTask(profile, taskType) {
   if (taskType === "usCloseSnapshot") {
     return profile.targets.filter((target) =>
-      target.market === "US" && target.role === "driver");
+      ["US", "HK"].includes(target.market) && target.role === "driver");
   }
   if (taskType === "intradayCollect" || taskType === "cnDailySnapshot") {
     return profile.targets.filter((target) =>

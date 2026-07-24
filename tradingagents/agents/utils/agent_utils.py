@@ -48,6 +48,27 @@ __all__ = [
 
 logger = logging.getLogger(__name__)
 
+_STATIC_IDENTITIES = {
+    "GOOG": {
+        "company_name": "Alphabet Inc.",
+        "sector": "Communication Services",
+        "industry": "Internet Content & Information",
+        "exchange": "NASDAQ",
+    },
+    "GOOGL": {
+        "company_name": "Alphabet Inc.",
+        "sector": "Communication Services",
+        "industry": "Internet Content & Information",
+        "exchange": "NASDAQ",
+    },
+    "3887.HK": {
+        "company_name": "Bitdeer Technologies Group",
+        "sector": "Technology",
+        "industry": "Computer Hardware",
+        "exchange": "HKG",
+    },
+}
+
 
 def get_language_instruction() -> str:
     """Return a prompt instruction for the configured output language.
@@ -95,11 +116,12 @@ def resolve_instrument_identity(ticker: str) -> dict:
     """
     from tradingagents.dataflows.symbol_utils import normalize_symbol
 
+    canonical = normalize_symbol(ticker)
     try:
-        info = yf.Ticker(normalize_symbol(ticker)).info or {}
+        info = yf.Ticker(canonical).info or {}
     except Exception as exc:  # noqa: BLE001 — fail open, never block the run
         logger.debug("Could not resolve instrument identity for %s: %s", ticker, exc)
-        return {}
+        return dict(_STATIC_IDENTITIES.get(canonical, {}))
 
     identity: dict[str, str] = {}
     company_name = _clean_identity_value(info.get("longName")) or _clean_identity_value(
@@ -116,7 +138,7 @@ def resolve_instrument_identity(ticker: str) -> dict:
         value = _clean_identity_value(info.get(source_key))
         if value:
             identity[target_key] = value
-    return identity
+    return identity or dict(_STATIC_IDENTITIES.get(canonical, {}))
 
 
 def build_instrument_context(
@@ -131,8 +153,9 @@ def build_instrument_context(
     classification are injected so agents anchor to the real company rather
     than pattern-matching the price chart to a wrong one (#814).
     """
-    is_crypto = asset_type == "crypto"
-    instrument_label = "asset" if is_crypto else "instrument"
+    is_crypto = asset_type in {"crypto", "crypto_driver"}
+    is_etf = asset_type in {"cn_etf", "us_etf"}
+    instrument_label = "asset" if is_crypto else "ETF" if is_etf else "instrument"
     context = (
         f"The {instrument_label} to analyze is `{ticker}`. "
         "Use this exact ticker in every tool call, report, and recommendation, "
@@ -143,7 +166,7 @@ def build_instrument_context(
     if identity:
         name = identity.get("company_name") or identity.get("name")
         if name:
-            details.append(f"{'Name' if is_crypto else 'Company'}: {name}")
+            details.append(f"{'Name' if is_crypto or is_etf else 'Company'}: {name}")
         sector, industry = identity.get("sector"), identity.get("industry")
         if sector and industry:
             details.append(f"Business classification: {sector} / {industry}")
@@ -166,6 +189,13 @@ def build_instrument_context(
             " Treat it as a crypto asset rather than a company, and do not "
             "assume company fundamentals are available."
         )
+    elif is_etf:
+        context += (
+            " Treat it as an ETF, not an operating company: analyze its tracked "
+            "index, holdings, NAV/premium-discount, concentration, liquidity, "
+            "fees, tracking error, and corporate actions before making a view. "
+            "Do not invent an income statement or a company valuation."
+        )
     return context
 
 
@@ -180,11 +210,31 @@ def get_instrument_context_from_state(state: Mapping[str, Any]) -> str:
     """
     context = state.get("instrument_context")
     if isinstance(context, str) and context.strip():
-        return context
-    return build_instrument_context(
-        str(state["company_of_interest"]),
-        state.get("asset_type", "stock"),
-    )
+        result = context
+    else:
+        result = build_instrument_context(
+            str(state["company_of_interest"]),
+            state.get("asset_type", "stock"),
+        )
+    packet = state.get("evidence_packet")
+    if isinstance(packet, Mapping):
+        errors = packet.get("integrity", {}).get("errors", [])
+        result += (
+            " EvidencePacketV1 is authoritative for this run: "
+            f"status={packet.get('status', 'unknown')}, "
+            f"asOf={packet.get('asOf', 'unknown')}, "
+            f"contentHash={packet.get('contentHash', 'unknown')}. "
+            "Every numerical claim must cite the packet's exact Evidence ID "
+            "(M=market, CA=corporate action, N=news, S=source). "
+            "Separate verified facts, inference, transmission path, confidence, "
+            "counter-evidence, and the next observation. "
+        )
+        if errors:
+            result += (
+                f"Validation errors are present ({', '.join(map(str, errors))}); "
+                "do not issue a Buy/Sell rating or target price. "
+            )
+    return result
 
 
 def create_msg_delete():

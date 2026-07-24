@@ -97,6 +97,26 @@ class TestNullishFloatCoercion:
         )
         assert d.price_target is None
 
+    def test_pm_price_target_requires_a_reproducible_method(self):
+        unsupported = PortfolioDecision(
+            rating=PortfolioRating.HOLD,
+            executive_summary="s",
+            investment_thesis="t",
+            price_target=215,
+        )
+        assert unsupported.price_target is None
+        supported = PortfolioDecision(
+            rating=PortfolioRating.HOLD,
+            executive_summary="s",
+            investment_thesis="t",
+            price_target=215,
+            price_target_method="EV/EBITDA scenarios",
+            price_target_inputs="2027 EBITDA 10; net debt 5",
+            price_target_range="190-230",
+            scenario_probabilities="bear 25%; base 50%; bull 25%",
+        )
+        assert supported.price_target == 215
+
 
 @pytest.mark.unit
 class TestRenderResearchPlan:

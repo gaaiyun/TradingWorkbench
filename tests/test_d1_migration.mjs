@@ -15,6 +15,10 @@ const oracleMigrationUrl = new URL(
   "../migrations/0007_add_oracle_monitor.sql",
   import.meta.url,
 );
+const evidenceMigrationUrl = new URL(
+  "../migrations/0010_news_evidence_metadata.sql",
+  import.meta.url,
+);
 
 test("D1 migration defines every dynamic workbench table and its lookup indexes", () => {
   const sql = readFileSync(migrationUrl, "utf8");
@@ -116,6 +120,14 @@ test("provider health migration adds durable circuit-breaker state without widen
     last_error_code: null,
     last_success_at: null,
   });
+});
+
+test("news evidence migration stores source tier, publisher, relevance, and duplicate cluster", () => {
+  const sql = readFileSync(evidenceMigrationUrl, "utf8");
+  for (const column of ["source_tier", "publisher", "relevance", "cluster_id"]) {
+    assert.match(sql, new RegExp(`ADD COLUMN\\s+${column}\\b`, "i"));
+  }
+  assert.match(sql, /idx_news_items_source_tier_published_at/i);
 });
 
 test("settings seed is valid v2 JSON and never overwrites a web-edited row", async (t) => {

@@ -21,6 +21,9 @@ ANALYST_ORDER = [
 ]
 
 CRYPTO_SUFFIXES = ("-USD", "-USDT", "-USDC", "-BTC", "-ETH")
+CN_ETFS = frozenset({"515880.SS", "512480.SS", "159995.SZ", "510050.SS"})
+US_ETFS = frozenset({"SPY", "SOXX", "SMH", "QQQ"})
+US_EQUITIES = frozenset({"GOOG", "GOOGL", "ORCL", "NVDA", "TSM", "AVGO", "AMD", "ASML"})
 
 
 def is_valid_ticker_input(value: str) -> bool:
@@ -84,6 +87,16 @@ def detect_asset_type(ticker: str) -> AssetType:
     canonical = normalize_ticker_symbol(ticker)
     if canonical.endswith(CRYPTO_SUFFIXES):
         return AssetType.CRYPTO
+    if canonical in CN_ETFS:
+        return AssetType.CN_ETF
+    if canonical in US_ETFS:
+        return AssetType.US_ETF
+    if canonical.endswith(".HK"):
+        return AssetType.HK_EQUITY
+    if canonical.endswith(".SS") or canonical.endswith(".SZ"):
+        return AssetType.CN_EQUITY
+    if canonical in US_EQUITIES:
+        return AssetType.US_EQUITY
     return AssetType.STOCK
 
 

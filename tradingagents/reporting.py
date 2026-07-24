@@ -6,13 +6,54 @@ CLI and ``TradingAgentsGraph.save_reports`` both call this, so a headless / API
 run produces the same on-disk report tree a CLI run does.
 """
 
-from datetime import datetime
+import json
+import re
+from datetime import datetime, timezone
 from pathlib import Path
 
+from tradingagents.evidence import validate_evidence_packet
 
-def write_report_tree(final_state: dict, ticker: str, save_path) -> Path:
+
+class ReportValidationError(ValueError):
+    """Raised when evidence explicitly says a report must not be rated."""
+
+
+def _sanitize_final_proposals(text: str) -> str:
+    """Keep one final proposal marker in the consolidated report.
+
+    Agent sub-reports remain untouched for auditability; the reader-facing
+    consolidated report cannot present multiple conflicting final actions.
+    """
+    lines = str(text or "").splitlines()
+    marker_indexes = [
+        index for index, line in enumerate(lines)
+        if re.search(r"FINAL TRANSACTION PROPOSAL", line, re.IGNORECASE)
+    ]
+    if len(marker_indexes) <= 1:
+        return str(text or "")
+    keep = marker_indexes[-1]
+    return "\n".join(
+        line for index, line in enumerate(lines)
+        if index not in marker_indexes[:-1]
+    )
+
+
+def write_report_tree(
+    final_state: dict,
+    ticker: str,
+    save_path,
+    *,
+    evidence_packet: dict | None = None,
+) -> Path:
     """Save a completed run's reports to ``save_path``; return the complete-report path."""
     save_path = Path(save_path)
+    packet = evidence_packet or final_state.get("evidence_packet")
+    if packet:
+        validate_evidence_packet(packet)
+        if packet.get("status") == "data_validation_failed" or not packet.get("canRate"):
+            raise ReportValidationError(
+                f"evidence validation failed; cannot generate a rated report for {ticker}"
+            )
     save_path.mkdir(parents=True, exist_ok=True)
     sections = []
 
@@ -21,20 +62,24 @@ def write_report_tree(final_state: dict, ticker: str, save_path) -> Path:
     analyst_parts = []
     if final_state.get("market_report"):
         analysts_dir.mkdir(exist_ok=True)
-        (analysts_dir / "market.md").write_text(final_state["market_report"], encoding="utf-8")
-        analyst_parts.append(("Market Analyst", final_state["market_report"]))
+        text = _sanitize_final_proposals(final_state["market_report"])
+        (analysts_dir / "market.md").write_text(text, encoding="utf-8")
+        analyst_parts.append(("Market Analyst", text))
     if final_state.get("sentiment_report"):
         analysts_dir.mkdir(exist_ok=True)
-        (analysts_dir / "sentiment.md").write_text(final_state["sentiment_report"], encoding="utf-8")
-        analyst_parts.append(("Sentiment Analyst", final_state["sentiment_report"]))
+        text = _sanitize_final_proposals(final_state["sentiment_report"])
+        (analysts_dir / "sentiment.md").write_text(text, encoding="utf-8")
+        analyst_parts.append(("Sentiment Analyst", text))
     if final_state.get("news_report"):
         analysts_dir.mkdir(exist_ok=True)
-        (analysts_dir / "news.md").write_text(final_state["news_report"], encoding="utf-8")
-        analyst_parts.append(("News Analyst", final_state["news_report"]))
+        text = _sanitize_final_proposals(final_state["news_report"])
+        (analysts_dir / "news.md").write_text(text, encoding="utf-8")
+        analyst_parts.append(("News Analyst", text))
     if final_state.get("fundamentals_report"):
         analysts_dir.mkdir(exist_ok=True)
-        (analysts_dir / "fundamentals.md").write_text(final_state["fundamentals_report"], encoding="utf-8")
-        analyst_parts.append(("Fundamentals Analyst", final_state["fundamentals_report"]))
+        text = _sanitize_final_proposals(final_state["fundamentals_report"])
+        (analysts_dir / "fundamentals.md").write_text(text, encoding="utf-8")
+        analyst_parts.append(("Fundamentals Analyst", text))
     if analyst_parts:
         content = "\n\n".join(f"### {name}\n{text}" for name, text in analyst_parts)
         sections.append(f"## I. Analyst Team Reports\n\n{content}")
@@ -46,16 +91,19 @@ def write_report_tree(final_state: dict, ticker: str, save_path) -> Path:
         research_parts = []
         if debate.get("bull_history"):
             research_dir.mkdir(exist_ok=True)
-            (research_dir / "bull.md").write_text(debate["bull_history"], encoding="utf-8")
-            research_parts.append(("Bull Researcher", debate["bull_history"]))
+            text = _sanitize_final_proposals(debate["bull_history"])
+            (research_dir / "bull.md").write_text(text, encoding="utf-8")
+            research_parts.append(("Bull Researcher", text))
         if debate.get("bear_history"):
             research_dir.mkdir(exist_ok=True)
-            (research_dir / "bear.md").write_text(debate["bear_history"], encoding="utf-8")
-            research_parts.append(("Bear Researcher", debate["bear_history"]))
+            text = _sanitize_final_proposals(debate["bear_history"])
+            (research_dir / "bear.md").write_text(text, encoding="utf-8")
+            research_parts.append(("Bear Researcher", text))
         if debate.get("judge_decision"):
             research_dir.mkdir(exist_ok=True)
-            (research_dir / "manager.md").write_text(debate["judge_decision"], encoding="utf-8")
-            research_parts.append(("Research Manager", debate["judge_decision"]))
+            text = _sanitize_final_proposals(debate["judge_decision"])
+            (research_dir / "manager.md").write_text(text, encoding="utf-8")
+            research_parts.append(("Research Manager", text))
         if research_parts:
             content = "\n\n".join(f"### {name}\n{text}" for name, text in research_parts)
             sections.append(f"## II. Research Team Decision\n\n{content}")
@@ -64,8 +112,9 @@ def write_report_tree(final_state: dict, ticker: str, save_path) -> Path:
     if final_state.get("trader_investment_plan"):
         trading_dir = save_path / "3_trading"
         trading_dir.mkdir(exist_ok=True)
-        (trading_dir / "trader.md").write_text(final_state["trader_investment_plan"], encoding="utf-8")
-        sections.append(f"## III. Trading Team Plan\n\n### Trader\n{final_state['trader_investment_plan']}")
+        text = _sanitize_final_proposals(final_state["trader_investment_plan"])
+        (trading_dir / "trader.md").write_text(text, encoding="utf-8")
+        sections.append(f"## III. Trading Team Plan\n\n### Trader\n{text}")
 
     # 4. Risk Management
     if final_state.get("risk_debate_state"):
@@ -74,16 +123,19 @@ def write_report_tree(final_state: dict, ticker: str, save_path) -> Path:
         risk_parts = []
         if risk.get("aggressive_history"):
             risk_dir.mkdir(exist_ok=True)
-            (risk_dir / "aggressive.md").write_text(risk["aggressive_history"], encoding="utf-8")
-            risk_parts.append(("Aggressive Analyst", risk["aggressive_history"]))
+            text = _sanitize_final_proposals(risk["aggressive_history"])
+            (risk_dir / "aggressive.md").write_text(text, encoding="utf-8")
+            risk_parts.append(("Aggressive Analyst", text))
         if risk.get("conservative_history"):
             risk_dir.mkdir(exist_ok=True)
-            (risk_dir / "conservative.md").write_text(risk["conservative_history"], encoding="utf-8")
-            risk_parts.append(("Conservative Analyst", risk["conservative_history"]))
+            text = _sanitize_final_proposals(risk["conservative_history"])
+            (risk_dir / "conservative.md").write_text(text, encoding="utf-8")
+            risk_parts.append(("Conservative Analyst", text))
         if risk.get("neutral_history"):
             risk_dir.mkdir(exist_ok=True)
-            (risk_dir / "neutral.md").write_text(risk["neutral_history"], encoding="utf-8")
-            risk_parts.append(("Neutral Analyst", risk["neutral_history"]))
+            text = _sanitize_final_proposals(risk["neutral_history"])
+            (risk_dir / "neutral.md").write_text(text, encoding="utf-8")
+            risk_parts.append(("Neutral Analyst", text))
         if risk_parts:
             content = "\n\n".join(f"### {name}\n{text}" for name, text in risk_parts)
             sections.append(f"## IV. Risk Management Team Decision\n\n{content}")
@@ -92,10 +144,47 @@ def write_report_tree(final_state: dict, ticker: str, save_path) -> Path:
         if risk.get("judge_decision"):
             portfolio_dir = save_path / "5_portfolio"
             portfolio_dir.mkdir(exist_ok=True)
-            (portfolio_dir / "decision.md").write_text(risk["judge_decision"], encoding="utf-8")
-            sections.append(f"## V. Portfolio Manager Decision\n\n### Portfolio Manager\n{risk['judge_decision']}")
+            text = _sanitize_final_proposals(risk["judge_decision"])
+            (portfolio_dir / "decision.md").write_text(text, encoding="utf-8")
+            sections.append(f"## V. Portfolio Manager Decision\n\n### Portfolio Manager\n{text}")
 
     # Write consolidated report
-    header = f"# Trading Analysis Report: {ticker}\n\nGenerated: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}\n\n"
+    generated_at = datetime.now(timezone.utc).isoformat()
+    status = str(final_state.get("analysis_status") or ("rated" if packet else "not_rated"))
+    audit_status = "verified" if packet and packet.get("status") == "ok" and status == "rated" else "legacy_unverified"
+    header = (
+        f"# Trading Analysis Report: {ticker}\n\n"
+        f"Generated: {generated_at}\n\n"
+        f"Analysis status: `{status}` · Audit status: `{audit_status}`\n\n"
+    )
+    if packet:
+        header += (
+            f"Evidence as of: {packet.get('asOf', '—')} · "
+            f"content hash: `{packet.get('contentHash', '—')}`\n\n"
+        )
     (save_path / "complete_report.md").write_text(header + "\n\n".join(sections), encoding="utf-8")
+    manifest = {
+        "schemaVersion": 1,
+        "ticker": str(ticker),
+        "tradeDate": final_state.get("trade_date"),
+        "generatedAt": generated_at,
+        "analysisStatus": status,
+        "auditStatus": audit_status,
+        "evidence": (
+            {
+                "schemaVersion": packet.get("schemaVersion"),
+                "asOf": packet.get("asOf"),
+                "contentHash": packet.get("contentHash"),
+                "status": packet.get("status"),
+            }
+            if packet else None
+        ),
+    }
+    (save_path / "report_manifest.json").write_text(
+        json.dumps(manifest, ensure_ascii=False, indent=2), encoding="utf-8"
+    )
+    if packet:
+        (save_path / "evidence_packet.json").write_text(
+            json.dumps(packet, ensure_ascii=False, indent=2), encoding="utf-8"
+        )
     return save_path / "complete_report.md"

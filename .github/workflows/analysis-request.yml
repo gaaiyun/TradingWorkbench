@@ -70,24 +70,10 @@ jobs:
         id: parse
         shell: python
         run: |
-          import os, re
-          title = os.environ.get("ISSUE_TITLE", "")
-          body = os.environ.get("ISSUE_BODY", "")
-          # 解析优先级: 表单「### 标的代码」段 > 标题冒号后 > 全文兜底
-          section = re.search(r"###\s*标的代码\s*\n+([^\n#]+)", body)
-          title_part = re.sub(r"^\s*(分析|analyze)[:：]?", "", title, flags=re.I).strip()
-          text = section.group(1) if section else (title_part or body)
-          # 美股字母代码（可带 .SS/.SZ/.HK 等后缀）或 6 位数字
-          tokens = re.findall(r"\b([A-Za-z]{1,6}(?:\.[A-Za-z]{1,3})?|\d{6}(?:\.S[SZ])?)\b", text)
-          drop = {"THE", "AND", "FOR", "ETF", "LLM", "API", "GIT", "HTTP", "HTTPS", "ISSUE", "NEW", "RUN"}
-          seen, tickers = set(), []
-          for t in tokens:
-              t = t.upper()
-              if t in drop or t in seen:
-                  continue
-              seen.add(t)
-              tickers.append(t)
-          tickers = tickers[:5]  # 单次最多 5 个，防配额失控
+          import os
+          from scripts.parse_issue_tickers import extract_tickers_from_issue_body
+
+          tickers = extract_tickers_from_issue_body(os.environ.get("ISSUE_BODY", ""))
           out = ",".join(tickers)
           print(f"parsed tickers: {out or '(none)'}")
           with open(os.environ["GITHUB_OUTPUT"], "a", encoding="utf-8") as f:
@@ -97,7 +83,7 @@ jobs:
         if: steps.parse.outputs.tickers == ''
         run: |
           gh issue comment "$ISSUE_NUMBER" --repo "$GITHUB_REPOSITORY" --body \
-            "未能从标题/正文解析出标的代码。示例：标题写「分析: NVDA, 600519」。"
+            "未能从 Issue 表单的「标的代码」字段读取有效代码。请使用点名分析模板重新提交。"
           exit 1
 
       - name: Set up Python 3.12

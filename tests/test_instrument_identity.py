@@ -64,6 +64,16 @@ class ResolveInstrumentIdentityTests(unittest.TestCase):
         mock.assert_called_once()  # second call served from cache
         self.assertEqual(first, second)
 
+    def test_global_tech_aliases_keep_a_network_failure_useful(self):
+        with patch(
+            "tradingagents.agents.utils.agent_utils.yf.Ticker",
+            side_effect=RuntimeError("blocked"),
+        ):
+            googl = resolve_instrument_identity("GOOGL")
+            bitdeer = resolve_instrument_identity("03887")
+        self.assertEqual(googl["company_name"], "Alphabet Inc.")
+        self.assertEqual(bitdeer["company_name"], "Bitdeer Technologies Group")
+
 
 @pytest.mark.unit
 class BuildInstrumentContextTests(unittest.TestCase):
@@ -95,6 +105,16 @@ class BuildInstrumentContextTests(unittest.TestCase):
         self.assertIn("Name: Bitcoin USD", context)
         self.assertIn("crypto asset rather than a company", context)
 
+    def test_etf_context_avoids_company_financials(self):
+        context = build_instrument_context(
+            "512480.SS",
+            "cn_etf",
+            {"company_name": "半导体ETF", "sector": "Technology"},
+        )
+        self.assertIn("ETF", context)
+        self.assertIn("index, holdings, NAV", context)
+        self.assertNotIn("Company:", context)
+
 
 @pytest.mark.unit
 class GetInstrumentContextFromStateTests(unittest.TestCase):
@@ -116,6 +136,21 @@ class GetInstrumentContextFromStateTests(unittest.TestCase):
             {"company_of_interest": "BTC-USD", "asset_type": "crypto"}
         )
         self.assertIn("crypto asset", context)
+
+    def test_evidence_packet_requires_citations_in_agent_context(self):
+        context = get_instrument_context_from_state({
+            "company_of_interest": "GOOGL",
+            "instrument_context": "The instrument to analyze is `GOOGL`.",
+            "evidence_packet": {
+                "status": "ok",
+                "asOf": "2026-07-23T08:00:00Z",
+                "contentHash": "abc123",
+                "integrity": {"errors": []},
+            },
+        })
+        self.assertIn("EvidencePacketV1", context)
+        self.assertIn("Evidence ID", context)
+        self.assertIn("abc123", context)
 
 
 @pytest.mark.unit

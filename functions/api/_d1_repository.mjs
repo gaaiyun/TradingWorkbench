@@ -96,6 +96,7 @@ export function queryNewsItems(db, query) {
     table: "news_items",
     columns: [
       "id", "symbol", "profile_id", "topic", "title", "summary", "url", "published_at",
+      "source_tier", "publisher", "relevance", "cluster_id",
       ...SOURCE_COLUMNS,
     ],
     filters: [
@@ -134,4 +135,17 @@ export function querySourceHealth(db, query) {
     timeColumn: "as_of",
     ...query,
   });
+}
+
+export async function queryEvidencePacket(db, { symbol, asOf = null }) {
+  const cutoff = asOf || new Date().toISOString();
+  const row = await db.prepare(`
+    SELECT id, symbol, as_of, generated_at, status, packet_json, content_hash,
+           expires_at
+    FROM evidence_packets
+    WHERE symbol = ? AND as_of <= ? AND expires_at > ?
+    ORDER BY as_of DESC
+    LIMIT 1
+  `).bind(symbol, cutoff, new Date().toISOString()).first();
+  return row || null;
 }

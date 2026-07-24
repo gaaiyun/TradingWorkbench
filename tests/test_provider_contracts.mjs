@@ -30,6 +30,17 @@ test("maps supported Workbench symbols for every provider", async () => {
     timeframe: "1d",
     limit: 1500,
   });
+  assert.deepEqual(normalizeMarketRequest({
+    symbol: "03887",
+    market: "HK",
+    timeframe: "1d",
+    limit: 1500,
+  }), {
+    symbol: "3887.HK",
+    market: "HK",
+    timeframe: "1d",
+    limit: 1500,
+  });
   assert.equal(mapProviderSymbol("tencent", "515880.SS"), "sh515880");
   assert.equal(mapProviderSymbol("eastmoney", "515880.SS"), "1.515880");
   assert.equal(mapProviderSymbol("tencent", "512480.SS"), "sh512480");
@@ -42,6 +53,7 @@ test("maps supported Workbench symbols for every provider", async () => {
   assert.equal(mapProviderSymbol("yahoo", "NVDA"), "NVDA");
   assert.equal(mapProviderSymbol("alphavantage", "BRK.B"), "BRK-B");
   assert.equal(mapProviderSymbol("stooq", "NVDA"), "nvda.us");
+  assert.equal(mapProviderSymbol("yahoo", "03887"), "3887.HK");
 });
 
 test("rejects symbols, market mismatches, and timeframes outside the Workbench contract", async () => {
@@ -52,6 +64,7 @@ test("rejects symbols, market mismatches, and timeframes outside the Workbench c
     { symbol: "515880.SS", market: "US", timeframe: "5m" },
     { symbol: "NVDA", market: "CN", timeframe: "5m" },
     { symbol: "NVDA", market: "US", timeframe: "1h" },
+    { symbol: "3887.HK", market: "US", timeframe: "1d" },
   ]) {
     assert.throws(
       () => normalizeMarketRequest(request),

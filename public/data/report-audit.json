@@ -1,0 +1,779 @@
+{
+  "version": 1,
+  "generatedAt": "2026-07-24T12:09:02.586Z",
+  "summary": {
+    "successfulReports": 33,
+    "invalidatedReports": 3,
+    "legacyUnverifiedReports": 30,
+    "invalidRecords": 1
+  },
+  "reports": [
+    {
+      "ticker": "515880.SS",
+      "tradeDate": "2026-07-24",
+      "generatedAt": "2026-07-24T15:21:07+08:00",
+      "provider": "openai_compatible",
+      "rating": "Sell",
+      "report": "reports/515880.SS/2026-07-24/complete_report.md",
+      "auditStatus": "invalidated",
+      "problemCodes": [
+        "CORPORATE_ACTION_CONTAMINATION",
+        "ETF_TEMPLATE_MISMATCH",
+        "MISSING_CLAIM_EVIDENCE",
+        "DUPLICATE_FINAL_PROPOSAL"
+      ],
+      "evidence": {
+        "urlCount": 10,
+        "claimCitationCount": 0,
+        "finalProposalMarkers": 2,
+        "priceTargetCount": 0,
+        "valuationMethodCount": 36,
+        "publishedMarkerCount": 6
+      },
+      "supersededBy": null
+    },
+    {
+      "ticker": "512480.SS",
+      "tradeDate": "2026-07-24",
+      "generatedAt": "2026-07-24T15:21:07+08:00",
+      "provider": "openai_compatible",
+      "rating": "Sell",
+      "report": "reports/512480.SS/2026-07-24/complete_report.md",
+      "auditStatus": "invalidated",
+      "problemCodes": [
+        "CORPORATE_ACTION_CONTAMINATION",
+        "ETF_TEMPLATE_MISMATCH",
+        "MISSING_CLAIM_EVIDENCE",
+        "DUPLICATE_FINAL_PROPOSAL"
+      ],
+      "evidence": {
+        "urlCount": 9,
+        "claimCitationCount": 0,
+        "finalProposalMarkers": 2,
+        "priceTargetCount": 1,
+        "valuationMethodCount": 43,
+        "publishedMarkerCount": 9
+      },
+      "supersededBy": null
+    },
+    {
+      "ticker": "512480.SS",
+      "tradeDate": "2026-07-23",
+      "generatedAt": "2026-07-24T07:53:17+08:00",
+      "provider": "openai_compatible",
+      "rating": "Underweight",
+      "report": "reports/512480.SS/2026-07-23/complete_report.md",
+      "auditStatus": "invalidated",
+      "problemCodes": [
+        "CORPORATE_ACTION_CONTAMINATION",
+        "ETF_TEMPLATE_MISMATCH"
+      ],
+      "evidence": {
+        "urlCount": 10,
+        "claimCitationCount": 1,
+        "finalProposalMarkers": 1,
+        "priceTargetCount": 1,
+        "valuationMethodCount": 22,
+        "publishedMarkerCount": 11
+      },
+      "supersededBy": null
+    },
+    {
+      "ticker": "NVDA",
+      "tradeDate": "2026-07-22",
+      "generatedAt": "2026-07-23T06:34:48+08:00",
+      "provider": "openai_compatible",
+      "rating": "Overweight",
+      "report": "reports/NVDA/2026-07-22/complete_report.md",
+      "auditStatus": "legacy_unverified",
+      "problemCodes": [
+        "MISSING_CLAIM_EVIDENCE",
+        "MISSING_PUBLICATION_TIME"
+      ],
+      "evidence": {
+        "urlCount": 0,
+        "claimCitationCount": 0,
+        "finalProposalMarkers": 1,
+        "priceTargetCount": 1,
+        "valuationMethodCount": 44,
+        "publishedMarkerCount": 0
+      },
+      "supersededBy": null
+    },
+    {
+      "ticker": "SPY",
+      "tradeDate": "2026-07-22",
+      "generatedAt": "2026-07-23T06:34:48+08:00",
+      "provider": "openai_compatible",
+      "rating": "Hold",
+      "report": "reports/SPY/2026-07-22/complete_report.md",
+      "auditStatus": "legacy_unverified",
+      "problemCodes": [
+        "ETF_TEMPLATE_MISMATCH",
+        "MISSING_CLAIM_EVIDENCE",
+        "DUPLICATE_FINAL_PROPOSAL",
+        "MISSING_PUBLICATION_TIME"
+      ],
+      "evidence": {
+        "urlCount": 0,
+        "claimCitationCount": 0,
+        "finalProposalMarkers": 2,
+        "priceTargetCount": 1,
+        "valuationMethodCount": 71,
+        "publishedMarkerCount": 0
+      },
+      "supersededBy": null
+    },
+    {
+      "ticker": "600519.SS",
+      "tradeDate": "2026-07-22",
+      "generatedAt": "2026-07-23T06:34:48+08:00",
+      "provider": "openai_compatible",
+      "rating": "Hold",
+      "report": "reports/600519.SS/2026-07-22/complete_report.md",
+      "auditStatus": "legacy_unverified",
+      "problemCodes": [
+        "MISSING_CLAIM_EVIDENCE",
+        "MISSING_PUBLICATION_TIME"
+      ],
+      "evidence": {
+        "urlCount": 0,
+        "claimCitationCount": 0,
+        "finalProposalMarkers": 1,
+        "priceTargetCount": 0,
+        "valuationMethodCount": 34,
+        "publishedMarkerCount": 0
+      },
+      "supersededBy": null
+    },
+    {
+      "ticker": "NVDA",
+      "tradeDate": "2026-07-21",
+      "generatedAt": "2026-07-22T06:28:17+08:00",
+      "provider": "openai_compatible",
+      "rating": "Overweight",
+      "report": "reports/NVDA/2026-07-21/complete_report.md",
+      "auditStatus": "legacy_unverified",
+      "problemCodes": [
+        "MISSING_CLAIM_EVIDENCE",
+        "MISSING_PUBLICATION_TIME"
+      ],
+      "evidence": {
+        "urlCount": 0,
+        "claimCitationCount": 0,
+        "finalProposalMarkers": 1,
+        "priceTargetCount": 1,
+        "valuationMethodCount": 2,
+        "publishedMarkerCount": 0
+      },
+      "supersededBy": null
+    },
+    {
+      "ticker": "SPY",
+      "tradeDate": "2026-07-21",
+      "generatedAt": "2026-07-22T06:28:17+08:00",
+      "provider": "openai_compatible",
+      "rating": "Hold",
+      "report": "reports/SPY/2026-07-21/complete_report.md",
+      "auditStatus": "legacy_unverified",
+      "problemCodes": [
+        "ETF_TEMPLATE_MISMATCH",
+        "MISSING_CLAIM_EVIDENCE",
+        "MISSING_PUBLICATION_TIME"
+      ],
+      "evidence": {
+        "urlCount": 0,
+        "claimCitationCount": 0,
+        "finalProposalMarkers": 1,
+        "priceTargetCount": 1,
+        "valuationMethodCount": 70,
+        "publishedMarkerCount": 0
+      },
+      "supersededBy": null
+    },
+    {
+      "ticker": "600519.SS",
+      "tradeDate": "2026-07-21",
+      "generatedAt": "2026-07-22T06:28:17+08:00",
+      "provider": "openai_compatible",
+      "rating": "Overweight",
+      "report": "reports/600519.SS/2026-07-21/complete_report.md",
+      "auditStatus": "legacy_unverified",
+      "problemCodes": [
+        "MISSING_CLAIM_EVIDENCE",
+        "MISSING_PUBLICATION_TIME"
+      ],
+      "evidence": {
+        "urlCount": 0,
+        "claimCitationCount": 0,
+        "finalProposalMarkers": 1,
+        "priceTargetCount": 1,
+        "valuationMethodCount": 21,
+        "publishedMarkerCount": 0
+      },
+      "supersededBy": null
+    },
+    {
+      "ticker": "NVDA",
+      "tradeDate": "2026-07-20",
+      "generatedAt": "2026-07-21T06:31:39+08:00",
+      "provider": "openai_compatible",
+      "rating": "Hold",
+      "report": "reports/NVDA/2026-07-20/complete_report.md",
+      "auditStatus": "legacy_unverified",
+      "problemCodes": [
+        "MISSING_CLAIM_EVIDENCE",
+        "MISSING_PUBLICATION_TIME"
+      ],
+      "evidence": {
+        "urlCount": 0,
+        "claimCitationCount": 0,
+        "finalProposalMarkers": 1,
+        "priceTargetCount": 1,
+        "valuationMethodCount": 39,
+        "publishedMarkerCount": 0
+      },
+      "supersededBy": null
+    },
+    {
+      "ticker": "SPY",
+      "tradeDate": "2026-07-20",
+      "generatedAt": "2026-07-21T06:31:39+08:00",
+      "provider": "openai_compatible",
+      "rating": "Hold",
+      "report": "reports/SPY/2026-07-20/complete_report.md",
+      "auditStatus": "legacy_unverified",
+      "problemCodes": [
+        "ETF_TEMPLATE_MISMATCH",
+        "MISSING_CLAIM_EVIDENCE",
+        "MISSING_PUBLICATION_TIME"
+      ],
+      "evidence": {
+        "urlCount": 0,
+        "claimCitationCount": 0,
+        "finalProposalMarkers": 1,
+        "priceTargetCount": 1,
+        "valuationMethodCount": 55,
+        "publishedMarkerCount": 0
+      },
+      "supersededBy": null
+    },
+    {
+      "ticker": "600519.SS",
+      "tradeDate": "2026-07-20",
+      "generatedAt": "2026-07-21T06:31:39+08:00",
+      "provider": "openai_compatible",
+      "rating": "Hold",
+      "report": "reports/600519.SS/2026-07-20/complete_report.md",
+      "auditStatus": "legacy_unverified",
+      "problemCodes": [
+        "MISSING_CLAIM_EVIDENCE",
+        "MISSING_PUBLICATION_TIME"
+      ],
+      "evidence": {
+        "urlCount": 0,
+        "claimCitationCount": 0,
+        "finalProposalMarkers": 1,
+        "priceTargetCount": 0,
+        "valuationMethodCount": 47,
+        "publishedMarkerCount": 0
+      },
+      "supersededBy": null
+    },
+    {
+      "ticker": "NVDA",
+      "tradeDate": "2026-07-16",
+      "generatedAt": "2026-07-17T06:30:32+08:00",
+      "provider": "openai_compatible",
+      "rating": "Overweight",
+      "report": "reports/NVDA/2026-07-16/complete_report.md",
+      "auditStatus": "legacy_unverified",
+      "problemCodes": [
+        "MISSING_CLAIM_EVIDENCE",
+        "MISSING_PUBLICATION_TIME"
+      ],
+      "evidence": {
+        "urlCount": 0,
+        "claimCitationCount": 0,
+        "finalProposalMarkers": 1,
+        "priceTargetCount": 1,
+        "valuationMethodCount": 25,
+        "publishedMarkerCount": 0
+      },
+      "supersededBy": null
+    },
+    {
+      "ticker": "SPY",
+      "tradeDate": "2026-07-16",
+      "generatedAt": "2026-07-17T06:30:32+08:00",
+      "provider": "openai_compatible",
+      "rating": "Hold",
+      "report": "reports/SPY/2026-07-16/complete_report.md",
+      "auditStatus": "legacy_unverified",
+      "problemCodes": [
+        "ETF_TEMPLATE_MISMATCH",
+        "MISSING_CLAIM_EVIDENCE",
+        "DUPLICATE_FINAL_PROPOSAL",
+        "MISSING_PUBLICATION_TIME"
+      ],
+      "evidence": {
+        "urlCount": 0,
+        "claimCitationCount": 0,
+        "finalProposalMarkers": 2,
+        "priceTargetCount": 1,
+        "valuationMethodCount": 74,
+        "publishedMarkerCount": 0
+      },
+      "supersededBy": null
+    },
+    {
+      "ticker": "600519.SS",
+      "tradeDate": "2026-07-16",
+      "generatedAt": "2026-07-17T06:30:32+08:00",
+      "provider": "openai_compatible",
+      "rating": "Overweight",
+      "report": "reports/600519.SS/2026-07-16/complete_report.md",
+      "auditStatus": "legacy_unverified",
+      "problemCodes": [
+        "MISSING_CLAIM_EVIDENCE",
+        "DUPLICATE_FINAL_PROPOSAL",
+        "MISSING_PUBLICATION_TIME"
+      ],
+      "evidence": {
+        "urlCount": 0,
+        "claimCitationCount": 0,
+        "finalProposalMarkers": 2,
+        "priceTargetCount": 1,
+        "valuationMethodCount": 33,
+        "publishedMarkerCount": 0
+      },
+      "supersededBy": null
+    },
+    {
+      "ticker": "NVDA",
+      "tradeDate": "2026-07-15",
+      "generatedAt": "2026-07-16T06:31:36+08:00",
+      "provider": "openai_compatible",
+      "rating": "Hold",
+      "report": "reports/NVDA/2026-07-15/complete_report.md",
+      "auditStatus": "legacy_unverified",
+      "problemCodes": [
+        "MISSING_CLAIM_EVIDENCE",
+        "DUPLICATE_FINAL_PROPOSAL",
+        "MISSING_PUBLICATION_TIME"
+      ],
+      "evidence": {
+        "urlCount": 0,
+        "claimCitationCount": 0,
+        "finalProposalMarkers": 2,
+        "priceTargetCount": 1,
+        "valuationMethodCount": 88,
+        "publishedMarkerCount": 0
+      },
+      "supersededBy": null
+    },
+    {
+      "ticker": "SPY",
+      "tradeDate": "2026-07-15",
+      "generatedAt": "2026-07-16T06:31:36+08:00",
+      "provider": "openai_compatible",
+      "rating": "Underweight",
+      "report": "reports/SPY/2026-07-15/complete_report.md",
+      "auditStatus": "legacy_unverified",
+      "problemCodes": [
+        "ETF_TEMPLATE_MISMATCH",
+        "MISSING_CLAIM_EVIDENCE",
+        "MISSING_PUBLICATION_TIME"
+      ],
+      "evidence": {
+        "urlCount": 0,
+        "claimCitationCount": 0,
+        "finalProposalMarkers": 1,
+        "priceTargetCount": 1,
+        "valuationMethodCount": 6,
+        "publishedMarkerCount": 0
+      },
+      "supersededBy": null
+    },
+    {
+      "ticker": "600519.SS",
+      "tradeDate": "2026-07-15",
+      "generatedAt": "2026-07-16T06:31:36+08:00",
+      "provider": "openai_compatible",
+      "rating": "Hold",
+      "report": "reports/600519.SS/2026-07-15/complete_report.md",
+      "auditStatus": "legacy_unverified",
+      "problemCodes": [
+        "MISSING_CLAIM_EVIDENCE",
+        "MISSING_PUBLICATION_TIME"
+      ],
+      "evidence": {
+        "urlCount": 0,
+        "claimCitationCount": 0,
+        "finalProposalMarkers": 1,
+        "priceTargetCount": 1,
+        "valuationMethodCount": 25,
+        "publishedMarkerCount": 0
+      },
+      "supersededBy": null
+    },
+    {
+      "ticker": "ORCL",
+      "tradeDate": "2026-07-15",
+      "generatedAt": "2026-07-15T17:07:07+08:00",
+      "provider": "openai_compatible",
+      "rating": "Underweight",
+      "report": "reports/ORCL/2026-07-15/complete_report.md",
+      "auditStatus": "legacy_unverified",
+      "problemCodes": [
+        "MISSING_CLAIM_EVIDENCE",
+        "MISSING_PUBLICATION_TIME"
+      ],
+      "evidence": {
+        "urlCount": 0,
+        "claimCitationCount": 0,
+        "finalProposalMarkers": 1,
+        "priceTargetCount": 1,
+        "valuationMethodCount": 36,
+        "publishedMarkerCount": 0
+      },
+      "supersededBy": null
+    },
+    {
+      "ticker": "NVDA",
+      "tradeDate": "2026-07-14",
+      "generatedAt": "2026-07-15T06:31:56+08:00",
+      "provider": "openai_compatible",
+      "rating": "Overweight",
+      "report": "reports/NVDA/2026-07-14/complete_report.md",
+      "auditStatus": "legacy_unverified",
+      "problemCodes": [
+        "MISSING_CLAIM_EVIDENCE",
+        "MISSING_PUBLICATION_TIME"
+      ],
+      "evidence": {
+        "urlCount": 0,
+        "claimCitationCount": 0,
+        "finalProposalMarkers": 1,
+        "priceTargetCount": 1,
+        "valuationMethodCount": 37,
+        "publishedMarkerCount": 0
+      },
+      "supersededBy": null
+    },
+    {
+      "ticker": "SPY",
+      "tradeDate": "2026-07-14",
+      "generatedAt": "2026-07-15T06:31:56+08:00",
+      "provider": "openai_compatible",
+      "rating": "Underweight",
+      "report": "reports/SPY/2026-07-14/complete_report.md",
+      "auditStatus": "legacy_unverified",
+      "problemCodes": [
+        "ETF_TEMPLATE_MISMATCH",
+        "MISSING_CLAIM_EVIDENCE",
+        "DUPLICATE_FINAL_PROPOSAL",
+        "MISSING_PUBLICATION_TIME"
+      ],
+      "evidence": {
+        "urlCount": 0,
+        "claimCitationCount": 0,
+        "finalProposalMarkers": 2,
+        "priceTargetCount": 1,
+        "valuationMethodCount": 50,
+        "publishedMarkerCount": 0
+      },
+      "supersededBy": null
+    },
+    {
+      "ticker": "600519.SS",
+      "tradeDate": "2026-07-14",
+      "generatedAt": "2026-07-15T06:31:56+08:00",
+      "provider": "openai_compatible",
+      "rating": "Underweight",
+      "report": "reports/600519.SS/2026-07-14/complete_report.md",
+      "auditStatus": "legacy_unverified",
+      "problemCodes": [
+        "MISSING_CLAIM_EVIDENCE",
+        "MISSING_PUBLICATION_TIME"
+      ],
+      "evidence": {
+        "urlCount": 0,
+        "claimCitationCount": 0,
+        "finalProposalMarkers": 1,
+        "priceTargetCount": 1,
+        "valuationMethodCount": 30,
+        "publishedMarkerCount": 0
+      },
+      "supersededBy": null
+    },
+    {
+      "ticker": "ORCL",
+      "tradeDate": "2026-07-14",
+      "generatedAt": "2026-07-14T10:42:43+08:00",
+      "provider": "openai_compatible",
+      "rating": "Hold",
+      "report": "reports/ORCL/2026-07-14/complete_report.md",
+      "auditStatus": "legacy_unverified",
+      "problemCodes": [
+        "MISSING_CLAIM_EVIDENCE",
+        "MISSING_PUBLICATION_TIME"
+      ],
+      "evidence": {
+        "urlCount": 0,
+        "claimCitationCount": 0,
+        "finalProposalMarkers": 1,
+        "priceTargetCount": 0,
+        "valuationMethodCount": 25,
+        "publishedMarkerCount": 0
+      },
+      "supersededBy": null
+    },
+    {
+      "ticker": "NVDA",
+      "tradeDate": "2026-07-13",
+      "generatedAt": "2026-07-14T06:29:28+08:00",
+      "provider": "openai_compatible",
+      "rating": "Overweight",
+      "report": "reports/NVDA/2026-07-13/complete_report.md",
+      "auditStatus": "legacy_unverified",
+      "problemCodes": [
+        "MISSING_CLAIM_EVIDENCE",
+        "MISSING_PUBLICATION_TIME"
+      ],
+      "evidence": {
+        "urlCount": 0,
+        "claimCitationCount": 0,
+        "finalProposalMarkers": 1,
+        "priceTargetCount": 1,
+        "valuationMethodCount": 30,
+        "publishedMarkerCount": 0
+      },
+      "supersededBy": null
+    },
+    {
+      "ticker": "SPY",
+      "tradeDate": "2026-07-13",
+      "generatedAt": "2026-07-14T06:29:28+08:00",
+      "provider": "openai_compatible",
+      "rating": "Underweight",
+      "report": "reports/SPY/2026-07-13/complete_report.md",
+      "auditStatus": "legacy_unverified",
+      "problemCodes": [
+        "ETF_TEMPLATE_MISMATCH",
+        "MISSING_CLAIM_EVIDENCE",
+        "MISSING_PUBLICATION_TIME"
+      ],
+      "evidence": {
+        "urlCount": 0,
+        "claimCitationCount": 0,
+        "finalProposalMarkers": 1,
+        "priceTargetCount": 1,
+        "valuationMethodCount": 41,
+        "publishedMarkerCount": 0
+      },
+      "supersededBy": null
+    },
+    {
+      "ticker": "600519.SS",
+      "tradeDate": "2026-07-13",
+      "generatedAt": "2026-07-14T06:29:28+08:00",
+      "provider": "openai_compatible",
+      "rating": "Overweight",
+      "report": "reports/600519.SS/2026-07-13/complete_report.md",
+      "auditStatus": "legacy_unverified",
+      "problemCodes": [
+        "MISSING_CLAIM_EVIDENCE",
+        "MISSING_PUBLICATION_TIME"
+      ],
+      "evidence": {
+        "urlCount": 0,
+        "claimCitationCount": 0,
+        "finalProposalMarkers": 1,
+        "priceTargetCount": 1,
+        "valuationMethodCount": 44,
+        "publishedMarkerCount": 0
+      },
+      "supersededBy": null
+    },
+    {
+      "ticker": "ORCL",
+      "tradeDate": "2026-07-10",
+      "generatedAt": "2026-07-13T02:13:48+08:00",
+      "provider": "openai_compatible",
+      "rating": "Underweight",
+      "report": "reports/ORCL/2026-07-10/complete_report.md",
+      "auditStatus": "legacy_unverified",
+      "problemCodes": [
+        "MISSING_CLAIM_EVIDENCE",
+        "MISSING_PUBLICATION_TIME"
+      ],
+      "evidence": {
+        "urlCount": 0,
+        "claimCitationCount": 0,
+        "finalProposalMarkers": 1,
+        "priceTargetCount": 1,
+        "valuationMethodCount": 6,
+        "publishedMarkerCount": 0
+      },
+      "supersededBy": null
+    },
+    {
+      "ticker": "002865.SZ",
+      "tradeDate": "2026-07-10",
+      "generatedAt": "2026-07-12T17:40:12+08:00",
+      "provider": "openai_compatible",
+      "rating": "Sell",
+      "report": "reports/002865.SZ/2026-07-10/complete_report.md",
+      "auditStatus": "legacy_unverified",
+      "problemCodes": [
+        "MISSING_CLAIM_EVIDENCE",
+        "MISSING_PUBLICATION_TIME"
+      ],
+      "evidence": {
+        "urlCount": 0,
+        "claimCitationCount": 0,
+        "finalProposalMarkers": 1,
+        "priceTargetCount": 0,
+        "valuationMethodCount": 30,
+        "publishedMarkerCount": 0
+      },
+      "supersededBy": null
+    },
+    {
+      "ticker": "000001.SZ",
+      "tradeDate": "2026-07-10",
+      "generatedAt": "2026-07-12T12:47:13+08:00",
+      "provider": "openai_compatible",
+      "rating": "Underweight",
+      "report": "reports/000001.SZ/2026-07-10/complete_report.md",
+      "auditStatus": "legacy_unverified",
+      "problemCodes": [
+        "MISSING_CLAIM_EVIDENCE",
+        "DUPLICATE_FINAL_PROPOSAL",
+        "MISSING_PUBLICATION_TIME"
+      ],
+      "evidence": {
+        "urlCount": 0,
+        "claimCitationCount": 0,
+        "finalProposalMarkers": 2,
+        "priceTargetCount": 1,
+        "valuationMethodCount": 23,
+        "publishedMarkerCount": 0
+      },
+      "supersededBy": null
+    },
+    {
+      "ticker": "SPY",
+      "tradeDate": "2026-07-10",
+      "generatedAt": "2026-07-12T00:13:23+08:00",
+      "provider": "openai_compatible",
+      "rating": "Underweight",
+      "report": "reports/SPY/2026-07-10/complete_report.md",
+      "auditStatus": "legacy_unverified",
+      "problemCodes": [
+        "ETF_TEMPLATE_MISMATCH",
+        "MISSING_CLAIM_EVIDENCE",
+        "MISSING_PUBLICATION_TIME"
+      ],
+      "evidence": {
+        "urlCount": 0,
+        "claimCitationCount": 0,
+        "finalProposalMarkers": 1,
+        "priceTargetCount": 1,
+        "valuationMethodCount": 50,
+        "publishedMarkerCount": 0
+      },
+      "supersededBy": null
+    },
+    {
+      "ticker": "600519.SS",
+      "tradeDate": "2026-07-10",
+      "generatedAt": "2026-07-11T23:59:59+08:00",
+      "provider": "openai_compatible",
+      "rating": "Hold",
+      "report": "reports/600519.SS/2026-07-10/complete_report.md",
+      "auditStatus": "legacy_unverified",
+      "problemCodes": [
+        "MISSING_CLAIM_EVIDENCE",
+        "MISSING_PUBLICATION_TIME"
+      ],
+      "evidence": {
+        "urlCount": 0,
+        "claimCitationCount": 0,
+        "finalProposalMarkers": 1,
+        "priceTargetCount": 1,
+        "valuationMethodCount": 5,
+        "publishedMarkerCount": 0
+      },
+      "supersededBy": null
+    },
+    {
+      "ticker": "510050.SS",
+      "tradeDate": "2026-07-10",
+      "generatedAt": "2026-07-11T19:33:52+08:00",
+      "provider": "openai_compatible",
+      "rating": "Hold",
+      "report": "reports/510050.SS/2026-07-10/complete_report.md",
+      "auditStatus": "legacy_unverified",
+      "problemCodes": [
+        "ETF_TEMPLATE_MISMATCH",
+        "MISSING_CLAIM_EVIDENCE",
+        "DUPLICATE_FINAL_PROPOSAL",
+        "MISSING_PUBLICATION_TIME"
+      ],
+      "evidence": {
+        "urlCount": 0,
+        "claimCitationCount": 0,
+        "finalProposalMarkers": 2,
+        "priceTargetCount": 1,
+        "valuationMethodCount": 39,
+        "publishedMarkerCount": 0
+      },
+      "supersededBy": null
+    },
+    {
+      "ticker": "ISSUE",
+      "tradeDate": "2026-07-10",
+      "generatedAt": "2026-07-11T19:33:52+08:00",
+      "provider": "openai_compatible",
+      "rating": null,
+      "report": null,
+      "auditStatus": "invalid_record",
+      "problemCodes": [
+        "INVALID_TICKER_INPUT"
+      ],
+      "evidence": {
+        "urlCount": 0,
+        "claimCitationCount": 0,
+        "finalProposalMarkers": 0,
+        "priceTargetCount": 0,
+        "valuationMethodCount": 0,
+        "publishedMarkerCount": 0
+      },
+      "supersededBy": null
+    },
+    {
+      "ticker": "NVDA",
+      "tradeDate": "2026-07-10",
+      "generatedAt": "2026-07-11T19:14:59+08:00",
+      "provider": "openai_compatible",
+      "rating": "Underweight",
+      "report": "reports/NVDA/2026-07-10/complete_report.md",
+      "auditStatus": "legacy_unverified",
+      "problemCodes": [
+        "MISSING_CLAIM_EVIDENCE",
+        "MISSING_PUBLICATION_TIME"
+      ],
+      "evidence": {
+        "urlCount": 0,
+        "claimCitationCount": 0,
+        "finalProposalMarkers": 1,
+        "priceTargetCount": 1,
+        "valuationMethodCount": 53,
+        "publishedMarkerCount": 0
+      },
+      "supersededBy": null
+    }
+  ]
+}

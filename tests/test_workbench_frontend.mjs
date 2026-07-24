@@ -41,7 +41,7 @@ test("research terminal exposes the continuous three-column workspace and indica
 test("default universe contains the full ETF and semiconductor driver set", () => {
   assert.deepEqual(
     DEFAULT_TARGETS.map(({ symbol }) => symbol),
-    ["515880.SS", "512480.SS", "159995.SZ", "SOXX", "SMH", "NVDA", "TSM", "AVGO", "AMD", "ASML", "ORCL"],
+    ["515880.SS", "512480.SS", "159995.SZ", "SOXX", "SMH", "NVDA", "TSM", "AVGO", "AMD", "ASML", "ORCL", "GOOGL", "3887.HK"],
   );
 });
 
@@ -220,9 +220,9 @@ test("scheduled refresh updates selected bars, watch quotes, feeds, and monitor 
   assert.doesNotMatch(script, /location\.reload/);
 });
 
-test("US drivers use daily data for quote strips and switch to the available daily chart", () => {
-  assert.match(script, /market === "US" \? "1d" : state\.timeframe/);
-  assert.match(script, /target\?\.market === "US" && state\.timeframe !== "1d"/);
+test("US and Hong Kong drivers use daily data and switch to the available daily chart", () => {
+  assert.match(script, /market === "CN" \? state\.timeframe : "1d"/);
+  assert.match(script, /target\?\.market !== "CN" && state\.timeframe !== "1d"/);
   assert.match(script, /state\.timeframe = "1d"/);
   assert.equal(dailyHistoryLimit("6m"), 126);
   assert.equal(dailyHistoryLimit("1y"), 252);
@@ -365,6 +365,13 @@ test("options risk and multi-agent analysis are first-class workspaces", () => {
   assert.match(html, /id="options-chain"/);
   assert.match(script, /#deep-analysis-open/);
   assert.match(script, /filter\(\(\{ analysis \}\) => analysis === "full"\)/);
+});
+
+test("report archive uses the audit index and visibly labels unverified evidence", () => {
+  assert.match(script, /\/api\/report-audit/);
+  assert.match(script, /auditStatus/);
+  assert.match(script, /invalidated/);
+  assert.match(html, /历史审计/);
 });
 
 test("market direction follows A-share and US conventions without changing health colors", () => {
