@@ -75,6 +75,22 @@ AVGO、AMD、ASML 和 ORCL 各返回 1,254 个唯一交易日，覆盖
 2021-07-26 至 2026-07-23，重复交易日为零。该数字是一次验收记录，不是写死在代码里的
 成功条件；以后仍以 API 返回的来源和时间为准。
 
+### 真实 Agent 冒烟
+
+同日从 GitHub Actions 实际运行 `512480.SS` 深度研究：
+
+- 安装、行情/新闻/基本面 Agent、辩论、风险决策和报告持久化全部成功；
+- 模型阶段约十分钟，使用仓库保存的 OpenAI-compatible 配置；
+- 生成 28,928 字符的完整报告并写入
+  `reports/512480.SS/2026-07-23/complete_report.md`；
+- `latest.json` 和 `history.json` 已更新，生产 `/api/latest` 与报告 URL 可读取。
+
+第一次 run 的最终状态曾显示失败，但失败发生在报告写回之后：工作流无条件调用
+`actions/configure-pages`，而新仓库没有启用 GitHub Pages。正式站点实际使用
+Cloudflare Pages，因此后续把 GitHub Pages 三个步骤置于
+`ENABLE_GITHUB_PAGES=true` 条件下。未启用的可选发布目标不再把成功的 Agent 研究标成
+失败。
+
 ### 视觉
 
 - 取消彩色左边卡片和卡片墙。
