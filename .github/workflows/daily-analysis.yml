@@ -72,6 +72,7 @@ jobs:
       # ── 微信推送 ────────────────────────────────────────────────
       PUSHPLUS_TOKEN: ${{ secrets.PUSHPLUS_TOKEN }}
       PAGES_URL: https://tradingagents-board.pages.dev/
+      ENABLE_GITHUB_PAGES: ${{ vars.ENABLE_GITHUB_PAGES || 'false' }}
       # ── Cloudflare 国内镜像（配置 CLOUDFLARE_API_TOKEN 后自动启用）──
       CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
       CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID || vars.CLOUDFLARE_ACCOUNT_ID }}
@@ -132,16 +133,23 @@ jobs:
           bash scripts/persist_reports.sh "chore(data): 更新分析报告 $(date -u +%F) [skip ci]"
 
       - name: Setup Pages
+        if: ${{ env.ENABLE_GITHUB_PAGES == 'true' }}
         uses: actions/configure-pages@v5
 
       - name: Upload site artifact
+        if: ${{ env.ENABLE_GITHUB_PAGES == 'true' }}
         uses: actions/upload-pages-artifact@v3
         with:
           path: public
 
       - name: Deploy to GitHub Pages
+        if: ${{ env.ENABLE_GITHUB_PAGES == 'true' }}
         id: deployment
         uses: actions/deploy-pages@v4
+
+      - name: Report GitHub Pages policy
+        if: ${{ env.ENABLE_GITHUB_PAGES != 'true' }}
+        run: echo "::notice::GitHub Pages is disabled; the Cloudflare Pages production site remains authoritative."
 
       - name: Deploy CN mirror to Cloudflare Pages
         if: ${{ env.CLOUDFLARE_API_TOKEN != '' && env.CLOUDFLARE_ACCOUNT_ID != '' }}

@@ -424,6 +424,13 @@ test("daily workflow accepts monitor dispatch metadata and keeps legacy manual i
     assert.match(workflow, new RegExp(`^\\s{6}${input}:`, "m"));
   }
   assert.match(workflow, /MANUAL_TICKERS:\s*\$\{\{\s*inputs\.tickers/);
+  assert.match(workflow, /ENABLE_GITHUB_PAGES:\s*\$\{\{\s*vars\.ENABLE_GITHUB_PAGES/);
+  for (const step of ["Setup Pages", "Upload site artifact", "Deploy to GitHub Pages"]) {
+    assert.match(
+      workflow,
+      new RegExp(`- name: ${step}\\n\\s+if: \\$\\{\\{ env\\.ENABLE_GITHUB_PAGES == 'true' \\}\\}`),
+    );
+  }
 });
 
 test("failed 09:30 slot is retried by later cron ticks and stops after three attempts", async () => {
