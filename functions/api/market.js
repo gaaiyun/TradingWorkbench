@@ -32,7 +32,8 @@ const FRESHNESS_RANK = {
 };
 
 const SOURCE_OVERLAP_FACTOR = 6;
-const DAILY_MAX_CONTIGUOUS_GAP_MS = 7 * 24 * 60 * 60 * 1000;
+// 春节、国庆等合法休市可能超过一周；只有超过一个半月的断口才按旧种子处理。
+const DAILY_MAX_CONTIGUOUS_GAP_MS = 45 * 24 * 60 * 60 * 1000;
 
 function laterTimestamp(left, right) {
   return String(left || "") >= String(right || "") ? left : right;

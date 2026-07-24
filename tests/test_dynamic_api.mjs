@@ -283,6 +283,40 @@ test("daily market API removes a disconnected legacy seed before calculating cha
   assert.equal(payload.indicators.bars, 1);
 });
 
+test("daily market API keeps legitimate long holiday closures in one history", async () => {
+  const base = {
+    symbol: "512480.SS",
+    profile_id: "cn-semi-comms",
+    timeframe: "1d",
+    open: 1.2,
+    high: 1.3,
+    low: 1.1,
+    close: 1.25,
+    volume: 1000,
+    source: "tencent",
+    fetched_at: "2026-07-24T01:00:00Z",
+    freshness: "stale",
+    adjustment: "qfq",
+    quality: "good",
+  };
+  const DB = new FakeD1({ rows: { market_bars: [
+    { ...base, ts: "2026-02-23T16:00:00Z", as_of: "2026-02-23T16:00:00Z" },
+    { ...base, ts: "2026-02-13T16:00:00Z", as_of: "2026-02-13T16:00:00Z" },
+    { ...base, ts: "2026-02-12T16:00:00Z", as_of: "2026-02-12T16:00:00Z" },
+  ] } });
+
+  const response = await marketApi.onRequestGet({
+    request: request("/api/market?symbol=512480.SS&profile=cn-semi-comms&timeframe=1d&limit=20"),
+    env: { DB },
+  });
+  const payload = await response.json();
+  assert.deepEqual(payload.data.map(({ ts }) => ts), [
+    "2026-02-23T16:00:00Z",
+    "2026-02-13T16:00:00Z",
+    "2026-02-12T16:00:00Z",
+  ]);
+});
+
 test("news and events APIs support topic and importance filters without interpolating input", async () => {
   const injectedTopic = "chips' OR 1=1 --";
   const newsRow = {
