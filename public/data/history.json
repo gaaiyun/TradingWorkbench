@@ -1,5 +1,24 @@
 [
   {
+    "trade_date": "2026-07-24",
+    "generated_at": "2026-07-24T15:21:07+08:00",
+    "provider": "openai_compatible",
+    "results": [
+      {
+        "ticker": "515880.SS",
+        "rating": "Sell",
+        "report": "reports/515880.SS/2026-07-24/complete_report.md",
+        "error": false
+      },
+      {
+        "ticker": "512480.SS",
+        "rating": "Sell",
+        "report": "reports/512480.SS/2026-07-24/complete_report.md",
+        "error": false
+      }
+    ]
+  },
+  {
     "trade_date": "2026-07-23",
     "generated_at": "2026-07-24T07:53:17+08:00",
     "provider": "openai_compatible",

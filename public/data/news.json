@@ -1,113 +1,113 @@
 {
   "version": 1,
-  "status": "partial",
-  "generated_at": "2026-07-24T07:53:17+08:00",
-  "trade_date": "2026-07-23",
+  "status": "ok",
+  "generated_at": "2026-07-24T15:21:07+08:00",
+  "trade_date": "2026-07-24",
   "global": {
     "status": "ok",
     "query_type": "global",
     "ticker": null,
-    "start_date": "2026-07-16",
-    "end_date": "2026-07-23",
-    "fetched_at": "2026-07-23T23:53:19Z",
+    "start_date": "2026-07-17",
+    "end_date": "2026-07-24",
+    "fetched_at": "2026-07-24T07:21:08Z",
     "items": [
       {
-        "title": "Does Walmart pay dividends? Its yield & payouts explained",
+        "title": "Oil prices head for weekly rise on Middle East escalation",
         "summary": "",
-        "url": "https://finance.yahoo.com/m/e695faec-bc6d-3ffe-8718-4bc2e64eee2e/does-walmart-pay-dividends%3F.html",
-        "source": "TheStreet",
-        "published_at": "2026-07-23T23:19:42Z",
-        "fetched_at": "2026-07-23T23:53:19Z",
+        "url": "https://finance.yahoo.com/news/brent-hovers-above-100-bbl-035115480.html",
+        "source": "Reuters",
+        "published_at": "2026-07-24T07:07:19Z",
+        "fetched_at": "2026-07-24T07:21:08Z",
         "ticker": null,
         "source_tier": "aggregator"
       },
       {
-        "title": "Dow Jones Futures: Market Sells Off On Oil Prices, Google, Tesla; Intel Rises Late, SpaceX Starship Launch Delayed",
+        "title": "FTSE 100 Live: London stocks called lower as Big Tech burns cash and oil hits $100",
         "summary": "",
-        "url": "https://finance.yahoo.com/m/96fdd7c6-3e7b-334a-a08e-b91b60ced4b6/dow-jones-futures%3A-market.html",
-        "source": "Investor's Business Daily",
-        "published_at": "2026-07-23T23:18:18Z",
-        "fetched_at": "2026-07-23T23:53:19Z",
+        "url": "https://finance.yahoo.com/m/a29be53f-56d9-33c1-84fa-e7db2449b60f/ftse-100-live%3A-london-stocks.html",
+        "source": "Proactive",
+        "published_at": "2026-07-24T06:15:00Z",
+        "fetched_at": "2026-07-24T07:21:08Z",
         "ticker": null,
         "source_tier": "aggregator"
       },
       {
-        "title": "Walmart shares its quiet plan to take down Amazon",
+        "title": "U.S. Treasury Yields Edge Lower as Oil Looks to Stabilize",
         "summary": "",
-        "url": "https://finance.yahoo.com/m/15c5ae5d-a9c8-35ae-a62b-ef1ddbbf19ac/walmart-shares-its-quiet-plan.html",
-        "source": "TheStreet",
-        "published_at": "2026-07-23T23:17:00Z",
-        "fetched_at": "2026-07-23T23:53:19Z",
-        "ticker": null,
-        "source_tier": "aggregator"
-      },
-      {
-        "title": "Freeport-McMoRan (FCX) Beats In Q2 As Lower Copper Sales Outlook Tests Valuation",
-        "summary": "",
-        "url": "https://finance.yahoo.com/markets/stocks/articles/freeport-mcmoran-fcx-beats-q2-231447355.html",
-        "source": "Simply Wall St.",
-        "published_at": "2026-07-23T23:14:47Z",
-        "fetched_at": "2026-07-23T23:53:19Z",
-        "ticker": null,
-        "source_tier": "aggregator"
-      },
-      {
-        "title": "Teck Resources Ltd (TECK) Q2 2026 Earnings Call Highlights: Record EBITDA and Strong Cash Flow ...",
-        "summary": "",
-        "url": "https://finance.yahoo.com/markets/stocks/articles/teck-resources-ltd-teck-q2-230151233.html",
-        "source": "GuruFocus.com",
-        "published_at": "2026-07-23T23:01:51Z",
-        "fetched_at": "2026-07-23T23:53:19Z",
-        "ticker": null,
-        "source_tier": "aggregator"
-      },
-      {
-        "title": "Brent Crude Oil Price Could Surge to $100 After Iran’s Red Sea Attack",
-        "summary": "",
-        "url": "https://finance.yahoo.com/m/047de5c4-ec73-30c1-8088-c72e00274978/brent-crude-oil-price-could.html",
-        "source": "BeInCrypto",
-        "published_at": "2026-07-23T22:54:39Z",
-        "fetched_at": "2026-07-23T23:53:19Z",
-        "ticker": null,
-        "source_tier": "aggregator"
-      },
-      {
-        "title": "Judge temporarily halts Paramount-Warner Bros. Discovery merger",
-        "summary": "",
-        "url": "https://finance.yahoo.com/m/cd0d7130-25d0-3bbd-9d45-ec7088719dc2/judge-temporarily-halts.html",
-        "source": "CBS News",
-        "published_at": "2026-07-23T22:40:12Z",
-        "fetched_at": "2026-07-23T23:53:19Z",
-        "ticker": null,
-        "source_tier": "aggregator"
-      },
-      {
-        "title": "NVR and Champion Homes Stocks Trade Down, What You Need To Know",
-        "summary": "",
-        "url": "https://finance.yahoo.com/markets/stocks/articles/nvr-champion-homes-stocks-trade-223631767.html",
-        "source": "StockStory",
-        "published_at": "2026-07-23T22:36:31Z",
-        "fetched_at": "2026-07-23T23:53:19Z",
-        "ticker": null,
-        "source_tier": "aggregator"
-      },
-      {
-        "title": "S&P 500, Dow, Nasdaq End Lower Over Capex Concerns, Surging Oil — CBRS, AMD, GOOGL, TSLA, MSTR In Focus",
-        "summary": "",
-        "url": "https://finance.yahoo.com/m/4bfbce32-2080-3020-bb31-7e442b2bd0e9/s%26p-500%2C-dow%2C-nasdaq-end.html",
-        "source": "Stocktwits",
-        "published_at": "2026-07-23T22:34:00Z",
-        "fetched_at": "2026-07-23T23:53:19Z",
-        "ticker": null,
-        "source_tier": "aggregator"
-      },
-      {
-        "title": "Trump Says Iran Will Be Held Responsible for Future Houthi Attacks",
-        "summary": "",
-        "url": "https://finance.yahoo.com/m/1acaa0e8-f8aa-3100-93f8-1262617e3f72/trump-says-iran-will-be-held.html",
+        "url": "https://finance.yahoo.com/m/7f98ce1d-c968-3f77-9cf4-1d6dccd53738/u.s.-treasury-yields-edge.html",
         "source": "The Wall Street Journal",
-        "published_at": "2026-07-23T22:30:00Z",
-        "fetched_at": "2026-07-23T23:53:19Z",
+        "published_at": "2026-07-24T05:58:00Z",
+        "fetched_at": "2026-07-24T07:21:08Z",
+        "ticker": null,
+        "source_tier": "aggregator"
+      },
+      {
+        "title": "US Weekly Jobless Claims Hit 1969 Low: What Does It Mean For Crypto?",
+        "summary": "",
+        "url": "https://finance.yahoo.com/m/40dfbfec-48d6-3f53-92d8-21d854b7b9ed/us-weekly-jobless-claims-hit.html",
+        "source": "BeInCrypto",
+        "published_at": "2026-07-24T05:43:43Z",
+        "fetched_at": "2026-07-24T07:21:08Z",
+        "ticker": null,
+        "source_tier": "aggregator"
+      },
+      {
+        "title": "Oil Tops $100 as Supply Crisis Deepens",
+        "summary": "",
+        "url": "https://finance.yahoo.com/energy/articles/oil-tops-100-supply-crisis-054000369.html",
+        "source": "Oilprice.com",
+        "published_at": "2026-07-24T05:40:00Z",
+        "fetched_at": "2026-07-24T07:21:08Z",
+        "ticker": null,
+        "source_tier": "aggregator"
+      },
+      {
+        "title": "Dollar gets yields boost as Middle East and trade wars raise inflation stakes",
+        "summary": "",
+        "url": "https://finance.yahoo.com/news/dollar-rides-yield-surge-middle-005503376.html",
+        "source": "Reuters",
+        "published_at": "2026-07-24T05:39:55Z",
+        "fetched_at": "2026-07-24T07:21:08Z",
+        "ticker": null,
+        "source_tier": "aggregator"
+      },
+      {
+        "title": "Shares skid in Asia in sell-off of AI-related shares as Brent oil trades near $100 per barrel",
+        "summary": "",
+        "url": "https://finance.yahoo.com/markets/articles/shares-skid-asia-sell-off-051338979.html",
+        "source": "Associated Press",
+        "published_at": "2026-07-24T05:13:38Z",
+        "fetched_at": "2026-07-24T07:21:08Z",
+        "ticker": null,
+        "source_tier": "aggregator"
+      },
+      {
+        "title": "Newmont Corp (NEM) Q2 2026 Earnings Call Highlights: Record Free Cash Flow and Strategic ...",
+        "summary": "",
+        "url": "https://finance.yahoo.com/markets/stocks/articles/newmont-corp-nem-q2-2026-050155908.html",
+        "source": "GuruFocus.com",
+        "published_at": "2026-07-24T05:01:55Z",
+        "fetched_at": "2026-07-24T07:21:08Z",
+        "ticker": null,
+        "source_tier": "aggregator"
+      },
+      {
+        "title": "Teck Resources (TSX:TECK.B) Could Be About Right Following The Q2 Earnings Beat",
+        "summary": "",
+        "url": "https://finance.yahoo.com/markets/stocks/articles/teck-resources-tsx-teck-b-042952255.html",
+        "source": "Simply Wall St.",
+        "published_at": "2026-07-24T04:29:52Z",
+        "fetched_at": "2026-07-24T07:21:08Z",
+        "ticker": null,
+        "source_tier": "aggregator"
+      },
+      {
+        "title": "AP Top Financial News at 2:49 a.m. EDT",
+        "summary": "",
+        "url": "https://finance.yahoo.com/markets/stocks/articles/ap-top-financial-news-1-040000822.html",
+        "source": "Associated Press",
+        "published_at": "2026-07-24T04:00:00Z",
+        "fetched_at": "2026-07-24T07:21:08Z",
         "ticker": null,
         "source_tier": "aggregator"
       }
@@ -120,19 +120,19 @@
       },
       {
         "source": "Federal Reserve",
-        "status": "ok",
-        "item_count": 2
+        "status": "empty",
+        "item_count": 0
       }
     ]
   },
   "tickers": {
-    "512480.SS": {
-      "status": "partial_empty",
+    "515880.SS": {
+      "status": "empty",
       "query_type": "ticker",
-      "ticker": "512480.SS",
-      "start_date": "2026-07-23",
-      "end_date": "2026-07-23",
-      "fetched_at": "2026-07-23T23:53:20Z",
+      "ticker": "515880.SS",
+      "start_date": "2026-07-24",
+      "end_date": "2026-07-24",
+      "fetched_at": "2026-07-24T07:21:09Z",
       "items": [],
       "source_statuses": [
         {
@@ -142,8 +142,45 @@
         },
         {
           "source": "Google News RSS",
-          "status": "failed",
+          "status": "empty",
           "item_count": 0
+        },
+        {
+          "source": "SEC EDGAR",
+          "status": "empty",
+          "item_count": 0
+        }
+      ]
+    },
+    "512480.SS": {
+      "status": "ok",
+      "query_type": "ticker",
+      "ticker": "512480.SS",
+      "start_date": "2026-07-24",
+      "end_date": "2026-07-24",
+      "fetched_at": "2026-07-24T07:21:24Z",
+      "items": [
+        {
+          "title": "半导体ETF国联安：7月23日融资净买入7105.74万元，当日排名第38",
+          "summary": "半导体ETF国联安：7月23日融资净买入7105.74万元，当日排名第38 手机网易网",
+          "url": "https://news.google.com/rss/articles/CBMiYkFVX3lxTE1HdnhWS3hfb1lOR0w2RGE2ZnprU0M5MERDTDN0c0JFTDJnanZFaXUwZVkxclhWempORnVWRk1yckJOV19Xa0JWMldqNTJrRThLMDQ1S2tCSjd0Q3UyWnBLcjlR?oc=5",
+          "source": "Google News / 手机网易网",
+          "published_at": "2026-07-24T01:37:44Z",
+          "fetched_at": "2026-07-24T07:21:24Z",
+          "ticker": "512480.SS",
+          "source_tier": "aggregator"
+        }
+      ],
+      "source_statuses": [
+        {
+          "source": "Yahoo Finance",
+          "status": "empty",
+          "item_count": 0
+        },
+        {
+          "source": "Google News RSS",
+          "status": "ok",
+          "item_count": 1
         },
         {
           "source": "SEC EDGAR",
@@ -155,103 +192,113 @@
   },
   "items": [
     {
-      "title": "Does Walmart pay dividends? Its yield & payouts explained",
+      "title": "Oil prices head for weekly rise on Middle East escalation",
       "summary": "",
-      "url": "https://finance.yahoo.com/m/e695faec-bc6d-3ffe-8718-4bc2e64eee2e/does-walmart-pay-dividends%3F.html",
-      "source": "TheStreet",
-      "published_at": "2026-07-23T23:19:42Z",
-      "fetched_at": "2026-07-23T23:53:19Z",
+      "url": "https://finance.yahoo.com/news/brent-hovers-above-100-bbl-035115480.html",
+      "source": "Reuters",
+      "published_at": "2026-07-24T07:07:19Z",
+      "fetched_at": "2026-07-24T07:21:08Z",
       "ticker": null,
       "source_tier": "aggregator"
     },
     {
-      "title": "Dow Jones Futures: Market Sells Off On Oil Prices, Google, Tesla; Intel Rises Late, SpaceX Starship Launch Delayed",
+      "title": "FTSE 100 Live: London stocks called lower as Big Tech burns cash and oil hits $100",
       "summary": "",
-      "url": "https://finance.yahoo.com/m/96fdd7c6-3e7b-334a-a08e-b91b60ced4b6/dow-jones-futures%3A-market.html",
-      "source": "Investor's Business Daily",
-      "published_at": "2026-07-23T23:18:18Z",
-      "fetched_at": "2026-07-23T23:53:19Z",
+      "url": "https://finance.yahoo.com/m/a29be53f-56d9-33c1-84fa-e7db2449b60f/ftse-100-live%3A-london-stocks.html",
+      "source": "Proactive",
+      "published_at": "2026-07-24T06:15:00Z",
+      "fetched_at": "2026-07-24T07:21:08Z",
       "ticker": null,
       "source_tier": "aggregator"
     },
     {
-      "title": "Walmart shares its quiet plan to take down Amazon",
+      "title": "U.S. Treasury Yields Edge Lower as Oil Looks to Stabilize",
       "summary": "",
-      "url": "https://finance.yahoo.com/m/15c5ae5d-a9c8-35ae-a62b-ef1ddbbf19ac/walmart-shares-its-quiet-plan.html",
-      "source": "TheStreet",
-      "published_at": "2026-07-23T23:17:00Z",
-      "fetched_at": "2026-07-23T23:53:19Z",
-      "ticker": null,
-      "source_tier": "aggregator"
-    },
-    {
-      "title": "Freeport-McMoRan (FCX) Beats In Q2 As Lower Copper Sales Outlook Tests Valuation",
-      "summary": "",
-      "url": "https://finance.yahoo.com/markets/stocks/articles/freeport-mcmoran-fcx-beats-q2-231447355.html",
-      "source": "Simply Wall St.",
-      "published_at": "2026-07-23T23:14:47Z",
-      "fetched_at": "2026-07-23T23:53:19Z",
-      "ticker": null,
-      "source_tier": "aggregator"
-    },
-    {
-      "title": "Teck Resources Ltd (TECK) Q2 2026 Earnings Call Highlights: Record EBITDA and Strong Cash Flow ...",
-      "summary": "",
-      "url": "https://finance.yahoo.com/markets/stocks/articles/teck-resources-ltd-teck-q2-230151233.html",
-      "source": "GuruFocus.com",
-      "published_at": "2026-07-23T23:01:51Z",
-      "fetched_at": "2026-07-23T23:53:19Z",
-      "ticker": null,
-      "source_tier": "aggregator"
-    },
-    {
-      "title": "Brent Crude Oil Price Could Surge to $100 After Iran’s Red Sea Attack",
-      "summary": "",
-      "url": "https://finance.yahoo.com/m/047de5c4-ec73-30c1-8088-c72e00274978/brent-crude-oil-price-could.html",
-      "source": "BeInCrypto",
-      "published_at": "2026-07-23T22:54:39Z",
-      "fetched_at": "2026-07-23T23:53:19Z",
-      "ticker": null,
-      "source_tier": "aggregator"
-    },
-    {
-      "title": "Judge temporarily halts Paramount-Warner Bros. Discovery merger",
-      "summary": "",
-      "url": "https://finance.yahoo.com/m/cd0d7130-25d0-3bbd-9d45-ec7088719dc2/judge-temporarily-halts.html",
-      "source": "CBS News",
-      "published_at": "2026-07-23T22:40:12Z",
-      "fetched_at": "2026-07-23T23:53:19Z",
-      "ticker": null,
-      "source_tier": "aggregator"
-    },
-    {
-      "title": "NVR and Champion Homes Stocks Trade Down, What You Need To Know",
-      "summary": "",
-      "url": "https://finance.yahoo.com/markets/stocks/articles/nvr-champion-homes-stocks-trade-223631767.html",
-      "source": "StockStory",
-      "published_at": "2026-07-23T22:36:31Z",
-      "fetched_at": "2026-07-23T23:53:19Z",
-      "ticker": null,
-      "source_tier": "aggregator"
-    },
-    {
-      "title": "S&P 500, Dow, Nasdaq End Lower Over Capex Concerns, Surging Oil — CBRS, AMD, GOOGL, TSLA, MSTR In Focus",
-      "summary": "",
-      "url": "https://finance.yahoo.com/m/4bfbce32-2080-3020-bb31-7e442b2bd0e9/s%26p-500%2C-dow%2C-nasdaq-end.html",
-      "source": "Stocktwits",
-      "published_at": "2026-07-23T22:34:00Z",
-      "fetched_at": "2026-07-23T23:53:19Z",
-      "ticker": null,
-      "source_tier": "aggregator"
-    },
-    {
-      "title": "Trump Says Iran Will Be Held Responsible for Future Houthi Attacks",
-      "summary": "",
-      "url": "https://finance.yahoo.com/m/1acaa0e8-f8aa-3100-93f8-1262617e3f72/trump-says-iran-will-be-held.html",
+      "url": "https://finance.yahoo.com/m/7f98ce1d-c968-3f77-9cf4-1d6dccd53738/u.s.-treasury-yields-edge.html",
       "source": "The Wall Street Journal",
-      "published_at": "2026-07-23T22:30:00Z",
-      "fetched_at": "2026-07-23T23:53:19Z",
+      "published_at": "2026-07-24T05:58:00Z",
+      "fetched_at": "2026-07-24T07:21:08Z",
       "ticker": null,
+      "source_tier": "aggregator"
+    },
+    {
+      "title": "US Weekly Jobless Claims Hit 1969 Low: What Does It Mean For Crypto?",
+      "summary": "",
+      "url": "https://finance.yahoo.com/m/40dfbfec-48d6-3f53-92d8-21d854b7b9ed/us-weekly-jobless-claims-hit.html",
+      "source": "BeInCrypto",
+      "published_at": "2026-07-24T05:43:43Z",
+      "fetched_at": "2026-07-24T07:21:08Z",
+      "ticker": null,
+      "source_tier": "aggregator"
+    },
+    {
+      "title": "Oil Tops $100 as Supply Crisis Deepens",
+      "summary": "",
+      "url": "https://finance.yahoo.com/energy/articles/oil-tops-100-supply-crisis-054000369.html",
+      "source": "Oilprice.com",
+      "published_at": "2026-07-24T05:40:00Z",
+      "fetched_at": "2026-07-24T07:21:08Z",
+      "ticker": null,
+      "source_tier": "aggregator"
+    },
+    {
+      "title": "Dollar gets yields boost as Middle East and trade wars raise inflation stakes",
+      "summary": "",
+      "url": "https://finance.yahoo.com/news/dollar-rides-yield-surge-middle-005503376.html",
+      "source": "Reuters",
+      "published_at": "2026-07-24T05:39:55Z",
+      "fetched_at": "2026-07-24T07:21:08Z",
+      "ticker": null,
+      "source_tier": "aggregator"
+    },
+    {
+      "title": "Shares skid in Asia in sell-off of AI-related shares as Brent oil trades near $100 per barrel",
+      "summary": "",
+      "url": "https://finance.yahoo.com/markets/articles/shares-skid-asia-sell-off-051338979.html",
+      "source": "Associated Press",
+      "published_at": "2026-07-24T05:13:38Z",
+      "fetched_at": "2026-07-24T07:21:08Z",
+      "ticker": null,
+      "source_tier": "aggregator"
+    },
+    {
+      "title": "Newmont Corp (NEM) Q2 2026 Earnings Call Highlights: Record Free Cash Flow and Strategic ...",
+      "summary": "",
+      "url": "https://finance.yahoo.com/markets/stocks/articles/newmont-corp-nem-q2-2026-050155908.html",
+      "source": "GuruFocus.com",
+      "published_at": "2026-07-24T05:01:55Z",
+      "fetched_at": "2026-07-24T07:21:08Z",
+      "ticker": null,
+      "source_tier": "aggregator"
+    },
+    {
+      "title": "Teck Resources (TSX:TECK.B) Could Be About Right Following The Q2 Earnings Beat",
+      "summary": "",
+      "url": "https://finance.yahoo.com/markets/stocks/articles/teck-resources-tsx-teck-b-042952255.html",
+      "source": "Simply Wall St.",
+      "published_at": "2026-07-24T04:29:52Z",
+      "fetched_at": "2026-07-24T07:21:08Z",
+      "ticker": null,
+      "source_tier": "aggregator"
+    },
+    {
+      "title": "AP Top Financial News at 2:49 a.m. EDT",
+      "summary": "",
+      "url": "https://finance.yahoo.com/markets/stocks/articles/ap-top-financial-news-1-040000822.html",
+      "source": "Associated Press",
+      "published_at": "2026-07-24T04:00:00Z",
+      "fetched_at": "2026-07-24T07:21:08Z",
+      "ticker": null,
+      "source_tier": "aggregator"
+    },
+    {
+      "title": "半导体ETF国联安：7月23日融资净买入7105.74万元，当日排名第38",
+      "summary": "半导体ETF国联安：7月23日融资净买入7105.74万元，当日排名第38 手机网易网",
+      "url": "https://news.google.com/rss/articles/CBMiYkFVX3lxTE1HdnhWS3hfb1lOR0w2RGE2ZnprU0M5MERDTDN0c0JFTDJnanZFaXUwZVkxclhWempORnVWRk1yckJOV19Xa0JWMldqNTJrRThLMDQ1S2tCSjd0Q3UyWnBLcjlR?oc=5",
+      "source": "Google News / 手机网易网",
+      "published_at": "2026-07-24T01:37:44Z",
+      "fetched_at": "2026-07-24T07:21:24Z",
+      "ticker": "512480.SS",
       "source_tier": "aggregator"
     }
   ]

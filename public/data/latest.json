@@ -1,7 +1,7 @@
 {
   "status": "ok",
-  "generated_at": "2026-07-24T07:53:17+08:00",
-  "trade_date": "2026-07-23",
+  "generated_at": "2026-07-24T15:21:07+08:00",
+  "trade_date": "2026-07-24",
   "provider": "openai_compatible",
   "analysts": [
     "market",
@@ -17,24 +17,45 @@
   ],
   "results": [
     {
-      "ticker": "512480.SS",
-      "rating": "Underweight",
-      "report": "reports/512480.SS/2026-07-23/complete_report.md",
+      "ticker": "515880.SS",
+      "rating": "Sell",
+      "report": "reports/515880.SS/2026-07-24/complete_report.md",
       "files": {
-        "fundamentals": "reports/512480.SS/2026-07-23/1_analysts/fundamentals.md",
-        "market": "reports/512480.SS/2026-07-23/1_analysts/market.md",
-        "news": "reports/512480.SS/2026-07-23/1_analysts/news.md",
-        "bear": "reports/512480.SS/2026-07-23/2_research/bear.md",
-        "bull": "reports/512480.SS/2026-07-23/2_research/bull.md",
-        "manager": "reports/512480.SS/2026-07-23/2_research/manager.md",
-        "trader": "reports/512480.SS/2026-07-23/3_trading/trader.md",
-        "aggressive": "reports/512480.SS/2026-07-23/4_risk/aggressive.md",
-        "conservative": "reports/512480.SS/2026-07-23/4_risk/conservative.md",
-        "neutral": "reports/512480.SS/2026-07-23/4_risk/neutral.md",
-        "decision": "reports/512480.SS/2026-07-23/5_portfolio/decision.md",
-        "complete_report": "reports/512480.SS/2026-07-23/complete_report.md"
+        "fundamentals": "reports/515880.SS/2026-07-24/1_analysts/fundamentals.md",
+        "market": "reports/515880.SS/2026-07-24/1_analysts/market.md",
+        "news": "reports/515880.SS/2026-07-24/1_analysts/news.md",
+        "bear": "reports/515880.SS/2026-07-24/2_research/bear.md",
+        "bull": "reports/515880.SS/2026-07-24/2_research/bull.md",
+        "manager": "reports/515880.SS/2026-07-24/2_research/manager.md",
+        "trader": "reports/515880.SS/2026-07-24/3_trading/trader.md",
+        "aggressive": "reports/515880.SS/2026-07-24/4_risk/aggressive.md",
+        "conservative": "reports/515880.SS/2026-07-24/4_risk/conservative.md",
+        "neutral": "reports/515880.SS/2026-07-24/4_risk/neutral.md",
+        "decision": "reports/515880.SS/2026-07-24/5_portfolio/decision.md",
+        "complete_report": "reports/515880.SS/2026-07-24/complete_report.md"
       },
-      "decision_excerpt": "**Rating**: Underweight\n\n**Executive Summary**: 对512480.SS执行分批减仓策略：立即在当前价格1.15附近削减50%仓位以快速释放风险，若3-5个交易日内价格反弹至1.20-1.25区间（10日EMA附近），再减持20%，保留30%战略底仓。剩余底仓止损从严设定在1.08元（而非激进派的1.05或保守派的1.12），在数据异常未获官方澄清、MACD未出现金叉且价格未站稳10日EMA之前，不新增任何仓位。预计执行周期1-3个月。\n\n**Investment Thesis**: 综合三位风险分析师的辩论，512480.SS（GTJA Allianz CSI All-share Semi-conductor Product and Equipment ETF）的核心风险可归纳为四个维度，均指向显著减仓的必要性：\n\n**第一，数据完整性存疑是根",
+      "decision_excerpt": "**Rating**: Sell\n\n**Executive Summary**: 515880.SS（国泰中证全指通信设备ETF）当前面临技术结构全面崩塌、流动性枯竭与宏观逆风三重叠加的极端不利环境，建议立即清仓退出。当前价格0.65元距52周低点0.608元仅6.5%，距布林带下轨0.40元仍有38%下行空间，而ATR高达17%意味着单日波动即可触发0.60元止损。在成交量萎缩90%以上的流动性荒漠中，杠杆融资盘构成连环踩踏的定时炸弹，保留任何敞口的风险收益比均极为不利。\n\n**Investment Thesis**: 综合三位风险分析师的辩论，SELL决策获得跨派系共识，核心逻辑可归纳为以下五个维度：\n\n**一、技术结构已遭不可逆破坏，反弹缺乏可行性。** 三位分析师一致确认：50日均线（1.34元）与200日均线（1.94元）形成教科书级死叉，当前价格仅为50日均线的49%、200日",
+      "error": null
+    },
+    {
+      "ticker": "512480.SS",
+      "rating": "Sell",
+      "report": "reports/512480.SS/2026-07-24/complete_report.md",
+      "files": {
+        "fundamentals": "reports/512480.SS/2026-07-24/1_analysts/fundamentals.md",
+        "market": "reports/512480.SS/2026-07-24/1_analysts/market.md",
+        "news": "reports/512480.SS/2026-07-24/1_analysts/news.md",
+        "bear": "reports/512480.SS/2026-07-24/2_research/bear.md",
+        "bull": "reports/512480.SS/2026-07-24/2_research/bull.md",
+        "manager": "reports/512480.SS/2026-07-24/2_research/manager.md",
+        "trader": "reports/512480.SS/2026-07-24/3_trading/trader.md",
+        "aggressive": "reports/512480.SS/2026-07-24/4_risk/aggressive.md",
+        "conservative": "reports/512480.SS/2026-07-24/4_risk/conservative.md",
+        "neutral": "reports/512480.SS/2026-07-24/4_risk/neutral.md",
+        "decision": "reports/512480.SS/2026-07-24/5_portfolio/decision.md",
+        "complete_report": "reports/512480.SS/2026-07-24/complete_report.md"
+      },
+      "decision_excerpt": "**Rating**: Sell\n\n**Executive Summary**: 对512480.SS执行卖出减仓决策。建议采用混合执行策略：当前价格1.11附近立即减仓20%锁定确定性，剩余仓位在反弹至1.15/1.20/1.28时按梯度分批减持（20%/30%/50%），止损设在1.06。若PBOC在减仓完成前实质性降息，暂停减持观察3个交易日。持仓时间窗口1-3个月，完成减仓后释放资金转向低Beta防御性资产，待出现右侧反转信号再评估回流。\n\n**Investment Thesis**: 三方风险分析师在卖出方向上已形成完全共识，核心分歧仅在执行细节。综合判断，512480.SS的技术面、宏观面和产业面均指向结构性下行，当前1.11的价格不是\"黄金坑\"而是\"价值重估的中途\"。\n\n**技术面：下行通道完好，死亡交叉迫在眉睫。** 当前价格1.11距离50日SMA（1.89）和200日S",
       "error": null
     }
   ]
