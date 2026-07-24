@@ -345,7 +345,8 @@ import {
 
   function renderInstrument() {
     const target = targets().find((item) => item.symbol === state.selectedSymbol) || DEFAULT_TARGETS[0];
-    const isUsDaily = target.market === "US";
+    const isUs = target.market === "US";
+    const isDaily = state.timeframe === "1d";
     const bars = state.chart.bars;
     const bar = bars.at(-1);
     const previous = bars.at(-2);
@@ -360,11 +361,11 @@ import {
     $("#quote-high").textContent = formatNumber(bar?.high);
     $("#quote-low").textContent = formatNumber(bar?.low);
     $("#quote-volume").textContent = formatVolume(bar?.volume);
-    $("#history-range-tabs").hidden = !isUsDaily;
+    $("#history-range-tabs").hidden = !isDaily;
     $$("[data-timeframe]").forEach((button) => {
-      button.disabled = isUsDaily && button.dataset.timeframe !== "1d";
+      button.disabled = isUs && button.dataset.timeframe !== "1d";
     });
-    if (isUsDaily && bars.length) {
+    if (isDaily && bars.length) {
       const first = bars[0];
       const source = state.market.sources?.[0];
       const degraded = state.market.status === "degraded" || state.market.status === "stale";
@@ -433,7 +434,7 @@ import {
     let chartUpdate = { changedFromIndex: 0, strategy: "setData" };
     try {
       const target = targets().find((item) => item.symbol === symbol);
-      const fullLimit = target?.market === "US" && timeframe === "1d"
+      const fullLimit = timeframe === "1d"
         ? dailyHistoryLimit(state.historyRange)
         : 240;
       const envelope = normalizeEnvelope(await requestJson(

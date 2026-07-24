@@ -235,6 +235,19 @@ test("US drivers use daily data for quote strips and switch to the available dai
   assert.match(html, /id="chart-coverage"/);
 });
 
+test("A-share ETF daily charts use the same range controls and coverage summary", () => {
+  assert.match(
+    script,
+    /const isDaily = state\.timeframe === "1d"/,
+  );
+  assert.match(
+    script,
+    /const fullLimit = timeframe === "1d"\s*\?\s*dailyHistoryLimit\(state\.historyRange\)/,
+  );
+  assert.match(script, /history-range-tabs"\)\.hidden = !isDaily/);
+  assert.match(script, /if \(isDaily && bars\.length\)/);
+});
+
 test("task timeline never maps source health rows to schedule slots by array position", () => {
   assert.equal(typeof workbenchData.buildTaskTimeline, "function");
   const profile = {
