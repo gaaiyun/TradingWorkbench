@@ -1,5 +1,4 @@
 import {
-  DEFAULT_TARGETS,
   applySeriesBatch,
   buildChatHistory,
   buildTaskTimeline,
@@ -32,12 +31,16 @@ import {
   PROFILE_LIMIT,
   PROFILE_STORAGE_KEY,
   TARGET_LIMIT,
+  createProfileRequestCoordinator,
   currentProfileFor,
+  isSettingsRevisionConflict,
   marketForProfileTarget,
   normalizeProfileTargetSymbol,
   profileRequestUrl,
   resetProfileContext,
   resolveSelectedProfileId,
+  selectedProfileAfterMutation,
+  settingsSnapshotFromPayload,
 } from "./workbench-profiles.mjs";
 import {
   OPTIONS_FAST_REFRESH_MS,
@@ -78,6 +81,9 @@ import {
   const state = {
     settings: null,
     settingsUpdatedAt: null,
+    settingsMode: "loading",
+    settingsWritable: false,
+    settingsError: "",
     selectedProfileId: null,
     selectedSymbol: "515880.SS",
     timeframe: "15m",
@@ -110,6 +116,7 @@ import {
     optionsNextAt: null,
   };
   const marketRequestGate = createLatestRequestGate();
+  const profileRequests = createProfileRequestCoordinator();
 
   const escapeHtml = (value) => String(value ?? "")
     .replaceAll("&", "&amp;")
@@ -237,7 +244,7 @@ import {
 
   function targets() {
     const profile = currentProfile();
-    return profile ? profile.targets || [] : DEFAULT_TARGETS;
+    return profile?.targets || [];
   }
 
   function settingsTickers(settings) {
@@ -252,22 +259,65 @@ import {
     const profiles = state.settings?.profiles || [];
     const options = profiles.map((profile) =>
       `<option value="${escapeHtml(profile.id)}">${escapeHtml(profile.name)}${profile.enabled ? "" : " · 已停用"}</option>`
-    ).join("");
+    ).join("") || '<option value="">配置不可用</option>';
     for (const selector of ["#profile-selector", "#settings-profile-selector"]) {
       const select = $(selector);
       select.innerHTML = options;
       select.value = state.selectedProfileId || "";
     }
     $("#profile-count").textContent = `${profiles.length} / ${PROFILE_LIMIT} 组`;
-    $("#profile-create").disabled = profiles.length >= PROFILE_LIMIT;
-    $("#profile-copy").disabled = profiles.length >= PROFILE_LIMIT || !currentProfile();
-    $("#profile-delete").disabled = profiles.length <= 1 || !currentProfile();
+    updateSettingsControlAvailability();
+  }
+
+  function updateSettingsControlAvailability() {
+    const readOnly = !state.settingsWritable;
+    const allowedWhileReadOnly = new Set([
+      "settings-profile-selector",
+      "settings-reload-remote",
+      "settings-code",
+      "toggle-code",
+      "clear-credential",
+    ]);
+    $$("input, select, textarea, button", $("#settings-form")).forEach((control) => {
+      control.disabled = readOnly && !allowedWhileReadOnly.has(control.id);
+    });
+
+    const profiles = state.settings?.profiles || [];
+    $("#settings-profile-selector").disabled = profiles.length === 0;
+    if (!readOnly) {
+      $("#profile-create").disabled = profiles.length >= PROFILE_LIMIT;
+      $("#profile-copy").disabled = profiles.length >= PROFILE_LIMIT || !currentProfile();
+      $("#profile-delete").disabled = profiles.length <= 1 || !currentProfile();
+    }
+    $("#settings-reload-remote").hidden = state.settingsMode === "ready";
+  }
+
+  function renderSettingsAvailability() {
+    const notice = $("#settings-notice");
+    if (state.settingsMode === "degraded") {
+      notice.className = "settings-notice is-error";
+      notice.textContent = "远端设置不可用，当前使用静态灾备快照；此模式仅供查看，不能保存。";
+    } else if (state.settingsMode === "unavailable") {
+      notice.className = "settings-notice is-error";
+      notice.textContent = `远端监控配置不可用：${state.settingsError || "请重试"}`;
+    }
+    updateSettingsControlAvailability();
   }
 
   function renderSettingsSummary() {
     renderProfileSelectors();
     const profile = currentProfile();
-    if (!profile) return;
+    if (!profile) {
+      renderTargetEditor();
+      renderWatchlist();
+      renderInstrument();
+      renderNextRun();
+      renderTimeline();
+      renderTaskBoard();
+      renderSettingsWorkspace();
+      renderSettingsAvailability();
+      return;
+    }
     const fullAnalysisTickers = settingsTickers(state.settings);
     $("#watchlist-count").title = `深度分析 ${fullAnalysisTickers.length} 个`;
     $("#profile-enabled").checked = profile.enabled;
@@ -299,34 +349,7 @@ import {
     renderTaskBoard();
     renderAgentWorkspace();
     renderSettingsWorkspace();
-  }
-
-  function ensureSettings() {
-    if (state.settings?.profiles?.length) return;
-    state.settings = {
-      version: 2,
-      profiles: [{
-        id: "cn-semi-comms",
-        name: "A 股通信与半导体 ETF 传导监控",
-        objective: "持续监控美股半导体、政策与流动性变化对 A 股 ETF 的传导影响。",
-        enabled: true,
-        timezone: "Asia/Shanghai",
-        targets: structuredClone(DEFAULT_TARGETS),
-        systemBenchmarks: [
-          { id: "csi-300", name: "沪深300", market: "CN" },
-          { id: "nasdaq-100", name: "纳指100", market: "US" },
-          { id: "usd-cny", name: "美元人民币", market: "FX" },
-        ],
-        schedules: {
-          usCloseSnapshot: { enabled: true, time: "05:35" },
-          preMarketBrief: { enabled: true, time: "08:25" },
-          cnIntraday: { enabled: true, windows: [{ start: "09:30", end: "11:30" }, { start: "13:00", end: "15:00" }], collectionIntervalMinutes: 5, signalIntervalMinutes: 15 },
-          closeDeepAnalysis: { enabled: true, time: "15:20" },
-        },
-        alerts: { channels: { web: true, pushPlus: true }, pushMinSeverity: "high", quietHours: { start: "22:30", end: "07:30" } },
-        agentBudget: { intradayLightSummariesPerDay: 3, fullAnalysesPerDay: 1 },
-      }],
-    };
+    renderSettingsAvailability();
   }
 
   function restoreSelectedProfile() {
@@ -419,21 +442,34 @@ import {
   }
 
   async function loadSettings() {
+    let snapshot;
     try {
       const payload = await requestJson("/api/settings");
-      const data = payload?.data && !payload.profiles ? payload.data : payload;
-      state.settings = data;
-      state.settingsUpdatedAt = data?.updatedAt ?? payload?.updatedAt ?? null;
-    } catch {
+      snapshot = settingsSnapshotFromPayload(payload);
+      if (snapshot.mode === "unavailable") throw new Error(snapshot.error);
+    } catch (remoteError) {
       try {
-        state.settings = await requestJson("./data/workbench-settings.json");
-        state.settingsUpdatedAt = null;
+        snapshot = settingsSnapshotFromPayload(
+          await requestJson("./data/workbench-settings.json"),
+          { source: "static" },
+        );
       } catch {
-        state.settings = null;
+        snapshot = {
+          mode: "unavailable",
+          settings: null,
+          revision: null,
+          writable: false,
+          error: remoteError?.message || "请重试",
+        };
       }
     }
-    ensureSettings();
+    state.settings = snapshot.settings;
+    state.settingsUpdatedAt = snapshot.revision;
+    state.settingsMode = snapshot.mode;
+    state.settingsWritable = snapshot.writable;
+    state.settingsError = snapshot.error || "";
     restoreSelectedProfile();
+    profileRequests.activate(state.selectedProfileId);
     renderSettingsSummary();
   }
 
@@ -568,25 +604,36 @@ import {
   async function loadFeeds() {
     const profileId = currentProfile()?.id;
     if (!profileId) return;
-    const [newsResult, eventsResult] = await Promise.allSettled([
-      requestJson(profileRequestUrl("/api/news", profileId, { limit: 200 })),
-      requestJson(profileRequestUrl("/api/events", profileId, { limit: 200 })),
-    ]);
-    if (currentProfile()?.id !== profileId) return;
-    const news = normalizeEnvelope(newsResult.status === "fulfilled" ? newsResult.value : null);
-    const events = normalizeEnvelope(eventsResult.status === "fulfilled" ? eventsResult.value : null);
-    state.feeds = [...normalizeFeed(news, "news"), ...normalizeFeed(events, "event")]
-      .sort((a, b) => String(b.at || "").localeCompare(String(a.at || "")));
-    const statuses = [news.status, events.status];
-    state.feedEnvelope = {
-      status: statuses.every((status) => status === "unavailable") ? "unavailable" : statuses.includes("degraded") || statuses.includes("unavailable") ? "degraded" : statuses.includes("stale") ? "stale" : "ok",
-      asOf: [news.asOf, events.asOf].filter(Boolean).sort().at(-1) || null,
-      data: state.feeds,
-      sources: [...news.sources, ...events.sources],
-    };
-    renderFeedFilters();
-    renderFeed();
-    renderNewsWorkspace();
+    const request = profileRequests.begin("feeds");
+    try {
+      const [newsResult, eventsResult] = await Promise.allSettled([
+        requestJson(
+          profileRequestUrl("/api/news", profileId, { limit: 200 }),
+          { signal: request.signal },
+        ),
+        requestJson(
+          profileRequestUrl("/api/events", profileId, { limit: 200 }),
+          { signal: request.signal },
+        ),
+      ]);
+      if (!profileRequests.isCurrent(request)) return;
+      const news = normalizeEnvelope(newsResult.status === "fulfilled" ? newsResult.value : null);
+      const events = normalizeEnvelope(eventsResult.status === "fulfilled" ? eventsResult.value : null);
+      state.feeds = [...normalizeFeed(news, "news"), ...normalizeFeed(events, "event")]
+        .sort((a, b) => String(b.at || "").localeCompare(String(a.at || "")));
+      const statuses = [news.status, events.status];
+      state.feedEnvelope = {
+        status: statuses.every((status) => status === "unavailable") ? "unavailable" : statuses.includes("degraded") || statuses.includes("unavailable") ? "degraded" : statuses.includes("stale") ? "stale" : "ok",
+        asOf: [news.asOf, events.asOf].filter(Boolean).sort().at(-1) || null,
+        data: state.feeds,
+        sources: [...news.sources, ...events.sources],
+      };
+      renderFeedFilters();
+      renderFeed();
+      renderNewsWorkspace();
+    } finally {
+      profileRequests.finish(request);
+    }
   }
 
   function renderFeedFilters() {
@@ -624,16 +671,20 @@ import {
   async function loadMonitor() {
     const profileId = currentProfile()?.id;
     if (!profileId) return;
+    const request = profileRequests.begin("monitor");
     try {
       const monitor = normalizeEnvelope(await requestJson(
         profileRequestUrl("/api/monitor-status", profileId, { limit: 20 }),
+        { signal: request.signal },
       ));
-      if (currentProfile()?.id !== profileId) return;
+      if (!profileRequests.isCurrent(request)) return;
       state.monitor = monitor;
     }
     catch {
-      if (currentProfile()?.id !== profileId) return;
+      if (!profileRequests.isCurrent(request)) return;
       state.monitor = normalizeEnvelope(null);
+    } finally {
+      profileRequests.finish(request);
     }
     renderTimeline();
     renderMonitorStatus();
@@ -644,7 +695,9 @@ import {
     const schedules = buildTaskTimeline(profile);
     $("#task-timeline").innerHTML = schedules.map(({ time, label, status, detail }) => {
       return `<li class="is-${escapeHtml(status)}"><time>${escapeHtml(time)}</time><span><b>${escapeHtml(label)}</b><small>${escapeHtml(detail)}</small></span></li>`;
-    }).join("") || '<li class="is-pending"><time>—</time><span><b>未启用计划</b><small>在设置中启用监控</small></span></li>';
+    }).join("") || (profile?.enabled === false
+      ? '<li class="is-disabled"><time>—</time><span><b>监控组已停用</b><small>不会创建或等待计划任务</small></span></li>'
+      : '<li class="is-disabled"><time>—</time><span><b>未启用计划</b><small>在设置中启用监控</small></span></li>');
   }
 
   function renderMonitorStatus() {
@@ -872,7 +925,9 @@ import {
       <time>${escapeHtml(time)}</time>
       <div><b>${escapeHtml(label)}</b><small>${escapeHtml(detail)}</small></div>
       <span>${escapeHtml(status === "success" ? "成功" : status === "failed" ? "失败" : status === "running" ? "运行中" : "等待结果")}</span>
-    </li>`).join("") || "<li><time>—</time><div><b>未启用研究计划</b><small>在设置中启用至少一个时段。</small></div><span>已停用</span></li>";
+    </li>`).join("") || (profile?.enabled === false
+      ? "<li class=\"is-disabled\"><time>—</time><div><b>监控组已停用</b><small>不会创建或等待计划任务。</small></div><span>已停用</span></li>"
+      : "<li class=\"is-disabled\"><time>—</time><div><b>未启用研究计划</b><small>在设置中启用至少一个时段。</small></div><span>已停用</span></li>");
   }
 
   function renderArchiveList() {
@@ -909,12 +964,17 @@ import {
     }));
   }
 
-  async function fetchReportText(path) {
+  async function fetchReportText(path, profileId, signal) {
     let response = await fetch(
-      profileRequestUrl("/api/report", currentProfile()?.id, { path }),
-      { cache: "no-store" },
+      profileRequestUrl("/api/report", profileId, { path }),
+      { cache: "no-store", signal },
     );
-    if (!response.ok) response = await fetch(`/${path.replace(/^\/+/, "")}`, { cache: "no-store" });
+    if (!response.ok) {
+      response = await fetch(
+        `/${path.replace(/^\/+/, "")}`,
+        { cache: "no-store", signal },
+      );
+    }
     if (!response.ok) throw new Error(`报告读取失败 (${response.status})`);
     return response.text();
   }
@@ -970,22 +1030,30 @@ import {
 
   async function loadArchiveFile(tab, tabs) {
     if (!tab?.path) return;
+    const profileId = currentProfile()?.id;
+    if (!profileId) return;
+    const request = profileRequests.begin("report", tab.path);
     state.selectedReportSection = tab.id;
     state.selectedReportContent = "";
     renderArchiveTabs(tabs);
     $("#archive-report-body").className = "panel-empty";
     $("#archive-report-body").innerHTML = `<b>正在读取${escapeHtml(tab.label)}</b><span>${escapeHtml(tab.path)}</span>`;
     try {
-      state.selectedReportContent = await fetchReportText(tab.path);
+      const content = await fetchReportText(tab.path, profileId, request.signal);
+      if (!profileRequests.isCurrent(request)) return;
+      state.selectedReportContent = content;
       $("#archive-report-body").className = "archive-markdown";
       $("#archive-report-body").innerHTML = renderMarkdown(state.selectedReportContent);
     } catch (error) {
+      if (!profileRequests.isCurrent(request)) return;
       $("#archive-report-body").className = "panel-empty";
       $("#archive-report-body").innerHTML = `<b>报告暂不可用</b><span>${escapeHtml(error.message)}</span><button class="button" id="archive-report-retry" type="button">重试</button>`;
       $("#archive-report-retry").addEventListener(
         "click",
         () => loadArchiveFile(tab, tabs),
       );
+    } finally {
+      profileRequests.finish(request);
     }
   }
 
@@ -1009,42 +1077,47 @@ import {
   async function loadResearchWorkspace() {
     const profileId = currentProfile()?.id;
     if (!profileId) return;
-    const [historyResult, runsResult, auditResult] = await Promise.allSettled([
-      requestJson(profileRequestUrl("/api/history", profileId)),
-      requestJson(profileRequestUrl("/api/runs", profileId)),
-      requestJson(profileRequestUrl("/api/report-audit", profileId)),
-    ]);
-    if (currentProfile()?.id !== profileId) return;
-    if (historyResult.status === "fulfilled") {
-      const payload = historyResult.value;
-      state.history = Array.isArray(payload) ? payload : payload?.data || payload?.history || [];
-    } else {
-      state.history = [];
+    const request = profileRequests.begin("research");
+    try {
+      const [historyResult, runsResult, auditResult] = await Promise.allSettled([
+        requestJson(profileRequestUrl("/api/history", profileId), { signal: request.signal }),
+        requestJson(profileRequestUrl("/api/runs", profileId), { signal: request.signal }),
+        requestJson(profileRequestUrl("/api/report-audit", profileId), { signal: request.signal }),
+      ]);
+      if (!profileRequests.isCurrent(request)) return;
+      if (historyResult.status === "fulfilled") {
+        const payload = historyResult.value;
+        state.history = Array.isArray(payload) ? payload : payload?.data || payload?.history || [];
+      } else {
+        state.history = [];
+      }
+      if (runsResult.status === "fulfilled") {
+        const payload = runsResult.value;
+        state.runs = payload?.runs || payload?.data || [];
+      } else {
+        state.runs = [];
+      }
+      if (auditResult.status === "fulfilled") {
+        state.reportAudit = auditResult.value?.data || auditResult.value;
+      } else {
+        state.reportAudit = null;
+      }
+      if (state.latest) {
+        state.latest = {
+          ...state.latest,
+          results: filterAuditedResults(
+            state.latest.results,
+            state.reportAudit,
+            { verifiedOnly: true },
+          ),
+        };
+      }
+      renderAgentWorkspace();
+      renderTaskBoard();
+      renderArchiveList();
+    } finally {
+      profileRequests.finish(request);
     }
-    if (runsResult.status === "fulfilled") {
-      const payload = runsResult.value;
-      state.runs = payload?.runs || payload?.data || [];
-    } else {
-      state.runs = [];
-    }
-    if (auditResult.status === "fulfilled") {
-      state.reportAudit = auditResult.value?.data || auditResult.value;
-    } else {
-      state.reportAudit = null;
-    }
-    if (state.latest) {
-      state.latest = {
-        ...state.latest,
-        results: filterAuditedResults(
-          state.latest.results,
-          state.reportAudit,
-          { verifiedOnly: true },
-        ),
-      };
-    }
-    renderAgentWorkspace();
-    renderTaskBoard();
-    renderArchiveList();
   }
 
   function renderNewsWorkspace() {
@@ -1072,9 +1145,16 @@ import {
 
   function renderSettingsWorkspace() {
     const profile = currentProfile();
-    if (!profile) return;
+    if (!profile) {
+      $("#settings-workspace-status").textContent = "配置不可用";
+      $("#settings-workspace-summary").className = "panel-empty";
+      $("#settings-workspace-summary").innerHTML = "<b>远端监控配置不可用</b><span>请打开设置并重试；系统不会生成默认监控组。</span>";
+      return;
+    }
     const enabledTargets = profile.targets || [];
-    $("#settings-workspace-status").textContent = profile.enabled ? "已启用" : "已停用";
+    $("#settings-workspace-status").textContent = state.settingsMode === "degraded"
+      ? "降级只读"
+      : profile.enabled ? "已启用" : "已停用";
     $("#settings-workspace-summary").className = "settings-summary-grid";
     $("#settings-workspace-summary").innerHTML = `
       <div><span>研究目标</span><b>${escapeHtml(profile.name)}</b><small>${escapeHtml(profile.objective)}</small></div>
@@ -1093,13 +1173,19 @@ import {
   async function loadLatest() {
     const profileId = currentProfile()?.id;
     if (!profileId) return;
+    const request = profileRequests.begin("latest");
     try {
-      const payload = await requestJson(profileRequestUrl("/api/latest", profileId));
-      if (currentProfile()?.id !== profileId) return;
+      const payload = await requestJson(
+        profileRequestUrl("/api/latest", profileId),
+        { signal: request.signal },
+      );
+      if (!profileRequests.isCurrent(request)) return;
       state.latest = payload?.data || payload;
     } catch {
-      if (currentProfile()?.id !== profileId) return;
+      if (!profileRequests.isCurrent(request)) return;
       state.latest = null;
+    } finally {
+      profileRequests.finish(request);
     }
     if (state.latest) {
       state.latest = {
@@ -1388,6 +1474,7 @@ import {
       return;
     }
 
+    profileRequests.activate(state.selectedProfileId);
     Object.assign(state, resetProfileContext(state, currentProfile()));
     const selectedTarget = targets().find(({ symbol }) => symbol === state.selectedSymbol);
     if (selectedTarget?.market !== "CN") state.timeframe = "1d";
@@ -1510,7 +1597,11 @@ import {
 
   function renderTargetEditor() {
     const profile = currentProfile();
-    if (!profile) return;
+    if (!profile) {
+      $("#target-editor").innerHTML = '<div class="panel-empty"><b>配置不可用</b><span>重新载入远端配置后才能编辑标的。</span></div>';
+      updateSettingsControlAvailability();
+      return;
+    }
     $("#target-editor").innerHTML = (profile.targets || []).map((target, index) => `<div class="target-row" data-target-index="${index}">
       <span class="target-symbol"><strong>${escapeHtml(target.symbol)}</strong><small>${escapeHtml(target.name)}</small></span>
       <select data-target-role aria-label="${escapeHtml(target.symbol)} 角色">${Object.entries(roleLabels).map(([value, label]) => `<option value="${value}" ${target.role === value ? "selected" : ""}>${label}</option>`).join("")}</select>
@@ -1530,6 +1621,7 @@ import {
       }
       renderTargetEditor(); renderWatchlist(); renderInstrument();
     }));
+    updateSettingsControlAvailability();
   }
 
   function addTarget() {
@@ -1575,6 +1667,12 @@ import {
   }
 
   async function submitAction(path, body, method = "POST") {
+    if (!state.settingsWritable || !state.settingsUpdatedAt) {
+      throw Object.assign(
+        new Error("远端监控配置不可写，请重新载入后重试"),
+        { status: 503, payload: { error_code: "SETTINGS_READ_ONLY" } },
+      );
+    }
     if (!state.accessCode) throw Object.assign(new Error("请先输入写操作访问码"), { status: 401 });
     return requestJson(path, {
       method,
@@ -1589,22 +1687,43 @@ import {
   }
 
   function acceptSettingsPayload(payload) {
-    if (!payload?.settings?.profiles?.length) {
+    const snapshot = settingsSnapshotFromPayload(payload);
+    if (!snapshot.writable) {
       throw new Error("服务端未返回最新监控配置");
     }
-    state.settings = payload.settings;
-    state.settingsUpdatedAt = payload.updatedAt ?? null;
+    state.settings = snapshot.settings;
+    state.settingsUpdatedAt = snapshot.revision;
+    state.settingsMode = snapshot.mode;
+    state.settingsWritable = snapshot.writable;
+    state.settingsError = "";
+  }
+
+  async function applyMutationPayload(payload, {
+    requestContext,
+    preferredProfileId,
+  } = {}) {
+    const selectedAtResponse = state.selectedProfileId;
+    const selectionChanged = !profileRequests.matches(requestContext);
+    acceptSettingsPayload(payload);
+    const nextId = selectedProfileAfterMutation(state.settings.profiles, {
+      selectedAtResponse,
+      selectionChanged,
+      preferredProfileId,
+    });
+    await selectProfile(nextId, { forceReset: true });
+    return nextId;
   }
 
   function showSettingsConflict(error) {
     const notice = $("#settings-notice");
     notice.classList.add("is-error");
-    if (error.status === 409) {
+    if (isSettingsRevisionConflict(error)) {
       notice.textContent = "版本冲突：远端配置已变化。";
       $("#settings-reload-remote").hidden = false;
       return;
     }
     notice.textContent = error.message;
+    if (error.status >= 500) $("#settings-reload-remote").hidden = false;
   }
 
   async function saveSettings(event) {
@@ -1615,15 +1734,18 @@ import {
     updateAccessCodeFromSettings();
     try {
       const profile = currentProfile();
+      const requestContext = profileRequests.snapshot();
       const patch = collectSettingsForm();
       const payload = await submitAction(
         `/api/settings/profiles/${encodeURIComponent(profile.id)}`,
         { patch, expectedUpdatedAt: state.settingsUpdatedAt },
         "PATCH",
       );
-      acceptSettingsPayload(payload);
+      await applyMutationPayload(payload, {
+        requestContext,
+        preferredProfileId: profile.id,
+      });
       notice.textContent = payload.message || "配置已保存";
-      renderSettingsSummary();
       await persistCredential();
       toast("监控配置已保存");
     } catch (error) {
@@ -1658,6 +1780,7 @@ import {
     }
     updateAccessCodeFromSettings();
     try {
+      const requestContext = profileRequests.snapshot();
       const payload = await submitAction("/api/settings/profiles", {
         profile: {
           id,
@@ -1669,10 +1792,12 @@ import {
         },
         expectedUpdatedAt: state.settingsUpdatedAt,
       });
-      acceptSettingsPayload(payload);
+      await applyMutationPayload(payload, {
+        requestContext,
+        preferredProfileId: id,
+      });
       $("#new-profile-id").value = "";
       $("#new-profile-name").value = "";
-      await selectProfile(id);
       toast(`已创建监控组：${name}`);
     } catch (error) {
       showSettingsConflict(error);
@@ -1688,6 +1813,7 @@ import {
     }
     updateAccessCodeFromSettings();
     try {
+      const requestContext = profileRequests.snapshot();
       const payload = await submitAction(
         `/api/settings/profiles/${encodeURIComponent(profile.id)}/copy`,
         {
@@ -1698,8 +1824,10 @@ import {
           expectedUpdatedAt: state.settingsUpdatedAt,
         },
       );
-      acceptSettingsPayload(payload);
-      await selectProfile(newId);
+      await applyMutationPayload(payload, {
+        requestContext,
+        preferredProfileId: newId,
+      });
       toast(`已复制监控组：${profile.name}`);
     } catch (error) {
       showSettingsConflict(error);
@@ -1715,14 +1843,16 @@ import {
     if (!window.confirm(`删除监控组“${profile.name}”？历史行情、报告和事件不会被删除。`)) return;
     updateAccessCodeFromSettings();
     try {
+      const requestContext = profileRequests.snapshot();
       const payload = await submitAction(
         `/api/settings/profiles/${encodeURIComponent(profile.id)}`,
         { expectedUpdatedAt: state.settingsUpdatedAt },
         "DELETE",
       );
-      acceptSettingsPayload(payload);
-      const nextId = resolveSelectedProfileId(state.settings.profiles, null);
-      await selectProfile(nextId);
+      await applyMutationPayload(payload, {
+        requestContext,
+        preferredProfileId: null,
+      });
       toast(`已删除监控组：${profile.name}`);
     } catch (error) {
       showSettingsConflict(error);
@@ -1735,10 +1865,13 @@ import {
     notice.textContent = "正在重新载入远端配置…";
     try {
       const payload = await requestJson("/api/settings");
-      const settings = payload?.data && !payload.profiles ? payload.data : payload;
-      state.settings = settings;
-      state.settingsUpdatedAt = settings?.updatedAt ?? payload?.updatedAt ?? null;
-      ensureSettings();
+      const snapshot = settingsSnapshotFromPayload(payload);
+      if (!snapshot.writable) throw new Error(snapshot.error || "远端配置仍不可写");
+      state.settings = snapshot.settings;
+      state.settingsUpdatedAt = snapshot.revision;
+      state.settingsMode = snapshot.mode;
+      state.settingsWritable = snapshot.writable;
+      state.settingsError = "";
       const nextId = resolveSelectedProfileId(state.settings.profiles, state.selectedProfileId);
       $("#settings-reload-remote").hidden = true;
       await selectProfile(nextId, { forceReset: true });
@@ -1746,6 +1879,7 @@ import {
     } catch (error) {
       notice.classList.add("is-error");
       notice.textContent = `重新载入失败：${error.message}`;
+      $("#settings-reload-remote").hidden = false;
     }
   }
 

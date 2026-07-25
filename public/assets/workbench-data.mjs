@@ -196,6 +196,7 @@ export function filterFeedItems(items, filters = {}) {
 }
 
 export function buildTaskTimeline(profile) {
+  if (profile?.enabled === false) return [];
   const schedules = profile?.schedules || {};
   return [
     {

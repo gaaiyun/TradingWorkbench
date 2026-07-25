@@ -486,5 +486,6 @@ test("the workbench patches the selected profile with the last observed D1 revis
   assert.match(script, /expectedUpdatedAt:\s*state\.settingsUpdatedAt/);
   assert.match(script, /`\/api\/settings\/profiles\/\$\{encodeURIComponent\(profile\.id\)\}`/);
   assert.match(script, /"PATCH"/);
-  assert.match(script, /state\.settingsUpdatedAt\s*=\s*payload\.updatedAt/);
+  assert.match(script, /state\.settingsUpdatedAt\s*=\s*snapshot\.revision/);
+  assert.match(script, /if\s*\(!state\.settingsWritable\s*\|\|\s*!state\.settingsUpdatedAt\)/);
 });

@@ -403,6 +403,8 @@ def run_browser():
         page.wait_for_timeout(180)
         assert urlparse(page.url).fragment == "monitor"
         assert page.locator("#watchlist .watch-row").count() == 2
+        assert "监控组已停用" in page.locator("#task-timeline").inner_text()
+        assert "任务结果接口未提供" not in page.locator("#task-timeline").inner_text()
         assert page.evaluate(
             "localStorage.getItem('ta.workbench.selected-profile.v1')"
         ) == "profile-b"
@@ -615,6 +617,36 @@ def run_browser():
         mobile.click('[data-mobile-section="chart"]')
         mobile.wait_for_function("document.querySelector('#conclusion-asof').textContent.includes('尚无')")
         assert "美股半导体驱动偏强" not in mobile.locator("#conclusion-body").inner_text()
+
+        degraded = browser.new_page(
+            viewport={"width": 1200, "height": 800},
+            device_scale_factor=1,
+        )
+        capture_browser_diagnostics(degraded, "degraded-settings")
+
+        def route_degraded_settings(route):
+            if urlparse(route.request.url).path == "/api/settings":
+                fulfill_json(route, {
+                    "status": "unavailable",
+                    "error": "D1 unavailable",
+                    "data": deepcopy(ACTIVE_SETTINGS),
+                })
+                return
+            route_api(route)
+
+        degraded.route("**/api/**", route_degraded_settings)
+        degraded.goto(BASE_URL, wait_until="domcontentloaded")
+        degraded.wait_for_function(
+            "document.querySelector('#settings-workspace-status').textContent.includes('只读')"
+        )
+        degraded.locator('[data-route-link="settings"]').first.click()
+        degraded.click("#settings-workspace-open")
+        degraded.wait_for_selector("#settings-drawer.is-open")
+        assert degraded.locator("#save-settings").is_disabled()
+        assert degraded.locator("#profile-create").is_disabled()
+        assert degraded.locator("#settings-reload-remote").is_visible()
+        assert "静态灾备快照" in degraded.locator("#settings-notice").inner_text()
+        degraded.close()
 
         race = browser.new_page(viewport={"width": 1200, "height": 800}, device_scale_factor=1)
         capture_browser_diagnostics(race, "race")

@@ -5,13 +5,17 @@ import {
   PROFILE_LIMIT,
   PROFILE_STORAGE_KEY,
   TARGET_LIMIT,
+  createProfileRequestCoordinator,
   currentProfileFor,
+  isSettingsRevisionConflict,
   marketForProfileTarget,
   normalizeProfileTargetSymbol,
   profileRequestUrl,
   replaceProfile,
   resetProfileContext,
   resolveSelectedProfileId,
+  selectedProfileAfterMutation,
+  settingsSnapshotFromPayload,
 } from "../public/assets/workbench-profiles.mjs";
 
 const profiles = [
@@ -146,4 +150,94 @@ test("profile target symbols accept Hong Kong aliases and preserve general HK ti
   assert.equal(marketForProfileTarget("3887.HK"), "HK");
   assert.equal(marketForProfileTarget("515880.SS"), "CN");
   assert.equal(marketForProfileTarget("NVDA"), "US");
+});
+
+test("settings snapshots fail closed and keep static disaster recovery read-only", () => {
+  const unavailable = settingsSnapshotFromPayload({
+    status: "unavailable",
+    error: "D1 unavailable",
+    data: { version: 2, profiles },
+  });
+  assert.equal(unavailable.mode, "unavailable");
+  assert.equal(unavailable.settings, null);
+  assert.equal(unavailable.revision, null);
+  assert.equal(unavailable.writable, false);
+
+  const fallback = settingsSnapshotFromPayload(
+    { version: 2, profiles },
+    { source: "static" },
+  );
+  assert.equal(fallback.mode, "degraded");
+  assert.equal(fallback.settings.profiles, profiles);
+  assert.equal(fallback.revision, null);
+  assert.equal(fallback.writable, false);
+
+  const live = settingsSnapshotFromPayload({
+    version: 2,
+    profiles,
+    updatedAt: "2026-07-26T01:02:03.000Z",
+  });
+  assert.equal(live.mode, "ready");
+  assert.equal(live.revision, "2026-07-26T01:02:03.000Z");
+  assert.equal(live.writable, true);
+
+  const missingRevision = settingsSnapshotFromPayload({ version: 2, profiles });
+  assert.equal(missingRevision.mode, "degraded");
+  assert.equal(missingRevision.writable, false);
+});
+
+test("profile request generations reject A to B to A and superseded report responses", () => {
+  const requests = createProfileRequestCoordinator();
+  requests.activate("profile-a");
+  const firstFeeds = requests.begin("feeds");
+  const firstReport = requests.begin("report", "decision.md");
+
+  requests.activate("profile-b");
+  assert.equal(firstFeeds.signal.aborted, true);
+  assert.equal(firstReport.signal.aborted, true);
+
+  requests.activate("profile-a");
+  const latestFeeds = requests.begin("feeds");
+  const oldReport = requests.begin("report", "decision.md");
+  const latestReport = requests.begin("report", "market.md");
+
+  assert.equal(requests.isCurrent(firstFeeds), false);
+  assert.equal(requests.isCurrent(latestFeeds), true);
+  assert.equal(oldReport.signal.aborted, true);
+  assert.equal(requests.isCurrent(oldReport), false);
+  assert.equal(requests.isCurrent(latestReport), true);
+});
+
+test("CRUD selection resolution preserves a selection changed while the request was pending", () => {
+  const withCreated = [...profiles, { id: "profile-new", name: "新组", targets: [] }];
+
+  assert.equal(selectedProfileAfterMutation(withCreated, {
+    selectedAtRequest: "profile-a",
+    selectedAtResponse: "profile-a",
+    selectionChanged: false,
+    preferredProfileId: "profile-new",
+  }), "profile-new");
+
+  assert.equal(selectedProfileAfterMutation(withCreated, {
+    selectedAtRequest: "profile-a",
+    selectedAtResponse: "profile-b",
+    selectionChanged: true,
+    preferredProfileId: "profile-new",
+  }), "profile-b");
+});
+
+test("only revision conflicts and precondition failures map to concurrent settings conflicts", () => {
+  assert.equal(isSettingsRevisionConflict({
+    status: 409,
+    payload: { error_code: "SETTINGS_CONFLICT" },
+  }), true);
+  assert.equal(isSettingsRevisionConflict({
+    status: 428,
+    payload: { error_code: "SETTINGS_REVISION_REQUIRED" },
+  }), true);
+  assert.equal(isSettingsRevisionConflict({
+    status: 409,
+    payload: { error_code: "LAST_PROFILE_REQUIRED" },
+  }), false);
+  assert.equal(isSettingsRevisionConflict({ status: 503 }), false);
 });

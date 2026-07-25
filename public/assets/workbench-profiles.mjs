@@ -9,6 +9,126 @@ const unavailableEnvelope = () => ({
   sources: [],
 });
 
+function validRevision(value) {
+  return typeof value === "string"
+    && value.trim().length > 0
+    && !Number.isNaN(new Date(value).valueOf());
+}
+
+export function settingsSnapshotFromPayload(payload, { source = "remote" } = {}) {
+  const explicitStatus = String(payload?.status || "").toLowerCase();
+  const explicitlyUnavailable = ["unavailable", "error"].includes(explicitStatus);
+  if (explicitlyUnavailable) {
+    return {
+      mode: "unavailable",
+      settings: null,
+      revision: null,
+      writable: false,
+      error: payload?.error || "远端监控配置不可用",
+    };
+  }
+
+  const settings = payload?.settings?.profiles
+    ? payload.settings
+    : payload?.data?.profiles
+      ? payload.data
+      : payload;
+  if (!Array.isArray(settings?.profiles) || settings.profiles.length === 0) {
+    return {
+      mode: "unavailable",
+      settings: null,
+      revision: null,
+      writable: false,
+      error: payload?.error || "服务端未返回监控配置",
+    };
+  }
+
+  const revision = payload?.revision
+    ?? payload?.updatedAt
+    ?? settings?.revision
+    ?? settings?.updatedAt
+    ?? null;
+  const degraded = source === "static"
+    || ["degraded", "stale"].includes(explicitStatus)
+    || !validRevision(revision);
+  return {
+    mode: degraded ? "degraded" : "ready",
+    settings,
+    revision: validRevision(revision) ? revision : null,
+    writable: !degraded,
+    error: degraded ? "远端设置不可写" : null,
+  };
+}
+
+export function createProfileRequestCoordinator() {
+  let generation = 0;
+  let profileId = null;
+  const active = new Map();
+
+  function abortActive() {
+    for (const request of active.values()) request.controller.abort();
+    active.clear();
+  }
+
+  return {
+    activate(nextProfileId) {
+      abortActive();
+      generation += 1;
+      profileId = nextProfileId || null;
+      return { generation, profileId };
+    },
+    snapshot() {
+      return { generation, profileId };
+    },
+    matches(context) {
+      return context?.generation === generation && context.profileId === profileId;
+    },
+    begin(channel, key = "") {
+      active.get(channel)?.controller.abort();
+      const controller = new AbortController();
+      const request = {
+        channel,
+        key,
+        generation,
+        profileId,
+        controller,
+        signal: controller.signal,
+      };
+      active.set(channel, request);
+      return request;
+    },
+    isCurrent(request) {
+      return Boolean(
+        request
+        && active.get(request.channel) === request
+        && request.generation === generation
+        && request.profileId === profileId
+        && !request.signal.aborted
+      );
+    },
+    finish(request) {
+      if (active.get(request?.channel) === request) active.delete(request.channel);
+    },
+  };
+}
+
+export function selectedProfileAfterMutation(profiles, {
+  selectedAtResponse,
+  selectionChanged,
+  preferredProfileId,
+} = {}) {
+  const requestedId = selectionChanged ? selectedAtResponse : preferredProfileId;
+  return resolveSelectedProfileId(profiles, requestedId);
+}
+
+export function isSettingsRevisionConflict(error) {
+  return error?.status === 428
+    || (
+      error?.status === 409
+      && error?.payload?.error_code === "SETTINGS_CONFLICT"
+    );
+}
+
 export function normalizeProfileTargetSymbol(raw) {
   const value = String(raw ?? "").trim().toUpperCase();
   if (["03887", "3887", "03887.HK", "3887.HK"].includes(value)) {

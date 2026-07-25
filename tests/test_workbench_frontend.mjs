@@ -267,6 +267,20 @@ test("task timeline never maps source health rows to schedule slots by array pos
   assert.equal(timeline.every((item) => item.detail === "任务结果接口未提供"), true);
 });
 
+test("disabled profiles expose no pending scheduled work", () => {
+  const timeline = workbenchData.buildTaskTimeline({
+    enabled: false,
+    schedules: {
+      usCloseSnapshot: { enabled: true, time: "05:35" },
+      preMarketBrief: { enabled: true, time: "08:25" },
+      cnIntraday: { enabled: true, windows: [{ start: "09:30", end: "11:30" }] },
+      closeDeepAnalysis: { enabled: true, time: "15:20" },
+    },
+  });
+  assert.deepEqual(timeline, []);
+  assert.match(script, /监控组已停用/);
+});
+
 test("current-symbol conclusion never falls back to a different symbol", () => {
   assert.equal(typeof workbenchData.selectConclusion, "function");
   const latest = { results: [{ ticker: "NVDA", rating: "Buy" }] };
@@ -489,6 +503,34 @@ test("settings expose profile CRUD, server conflict recovery, and documented lim
   assert.match(script, /重新载入远端/);
   assert.match(profilesScript, /PROFILE_LIMIT\s*=\s*8/);
   assert.match(profilesScript, /TARGET_LIMIT\s*=\s*14/);
+});
+
+test("settings fail closed without a live revision and expose degraded read-only recovery", () => {
+  assert.doesNotMatch(script, /function ensureSettings/);
+  assert.match(script, /settingsSnapshotFromPayload/);
+  assert.match(script, /settingsMode:\s*"loading"/);
+  assert.match(script, /settingsWritable:\s*false/);
+  assert.match(script, /静态灾备快照/);
+  assert.match(script, /远端监控配置不可用/);
+  assert.match(script, /if\s*\(!state\.settingsWritable\s*\|\|\s*!state\.settingsUpdatedAt\)/);
+  assert.match(script, /settings-reload-remote/);
+});
+
+test("profile-scoped resources share one abortable generation gate", () => {
+  for (const channel of ["feeds", "monitor", "latest", "research", "report"]) {
+    assert.match(script, new RegExp(`profileRequests\\.begin\\("${channel}"`));
+  }
+  assert.match(script, /profileRequests\.activate\(state\.selectedProfileId\)/);
+  assert.match(script, /profileRequests\.isCurrent\(request\)/);
+  assert.match(script, /\{\s*signal:\s*request\.signal\s*\}/);
+  assert.match(script, /applyMutationPayload/);
+  assert.match(script, /selectionChanged/);
+});
+
+test("settings error mapping distinguishes revision conflicts and keeps failed refresh retryable", () => {
+  assert.match(script, /isSettingsRevisionConflict\(error\)/);
+  assert.match(script, /重新载入失败/);
+  assert.match(script, /settings-reload-remote"\)\.hidden\s*=\s*false/);
 });
 
 test("target editor accepts A-share, Hong Kong, and US symbols with explicit market mapping", () => {
