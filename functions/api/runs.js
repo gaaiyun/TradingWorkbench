@@ -1,6 +1,36 @@
 import { REPO, ghHeaders, json } from "./_util.js";
 
 const WORKFLOWS = ["daily-analysis.yml", "analysis-request.yml"];
+const UUID = "[0-9a-f]{8}-(?:[0-9a-f]{4}-){3}[0-9a-f]{12}";
+const MANUAL_RUN = new RegExp(`^Daily analysis · manual · (${UUID})$`, "i");
+const SCHEDULED_RUN = /^Daily analysis · ([^·]+) · ([^·]+) · (\S+)$/;
+
+function runIdentity(title) {
+  const manual = MANUAL_RUN.exec(title || "");
+  if (manual) {
+    return {
+      requestId: manual[1].toLowerCase(),
+      profileId: null,
+      slotId: null,
+      scheduledFor: null,
+    };
+  }
+  const scheduled = SCHEDULED_RUN.exec(title || "");
+  if (scheduled && scheduled[1].trim() !== "manual") {
+    return {
+      requestId: null,
+      profileId: scheduled[1].trim(),
+      slotId: scheduled[2].trim(),
+      scheduledFor: scheduled[3],
+    };
+  }
+  return {
+    requestId: null,
+    profileId: null,
+    slotId: null,
+    scheduledFor: null,
+  };
+}
 
 // GET /api/runs → 最近的分析运行状态（两个工作流合并，按时间倒序）
 export async function onRequestGet({ env }) {
@@ -21,6 +51,7 @@ export async function onRequestGet({ env }) {
         conclusion: r.conclusion,    // success | failure | ...
         created_at: r.created_at,
         url: r.html_url,
+        ...runIdentity(r.display_title),
       });
     }
   }

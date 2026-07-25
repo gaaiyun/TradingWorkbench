@@ -72,7 +72,10 @@ test("manual analysis still dispatches the TradingAgents workflow", async () => 
       },
     });
     assert.equal(response.status, 202);
-    assert.deepEqual(dispatched.inputs, { tickers: "515880.SS,512480.SS" });
+    assert.equal(dispatched.inputs.tickers, "515880.SS,512480.SS");
+    assert.equal(dispatched.inputs.analysts, "market,news,fundamentals");
+    assert.equal(dispatched.inputs.researchDepth, "standard");
+    assert.match(dispatched.inputs.requestId, /^[0-9a-f-]{36}$/i);
   } finally {
     globalThis.fetch = originalFetch;
   }

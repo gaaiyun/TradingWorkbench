@@ -14,6 +14,20 @@
         "evidence_publish": {
           "published": true,
           "status": 201
+        },
+        "files": {
+          "fundamentals": "reports/515880.SS/2026-07-24-v3/1_analysts/fundamentals.md",
+          "market": "reports/515880.SS/2026-07-24-v3/1_analysts/market.md",
+          "news": "reports/515880.SS/2026-07-24-v3/1_analysts/news.md",
+          "bear": "reports/515880.SS/2026-07-24-v3/2_research/bear.md",
+          "bull": "reports/515880.SS/2026-07-24-v3/2_research/bull.md",
+          "manager": "reports/515880.SS/2026-07-24-v3/2_research/manager.md",
+          "trader": "reports/515880.SS/2026-07-24-v3/3_trading/trader.md",
+          "aggressive": "reports/515880.SS/2026-07-24-v3/4_risk/aggressive.md",
+          "conservative": "reports/515880.SS/2026-07-24-v3/4_risk/conservative.md",
+          "neutral": "reports/515880.SS/2026-07-24-v3/4_risk/neutral.md",
+          "decision": "reports/515880.SS/2026-07-24-v3/5_portfolio/decision.md",
+          "complete_report": "reports/515880.SS/2026-07-24-v3/complete_report.md"
         }
       },
       {
@@ -26,6 +40,19 @@
         "evidence_publish": {
           "published": true,
           "status": 201
+        },
+        "files": {
+          "fundamentals": "reports/512480.SS/2026-07-24-v3/1_analysts/fundamentals.md",
+          "market": "reports/512480.SS/2026-07-24-v3/1_analysts/market.md",
+          "bear": "reports/512480.SS/2026-07-24-v3/2_research/bear.md",
+          "bull": "reports/512480.SS/2026-07-24-v3/2_research/bull.md",
+          "manager": "reports/512480.SS/2026-07-24-v3/2_research/manager.md",
+          "trader": "reports/512480.SS/2026-07-24-v3/3_trading/trader.md",
+          "aggressive": "reports/512480.SS/2026-07-24-v3/4_risk/aggressive.md",
+          "conservative": "reports/512480.SS/2026-07-24-v3/4_risk/conservative.md",
+          "neutral": "reports/512480.SS/2026-07-24-v3/4_risk/neutral.md",
+          "decision": "reports/512480.SS/2026-07-24-v3/5_portfolio/decision.md",
+          "complete_report": "reports/512480.SS/2026-07-24-v3/complete_report.md"
         }
       },
       {
@@ -38,6 +65,20 @@
         "evidence_publish": {
           "published": true,
           "status": 201
+        },
+        "files": {
+          "fundamentals": "reports/ORCL/2026-07-24-v2/1_analysts/fundamentals.md",
+          "market": "reports/ORCL/2026-07-24-v2/1_analysts/market.md",
+          "news": "reports/ORCL/2026-07-24-v2/1_analysts/news.md",
+          "bear": "reports/ORCL/2026-07-24-v2/2_research/bear.md",
+          "bull": "reports/ORCL/2026-07-24-v2/2_research/bull.md",
+          "manager": "reports/ORCL/2026-07-24-v2/2_research/manager.md",
+          "trader": "reports/ORCL/2026-07-24-v2/3_trading/trader.md",
+          "aggressive": "reports/ORCL/2026-07-24-v2/4_risk/aggressive.md",
+          "conservative": "reports/ORCL/2026-07-24-v2/4_risk/conservative.md",
+          "neutral": "reports/ORCL/2026-07-24-v2/4_risk/neutral.md",
+          "decision": "reports/ORCL/2026-07-24-v2/5_portfolio/decision.md",
+          "complete_report": "reports/ORCL/2026-07-24-v2/complete_report.md"
         }
       },
       {
@@ -50,6 +91,20 @@
         "evidence_publish": {
           "published": true,
           "status": 201
+        },
+        "files": {
+          "fundamentals": "reports/GOOGL/2026-07-24-v3/1_analysts/fundamentals.md",
+          "market": "reports/GOOGL/2026-07-24-v3/1_analysts/market.md",
+          "news": "reports/GOOGL/2026-07-24-v3/1_analysts/news.md",
+          "bear": "reports/GOOGL/2026-07-24-v3/2_research/bear.md",
+          "bull": "reports/GOOGL/2026-07-24-v3/2_research/bull.md",
+          "manager": "reports/GOOGL/2026-07-24-v3/2_research/manager.md",
+          "trader": "reports/GOOGL/2026-07-24-v3/3_trading/trader.md",
+          "aggressive": "reports/GOOGL/2026-07-24-v3/4_risk/aggressive.md",
+          "conservative": "reports/GOOGL/2026-07-24-v3/4_risk/conservative.md",
+          "neutral": "reports/GOOGL/2026-07-24-v3/4_risk/neutral.md",
+          "decision": "reports/GOOGL/2026-07-24-v3/5_portfolio/decision.md",
+          "complete_report": "reports/GOOGL/2026-07-24-v3/complete_report.md"
         }
       },
       {
@@ -62,6 +117,20 @@
         "evidence_publish": {
           "published": true,
           "status": 201
+        },
+        "files": {
+          "fundamentals": "reports/3887.HK/2026-07-24-v4/1_analysts/fundamentals.md",
+          "market": "reports/3887.HK/2026-07-24-v4/1_analysts/market.md",
+          "news": "reports/3887.HK/2026-07-24-v4/1_analysts/news.md",
+          "bear": "reports/3887.HK/2026-07-24-v4/2_research/bear.md",
+          "bull": "reports/3887.HK/2026-07-24-v4/2_research/bull.md",
+          "manager": "reports/3887.HK/2026-07-24-v4/2_research/manager.md",
+          "trader": "reports/3887.HK/2026-07-24-v4/3_trading/trader.md",
+          "aggressive": "reports/3887.HK/2026-07-24-v4/4_risk/aggressive.md",
+          "conservative": "reports/3887.HK/2026-07-24-v4/4_risk/conservative.md",
+          "neutral": "reports/3887.HK/2026-07-24-v4/4_risk/neutral.md",
+          "decision": "reports/3887.HK/2026-07-24-v4/5_portfolio/decision.md",
+          "complete_report": "reports/3887.HK/2026-07-24-v4/complete_report.md"
         }
       }
     ]
@@ -94,6 +163,20 @@
           "published": false,
           "reason": "http_error",
           "status": 400
+        },
+        "files": {
+          "fundamentals": "reports/GOOGL/2026-07-24-v2/1_analysts/fundamentals.md",
+          "market": "reports/GOOGL/2026-07-24-v2/1_analysts/market.md",
+          "news": "reports/GOOGL/2026-07-24-v2/1_analysts/news.md",
+          "bear": "reports/GOOGL/2026-07-24-v2/2_research/bear.md",
+          "bull": "reports/GOOGL/2026-07-24-v2/2_research/bull.md",
+          "manager": "reports/GOOGL/2026-07-24-v2/2_research/manager.md",
+          "trader": "reports/GOOGL/2026-07-24-v2/3_trading/trader.md",
+          "aggressive": "reports/GOOGL/2026-07-24-v2/4_risk/aggressive.md",
+          "conservative": "reports/GOOGL/2026-07-24-v2/4_risk/conservative.md",
+          "neutral": "reports/GOOGL/2026-07-24-v2/4_risk/neutral.md",
+          "decision": "reports/GOOGL/2026-07-24-v2/5_portfolio/decision.md",
+          "complete_report": "reports/GOOGL/2026-07-24-v2/complete_report.md"
         }
       },
       {
@@ -107,6 +190,20 @@
           "published": false,
           "reason": "http_error",
           "status": 400
+        },
+        "files": {
+          "fundamentals": "reports/3887.HK/2026-07-24-v3/1_analysts/fundamentals.md",
+          "market": "reports/3887.HK/2026-07-24-v3/1_analysts/market.md",
+          "news": "reports/3887.HK/2026-07-24-v3/1_analysts/news.md",
+          "bear": "reports/3887.HK/2026-07-24-v3/2_research/bear.md",
+          "bull": "reports/3887.HK/2026-07-24-v3/2_research/bull.md",
+          "manager": "reports/3887.HK/2026-07-24-v3/2_research/manager.md",
+          "trader": "reports/3887.HK/2026-07-24-v3/3_trading/trader.md",
+          "aggressive": "reports/3887.HK/2026-07-24-v3/4_risk/aggressive.md",
+          "conservative": "reports/3887.HK/2026-07-24-v3/4_risk/conservative.md",
+          "neutral": "reports/3887.HK/2026-07-24-v3/4_risk/neutral.md",
+          "decision": "reports/3887.HK/2026-07-24-v3/5_portfolio/decision.md",
+          "complete_report": "reports/3887.HK/2026-07-24-v3/complete_report.md"
         }
       }
     ]
@@ -127,6 +224,20 @@
           "published": false,
           "reason": "http_error",
           "status": 400
+        },
+        "files": {
+          "fundamentals": "reports/515880.SS/2026-07-24-v2/1_analysts/fundamentals.md",
+          "market": "reports/515880.SS/2026-07-24-v2/1_analysts/market.md",
+          "news": "reports/515880.SS/2026-07-24-v2/1_analysts/news.md",
+          "bear": "reports/515880.SS/2026-07-24-v2/2_research/bear.md",
+          "bull": "reports/515880.SS/2026-07-24-v2/2_research/bull.md",
+          "manager": "reports/515880.SS/2026-07-24-v2/2_research/manager.md",
+          "trader": "reports/515880.SS/2026-07-24-v2/3_trading/trader.md",
+          "aggressive": "reports/515880.SS/2026-07-24-v2/4_risk/aggressive.md",
+          "conservative": "reports/515880.SS/2026-07-24-v2/4_risk/conservative.md",
+          "neutral": "reports/515880.SS/2026-07-24-v2/4_risk/neutral.md",
+          "decision": "reports/515880.SS/2026-07-24-v2/5_portfolio/decision.md",
+          "complete_report": "reports/515880.SS/2026-07-24-v2/complete_report.md"
         }
       },
       {
@@ -140,6 +251,20 @@
           "published": false,
           "reason": "http_error",
           "status": 400
+        },
+        "files": {
+          "fundamentals": "reports/512480.SS/2026-07-24-v2/1_analysts/fundamentals.md",
+          "market": "reports/512480.SS/2026-07-24-v2/1_analysts/market.md",
+          "news": "reports/512480.SS/2026-07-24-v2/1_analysts/news.md",
+          "bear": "reports/512480.SS/2026-07-24-v2/2_research/bear.md",
+          "bull": "reports/512480.SS/2026-07-24-v2/2_research/bull.md",
+          "manager": "reports/512480.SS/2026-07-24-v2/2_research/manager.md",
+          "trader": "reports/512480.SS/2026-07-24-v2/3_trading/trader.md",
+          "aggressive": "reports/512480.SS/2026-07-24-v2/4_risk/aggressive.md",
+          "conservative": "reports/512480.SS/2026-07-24-v2/4_risk/conservative.md",
+          "neutral": "reports/512480.SS/2026-07-24-v2/4_risk/neutral.md",
+          "decision": "reports/512480.SS/2026-07-24-v2/5_portfolio/decision.md",
+          "complete_report": "reports/512480.SS/2026-07-24-v2/complete_report.md"
         }
       },
       {
@@ -177,6 +302,20 @@
           "published": false,
           "reason": "http_error",
           "status": 400
+        },
+        "files": {
+          "fundamentals": "reports/3887.HK/2026-07-24-v2/1_analysts/fundamentals.md",
+          "market": "reports/3887.HK/2026-07-24-v2/1_analysts/market.md",
+          "news": "reports/3887.HK/2026-07-24-v2/1_analysts/news.md",
+          "bear": "reports/3887.HK/2026-07-24-v2/2_research/bear.md",
+          "bull": "reports/3887.HK/2026-07-24-v2/2_research/bull.md",
+          "manager": "reports/3887.HK/2026-07-24-v2/2_research/manager.md",
+          "trader": "reports/3887.HK/2026-07-24-v2/3_trading/trader.md",
+          "aggressive": "reports/3887.HK/2026-07-24-v2/4_risk/aggressive.md",
+          "conservative": "reports/3887.HK/2026-07-24-v2/4_risk/conservative.md",
+          "neutral": "reports/3887.HK/2026-07-24-v2/4_risk/neutral.md",
+          "decision": "reports/3887.HK/2026-07-24-v2/5_portfolio/decision.md",
+          "complete_report": "reports/3887.HK/2026-07-24-v2/complete_report.md"
         }
       }
     ]
@@ -202,19 +341,61 @@
         "ticker": "ORCL",
         "rating": "Underweight",
         "report": "reports/ORCL/2026-07-24/complete_report.md",
-        "error": false
+        "error": false,
+        "files": {
+          "fundamentals": "reports/ORCL/2026-07-24/1_analysts/fundamentals.md",
+          "market": "reports/ORCL/2026-07-24/1_analysts/market.md",
+          "news": "reports/ORCL/2026-07-24/1_analysts/news.md",
+          "bear": "reports/ORCL/2026-07-24/2_research/bear.md",
+          "bull": "reports/ORCL/2026-07-24/2_research/bull.md",
+          "manager": "reports/ORCL/2026-07-24/2_research/manager.md",
+          "trader": "reports/ORCL/2026-07-24/3_trading/trader.md",
+          "aggressive": "reports/ORCL/2026-07-24/4_risk/aggressive.md",
+          "conservative": "reports/ORCL/2026-07-24/4_risk/conservative.md",
+          "neutral": "reports/ORCL/2026-07-24/4_risk/neutral.md",
+          "decision": "reports/ORCL/2026-07-24/5_portfolio/decision.md",
+          "complete_report": "reports/ORCL/2026-07-24/complete_report.md"
+        }
       },
       {
         "ticker": "GOOGL",
         "rating": "Hold",
         "report": "reports/GOOGL/2026-07-24/complete_report.md",
-        "error": false
+        "error": false,
+        "files": {
+          "fundamentals": "reports/GOOGL/2026-07-24/1_analysts/fundamentals.md",
+          "market": "reports/GOOGL/2026-07-24/1_analysts/market.md",
+          "news": "reports/GOOGL/2026-07-24/1_analysts/news.md",
+          "bear": "reports/GOOGL/2026-07-24/2_research/bear.md",
+          "bull": "reports/GOOGL/2026-07-24/2_research/bull.md",
+          "manager": "reports/GOOGL/2026-07-24/2_research/manager.md",
+          "trader": "reports/GOOGL/2026-07-24/3_trading/trader.md",
+          "aggressive": "reports/GOOGL/2026-07-24/4_risk/aggressive.md",
+          "conservative": "reports/GOOGL/2026-07-24/4_risk/conservative.md",
+          "neutral": "reports/GOOGL/2026-07-24/4_risk/neutral.md",
+          "decision": "reports/GOOGL/2026-07-24/5_portfolio/decision.md",
+          "complete_report": "reports/GOOGL/2026-07-24/complete_report.md"
+        }
       },
       {
         "ticker": "3887.HK",
         "rating": "Sell",
         "report": "reports/3887.HK/2026-07-24/complete_report.md",
-        "error": false
+        "error": false,
+        "files": {
+          "fundamentals": "reports/3887.HK/2026-07-24/1_analysts/fundamentals.md",
+          "market": "reports/3887.HK/2026-07-24/1_analysts/market.md",
+          "news": "reports/3887.HK/2026-07-24/1_analysts/news.md",
+          "bear": "reports/3887.HK/2026-07-24/2_research/bear.md",
+          "bull": "reports/3887.HK/2026-07-24/2_research/bull.md",
+          "manager": "reports/3887.HK/2026-07-24/2_research/manager.md",
+          "trader": "reports/3887.HK/2026-07-24/3_trading/trader.md",
+          "aggressive": "reports/3887.HK/2026-07-24/4_risk/aggressive.md",
+          "conservative": "reports/3887.HK/2026-07-24/4_risk/conservative.md",
+          "neutral": "reports/3887.HK/2026-07-24/4_risk/neutral.md",
+          "decision": "reports/3887.HK/2026-07-24/5_portfolio/decision.md",
+          "complete_report": "reports/3887.HK/2026-07-24/complete_report.md"
+        }
       }
     ]
   },
@@ -227,13 +408,41 @@
         "ticker": "515880.SS",
         "rating": "Sell",
         "report": "reports/515880.SS/2026-07-24/complete_report.md",
-        "error": false
+        "error": false,
+        "files": {
+          "fundamentals": "reports/515880.SS/2026-07-24/1_analysts/fundamentals.md",
+          "market": "reports/515880.SS/2026-07-24/1_analysts/market.md",
+          "news": "reports/515880.SS/2026-07-24/1_analysts/news.md",
+          "bear": "reports/515880.SS/2026-07-24/2_research/bear.md",
+          "bull": "reports/515880.SS/2026-07-24/2_research/bull.md",
+          "manager": "reports/515880.SS/2026-07-24/2_research/manager.md",
+          "trader": "reports/515880.SS/2026-07-24/3_trading/trader.md",
+          "aggressive": "reports/515880.SS/2026-07-24/4_risk/aggressive.md",
+          "conservative": "reports/515880.SS/2026-07-24/4_risk/conservative.md",
+          "neutral": "reports/515880.SS/2026-07-24/4_risk/neutral.md",
+          "decision": "reports/515880.SS/2026-07-24/5_portfolio/decision.md",
+          "complete_report": "reports/515880.SS/2026-07-24/complete_report.md"
+        }
       },
       {
         "ticker": "512480.SS",
         "rating": "Sell",
         "report": "reports/512480.SS/2026-07-24/complete_report.md",
-        "error": false
+        "error": false,
+        "files": {
+          "fundamentals": "reports/512480.SS/2026-07-24/1_analysts/fundamentals.md",
+          "market": "reports/512480.SS/2026-07-24/1_analysts/market.md",
+          "news": "reports/512480.SS/2026-07-24/1_analysts/news.md",
+          "bear": "reports/512480.SS/2026-07-24/2_research/bear.md",
+          "bull": "reports/512480.SS/2026-07-24/2_research/bull.md",
+          "manager": "reports/512480.SS/2026-07-24/2_research/manager.md",
+          "trader": "reports/512480.SS/2026-07-24/3_trading/trader.md",
+          "aggressive": "reports/512480.SS/2026-07-24/4_risk/aggressive.md",
+          "conservative": "reports/512480.SS/2026-07-24/4_risk/conservative.md",
+          "neutral": "reports/512480.SS/2026-07-24/4_risk/neutral.md",
+          "decision": "reports/512480.SS/2026-07-24/5_portfolio/decision.md",
+          "complete_report": "reports/512480.SS/2026-07-24/complete_report.md"
+        }
       }
     ]
   },
@@ -246,7 +455,21 @@
         "ticker": "512480.SS",
         "rating": "Underweight",
         "report": "reports/512480.SS/2026-07-23/complete_report.md",
-        "error": false
+        "error": false,
+        "files": {
+          "fundamentals": "reports/512480.SS/2026-07-23/1_analysts/fundamentals.md",
+          "market": "reports/512480.SS/2026-07-23/1_analysts/market.md",
+          "news": "reports/512480.SS/2026-07-23/1_analysts/news.md",
+          "bear": "reports/512480.SS/2026-07-23/2_research/bear.md",
+          "bull": "reports/512480.SS/2026-07-23/2_research/bull.md",
+          "manager": "reports/512480.SS/2026-07-23/2_research/manager.md",
+          "trader": "reports/512480.SS/2026-07-23/3_trading/trader.md",
+          "aggressive": "reports/512480.SS/2026-07-23/4_risk/aggressive.md",
+          "conservative": "reports/512480.SS/2026-07-23/4_risk/conservative.md",
+          "neutral": "reports/512480.SS/2026-07-23/4_risk/neutral.md",
+          "decision": "reports/512480.SS/2026-07-23/5_portfolio/decision.md",
+          "complete_report": "reports/512480.SS/2026-07-23/complete_report.md"
+        }
       }
     ]
   },
@@ -259,19 +482,61 @@
         "ticker": "NVDA",
         "rating": "Overweight",
         "report": "reports/NVDA/2026-07-22/complete_report.md",
-        "error": false
+        "error": false,
+        "files": {
+          "fundamentals": "reports/NVDA/2026-07-22/1_analysts/fundamentals.md",
+          "market": "reports/NVDA/2026-07-22/1_analysts/market.md",
+          "news": "reports/NVDA/2026-07-22/1_analysts/news.md",
+          "bear": "reports/NVDA/2026-07-22/2_research/bear.md",
+          "bull": "reports/NVDA/2026-07-22/2_research/bull.md",
+          "manager": "reports/NVDA/2026-07-22/2_research/manager.md",
+          "trader": "reports/NVDA/2026-07-22/3_trading/trader.md",
+          "aggressive": "reports/NVDA/2026-07-22/4_risk/aggressive.md",
+          "conservative": "reports/NVDA/2026-07-22/4_risk/conservative.md",
+          "neutral": "reports/NVDA/2026-07-22/4_risk/neutral.md",
+          "decision": "reports/NVDA/2026-07-22/5_portfolio/decision.md",
+          "complete_report": "reports/NVDA/2026-07-22/complete_report.md"
+        }
       },
       {
         "ticker": "SPY",
         "rating": "Hold",
         "report": "reports/SPY/2026-07-22/complete_report.md",
-        "error": false
+        "error": false,
+        "files": {
+          "fundamentals": "reports/SPY/2026-07-22/1_analysts/fundamentals.md",
+          "market": "reports/SPY/2026-07-22/1_analysts/market.md",
+          "news": "reports/SPY/2026-07-22/1_analysts/news.md",
+          "bear": "reports/SPY/2026-07-22/2_research/bear.md",
+          "bull": "reports/SPY/2026-07-22/2_research/bull.md",
+          "manager": "reports/SPY/2026-07-22/2_research/manager.md",
+          "trader": "reports/SPY/2026-07-22/3_trading/trader.md",
+          "aggressive": "reports/SPY/2026-07-22/4_risk/aggressive.md",
+          "conservative": "reports/SPY/2026-07-22/4_risk/conservative.md",
+          "neutral": "reports/SPY/2026-07-22/4_risk/neutral.md",
+          "decision": "reports/SPY/2026-07-22/5_portfolio/decision.md",
+          "complete_report": "reports/SPY/2026-07-22/complete_report.md"
+        }
       },
       {
         "ticker": "600519.SS",
         "rating": "Hold",
         "report": "reports/600519.SS/2026-07-22/complete_report.md",
-        "error": false
+        "error": false,
+        "files": {
+          "fundamentals": "reports/600519.SS/2026-07-22/1_analysts/fundamentals.md",
+          "market": "reports/600519.SS/2026-07-22/1_analysts/market.md",
+          "news": "reports/600519.SS/2026-07-22/1_analysts/news.md",
+          "bear": "reports/600519.SS/2026-07-22/2_research/bear.md",
+          "bull": "reports/600519.SS/2026-07-22/2_research/bull.md",
+          "manager": "reports/600519.SS/2026-07-22/2_research/manager.md",
+          "trader": "reports/600519.SS/2026-07-22/3_trading/trader.md",
+          "aggressive": "reports/600519.SS/2026-07-22/4_risk/aggressive.md",
+          "conservative": "reports/600519.SS/2026-07-22/4_risk/conservative.md",
+          "neutral": "reports/600519.SS/2026-07-22/4_risk/neutral.md",
+          "decision": "reports/600519.SS/2026-07-22/5_portfolio/decision.md",
+          "complete_report": "reports/600519.SS/2026-07-22/complete_report.md"
+        }
       }
     ]
   },
@@ -284,19 +549,60 @@
         "ticker": "NVDA",
         "rating": "Overweight",
         "report": "reports/NVDA/2026-07-21/complete_report.md",
-        "error": false
+        "error": false,
+        "files": {
+          "fundamentals": "reports/NVDA/2026-07-21/1_analysts/fundamentals.md",
+          "market": "reports/NVDA/2026-07-21/1_analysts/market.md",
+          "bear": "reports/NVDA/2026-07-21/2_research/bear.md",
+          "bull": "reports/NVDA/2026-07-21/2_research/bull.md",
+          "manager": "reports/NVDA/2026-07-21/2_research/manager.md",
+          "trader": "reports/NVDA/2026-07-21/3_trading/trader.md",
+          "aggressive": "reports/NVDA/2026-07-21/4_risk/aggressive.md",
+          "conservative": "reports/NVDA/2026-07-21/4_risk/conservative.md",
+          "neutral": "reports/NVDA/2026-07-21/4_risk/neutral.md",
+          "decision": "reports/NVDA/2026-07-21/5_portfolio/decision.md",
+          "complete_report": "reports/NVDA/2026-07-21/complete_report.md"
+        }
       },
       {
         "ticker": "SPY",
         "rating": "Hold",
         "report": "reports/SPY/2026-07-21/complete_report.md",
-        "error": false
+        "error": false,
+        "files": {
+          "fundamentals": "reports/SPY/2026-07-21/1_analysts/fundamentals.md",
+          "market": "reports/SPY/2026-07-21/1_analysts/market.md",
+          "news": "reports/SPY/2026-07-21/1_analysts/news.md",
+          "bear": "reports/SPY/2026-07-21/2_research/bear.md",
+          "bull": "reports/SPY/2026-07-21/2_research/bull.md",
+          "manager": "reports/SPY/2026-07-21/2_research/manager.md",
+          "trader": "reports/SPY/2026-07-21/3_trading/trader.md",
+          "aggressive": "reports/SPY/2026-07-21/4_risk/aggressive.md",
+          "conservative": "reports/SPY/2026-07-21/4_risk/conservative.md",
+          "neutral": "reports/SPY/2026-07-21/4_risk/neutral.md",
+          "decision": "reports/SPY/2026-07-21/5_portfolio/decision.md",
+          "complete_report": "reports/SPY/2026-07-21/complete_report.md"
+        }
       },
       {
         "ticker": "600519.SS",
         "rating": "Overweight",
         "report": "reports/600519.SS/2026-07-21/complete_report.md",
-        "error": false
+        "error": false,
+        "files": {
+          "fundamentals": "reports/600519.SS/2026-07-21/1_analysts/fundamentals.md",
+          "market": "reports/600519.SS/2026-07-21/1_analysts/market.md",
+          "news": "reports/600519.SS/2026-07-21/1_analysts/news.md",
+          "bear": "reports/600519.SS/2026-07-21/2_research/bear.md",
+          "bull": "reports/600519.SS/2026-07-21/2_research/bull.md",
+          "manager": "reports/600519.SS/2026-07-21/2_research/manager.md",
+          "trader": "reports/600519.SS/2026-07-21/3_trading/trader.md",
+          "aggressive": "reports/600519.SS/2026-07-21/4_risk/aggressive.md",
+          "conservative": "reports/600519.SS/2026-07-21/4_risk/conservative.md",
+          "neutral": "reports/600519.SS/2026-07-21/4_risk/neutral.md",
+          "decision": "reports/600519.SS/2026-07-21/5_portfolio/decision.md",
+          "complete_report": "reports/600519.SS/2026-07-21/complete_report.md"
+        }
       }
     ]
   },
@@ -309,19 +615,61 @@
         "ticker": "NVDA",
         "rating": "Hold",
         "report": "reports/NVDA/2026-07-20/complete_report.md",
-        "error": false
+        "error": false,
+        "files": {
+          "fundamentals": "reports/NVDA/2026-07-20/1_analysts/fundamentals.md",
+          "market": "reports/NVDA/2026-07-20/1_analysts/market.md",
+          "news": "reports/NVDA/2026-07-20/1_analysts/news.md",
+          "bear": "reports/NVDA/2026-07-20/2_research/bear.md",
+          "bull": "reports/NVDA/2026-07-20/2_research/bull.md",
+          "manager": "reports/NVDA/2026-07-20/2_research/manager.md",
+          "trader": "reports/NVDA/2026-07-20/3_trading/trader.md",
+          "aggressive": "reports/NVDA/2026-07-20/4_risk/aggressive.md",
+          "conservative": "reports/NVDA/2026-07-20/4_risk/conservative.md",
+          "neutral": "reports/NVDA/2026-07-20/4_risk/neutral.md",
+          "decision": "reports/NVDA/2026-07-20/5_portfolio/decision.md",
+          "complete_report": "reports/NVDA/2026-07-20/complete_report.md"
+        }
       },
       {
         "ticker": "SPY",
         "rating": "Hold",
         "report": "reports/SPY/2026-07-20/complete_report.md",
-        "error": false
+        "error": false,
+        "files": {
+          "fundamentals": "reports/SPY/2026-07-20/1_analysts/fundamentals.md",
+          "market": "reports/SPY/2026-07-20/1_analysts/market.md",
+          "news": "reports/SPY/2026-07-20/1_analysts/news.md",
+          "bear": "reports/SPY/2026-07-20/2_research/bear.md",
+          "bull": "reports/SPY/2026-07-20/2_research/bull.md",
+          "manager": "reports/SPY/2026-07-20/2_research/manager.md",
+          "trader": "reports/SPY/2026-07-20/3_trading/trader.md",
+          "aggressive": "reports/SPY/2026-07-20/4_risk/aggressive.md",
+          "conservative": "reports/SPY/2026-07-20/4_risk/conservative.md",
+          "neutral": "reports/SPY/2026-07-20/4_risk/neutral.md",
+          "decision": "reports/SPY/2026-07-20/5_portfolio/decision.md",
+          "complete_report": "reports/SPY/2026-07-20/complete_report.md"
+        }
       },
       {
         "ticker": "600519.SS",
         "rating": "Hold",
         "report": "reports/600519.SS/2026-07-20/complete_report.md",
-        "error": false
+        "error": false,
+        "files": {
+          "fundamentals": "reports/600519.SS/2026-07-20/1_analysts/fundamentals.md",
+          "market": "reports/600519.SS/2026-07-20/1_analysts/market.md",
+          "news": "reports/600519.SS/2026-07-20/1_analysts/news.md",
+          "bear": "reports/600519.SS/2026-07-20/2_research/bear.md",
+          "bull": "reports/600519.SS/2026-07-20/2_research/bull.md",
+          "manager": "reports/600519.SS/2026-07-20/2_research/manager.md",
+          "trader": "reports/600519.SS/2026-07-20/3_trading/trader.md",
+          "aggressive": "reports/600519.SS/2026-07-20/4_risk/aggressive.md",
+          "conservative": "reports/600519.SS/2026-07-20/4_risk/conservative.md",
+          "neutral": "reports/600519.SS/2026-07-20/4_risk/neutral.md",
+          "decision": "reports/600519.SS/2026-07-20/5_portfolio/decision.md",
+          "complete_report": "reports/600519.SS/2026-07-20/complete_report.md"
+        }
       }
     ]
   },
@@ -334,19 +682,61 @@
         "ticker": "NVDA",
         "rating": "Overweight",
         "report": "reports/NVDA/2026-07-16/complete_report.md",
-        "error": false
+        "error": false,
+        "files": {
+          "fundamentals": "reports/NVDA/2026-07-16/1_analysts/fundamentals.md",
+          "market": "reports/NVDA/2026-07-16/1_analysts/market.md",
+          "news": "reports/NVDA/2026-07-16/1_analysts/news.md",
+          "bear": "reports/NVDA/2026-07-16/2_research/bear.md",
+          "bull": "reports/NVDA/2026-07-16/2_research/bull.md",
+          "manager": "reports/NVDA/2026-07-16/2_research/manager.md",
+          "trader": "reports/NVDA/2026-07-16/3_trading/trader.md",
+          "aggressive": "reports/NVDA/2026-07-16/4_risk/aggressive.md",
+          "conservative": "reports/NVDA/2026-07-16/4_risk/conservative.md",
+          "neutral": "reports/NVDA/2026-07-16/4_risk/neutral.md",
+          "decision": "reports/NVDA/2026-07-16/5_portfolio/decision.md",
+          "complete_report": "reports/NVDA/2026-07-16/complete_report.md"
+        }
       },
       {
         "ticker": "SPY",
         "rating": "Hold",
         "report": "reports/SPY/2026-07-16/complete_report.md",
-        "error": false
+        "error": false,
+        "files": {
+          "fundamentals": "reports/SPY/2026-07-16/1_analysts/fundamentals.md",
+          "market": "reports/SPY/2026-07-16/1_analysts/market.md",
+          "news": "reports/SPY/2026-07-16/1_analysts/news.md",
+          "bear": "reports/SPY/2026-07-16/2_research/bear.md",
+          "bull": "reports/SPY/2026-07-16/2_research/bull.md",
+          "manager": "reports/SPY/2026-07-16/2_research/manager.md",
+          "trader": "reports/SPY/2026-07-16/3_trading/trader.md",
+          "aggressive": "reports/SPY/2026-07-16/4_risk/aggressive.md",
+          "conservative": "reports/SPY/2026-07-16/4_risk/conservative.md",
+          "neutral": "reports/SPY/2026-07-16/4_risk/neutral.md",
+          "decision": "reports/SPY/2026-07-16/5_portfolio/decision.md",
+          "complete_report": "reports/SPY/2026-07-16/complete_report.md"
+        }
       },
       {
         "ticker": "600519.SS",
         "rating": "Overweight",
         "report": "reports/600519.SS/2026-07-16/complete_report.md",
-        "error": false
+        "error": false,
+        "files": {
+          "fundamentals": "reports/600519.SS/2026-07-16/1_analysts/fundamentals.md",
+          "market": "reports/600519.SS/2026-07-16/1_analysts/market.md",
+          "news": "reports/600519.SS/2026-07-16/1_analysts/news.md",
+          "bear": "reports/600519.SS/2026-07-16/2_research/bear.md",
+          "bull": "reports/600519.SS/2026-07-16/2_research/bull.md",
+          "manager": "reports/600519.SS/2026-07-16/2_research/manager.md",
+          "trader": "reports/600519.SS/2026-07-16/3_trading/trader.md",
+          "aggressive": "reports/600519.SS/2026-07-16/4_risk/aggressive.md",
+          "conservative": "reports/600519.SS/2026-07-16/4_risk/conservative.md",
+          "neutral": "reports/600519.SS/2026-07-16/4_risk/neutral.md",
+          "decision": "reports/600519.SS/2026-07-16/5_portfolio/decision.md",
+          "complete_report": "reports/600519.SS/2026-07-16/complete_report.md"
+        }
       }
     ]
   },
@@ -359,19 +749,60 @@
         "ticker": "NVDA",
         "rating": "Hold",
         "report": "reports/NVDA/2026-07-15/complete_report.md",
-        "error": false
+        "error": false,
+        "files": {
+          "fundamentals": "reports/NVDA/2026-07-15/1_analysts/fundamentals.md",
+          "market": "reports/NVDA/2026-07-15/1_analysts/market.md",
+          "news": "reports/NVDA/2026-07-15/1_analysts/news.md",
+          "bear": "reports/NVDA/2026-07-15/2_research/bear.md",
+          "bull": "reports/NVDA/2026-07-15/2_research/bull.md",
+          "manager": "reports/NVDA/2026-07-15/2_research/manager.md",
+          "trader": "reports/NVDA/2026-07-15/3_trading/trader.md",
+          "aggressive": "reports/NVDA/2026-07-15/4_risk/aggressive.md",
+          "conservative": "reports/NVDA/2026-07-15/4_risk/conservative.md",
+          "neutral": "reports/NVDA/2026-07-15/4_risk/neutral.md",
+          "decision": "reports/NVDA/2026-07-15/5_portfolio/decision.md",
+          "complete_report": "reports/NVDA/2026-07-15/complete_report.md"
+        }
       },
       {
         "ticker": "SPY",
         "rating": "Underweight",
         "report": "reports/SPY/2026-07-15/complete_report.md",
-        "error": false
+        "error": false,
+        "files": {
+          "fundamentals": "reports/SPY/2026-07-15/1_analysts/fundamentals.md",
+          "market": "reports/SPY/2026-07-15/1_analysts/market.md",
+          "bear": "reports/SPY/2026-07-15/2_research/bear.md",
+          "bull": "reports/SPY/2026-07-15/2_research/bull.md",
+          "manager": "reports/SPY/2026-07-15/2_research/manager.md",
+          "trader": "reports/SPY/2026-07-15/3_trading/trader.md",
+          "aggressive": "reports/SPY/2026-07-15/4_risk/aggressive.md",
+          "conservative": "reports/SPY/2026-07-15/4_risk/conservative.md",
+          "neutral": "reports/SPY/2026-07-15/4_risk/neutral.md",
+          "decision": "reports/SPY/2026-07-15/5_portfolio/decision.md",
+          "complete_report": "reports/SPY/2026-07-15/complete_report.md"
+        }
       },
       {
         "ticker": "600519.SS",
         "rating": "Hold",
         "report": "reports/600519.SS/2026-07-15/complete_report.md",
-        "error": false
+        "error": false,
+        "files": {
+          "fundamentals": "reports/600519.SS/2026-07-15/1_analysts/fundamentals.md",
+          "market": "reports/600519.SS/2026-07-15/1_analysts/market.md",
+          "news": "reports/600519.SS/2026-07-15/1_analysts/news.md",
+          "bear": "reports/600519.SS/2026-07-15/2_research/bear.md",
+          "bull": "reports/600519.SS/2026-07-15/2_research/bull.md",
+          "manager": "reports/600519.SS/2026-07-15/2_research/manager.md",
+          "trader": "reports/600519.SS/2026-07-15/3_trading/trader.md",
+          "aggressive": "reports/600519.SS/2026-07-15/4_risk/aggressive.md",
+          "conservative": "reports/600519.SS/2026-07-15/4_risk/conservative.md",
+          "neutral": "reports/600519.SS/2026-07-15/4_risk/neutral.md",
+          "decision": "reports/600519.SS/2026-07-15/5_portfolio/decision.md",
+          "complete_report": "reports/600519.SS/2026-07-15/complete_report.md"
+        }
       }
     ]
   },
@@ -384,7 +815,21 @@
         "ticker": "ORCL",
         "rating": "Underweight",
         "report": "reports/ORCL/2026-07-15/complete_report.md",
-        "error": false
+        "error": false,
+        "files": {
+          "fundamentals": "reports/ORCL/2026-07-15/1_analysts/fundamentals.md",
+          "market": "reports/ORCL/2026-07-15/1_analysts/market.md",
+          "news": "reports/ORCL/2026-07-15/1_analysts/news.md",
+          "bear": "reports/ORCL/2026-07-15/2_research/bear.md",
+          "bull": "reports/ORCL/2026-07-15/2_research/bull.md",
+          "manager": "reports/ORCL/2026-07-15/2_research/manager.md",
+          "trader": "reports/ORCL/2026-07-15/3_trading/trader.md",
+          "aggressive": "reports/ORCL/2026-07-15/4_risk/aggressive.md",
+          "conservative": "reports/ORCL/2026-07-15/4_risk/conservative.md",
+          "neutral": "reports/ORCL/2026-07-15/4_risk/neutral.md",
+          "decision": "reports/ORCL/2026-07-15/5_portfolio/decision.md",
+          "complete_report": "reports/ORCL/2026-07-15/complete_report.md"
+        }
       }
     ]
   },
@@ -397,19 +842,61 @@
         "ticker": "NVDA",
         "rating": "Overweight",
         "report": "reports/NVDA/2026-07-14/complete_report.md",
-        "error": false
+        "error": false,
+        "files": {
+          "fundamentals": "reports/NVDA/2026-07-14/1_analysts/fundamentals.md",
+          "market": "reports/NVDA/2026-07-14/1_analysts/market.md",
+          "news": "reports/NVDA/2026-07-14/1_analysts/news.md",
+          "bear": "reports/NVDA/2026-07-14/2_research/bear.md",
+          "bull": "reports/NVDA/2026-07-14/2_research/bull.md",
+          "manager": "reports/NVDA/2026-07-14/2_research/manager.md",
+          "trader": "reports/NVDA/2026-07-14/3_trading/trader.md",
+          "aggressive": "reports/NVDA/2026-07-14/4_risk/aggressive.md",
+          "conservative": "reports/NVDA/2026-07-14/4_risk/conservative.md",
+          "neutral": "reports/NVDA/2026-07-14/4_risk/neutral.md",
+          "decision": "reports/NVDA/2026-07-14/5_portfolio/decision.md",
+          "complete_report": "reports/NVDA/2026-07-14/complete_report.md"
+        }
       },
       {
         "ticker": "SPY",
         "rating": "Underweight",
         "report": "reports/SPY/2026-07-14/complete_report.md",
-        "error": false
+        "error": false,
+        "files": {
+          "fundamentals": "reports/SPY/2026-07-14/1_analysts/fundamentals.md",
+          "market": "reports/SPY/2026-07-14/1_analysts/market.md",
+          "news": "reports/SPY/2026-07-14/1_analysts/news.md",
+          "bear": "reports/SPY/2026-07-14/2_research/bear.md",
+          "bull": "reports/SPY/2026-07-14/2_research/bull.md",
+          "manager": "reports/SPY/2026-07-14/2_research/manager.md",
+          "trader": "reports/SPY/2026-07-14/3_trading/trader.md",
+          "aggressive": "reports/SPY/2026-07-14/4_risk/aggressive.md",
+          "conservative": "reports/SPY/2026-07-14/4_risk/conservative.md",
+          "neutral": "reports/SPY/2026-07-14/4_risk/neutral.md",
+          "decision": "reports/SPY/2026-07-14/5_portfolio/decision.md",
+          "complete_report": "reports/SPY/2026-07-14/complete_report.md"
+        }
       },
       {
         "ticker": "600519.SS",
         "rating": "Underweight",
         "report": "reports/600519.SS/2026-07-14/complete_report.md",
-        "error": false
+        "error": false,
+        "files": {
+          "fundamentals": "reports/600519.SS/2026-07-14/1_analysts/fundamentals.md",
+          "market": "reports/600519.SS/2026-07-14/1_analysts/market.md",
+          "news": "reports/600519.SS/2026-07-14/1_analysts/news.md",
+          "bear": "reports/600519.SS/2026-07-14/2_research/bear.md",
+          "bull": "reports/600519.SS/2026-07-14/2_research/bull.md",
+          "manager": "reports/600519.SS/2026-07-14/2_research/manager.md",
+          "trader": "reports/600519.SS/2026-07-14/3_trading/trader.md",
+          "aggressive": "reports/600519.SS/2026-07-14/4_risk/aggressive.md",
+          "conservative": "reports/600519.SS/2026-07-14/4_risk/conservative.md",
+          "neutral": "reports/600519.SS/2026-07-14/4_risk/neutral.md",
+          "decision": "reports/600519.SS/2026-07-14/5_portfolio/decision.md",
+          "complete_report": "reports/600519.SS/2026-07-14/complete_report.md"
+        }
       }
     ]
   },
@@ -422,7 +909,21 @@
         "ticker": "ORCL",
         "rating": "Hold",
         "report": "reports/ORCL/2026-07-14/complete_report.md",
-        "error": false
+        "error": false,
+        "files": {
+          "fundamentals": "reports/ORCL/2026-07-14/1_analysts/fundamentals.md",
+          "market": "reports/ORCL/2026-07-14/1_analysts/market.md",
+          "news": "reports/ORCL/2026-07-14/1_analysts/news.md",
+          "bear": "reports/ORCL/2026-07-14/2_research/bear.md",
+          "bull": "reports/ORCL/2026-07-14/2_research/bull.md",
+          "manager": "reports/ORCL/2026-07-14/2_research/manager.md",
+          "trader": "reports/ORCL/2026-07-14/3_trading/trader.md",
+          "aggressive": "reports/ORCL/2026-07-14/4_risk/aggressive.md",
+          "conservative": "reports/ORCL/2026-07-14/4_risk/conservative.md",
+          "neutral": "reports/ORCL/2026-07-14/4_risk/neutral.md",
+          "decision": "reports/ORCL/2026-07-14/5_portfolio/decision.md",
+          "complete_report": "reports/ORCL/2026-07-14/complete_report.md"
+        }
       }
     ]
   },
@@ -435,19 +936,61 @@
         "ticker": "NVDA",
         "rating": "Overweight",
         "report": "reports/NVDA/2026-07-13/complete_report.md",
-        "error": false
+        "error": false,
+        "files": {
+          "fundamentals": "reports/NVDA/2026-07-13/1_analysts/fundamentals.md",
+          "market": "reports/NVDA/2026-07-13/1_analysts/market.md",
+          "news": "reports/NVDA/2026-07-13/1_analysts/news.md",
+          "bear": "reports/NVDA/2026-07-13/2_research/bear.md",
+          "bull": "reports/NVDA/2026-07-13/2_research/bull.md",
+          "manager": "reports/NVDA/2026-07-13/2_research/manager.md",
+          "trader": "reports/NVDA/2026-07-13/3_trading/trader.md",
+          "aggressive": "reports/NVDA/2026-07-13/4_risk/aggressive.md",
+          "conservative": "reports/NVDA/2026-07-13/4_risk/conservative.md",
+          "neutral": "reports/NVDA/2026-07-13/4_risk/neutral.md",
+          "decision": "reports/NVDA/2026-07-13/5_portfolio/decision.md",
+          "complete_report": "reports/NVDA/2026-07-13/complete_report.md"
+        }
       },
       {
         "ticker": "SPY",
         "rating": "Underweight",
         "report": "reports/SPY/2026-07-13/complete_report.md",
-        "error": false
+        "error": false,
+        "files": {
+          "fundamentals": "reports/SPY/2026-07-13/1_analysts/fundamentals.md",
+          "market": "reports/SPY/2026-07-13/1_analysts/market.md",
+          "news": "reports/SPY/2026-07-13/1_analysts/news.md",
+          "bear": "reports/SPY/2026-07-13/2_research/bear.md",
+          "bull": "reports/SPY/2026-07-13/2_research/bull.md",
+          "manager": "reports/SPY/2026-07-13/2_research/manager.md",
+          "trader": "reports/SPY/2026-07-13/3_trading/trader.md",
+          "aggressive": "reports/SPY/2026-07-13/4_risk/aggressive.md",
+          "conservative": "reports/SPY/2026-07-13/4_risk/conservative.md",
+          "neutral": "reports/SPY/2026-07-13/4_risk/neutral.md",
+          "decision": "reports/SPY/2026-07-13/5_portfolio/decision.md",
+          "complete_report": "reports/SPY/2026-07-13/complete_report.md"
+        }
       },
       {
         "ticker": "600519.SS",
         "rating": "Overweight",
         "report": "reports/600519.SS/2026-07-13/complete_report.md",
-        "error": false
+        "error": false,
+        "files": {
+          "fundamentals": "reports/600519.SS/2026-07-13/1_analysts/fundamentals.md",
+          "market": "reports/600519.SS/2026-07-13/1_analysts/market.md",
+          "news": "reports/600519.SS/2026-07-13/1_analysts/news.md",
+          "bear": "reports/600519.SS/2026-07-13/2_research/bear.md",
+          "bull": "reports/600519.SS/2026-07-13/2_research/bull.md",
+          "manager": "reports/600519.SS/2026-07-13/2_research/manager.md",
+          "trader": "reports/600519.SS/2026-07-13/3_trading/trader.md",
+          "aggressive": "reports/600519.SS/2026-07-13/4_risk/aggressive.md",
+          "conservative": "reports/600519.SS/2026-07-13/4_risk/conservative.md",
+          "neutral": "reports/600519.SS/2026-07-13/4_risk/neutral.md",
+          "decision": "reports/600519.SS/2026-07-13/5_portfolio/decision.md",
+          "complete_report": "reports/600519.SS/2026-07-13/complete_report.md"
+        }
       }
     ]
   },
@@ -460,7 +1003,20 @@
         "ticker": "ORCL",
         "rating": "Underweight",
         "report": "reports/ORCL/2026-07-10/complete_report.md",
-        "error": false
+        "error": false,
+        "files": {
+          "fundamentals": "reports/ORCL/2026-07-10/1_analysts/fundamentals.md",
+          "market": "reports/ORCL/2026-07-10/1_analysts/market.md",
+          "bear": "reports/ORCL/2026-07-10/2_research/bear.md",
+          "bull": "reports/ORCL/2026-07-10/2_research/bull.md",
+          "manager": "reports/ORCL/2026-07-10/2_research/manager.md",
+          "trader": "reports/ORCL/2026-07-10/3_trading/trader.md",
+          "aggressive": "reports/ORCL/2026-07-10/4_risk/aggressive.md",
+          "conservative": "reports/ORCL/2026-07-10/4_risk/conservative.md",
+          "neutral": "reports/ORCL/2026-07-10/4_risk/neutral.md",
+          "decision": "reports/ORCL/2026-07-10/5_portfolio/decision.md",
+          "complete_report": "reports/ORCL/2026-07-10/complete_report.md"
+        }
       }
     ]
   },
@@ -473,7 +1029,21 @@
         "ticker": "002865.SZ",
         "rating": "Sell",
         "report": "reports/002865.SZ/2026-07-10/complete_report.md",
-        "error": false
+        "error": false,
+        "files": {
+          "fundamentals": "reports/002865.SZ/2026-07-10/1_analysts/fundamentals.md",
+          "market": "reports/002865.SZ/2026-07-10/1_analysts/market.md",
+          "news": "reports/002865.SZ/2026-07-10/1_analysts/news.md",
+          "bear": "reports/002865.SZ/2026-07-10/2_research/bear.md",
+          "bull": "reports/002865.SZ/2026-07-10/2_research/bull.md",
+          "manager": "reports/002865.SZ/2026-07-10/2_research/manager.md",
+          "trader": "reports/002865.SZ/2026-07-10/3_trading/trader.md",
+          "aggressive": "reports/002865.SZ/2026-07-10/4_risk/aggressive.md",
+          "conservative": "reports/002865.SZ/2026-07-10/4_risk/conservative.md",
+          "neutral": "reports/002865.SZ/2026-07-10/4_risk/neutral.md",
+          "decision": "reports/002865.SZ/2026-07-10/5_portfolio/decision.md",
+          "complete_report": "reports/002865.SZ/2026-07-10/complete_report.md"
+        }
       }
     ]
   },
@@ -486,7 +1056,21 @@
         "ticker": "000001.SZ",
         "rating": "Underweight",
         "report": "reports/000001.SZ/2026-07-10/complete_report.md",
-        "error": false
+        "error": false,
+        "files": {
+          "fundamentals": "reports/000001.SZ/2026-07-10/1_analysts/fundamentals.md",
+          "market": "reports/000001.SZ/2026-07-10/1_analysts/market.md",
+          "news": "reports/000001.SZ/2026-07-10/1_analysts/news.md",
+          "bear": "reports/000001.SZ/2026-07-10/2_research/bear.md",
+          "bull": "reports/000001.SZ/2026-07-10/2_research/bull.md",
+          "manager": "reports/000001.SZ/2026-07-10/2_research/manager.md",
+          "trader": "reports/000001.SZ/2026-07-10/3_trading/trader.md",
+          "aggressive": "reports/000001.SZ/2026-07-10/4_risk/aggressive.md",
+          "conservative": "reports/000001.SZ/2026-07-10/4_risk/conservative.md",
+          "neutral": "reports/000001.SZ/2026-07-10/4_risk/neutral.md",
+          "decision": "reports/000001.SZ/2026-07-10/5_portfolio/decision.md",
+          "complete_report": "reports/000001.SZ/2026-07-10/complete_report.md"
+        }
       }
     ]
   },
@@ -499,7 +1083,21 @@
         "ticker": "SPY",
         "rating": "Underweight",
         "report": "reports/SPY/2026-07-10/complete_report.md",
-        "error": false
+        "error": false,
+        "files": {
+          "fundamentals": "reports/SPY/2026-07-10/1_analysts/fundamentals.md",
+          "market": "reports/SPY/2026-07-10/1_analysts/market.md",
+          "news": "reports/SPY/2026-07-10/1_analysts/news.md",
+          "bear": "reports/SPY/2026-07-10/2_research/bear.md",
+          "bull": "reports/SPY/2026-07-10/2_research/bull.md",
+          "manager": "reports/SPY/2026-07-10/2_research/manager.md",
+          "trader": "reports/SPY/2026-07-10/3_trading/trader.md",
+          "aggressive": "reports/SPY/2026-07-10/4_risk/aggressive.md",
+          "conservative": "reports/SPY/2026-07-10/4_risk/conservative.md",
+          "neutral": "reports/SPY/2026-07-10/4_risk/neutral.md",
+          "decision": "reports/SPY/2026-07-10/5_portfolio/decision.md",
+          "complete_report": "reports/SPY/2026-07-10/complete_report.md"
+        }
       }
     ]
   },
@@ -512,7 +1110,20 @@
         "ticker": "600519.SS",
         "rating": "Hold",
         "report": "reports/600519.SS/2026-07-10/complete_report.md",
-        "error": false
+        "error": false,
+        "files": {
+          "fundamentals": "reports/600519.SS/2026-07-10/1_analysts/fundamentals.md",
+          "market": "reports/600519.SS/2026-07-10/1_analysts/market.md",
+          "bear": "reports/600519.SS/2026-07-10/2_research/bear.md",
+          "bull": "reports/600519.SS/2026-07-10/2_research/bull.md",
+          "manager": "reports/600519.SS/2026-07-10/2_research/manager.md",
+          "trader": "reports/600519.SS/2026-07-10/3_trading/trader.md",
+          "aggressive": "reports/600519.SS/2026-07-10/4_risk/aggressive.md",
+          "conservative": "reports/600519.SS/2026-07-10/4_risk/conservative.md",
+          "neutral": "reports/600519.SS/2026-07-10/4_risk/neutral.md",
+          "decision": "reports/600519.SS/2026-07-10/5_portfolio/decision.md",
+          "complete_report": "reports/600519.SS/2026-07-10/complete_report.md"
+        }
       }
     ]
   },

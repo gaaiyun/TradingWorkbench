@@ -1,13 +1,25 @@
 name: daily-analysis
 
 run-name: >-
-  Daily analysis · ${{ inputs.profileId || 'manual' }} · ${{ inputs.slotId || github.run_id }}
+  Daily analysis · ${{ inputs.profileId || 'manual' }} · ${{ inputs.slotId || inputs.requestId || github.run_id }}${{ inputs.scheduledFor && format(' · {0}', inputs.scheduledFor) || '' }}
 
 on:
   workflow_dispatch:
     inputs:
       tickers:
         description: "逗号分隔的股票代码（留空使用网页保存的每日清单）"
+        required: false
+        default: ""
+      requestId:
+        description: "手动研究请求 UUID"
+        required: false
+        default: ""
+      analysts:
+        description: "逗号分隔的分析师白名单"
+        required: false
+        default: ""
+      researchDepth:
+        description: "研究深度：standard 或 deep"
         required: false
         default: ""
       profileId:
@@ -43,13 +55,15 @@ jobs:
       TRADINGAGENTS_PROFILE_ID: ${{ inputs.profileId || '' }}
       TRADINGAGENTS_SLOT_ID: ${{ inputs.slotId || '' }}
       TRADINGAGENTS_SCHEDULED_FOR: ${{ inputs.scheduledFor || '' }}
+      TRADINGAGENTS_ANALYSTS: ${{ inputs.analysts || vars.TRADINGAGENTS_ANALYSTS || 'market,news,fundamentals' }}
+      TRADINGAGENTS_MAX_DEBATE_ROUNDS: ${{ inputs.researchDepth == 'deep' && '2' || '1' }}
+      TRADINGAGENTS_MAX_RISK_ROUNDS: ${{ inputs.researchDepth == 'deep' && '2' || '1' }}
       # ── LLM 后端（仓库 Variables 可覆盖）─────────────────────────
       TRADINGAGENTS_LLM_PROVIDER: ${{ vars.TRADINGAGENTS_LLM_PROVIDER || 'deepseek' }}
       TRADINGAGENTS_DEEP_THINK_LLM: ${{ vars.TRADINGAGENTS_DEEP_THINK_LLM || 'deepseek-v4-pro' }}
       TRADINGAGENTS_QUICK_THINK_LLM: ${{ vars.TRADINGAGENTS_QUICK_THINK_LLM || 'deepseek-v4-flash' }}
       TRADINGAGENTS_LLM_BACKEND_URL: ${{ vars.TRADINGAGENTS_LLM_BACKEND_URL }}
       TRADINGAGENTS_OUTPUT_LANGUAGE: ${{ vars.TRADINGAGENTS_OUTPUT_LANGUAGE || '中文' }}
-      TRADINGAGENTS_ANALYSTS: ${{ vars.TRADINGAGENTS_ANALYSTS || 'market,news,fundamentals' }}
       PAGES_URL: https://tradingagents-board.pages.dev/
     steps:
       - uses: actions/checkout@v4
@@ -61,12 +75,23 @@ jobs:
       - name: Resolve daily ticker list
         env:
           MANUAL_TICKERS: ${{ inputs.tickers || '' }}
+          REQUEST_ID: ${{ inputs.requestId || '' }}
+          REQUESTED_ANALYSTS: ${{ inputs.analysts || vars.TRADINGAGENTS_ANALYSTS || 'market,news,fundamentals' }}
+          RESEARCH_DEPTH: ${{ inputs.researchDepth || 'standard' }}
+          ANALYSIS_CAPABILITIES: ${{ vars.ANALYSIS_CAPABILITIES || '' }}
           MONITOR_PROFILE_ID: ${{ inputs.profileId || '' }}
           MONITOR_SLOT_ID: ${{ inputs.slotId || '' }}
           MONITOR_SCHEDULED_FOR: ${{ inputs.scheduledFor || '' }}
         run: |
           node --input-type=module <<'NODE'
           import { appendFile, readFile } from "node:fs/promises";
+          import {
+            enforceAnalysisWorkload,
+            normalizeAnalysts,
+            normalizeRequestId,
+            normalizeResearchDepth,
+            researchDepthRounds,
+          } from "./functions/api/_analysis_request.mjs";
           import {
             normalizeWorkbenchTickers,
             parseWorkbenchSettings,
@@ -82,8 +107,35 @@ jobs:
             tickers = parseWorkbenchSettings(JSON.parse(raw)).tickers;
             console.log("using saved workbench ticker list");
           }
+          const requestId = normalizeRequestId(
+            process.env.REQUEST_ID,
+            { generate: false },
+          );
+          const analysts = normalizeAnalysts(process.env.REQUESTED_ANALYSTS, {
+            capabilities: process.env.ANALYSIS_CAPABILITIES,
+          });
+          const researchDepth = normalizeResearchDepth(process.env.RESEARCH_DEPTH);
+          // The workload guard protects the new ad-hoc research endpoint.
+          // Scheduled monitor runs retain their existing 10-symbol contract.
+          if (requestId) enforceAnalysisWorkload(tickers.length, researchDepth);
+          const rounds = researchDepthRounds(researchDepth);
           const value = tickers.join(",");
-          await appendFile(process.env.GITHUB_ENV, `TRADINGAGENTS_TICKERS=${value}\n`, "utf8");
+          await appendFile(
+            process.env.GITHUB_ENV,
+            [
+              `TRADINGAGENTS_TICKERS=${value}`,
+              `TRADINGAGENTS_ANALYSTS=${analysts.join(",")}`,
+              `TRADINGAGENTS_MAX_DEBATE_ROUNDS=${rounds}`,
+              `TRADINGAGENTS_MAX_RISK_ROUNDS=${rounds}`,
+              `TRADINGAGENTS_REQUEST_ID=${requestId}`,
+              `TRADINGAGENTS_REQUEST_KIND=${
+                requestId ? "adhoc" : process.env.MONITOR_PROFILE_ID ? "monitor" : "manual"
+              }`,
+              `TRADINGAGENTS_RESEARCH_DEPTH=${researchDepth}`,
+              "",
+            ].join("\n"),
+            "utf8",
+          );
           console.log(`resolved tickers: ${value}`);
           NODE
 

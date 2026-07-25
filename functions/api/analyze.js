@@ -10,8 +10,16 @@ import {
   WorkbenchSettingsError,
   normalizeWorkbenchTickers,
 } from "./_workbench_settings.mjs";
+import {
+  AnalysisRequestError,
+  enforceAnalysisWorkload,
+  normalizeAnalysts,
+  normalizeRequestId,
+  normalizeResearchDepth,
+} from "./_analysis_request.mjs";
 
-// POST /api/analyze {code, tickers} → 触发 GitHub Actions daily-analysis 工作流
+// POST /api/analyze {code, tickers, requestId?, analysts?, researchDepth?}
+// → 触发 GitHub Actions daily-analysis 工作流
 export async function onRequestPost({ request, env }) {
   const headerCode = request.headers.get("x-access-code");
   if (headerCode !== null && !gate(env, headerCode)) {
@@ -31,11 +39,30 @@ export async function onRequestPost({ request, env }) {
   if (!gate(env, headerCode ?? body.code)) return json({ error: "访问码不正确" }, 401);
 
   let tickerList;
+  let requestId;
+  let analysts;
+  let researchDepth;
+  const hasCallerRequestId =
+    typeof body.requestId === "string" && body.requestId.trim() !== "";
   try {
     tickerList = normalizeWorkbenchTickers(body.tickers);
+    requestId = normalizeRequestId(body.requestId);
+    analysts = normalizeAnalysts(body.analysts, {
+      capabilities: env.ANALYSIS_CAPABILITIES,
+    });
+    researchDepth = normalizeResearchDepth(body.researchDepth);
+    if (hasCallerRequestId) {
+      enforceAnalysisWorkload(tickerList.length, researchDepth);
+    }
   } catch (error) {
     if (error instanceof WorkbenchSettingsError) {
       return json({ error: error.message, error_code: error.code }, 400);
+    }
+    if (error instanceof AnalysisRequestError) {
+      return json(
+        { error: error.message, error_code: error.code, ...error.details },
+        400,
+      );
     }
     throw error;
   }
@@ -47,12 +74,27 @@ export async function onRequestPost({ request, env }) {
     {
       method: "POST",
       headers: { ...ghHeaders(env), "content-type": "application/json" },
-      body: JSON.stringify({ ref: "main", inputs: { tickers } }),
+      body: JSON.stringify({
+        ref: "main",
+        inputs: {
+          tickers,
+          requestId: hasCallerRequestId ? requestId : "",
+          analysts: analysts.join(","),
+          researchDepth,
+        },
+      }),
     },
   );
   if (resp.status !== 204) {
     const detail = await resp.text();
     return json({ error: `GitHub dispatch 失败 (${resp.status})`, detail: detail.slice(0, 300) }, 502);
   }
-  return json({ ok: true, tickers: tickerList, message: "已受理，分析会在后台顺序执行" }, 202);
+  return json({
+    ok: true,
+    requestId,
+    tickers: tickerList,
+    analysts,
+    researchDepth,
+    message: "已受理，分析会在后台顺序执行",
+  }, 202);
 }

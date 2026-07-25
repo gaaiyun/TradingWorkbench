@@ -20,6 +20,7 @@ from __future__ import annotations
 
 import argparse
 import json
+import math
 import os
 import sys
 import traceback
@@ -39,6 +40,9 @@ RATING_TIERS = ["Sell", "Underweight", "Hold", "Overweight", "Buy"]
 HISTORY_CAP = 60
 
 NEWS_EXPORT_VERSION = 1
+YAHOO_HISTORY_LIMIT = 1260
+YAHOO_AUTO_ADJUSTMENT = "split-and-dividend-adjusted"
+TECHNICAL_INDICATOR_VERSION = "ta-indicators-v1"
 _NEWS_ITEM_FIELDS = (
     "title",
     "summary",
@@ -369,6 +373,133 @@ def _load_workbench_news(symbol: str, trade_date: str) -> dict[str, Any]:
     return {"items": items, "sources": sources}
 
 
+def _ema_series(values: list[float], period: int) -> list[float | None]:
+    result: list[float | None] = [None] * len(values)
+    if len(values) < period:
+        return result
+    current = sum(values[:period]) / period
+    result[period - 1] = current
+    multiplier = 2 / (period + 1)
+    for index in range(period, len(values)):
+        current = (values[index] - current) * multiplier + current
+        result[index] = current
+    return result
+
+
+def _rounded_indicator(value: float | None) -> float | None:
+    return round(value, 8) if value is not None and math.isfinite(value) else None
+
+
+def _calculate_technical_snapshot(bars: list[dict[str, Any]]) -> dict[str, Any]:
+    """Match the workbench's deterministic daily indicator snapshot."""
+    closes = [float(bar["close"]) for bar in bars]
+
+    def simple_average(period: int) -> float | None:
+        if len(closes) < period:
+            return None
+        return sum(closes[-period:]) / period
+
+    fast = _ema_series(closes, 12)
+    slow = _ema_series(closes, 26)
+    macd_values = [
+        fast[index] - slow[index]
+        for index in range(len(closes))
+        if fast[index] is not None and slow[index] is not None
+    ]
+    signal_values = _ema_series(macd_values, 9)
+    latest_macd = macd_values[-1] if macd_values else None
+    latest_signal = signal_values[-1] if signal_values else None
+
+    rsi: float | None = None
+    if len(closes) >= 15:
+        changes = [
+            closes[index] - closes[index - 1]
+            for index in range(1, len(closes))
+        ]
+        average_gain = sum(max(0.0, change) for change in changes[:14]) / 14
+        average_loss = sum(max(0.0, -change) for change in changes[:14]) / 14
+        for change in changes[14:]:
+            average_gain = (average_gain * 13 + max(0.0, change)) / 14
+            average_loss = (average_loss * 13 + max(0.0, -change)) / 14
+        if average_loss == 0:
+            rsi = 50.0 if average_gain == 0 else 100.0
+        else:
+            rsi = 100 - 100 / (1 + average_gain / average_loss)
+
+    atr: float | None = None
+    eligible = [
+        bar for bar in bars
+        if bar.get("high") is not None and bar.get("low") is not None
+    ]
+    if len(eligible) >= 14:
+        ranges = []
+        for index, bar in enumerate(eligible):
+            high = float(bar["high"])
+            low = float(bar["low"])
+            if index == 0:
+                ranges.append(high - low)
+                continue
+            previous_close = float(eligible[index - 1]["close"])
+            ranges.append(max(
+                high - low,
+                abs(high - previous_close),
+                abs(low - previous_close),
+            ))
+        atr = sum(ranges[:14]) / 14
+        for value in ranges[14:]:
+            atr = (atr * 13 + value) / 14
+
+    realized_volatility: float | None = None
+    if len(closes) >= 21 and all(value > 0 for value in closes[-21:]):
+        returns = [
+            math.log(closes[index] / closes[index - 1])
+            for index in range(len(closes) - 20, len(closes))
+        ]
+        mean = sum(returns) / len(returns)
+        variance = sum((value - mean) ** 2 for value in returns) / max(
+            1, len(returns) - 1
+        )
+        realized_volatility = math.sqrt(variance * 252) * 100
+
+    adjustments = {
+        str(bar.get("adjustment"))
+        for bar in bars
+        if isinstance(bar.get("adjustment"), str) and bar.get("adjustment")
+    }
+    missing_adjustment = any(not bar.get("adjustment") for bar in bars)
+    adjustment = (
+        "none" if not adjustments
+        else next(iter(adjustments))
+        if len(adjustments) == 1 and not missing_adjustment
+        else "unknown"
+    )
+    return {
+        "version": TECHNICAL_INDICATOR_VERSION,
+        "bars": len(bars),
+        "asOf": bars[-1]["ts"] if bars else None,
+        "adjustment": adjustment,
+        "ma20": _rounded_indicator(simple_average(20)),
+        "ma60": _rounded_indicator(simple_average(60)),
+        "ma200": _rounded_indicator(simple_average(200)),
+        "macd": _rounded_indicator(latest_macd),
+        "macdSignal": _rounded_indicator(latest_signal),
+        "macdHistogram": _rounded_indicator(
+            latest_macd - latest_signal
+            if latest_macd is not None and latest_signal is not None
+            else None
+        ),
+        "rsi14": _rounded_indicator(rsi),
+        "atr14": _rounded_indicator(atr),
+        "realizedVolatility20": _rounded_indicator(realized_volatility),
+        "methodology": {
+            "macd": "EMA 12/26, signal EMA 9",
+            "rsi": "Wilder 14",
+            "atr": "Wilder 14",
+            "realizedVolatility": "20-period log returns, annualized with 252",
+        },
+    }
+
+
 def build_runtime_evidence(ticker: str, trade_date: str) -> dict[str, Any]:
     """在模型调用前构建 point-in-time 证据包。
 
@@ -396,32 +527,47 @@ def build_runtime_evidence(ticker: str, trade_date: str) -> dict[str, Any]:
 
     import yfinance as yf
 
-    history = yf.Ticker(symbol).history(period="6mo", auto_adjust=True, actions=True)
+    trade_day = datetime.strptime(trade_date, "%Y-%m-%d").date()
+    end_date = trade_day + timedelta(days=1)
+    start_date = trade_day - timedelta(days=365 * 5 + 3)
+    history = yf.Ticker(symbol).history(
+        start=start_date.isoformat(),
+        end=end_date.isoformat(),
+        auto_adjust=True,
+        actions=True,
+    )
     bars: list[dict[str, Any]] = []
     if history is not None and not history.empty:
         for index, row in history.iterrows():
             timestamp = index.to_pydatetime()
+            exchange_date = timestamp.date().isoformat()
+            if exchange_date < start_date.isoformat() or exchange_date > trade_date:
+                continue
             if timestamp.tzinfo is None:
                 timestamp = timestamp.replace(tzinfo=timezone.utc)
             timestamp = timestamp.astimezone(timezone.utc)
-            if timestamp.date().isoformat() > trade_date:
-                continue
             bars.append({
-                "ts": timestamp.isoformat(),
+                "ts": timestamp.isoformat().replace("+00:00", "Z"),
                 "open": row.get("Open"),
                 "high": row.get("High"),
                 "low": row.get("Low"),
                 "close": row.get("Close"),
                 "volume": row.get("Volume"),
-                "adjustment": "qfq",
+                "adjustment": YAHOO_AUTO_ADJUSTMENT,
             })
+    bars = bars[-YAHOO_HISTORY_LIMIT:]
     actions: list[dict[str, Any]] = []
     if history is not None and "Stock Splits" in history.columns:
         for index, value in history["Stock Splits"].items():
-            if value and float(value) != 0 and index.date().isoformat() <= trade_date:
+            action_date = index.date().isoformat()
+            if (
+                value
+                and float(value) != 0
+                and start_date.isoformat() <= action_date <= trade_date
+            ):
                 actions.append({
                     "type": "split",
-                    "exDate": index.date().isoformat(),
+                    "exDate": action_date,
                     "ratio": float(value),
                     "source": "yahoo-actions",
                 })
@@ -430,6 +576,7 @@ def build_runtime_evidence(ticker: str, trade_date: str) -> dict[str, Any]:
         asset_type=asset_type,
         as_of=cutoff,
         bars=bars,
+        indicators=_calculate_technical_snapshot(bars),
         corporate_actions=actions,
         sources=[{
             "source": "yahoo-finance",
@@ -439,6 +586,63 @@ def build_runtime_evidence(ticker: str, trade_date: str) -> dict[str, Any]:
         }, *workbench_news["sources"]],
         news=workbench_news["items"],
     )
+
+
+def backfill_history_report_files(data_dir: Path) -> int:
+    """Record only report sections that actually exist on disk."""
+    history_path = data_dir / "history.json"
+    try:
+        history = json.loads(history_path.read_text(encoding="utf-8"))
+    except (OSError, ValueError, TypeError):
+        return 0
+    if not isinstance(history, list):
+        return 0
+
+    public_root = data_dir.parent.resolve()
+    reports_root = (public_root / "reports").resolve()
+    enriched = 0
+    for batch in history:
+        for result in batch.get("results", []) if isinstance(batch, dict) else []:
+            if not isinstance(result, dict) or result.get("files"):
+                continue
+            report = str(result.get("report") or "")
+            parts = report.split("/")
+            if (
+                len(parts) != 4
+                or parts[0] != "reports"
+                or parts[3] != "complete_report.md"
+                or any(
+                    not part
+                    or part in {".", ".."}
+                    or not all(char.isalnum() or char in "._-" for char in part)
+                    for part in parts[1:3]
+                )
+            ):
+                continue
+            report_dir = public_root.joinpath(*parts[:-1]).resolve()
+            try:
+                report_dir.relative_to(reports_root)
+            except ValueError:
+                continue
+            complete_report = report_dir / "complete_report.md"
+            if not complete_report.is_file():
+                continue
+            files = {
+                path.stem: path.relative_to(public_root).as_posix()
+                for path in sorted(report_dir.rglob("*.md"))
+                if path.is_file()
+            }
+            if not files:
+                continue
+            result["files"] = files
+            enriched += 1
+
+    if enriched:
+        history_path.write_text(
+            json.dumps(history, ensure_ascii=False, indent=2),
+            encoding="utf-8",
+        )
+    return enriched
 
 
 def update_history(data_dir: Path, payload: dict, cap: int = HISTORY_CAP) -> int:
@@ -473,6 +677,7 @@ def update_history(data_dir: Path, payload: dict, cap: int = HISTORY_CAP) -> int
                 "ticker": r["ticker"],
                 "rating": r["rating"],
                 "report": r["report"],
+                "files": r.get("files") or {},
                 "error": bool(r.get("error")),
                 "analysis_status": r.get("analysis_status"),
                 "audit_status": r.get("audit_status"),
@@ -481,9 +686,13 @@ def update_history(data_dir: Path, payload: dict, cap: int = HISTORY_CAP) -> int
             for r in payload.get("results", [])
         ],
     }
+    for field in ("request", "run"):
+        if field in payload:
+            entry[field] = payload[field]
     history.insert(0, entry)
     history = history[:cap]
     hist_path.write_text(json.dumps(history, ensure_ascii=False, indent=2), encoding="utf-8")
+    backfill_history_report_files(data_dir)
     return len(history)
 
 
@@ -505,6 +714,43 @@ def last_us_trading_day(now_utc: datetime | None = None) -> str:
     while d.weekday() >= 5:
         d -= timedelta(days=1)
     return d.isoformat()
+
+
+def _workflow_metadata(analysts: list[str]) -> tuple[dict[str, Any], dict[str, Any]]:
+    """Project trusted workflow identity fields into the public run manifest."""
+    request_id = os.environ.get("TRADINGAGENTS_REQUEST_ID", "").strip() or None
+    kind = os.environ.get("TRADINGAGENTS_REQUEST_KIND", "").strip()
+    if not kind:
+        kind = (
+            "adhoc" if request_id
+            else "monitor"
+            if os.environ.get("TRADINGAGENTS_PROFILE_ID", "").strip()
+            else "manual"
+        )
+    request = {
+        "requestId": request_id,
+        "analysts": list(analysts),
+        "researchDepth": (
+            os.environ.get("TRADINGAGENTS_RESEARCH_DEPTH", "").strip()
+            or "standard"
+        ),
+        "kind": kind,
+    }
+
+    run_id = os.environ.get("GITHUB_RUN_ID", "").strip()
+    server = os.environ.get("GITHUB_SERVER_URL", "").strip().rstrip("/")
+    repository = os.environ.get("GITHUB_REPOSITORY", "").strip().strip("/")
+    run = {
+        "id": run_id or None,
+        "attempt": os.environ.get("GITHUB_RUN_ATTEMPT", "").strip() or None,
+        "workflow": os.environ.get("GITHUB_WORKFLOW", "").strip() or None,
+        "url": (
+            f"{server}/{repository}/actions/runs/{run_id}"
+            if server and repository and run_id
+            else None
+        ),
+    }
+    return request, run
 
 
 def resolve_llm_key_status() -> tuple[bool, str]:
@@ -679,6 +925,7 @@ def main(argv: list[str] | None = None) -> int:
     tickers = [normalize_ticker(t) for t in args.tickers.split(",") if t.strip()]
     tickers = list(dict.fromkeys(t for t in tickers if t))
     analysts = [a.strip().lower() for a in args.analysts.split(",") if a.strip()]
+    request_metadata, run_metadata = _workflow_metadata(analysts)
     generated_at = datetime.now(CST).isoformat(timespec="seconds")
     news_payload = write_news_export(
         data_dir,
@@ -695,6 +942,8 @@ def main(argv: list[str] | None = None) -> int:
             "generated_at": generated_at,
             "trade_date": trade_date,
             "provider": provider,
+            "request": request_metadata,
+            "run": run_metadata,
             "hint": (f"未检测到 {provider} 的 API key。请在仓库 Settings → Secrets 配置对应密钥"
                      "（如 DEEPSEEK_API_KEY / OPENAI_COMPATIBLE_API_KEY），并可用仓库变量"
                      " TRADINGAGENTS_LLM_PROVIDER / TRADINGAGENTS_LLM_BACKEND_URL 切换后端。"),
@@ -724,6 +973,8 @@ def main(argv: list[str] | None = None) -> int:
         "trade_date": trade_date,
         "provider": provider,
         "analysts": analysts,
+        "request": request_metadata,
+        "run": run_metadata,
         "rating_tiers": RATING_TIERS,
         "results": results,
     }

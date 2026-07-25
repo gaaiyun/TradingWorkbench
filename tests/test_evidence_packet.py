@@ -1,3 +1,4 @@
+import pandas as pd
 import pytest
 
 from scripts.run_daily import build_runtime_evidence
@@ -296,6 +297,102 @@ def test_us_runtime_evidence_uses_the_same_five_year_workbench_history(monkeypat
         "timeframe": "1d",
         "limit": 1260,
     }
+
+
+def test_adhoc_yahoo_evidence_uses_a_bounded_point_in_time_history_and_indicators(
+    monkeypatch,
+):
+    observed = {}
+    count = 1400
+    dates = pd.date_range("2020-12-01", periods=count, freq="B", tz="UTC")
+    history = pd.DataFrame(
+        {
+            "Open": [100 + index * 0.1 for index in range(count)],
+            "High": [101 + index * 0.1 for index in range(count)],
+            "Low": [99 + index * 0.1 for index in range(count)],
+            "Close": [100.5 + index * 0.1 for index in range(count)],
+            "Volume": [1_000_000 + index for index in range(count)],
+            "Stock Splits": [0.0] * count,
+        },
+        index=dates,
+    )
+
+    class Ticker:
+        def history(self, **kwargs):
+            observed.update(kwargs)
+            return history
+
+    monkeypatch.setattr("scripts.run_daily._load_workbench_daily", lambda *_: None)
+    monkeypatch.setattr(
+        "scripts.run_daily._load_workbench_news",
+        lambda *_: {"items": [], "sources": []},
+    )
+    monkeypatch.setattr("yfinance.Ticker", lambda _symbol: Ticker())
+
+    packet = build_runtime_evidence("ADHOC", "2026-01-02")
+
+    assert observed == {
+        "start": "2020-12-31",
+        "end": "2026-01-03",
+        "auto_adjust": True,
+        "actions": True,
+    }
+    assert packet["integrity"]["barCount"] == 1260
+    assert packet["bars"][-1]["ts"].startswith("2026-01-02")
+    assert all(bar["ts"][:10] <= "2026-01-02" for bar in packet["bars"])
+    assert {bar["adjustment"] for bar in packet["bars"]} == {
+        "split-and-dividend-adjusted"
+    }
+    assert packet["indicators"]["version"] == "ta-indicators-v1"
+    assert packet["indicators"]["bars"] == packet["integrity"]["barCount"]
+    assert packet["indicators"]["asOf"] == packet["bars"][-1]["ts"]
+    assert packet["indicators"]["adjustment"] == "split-and-dividend-adjusted"
+    assert {
+        "ma20",
+        "ma60",
+        "ma200",
+        "macd",
+        "macdSignal",
+        "macdHistogram",
+        "rsi14",
+        "atr14",
+        "realizedVolatility20",
+    } <= packet["indicators"].keys()
+
+
+def test_adhoc_yahoo_filter_uses_the_exchange_date_before_utc_conversion(monkeypatch):
+    history = pd.DataFrame(
+        {
+            "Open": [10.0, 20.0],
+            "High": [11.0, 21.0],
+            "Low": [9.0, 19.0],
+            "Close": [10.5, 20.5],
+            "Volume": [100, 200],
+            "Stock Splits": [0.0, 0.0],
+        },
+        index=pd.DatetimeIndex(
+            ["2026-01-02T00:00:00+08:00", "2026-01-03T00:00:00+08:00"],
+        ),
+    )
+
+    monkeypatch.setattr("scripts.run_daily._load_workbench_daily", lambda *_: None)
+    monkeypatch.setattr(
+        "scripts.run_daily._load_workbench_news",
+        lambda *_: {"items": [], "sources": []},
+    )
+    monkeypatch.setattr(
+        "yfinance.Ticker",
+        lambda _symbol: type(
+            "Ticker",
+            (),
+            {"history": lambda _self, **_kwargs: history},
+        )(),
+    )
+
+    packet = build_runtime_evidence("3887.HK", "2026-01-02")
+
+    assert packet["integrity"]["barCount"] == 1
+    assert packet["bars"][0]["close"] == 10.5
 
 
 def test_runtime_evidence_includes_point_in_time_workbench_news(monkeypatch):
