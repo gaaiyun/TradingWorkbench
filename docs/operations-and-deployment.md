@@ -164,8 +164,9 @@ Cloudflare 出口访问免费源时可能需要来源请求头。当前 adapter 
 
 新闻链同样必须做云端验证。Google News RSS 可能拒绝 Cloudflare 出口，Worker 会按
 主题改用工信部 RSS 或 Yahoo Finance RSS；Alphabet 使用 `GOOGL` feed，HashKey
-Holdings 使用 `3887.HK` feed。返回的 `sources` 应同时保留主来源失败码和降级来源
-成功状态。不能因为本机 Google 请求成功就删除这条降级链。
+Holdings 先读公司投资者关系公告，官方页失败后再使用 Google/Yahoo 的 `3887.HK`
+feed。返回的 `sources` 应同时保留主来源失败码和降级来源成功状态。不能因为本机
+Google 请求成功就删除这条降级链。
 
 工作台：
 

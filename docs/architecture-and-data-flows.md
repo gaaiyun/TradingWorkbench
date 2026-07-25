@@ -138,8 +138,8 @@ flowchart TD
 
 新闻实体表把 `03887`、`3887`、`03887.HK` 统一到 `3887.HK / HashKey Holdings`。
 该映射来自港交所发行人资料，不能与美股 `BTDR / Bitdeer` 混用。Google News RSS
-不可达时，GOOGL 与 3887.HK 分别使用其 Yahoo Finance RSS，失败轨迹与降级来源一并
-写入 run card。
+不可达时，GOOGL 使用 Yahoo Finance RSS；3887.HK 优先使用 HashKey 投资者关系公告，
+官方页不可达时才降级到 Google/Yahoo。失败轨迹与降级来源一并写入 run card。
 
 ## 5. Provider Registry
 

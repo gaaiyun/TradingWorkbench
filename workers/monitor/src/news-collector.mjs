@@ -5,6 +5,7 @@ const MIIT_RSS_URL = [
   "?webId=8d828e408d90447786ddbe128d495e9e",
   "&columnIds=d3e2bede1bc045e2875fc7161c01db7d",
 ].join("");
+const HASHKEY_IR_URL = "https://group.hashkey.com/en/news/categories/announcement-1";
 
 const TARGET_ALIASES = {
   "515880.SS": ["通信ETF", "通信 ETF", "光模块", "光通信", "通信设备", "5G", "6G"],
@@ -80,6 +81,50 @@ export function parseGoogleNewsRss(xml) {
     });
   }
   return items;
+}
+
+export function parseHashKeyFeedPage(html) {
+  const value = String(html || "");
+  const marker = '\\"posts\\":{\\"posts\\":';
+  const start = value.indexOf(marker);
+  if (start < 0) return [];
+  const bodyStart = start + marker.length;
+  const bodyEnd = value.indexOf('],\\"metaData\\":', bodyStart);
+  if (bodyEnd < bodyStart) return [];
+  try {
+    const encodedPosts = value.slice(bodyStart, bodyEnd + 1);
+    const posts = JSON.parse(JSON.parse(`"${encodedPosts}"`));
+    if (!Array.isArray(posts)) return [];
+    return posts.flatMap((post) => {
+      const title = cleanText(post?.title, 300);
+      const summary = cleanText(post?.excerpt, 500);
+      const published = new Date(post?.firstPublishedDate || "");
+      let url;
+      try {
+        const base = String(post?.url?.base || HASHKEY_IR_URL).replace(/\/+$/, "");
+        const path = String(post?.url?.path || "").replace(/^\/?/, "/");
+        url = new URL(`${base}${path}`).toString();
+      } catch {
+        return [];
+      }
+      if (
+        !title
+        || !Number.isFinite(published.valueOf())
+        || new URL(url).hostname !== "group.hashkey.com"
+      ) {
+        return [];
+      }
+      return [{
+        title,
+        url,
+        publishedAt: published.toISOString(),
+        summary,
+        publisher: "HashKey Holdings",
+      }];
+    });
+  } catch {
+    return [];
+  }
 }
 
 function availableSymbols(profile, symbols) {
@@ -184,17 +229,41 @@ function providerCandidates(plan) {
   const candidates = [{
     source: "google-news-rss",
     url: rssUrl(plan),
+    format: "rss",
   }];
+  if (plan.topic === "hashkey") {
+    candidates.unshift({
+      source: "hashkey-ir",
+      url: HASHKEY_IR_URL,
+      format: "hashkey-feed",
+    });
+  }
   if (["communications", "cn-semiconductor", "policy"].includes(plan.topic)) {
-    candidates.push({ source: "miit-rss", url: MIIT_RSS_URL });
+    candidates.push({ source: "miit-rss", url: MIIT_RSS_URL, format: "rss" });
   } else if (plan.topic === "us-semiconductor") {
-    candidates.push({ source: "yahoo-finance-rss", url: yahooRssUrl("SOXX") });
+    candidates.push({
+      source: "yahoo-finance-rss",
+      url: yahooRssUrl("SOXX"),
+      format: "rss",
+    });
   } else if (plan.topic === "oracle") {
-    candidates.push({ source: "yahoo-finance-rss", url: yahooRssUrl("ORCL") });
+    candidates.push({
+      source: "yahoo-finance-rss",
+      url: yahooRssUrl("ORCL"),
+      format: "rss",
+    });
   } else if (plan.topic === "alphabet") {
-    candidates.push({ source: "yahoo-finance-rss", url: yahooRssUrl("GOOGL") });
+    candidates.push({
+      source: "yahoo-finance-rss",
+      url: yahooRssUrl("GOOGL"),
+      format: "rss",
+    });
   } else if (plan.topic === "hashkey") {
-    candidates.push({ source: "yahoo-finance-rss", url: yahooRssUrl("3887.HK") });
+    candidates.push({
+      source: "yahoo-finance-rss",
+      url: yahooRssUrl("3887.HK"),
+      format: "rss",
+    });
   }
   return candidates;
 }
@@ -239,16 +308,28 @@ function canonicalUrl(value) {
   }
 }
 
-async function itemId(profileId, symbol, url) {
-  const material = `${profileId}\n${symbol || ""}\n${canonicalUrl(url)}`;
+async function sha256Hex(material) {
   const digest = await crypto.subtle.digest(
     "SHA-256",
     new TextEncoder().encode(material),
   );
-  const hex = [...new Uint8Array(digest)]
+  return [...new Uint8Array(digest)]
     .map((byte) => byte.toString(16).padStart(2, "0"))
     .join("");
-  return `news-${hex}`;
+}
+
+async function itemId(profileId, symbol, url) {
+  const material = `${profileId}\n${symbol || ""}\n${canonicalUrl(url)}`;
+  return `news-${await sha256Hex(material)}`;
+}
+
+async function itemClusterId(title) {
+  const normalized = cleanText(title, 300)
+    .normalize("NFKC")
+    .toLocaleLowerCase()
+    .replace(/[^\p{L}\p{N}]+/gu, " ")
+    .trim();
+  return `cluster-${await sha256Hex(normalized)}`;
 }
 
 class NewsFetchError extends Error {
@@ -264,14 +345,16 @@ function fetchErrorCode(error) {
     : "NEWS_NETWORK_ERROR";
 }
 
-async function fetchXml(url, fetcher) {
+async function fetchContent(candidate, fetcher) {
   const controller = new AbortController();
   const timer = setTimeout(() => controller.abort(), 8_000);
   try {
-    const response = await fetcher(url, {
+    const response = await fetcher(candidate.url, {
       signal: controller.signal,
       headers: {
-        accept: "application/rss+xml,application/xml,text/xml;q=0.9,*/*;q=0.5",
+        accept: candidate.format === "hashkey-feed"
+          ? "text/html,application/xhtml+xml;q=0.9,*/*;q=0.5"
+          : "application/rss+xml,application/xml,text/xml;q=0.9,*/*;q=0.5",
         "user-agent": "TradingWorkbench/1.0 (+https://github.com/gaaiyun/TradingWorkbench)",
       },
     });
@@ -279,7 +362,10 @@ async function fetchXml(url, fetcher) {
       throw new NewsFetchError(`NEWS_HTTP_${Number(response?.status) || 0}`);
     }
     const contentType = response.headers.get("content-type") || "";
-    if (!/(?:xml|rss|text\/plain)/i.test(contentType)) {
+    const supported = candidate.format === "hashkey-feed"
+      ? /text\/html/i.test(contentType)
+      : /(?:xml|rss|text\/plain)/i.test(contentType);
+    if (!supported) {
       throw new NewsFetchError("NEWS_MALFORMED_RESPONSE");
     }
     return await response.text();
@@ -291,9 +377,11 @@ async function fetchXml(url, fetcher) {
   }
 }
 
-function cachedXml(url, fetcher, cache) {
-  if (!cache.has(url)) cache.set(url, fetchXml(url, fetcher));
-  return cache.get(url);
+function cachedContent(candidate, fetcher, cache) {
+  if (!cache.has(candidate.url)) {
+    cache.set(candidate.url, fetchContent(candidate, fetcher));
+  }
+  return cache.get(candidate.url);
 }
 
 async function fetchPlan(plan, fetcher, cache) {
@@ -301,9 +389,10 @@ async function fetchPlan(plan, fetcher, cache) {
   let firstSuccessfulSource = null;
   for (const candidate of providerCandidates(plan)) {
     try {
-      const parsed = parseGoogleNewsRss(
-        await cachedXml(candidate.url, fetcher, cache),
-      );
+      const content = await cachedContent(candidate, fetcher, cache);
+      const parsed = candidate.format === "hashkey-feed"
+        ? parseHashKeyFeedPage(content)
+        : parseGoogleNewsRss(content);
       const items = parsed
         .filter((item) => relevantToPlan(item, plan))
         .slice(0, RSS_LIMIT_PER_QUERY);
@@ -328,6 +417,7 @@ async function fetchPlan(plan, fetcher, cache) {
 
 function itemSource(provider, item) {
   if (provider === "miit-rss") return "工业和信息化部 RSS";
+  if (provider === "hashkey-ir") return "HashKey Investor Relations";
   if (provider === "yahoo-finance-rss") {
     let publisher = item.publisher;
     if (!publisher || publisher === "未知发布者") {
@@ -348,7 +438,8 @@ export async function writeNewsItems(db, { items }) {
   await db.prepare(`
     INSERT INTO news_items (
       id, symbol, profile_id, topic, title, summary, url, published_at,
-      source, source_tier, as_of, fetched_at, freshness, adjustment, quality, expires_at
+      source, source_tier, publisher, relevance, cluster_id,
+      as_of, fetched_at, freshness, adjustment, quality, expires_at
     )
     SELECT
       json_extract(value, '$.id'),
@@ -361,6 +452,9 @@ export async function writeNewsItems(db, { items }) {
       json_extract(value, '$.publishedAt'),
       json_extract(value, '$.source'),
       COALESCE(json_extract(value, '$.sourceTier'), 'discovery'),
+      json_extract(value, '$.publisher'),
+      json_extract(value, '$.relevance'),
+      json_extract(value, '$.clusterId'),
       json_extract(value, '$.asOf'),
       json_extract(value, '$.fetchedAt'),
       json_extract(value, '$.freshness'),
@@ -378,6 +472,9 @@ export async function writeNewsItems(db, { items }) {
       published_at = excluded.published_at,
       source = excluded.source,
       source_tier = excluded.source_tier,
+      publisher = excluded.publisher,
+      relevance = excluded.relevance,
+      cluster_id = excluded.cluster_id,
       as_of = excluded.as_of,
       fetched_at = excluded.fetched_at,
       freshness = excluded.freshness,
@@ -430,6 +527,7 @@ export async function collectNewsForProfile({
         || null;
       const id = await itemId(profile.id, symbol, item.url);
       if (byId.has(id)) continue;
+      const clusterId = await itemClusterId(item.title);
       const age = now.valueOf() - Date.parse(item.publishedAt);
       byId.set(id, {
         id,
@@ -441,12 +539,19 @@ export async function collectNewsForProfile({
         url: item.url,
         publishedAt: item.publishedAt,
         source: itemSource(outcome.value.source, item),
-        sourceTier: outcome.value.source === "miit-rss" ? "evidence" : "discovery",
+        sourceTier: ["miit-rss", "hashkey-ir"].includes(outcome.value.source)
+          ? "evidence"
+          : "discovery",
+        publisher: item.publisher,
+        relevance: 1,
+        clusterId,
         asOf: item.publishedAt,
         fetchedAt,
         freshness: age >= 0 && age <= 36 * 60 * 60 * 1000 ? "fresh" : "stale",
         adjustment: null,
-        quality: "discovery",
+        quality: ["miit-rss", "hashkey-ir"].includes(outcome.value.source)
+          ? "evidence"
+          : "discovery",
         expiresAt,
       });
     }

@@ -46,6 +46,29 @@ test("Google News RSS parser preserves evidence metadata and strips markup", asy
   ]);
 });
 
+test("HashKey investor page parser extracts the embedded official post feed", async () => {
+  const { parseHashKeyFeedPage } = await import(newsUrl);
+  const posts = JSON.stringify([{
+    id: "official-1",
+    title: "HashKey Holdings publishes a licensed exchange update",
+    excerpt: "The company explains its latest regulated digital asset service.",
+    firstPublishedDate: "2026-07-21T01:39:24.598Z",
+    url: {
+      base: "https://group.hashkey.com/en",
+      path: "/newsroom/licensed-exchange-update",
+    },
+  }]);
+  const encoded = JSON.stringify(posts).slice(1, -1);
+  const html = `prefix \\"posts\\":{\\"posts\\":${encoded},\\"metaData\\":{\\"count\\":1} suffix`;
+  assert.deepEqual(parseHashKeyFeedPage(html), [{
+    title: "HashKey Holdings publishes a licensed exchange update",
+    url: "https://group.hashkey.com/en/newsroom/licensed-exchange-update",
+    publishedAt: "2026-07-21T01:39:24.598Z",
+    summary: "The company explains its latest regulated digital asset service.",
+    publisher: "HashKey Holdings",
+  }]);
+});
+
 test("news collection writes relevant discovery items and rejects bare SMH false positives", async () => {
   const { collectNewsForProfile } = await import(newsUrl);
   const writes = [];
@@ -72,6 +95,9 @@ test("news collection writes relevant discovery items and rejects bare SMH false
   assert.equal(semiconductor.symbol, "159995.SZ");
   assert.equal(semiconductor.topic, "cn-semiconductor");
   assert.equal(semiconductor.source, "Google News / 财经日报");
+  assert.equal(semiconductor.publisher, "财经日报");
+  assert.equal(semiconductor.relevance, 1);
+  assert.match(semiconductor.clusterId, /^cluster-[a-f0-9]{64}$/);
   assert.equal(semiconductor.quality, "discovery");
   assert.match(semiconductor.id, /^news-[a-f0-9]{64}$/);
   assert.equal(semiconductor.freshness, "fresh");
@@ -110,6 +136,48 @@ test("news routing recognizes Alphabet and HashKey while requiring full aliases"
   assert.equal(items.every((item) => item.sourceTier === "discovery"), true);
 });
 
+test("HashKey news prefers the official investor feed before discovery providers", async () => {
+  const { collectNewsForProfile } = await import(newsUrl);
+  const writes = [];
+  const calls = [];
+  const posts = JSON.stringify([{
+    id: "official-1",
+    title: "HashKey Holdings signs a regulated infrastructure agreement",
+    excerpt: "HashKey Group announced an update for its licensed digital asset platform.",
+    firstPublishedDate: "2026-07-21T01:39:24.598Z",
+    url: {
+      base: "https://group.hashkey.com/en",
+      path: "/newsroom/regulated-infrastructure-agreement",
+    },
+  }]);
+  const encoded = JSON.stringify(posts).slice(1, -1);
+  const officialHtml = `prefix \\"posts\\":{\\"posts\\":${encoded},\\"metaData\\":{\\"count\\":1} suffix`;
+  const result = await collectNewsForProfile({
+    profile: {
+      ...monitorSettings().profiles[0],
+      targets: [{ symbol: "3887.HK" }],
+    },
+    db: {},
+    fetcher: async (url) => {
+      calls.push(String(url));
+      return new Response(officialHtml, {
+        status: 200,
+        headers: { "content-type": "text/html; charset=UTF-8" },
+      });
+    },
+    writeItems: async (_db, payload) => writes.push(payload),
+    now: new Date("2026-07-23T01:30:00.000Z"),
+  });
+  const item = writes.flatMap(({ items }) => items)[0];
+  assert.equal(result.status, "completed");
+  assert.equal(calls.length, 1);
+  assert.equal(calls[0], "https://group.hashkey.com/en/news/categories/announcement-1");
+  assert.equal(item.symbol, "3887.HK");
+  assert.equal(item.source, "HashKey Investor Relations");
+  assert.equal(item.sourceTier, "evidence");
+  assert.equal(item.quality, "evidence");
+});
+
 test("news collection falls back to Yahoo feeds for Alphabet and HashKey", async () => {
   const { collectNewsForProfile } = await import(newsUrl);
   const calls = [];
@@ -127,7 +195,7 @@ test("news collection falls back to Yahoo feeds for Alphabet and HashKey", async
     fetcher: async (url) => {
       const value = String(url);
       calls.push(value);
-      if (value.includes("news.google.com")) {
+      if (value.includes("group.hashkey.com") || value.includes("news.google.com")) {
         return new Response("", { status: 503 });
       }
       const symbol = new URL(value).searchParams.get("s");
@@ -225,6 +293,9 @@ test("news writer uses idempotent upserts without storing article bodies", async
     url: "https://example.com/news",
     publishedAt: "2026-07-23T01:20:00.000Z",
     source: "Google News / Publisher",
+    publisher: "Publisher",
+    relevance: 1,
+    clusterId: `cluster-${"b".repeat(64)}`,
     asOf: "2026-07-23T01:20:00.000Z",
     fetchedAt: "2026-07-23T01:30:00.000Z",
     freshness: "fresh",
@@ -235,6 +306,10 @@ test("news writer uses idempotent upserts without storing article bodies", async
   await writeNewsItems(db, { items: [item] });
   assert.equal(calls.length, 1);
   assert.match(calls[0].sql, /ON CONFLICT\(id\)\s+DO UPDATE/i);
+  assert.match(calls[0].sql, /\bpublisher\b/i);
+  assert.match(calls[0].sql, /\brelevance\b/i);
+  assert.match(calls[0].sql, /\bcluster_id\b/i);
   assert.equal(calls[0].payload[0].summary, "允许保存的短摘要");
+  assert.equal(calls[0].payload[0].publisher, "Publisher");
   assert.equal("body" in calls[0].payload[0], false);
 });
