@@ -1,0 +1,25 @@
+{
+  "schemaVersion": 1,
+  "ticker": "MSFT",
+  "tradeDate": "2026-07-24",
+  "generatedAt": "2026-07-25T17:36:23.705609+00:00",
+  "analysisStatus": "insufficient_evidence",
+  "auditStatus": "legacy_unverified",
+  "claimValidation": {
+    "status": "failed",
+    "errorCodes": [
+      "UNCITED_NUMERIC_CLAIM",
+      "UNSUPPORTED_PRICE_TARGET",
+      "UNSUPPORTED_ALLOCATION"
+    ],
+    "citationCount": 11,
+    "unknownEvidenceIds": [],
+    "uncitedNumericParagraphs": 169
+  },
+  "evidence": {
+    "schemaVersion": "EvidencePacketV1",
+    "asOf": "2026-07-24T23:59:59Z",
+    "contentHash": "5c288c40e51987b0b4d95eb9a0c9827f8165d9aae540225eb39f94760ba01102",
+    "status": "ok"
+  }
+}

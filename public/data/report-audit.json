@@ -1,17 +1,54 @@
 {
   "version": 1,
-  "generatedAt": "2026-07-25T17:17:17.386Z",
+  "generatedAt": "2026-07-25T17:36:25.599Z",
   "summary": {
-    "successfulReports": 46,
+    "successfulReports": 47,
     "verifiedReports": 0,
     "invalidatedReports": 3,
-    "legacyUnverifiedReports": 43,
+    "legacyUnverifiedReports": 44,
     "invalidRecords": 6,
     "evidenceValidationFailures": 3,
     "analysisExecutionFailures": 2,
     "invalidInputs": 1
   },
   "reports": [
+    {
+      "ticker": "MSFT",
+      "tradeDate": "2026-07-24",
+      "generatedAt": "2026-07-26T01:26:57+08:00",
+      "provider": "openai_compatible",
+      "rating": "Not Rated",
+      "analysisStatus": "insufficient_evidence",
+      "report": "reports/MSFT/2026-07-24/complete_report.md",
+      "auditStatus": "legacy_unverified",
+      "failureClass": null,
+      "problemCodes": [],
+      "evidence": {
+        "urlCount": 7,
+        "claimCitationCount": 1,
+        "finalProposalMarkers": 1,
+        "priceTargetCount": 0,
+        "valuationMethodCount": 63,
+        "publishedMarkerCount": 7
+      },
+      "claimValidation": {
+        "status": "failed",
+        "errorCodes": [
+          "UNCITED_NUMERIC_CLAIM",
+          "UNSUPPORTED_PRICE_TARGET",
+          "UNSUPPORTED_ALLOCATION"
+        ],
+        "citationCount": 11,
+        "unknownEvidenceIds": [],
+        "uncitedNumericParagraphs": 169
+      },
+      "evidencePacket": null,
+      "evidencePublish": {
+        "published": false,
+        "reason": "network_error"
+      },
+      "supersededBy": null
+    },
     {
       "ticker": "515880.SS",
       "tradeDate": "2026-07-24",

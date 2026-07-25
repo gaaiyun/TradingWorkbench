@@ -1,6 +1,6 @@
 {
   "status": "ok",
-  "generated_at": "2026-07-25T18:37:27+08:00",
+  "generated_at": "2026-07-26T01:26:57+08:00",
   "trade_date": "2026-07-24",
   "provider": "openai_compatible",
   "analysts": [
@@ -8,6 +8,22 @@
     "news",
     "fundamentals"
   ],
+  "request": {
+    "requestId": "9f94fccc-05de-4186-81a2-c4a034a472c8",
+    "analysts": [
+      "market",
+      "news",
+      "fundamentals"
+    ],
+    "researchDepth": "standard",
+    "kind": "adhoc"
+  },
+  "run": {
+    "id": "30167621231",
+    "attempt": "1",
+    "workflow": "daily-analysis",
+    "url": "https://github.com/gaaiyun/TradingWorkbench/actions/runs/30167621231"
+  },
   "rating_tiers": [
     "Sell",
     "Underweight",
@@ -17,136 +33,28 @@
   ],
   "results": [
     {
-      "ticker": "515880.SS",
+      "ticker": "MSFT",
       "rating": "Not Rated",
-      "report": "reports/515880.SS/2026-07-24-v3/complete_report.md",
+      "report": "reports/MSFT/2026-07-24/complete_report.md",
       "files": {
-        "fundamentals": "reports/515880.SS/2026-07-24-v3/1_analysts/fundamentals.md",
-        "market": "reports/515880.SS/2026-07-24-v3/1_analysts/market.md",
-        "news": "reports/515880.SS/2026-07-24-v3/1_analysts/news.md",
-        "bear": "reports/515880.SS/2026-07-24-v3/2_research/bear.md",
-        "bull": "reports/515880.SS/2026-07-24-v3/2_research/bull.md",
-        "manager": "reports/515880.SS/2026-07-24-v3/2_research/manager.md",
-        "trader": "reports/515880.SS/2026-07-24-v3/3_trading/trader.md",
-        "aggressive": "reports/515880.SS/2026-07-24-v3/4_risk/aggressive.md",
-        "conservative": "reports/515880.SS/2026-07-24-v3/4_risk/conservative.md",
-        "neutral": "reports/515880.SS/2026-07-24-v3/4_risk/neutral.md",
-        "decision": "reports/515880.SS/2026-07-24-v3/5_portfolio/decision.md",
-        "complete_report": "reports/515880.SS/2026-07-24-v3/complete_report.md"
+        "fundamentals": "reports/MSFT/2026-07-24/1_analysts/fundamentals.md",
+        "market": "reports/MSFT/2026-07-24/1_analysts/market.md",
+        "news": "reports/MSFT/2026-07-24/1_analysts/news.md",
+        "bear": "reports/MSFT/2026-07-24/2_research/bear.md",
+        "bull": "reports/MSFT/2026-07-24/2_research/bull.md",
+        "manager": "reports/MSFT/2026-07-24/2_research/manager.md",
+        "trader": "reports/MSFT/2026-07-24/3_trading/trader.md",
+        "aggressive": "reports/MSFT/2026-07-24/4_risk/aggressive.md",
+        "conservative": "reports/MSFT/2026-07-24/4_risk/conservative.md",
+        "neutral": "reports/MSFT/2026-07-24/4_risk/neutral.md",
+        "complete_report": "reports/MSFT/2026-07-24/complete_report.md"
       },
-      "decision_excerpt": "**Rating**: Sell\n\n**Executive Summary**: 515880.SS（国泰中证全指通信设备ETF）当前面临结构性赎回压力、极端波动率、杠杆踩踏风险及宏观流动性偏紧的多重风险叠加。三位风险分析师在SELL方向上达成一致，核心分歧仅在执行方式。考虑到该ETF在5个月内经历两次大幅拆分、52周振幅达449.8%、ATR高达17%，且多方核心论据（MACD柱状图微弱转正、低流动性预测市场降息预期）在严格审视下根基不稳，建议退出该ETF持仓。\n\n**Investment Thesis**: 综合三位风险分析师的辩论，515880.SS的风险收益比严重恶化，退出是当前唯一负责任的选择。以下逐维度论证：\n\n**一、ETF结构风险：两次拆分是最核心的警示信号。**\n该ETF在2026年2月和6月先后经历3:1和2:1两次大幅拆分。激进派和保守派均指出，短期内连续两次大幅拆分",
+      "decision_excerpt": "",
       "analysis_status": "insufficient_evidence",
       "audit_status": "legacy_unverified",
       "evidence_publish": {
-        "published": true,
-        "status": 201
-      },
-      "error": null
-    },
-    {
-      "ticker": "512480.SS",
-      "rating": "Not Rated",
-      "report": "reports/512480.SS/2026-07-24-v3/complete_report.md",
-      "files": {
-        "fundamentals": "reports/512480.SS/2026-07-24-v3/1_analysts/fundamentals.md",
-        "market": "reports/512480.SS/2026-07-24-v3/1_analysts/market.md",
-        "bear": "reports/512480.SS/2026-07-24-v3/2_research/bear.md",
-        "bull": "reports/512480.SS/2026-07-24-v3/2_research/bull.md",
-        "manager": "reports/512480.SS/2026-07-24-v3/2_research/manager.md",
-        "trader": "reports/512480.SS/2026-07-24-v3/3_trading/trader.md",
-        "aggressive": "reports/512480.SS/2026-07-24-v3/4_risk/aggressive.md",
-        "conservative": "reports/512480.SS/2026-07-24-v3/4_risk/conservative.md",
-        "neutral": "reports/512480.SS/2026-07-24-v3/4_risk/neutral.md",
-        "decision": "reports/512480.SS/2026-07-24-v3/5_portfolio/decision.md",
-        "complete_report": "reports/512480.SS/2026-07-24-v3/complete_report.md"
-      },
-      "decision_excerpt": "**Rating**: Underweight\n\n**Executive Summary**: 512480.SS（国泰君安全指半导体产品与设备ETF）当前面临数据异常未澄清、极端波动率未收敛、成分股高度集中及宏观叙事与底层资产错配等多重风险。综合多空辩论，应以风险管理为优先，逐步减持至低配状态，而非在距52周低点仅约11%的潜在底部区域恐慌性清仓。建议分批减仓，同时密切监控NAV折溢价与数据异常官方澄清进展，待右侧信号确认后再评估是否回补。\n\n**Investment Thesis**: **一、核心风险：数据异常未获官方澄清，技术指标可信度受损。**\n6月26日至7月3日期间出现的极端价格跳变（2.75→1.45→2.70→1.33）在无官方分红或拆股记录的情况下构成严重警示信号。激进派与保守派均正确指出，该异常导致MACD柱状图收窄、ATR变化等信号建立在被污染的数据区间之上，其有效",
-      "analysis_status": "insufficient_evidence",
-      "audit_status": "legacy_unverified",
-      "evidence_publish": {
-        "published": true,
-        "status": 201
-      },
-      "error": null
-    },
-    {
-      "ticker": "ORCL",
-      "rating": "Not Rated",
-      "report": "reports/ORCL/2026-07-24-v2/complete_report.md",
-      "files": {
-        "fundamentals": "reports/ORCL/2026-07-24-v2/1_analysts/fundamentals.md",
-        "market": "reports/ORCL/2026-07-24-v2/1_analysts/market.md",
-        "news": "reports/ORCL/2026-07-24-v2/1_analysts/news.md",
-        "bear": "reports/ORCL/2026-07-24-v2/2_research/bear.md",
-        "bull": "reports/ORCL/2026-07-24-v2/2_research/bull.md",
-        "manager": "reports/ORCL/2026-07-24-v2/2_research/manager.md",
-        "trader": "reports/ORCL/2026-07-24-v2/3_trading/trader.md",
-        "aggressive": "reports/ORCL/2026-07-24-v2/4_risk/aggressive.md",
-        "conservative": "reports/ORCL/2026-07-24-v2/4_risk/conservative.md",
-        "neutral": "reports/ORCL/2026-07-24-v2/4_risk/neutral.md",
-        "decision": "reports/ORCL/2026-07-24-v2/5_portfolio/decision.md",
-        "complete_report": "reports/ORCL/2026-07-24-v2/complete_report.md"
-      },
-      "decision_excerpt": "**Rating**: Hold\n\n**Executive Summary**: ORCL正处于AI基础设施投资周期的关键拐点，多空双方论据各有坚实支撑，证据天平未明显倾斜。多方指出Q4收入加速增长与经营现金流大幅改善是真实的基本面信号，空方强调的债务负担、负自由现金流及成本增速远超收入增速的剪刀差同样即期可量化。在OCI资本开支能否于未来1-2个季度转化为利润率改善和正向自由现金流的答案揭晓前，维持中性仓位、以时间换取确定性是当前最审慎的策略。\n\n**Investment Thesis**: **核心矛盾：OCI巨额资本开支的回报兑现时点与确定性尚不明朗。**\n\n本轮辩论的核心张力在于：ORCL正在执行一场高风险高回报的AI基础设施豪赌，多方与空方均提供了可量化的论据，但关键变量——OCI资本开支能否转化为利润率改善和正向自由现金流——的答案尚未揭晓。\n\n**多方论据的合理性与局限性：*",
-      "analysis_status": "insufficient_evidence",
-      "audit_status": "legacy_unverified",
-      "evidence_publish": {
-        "published": true,
-        "status": 201
-      },
-      "error": null
-    },
-    {
-      "ticker": "GOOGL",
-      "rating": "Not Rated",
-      "report": "reports/GOOGL/2026-07-24-v3/complete_report.md",
-      "files": {
-        "fundamentals": "reports/GOOGL/2026-07-24-v3/1_analysts/fundamentals.md",
-        "market": "reports/GOOGL/2026-07-24-v3/1_analysts/market.md",
-        "news": "reports/GOOGL/2026-07-24-v3/1_analysts/news.md",
-        "bear": "reports/GOOGL/2026-07-24-v3/2_research/bear.md",
-        "bull": "reports/GOOGL/2026-07-24-v3/2_research/bull.md",
-        "manager": "reports/GOOGL/2026-07-24-v3/2_research/manager.md",
-        "trader": "reports/GOOGL/2026-07-24-v3/3_trading/trader.md",
-        "aggressive": "reports/GOOGL/2026-07-24-v3/4_risk/aggressive.md",
-        "conservative": "reports/GOOGL/2026-07-24-v3/4_risk/conservative.md",
-        "neutral": "reports/GOOGL/2026-07-24-v3/4_risk/neutral.md",
-        "decision": "reports/GOOGL/2026-07-24-v3/5_portfolio/decision.md",
-        "complete_report": "reports/GOOGL/2026-07-24-v3/complete_report.md"
-      },
-      "decision_excerpt": "**Rating**: Hold\n\n**Executive Summary**: GOOGL 当前处于基本面逻辑换挡与技术面破位修复的焦灼期，维持仓位不变是当前风险收益比最优的选择。空头的两大结构性隐忧——盈利质量被一次性投资收益粉饰、2050亿美元CapEx的折旧压制风险——具有真实杀伤力，但24.2%的营收增速和持续扩张的毛利率证明核心引擎并未熄火。技术面全面空头排列指向机构资金正在对上述隐忧重新定价，而非情绪化错杀。在正常化利润环比趋势和CapEx回报路径明朗之前，既不宜用信仰抄底，也不值得用恐慌割肉。\n\n**Investment Thesis**: **一、盈利质量：一次性收益掩盖了环比停滞信号，但同比增速仍证明主业韧性**\n\n辩论中最具结构性杀伤力的论点聚焦于盈利质量。Q2报告净利润1121.9亿美元中，高达988.4亿美元来自投资证券出售收益，Q1另有369.5亿美元同类一次性",
-      "analysis_status": "insufficient_evidence",
-      "audit_status": "legacy_unverified",
-      "evidence_publish": {
-        "published": true,
-        "status": 201
-      },
-      "error": null
-    },
-    {
-      "ticker": "3887.HK",
-      "rating": "Not Rated",
-      "report": "reports/3887.HK/2026-07-24-v4/complete_report.md",
-      "files": {
-        "fundamentals": "reports/3887.HK/2026-07-24-v4/1_analysts/fundamentals.md",
-        "market": "reports/3887.HK/2026-07-24-v4/1_analysts/market.md",
-        "news": "reports/3887.HK/2026-07-24-v4/1_analysts/news.md",
-        "bear": "reports/3887.HK/2026-07-24-v4/2_research/bear.md",
-        "bull": "reports/3887.HK/2026-07-24-v4/2_research/bull.md",
-        "manager": "reports/3887.HK/2026-07-24-v4/2_research/manager.md",
-        "trader": "reports/3887.HK/2026-07-24-v4/3_trading/trader.md",
-        "aggressive": "reports/3887.HK/2026-07-24-v4/4_risk/aggressive.md",
-        "conservative": "reports/3887.HK/2026-07-24-v4/4_risk/conservative.md",
-        "neutral": "reports/3887.HK/2026-07-24-v4/4_risk/neutral.md",
-        "decision": "reports/3887.HK/2026-07-24-v4/5_portfolio/decision.md",
-        "complete_report": "reports/3887.HK/2026-07-24-v4/complete_report.md"
-      },
-      "decision_excerpt": "**最终交易决定**\n\n- **标的**: `3887.HK`\n- **评级**: **Underweight (减持)**\n- **价格目标**: 留空（由于未提供包含证据编号的数据包，无法验证估值方法与输入参数，故不设定具体目标价）\n\n---\n\n**综合辩论与决策依据**\n\n作为投资组合经理，在审阅了激进、保守、中性三位风险分析师的辩论，并结合研究经理的投资计划与交易员的提案后，我决定将交易员的“Sell”提案调整为“Underweight”。这一调整旨在融合空头逻辑的压倒性优势与中性分析师在执行层面的优化建议，在控制结构性风险的同时避免在流动性枯竭区造成不必要的冲击成本。\n\n- **Verified Fact (已验证事实)**: \n  由于当前运行环境未提供包含具体 Evidence ID 的数据包，分析师辩论中引用的所有财务数据（如现金流、毛利率、现金储备）、技术指标点位（如均线",
-      "analysis_status": "insufficient_evidence",
-      "audit_status": "legacy_unverified",
-      "evidence_publish": {
-        "published": true,
-        "status": 201
+        "published": false,
+        "reason": "network_error"
       },
       "error": null
     }

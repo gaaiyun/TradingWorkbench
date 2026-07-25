@@ -1,6 +1,54 @@
 [
   {
     "trade_date": "2026-07-24",
+    "generated_at": "2026-07-26T01:26:57+08:00",
+    "provider": "openai_compatible",
+    "results": [
+      {
+        "ticker": "MSFT",
+        "rating": "Not Rated",
+        "report": "reports/MSFT/2026-07-24/complete_report.md",
+        "files": {
+          "fundamentals": "reports/MSFT/2026-07-24/1_analysts/fundamentals.md",
+          "market": "reports/MSFT/2026-07-24/1_analysts/market.md",
+          "news": "reports/MSFT/2026-07-24/1_analysts/news.md",
+          "bear": "reports/MSFT/2026-07-24/2_research/bear.md",
+          "bull": "reports/MSFT/2026-07-24/2_research/bull.md",
+          "manager": "reports/MSFT/2026-07-24/2_research/manager.md",
+          "trader": "reports/MSFT/2026-07-24/3_trading/trader.md",
+          "aggressive": "reports/MSFT/2026-07-24/4_risk/aggressive.md",
+          "conservative": "reports/MSFT/2026-07-24/4_risk/conservative.md",
+          "neutral": "reports/MSFT/2026-07-24/4_risk/neutral.md",
+          "complete_report": "reports/MSFT/2026-07-24/complete_report.md"
+        },
+        "error": false,
+        "analysis_status": "insufficient_evidence",
+        "audit_status": "legacy_unverified",
+        "evidence_publish": {
+          "published": false,
+          "reason": "network_error"
+        }
+      }
+    ],
+    "request": {
+      "requestId": "9f94fccc-05de-4186-81a2-c4a034a472c8",
+      "analysts": [
+        "market",
+        "news",
+        "fundamentals"
+      ],
+      "researchDepth": "standard",
+      "kind": "adhoc"
+    },
+    "run": {
+      "id": "30167621231",
+      "attempt": "1",
+      "workflow": "daily-analysis",
+      "url": "https://github.com/gaaiyun/TradingWorkbench/actions/runs/30167621231"
+    }
+  },
+  {
+    "trade_date": "2026-07-24",
     "generated_at": "2026-07-25T18:37:27+08:00",
     "provider": "openai_compatible",
     "results": [
