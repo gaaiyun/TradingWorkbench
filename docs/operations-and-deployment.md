@@ -163,8 +163,9 @@ Cloudflare 出口访问免费源时可能需要来源请求头。当前 adapter 
 请求头后必须在生产 Worker 中补跑验证，不能用本机直连成功代替云端验收。
 
 新闻链同样必须做云端验证。Google News RSS 可能拒绝 Cloudflare 出口，Worker 会按
-主题改用工信部 RSS 或 Yahoo Finance RSS；Oracle 与 Alphabet 先查询 SEC EDGAR 8-K，
-再进入 Google/Yahoo 发现链；HashKey
+主题改用东方财富资讯搜索、工信部 RSS 或 Yahoo Finance RSS；A 股主题在 Google
+失败后先读取东方财富发现结果，再读取工信部官方 RSS。Oracle 与 Alphabet 先查询
+SEC EDGAR 8-K，再进入 Google/Yahoo 发现链；HashKey
 Holdings 先读公司投资者关系公告，官方页失败后再使用 Google/Yahoo 的 `3887.HK`
 feed。返回的 `sources` 应同时保留主来源失败码和降级来源成功状态。不能因为本机
 Google 请求成功就删除这条降级链。

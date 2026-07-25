@@ -32,6 +32,21 @@
 | Pages 项目 | `tradingagents-board` |
 | Worker 名称 | `tradingagents-monitor` |
 
+### 2026-07-25 最终生产验收基线
+
+- Pages 版本预览：`https://263c42d8.tradingagents-board.pages.dev`，生产域名已指向同一版。
+- Worker 版本：`c03d0e4a-6493-4f4a-b664-c9891c6a71e6`。
+- `/api/health`：`status=ok`，访问门禁、问答、分析调度和 D1 共享会话均已配置。
+- `/api/v1/evidence`：未授权请求返回 JSON 401，不再错误回退到 HTML。
+- 报告审计：46 份成功报告；0 verified、43 legacy_unverified、3 invalidated；另有 6 条失败记录。
+- 日线覆盖：ORCL 1,260 根、GOOGL 1,255 根、3887.HK 145 根；港股样本短是上市历史边界，不补造数据。
+- A 股新闻：515880.SS 9 条、512480.SS 16 条、159995.SZ 16 条，全部带原文链接。Google News 在 Cloudflare 出口失败时，东方财富发现层已在生产回退成功。
+- VolGuard：`/api/live` 返回 92 份期权合约；快行情、标的时间和慢指标时间分别记录。
+- 问答：生产问题“今天 512480 为什么涨跌”返回 21 条证据、时间与来源，并因点时数据校验失败明确答复“无法可靠归因”；同一请求重放命中 D1；SSE 有 `meta/delta/done`；失效报告正文未进入上下文。
+- 本地验证：Functions 206 passed / 1 skipped，前端 42 passed，Python 612 passed / 2 skipped，ruff 和浏览器 E2E 均通过。
+
+GitHub `deploy-workbench` 在仓库未配置 Cloudflare 凭据时会“测试成功、部署步骤 skipped”。本轮因此使用本机 Wrangler OAuth 完成 Pages 和 Worker 发布。后续不能只看 workflow 总结为绿色就宣称生产已更新，必须检查部署步骤并访问生产路由。
+
 接手时先执行：
 
 ```powershell
@@ -144,6 +159,7 @@ VolGuard 在另一个仓库运行。工作台通过 `/api/volguard` 读取实时
 | 官方证据 | HashKey Investor Relations | 3887.HK 首选，`sourceTier=evidence` |
 | 官方证据 | 工信部 RSS | A 股通信、半导体和政策证据 |
 | 发现层 | Google News RSS | 主题发现，不作为最终事实来源 |
+| 发现降级 | 东方财富资讯搜索 | Cloudflare 出口访问 Google 失败时补齐 A 股主题；仍为 `discovery` |
 | 发现降级 | Yahoo Finance RSS | Google/官方页失败后的发现层 |
 
 SEC CIK：

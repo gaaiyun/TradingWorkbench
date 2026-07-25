@@ -142,8 +142,9 @@ Worker 每五分钟读取 D1 设置，按“任务 + 理论计划时间槽”生
 HashKey 和工信部政策主题采集。Oracle 与 Alphabet 优先读取 SEC EDGAR 8-K，
 HashKey 优先读取公司投资者关系公告，其他主题先查询 Google News RSS。官方源或
 Google 从 Cloudflare 出口不可用时，
-A 股与政策主题降级到工信部官方 RSS，半导体、Oracle、Alphabet 与 HashKey 主题降级
-到对应的 Yahoo Finance RSS。D1 只保存
+A 股主题先降级到东方财富资讯搜索，再读取工信部官方 RSS；美股半导体、Oracle、
+Alphabet 与 HashKey 主题降级到对应的 Yahoo Finance RSS。东方财富仅属于发现层，
+工信部原文才属于证据层。D1 只保存
 标题、短摘要、原始发布者、发布时间、采集时间、来源等级和原文链接；聚合结果标记为
 `discovery`，SEC 8-K、工信部和 HashKey 公司公告标记为 `evidence`。`SMH` 只有匹配
 `VanEck Semiconductor ETF` 等完整

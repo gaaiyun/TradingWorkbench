@@ -227,7 +227,7 @@ Tushare 只有在 token 和接口权限足够时才优先。AKShare 是 adapter�
 
 GDELT 的多语言覆盖适合约十五分钟级发现；聚合站转载同一稿件只算一个重复簇。付费全文不复制，只保存标题、允许的摘要、元数据和原文链接。
 
-当前生产 Worker 已接入 Google News RSS 主题查询，覆盖通信、A 股半导体、美股半导体、Oracle、Alphabet、HashKey 和工信部站点发现。HashKey 主题优先解析公司投资者关系公告页内的官方文章 feed，验证域名、发布时间和原文链接后标记为 `evidence`。Google 从 Cloudflare 出口被拒绝时，A 股和政策主题自动改用工信部官方 RSS，美股半导体、Oracle、Alphabet 与 HashKey 改用对应的 Yahoo Finance RSS；相同的工信部大文档在单次任务内只下载一次。`03887.HK` 的发行人身份以港交所披露易和 HashKey 投资者关系页为准，不根据公司英文缩写猜测。每个条目保存发布者、发布时间、短摘要和链接，并明确区分聚合发现与官方来源。Google News RSS 是无鉴权发现入口，不是稳定契约；所有来源都失败时页面显示不可用，不用旧示例新闻替代。
+当前生产 Worker 已接入 Google News RSS 主题查询，覆盖通信、A 股半导体、美股半导体、Oracle、Alphabet、HashKey 和工信部站点发现。HashKey 主题优先解析公司投资者关系公告页内的官方文章 feed，验证域名、发布时间和原文链接后标记为 `evidence`。Google 从 Cloudflare 出口被拒绝时，A 股主题先用东方财富资讯搜索补齐发现层，再读取工信部官方 RSS；美股半导体、Oracle、Alphabet 与 HashKey 改用对应的 Yahoo Finance RSS；相同的工信部大文档在单次任务内只下载一次。东方财富结果始终标记为 `discovery`，不能替代交易所、基金公司或工信部原文。`03887.HK` 的发行人身份以港交所披露易和 HashKey 投资者关系页为准，不根据公司英文缩写猜测。每个条目保存发布者、发布时间、短摘要和链接，并明确区分聚合发现与官方来源。Google News RSS 是无鉴权发现入口，不是稳定契约；所有来源都失败时页面显示不可用，不用旧示例新闻替代。
 
 ### 处理管线
 

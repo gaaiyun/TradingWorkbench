@@ -47,6 +47,21 @@ const SEC_ATOM = `<?xml version="1.0" encoding="ISO-8859-1"?>
   </entry>
 </feed>`;
 
+const EASTMONEY_JSONP = `callback({
+  "code": 0,
+  "result": {
+    "cmsArticleWebOld": [
+      {
+        "date": "2026-07-25 12:14:47",
+        "title": "半导体ETF资金回流，芯片产业成交活跃",
+        "content": "半导体设备与集成电路板块受到资金关注。",
+        "mediaName": "每日经济新闻",
+        "url": "http://finance.eastmoney.com/a/202607253821111766.html"
+      }
+    ]
+  }
+})`;
+
 test("Google News RSS parser preserves evidence metadata and strips markup", async () => {
   const { parseGoogleNewsRss } = await import(newsUrl);
   assert.deepEqual(parseGoogleNewsRss(RSS), [
@@ -65,6 +80,17 @@ test("Google News RSS parser preserves evidence metadata and strips markup", asy
       publisher: "Local Daily",
     },
   ]);
+});
+
+test("Eastmoney JSONP parser normalizes publisher, source time and article URL", async () => {
+  const { parseEastmoneySearch } = await import(newsUrl);
+  assert.deepEqual(parseEastmoneySearch(EASTMONEY_JSONP), [{
+    title: "半导体ETF资金回流，芯片产业成交活跃",
+    url: "https://finance.eastmoney.com/a/202607253821111766.html",
+    publishedAt: "2026-07-25T04:14:47.000Z",
+    summary: "半导体设备与集成电路板块受到资金关注。",
+    publisher: "每日经济新闻",
+  }]);
 });
 
 test("SEC EDGAR Atom parser keeps the official filing URL and source timestamp", async () => {
@@ -451,4 +477,87 @@ test("news writer uses idempotent upserts without storing article bodies", async
   assert.equal(calls[0].payload[0].summary, "允许保存的短摘要");
   assert.equal(calls[0].payload[0].publisher, "Publisher");
   assert.equal("body" in calls[0].payload[0], false);
+});
+
+test("A-share ETF news falls back to Eastmoney when Google News is blocked at the edge", async () => {
+  const { collectNewsForProfile } = await import(newsUrl);
+  const calls = [];
+  const writes = [];
+  const result = await collectNewsForProfile({
+    profile: {
+      ...monitorSettings().profiles[0],
+      targets: [{ symbol: "512480.SS" }],
+    },
+    db: {},
+    fetcher: async (url) => {
+      calls.push(String(url));
+      if (String(url).includes("news.google.com")) {
+        return new Response("", { status: 503 });
+      }
+      if (String(url).includes("search-api-web.eastmoney.com")) {
+        return new Response(EASTMONEY_JSONP, {
+          status: 200,
+          headers: { "content-type": "text/javascript; charset=UTF-8" },
+        });
+      }
+      return new Response("", {
+        status: 200,
+        headers: { "content-type": "application/xml" },
+      });
+    },
+    writeItems: async (_db, payload) => writes.push(payload),
+    now: new Date("2026-07-25T05:00:00.000Z"),
+  });
+  const items = writes.flatMap(({ items: rows }) => rows);
+  assert.equal(result.status, "completed");
+  assert.equal(items.length, 1);
+  assert.equal(items[0].symbol, "512480.SS");
+  assert.equal(items[0].source, "东方财富搜索 / 每日经济新闻");
+  assert.equal(items[0].sourceTier, "discovery");
+  assert.equal(items[0].publisher, "每日经济新闻");
+  assert.equal(items[0].freshness, "fresh");
+  assert.equal(
+    calls.some((url) => url.includes("search-api-web.eastmoney.com")),
+    true,
+  );
+  assert.equal(
+    result.sources.some(({ source, status }) =>
+      source === "eastmoney-search" && status === "success"),
+    true,
+  );
+});
+
+test("semiconductor policy news maps to both chip ETFs without polluting the communication ETF", async () => {
+  const { collectNewsForProfile } = await import(newsUrl);
+  const writes = [];
+  const rss = `<?xml version="1.0"?><rss><channel>
+    <item>
+      <title>半导体行业政策支持集成电路设备升级</title>
+      <link>https://example.com/semiconductor-policy</link>
+      <pubDate>Sat, 25 Jul 2026 04:00:00 GMT</pubDate>
+      <description>芯片产业和半导体设备迎来新的政策文件。</description>
+      <source>工业主管部门</source>
+    </item>
+  </channel></rss>`;
+  await collectNewsForProfile({
+    profile: {
+      ...monitorSettings().profiles[0],
+      targets: [
+        { symbol: "515880.SS" },
+        { symbol: "512480.SS" },
+        { symbol: "159995.SZ" },
+      ],
+    },
+    db: {},
+    fetcher: async () => new Response(rss, {
+      status: 200,
+      headers: { "content-type": "application/rss+xml" },
+    }),
+    writeItems: async (_db, payload) => writes.push(payload),
+    now: new Date("2026-07-25T05:00:00.000Z"),
+  });
+  const symbols = new Set(
+    writes.flatMap(({ items }) => items).map(({ symbol }) => symbol),
+  );
+  assert.deepEqual([...symbols].sort(), ["159995.SZ", "512480.SS"]);
 });

@@ -88,6 +88,44 @@ export function parseGoogleNewsRss(xml) {
   return items;
 }
 
+export function parseEastmoneySearch(jsonp) {
+  const source = String(jsonp || "").trim();
+  const match = /^[^(]*\(([\s\S]*)\)\s*;?$/.exec(source);
+  if (!match) return [];
+  let payload;
+  try {
+    payload = JSON.parse(match[1]);
+  } catch {
+    return [];
+  }
+  const rows = payload?.result?.cmsArticleWebOld;
+  if (!Array.isArray(rows)) return [];
+  return rows.flatMap((row) => {
+    const title = cleanText(row?.title, 300);
+    const summary = cleanText(row?.content, 500);
+    const publisher = cleanText(row?.mediaName, 120) || "未知发布者";
+    const sourceTime = String(row?.date || "").trim().replace(" ", "T");
+    const published = new Date(`${sourceTime}+08:00`);
+    let url;
+    try {
+      const parsed = new URL(String(row?.url || ""));
+      if (!["http:", "https:"].includes(parsed.protocol)) return [];
+      if (parsed.protocol === "http:") parsed.protocol = "https:";
+      url = parsed.toString();
+    } catch {
+      return [];
+    }
+    if (!title || !Number.isFinite(published.valueOf())) return [];
+    return [{
+      title,
+      url,
+      publishedAt: published.toISOString(),
+      summary,
+      publisher,
+    }];
+  });
+}
+
 function atomTagValue(item, tag) {
   const escaped = String(tag).replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
   const qualified = `(?:[A-Za-z_][\\w.-]*:)?${escaped}`;
@@ -230,6 +268,7 @@ function queryPlans(profile) {
       topic: "communications",
       symbols: communication,
       query: '("通信ETF" OR 光模块 OR 光通信 OR 通信设备 OR 5G OR 6G) when:7d',
+      eastmoneyKeyword: "通信ETF",
       locale: "zh-CN",
     });
   }
@@ -239,6 +278,7 @@ function queryPlans(profile) {
       topic: "cn-semiconductor",
       symbols: cnSemiconductor,
       query: '("半导体ETF" OR "芯片ETF" OR 半导体设备 OR 芯片产业 OR 集成电路) when:7d',
+      eastmoneyKeyword: "半导体ETF",
       locale: "zh-CN",
     });
   }
@@ -287,6 +327,7 @@ function queryPlans(profile) {
       topic: "policy",
       symbols: policy,
       query: "site:miit.gov.cn (半导体 OR 芯片 OR 通信 OR 光模块) when:30d",
+      eastmoneyKeyword: "半导体 通信 政策",
       locale: "zh-CN",
     });
   }
@@ -311,6 +352,32 @@ function yahooRssUrl(symbol) {
     lang: "en-US",
   });
   return `https://feeds.finance.yahoo.com/rss/2.0/headline?${parameters}`;
+}
+
+function eastmoneySearchUrl(keyword) {
+  const payload = {
+    uid: "",
+    keyword,
+    type: ["cmsArticleWebOld"],
+    client: "web",
+    clientType: "web",
+    clientVersion: "curr",
+    param: {
+      cmsArticleWebOld: {
+        searchScope: "default",
+        sort: "time",
+        pageIndex: 1,
+        pageSize: 20,
+        preTag: "",
+        postTag: "",
+      },
+    },
+  };
+  const parameters = new URLSearchParams({
+    cb: "TradingWorkbenchNews",
+    param: JSON.stringify(payload),
+  });
+  return `https://search-api-web.eastmoney.com/search/jsonp?${parameters}`;
 }
 
 function secEdgarAtomUrl(symbol) {
@@ -353,6 +420,11 @@ function providerCandidates(plan) {
     });
   }
   if (["communications", "cn-semiconductor", "policy"].includes(plan.topic)) {
+    candidates.push({
+      source: "eastmoney-search",
+      url: eastmoneySearchUrl(plan.eastmoneyKeyword),
+      format: "eastmoney-jsonp",
+    });
     candidates.push({ source: "miit-rss", url: MIIT_RSS_URL, format: "rss" });
   } else if (plan.topic === "us-semiconductor") {
     candidates.push({
@@ -400,6 +472,28 @@ function matchedSymbol(item, symbols) {
     }
   }
   return null;
+}
+
+function matchedSymbols(item, plan) {
+  const direct = matchedSymbol(item, plan.symbols);
+  if (plan.topic === "cn-semiconductor") {
+    return plan.symbols.filter((symbol) =>
+      ["512480.SS", "159995.SZ"].includes(symbol));
+  }
+  if (plan.topic === "policy") {
+    const material = `${item.title} ${item.summary}`;
+    const matches = [];
+    if (/(通信ETF|光模块|光通信|通信设备|5G|6G)/i.test(material)) {
+      if (plan.symbols.includes("515880.SS")) matches.push("515880.SS");
+    }
+    if (/(半导体|芯片|集成电路)/i.test(material)) {
+      for (const symbol of ["512480.SS", "159995.SZ"]) {
+        if (plan.symbols.includes(symbol)) matches.push(symbol);
+      }
+    }
+    return [...new Set(matches)];
+  }
+  return direct ? [direct] : plan.symbols.slice(0, 1);
 }
 
 function relevantToPlan(item, plan) {
@@ -468,6 +562,8 @@ async function fetchContent(candidate, fetcher) {
       headers: {
         accept: candidate.format === "hashkey-feed"
           ? "text/html,application/xhtml+xml;q=0.9,*/*;q=0.5"
+          : candidate.format === "eastmoney-jsonp"
+            ? "text/javascript,application/json,text/plain;q=0.9,*/*;q=0.5"
           : candidate.format === "sec-edgar-atom"
             ? "application/atom+xml,application/xml,text/xml;q=0.9,text/html;q=0.8,*/*;q=0.5"
           : "application/rss+xml,application/xml,text/xml;q=0.9,*/*;q=0.5",
@@ -480,6 +576,8 @@ async function fetchContent(candidate, fetcher) {
     const contentType = response.headers.get("content-type") || "";
     const supported = candidate.format === "hashkey-feed"
       ? /text\/html/i.test(contentType)
+      : candidate.format === "eastmoney-jsonp"
+        ? /(?:javascript|json|text\/plain)/i.test(contentType)
       : candidate.format === "sec-edgar-atom"
         ? /(?:atom\+xml|xml|text\/html|text\/plain)/i.test(contentType)
       : /(?:xml|rss|text\/plain)/i.test(contentType);
@@ -510,6 +608,8 @@ async function fetchPlan(plan, fetcher, cache) {
       const content = await cachedContent(candidate, fetcher, cache);
       const parsed = candidate.format === "hashkey-feed"
         ? parseHashKeyFeedPage(content)
+        : candidate.format === "eastmoney-jsonp"
+          ? parseEastmoneySearch(content)
         : candidate.format === "sec-edgar-atom"
           ? parseSecEdgarAtom(content, candidate.publisher)
         : parseGoogleNewsRss(content);
@@ -539,6 +639,7 @@ function itemSource(provider, item) {
   if (provider === "miit-rss") return "工业和信息化部 RSS";
   if (provider === "hashkey-ir") return "HashKey Investor Relations";
   if (provider === "sec-edgar-8k") return `SEC EDGAR 8-K / ${item.publisher}`;
+  if (provider === "eastmoney-search") return `东方财富搜索 / ${item.publisher}`;
   if (provider === "yahoo-finance-rss") {
     let publisher = item.publisher;
     if (!publisher || publisher === "未知发布者") {
@@ -643,38 +744,37 @@ export async function collectNewsForProfile({
     succeeded += 1;
     sources.push(...outcome.value.trail);
     for (const item of outcome.value.items) {
-      const symbol = matchedSymbol(item, plan.symbols)
-        || plan.symbols[0]
-        || null;
-      const id = await itemId(profile.id, symbol, item.url);
-      if (byId.has(id)) continue;
-      const clusterId = await itemClusterId(item.title);
-      const age = now.valueOf() - Date.parse(item.publishedAt);
-      byId.set(id, {
-        id,
-        symbol,
-        profileId: profile.id,
-        topic: plan.topic,
-        title: item.title,
-        summary: item.summary,
-        url: item.url,
-        publishedAt: item.publishedAt,
-        source: itemSource(outcome.value.source, item),
-        sourceTier: EVIDENCE_PROVIDERS.has(outcome.value.source)
-          ? "evidence"
-          : "discovery",
-        publisher: item.publisher,
-        relevance: 1,
-        clusterId,
-        asOf: item.publishedAt,
-        fetchedAt,
-        freshness: age >= 0 && age <= 36 * 60 * 60 * 1000 ? "fresh" : "stale",
-        adjustment: null,
-        quality: EVIDENCE_PROVIDERS.has(outcome.value.source)
-          ? "evidence"
-          : "discovery",
-        expiresAt,
-      });
+      for (const symbol of matchedSymbols(item, plan)) {
+        const id = await itemId(profile.id, symbol, item.url);
+        if (byId.has(id)) continue;
+        const clusterId = await itemClusterId(item.title);
+        const age = now.valueOf() - Date.parse(item.publishedAt);
+        byId.set(id, {
+          id,
+          symbol,
+          profileId: profile.id,
+          topic: plan.topic,
+          title: item.title,
+          summary: item.summary,
+          url: item.url,
+          publishedAt: item.publishedAt,
+          source: itemSource(outcome.value.source, item),
+          sourceTier: EVIDENCE_PROVIDERS.has(outcome.value.source)
+            ? "evidence"
+            : "discovery",
+          publisher: item.publisher,
+          relevance: 1,
+          clusterId,
+          asOf: item.publishedAt,
+          fetchedAt,
+          freshness: age >= 0 && age <= 36 * 60 * 60 * 1000 ? "fresh" : "stale",
+          adjustment: null,
+          quality: EVIDENCE_PROVIDERS.has(outcome.value.source)
+            ? "evidence"
+            : "discovery",
+          expiresAt,
+        });
+      }
     }
   }
 
