@@ -24,10 +24,13 @@ export async function readSettingsFromD1(db) {
 }
 
 export async function writeSettingsToD1(db, settings, expectedUpdatedAt, now = new Date()) {
-  let updatedAt = now.toISOString();
-  if (updatedAt === expectedUpdatedAt) {
-    updatedAt = new Date(now.valueOf() + 1).toISOString();
-  }
+  const expectedMilliseconds = typeof expectedUpdatedAt === "string"
+    ? Date.parse(expectedUpdatedAt)
+    : Number.NaN;
+  const updatedMilliseconds = Number.isFinite(expectedMilliseconds)
+    ? Math.max(now.valueOf(), expectedMilliseconds + 1)
+    : now.valueOf();
+  const updatedAt = new Date(updatedMilliseconds).toISOString();
   let result;
   if (expectedUpdatedAt === null) {
     result = await db.prepare(

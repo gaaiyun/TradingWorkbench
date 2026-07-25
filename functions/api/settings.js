@@ -20,6 +20,8 @@ import {
   writeSettingsToD1,
 } from "./_d1_repository.mjs";
 
+export const SETTINGS_REQUEST_MAX_BYTES = 64 * 1024;
+
 // GET /api/settings -> D1 中即时生效的设置；不可用时回退到静态/GitHub 快照。
 export async function onRequestGet({ env } = {}) {
   const db = d1Binding(env);
@@ -95,7 +97,12 @@ function expectedRevision(body, stored, { requireExisting = false } = {}) {
 
 function atomicRevision(body) {
   const provided = providedRevision(body);
-  if (!provided.present) return undefined;
+  if (!provided.present) {
+    throw new WorkbenchSettingsError(
+      "SETTINGS_REVISION_REQUIRED",
+      "profile 写入必须提供 revision",
+    );
+  }
   if (provided.value === null) {
     throw new WorkbenchSettingsError(
       "INVALID_EXPECTED_UPDATED_AT",
@@ -103,6 +110,16 @@ function atomicRevision(body) {
     );
   }
   return validateRevision(provided.value);
+}
+
+function directSettingsDocument(body) {
+  const {
+    revision: _revision,
+    expectedUpdatedAt: _expectedUpdatedAt,
+    code: _code,
+    ...settings
+  } = body;
+  return settings;
 }
 
 function storageFailure() {
@@ -202,7 +219,7 @@ export async function onRequestPut({ request, env }) {
 
   let body;
   try {
-    body = await readJsonBody(request);
+    body = await readJsonBody(request, { maxBytes: SETTINGS_REQUEST_MAX_BYTES });
   } catch (error) {
     if (error instanceof RequestBodyTooLargeError) {
       return json({ error: "请求体过大" }, 413);
@@ -229,10 +246,12 @@ export async function onRequestPut({ request, env }) {
     expectedUpdatedAt = expectedRevision(body, stored, {
       requireExisting: body.tickers === undefined,
     });
-    const current = body.settings ?? stored?.settings ?? body;
-    settings = body.tickers === undefined
-      ? parseWorkbenchSettings(current)
-      : updateWorkbenchFullAnalysisTargets(current, body.tickers);
+    if (body.tickers === undefined) {
+      settings = parseWorkbenchSettings(body.settings ?? directSettingsDocument(body));
+    } else {
+      const current = body.settings ?? stored?.settings ?? directSettingsDocument(body);
+      settings = updateWorkbenchFullAnalysisTargets(current, body.tickers);
+    }
   } catch (error) {
     if (error instanceof WorkbenchSettingsError) {
       if (error.code === "SETTINGS_REVISION_REQUIRED") {
@@ -265,7 +284,7 @@ export async function onRequestPost({ request, env }) {
 
   let body;
   try {
-    body = await readJsonBody(request);
+    body = await readJsonBody(request, { maxBytes: SETTINGS_REQUEST_MAX_BYTES });
   } catch (error) {
     if (error instanceof RequestBodyTooLargeError) {
       return json({ error: "请求体过大" }, 413);
@@ -287,7 +306,9 @@ export async function onRequestPost({ request, env }) {
     }
   }
 
-  const hasExpectedRevision = Object.prototype.hasOwnProperty.call(body, "expectedUpdatedAt");
+  const hasExpectedRevision =
+    Object.prototype.hasOwnProperty.call(body, "expectedUpdatedAt") ||
+    Object.prototype.hasOwnProperty.call(body, "revision");
   let currentSettings = hasExpectedRevision
     ? body.settings ?? stored?.settings
     : stored?.settings ?? body.settings;
@@ -379,18 +400,19 @@ export async function mutateProfileSettings({ request, env }, mutation) {
   }
   body ??= {};
 
-  const db = d1Binding(env);
-  if (!db) return storageFailure();
-
   let expectedUpdatedAt;
   try {
     expectedUpdatedAt = atomicRevision(body);
   } catch (error) {
     if (error instanceof WorkbenchSettingsError) {
-      return json({ error: error.message, error_code: error.code }, 400);
+      const status = error.code === "SETTINGS_REVISION_REQUIRED" ? 428 : 400;
+      return json({ error: error.message, error_code: error.code }, status);
     }
     throw error;
   }
+
+  const db = d1Binding(env);
+  if (!db) return storageFailure();
 
   try {
     const result = await mutateSettingsInD1(

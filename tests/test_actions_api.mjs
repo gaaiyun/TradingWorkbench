@@ -291,7 +291,7 @@ test("an invalid access header is rejected before parsing a malformed body", asy
 });
 
 test("settings and analysis reject oversized request bodies", async () => {
-  const body = JSON.stringify({ tickers: ["NVDA"], padding: "x".repeat(17 * 1024) });
+  const body = JSON.stringify({ tickers: ["NVDA"], padding: "x".repeat(65 * 1024) });
   const [analysisResponse, settingsResponse] = await Promise.all([
     analyze({ request: post(body), env }),
     saveSettings({ request: post(body), env }),

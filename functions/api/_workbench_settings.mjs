@@ -2,6 +2,15 @@ export const WORKBENCH_SETTINGS_VERSION = 2;
 export const MAX_WORKBENCH_TICKERS = 10;
 export const MAX_WORKBENCH_TARGETS = 14;
 export const MAX_WORKBENCH_PROFILES = 8;
+export const MAX_PROFILE_NAME_BYTES = 96;
+export const MAX_PROFILE_OBJECTIVE_BYTES = 512;
+export const MAX_TARGET_NAME_BYTES = 96;
+export const MAX_MARKET_BYTES = 16;
+export const MAX_TIMEZONE_BYTES = 64;
+export const MAX_SYSTEM_BENCHMARKS = 12;
+export const MAX_BENCHMARK_ID_BYTES = 64;
+export const MAX_BENCHMARK_NAME_BYTES = 96;
+export const MAX_SCHEDULE_WINDOWS = 8;
 
 const A_SHARE = /^(\d{6})(?:\.(SS|SH|SZ))?$/;
 const US_EQUITY = /^([A-Z]{1,5})(?:[.-]([A-Z]))?$/;
@@ -12,6 +21,9 @@ const TARGET_ROLES = new Set(["core", "comparison", "driver", "benchmark"]);
 const ANALYSIS_DEPTHS = new Set(["full", "signal"]);
 const ALERT_SEVERITIES = new Set(["low", "medium", "high", "critical"]);
 const CLOCK_TIME = /^(?:[01]\d|2[0-3]):[0-5]\d$/;
+const UNSAFE_MERGE_KEYS = new Set(["__proto__", "prototype", "constructor"]);
+const COPY_OPTION_KEYS = new Set(["id", "name"]);
+const UTF8_ENCODER = new TextEncoder();
 
 export class WorkbenchSettingsError extends Error {
   constructor(code, message) {
@@ -115,6 +127,14 @@ function requiredString(value, field, code = "INVALID_PROFILE") {
   return value.trim();
 }
 
+function boundedString(value, field, maxBytes, tooLongCode, invalidCode = tooLongCode) {
+  const normalized = requiredString(value, field, invalidCode);
+  if (UTF8_ENCODER.encode(normalized).byteLength > maxBytes) {
+    fail(tooLongCode, `${field} 最多允许 ${maxBytes} 个 UTF-8 字节`);
+  }
+  return normalized;
+}
+
 export function normalizeWorkbenchProfileId(value) {
   if (typeof value !== "string" || !PROFILE_ID.test(value)) {
     fail(
@@ -152,7 +172,12 @@ function timeMinutes(value) {
 }
 
 function normalizeTimezone(value) {
-  const timezone = requiredString(value, "profile.timezone", "INVALID_TIMEZONE");
+  const timezone = boundedString(
+    value,
+    "profile.timezone",
+    MAX_TIMEZONE_BYTES,
+    "INVALID_TIMEZONE",
+  );
   try {
     new Intl.DateTimeFormat("en-US", { timeZone: timezone });
   } catch {
@@ -175,8 +200,20 @@ function normalizeTarget(target) {
   }
   return {
     symbol: normalizeWorkbenchTicker(target.symbol),
-    name: requiredString(target.name, "target.name", "INVALID_TARGET"),
-    market: requiredString(target.market, "target.market", "INVALID_TARGET").toUpperCase(),
+    name: boundedString(
+      target.name,
+      "target.name",
+      MAX_TARGET_NAME_BYTES,
+      "TARGET_FIELD_TOO_LONG",
+      "INVALID_TARGET",
+    ),
+    market: boundedString(
+      target.market,
+      "target.market",
+      MAX_MARKET_BYTES,
+      "TARGET_FIELD_TOO_LONG",
+      "INVALID_TARGET",
+    ).toUpperCase(),
     role,
     analysis,
   };
@@ -202,9 +239,27 @@ function normalizeSystemBenchmark(benchmark) {
     fail("INVALID_BENCHMARK", "system benchmark 必须是对象");
   }
   return {
-    id: requiredString(benchmark.id, "systemBenchmark.id", "INVALID_BENCHMARK"),
-    name: requiredString(benchmark.name, "systemBenchmark.name", "INVALID_BENCHMARK"),
-    market: requiredString(benchmark.market, "systemBenchmark.market", "INVALID_BENCHMARK").toUpperCase(),
+    id: boundedString(
+      benchmark.id,
+      "systemBenchmark.id",
+      MAX_BENCHMARK_ID_BYTES,
+      "BENCHMARK_FIELD_TOO_LONG",
+      "INVALID_BENCHMARK",
+    ),
+    name: boundedString(
+      benchmark.name,
+      "systemBenchmark.name",
+      MAX_BENCHMARK_NAME_BYTES,
+      "BENCHMARK_FIELD_TOO_LONG",
+      "INVALID_BENCHMARK",
+    ),
+    market: boundedString(
+      benchmark.market,
+      "systemBenchmark.market",
+      MAX_MARKET_BYTES,
+      "BENCHMARK_FIELD_TOO_LONG",
+      "INVALID_BENCHMARK",
+    ).toUpperCase(),
   };
 }
 
@@ -225,6 +280,12 @@ function normalizeSchedules(value) {
   );
   if (!Array.isArray(intraday.windows) || intraday.windows.length === 0) {
     fail("INVALID_SCHEDULE_WINDOW", "盘中窗口必须是非空数组");
+  }
+  if (intraday.windows.length > MAX_SCHEDULE_WINDOWS) {
+    fail(
+      "TOO_MANY_SCHEDULE_WINDOWS",
+      `盘中窗口最多允许 ${MAX_SCHEDULE_WINDOWS} 个`,
+    );
   }
   const windows = intraday.windows.map((rawWindow, index) => {
     const field = `schedules.cnIntraday.windows[${index}]`;
@@ -341,13 +402,31 @@ function normalizeProfile(profile) {
   if (!Array.isArray(profile.systemBenchmarks)) {
     fail("INVALID_BENCHMARKS", "profile.systemBenchmarks 必须是数组");
   }
+  if (profile.systemBenchmarks.length > MAX_SYSTEM_BENCHMARKS) {
+    fail(
+      "TOO_MANY_BENCHMARKS",
+      `systemBenchmarks 最多允许 ${MAX_SYSTEM_BENCHMARKS} 个`,
+    );
+  }
   if (typeof profile.enabled !== "boolean") {
     fail("INVALID_PROFILE", "profile.enabled 必须是布尔值");
   }
   return {
     id: normalizeWorkbenchProfileId(profile.id),
-    name: requiredString(profile.name, "profile.name"),
-    objective: requiredString(profile.objective, "profile.objective"),
+    name: boundedString(
+      profile.name,
+      "profile.name",
+      MAX_PROFILE_NAME_BYTES,
+      "PROFILE_FIELD_TOO_LONG",
+      "INVALID_PROFILE",
+    ),
+    objective: boundedString(
+      profile.objective,
+      "profile.objective",
+      MAX_PROFILE_OBJECTIVE_BYTES,
+      "PROFILE_FIELD_TOO_LONG",
+      "INVALID_PROFILE",
+    ),
     enabled: profile.enabled,
     timezone: normalizeTimezone(profile.timezone),
     targets: normalizeTargets(profile.targets),
@@ -501,6 +580,9 @@ function mergeProfileValue(current, patch) {
   if (!plainObject(current) || !plainObject(patch)) return patch;
   const merged = { ...current };
   for (const [key, value] of Object.entries(patch)) {
+    if (UNSAFE_MERGE_KEYS.has(key)) {
+      fail("UNSAFE_PROFILE_PATCH", `profile patch 不允许字段：${key}`);
+    }
     merged[key] = plainObject(value) && plainObject(current[key])
       ? mergeProfileValue(current[key], value)
       : value;
@@ -569,15 +651,19 @@ export function copyWorkbenchProfile(value, id, options = {}) {
   }
   const source = settings.profiles[profileIndex(settings, id)];
   if (!plainObject(options)) {
-    fail("INVALID_PROFILE", "profile copy 选项必须是对象");
+    fail("INVALID_COPY_OPTIONS", "profile copy 选项必须是对象");
+  }
+  for (const key of Object.keys(options)) {
+    if (!COPY_OPTION_KEYS.has(key)) {
+      fail("INVALID_COPY_OPTIONS", `profile copy 不支持选项：${key}`);
+    }
   }
   const copyId = options.id ?? nextCopyProfileId(settings, source.id);
   const copy = {
     ...source,
-    ...options,
     id: copyId,
     name: options.name ?? `${source.name} 副本`,
-    enabled: options.enabled ?? false,
+    enabled: false,
   };
   return buildWorkbenchSettings({
     version: WORKBENCH_SETTINGS_VERSION,

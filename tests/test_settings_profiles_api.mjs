@@ -2,6 +2,7 @@ import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
 import test from "node:test";
 
+import * as settingsDomain from "../functions/api/_workbench_settings.mjs";
 import { FakeD1 } from "./helpers/fake_d1.mjs";
 
 const [profilesIndexApi, profileApi, profileCopyApi] = await Promise.all([
@@ -47,6 +48,14 @@ function context(method, path, body, {
     env: { DB, ACCESS_CODE: "correct-code" },
     params,
   };
+}
+
+function assertSettingsError(code, callback) {
+  assert.throws(callback, (error) => {
+    assert.ok(error instanceof settingsDomain.WorkbenchSettingsError);
+    assert.equal(error.code, code);
+    return true;
+  });
 }
 
 test("profile routes expose Cloudflare Pages method handlers", () => {
@@ -183,6 +192,213 @@ test("profile mutations reject stale revisions and return the latest winning doc
   assert.equal(payload.revision, INITIAL_REVISION);
   assert.equal(payload.settings.profiles[0].enabled, true);
   assert.equal(DB.settings.updated_at, INITIAL_REVISION);
+});
+
+test("every profile mutation requires revision before any D1 write", async () => {
+  const twoProfiles = structuredClone(staticSettings);
+  twoProfiles.profiles.push({
+    ...structuredClone(twoProfiles.profiles[0]),
+    id: "second-profile",
+  });
+  const cases = [
+    {
+      api: profilesIndexApi.onRequestPost,
+      method: "POST",
+      path: "/api/settings/profiles",
+      body: {
+        profile: {
+          id: "missing-revision",
+          name: "Missing revision",
+          objective: "Must fail before writing.",
+        },
+      },
+      params: {},
+      settings: staticSettings,
+    },
+    {
+      api: profileApi.onRequestPatch,
+      method: "PATCH",
+      path: "/api/settings/profiles/cn-semi-comms",
+      body: { patch: { enabled: false } },
+      params: { profileId: "cn-semi-comms" },
+      settings: staticSettings,
+    },
+    {
+      api: profileCopyApi.onRequestPost,
+      method: "POST",
+      path: "/api/settings/profiles/cn-semi-comms/copy",
+      body: {},
+      params: { profileId: "cn-semi-comms" },
+      settings: staticSettings,
+    },
+    {
+      api: profileApi.onRequestDelete,
+      method: "DELETE",
+      path: "/api/settings/profiles/second-profile",
+      body: {},
+      params: { profileId: "second-profile" },
+      settings: twoProfiles,
+    },
+  ];
+
+  for (const candidate of cases) {
+    const DB = new FakeD1({ settings: settingsRow(candidate.settings) });
+    const before = structuredClone(DB.settings);
+    const response = await candidate.api(context(
+      candidate.method,
+      candidate.path,
+      candidate.body,
+      { DB, params: candidate.params },
+    ));
+    const payload = await response.json();
+
+    assert.equal(response.status, 428, `${candidate.method} ${candidate.path}`);
+    assert.equal(payload.error_code, "SETTINGS_REVISION_REQUIRED");
+    assert.deepEqual(DB.settings, before);
+    assert.equal(
+      DB.calls.some(({ sql }) => /\b(?:INSERT|UPDATE)\b/i.test(sql)),
+      false,
+    );
+  }
+});
+
+test("profile strings and nested collection sizes have bounded UTF-8 contracts", () => {
+  const cases = [
+    {
+      code: "PROFILE_FIELD_TOO_LONG",
+      mutate(settings) {
+        settings.profiles[0].name = "n".repeat(97);
+      },
+    },
+    {
+      code: "PROFILE_FIELD_TOO_LONG",
+      mutate(settings) {
+        settings.profiles[0].objective = "o".repeat(513);
+      },
+    },
+    {
+      code: "TARGET_FIELD_TOO_LONG",
+      mutate(settings) {
+        settings.profiles[0].targets[0].name = "t".repeat(97);
+      },
+    },
+    {
+      code: "TARGET_FIELD_TOO_LONG",
+      mutate(settings) {
+        settings.profiles[0].targets[0].market = "M".repeat(17);
+      },
+    },
+    {
+      code: "BENCHMARK_FIELD_TOO_LONG",
+      mutate(settings) {
+        settings.profiles[0].systemBenchmarks[0].id = "b".repeat(65);
+      },
+    },
+    {
+      code: "BENCHMARK_FIELD_TOO_LONG",
+      mutate(settings) {
+        settings.profiles[0].systemBenchmarks[0].name = "b".repeat(97);
+      },
+    },
+    {
+      code: "BENCHMARK_FIELD_TOO_LONG",
+      mutate(settings) {
+        settings.profiles[0].systemBenchmarks[0].market = "M".repeat(17);
+      },
+    },
+    {
+      code: "TOO_MANY_BENCHMARKS",
+      mutate(settings) {
+        settings.profiles[0].systemBenchmarks = Array.from(
+          { length: 13 },
+          (_, index) => ({ id: `b-${index}`, name: `Benchmark ${index}`, market: "US" }),
+        );
+      },
+    },
+    {
+      code: "TOO_MANY_SCHEDULE_WINDOWS",
+      mutate(settings) {
+        settings.profiles[0].schedules.cnIntraday.windows = Array.from(
+          { length: 9 },
+          (_, index) => ({
+            start: `${String(index * 2).padStart(2, "0")}:00`,
+            end: `${String(index * 2 + 1).padStart(2, "0")}:00`,
+          }),
+        );
+      },
+    },
+  ];
+
+  for (const candidate of cases) {
+    const settings = structuredClone(staticSettings);
+    candidate.mutate(settings);
+    assertSettingsError(candidate.code, () => settingsDomain.buildWorkbenchSettings(settings));
+  }
+
+  const multibyte = structuredClone(staticSettings);
+  multibyte.profiles[0].name = "研".repeat(33);
+  assertSettingsError(
+    "PROFILE_FIELD_TOO_LONG",
+    () => settingsDomain.buildWorkbenchSettings(multibyte),
+  );
+});
+
+test("profile patch rejects prototype-pollution keys", () => {
+  const malicious = JSON.parse(
+    '{"alerts":{"__proto__":{"polluted":true}},"constructor":{"prototype":{"owned":true}}}',
+  );
+  assertSettingsError("UNSAFE_PROFILE_PATCH", () =>
+    settingsDomain.updateWorkbenchProfile(staticSettings, "cn-semi-comms", malicious));
+  assert.equal({}.polluted, undefined);
+  assert.equal({}.owned, undefined);
+});
+
+test("copy accepts only explicit options or compatible newId/newName aliases", async () => {
+  const conflictDB = new FakeD1({ settings: settingsRow() });
+  const conflict = await profileCopyApi.onRequestPost(context(
+    "POST",
+    "/api/settings/profiles/cn-semi-comms/copy",
+    {
+      revision: INITIAL_REVISION,
+      options: { id: "nested-copy", name: "Nested copy" },
+      newId: "top-copy",
+      newName: "Top copy",
+    },
+    { DB: conflictDB, params: { profileId: "cn-semi-comms" } },
+  ));
+  assert.equal(conflict.status, 400);
+  assert.equal((await conflict.json()).error_code, "COPY_OPTIONS_CONFLICT");
+  assert.equal(conflictDB.settings.updated_at, INITIAL_REVISION);
+
+  const unsafeDB = new FakeD1({ settings: settingsRow() });
+  const unsafe = await profileCopyApi.onRequestPost(context(
+    "POST",
+    "/api/settings/profiles/cn-semi-comms/copy",
+    {
+      revision: INITIAL_REVISION,
+      profile: { enabled: true },
+    },
+    { DB: unsafeDB, params: { profileId: "cn-semi-comms" } },
+  ));
+  assert.equal(unsafe.status, 400);
+  assert.equal((await unsafe.json()).error_code, "INVALID_COPY_OPTIONS");
+
+  const compatibleDB = new FakeD1({ settings: settingsRow() });
+  const compatible = await profileCopyApi.onRequestPost(context(
+    "POST",
+    "/api/settings/profiles/cn-semi-comms/copy",
+    {
+      revision: INITIAL_REVISION,
+      newId: "custom-copy",
+      newName: "自定义副本",
+    },
+    { DB: compatibleDB, params: { profileId: "cn-semi-comms" } },
+  ));
+  const payload = await compatible.json();
+  assert.equal(compatible.status, 200);
+  assert.equal(payload.settings.profiles[1].id, "custom-copy");
+  assert.equal(payload.settings.profiles[1].name, "自定义副本");
+  assert.equal(payload.settings.profiles[1].enabled, false);
 });
 
 test("new profile writes accept only the access-code header", async () => {

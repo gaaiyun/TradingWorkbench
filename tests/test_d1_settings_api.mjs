@@ -3,6 +3,7 @@ import { readFileSync } from "node:fs";
 import test from "node:test";
 
 import * as settingsApi from "../functions/api/settings.js";
+import { writeSettingsToD1 } from "../functions/api/_d1_repository.mjs";
 import { FakeD1 } from "./helpers/fake_d1.mjs";
 
 const staticSettings = JSON.parse(
@@ -28,6 +29,49 @@ function settingsRow(settings, updatedAt = "2026-07-23T00:00:00.000Z") {
     version: settings.version,
     settings_json: JSON.stringify(settings),
     updated_at: updatedAt,
+  };
+}
+
+const MAXIMAL_TARGET_SYMBOLS = [
+  "AAAAA", "AAAAB", "AAAAC", "AAAAD", "AAAAE", "AAAAF", "AAAAG",
+  "AAAAH", "AAAAI", "AAAAJ", "AAAAK", "AAAAL", "AAAAM", "AAAAN",
+];
+
+function maximalSettings() {
+  const template = structuredClone(staticSettings.profiles[0]);
+  const windows = Array.from({ length: 8 }, (_, index) => {
+    const hour = String(index * 2).padStart(2, "0");
+    const endHour = String(index * 2 + 1).padStart(2, "0");
+    return { start: `${hour}:00`, end: `${endHour}:00` };
+  });
+  return {
+    version: 2,
+    profiles: Array.from({ length: 8 }, (_, profileIndex) => ({
+      ...structuredClone(template),
+      id: `profile-${profileIndex + 1}`.padEnd(64, "x"),
+      name: "n".repeat(96),
+      objective: "o".repeat(512),
+      timezone: "America/Argentina/Buenos_Aires",
+      targets: MAXIMAL_TARGET_SYMBOLS.map((symbol) => ({
+        symbol,
+        name: "t".repeat(96),
+        market: "M".repeat(16),
+        role: "core",
+        analysis: "full",
+      })),
+      systemBenchmarks: Array.from({ length: 12 }, (_, benchmarkIndex) => ({
+        id: `${benchmarkIndex}`.padEnd(64, "b"),
+        name: "b".repeat(96),
+        market: "M".repeat(16),
+      })),
+      schedules: {
+        ...structuredClone(template.schedules),
+        cnIntraday: {
+          ...structuredClone(template.schedules.cnIntraday),
+          windows,
+        },
+      },
+    })),
   };
 }
 
@@ -174,6 +218,76 @@ test("settings writes enforce expectedUpdatedAt and leave the winning value inta
   });
   assert.equal(saved.status, 200);
   assert.notEqual((await saved.json()).updatedAt, initialUpdatedAt);
+});
+
+test("D1 revisions remain strictly monotonic when repeated writes share a fixed clock", async () => {
+  const initialUpdatedAt = "2026-07-23T00:00:00.000Z";
+  const fixedNow = new Date(initialUpdatedAt);
+  const DB = new FakeD1({ settings: settingsRow(staticSettings, initialUpdatedAt) });
+
+  const first = await writeSettingsToD1(DB, staticSettings, initialUpdatedAt, fixedNow);
+  const second = await writeSettingsToD1(DB, staticSettings, first, fixedNow);
+  const third = await writeSettingsToD1(DB, staticSettings, second, fixedNow);
+
+  assert.deepEqual(
+    [first, second, third],
+    [
+      "2026-07-23T00:00:00.001Z",
+      "2026-07-23T00:00:00.002Z",
+      "2026-07-23T00:00:00.003Z",
+    ],
+  );
+  assert.equal(DB.settings.updated_at, third);
+});
+
+test("PUT and legacy POST accept an explicit maximal eight-profile document below 64 KiB", async () => {
+  const settings = maximalSettings();
+  const putBody = { settings, revision: "2026-07-23T00:00:00.000Z" };
+  const encodedBytes = new TextEncoder().encode(JSON.stringify(putBody)).byteLength;
+  assert.ok(encodedBytes > 16 * 1024);
+  assert.ok(encodedBytes < 64 * 1024);
+
+  const putDB = new FakeD1({ settings: settingsRow(staticSettings) });
+  const putResponse = await settingsApi.onRequestPut({
+    request: put(putBody),
+    env: { DB: putDB, ACCESS_CODE: "correct-code" },
+  });
+  const putPayload = await putResponse.json();
+
+  const postDB = new FakeD1({ settings: settingsRow(staticSettings) });
+  const postResponse = await settingsApi.onRequestPost({
+    request: post({
+      settings,
+      tickers: MAXIMAL_TARGET_SYMBOLS.slice(0, 10),
+      revision: "2026-07-23T00:00:00.000Z",
+    }),
+    env: { DB: postDB, ACCESS_CODE: "correct-code" },
+  });
+  const postPayload = await postResponse.json();
+
+  assert.equal(putResponse.status, 200);
+  assert.equal(putPayload.settings.profiles.length, 8);
+  assert.equal(postResponse.status, 200);
+  assert.equal(postPayload.settings.profiles.length, 8);
+});
+
+test("a bare v2 PUT strips revision metadata and persists the submitted document", async () => {
+  const initialUpdatedAt = "2026-07-23T00:00:00.000Z";
+  const DB = new FakeD1({ settings: settingsRow(staticSettings, initialUpdatedAt) });
+  const submitted = structuredClone(staticSettings);
+  submitted.profiles[0].name = "裸 V2 PUT 已修改";
+
+  const response = await settingsApi.onRequestPut({
+    request: put({ ...submitted, revision: initialUpdatedAt }),
+    env: { DB, ACCESS_CODE: "correct-code" },
+  });
+  const payload = await response.json();
+  const persisted = JSON.parse(DB.settings.settings_json);
+
+  assert.equal(response.status, 200);
+  assert.equal(payload.settings.profiles[0].name, "裸 V2 PUT 已修改");
+  assert.equal(persisted.profiles[0].name, "裸 V2 PUT 已修改");
+  assert.equal(Object.hasOwn(persisted, "revision"), false);
 });
 
 test("GET falls back to the static GitHub settings when D1 is unavailable", async () => {
