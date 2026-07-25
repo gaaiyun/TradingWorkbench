@@ -324,17 +324,16 @@ def build_runtime_evidence(ticker: str, trade_date: str) -> dict[str, Any]:
     symbol = normalize_ticker_symbol(ticker)
     asset_type = detect_asset_type(symbol).value
     cutoff = f"{trade_date}T23:59:59Z"
-    if symbol.endswith((".SS", ".SZ")):
-        workbench = _load_workbench_daily(symbol, trade_date)
-        if workbench:
-            return build_evidence_packet(
-                ticker=symbol,
-                asset_type=asset_type,
-                as_of=cutoff,
-                bars=workbench["bars"],
-                indicators=workbench["indicators"],
-                sources=workbench["sources"],
-            )
+    workbench = _load_workbench_daily(symbol, trade_date)
+    if workbench:
+        return build_evidence_packet(
+            ticker=symbol,
+            asset_type=asset_type,
+            as_of=cutoff,
+            bars=workbench["bars"],
+            indicators=workbench["indicators"],
+            sources=workbench["sources"],
+        )
 
     import yfinance as yf
 

@@ -173,3 +173,71 @@ def test_cn_runtime_evidence_prefers_workbench_qfq_history(monkeypatch):
     assert {bar["adjustment"] for bar in packet["bars"]} == {"qfq"}
     assert packet["sources"][0]["source"] == "tencent"
     assert observed["params"]["limit"] == 1260
+
+
+def test_us_runtime_evidence_uses_the_same_five_year_workbench_history(monkeypatch):
+    observed = {}
+
+    class Response:
+        status_code = 200
+
+        @staticmethod
+        def json():
+            return {
+                "status": "ok",
+                "asOf": "2026-07-24T20:00:00Z",
+                "data": [
+                    {
+                        "ts": "2026-07-24T13:30:00Z",
+                        "open": 190,
+                        "high": 194,
+                        "low": 189,
+                        "close": 193,
+                        "volume": 1000,
+                        "source": "yahoo",
+                        "adjustment": "qfq",
+                        "quality": "good",
+                    },
+                    {
+                        "ts": "2021-07-26T13:30:00Z",
+                        "open": 189,
+                        "high": 191,
+                        "low": 188,
+                        "close": 190,
+                        "volume": 900,
+                        "source": "yahoo",
+                        "adjustment": "qfq",
+                        "quality": "good",
+                    },
+                ],
+                "sources": [{
+                    "source": "yahoo",
+                    "asOf": "2026-07-24T20:00:00Z",
+                    "fetchedAt": "2026-07-25T05:35:00Z",
+                    "adjustment": "qfq",
+                    "quality": "good",
+                }],
+            }
+
+    def get(url, *, params, timeout):
+        observed.update(url=url, params=params, timeout=timeout)
+        return Response()
+
+    monkeypatch.setenv("PAGES_URL", "https://board.example/")
+    monkeypatch.setattr("requests.get", get)
+    monkeypatch.setattr(
+        "yfinance.Ticker",
+        lambda *_: (_ for _ in ()).throw(AssertionError("Yahoo fallback must not run")),
+    )
+
+    packet = build_runtime_evidence("GOOGL", "2026-07-24")
+
+    assert packet["instrument"]["symbol"] == "GOOGL"
+    assert packet["status"] == "ok"
+    assert packet["integrity"]["barCount"] == 2
+    assert packet["bars"][0]["ts"].startswith("2021-07-26")
+    assert observed["params"] == {
+        "symbol": "GOOGL",
+        "timeframe": "1d",
+        "limit": 1260,
+    }
