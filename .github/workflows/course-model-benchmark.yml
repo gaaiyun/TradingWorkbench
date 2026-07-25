@@ -1,0 +1,74 @@
+name: course-model-benchmark
+
+on:
+  workflow_dispatch:
+    inputs:
+      coursework_ref:
+        description: "AI-Quant-Research-Lab 分支或提交"
+        required: true
+        default: "feature/final-assignment"
+
+permissions:
+  contents: read
+
+jobs:
+  benchmark:
+    runs-on: ubuntu-latest
+    timeout-minutes: 35
+    env:
+      PYTHONIOENCODING: utf-8
+      ARK_API_KEY: ${{ secrets.OPENAI_COMPATIBLE_API_KEY }}
+      ARK_BASE_URL: https://ark.cn-beijing.volces.com/api/coding/v3
+    steps:
+      - name: Checkout workflow owner
+        uses: actions/checkout@v4
+
+      - name: Checkout coursework
+        uses: actions/checkout@v4
+        with:
+          repository: gaaiyun/AI-Quant-Research-Lab
+          ref: ${{ inputs.coursework_ref }}
+          path: coursework
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Validate evidence
+        working-directory: coursework
+        run: python src/validate_evidence.py
+
+      - name: Run controlled five-model experiment
+        id: experiment
+        continue-on-error: true
+        working-directory: coursework
+        run: python src/run_experiment.py
+
+      - name: Score completed responses
+        if: always()
+        working-directory: coursework
+        run: python src/score_runs.py
+
+      - name: Write job summary
+        if: always()
+        shell: python
+        run: |
+          import json, pathlib, os
+          root = pathlib.Path("coursework")
+          scores = json.loads((root / "data/results/scores.json").read_text(encoding="utf-8"))
+          lines = ["# 512480 多模型受控实验", "", "| 模型 | 状态 | 自动审计分 | 延迟(ms) |", "|---|---:|---:|---:|"]
+          for item in scores["results"]:
+              lines.append(f"| {item['model']} | {item['status']} | {item.get('total', 0)} | {item.get('latencyMs', '-')} |")
+          pathlib.Path(os.environ["GITHUB_STEP_SUMMARY"]).write_text("\n".join(lines), encoding="utf-8")
+
+      - name: Upload reproducible experiment artifact
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: ai-quant-research-runs-${{ github.run_id }}
+          if-no-files-found: error
+          retention-days: 30
+          path: |
+            coursework/data/runs
+            coursework/data/results
