@@ -106,6 +106,18 @@ test("production workflows scope secrets and deploy the latest main under one lo
     dailyAnalysis,
     /Run multi-agent analysis[\s\S]*?EVIDENCE_API_URL:\s*https:\/\/tradingagents-board\.pages\.dev\/api\/v1\/evidence/,
   );
+  assert.match(
+    dailyAnalysis,
+    /name:\s*Run multi-agent analysis[\s\S]*?id:\s*analysis[\s\S]*?continue-on-error:\s*true/,
+  );
+  assert.match(
+    dailyAnalysis,
+    /name:\s*Persist reports to main[\s\S]*?if:\s*\$\{\{\s*always\(\)\s*\}\}/,
+  );
+  assert.match(
+    dailyAnalysis,
+    /name:\s*Fail when analysis failed[\s\S]*?steps\.analysis\.outcome == 'failure'/,
+  );
 
   const dailyCloudflare = daily.match(
     /^  deploy-cloudflare:[\s\S]*$/m,

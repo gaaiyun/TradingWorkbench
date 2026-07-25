@@ -13,6 +13,7 @@ import {
   normalizeEnvelope,
   selectConclusion,
 } from "./workbench-data.mjs";
+import { renderMarkdown } from "./workbench-markdown.mjs";
 import {
   CandlestickSeries,
   ColorType,
@@ -111,61 +112,6 @@ import {
     } catch {
       return "";
     }
-  }
-
-  function inlineMarkdown(raw) {
-    const links = [];
-    let text = String(raw || "").replace(/\[([^\]]+)]\(([^)]+)\)/g, (_match, label, href) => {
-      const url = safeUrl(href);
-      if (!url) return label;
-      const token = `\u0000L${links.length}\u0000`;
-      links.push(`<a href="${escapeHtml(url)}" target="_blank" rel="noopener noreferrer">${escapeHtml(label)}</a>`);
-      return token;
-    });
-    text = escapeHtml(text)
-      .replace(/`([^`]+)`/g, "<code>$1</code>")
-      .replace(/\*\*([^*]+)\*\*/g, "<strong>$1</strong>")
-      .replace(/\*([^*]+)\*/g, "<em>$1</em>");
-    links.forEach((link, index) => { text = text.replace(`\u0000L${index}\u0000`, link); });
-    return text;
-  }
-
-  function renderMarkdown(markdown) {
-    const lines = String(markdown || "").replaceAll("\r\n", "\n").split("\n");
-    const output = [];
-    let paragraph = [];
-    let list = null;
-    let code = false;
-    let codeLines = [];
-    const flush = () => {
-      if (paragraph.length) output.push(`<p>${inlineMarkdown(paragraph.join(" "))}</p>`);
-      paragraph = [];
-    };
-    const closeList = () => {
-      if (list) output.push(`</${list}>`);
-      list = null;
-    };
-    for (const line of lines) {
-      if (line.trim().startsWith("```")) {
-        flush(); closeList();
-        if (code) { output.push(`<pre><code>${escapeHtml(codeLines.join("\n"))}</code></pre>`); codeLines = []; }
-        code = !code; continue;
-      }
-      if (code) { codeLines.push(line); continue; }
-      if (!line.trim()) { flush(); closeList(); continue; }
-      const heading = /^(#{1,4})\s+(.+)$/.exec(line);
-      if (heading) { flush(); closeList(); output.push(`<h${heading[1].length}>${inlineMarkdown(heading[2])}</h${heading[1].length}>`); continue; }
-      const item = /^\s*[-*+]\s+(.+)$/.exec(line);
-      if (item) {
-        flush();
-        if (list !== "ul") { closeList(); output.push("<ul>"); list = "ul"; }
-        output.push(`<li>${inlineMarkdown(item[1])}</li>`); continue;
-      }
-      paragraph.push(line.trim());
-    }
-    if (codeLines.length) output.push(`<pre><code>${escapeHtml(codeLines.join("\n"))}</code></pre>`);
-    flush(); closeList();
-    return output.join("");
   }
 
   function plainText(value, limit = 280) {

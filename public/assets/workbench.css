@@ -281,13 +281,67 @@ a { color: inherit; }
 }
 .archive-report-tabs button:hover, .archive-report-tabs button.is-active { background: var(--surface-2); color: var(--text); }
 .archive-report-tabs button.is-active { box-shadow: inset 0 -2px var(--accent); }
-.archive-markdown { max-height: 760px; overflow: auto; padding: 22px 24px 40px; color: var(--muted); font-size: 11px; line-height: 1.75; }
-.archive-markdown h1, .archive-markdown h2, .archive-markdown h3 { color: var(--text); line-height: 1.35; }
-.archive-markdown h1 { font-size: 20px; }
-.archive-markdown h2 { margin-top: 28px; font-size: 15px; }
-.archive-markdown h3 { margin-top: 22px; font-size: 12px; }
-.archive-markdown a { color: var(--accent); }
-.archive-markdown pre { overflow: auto; padding: 10px; border: 1px solid var(--line); background: var(--bg); }
+.archive-markdown {
+  max-height: 760px; overflow: auto; padding: 28px clamp(22px, 3vw, 44px) 56px;
+  color: #aeb5ba; font-size: 12px; line-height: 1.82; text-wrap: pretty;
+}
+.archive-markdown > :not(.markdown-table-wrap) { max-width: 1080px; }
+.archive-markdown p { margin: 12px 0; }
+.archive-markdown h1, .archive-markdown h2, .archive-markdown h3, .archive-markdown h4 {
+  color: #f0f2f3; line-height: 1.35; letter-spacing: -.01em;
+}
+.archive-markdown h1 {
+  margin: 0 0 24px; padding-bottom: 16px; border-bottom: 1px solid var(--line);
+  font-size: 22px; font-weight: 640;
+}
+.archive-markdown h2 { margin: 36px 0 14px; font-size: 17px; font-weight: 620; }
+.archive-markdown h3 { margin: 28px 0 10px; font-size: 14px; font-weight: 620; }
+.archive-markdown h4 { margin: 22px 0 8px; color: #d9dddf; font-size: 12px; font-weight: 620; }
+.archive-markdown strong { color: #e5e8e9; font-weight: 650; }
+.archive-markdown a {
+  color: #86c8ba; text-decoration: underline; text-decoration-color: rgba(134, 200, 186, .35);
+  text-underline-offset: 3px; overflow-wrap: anywhere;
+}
+.archive-markdown a:hover { color: #b0e0d6; text-decoration-color: currentColor; }
+.archive-markdown a[target="_blank"]::after { content: " ↗"; color: var(--quiet); font-size: .82em; }
+.archive-markdown code {
+  padding: 2px 5px; border: 1px solid #30363a; border-radius: 3px;
+  background: #111518; color: #d8dcde; font: 10px/1.5 "IBM Plex Mono", Consolas, monospace;
+}
+.archive-markdown pre {
+  overflow: auto; margin: 18px 0; padding: 14px 16px; border: 1px solid #30363a;
+  border-radius: 3px; background: #0b0e10; box-shadow: inset 3px 0 #31383c;
+}
+.archive-markdown pre code { padding: 0; border: 0; background: transparent; color: #cbd2d5; }
+.archive-markdown blockquote {
+  margin: 18px 0; padding: 13px 16px; border-left: 3px solid #5c9f91;
+  background: #111619; color: #c4cbce;
+}
+.archive-markdown blockquote::before {
+  display: block; margin-bottom: 5px; color: #6f7b80; content: "引用 / EVIDENCE";
+  font: 8px/1.2 "IBM Plex Mono", Consolas, monospace; letter-spacing: .09em;
+}
+.archive-markdown ul, .archive-markdown ol { margin: 12px 0; padding-left: 22px; }
+.archive-markdown li { margin: 6px 0; padding-left: 3px; }
+.archive-markdown li::marker { color: #6f9990; font-family: "IBM Plex Mono", Consolas, monospace; }
+.archive-markdown hr { margin: 30px 0; border: 0; border-top: 1px solid #30363a; }
+.markdown-table-wrap {
+  max-width: 100%; overflow-x: auto; margin: 18px 0 24px; border: 1px solid #30363a;
+  background: #0e1214; scrollbar-width: thin;
+}
+.archive-markdown table { width: 100%; min-width: 680px; border-collapse: collapse; line-height: 1.55; }
+.archive-markdown th {
+  position: sticky; top: 0; padding: 10px 12px; border-right: 1px solid #30363a;
+  border-bottom: 1px solid #394145; background: #151a1d; color: #e4e7e8;
+  font: 600 9px/1.4 "IBM Plex Mono", Consolas, monospace; text-align: left; letter-spacing: .04em;
+}
+.archive-markdown td {
+  min-width: 120px; padding: 10px 12px; border-right: 1px solid #292f32;
+  border-bottom: 1px solid #292f32; color: #aeb5ba; vertical-align: top;
+}
+.archive-markdown th:last-child, .archive-markdown td:last-child { border-right: 0; }
+.archive-markdown tbody tr:last-child td { border-bottom: 0; }
+.archive-markdown tbody tr:hover td { background: #121719; color: #c9ced0; }
 .news-workspace-filters { padding: 10px 12px; border-bottom: 1px solid var(--line); color: var(--quiet); font-size: 10px; }
 .evidence-ledger { max-height: 720px; overflow: auto; }
 .evidence-row {

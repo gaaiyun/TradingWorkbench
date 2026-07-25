@@ -43,26 +43,34 @@
   `split-and-dividend-adjusted` 与 A 股 D1 `qfq`。
 - 状态关联：临时请求使用 UUID `requestId`，页面只匹配自身 GitHub run；未入队时不借用
   其他定时任务状态。
-- 档案：当前索引包含 22 次运行、52 条结果，其中 46 份成功报告均已按真实文件回填
+- 档案：当前索引包含 23 次运行、53 条结果，其中 47 份成功报告均已按真实文件回填
   `files`；13 个固定分栏缺失即隐藏，默认组合决策，支持键盘与重试。
 - 问答：完整报告 Manifest 仍是门禁；选中分栏由服务端枚举映射，同栏缺失只回退同一份
   完整报告。
 - Sentiment 暂不开放：Reddit 可达，StockTwits 实际返回 403，尚无可信来源健康 Manifest。
-- 三个实现提交：`0dace87`、`90b2d9d`、`1e487a7`。文档与生产发布提交在最终验收后追加到本节。
+- 已同步实现提交：`0dace87`、`90b2d9d`、`1e487a7`、`93123cd`、`ea9727c`、
+  `0263f89`、`9cbaf14`、`ed6acb7`。`ed6acb7` 修复真实 MSFT 任务暴露的非有限行情、
+  严格 JSON、目标日缺口、Evidence API 语义校验和报告文件哈希门禁。
+- 报告 Markdown 已拆成独立安全渲染模块，支持 GFM 表格、引用、裸链接、分隔线、
+  有序列表和代码块；13 个角色分栏及监控配置不变。
 
 ### 2026-07-26 本轮新鲜验证
 
-- Functions：224 passed / 1 skipped；跳过项只在显式启用时调用真实免费 Provider。
-- 前端与导航：53 passed。
-- Python：617 passed / 2 skipped；跳过原因分别是本机未安装 `langchain_aws`、未配置
+- Functions：228 passed / 1 skipped；跳过项只在显式启用时调用真实免费 Provider。
+- 前端与导航：55 passed。
+- Python：637 passed / 2 skipped；跳过原因分别是本机未安装 `langchain_aws`、未配置
   DeepSeek 测试密钥。
 - Ruff：`All checks passed`。
-- 前端语法：`public/assets/workbench.js` 通过 `node --check`。
-- 浏览器 E2E：58/58 个显式断言通过，主任务与独立复核均为退出码 0。
-- 报告审计：46 份成功报告；0 verified、43 legacy_unverified、3 invalidated；另有 6 条
+- 前端语法：`public/assets/workbench.js` 与 `public/assets/workbench-markdown.mjs`
+  均通过 `node --check`。
+- 浏览器 E2E：62/62 个显式断言通过，包含档案页真实挂载后的表格、链接、引用和
+  分隔线检查，退出码 0。
+- 报告审计：47 份成功报告；0 verified、43 legacy_unverified、4 invalidated；另有 6 条
   无报告记录，其中证据校验 3、模型/流程 2、错误输入 1。
-- GitHub 主线同步、Cloudflare 发布与生产冒烟仍必须以本节后续记录为准；
-  未写入实际版本号前不得宣称已经上线。
+- GitHub `main` 已同步到 `ed6acb7`。真实 MSFT 重验
+  `https://github.com/gaaiyun/TradingWorkbench/actions/runs/30168909752` 已正确阻断
+  缺失目标日完整行情；该次失败未持久化，后续已修改 workflow 为“先持久化失败记录，
+  再将任务标红”，必须用下一次真实运行确认。
 
 ### 会话与审计材料位置
 
@@ -76,8 +84,9 @@
 
 ### 2026-07-25 最终生产验收基线
 
-- Pages 生产域名：`https://tradingagents-board.pages.dev/`；本轮最终发布预览为 `https://e808d120.tradingagents-board.pages.dev`。
-- Worker 版本：`c03d0e4a-6493-4f4a-b664-c9891c6a71e6`。
+- Pages 生产域名：`https://tradingagents-board.pages.dev/`；2026-07-26 已验证预览为
+  `https://e55f95bc.tradingagents-board.pages.dev`。
+- Worker 版本：`24776c52-43e4-4c79-86c4-2bf48d93eaf3`。
 - `/api/health`：`status=ok`，访问门禁、问答、分析调度和 D1 共享会话均已配置。
 - `/api/v1/evidence`：未授权请求返回 JSON 401，不再错误回退到 HTML。
 - 报告审计：46 份成功报告；0 verified、43 legacy_unverified、3 invalidated；另有 6 条失败记录。
@@ -263,11 +272,15 @@ A 股通信与芯片主题始终查询工信部证据层；Google/东方财富�
 
 不满足时保留草稿，但标记 Not Rated 或相应失败，不得进入首页最新观点、问答、推送和组合结论。
 
-精确失效的旧报告只有：
+人工确认的公司行动污染报告是：
 
 - `reports/515880.SS/2026-07-24/complete_report.md`
 - `reports/512480.SS/2026-07-23/complete_report.md`
 - `reports/512480.SS/2026-07-24/complete_report.md`
+
+审计器还会动态失效 Manifest/证据包不一致的报告。当前
+`reports/MSFT/2026-07-24/complete_report.md` 因非标准 `NaN` 包标为
+`INVALID_EVIDENCE_PACKET`；不能将这类损坏包降回 `legacy_unverified`。
 
 同日 `-v2`、`-v3` 不得被连带失效。机器审计索引是 `public/data/report-audit.json`，生成命令是：
 
@@ -282,10 +295,10 @@ node scripts/report-audit.mjs
 - Actions：
   `https://github.com/gaaiyun/TradingWorkbench/actions/runs/30154765352`
 - 数据提交：`0815a18`
-- 报告数：46
+- 报告数：47
 - `verified`：0
 - `legacy_unverified`：43
-- `invalidated`：3
+- `invalidated`：4
 - 无报告运行：6，其中证据校验 3、模型/流程 2、错误输入 1
 
 这次五标的运行的 Packet 全部通过并发布成功，但五份 Agent 文本仍因未引用数字、无方法目标价或无用户约束的仓位建议未通过 claim validation，所以保持 Not Rated。不要为了生成评级而放松门禁。

@@ -287,6 +287,10 @@ Invoke-RestMethod https://sh50-volguard.pages.dev/api/live
    无方法目标价或无持仓上下文的配置比例；报告保留审计，但前端必须显示 Not Rated。
 9. 同标的同交易日补跑会创建 `YYYY-MM-DD-v2` 等新目录。不要删除旧目录；审计索引用
    `supersededBy` 关联新版本。
+10. Manifest 有 `packetFileHash` 时，用证据文件实际字节重算 SHA-256；不一致应显示
+    `INVALID_EVIDENCE_PACKET`，并从默认档案、问答和观点流隔离。
+11. Yahoo 返回目标日未完成 OHLC 时应记录 `DROPPED_INCOMPLETE_BAR` 和
+    `MISSING_TARGET_DATE_BAR`；合法休市没有该日 provider row 时不应误报。
 
 ### 期权指标不更新
 

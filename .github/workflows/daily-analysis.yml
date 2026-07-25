@@ -151,6 +151,8 @@ jobs:
           pip install .
 
       - name: Run multi-agent analysis
+        id: analysis
+        continue-on-error: true
         # 密钥仅交给实际调用外部服务的本仓库脚本，不暴露给 checkout/setup 等 action。
         env:
           OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
@@ -175,8 +177,13 @@ jobs:
           python scripts/run_daily.py
 
       - name: Persist reports to main
+        if: ${{ always() }}
         run: |
           bash scripts/persist_reports.sh "chore(data): 更新分析报告 $(date -u +%F) [skip ci]"
+
+      - name: Fail when analysis failed
+        if: ${{ steps.analysis.outcome == 'failure' }}
+        run: exit 1
 
   deploy-github-pages:
     needs: analyze-and-persist

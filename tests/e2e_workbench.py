@@ -177,7 +177,16 @@ def route_api(route):
         route.fulfill(
             status=200,
             content_type="text/plain; charset=utf-8",
-            body="# 515880.SS 研究报告\n\n## 结论\n\n成交确认仍是最重要的跟踪条件。",
+            body=(
+                "# 515880.SS 研究报告\n\n"
+                "> **证据提示：** 只采用带时间戳的原始来源。\n\n"
+                "## 关键信息\n\n"
+                "| 类别 | 来源 | 可靠性 |\n"
+                "| --- | --- | --- |\n"
+                "| 公告 | [交易所](https://example.com/filing) | 高 |\n\n"
+                "---\n\n"
+                "成交确认仍是最重要的跟踪条件。"
+            ),
         )
     elif path == "/api/volguard":
         route.fulfill(
@@ -350,6 +359,10 @@ def run_browser():
         page.click('#archive-report-tabs [data-report-section="market"]')
         page.wait_for_selector('#archive-report-tabs [data-report-section="market"].is-active')
         assert page.locator("#archive-report-warning").is_visible()
+        assert page.locator("#archive-report-body blockquote").is_visible()
+        assert page.locator("#archive-report-body .markdown-table-wrap table").is_visible()
+        assert page.locator("#archive-report-body a").get_attribute("href") == "https://example.com/filing"
+        assert page.locator("#archive-report-body hr").is_visible()
 
         mobile = browser.new_page(viewport={"width": 390, "height": 844}, device_scale_factor=1)
         capture_browser_diagnostics(mobile, "mobile")
