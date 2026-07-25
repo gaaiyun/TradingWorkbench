@@ -528,8 +528,8 @@ def run_ticker(ticker: str, trade_date: str, analysts: list[str], reports_dir: P
 
     symbol = normalize_ticker_symbol(ticker)
     evidence_packet = build_runtime_evidence(symbol, trade_date)
+    evidence_publish = publish_evidence_bundle(evidence_packet)
     if not evidence_packet.get("canRate"):
-        evidence_publish = publish_evidence_bundle(evidence_packet)
         return {
             "ticker": symbol,
             "rating": None,

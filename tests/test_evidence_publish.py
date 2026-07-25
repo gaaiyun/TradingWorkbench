@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import requests
 
-from scripts.run_daily import publish_evidence_bundle
+from scripts.run_daily import publish_evidence_bundle, run_ticker
 
 
 def packet() -> dict:
@@ -75,3 +75,64 @@ def test_publish_evidence_bundle_normalizes_http_and_network_failures(monkeypatc
         "published": False,
         "reason": "network_error",
     }
+
+
+def test_run_ticker_publishes_validated_evidence_before_starting_the_model(
+    monkeypatch,
+    tmp_path,
+):
+    calls = []
+    runtime_packet = packet()
+
+    def publish(packet_payload, *, manifest=None, report=None):
+        calls.append(("publish", manifest, report))
+        return {"published": True, "status": 201}
+
+    class FakeGraph:
+        def __init__(self, **_kwargs):
+            pass
+
+        def propagate(self, *_args, **_kwargs):
+            assert calls == [("publish", None, None)]
+            calls.append(("model", None, None))
+            return {"final_trade_decision": "Hold [BAR-1]"}, "Hold"
+
+        def save_reports(self, _state, _symbol, *, save_path, evidence_packet):
+            assert evidence_packet is runtime_packet
+            save_path.mkdir(parents=True)
+            (save_path / "complete_report.md").write_text(
+                "Hold [BAR-1]",
+                encoding="utf-8",
+            )
+            (save_path / "report_manifest.json").write_text(
+                '{"analysisStatus":"rated","auditStatus":"verified"}',
+                encoding="utf-8",
+            )
+
+    monkeypatch.setattr(
+        "scripts.run_daily.build_runtime_evidence",
+        lambda _ticker, _trade_date: runtime_packet,
+    )
+    monkeypatch.setattr("scripts.run_daily.publish_evidence_bundle", publish)
+    monkeypatch.setattr(
+        "tradingagents.graph.trading_graph.TradingAgentsGraph",
+        FakeGraph,
+    )
+
+    result = run_ticker(
+        "GOOGL",
+        "2026-07-24",
+        ["market"],
+        tmp_path / "reports",
+    )
+
+    assert result["analysis_status"] == "rated"
+    assert calls == [
+        ("publish", None, None),
+        ("model", None, None),
+        (
+            "publish",
+            {"analysisStatus": "rated", "auditStatus": "verified"},
+            "reports/GOOGL/2026-07-24/complete_report.md",
+        ),
+    ]
