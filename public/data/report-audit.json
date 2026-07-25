@@ -1,17 +1,46 @@
 {
   "version": 1,
-  "generatedAt": "2026-07-25T17:54:27.047Z",
+  "generatedAt": "2026-07-25T18:22:59.062Z",
   "summary": {
     "successfulReports": 47,
     "verifiedReports": 0,
     "invalidatedReports": 4,
     "legacyUnverifiedReports": 43,
-    "invalidRecords": 6,
-    "evidenceValidationFailures": 3,
+    "invalidRecords": 7,
+    "evidenceValidationFailures": 4,
     "analysisExecutionFailures": 2,
     "invalidInputs": 1
   },
   "reports": [
+    {
+      "ticker": "MSFT",
+      "tradeDate": "2026-07-24",
+      "generatedAt": "2026-07-26T02:22:46+08:00",
+      "provider": "openai_compatible",
+      "rating": null,
+      "analysisStatus": "data_validation_failed",
+      "report": null,
+      "auditStatus": "invalid_record",
+      "failureClass": "evidence_validation",
+      "problemCodes": [
+        "EVIDENCE_VALIDATION_FAILED"
+      ],
+      "evidence": {
+        "urlCount": 0,
+        "claimCitationCount": 0,
+        "finalProposalMarkers": 0,
+        "priceTargetCount": 0,
+        "valuationMethodCount": 0,
+        "publishedMarkerCount": 0
+      },
+      "claimValidation": null,
+      "evidencePacket": null,
+      "evidencePublish": {
+        "published": true,
+        "status": 201
+      },
+      "supersededBy": null
+    },
     {
       "ticker": "MSFT",
       "tradeDate": "2026-07-24",
