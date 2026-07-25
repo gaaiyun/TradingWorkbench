@@ -246,6 +246,12 @@ test("an empty production database bootstraps CN and US market snapshots outside
           };
         },
       }),
+      collectNews: async () => ({
+        status: "completed",
+        written: 0,
+        counts: { queries: 0, succeeded: 0, failed: 0, items: 0 },
+        sources: [],
+      }),
     },
   );
   assert.equal(result.status, "completed");
@@ -374,7 +380,12 @@ test("scheduled handler uses scheduledTime and waitUntil while health reveals no
     );
     assert.ok(promise instanceof Promise);
     const summary = await promise;
-    assert.equal(summary.counts.completed, 1);
+    assert.equal(summary.counts.completed, 0);
+    assert.equal(
+      summary.counts.degraded,
+      1,
+      "官方证据源返回非目标格式时，发现层空结果不能掩盖降级状态",
+    );
     assert.equal(summary.counts.deferred, 1);
     assert.equal(JSON.stringify(summary).includes("secret-value"), false);
   } finally {
@@ -528,6 +539,7 @@ test("monitor wrangler config uses five-minute cron and the same deployed D1 bin
     new URL("../wrangler.monitor.toml", import.meta.url),
     "utf8",
   );
+  assert.match(pages, /^name\s*=\s*"tradingagents-board"/m);
   assert.match(monitor, /main\s*=\s*"workers\/monitor\/src\/index\.mjs"/);
   assert.match(monitor, /crons\s*=\s*\[\s*"\*\/5 \* \* \* \*"\s*\]/);
   assert.match(monitor, /binding\s*=\s*"DB"/);
