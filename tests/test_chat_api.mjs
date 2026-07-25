@@ -244,6 +244,55 @@ test("上下文候选共享总 deadline，并随浏览器 signal 取消", async 
   assert.equal(calls, 0);
 });
 
+test("已验证报告按服务端分栏映射读取，分栏缺失时只回退同一份完整报告", async () => {
+  const calls = [];
+  const result = await loadResearchContext({
+    body: { report: REPORT_PATH, reportSection: "bull" },
+    rawBase: "https://raw.example/public",
+    contextLimit: 100,
+    timeoutMs: 1000,
+    fetchImpl: async (url) => {
+      calls.push(String(url));
+      if (String(url).endsWith("report_manifest.json")) {
+        return jsonResponse(VERIFIED_MANIFEST);
+      }
+      if (String(url).endsWith("/2_research/bull.md")) {
+        return new Response("", { status: 404 });
+      }
+      if (String(url).endsWith("/complete_report.md")) {
+        return new Response("same report fallback", { status: 200 });
+      }
+      throw new Error("must not fall back to unrelated latest data");
+    },
+  });
+
+  assert.equal(result.context, "same report fallback");
+  assert.equal(result.contextLabel, REPORT_PATH);
+  assert.equal(calls.some((url) => url.endsWith("/2_research/bull.md")), true);
+  assert.equal(calls.some((url) => url.endsWith("/data/latest.json")), false);
+});
+
+test("未知 reportSection 不参与路径拼接并安全读取完整报告", async () => {
+  const calls = [];
+  const result = await loadResearchContext({
+    body: { report: REPORT_PATH, reportSection: "../../data/latest.json" },
+    rawBase: "https://raw.example/public",
+    contextLimit: 100,
+    timeoutMs: 1000,
+    fetchImpl: async (url) => {
+      calls.push(String(url));
+      if (String(url).endsWith("report_manifest.json")) {
+        return jsonResponse(VERIFIED_MANIFEST);
+      }
+      return new Response("verified complete report", { status: 200 });
+    },
+  });
+
+  assert.equal(result.context, "verified complete report");
+  assert.equal(calls.some((url) => url.includes("..")), false);
+  assert.equal(calls.some((url) => url.endsWith("/complete_report.md")), true);
+});
+
 test("未验证或失效报告不能进入问答上下文", async () => {
   const calls = [];
   const result = await loadResearchContext({

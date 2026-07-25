@@ -1,6 +1,7 @@
 import assert from "node:assert/strict";
 import test from "node:test";
 
+import * as research from "../public/assets/workbench-research.mjs";
 import {
   archivedResearchAfterRun,
   buildArchiveEntries,
@@ -106,4 +107,190 @@ test("latest run selection ignores malformed rows and keeps chronological truth"
     { id: 3 },
   ]);
   assert.equal(latest.id, 2);
+});
+
+test("temporary research request is independent from monitor settings and carries an idempotency key", () => {
+  const request = research.buildTemporaryResearchRequest({
+    requestId: "123e4567-e89b-42d3-a456-426614174000",
+    tickers: " 515880.ss, NVDA\n515880.SS ",
+    analysts: ["market", "news", "fundamentals"],
+    researchDepth: "standard",
+  });
+
+  assert.deepEqual(request, {
+    requestId: "123e4567-e89b-42d3-a456-426614174000",
+    tickers: ["515880.SS", "NVDA"],
+    analysts: ["market", "news", "fundamentals"],
+    researchDepth: "standard",
+  });
+  assert.equal("settings" in request, false);
+});
+
+test("temporary research enforces API workload limits for standard and deep requests", () => {
+  assert.equal(research.researchTickerLimit("standard"), 6);
+  assert.equal(research.researchTickerLimit("deep"), 3);
+  assert.throws(
+    () => research.buildTemporaryResearchRequest({
+      requestId: "123e4567-e89b-42d3-a456-426614174001",
+      tickers: ["AAPL", "MSFT", "NVDA", "GOOGL", "ORCL", "AMD", "TSM"],
+      analysts: ["market", "news", "fundamentals"],
+      researchDepth: "standard",
+    }),
+    /standard.*6/,
+  );
+  assert.throws(
+    () => research.buildTemporaryResearchRequest({
+      requestId: "123e4567-e89b-42d3-a456-426614174002",
+      tickers: ["AAPL", "MSFT", "NVDA", "GOOGL"],
+      analysts: ["market", "news", "fundamentals"],
+      researchDepth: "deep",
+    }),
+    /deep.*3/,
+  );
+});
+
+test("temporary research defaults to verified analysts and standard depth", () => {
+  assert.deepEqual(
+    research.buildTemporaryResearchRequest({
+      requestId: "123e4567-e89b-42d3-a456-426614174003",
+      tickers: ["NVDA"],
+    }),
+    {
+      requestId: "123e4567-e89b-42d3-a456-426614174003",
+      tickers: ["NVDA"],
+      analysts: ["market", "news", "fundamentals"],
+      researchDepth: "standard",
+    },
+  );
+});
+
+test("temporary research creates UUID request ids and rejects controls the API will refuse", () => {
+  assert.match(
+    research.createTemporaryResearchRequestId(),
+    /^[0-9a-f]{8}-(?:[0-9a-f]{4}-){3}[0-9a-f]{12}$/i,
+  );
+  assert.throws(
+    () => research.buildTemporaryResearchRequest({
+      requestId: "not-a-uuid",
+      tickers: ["NVDA"],
+    }),
+    /requestId.*UUID/,
+  );
+  assert.throws(
+    () => research.buildTemporaryResearchRequest({
+      requestId: "123e4567-e89b-42d3-a456-426614174004",
+      tickers: ["NVDA"],
+      analysts: [],
+    }),
+    /分析师/,
+  );
+  assert.throws(
+    () => research.buildTemporaryResearchRequest({
+      requestId: "123e4567-e89b-42d3-a456-426614174005",
+      tickers: ["NVDA"],
+      researchDepth: "extreme",
+    }),
+    /researchDepth/,
+  );
+});
+
+test("archive entries retain report files and expose ordered available columns", () => {
+  const [entry] = buildArchiveEntries([{
+    trade_date: "2026-07-24",
+    results: [{
+      ticker: "NVDA",
+      rating: "Buy",
+      report: "reports/NVDA/2026-07-24/complete_report.md",
+      files: {
+        complete_report: "reports/NVDA/2026-07-24/complete_report.md",
+        conservative: "reports/NVDA/2026-07-24/4_risk/conservative.md",
+        decision: "reports/NVDA/2026-07-24/5_portfolio/decision.md",
+        market: "reports/NVDA/2026-07-24/1_analysts/market.md",
+        fundamentals: "reports/NVDA/2026-07-24/1_analysts/fundamentals.md",
+        bull: "reports/NVDA/2026-07-24/2_research/bull.md",
+      },
+    }],
+  }]);
+
+  assert.deepEqual(entry.files, {
+    complete_report: "reports/NVDA/2026-07-24/complete_report.md",
+    conservative: "reports/NVDA/2026-07-24/4_risk/conservative.md",
+    decision: "reports/NVDA/2026-07-24/5_portfolio/decision.md",
+    market: "reports/NVDA/2026-07-24/1_analysts/market.md",
+    fundamentals: "reports/NVDA/2026-07-24/1_analysts/fundamentals.md",
+    bull: "reports/NVDA/2026-07-24/2_research/bull.md",
+  });
+  assert.deepEqual(
+    research.buildArchiveFileTabs(entry).map(({ id }) => id),
+    ["market", "fundamentals", "bull", "conservative", "decision", "complete_report"],
+  );
+});
+
+test("archive opens decision by default and falls back in canonical order when it is absent", () => {
+  const withDecision = research.buildArchiveFileTabs({
+    report: "reports/NVDA/2026-07-24/complete_report.md",
+    files: {
+      market: "reports/NVDA/2026-07-24/1_analysts/market.md",
+      decision: "reports/NVDA/2026-07-24/5_portfolio/decision.md",
+      complete_report: "reports/NVDA/2026-07-24/complete_report.md",
+    },
+  });
+  assert.equal(research.defaultArchiveFileTab(withDecision).id, "decision");
+
+  const withoutDecision = research.buildArchiveFileTabs({
+    report: "reports/NVDA/2026-07-24/complete_report.md",
+    files: {
+      market: "reports/NVDA/2026-07-24/1_analysts/market.md",
+      complete_report: "reports/NVDA/2026-07-24/complete_report.md",
+    },
+  });
+  assert.equal(research.defaultArchiveFileTab(withoutDecision).id, "market");
+});
+
+test("archive file tabs ignore allowlisted keys that escape the report version directory", () => {
+  const tabs = research.buildArchiveFileTabs({
+    report: "reports/NVDA/2026-07-24/complete_report.md",
+    files: {
+      market: "../data/latest.json",
+      fundamentals: "/api/settings",
+      decision: "reports/NVDA/other-version/5_portfolio/decision.md",
+      complete_report: "reports/NVDA/2026-07-24/complete_report.md",
+    },
+  });
+
+  assert.deepEqual(tabs, [{
+    id: "complete_report",
+    label: "完整报告",
+    path: "reports/NVDA/2026-07-24/complete_report.md",
+  }]);
+});
+
+test("temporary research status only matches its own request id", () => {
+  const requestId = "123e4567-e89b-42d3-a456-426614174000";
+  const matched = research.researchRunForRequest([
+    {
+      id: 2,
+      requestId: "223e4567-e89b-42d3-a456-426614174000",
+      status: "in_progress",
+      created_at: "2026-07-25T10:01:00Z",
+    },
+    {
+      id: 1,
+      requestId,
+      status: "queued",
+      created_at: "2026-07-25T10:00:00Z",
+    },
+  ], requestId);
+  assert.equal(matched.id, 1);
+  assert.equal(
+    research.researchRunForRequest([{ requestId: "other" }], requestId),
+    null,
+  );
+  assert.equal(
+    research.archivedResearchForRequest([{
+      request: { requestId },
+      results: [{ ticker: "NVDA" }],
+    }], requestId).results[0].ticker,
+    "NVDA",
+  );
 });

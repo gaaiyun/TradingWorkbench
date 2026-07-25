@@ -158,6 +158,11 @@ def route_api(route):
             "results": [{
                 "ticker": "515880.SS", "rating": "Overweight",
                 "report": "reports/515880.SS/2026-07-22/complete_report.md",
+                "files": {
+                    "market": "reports/515880.SS/2026-07-22/1_analysts/market.md",
+                    "decision": "reports/515880.SS/2026-07-22/5_portfolio/decision.md",
+                    "complete_report": "reports/515880.SS/2026-07-22/complete_report.md",
+                },
                 "error": False,
             }],
         }])
@@ -217,7 +222,7 @@ def route_api(route):
         )
     elif path == "/api/analyze":
         ANALYZE_REQUESTS.append(route.request.post_data_json)
-        fulfill_json(route, {"ok": True, "message": "已受理，分析会在后台顺序执行", "tickers": [item["symbol"] for item in SETTINGS["profiles"][0]["targets"]]}, 202)
+        fulfill_json(route, {"ok": True, "message": "已受理，分析会在后台顺序执行", "tickers": route.request.post_data_json["tickers"]}, 202)
     elif path == "/api/chat":
         CHAT_REQUESTS.append(route.request.post_data_json)
         route.fulfill(
@@ -290,8 +295,25 @@ def run_browser():
         assert page.locator("#deep-analysis-open").is_visible()
         assert page.locator("#agent-pipeline .is-completed").count() == 4
         page.click("#deep-analysis-open")
+        assert page.locator("#settings-drawer").get_attribute("aria-hidden") == "true"
+        assert page.locator("#agent-research-tickers").evaluate("element => element === document.activeElement")
+        page.fill("#agent-research-tickers", "515880.SS, NVDA")
+        page.select_option("#agent-research-depth", "standard")
+        page.fill("#agent-research-code", "fixture-code")
+        settings_count = len(SETTINGS_REQUESTS)
+        page.click("#agent-research-submit")
+        page.wait_for_function("document.querySelector('#agent-research-notice').textContent.includes('已受理')")
+        temporary_request = ANALYZE_REQUESTS[-1]
+        assert temporary_request["tickers"] == ["515880.SS", "NVDA"]
+        assert temporary_request["analysts"] == ["market", "news", "fundamentals"]
+        assert temporary_request["researchDepth"] == "standard"
+        assert temporary_request["requestId"]
+        assert len(SETTINGS_REQUESTS) == settings_count
+
+        page.locator('[data-route-link="settings"]').first.click()
+        page.wait_for_function("document.body.dataset.route === 'settings'")
+        page.click("#settings-workspace-open")
         page.wait_for_selector("#settings-drawer.is-open")
-        assert "515880.SS、512480.SS" in page.locator("#settings-notice").inner_text()
         page.select_option("#profile-timezone", "Asia/Singapore")
         page.uncheck("#enable-us-close")
         page.uncheck("#enable-premarket")
@@ -316,6 +338,18 @@ def run_browser():
             for item in SETTINGS["profiles"][0]["targets"]
             if item["analysis"] == "full"
         ]
+        page.click("#settings-close")
+        page.locator('[data-route-link="archive"]').first.click()
+        page.wait_for_function("document.body.dataset.route === 'archive'")
+        page.locator("#archive-list [data-archive-index]").first.click()
+        page.wait_for_selector('#archive-report-tabs [data-report-section="decision"].is-active')
+        assert page.locator("#archive-report-tabs [data-report-section]").evaluate_all(
+            "nodes => nodes.map(node => node.dataset.reportSection)",
+        ) == ["market", "decision", "complete_report"]
+        assert page.locator("#archive-report-warning").is_visible()
+        page.click('#archive-report-tabs [data-report-section="market"]')
+        page.wait_for_selector('#archive-report-tabs [data-report-section="market"].is-active')
+        assert page.locator("#archive-report-warning").is_visible()
 
         mobile = browser.new_page(viewport={"width": 390, "height": 844}, device_scale_factor=1)
         capture_browser_diagnostics(mobile, "mobile")
@@ -455,7 +489,6 @@ def run_browser():
         assert "MA60 历史充足" in chart_label
         hydration.close()
 
-        page.click("#settings-close")
         page.click("#assistant-open")
         page.fill("#chat-question", "第一问")
         page.click("#chat-send")
@@ -465,6 +498,7 @@ def run_browser():
         page.wait_for_function("document.querySelectorAll('#chat-log .chat-message.user').length === 2")
         assert CHAT_REQUESTS[-1]["stream"] is True
         assert len(CHAT_REQUESTS[-1]["history"]) >= 2
+        assert CHAT_REQUESTS[-1]["reportSection"] == "market"
         assert page.evaluate("JSON.parse(localStorage.getItem('ta.workbench.threads.v1')).length") >= 1
         page.evaluate("""
           let index = 0;

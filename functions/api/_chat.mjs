@@ -20,6 +20,21 @@ const CONTEXT_SAFETY_TOKENS = 512;
 
 const REPORT_PATH_RE =
   /^reports\/[A-Za-z0-9._-]+\/\d{4}-\d{2}-\d{2}(?:-v(?:[2-9]|[1-9]\d+))?\/complete_report\.md$/;
+const REPORT_SECTION_FILES = Object.freeze({
+  market: "1_analysts/market.md",
+  fundamentals: "1_analysts/fundamentals.md",
+  sentiment: "1_analysts/sentiment.md",
+  news: "1_analysts/news.md",
+  bull: "2_research/bull.md",
+  bear: "2_research/bear.md",
+  manager: "2_research/manager.md",
+  trader: "3_trading/trader.md",
+  aggressive: "4_risk/aggressive.md",
+  neutral: "4_risk/neutral.md",
+  conservative: "4_risk/conservative.md",
+  decision: "5_portfolio/decision.md",
+  complete_report: "complete_report.md",
+});
 
 function envText(env, ...names) {
   for (const name of names) {
@@ -470,6 +485,40 @@ export function isValidReportPath(path) {
   return REPORT_PATH_RE.test(path) && !path.includes("..");
 }
 
+function reportContextCandidates(reportPath, reportSection, rawBase) {
+  if (!isValidReportPath(reportPath)) return [];
+  const basePath = reportPath.slice(0, -"complete_report.md".length);
+  const manifestUrl =
+    `${rawBase}/${basePath}report_manifest.json`;
+  const candidates = [];
+  if (
+    typeof reportSection === "string"
+    && Object.hasOwn(REPORT_SECTION_FILES, reportSection)
+    && reportSection !== "complete_report"
+  ) {
+    const sectionPath = `${basePath}${REPORT_SECTION_FILES[reportSection]}`;
+    candidates.push({
+      url: `${rawBase}/${sectionPath}`,
+      manifestUrl,
+      label: `${reportPath} · ${reportSection}`,
+      type: "report-section",
+      path: sectionPath,
+      reportPath,
+      cf: { cacheTtl: 300, cacheEverything: true },
+    });
+  }
+  candidates.push({
+    url: `${rawBase}/${reportPath}`,
+    manifestUrl,
+    label: reportPath,
+    type: "report",
+    path: reportPath,
+    reportPath,
+    cf: { cacheTtl: 300, cacheEverything: true },
+  });
+  return candidates;
+}
+
 function verifiedReportManifest(text, reportPath) {
   try {
     const manifest = JSON.parse(text);
@@ -587,16 +636,9 @@ export async function loadResearchContext({
   }
 
   const reportPath = String(body.report || "");
-  if (isValidReportPath(reportPath)) {
-    candidates.push({
-      url: `${rawBase}/${reportPath}`,
-      manifestUrl: `${rawBase}/${reportPath.replace(/complete_report\.md$/, "report_manifest.json")}`,
-      label: reportPath,
-      type: "report",
-      path: reportPath,
-      cf: { cacheTtl: 300, cacheEverything: true },
-    });
-  }
+  candidates.push(
+    ...reportContextCandidates(reportPath, body.reportSection, rawBase),
+  );
 
   candidates.push({
     url: `${rawBase}/data/latest.json`,
@@ -609,7 +651,7 @@ export async function loadResearchContext({
     if (signal?.aborted) break;
     const remainingMs = Math.trunc(deadline - now());
     if (remainingMs <= 0) break;
-    if (candidate.type === "report") {
+    if (candidate.type === "report" || candidate.type === "report-section") {
       const manifest = await fetchContextSource({
         fetchImpl,
         url: candidate.manifestUrl,
@@ -621,7 +663,10 @@ export async function loadResearchContext({
         timeoutMs: remainingMs,
         parentSignal: signal,
       });
-      if (!manifest.ok || !verifiedReportManifest(manifest.context, candidate.path)) {
+      if (
+        !manifest.ok
+        || !verifiedReportManifest(manifest.context, candidate.reportPath)
+      ) {
         attempts.push({
           ...manifest,
           ok: false,

@@ -192,13 +192,42 @@
 
   <section class="workspace-view page-workspace" data-workspace="agents" aria-labelledby="agents-title" hidden>
     <header class="workspace-heading">
-      <div><span>TRADINGAGENTS PIPELINE</span><h1 id="agents-title">Agent 研究</h1><p>选择研究标的与深度，跟踪分析师、辩论、交易员和风险经理的完整链路。</p></div>
+      <div><span>TRADINGAGENTS PIPELINE</span><h1 id="agents-title">Agent 研究</h1><p>发起一次独立的临时研究，不改动监控组合；运行进度与归档继续留在本页。</p></div>
       <button class="button primary" id="deep-analysis-open" type="button">发起多智能体分析</button>
     </header>
     <div class="workspace-split">
       <section class="workbench-panel">
-        <header><div><span>RESEARCH INPUT</span><h2>研究输入</h2></div><span id="agent-input-status">等待配置</span></header>
-        <div class="panel-empty" id="agent-targets-summary"><b>正在读取研究目标</b><span>已配置为“深度”的标的会出现在这里。</span></div>
+        <header><div><span>RESEARCH INPUT</span><h2>临时研究输入</h2></div><span id="agent-input-status">独立请求</span></header>
+        <form class="agent-research-form" id="agent-research-form" autocomplete="off">
+          <label class="agent-research-field" for="agent-research-tickers">
+            <span>研究标的</span>
+            <textarea id="agent-research-tickers" rows="3" required placeholder="例如 515880.SS, NVDA"></textarea>
+            <small>输入 1–10 个代码；API 工作量上限：standard 最多 6 个，deep 最多 3 个。</small>
+          </label>
+          <fieldset class="agent-research-analysts">
+            <legend>分析师</legend>
+            <label><input name="agent-analyst" value="market" type="checkbox" checked> 市场</label>
+            <label><input name="agent-analyst" value="news" type="checkbox" checked> 新闻</label>
+            <label><input name="agent-analyst" value="fundamentals" type="checkbox" checked> 基本面</label>
+          </fieldset>
+          <div class="agent-research-row">
+            <label class="agent-research-field" for="agent-research-depth">
+              <span>研究深度</span>
+              <select id="agent-research-depth">
+                <option value="standard" selected>standard · 最多 6 个</option>
+                <option value="deep">deep · 最多 3 个</option>
+              </select>
+            </label>
+            <label class="agent-research-field" for="agent-research-code">
+              <span>写操作访问码</span>
+              <input id="agent-research-code" type="password" autocomplete="current-password" placeholder="仅本次提交需要">
+            </label>
+          </div>
+          <div class="agent-research-actions">
+            <span id="agent-research-notice" role="status" aria-live="polite">不会保存或覆盖监控设置。</span>
+            <button class="button primary" id="agent-research-submit" type="submit">提交临时研究</button>
+          </div>
+        </form>
       </section>
       <section class="workbench-panel">
         <header><div><span>EXECUTION</span><h2>运行状态</h2></div><span id="agent-run-asof">—</span></header>
@@ -244,6 +273,8 @@
       </section>
       <article class="workbench-panel archive-reader">
         <header><div><span>REPORT</span><h2 id="archive-report-title">选择一份报告</h2></div><button class="text-button" id="archive-ask" type="button">基于报告提问</button></header>
+        <div class="report-warning" id="archive-report-warning" role="status" hidden></div>
+        <nav class="archive-report-tabs" id="archive-report-tabs" aria-label="报告分栏" hidden></nav>
         <div class="panel-empty" id="archive-report-body"><b>尚未选择研究报告</b><span>报告原文、证据与运行记录将在此显示。</span></div>
       </article>
     </div>

@@ -367,11 +367,54 @@ test("options risk and multi-agent analysis are first-class workspaces", () => {
   assert.match(script, /filter\(\(\{ analysis \}\) => analysis === "full"\)/);
 });
 
+test("Agent workspace owns a temporary research form instead of opening monitor settings", () => {
+  assert.match(html, /<form[^>]+id="agent-research-form"/);
+  assert.match(html, /id="agent-research-tickers"/);
+  assert.match(html, /id="agent-research-depth"/);
+  assert.match(html, /id="agent-research-code"/);
+  assert.match(html, /name="agent-analyst"[^>]+value="market"[^>]+checked/);
+  assert.match(html, /name="agent-analyst"[^>]+value="news"[^>]+checked/);
+  assert.match(html, /name="agent-analyst"[^>]+value="fundamentals"[^>]+checked/);
+  const form = /<form[^>]+id="agent-research-form"[\s\S]*?<\/form>/.exec(html)?.[0] || "";
+  assert.doesNotMatch(form, /value="(?:social|sentiment)"/);
+  assert.match(script, /function submitTemporaryResearch/);
+  assert.match(script, /buildTemporaryResearchRequest/);
+  assert.match(script, /x-request-id/);
+  assert.match(script, /requestId/);
+  assert.match(script, /researchDepth/);
+  const submitter = /async function submitTemporaryResearch[\s\S]*?\n  \}/.exec(script)?.[0] || "";
+  assert.match(submitter, /\/api\/analyze/);
+  assert.doesNotMatch(submitter, /\/api\/settings|method:\s*"PUT"|collectSettingsForm/);
+  assert.doesNotMatch(script, /#deep-analysis-open"\)\.addEventListener\("click",\s*openDeepAnalysis/);
+});
+
+test("settings and task workspaces retain the configured monitor combination run", () => {
+  assert.match(html, /id="run-analysis"[^>]*>立即运行</);
+  assert.match(html, /id="tasks-run-now"[^>]*>立即运行</);
+  assert.match(script, /#run-analysis"\)\.addEventListener\("click",\s*runAnalysis/);
+  assert.match(script, /#tasks-run-now"\)\.addEventListener\("click",\s*openDeepAnalysis/);
+});
+
 test("report archive uses the audit index and visibly labels unverified evidence", () => {
   assert.match(script, /\/api\/report-audit/);
   assert.match(script, /auditStatus/);
   assert.match(script, /invalidated/);
   assert.match(html, /历史审计/);
+});
+
+test("report archive exposes ordered file tabs with a persistent audit warning", () => {
+  assert.match(html, /id="archive-report-tabs"/);
+  assert.match(html, /id="archive-report-warning"/);
+  assert.match(
+    html,
+    /id="archive-report-warning"[\s\S]*id="archive-report-tabs"[\s\S]*id="archive-report-body"/,
+  );
+  assert.match(script, /buildArchiveFileTabs/);
+  assert.match(script, /defaultArchiveFileTab/);
+  assert.match(script, /selectedReportSection/);
+  assert.match(script, /reportSection:\s*state\.selectedReportSection/);
+  assert.match(css, /\.archive-report-tabs[^}]*overflow-x:\s*auto/);
+  assert.match(css, /\.archive-report-tabs[^}]*white-space:\s*nowrap/);
 });
 
 test("market direction follows A-share and US/Hong Kong conventions without changing health colors", () => {

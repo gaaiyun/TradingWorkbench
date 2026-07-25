@@ -33,10 +33,17 @@ import {
 } from "./workbench-options.mjs";
 import {
   archivedResearchAfterRun,
+  archivedResearchForRequest,
   buildArchiveEntries,
+  buildArchiveFileTabs,
   buildPipelineStages,
+  buildTemporaryResearchRequest,
+  createTemporaryResearchRequestId,
+  defaultArchiveFileTab,
   filterAuditedResults,
   latestResearchRun,
+  researchRunForRequest,
+  researchTickerLimit,
 } from "./workbench-research.mjs";
 
 (() => {
@@ -53,6 +60,7 @@ import {
     deviceKey: "ta.workbench.device-key.v1",
     encryptedCode: "ta.workbench.access.encrypted.v1",
     threads: "ta.workbench.threads.v1",
+    pendingResearch: "ta.workbench.pending-research.v1",
   };
   const state = {
     settings: null,
@@ -68,10 +76,12 @@ import {
     latest: null,
     history: [],
     runs: [],
+    pendingResearch: null,
     reportAudit: null,
     showAuditReports: false,
     archiveEntries: [],
     selectedReportPath: null,
+    selectedReportSection: null,
     selectedReportContent: "",
     accessCode: "",
     rememberCode: false,
@@ -739,32 +749,42 @@ import {
   }
 
   function renderAgentWorkspace() {
-    const fullTargets = targets().filter(({ analysis }) => analysis === "full");
-    $("#agent-input-status").textContent = `${fullTargets.length} 个深度标的`;
-    $("#agent-targets-summary").className = fullTargets.length ? "agent-target-grid" : "panel-empty";
-    $("#agent-targets-summary").innerHTML = fullTargets.length
-      ? fullTargets.map((target) => `<div>
-          <span>${escapeHtml(roleLabels[target.role] || target.role)}</span>
-          <b>${escapeHtml(target.symbol)}</b>
-          <small>${escapeHtml(target.name || target.market)} · 完整分析</small>
-        </div>`).join("")
-      : "<b>尚未指定深度分析标的</b><span>在设置中把至少一个标的的分析方式改为“深度”。</span>";
+    const depth = $("#agent-research-depth")?.value || "standard";
+    $("#agent-input-status").textContent = `${depth} · 最多 ${researchTickerLimit(depth)} 个`;
 
-    const run = latestResearchRun(state.runs);
-    const archivedAfterRun = archivedResearchAfterRun(run, state.latest);
-    const pipelineRun = archivedAfterRun ? { ...run, conclusion: "success" } : run;
+    const pending = state.pendingResearch;
+    const archivedBatch = pending
+      ? archivedResearchForRequest(state.history, pending.requestId)
+      : null;
+    const run = pending
+      ? researchRunForRequest(state.runs, pending.requestId)
+      : latestResearchRun(state.runs);
+    const archivedAfterRun = pending
+      ? Boolean(archivedBatch)
+      : archivedResearchAfterRun(run, state.latest);
+    const activeResult = archivedBatch || (pending ? null : state.latest);
+    const pipelineRun = archivedAfterRun
+      ? { ...(run || {}), status: "completed", conclusion: "success" }
+      : run;
     const stageLabels = { pending: "待运行", queued: "已排队", running: "运行中", completed: "已完成", failed: "失败", unknown: "未确认" };
     for (const stage of buildPipelineStages(pipelineRun)) {
       const row = $(`[data-stage="${stage.id}"]`, $("#agent-pipeline"));
       row.className = `is-${stage.status}`;
       $("em", row).textContent = stageLabels[stage.status];
     }
-    $("#agent-run-asof").textContent = run ? formatTime(run.created_at, true) : "没有运行记录";
+    $("#agent-run-asof").textContent = run
+      ? formatTime(run.created_at, true)
+      : pending ? `请求 ${pending.requestId.slice(0, 8)}` : "没有运行记录";
 
-    const resultCount = Array.isArray(state.latest?.results)
-      ? state.latest.results.filter(({ error }) => !error).length
+    const resultCount = Array.isArray(activeResult?.results)
+      ? activeResult.results.filter(({ error }) => !error).length
       : 0;
-    if (!run && !state.latest) {
+    if (pending && !run && !archivedBatch) {
+      $("#agent-run-card").className = "panel-empty";
+      $("#agent-run-card").innerHTML = `<b>已受理，等待进入队列</b><span>${escapeHtml(pending.tickers.join(" · "))} · 请求 ${escapeHtml(pending.requestId.slice(0, 8))}</span>`;
+      return;
+    }
+    if (!run && !activeResult) {
       $("#agent-run-card").className = "panel-empty";
       $("#agent-run-card").innerHTML = "<b>尚未开始新的研究</b><span>运行后将记录输入时间、来源、降级情况、模型、耗时和未解决问题。</span>";
       return;
@@ -772,14 +792,14 @@ import {
     $("#agent-run-card").className = "run-card-grid";
     const runStatus = archivedAfterRun
       ? "分析已完成"
-      : run?.status || state.latest?.status || "已归档";
+      : run?.status || activeResult?.status || "已归档";
     const runConclusion = archivedAfterRun
       ? "报告已归档 · 后续发布失败"
       : run?.conclusion || "等待结论";
     $("#agent-run-card").innerHTML = `
       <div><span>运行状态</span><b>${escapeHtml(runStatus)}</b><small>${escapeHtml(runConclusion)}</small></div>
-      <div><span>研究日期</span><b>${escapeHtml(state.latest?.trade_date || "—")}</b><small>${escapeHtml(formatTime(state.latest?.generated_at || run?.created_at, true))}</small></div>
-      <div><span>模型 / Provider</span><b>${escapeHtml(state.latest?.provider || "—")}</b><small>${escapeHtml((state.latest?.analysts || []).join(" · ") || "未提供分析师清单")}</small></div>
+      <div><span>研究日期</span><b>${escapeHtml(activeResult?.trade_date || "—")}</b><small>${escapeHtml(formatTime(activeResult?.generated_at || run?.created_at, true))}</small></div>
+      <div><span>模型 / Provider</span><b>${escapeHtml(activeResult?.provider || "—")}</b><small>${escapeHtml((activeResult?.analysts || activeResult?.request?.analysts || []).join(" · ") || "未提供分析师清单")}</small></div>
       <div><span>研究结果</span><b>${resultCount}</b><small>${escapeHtml(run?.workflow || "归档结果")}</small></div>`;
   }
 
@@ -835,32 +855,91 @@ import {
     return response.text();
   }
 
+  function archiveAuditNotice(entry) {
+    if (entry.auditStatus === "invalidated" || entry.auditStatus === "invalid_record") {
+      return "这份报告已失效，仅用于历史审计，不进入最新观点或问答上下文。";
+    }
+    if (entry.auditStatus === "legacy_unverified") {
+      return "这份报告属于历史未验证档案，原文保留，但不能作为当前证据结论。";
+    }
+    if (entry.auditStatus && entry.auditStatus !== "verified") {
+      return "这份报告尚未通过证据审计，请勿将其作为当前结论。";
+    }
+    return "";
+  }
+
+  function renderArchiveWarning(entry) {
+    const warning = $("#archive-report-warning");
+    const notice = archiveAuditNotice(entry);
+    warning.hidden = !notice;
+    warning.className = `report-warning audit-${escapeHtml(entry.auditStatus || "unverified")}`;
+    warning.textContent = notice;
+  }
+
+  function renderArchiveTabs(tabs) {
+    const nav = $("#archive-report-tabs");
+    nav.hidden = !tabs.length;
+    nav.setAttribute("role", "tablist");
+    nav.innerHTML = tabs.map((tab) => {
+      const selected = tab.id === state.selectedReportSection;
+      return `<button type="button" role="tab" data-report-section="${escapeHtml(tab.id)}" class="${selected ? "is-active" : ""}" aria-selected="${selected}" tabindex="${selected ? "0" : "-1"}">${escapeHtml(tab.label)}</button>`;
+    }).join("");
+    const buttons = $$("[data-report-section]", nav);
+    buttons.forEach((button, index) => {
+      button.addEventListener("click", () => {
+        const tab = tabs.find(({ id }) => id === button.dataset.reportSection);
+        if (tab) loadArchiveFile(tab, tabs);
+      });
+      button.addEventListener("keydown", (event) => {
+        if (!["ArrowLeft", "ArrowRight"].includes(event.key)) return;
+        event.preventDefault();
+        const direction = event.key === "ArrowRight" ? 1 : -1;
+        const next = buttons[(index + direction + buttons.length) % buttons.length];
+        const nextSection = next.dataset.reportSection;
+        next.click();
+        queueMicrotask(() => {
+          $(`[data-report-section="${CSS.escape(nextSection)}"]`, nav)?.focus();
+        });
+      });
+    });
+  }
+
+  async function loadArchiveFile(tab, tabs) {
+    if (!tab?.path) return;
+    state.selectedReportSection = tab.id;
+    state.selectedReportContent = "";
+    renderArchiveTabs(tabs);
+    $("#archive-report-body").className = "panel-empty";
+    $("#archive-report-body").innerHTML = `<b>正在读取${escapeHtml(tab.label)}</b><span>${escapeHtml(tab.path)}</span>`;
+    try {
+      state.selectedReportContent = await fetchReportText(tab.path);
+      $("#archive-report-body").className = "archive-markdown";
+      $("#archive-report-body").innerHTML = renderMarkdown(state.selectedReportContent);
+    } catch (error) {
+      $("#archive-report-body").className = "panel-empty";
+      $("#archive-report-body").innerHTML = `<b>报告暂不可用</b><span>${escapeHtml(error.message)}</span><button class="button" id="archive-report-retry" type="button">重试</button>`;
+      $("#archive-report-retry").addEventListener(
+        "click",
+        () => loadArchiveFile(tab, tabs),
+      );
+    }
+  }
+
   async function loadArchiveReport(entryOrPath) {
     const entry = typeof entryOrPath === "string"
       ? state.archiveEntries.find(({ report }) => report === entryOrPath)
-        || { report: entryOrPath, ticker: entryOrPath.split("/")[1] || "报告", rating: "" }
+        || { report: entryOrPath, ticker: entryOrPath.split("/")[1] || "报告", rating: "", files: {} }
       : entryOrPath;
     if (!entry?.report) return;
+    const tabs = buildArchiveFileTabs(entry);
+    const initialTab = defaultArchiveFileTab(tabs);
     state.selectedReportPath = entry.report;
     state.latestReport = entry.report;
-    state.selectedReportContent = "";
+    state.selectedReportSection = initialTab?.id || null;
     $("#archive-report-title").textContent = `${entry.ticker} · ${entry.tradeDate || "研究报告"}`;
-    $("#archive-report-body").className = "panel-empty";
-    const auditNotice = entry.auditStatus === "invalidated"
-      ? "这份报告已失效，仅用于历史审计，不进入最新观点或问答上下文。"
-      : entry.auditStatus === "legacy_unverified"
-        ? "这份报告属于历史未验证档案，原文保留，但不能作为当前证据结论。"
-        : "同时核验报告路径和来源。";
-    $("#archive-report-body").innerHTML = `<b>正在读取完整报告</b><span>${escapeHtml(auditNotice)}</span>`;
+    renderArchiveWarning(entry);
     renderArchiveList();
-    try {
-      state.selectedReportContent = await fetchReportText(entry.report);
-      $("#archive-report-body").className = "archive-markdown";
-      $("#archive-report-body").innerHTML = `${entry.auditStatus && entry.auditStatus !== "verified" ? `<div class="report-warning audit-${escapeHtml(entry.auditStatus)}">${escapeHtml(auditNotice)}</div>` : ""}${renderMarkdown(state.selectedReportContent)}`;
-    } catch (error) {
-      $("#archive-report-body").className = "panel-empty";
-      $("#archive-report-body").innerHTML = `<b>报告暂不可用</b><span>${escapeHtml(error.message)}</span>`;
-    }
+    if (initialTab) await loadArchiveFile(initialTab, tabs);
   }
 
   async function loadResearchWorkspace() {
@@ -1363,6 +1442,59 @@ import {
     }
   }
 
+  async function submitTemporaryResearch(event) {
+    event.preventDefault();
+    const notice = $("#agent-research-notice");
+    const submit = $("#agent-research-submit");
+    const requestId = createTemporaryResearchRequestId();
+    const analysts = $$('input[name="agent-analyst"]:checked', $("#agent-research-form"))
+      .map(({ value }) => value);
+    try {
+      const body = buildTemporaryResearchRequest({
+        requestId,
+        tickers: $("#agent-research-tickers").value,
+        analysts,
+        researchDepth: $("#agent-research-depth").value,
+      });
+      state.accessCode = $("#agent-research-code").value.trim() || state.accessCode;
+      if (!state.accessCode) throw new Error("请输入写操作访问码");
+      sessionStorage.setItem(STORAGE.sessionCode, state.accessCode);
+      submit.disabled = true;
+      notice.className = "";
+      notice.textContent = `正在提交 ${body.tickers.length} 个标的 · ${body.researchDepth}…`;
+      const payload = await requestJson("/api/analyze", {
+        method: "POST",
+        headers: {
+          "content-type": "application/json",
+          "x-access-code": state.accessCode,
+          "x-request-id": requestId,
+        },
+        body: JSON.stringify(body),
+      });
+      state.pendingResearch = {
+        requestId: payload?.requestId || body.requestId,
+        tickers: body.tickers,
+        submittedAt: new Date().toISOString(),
+      };
+      localStorage.setItem(
+        STORAGE.pendingResearch,
+        JSON.stringify(state.pendingResearch),
+      );
+      notice.textContent = payload?.message || "临时研究已受理";
+      renderAgentWorkspace();
+      toast(`临时研究已受理：${body.tickers.join("、")}`);
+      setTimeout(loadMonitor, 2500);
+    } catch (error) {
+      const errorCode = error.payload?.error_code || error.payload?.code;
+      notice.className = "is-error";
+      notice.textContent = errorCode
+        ? `提交失败 [${errorCode}]：${error.message}`
+        : `提交失败：${error.message}`;
+    } finally {
+      submit.disabled = false;
+    }
+  }
+
   async function runAnalysis() {
     state.accessCode = $("#settings-code").value.trim() || state.accessCode;
     const notice = $("#settings-notice");
@@ -1420,6 +1552,7 @@ import {
       } catch { localStorage.removeItem(STORAGE.encryptedCode); }
     }
     $("#settings-code").value = state.accessCode;
+    $("#agent-research-code").value = state.accessCode;
     $("#settings-remember").checked = state.rememberCode;
   }
 
@@ -1430,6 +1563,7 @@ import {
     localStorage.removeItem(STORAGE.encryptedCode);
     localStorage.removeItem(STORAGE.deviceKey);
     $("#settings-code").value = "";
+    $("#agent-research-code").value = "";
     $("#settings-remember").checked = false;
     toast("本机访问码及设备密钥已清除");
   }
@@ -1720,6 +1854,7 @@ import {
           question,
           history: historyMessages,
           report: state.latestReport,
+          reportSection: state.selectedReportSection,
           stream: true,
         }),
       });
@@ -1808,8 +1943,12 @@ import {
         ? `本次将运行 TradingAgents 多智能体深度分析：${fullSymbols.join("、")}`
         : "请先把至少一个标的的分析方式设为“深度”。";
     };
+    const focusTemporaryResearch = () => {
+      $("#agent-research-form").scrollIntoView({ behavior: "smooth", block: "center" });
+      $("#agent-research-tickers").focus();
+    };
     $("#settings-open").addEventListener("click", () => navigateRoute("settings"));
-    $("#deep-analysis-open").addEventListener("click", openDeepAnalysis);
+    $("#deep-analysis-open").addEventListener("click", focusTemporaryResearch);
     $("#mobile-settings").addEventListener("click", () => navigateRoute("settings"));
     $("#settings-workspace-open").addEventListener("click", openSettings);
     $("#watchlist-edit").addEventListener("click", openSettings);
@@ -1819,6 +1958,8 @@ import {
     $("#target-add").addEventListener("click", addTarget);
     $("#target-search").addEventListener("keydown", (event) => { if (event.key === "Enter") { event.preventDefault(); addTarget(); } });
     $("#settings-form").addEventListener("submit", saveSettings);
+    $("#agent-research-form").addEventListener("submit", submitTemporaryResearch);
+    $("#agent-research-depth").addEventListener("change", renderAgentWorkspace);
     $("#run-analysis").addEventListener("click", runAnalysis);
     $("#run-analysis-left").addEventListener("click", openDeepAnalysis);
     $("#toggle-code").addEventListener("click", () => { const input = $("#settings-code"); input.type = input.type === "password" ? "text" : "password"; $("#toggle-code").textContent = input.type === "password" ? "显示" : "隐藏"; });
@@ -1848,7 +1989,7 @@ import {
         toast("请先选择一份研究报告", true);
         return;
       }
-      $("#chat-context").textContent = `${state.selectedReportPath} · 当前档案`;
+      $("#chat-context").textContent = `${state.selectedReportPath} · ${state.selectedReportSection || "完整报告"}`;
       openAssistant();
     });
     $("#news-workspace-refresh").addEventListener("click", loadFeeds);
@@ -1873,6 +2014,18 @@ import {
   }
 
   async function init() {
+    try {
+      const pending = JSON.parse(
+        localStorage.getItem(STORAGE.pendingResearch) || "null",
+      );
+      if (
+        pending
+        && typeof pending.requestId === "string"
+        && Array.isArray(pending.tickers)
+      ) state.pendingResearch = pending;
+    } catch {
+      localStorage.removeItem(STORAGE.pendingResearch);
+    }
     loadThreads();
     bindEvents();
     applyRoute();
