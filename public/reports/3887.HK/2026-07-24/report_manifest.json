@@ -1,0 +1,14 @@
+{
+  "schemaVersion": 1,
+  "ticker": "3887.HK",
+  "tradeDate": "2026-07-24",
+  "generatedAt": "2026-07-25T07:55:38.803794+00:00",
+  "analysisStatus": "rated",
+  "auditStatus": "verified",
+  "evidence": {
+    "schemaVersion": "EvidencePacketV1",
+    "asOf": "2026-07-24T23:59:59Z",
+    "contentHash": "d0a315e4aeec2f70f48a6a8cf28f3e690e926e2a74a2fa03e47107e6a982f7b5",
+    "status": "ok"
+  }
+}

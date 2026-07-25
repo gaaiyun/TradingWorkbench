@@ -1,0 +1,14 @@
+{
+  "schemaVersion": 1,
+  "ticker": "ORCL",
+  "tradeDate": "2026-07-24",
+  "generatedAt": "2026-07-25T07:33:56.225280+00:00",
+  "analysisStatus": "rated",
+  "auditStatus": "verified",
+  "evidence": {
+    "schemaVersion": "EvidencePacketV1",
+    "asOf": "2026-07-24T23:59:59Z",
+    "contentHash": "ee89666f2f4d9e92ef0cc6da59d83673683e3f016847b9db974e008dcf15fd3f",
+    "status": "ok"
+  }
+}
