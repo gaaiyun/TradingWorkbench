@@ -1,3 +1,5 @@
+import math
+
 import pandas as pd
 import pytest
 
@@ -360,6 +362,90 @@ def test_adhoc_yahoo_evidence_uses_a_bounded_point_in_time_history_and_indicator
     } <= packet["indicators"].keys()
 
 
+def test_adhoc_yahoo_drops_an_incomplete_trailing_bar_before_calculating_indicators(
+    monkeypatch,
+):
+    count = 201
+    dates = pd.date_range("2025-03-27", periods=count, freq="B", tz="UTC")
+    valid = count - 1
+    history = pd.DataFrame(
+        {
+            "Open": [100 + index * 0.1 for index in range(valid)] + [math.nan],
+            "High": [101 + index * 0.1 for index in range(valid)] + [math.nan],
+            "Low": [99 + index * 0.1 for index in range(valid)] + [math.nan],
+            "Close": [100.5 + index * 0.1 for index in range(valid)] + [math.nan],
+            "Volume": [1_000_000 + index for index in range(count)],
+            "Stock Splits": [0.0] * count,
+        },
+        index=dates,
+    )
+
+    monkeypatch.setattr("scripts.run_daily._load_workbench_daily", lambda *_: None)
+    monkeypatch.setattr(
+        "scripts.run_daily._load_workbench_news",
+        lambda *_: {"items": [], "sources": []},
+    )
+    monkeypatch.setattr(
+        "yfinance.Ticker",
+        lambda _symbol: type(
+            "Ticker",
+            (),
+            {"history": lambda _self, **_kwargs: history},
+        )(),
+    )
+
+    packet = build_runtime_evidence("MSFT", dates[-1].date().isoformat())
+
+    assert packet["integrity"]["barCount"] == 200
+    assert packet["status"] == "data_validation_failed"
+    assert packet["canRate"] is False
+    assert "DROPPED_INCOMPLETE_BAR" in packet["integrity"]["warnings"]
+    assert "MISSING_TARGET_DATE_BAR" in packet["integrity"]["errors"]
+    assert packet["indicators"]["bars"] == 200
+    assert packet["indicators"]["asOf"] == packet["bars"][-1]["ts"]
+    assert packet["indicators"]["ma200"] is not None
+    assert all(
+        math.isfinite(bar[field])
+        for bar in packet["bars"]
+        for field in ("open", "high", "low", "close", "volume")
+    )
+
+
+def test_adhoc_yahoo_does_not_fail_when_the_requested_date_has_no_provider_bar(
+    monkeypatch,
+):
+    history = pd.DataFrame(
+        {
+            "Open": [100.0],
+            "High": [101.0],
+            "Low": [99.0],
+            "Close": [100.5],
+            "Volume": [1_000_000],
+            "Stock Splits": [0.0],
+        },
+        index=pd.DatetimeIndex(["2026-01-16T00:00:00Z"]),
+    )
+    monkeypatch.setattr("scripts.run_daily._load_workbench_daily", lambda *_: None)
+    monkeypatch.setattr(
+        "scripts.run_daily._load_workbench_news",
+        lambda *_: {"items": [], "sources": []},
+    )
+    monkeypatch.setattr(
+        "yfinance.Ticker",
+        lambda _symbol: type(
+            "Ticker",
+            (),
+            {"history": lambda _self, **_kwargs: history},
+        )(),
+    )
+
+    packet = build_runtime_evidence("MSFT", "2026-01-19")
+
+    assert packet["status"] == "ok"
+    assert packet["canRate"] is True
+    assert "MISSING_TARGET_DATE_BAR" not in packet["integrity"]["errors"]
+
+
 def test_adhoc_yahoo_filter_uses_the_exchange_date_before_utc_conversion(monkeypatch):
     history = pd.DataFrame(
         {
@@ -393,6 +479,129 @@ def test_adhoc_yahoo_filter_uses_the_exchange_date_before_utc_conversion(monkeyp
 
     assert packet["integrity"]["barCount"] == 1
     assert packet["bars"][0]["close"] == 10.5
+
+
+@pytest.mark.parametrize("field", ["open", "high", "low", "close", "volume"])
+@pytest.mark.parametrize("invalid_value", [math.nan, math.inf, -math.inf])
+def test_evidence_gateway_rejects_non_finite_market_values(field, invalid_value):
+    invalid_bar = bar("2026-01-02T20:00:00Z", 100)
+    invalid_bar[field] = invalid_value
+
+    with pytest.raises(EvidenceValidationError, match="finite"):
+        build_evidence_packet(
+            ticker="MSFT",
+            asset_type="us_equity",
+            as_of="2026-01-02T21:00:00Z",
+            bars=[invalid_bar],
+            sources=[{"source": "yahoo-finance", "sourceTier": "discovery"}],
+        )
+
+
+def test_adhoc_yahoo_returns_unavailable_when_every_provider_bar_is_incomplete(
+    monkeypatch,
+):
+    history = pd.DataFrame(
+        {
+            "Open": [math.nan],
+            "High": [math.nan],
+            "Low": [math.nan],
+            "Close": [math.nan],
+            "Volume": [100],
+            "Stock Splits": [0.0],
+        },
+        index=pd.DatetimeIndex(["2026-01-02T00:00:00Z"]),
+    )
+    monkeypatch.setattr("scripts.run_daily._load_workbench_daily", lambda *_: None)
+    monkeypatch.setattr(
+        "scripts.run_daily._load_workbench_news",
+        lambda *_: {"items": [], "sources": []},
+    )
+    monkeypatch.setattr(
+        "yfinance.Ticker",
+        lambda _symbol: type(
+            "Ticker",
+            (),
+            {"history": lambda _self, **_kwargs: history},
+        )(),
+    )
+
+    packet = build_runtime_evidence("MSFT", "2026-01-02")
+
+    assert packet["status"] == "unavailable"
+    assert packet["canRate"] is False
+    assert packet["integrity"]["barCount"] == 0
+    assert packet["indicators"]["bars"] == 0
+    assert packet["indicators"]["asOf"] is None
+
+
+def test_adhoc_yahoo_does_not_coerce_non_finite_volume_to_zero(monkeypatch):
+    history = pd.DataFrame(
+        {
+            "Open": [100.0],
+            "High": [101.0],
+            "Low": [99.0],
+            "Close": [100.5],
+            "Volume": [math.nan],
+            "Stock Splits": [0.0],
+        },
+        index=pd.DatetimeIndex(["2026-01-02T00:00:00Z"]),
+    )
+    monkeypatch.setattr("scripts.run_daily._load_workbench_daily", lambda *_: None)
+    monkeypatch.setattr(
+        "scripts.run_daily._load_workbench_news",
+        lambda *_: {"items": [], "sources": []},
+    )
+    monkeypatch.setattr(
+        "yfinance.Ticker",
+        lambda _symbol: type(
+            "Ticker",
+            (),
+            {"history": lambda _self, **_kwargs: history},
+        )(),
+    )
+
+    with pytest.raises(EvidenceValidationError, match="finite"):
+        build_runtime_evidence("MSFT", "2026-01-02")
+
+
+@pytest.mark.parametrize(
+    "invalid_bar",
+    [
+        {
+            "ts": "2026-01-02T20:00:00Z",
+            "open": -1,
+            "high": 101,
+            "low": 99,
+            "close": 100,
+            "volume": 10,
+        },
+        {
+            "ts": "2026-01-02T20:00:00Z",
+            "open": 100,
+            "high": 98,
+            "low": 99,
+            "close": 100,
+            "volume": 10,
+        },
+        {
+            "ts": "2026-01-02T20:00:00Z",
+            "open": 100,
+            "high": 101,
+            "low": 99,
+            "close": 102,
+            "volume": 10,
+        },
+    ],
+)
+def test_evidence_gateway_rejects_impossible_ohlc_ranges(invalid_bar):
+    with pytest.raises(EvidenceValidationError, match="OHLC"):
+        build_evidence_packet(
+            ticker="MSFT",
+            asset_type="us_equity",
+            as_of="2026-01-02T21:00:00Z",
+            bars=[invalid_bar],
+            sources=[{"source": "yahoo-finance", "sourceTier": "discovery"}],
+        )
 
 
 def test_runtime_evidence_includes_point_in_time_workbench_news(monkeypatch):

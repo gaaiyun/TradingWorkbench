@@ -537,6 +537,8 @@ def build_runtime_evidence(ticker: str, trade_date: str) -> dict[str, Any]:
         actions=True,
     )
     bars: list[dict[str, Any]] = []
+    dropped_incomplete_bars = 0
+    dropped_target_bar = False
     if history is not None and not history.empty:
         for index, row in history.iterrows():
             timestamp = index.to_pydatetime()
@@ -546,12 +548,25 @@ def build_runtime_evidence(ticker: str, trade_date: str) -> dict[str, Any]:
             if timestamp.tzinfo is None:
                 timestamp = timestamp.replace(tzinfo=timezone.utc)
             timestamp = timestamp.astimezone(timezone.utc)
+            try:
+                open_price = float(row.get("Open"))
+                high = float(row.get("High"))
+                low = float(row.get("Low"))
+                close = float(row.get("Close"))
+            except (TypeError, ValueError):
+                dropped_incomplete_bars += 1
+                dropped_target_bar = dropped_target_bar or exchange_date == trade_date
+                continue
+            if not all(math.isfinite(value) for value in (open_price, high, low, close)):
+                dropped_incomplete_bars += 1
+                dropped_target_bar = dropped_target_bar or exchange_date == trade_date
+                continue
             bars.append({
                 "ts": timestamp.isoformat().replace("+00:00", "Z"),
-                "open": row.get("Open"),
-                "high": row.get("High"),
-                "low": row.get("Low"),
-                "close": row.get("Close"),
+                "open": open_price,
+                "high": high,
+                "low": low,
+                "close": close,
                 "volume": row.get("Volume"),
                 "adjustment": YAHOO_AUTO_ADJUSTMENT,
             })
@@ -578,6 +593,14 @@ def build_runtime_evidence(ticker: str, trade_date: str) -> dict[str, Any]:
         bars=bars,
         indicators=_calculate_technical_snapshot(bars),
         corporate_actions=actions,
+        integrity_errors=(
+            ["MISSING_TARGET_DATE_BAR"]
+            if bars and dropped_target_bar
+            else []
+        ),
+        integrity_warnings=(
+            ["DROPPED_INCOMPLETE_BAR"] if dropped_incomplete_bars else []
+        ),
         sources=[{
             "source": "yahoo-finance",
             "asOf": cutoff,
@@ -806,6 +829,10 @@ def publish_evidence_bundle(
     if manifest is not None and report is not None:
         payload.update({"manifest": manifest, "report": report})
     try:
+        json.dumps(payload, ensure_ascii=False, allow_nan=False)
+    except (TypeError, ValueError):
+        return {"published": False, "reason": "invalid_payload"}
+    try:
         response = requests.post(
             endpoint,
             json=payload,
@@ -830,10 +857,27 @@ def run_ticker(ticker: str, trade_date: str, analysts: list[str], reports_dir: P
     """跑单个 ticker 的完整多智能体分析，返回结果摘要 dict。"""
     from cli.utils import detect_asset_type, normalize_ticker_symbol
     from tradingagents.default_config import DEFAULT_CONFIG
+    from tradingagents.evidence import EvidenceValidationError
     from tradingagents.graph.trading_graph import TradingAgentsGraph
 
     symbol = normalize_ticker_symbol(ticker)
-    evidence_packet = build_runtime_evidence(symbol, trade_date)
+    try:
+        evidence_packet = build_runtime_evidence(symbol, trade_date)
+    except EvidenceValidationError:
+        return {
+            "ticker": symbol,
+            "rating": None,
+            "report": None,
+            "files": {},
+            "decision_excerpt": "",
+            "analysis_status": "data_validation_failed",
+            "audit_status": "invalidated",
+            "evidence_publish": {
+                "published": False,
+                "reason": "invalid_payload",
+            },
+            "error": "evidence validation failed; model run skipped",
+        }
     evidence_publish = publish_evidence_bundle(evidence_packet)
     if not evidence_packet.get("canRate"):
         return {

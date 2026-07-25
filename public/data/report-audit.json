@@ -1,11 +1,11 @@
 {
   "version": 1,
-  "generatedAt": "2026-07-25T17:36:25.599Z",
+  "generatedAt": "2026-07-25T17:54:27.047Z",
   "summary": {
     "successfulReports": 47,
     "verifiedReports": 0,
-    "invalidatedReports": 3,
-    "legacyUnverifiedReports": 44,
+    "invalidatedReports": 4,
+    "legacyUnverifiedReports": 43,
     "invalidRecords": 6,
     "evidenceValidationFailures": 3,
     "analysisExecutionFailures": 2,
@@ -20,9 +20,11 @@
       "rating": "Not Rated",
       "analysisStatus": "insufficient_evidence",
       "report": "reports/MSFT/2026-07-24/complete_report.md",
-      "auditStatus": "legacy_unverified",
+      "auditStatus": "invalidated",
       "failureClass": null,
-      "problemCodes": [],
+      "problemCodes": [
+        "INVALID_EVIDENCE_PACKET"
+      ],
       "evidence": {
         "urlCount": 7,
         "claimCitationCount": 1,

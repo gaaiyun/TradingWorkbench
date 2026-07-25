@@ -37,6 +37,37 @@ function validIso(value) {
   return !Number.isNaN(date.valueOf());
 }
 
+function validateMarketBars(bars, asOf) {
+  const cutoff = new Date(asOf).valueOf();
+  for (const bar of bars) {
+    if (!bar || typeof bar !== "object" || Array.isArray(bar) || !validIso(bar.ts)) {
+      throw new Error("Evidence Packet bar 时间无效");
+    }
+    if (new Date(bar.ts).valueOf() > cutoff) {
+      throw new Error("Evidence Packet bar 不能晚于截止时间");
+    }
+    for (const field of ["open", "high", "low", "close", "volume"]) {
+      if (bar[field] == null && field !== "close") continue;
+      if (typeof bar[field] !== "number" || !Number.isFinite(bar[field])) {
+        throw new Error(`Evidence Packet bar ${field} 无效`);
+      }
+    }
+    if (bar.close <= 0 || (bar.volume != null && bar.volume < 0)) {
+      throw new Error("Evidence Packet bar 数值范围无效");
+    }
+    const ohlc = [bar.open, bar.high, bar.low, bar.close]
+      .map((value) => value ?? bar.close);
+    const [open, high, low, close] = ohlc;
+    if (
+      Math.min(...ohlc) <= 0
+      || high < Math.max(open, low, close)
+      || low > Math.min(open, high, close)
+    ) {
+      throw new Error("Evidence Packet bar OHLC 区间无效");
+    }
+  }
+}
+
 function validateBundle(body) {
   if (!body || typeof body !== "object" || Array.isArray(body)) {
     throw new Error("请求体无效");
@@ -75,6 +106,7 @@ function validateBundle(body) {
   for (const field of ["bars", "corporateActions", "news", "sources"]) {
     if (!Array.isArray(packet[field])) throw new Error(`Evidence Packet ${field} 无效`);
   }
+  validateMarketBars(packet.bars, packet.asOf);
   if (!packet.integrity || !Array.isArray(packet.integrity.errors) || !Array.isArray(packet.integrity.warnings)) {
     throw new Error("Evidence Packet 完整性状态无效");
   }

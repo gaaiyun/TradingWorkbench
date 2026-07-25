@@ -1,8 +1,11 @@
 from __future__ import annotations
 
+import math
+
 import requests
 
 from scripts.run_daily import publish_evidence_bundle, run_ticker
+from tradingagents.evidence import EvidenceValidationError
 
 
 def packet() -> dict:
@@ -77,6 +80,27 @@ def test_publish_evidence_bundle_normalizes_http_and_network_failures(monkeypatc
     }
 
 
+def test_publish_evidence_bundle_rejects_non_standard_json_before_network(monkeypatch):
+    invalid = packet()
+    invalid["bars"] = [{"close": math.nan}]
+    called = False
+
+    def post(*_args, **_kwargs):
+        nonlocal called
+        called = True
+        raise AssertionError("invalid payload must not reach the network")
+
+    monkeypatch.setenv("EVIDENCE_API_URL", "https://board.example/api/evidence")
+    monkeypatch.setenv("EVIDENCE_WRITE_TOKEN", "write-secret")
+    monkeypatch.setattr(requests, "post", post)
+
+    assert publish_evidence_bundle(invalid) == {
+        "published": False,
+        "reason": "invalid_payload",
+    }
+    assert called is False
+
+
 def test_run_ticker_publishes_validated_evidence_before_starting_the_model(
     monkeypatch,
     tmp_path,
@@ -136,3 +160,32 @@ def test_run_ticker_publishes_validated_evidence_before_starting_the_model(
             "reports/GOOGL/2026-07-24/complete_report.md",
         ),
     ]
+
+
+def test_run_ticker_classifies_gateway_rejection_as_invalidated_without_model(
+    monkeypatch,
+    tmp_path,
+):
+    monkeypatch.setattr(
+        "scripts.run_daily.build_runtime_evidence",
+        lambda *_: (_ for _ in ()).throw(
+            EvidenceValidationError("bar market values must be finite")
+        ),
+    )
+    monkeypatch.setattr(
+        "tradingagents.graph.trading_graph.TradingAgentsGraph",
+        lambda **_kwargs: (_ for _ in ()).throw(
+            AssertionError("model must not start after evidence rejection")
+        ),
+    )
+
+    result = run_ticker("MSFT", "2026-07-24", ["market"], tmp_path / "reports")
+
+    assert result["analysis_status"] == "data_validation_failed"
+    assert result["audit_status"] == "invalidated"
+    assert result["evidence_publish"] == {
+        "published": False,
+        "reason": "invalid_payload",
+    }
+    assert result["report"] is None
+    assert result["error"] == "evidence validation failed; model run skipped"

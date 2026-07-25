@@ -1,4 +1,5 @@
 import assert from "node:assert/strict";
+import { createHash } from "node:crypto";
 import fs from "node:fs/promises";
 import os from "node:os";
 import path from "node:path";
@@ -9,6 +10,10 @@ import {
 } from "../scripts/report-audit.mjs";
 
 const repoRoot = path.resolve(import.meta.dirname, "..");
+const EXPECTED_INVALIDATED_REPORTS = new Set([
+  ...INVALIDATED_REPORTS,
+  "reports/MSFT/2026-07-24/complete_report.md",
+]);
 
 test("audit index classifies every successful archived report and the malformed ISSUE record", async () => {
   const history = JSON.parse(
@@ -23,7 +28,7 @@ test("audit index classifies every successful archived report and the malformed 
   const allResults = history.flatMap((batch) => batch.results || []);
   const successful = allResults.filter((result) => !result.error && result.report);
   assert.equal(audit.summary.successfulReports, successful.length);
-  assert.equal(audit.summary.invalidatedReports, 3);
+  assert.equal(audit.summary.invalidatedReports, EXPECTED_INVALIDATED_REPORTS.size);
   assert.equal(
     audit.summary.verifiedReports
       + audit.summary.legacyUnverifiedReports
@@ -38,11 +43,11 @@ test("audit index classifies every successful archived report and the malformed 
       + audit.summary.invalidInputs,
   );
   assert.equal(audit.reports.length, allResults.length);
-  assert.deepEqual(
+  const invalidatedPaths = new Set(
     audit.reports.filter((entry) => entry.auditStatus === "invalidated")
-      .map((entry) => entry.report).sort(),
-    [...INVALIDATED_REPORTS].sort(),
+      .map((entry) => entry.report),
   );
+  assert.deepEqual(invalidatedPaths, EXPECTED_INVALIDATED_REPORTS);
 
   const issue = audit.reports.find((entry) => entry.ticker === "ISSUE");
   assert.equal(issue.auditStatus, "invalid_record");
@@ -147,12 +152,25 @@ test("audit index accepts only a matching claim-validated report bundle as verif
     claimValidation: { status: "passed", errorCodes: [] },
     evidence: { status: "ok", contentHash },
   }));
-  await fs.writeFile(path.join(reportDir, "evidence_packet.json"), JSON.stringify({
+  const packetText = JSON.stringify({
     schemaVersion: "EvidencePacketV1",
     status: "ok",
+    asOf: "2026-07-24T20:00:00Z",
+    canRate: true,
     contentHash,
     instrument: { symbol: "GOOGL" },
-  }));
+    bars: [],
+    corporateActions: [],
+    news: [],
+    sources: [],
+    integrity: { errors: [], warnings: [] },
+  });
+  await fs.writeFile(path.join(reportDir, "evidence_packet.json"), packetText);
+  const packetFileHash = createHash("sha256").update(packetText).digest("hex");
+  const manifestPath = path.join(reportDir, "report_manifest.json");
+  const manifest = JSON.parse(await fs.readFile(manifestPath, "utf8"));
+  manifest.evidence.packetFileHash = packetFileHash;
+  await fs.writeFile(manifestPath, JSON.stringify(manifest));
   const audit = await buildReportAudit({
     history: [{
       trade_date: "2026-07-24",
@@ -171,6 +189,138 @@ test("audit index accepts only a matching claim-validated report bundle as verif
   assert.equal(audit.reports[0].claimValidation.status, "passed");
   assert.equal(audit.reports[0].evidencePacket.contentHash, contentHash);
   assert.equal(audit.reports[0].problemCodes.includes("MISSING_CLAIM_EVIDENCE"), false);
+});
+
+test("audit invalidates a report whose manifest references an unreadable evidence packet", async (t) => {
+  const root = await fs.mkdtemp(path.join(os.tmpdir(), "tradingworkbench-audit-invalid-packet-"));
+  t.after(() => fs.rm(root, { recursive: true, force: true }));
+  const reportDir = path.join(root, "MSFT", "2026-07-24");
+  await fs.mkdir(reportDir, { recursive: true });
+  await fs.writeFile(path.join(reportDir, "complete_report.md"), "Not Rated.");
+  await fs.writeFile(path.join(reportDir, "report_manifest.json"), JSON.stringify({
+    ticker: "MSFT",
+    tradeDate: "2026-07-24",
+    analysisStatus: "insufficient_evidence",
+    auditStatus: "legacy_unverified",
+    evidence: { status: "ok", contentHash: "a".repeat(64) },
+  }));
+  await fs.writeFile(
+    path.join(reportDir, "evidence_packet.json"),
+    "{\"bars\":[NaN]}",
+  );
+
+  const audit = await buildReportAudit({
+    history: [{
+      trade_date: "2026-07-24",
+      generated_at: "2026-07-25T08:00:00Z",
+      results: [{
+        ticker: "MSFT",
+        rating: "Not Rated",
+        report: "reports/MSFT/2026-07-24/complete_report.md",
+        error: false,
+      }],
+    }],
+    reportsRoot: root,
+  });
+
+  assert.equal(audit.reports[0].auditStatus, "invalidated");
+  assert.ok(audit.reports[0].problemCodes.includes("INVALID_EVIDENCE_PACKET"));
+});
+
+test("audit invalidates a parseable evidence packet that violates its manifest identity", async (t) => {
+  const root = await fs.mkdtemp(path.join(os.tmpdir(), "tradingworkbench-audit-wrong-packet-"));
+  t.after(() => fs.rm(root, { recursive: true, force: true }));
+  const reportDir = path.join(root, "MSFT", "2026-07-24");
+  await fs.mkdir(reportDir, { recursive: true });
+  const contentHash = "a".repeat(64);
+  await fs.writeFile(path.join(reportDir, "complete_report.md"), "Not Rated.");
+  await fs.writeFile(path.join(reportDir, "report_manifest.json"), JSON.stringify({
+    ticker: "MSFT",
+    tradeDate: "2026-07-24",
+    analysisStatus: "insufficient_evidence",
+    auditStatus: "legacy_unverified",
+    evidence: { status: "ok", contentHash },
+  }));
+  await fs.writeFile(path.join(reportDir, "evidence_packet.json"), JSON.stringify({
+    schemaVersion: "WrongSchema",
+    status: "ok",
+    asOf: "2026-07-24T20:00:00Z",
+    contentHash,
+    instrument: { symbol: "MSFT" },
+    bars: [],
+    corporateActions: [],
+    news: [],
+    sources: [],
+    integrity: { errors: [], warnings: [] },
+  }));
+
+  const audit = await buildReportAudit({
+    history: [{
+      trade_date: "2026-07-24",
+      generated_at: "2026-07-25T08:00:00Z",
+      results: [{
+        ticker: "MSFT",
+        rating: "Not Rated",
+        report: "reports/MSFT/2026-07-24/complete_report.md",
+        error: false,
+      }],
+    }],
+    reportsRoot: root,
+  });
+
+  assert.equal(audit.reports[0].auditStatus, "invalidated");
+  assert.ok(audit.reports[0].problemCodes.includes("INVALID_EVIDENCE_PACKET"));
+});
+
+test("audit invalidates a verified report when packet bytes no longer match the manifest hash", async (t) => {
+  const root = await fs.mkdtemp(path.join(os.tmpdir(), "tradingworkbench-audit-tampered-"));
+  t.after(() => fs.rm(root, { recursive: true, force: true }));
+  const reportDir = path.join(root, "MSFT", "2026-07-24");
+  await fs.mkdir(reportDir, { recursive: true });
+  const contentHash = "a".repeat(64);
+  await fs.writeFile(path.join(reportDir, "complete_report.md"), "Close 192 [M1].");
+  await fs.writeFile(path.join(reportDir, "report_manifest.json"), JSON.stringify({
+    ticker: "MSFT",
+    tradeDate: "2026-07-24",
+    analysisStatus: "rated",
+    auditStatus: "verified",
+    claimValidation: { status: "passed", errorCodes: [] },
+    evidence: {
+      status: "ok",
+      contentHash,
+      packetFileHash: "b".repeat(64),
+    },
+  }));
+  await fs.writeFile(path.join(reportDir, "evidence_packet.json"), JSON.stringify({
+    schemaVersion: "EvidencePacketV1",
+    status: "ok",
+    asOf: "2026-07-24T20:00:00Z",
+    canRate: true,
+    contentHash,
+    instrument: { symbol: "MSFT" },
+    bars: [{ ts: "2026-07-24T20:00:00Z", close: 999 }],
+    corporateActions: [],
+    news: [],
+    sources: [],
+    integrity: { errors: [], warnings: [] },
+  }));
+
+  const audit = await buildReportAudit({
+    history: [{
+      trade_date: "2026-07-24",
+      generated_at: "2026-07-25T08:00:00Z",
+      results: [{
+        ticker: "MSFT",
+        rating: "Hold",
+        report: "reports/MSFT/2026-07-24/complete_report.md",
+        error: false,
+      }],
+    }],
+    reportsRoot: root,
+  });
+
+  assert.equal(audit.reports[0].auditStatus, "invalidated");
+  assert.ok(audit.reports[0].problemCodes.includes("INVALID_EVIDENCE_PACKET"));
 });
 
 test("report persistence regenerates the audit index after merging history", async () => {

@@ -195,6 +195,48 @@ test("evidence API write path fails closed and rejects malformed or oversized pa
   assert.equal(oversized.status, 413);
 });
 
+test("evidence API rejects semantically invalid market bars before D1", async () => {
+  for (const bar of [
+    { ts: "2026-07-24T20:00:00Z", close: "NaN" },
+    { ts: "2026-07-24T20:00:00Z", close: "Infinity" },
+    { ts: "not-a-time", close: 192.1 },
+    { ts: "2026-07-24T20:00:00Z", close: 192.1, volume: -1 },
+    {
+      ts: "2026-07-24T20:00:00Z",
+      open: -1,
+      high: 193,
+      low: 191,
+      close: 192.1,
+      volume: 1,
+    },
+    {
+      ts: "2026-07-24T20:00:00Z",
+      open: 192,
+      high: 190,
+      low: 191,
+      close: 192.1,
+      volume: 1,
+    },
+  ]) {
+    const calls = [];
+    const packet = { ...validPacket(), bars: [bar] };
+    const response = await onRequestPost({
+      request: new Request("https://example.test/api/evidence", {
+        method: "POST",
+        headers: { authorization: "Bearer write-token" },
+        body: JSON.stringify({ packet }),
+      }),
+      env: {
+        EVIDENCE_WRITE_TOKEN: "write-token",
+        DB: fakeWriterDb(calls),
+      },
+    });
+
+    assert.equal(response.status, 400);
+    assert.equal(calls.length, 0);
+  }
+});
+
 test("EvidencePacketV1 versioned entrypoint requires strict bearer auth and keeps the body limit", async () => {
   const versioned = await import("../functions/api/v1/evidence.js");
   assert.equal(typeof versioned.onRequestGet, "function");

@@ -9,6 +9,7 @@ from __future__ import annotations
 
 import hashlib
 import json
+import math
 from collections.abc import Mapping
 from datetime import datetime, timezone
 from typing import Any
@@ -41,7 +42,18 @@ def _time(value: Any) -> datetime:
 
 
 def _json(value: Any) -> str:
-    return json.dumps(value, ensure_ascii=False, sort_keys=True, separators=(",", ":"))
+    try:
+        return json.dumps(
+            value,
+            ensure_ascii=False,
+            sort_keys=True,
+            separators=(",", ":"),
+            allow_nan=False,
+        )
+    except (TypeError, ValueError) as exc:
+        raise EvidenceValidationError(
+            "packet contains non-finite or non-serializable values"
+        ) from exc
 
 
 def _hashable(packet: Mapping[str, Any]) -> dict[str, Any]:
@@ -56,16 +68,33 @@ def _bar(row: Mapping[str, Any], as_of: datetime) -> dict[str, Any]:
     timestamp = _time(row.get("ts") or row.get("timestamp"))
     if timestamp > as_of:
         raise EvidenceValidationError("bar timestamp is in the future")
-    close = float(row.get("close"))
+    try:
+        close = float(row.get("close"))
+        open_price = float(row.get("open") if row.get("open") is not None else close)
+        high = float(row.get("high") if row.get("high") is not None else close)
+        low = float(row.get("low") if row.get("low") is not None else close)
+        volume = float(row.get("volume") or 0)
+    except (TypeError, ValueError) as exc:
+        raise EvidenceValidationError("bar market values must be numeric") from exc
+    if not all(math.isfinite(value) for value in (open_price, high, low, close, volume)):
+        raise EvidenceValidationError("bar market values must be finite")
     if close <= 0:
         raise EvidenceValidationError("bar close must be positive")
+    if volume < 0:
+        raise EvidenceValidationError("bar volume cannot be negative")
+    if (
+        min(open_price, high, low, close) <= 0
+        or high < max(open_price, low, close)
+        or low > min(open_price, high, close)
+    ):
+        raise EvidenceValidationError("bar OHLC range is invalid")
     result = {
         "ts": timestamp.isoformat().replace("+00:00", "Z"),
-        "open": float(row.get("open", close)),
-        "high": float(row.get("high", close)),
-        "low": float(row.get("low", close)),
+        "open": open_price,
+        "high": high,
+        "low": low,
         "close": close,
-        "volume": float(row.get("volume", 0) or 0),
+        "volume": volume,
     }
     adjustment = row.get("adjustment")
     if adjustment:
@@ -116,6 +145,8 @@ def build_evidence_packet(
     corporate_actions: list[Mapping[str, Any]] | None = None,
     news: list[Mapping[str, Any]] | None = None,
     financials: Mapping[str, Any] | None = None,
+    integrity_errors: list[str] | None = None,
+    integrity_warnings: list[str] | None = None,
     generated_at: str | None = None,
 ) -> dict[str, Any]:
     """Build a validated, point-in-time packet.
@@ -140,8 +171,8 @@ def build_evidence_packet(
         {"evidenceId": f"CA{index}", **dict(action)}
         for index, action in enumerate((corporate_actions or []), start=1)
     ]
-    errors: list[str] = []
-    warnings: list[str] = []
+    errors: list[str] = list(integrity_errors or [])
+    warnings: list[str] = list(integrity_warnings or [])
 
     for previous, current in zip(normalized_bars, normalized_bars[1:], strict=False):
         previous_close = previous["close"]

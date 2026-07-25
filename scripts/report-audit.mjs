@@ -1,5 +1,6 @@
 import fs from "node:fs/promises";
 import path from "node:path";
+import { createHash } from "node:crypto";
 import { fileURLToPath } from "node:url";
 
 export const INVALIDATED_REPORTS = new Set([
@@ -15,6 +16,12 @@ const TARGET_RE = /\*\*(?:Price Target|Target Price|目标价)\*\*\s*[:：]/gi;
 const VALUATION_RE = /(?:DCF|discounted cash flow|估值方法|情景分析|valuation method|multiple|倍数|概率)/gi;
 const FINAL_PROPOSAL_RE = /FINAL TRANSACTION PROPOSAL/gi;
 const PUBLISHED_RE = /(?:published|发布时间|发布日期|published_at|发表时间)/gi;
+const PACKET_STATUSES = new Set([
+  "ok",
+  "degraded",
+  "unavailable",
+  "data_validation_failed",
+]);
 
 function normalizedReportPath(report) {
   return String(report || "").replaceAll("\\", "/");
@@ -32,6 +39,7 @@ function problemCodesFor({
   text,
   evidence,
   verifiedEvidence = false,
+  invalidEvidencePacket = false,
 }) {
   const codes = [];
   if (error || !report) {
@@ -47,6 +55,7 @@ function problemCodesFor({
   if (isInvalidatedReport(report)) {
     codes.push("CORPORATE_ACTION_CONTAMINATION");
   }
+  if (invalidEvidencePacket) codes.push("INVALID_EVIDENCE_PACKET");
   if (ETF_SYMBOLS.has(ticker)) codes.push("ETF_TEMPLATE_MISMATCH");
   if (!verifiedEvidence && (evidence.claimCitationCount === 0 || evidence.urlCount === 0)) {
     codes.push("MISSING_CLAIM_EVIDENCE");
@@ -97,36 +106,102 @@ async function readJson(file) {
 
 async function readReportBundle(reportsRoot, report) {
   const relative = reportParts(report);
-  if (!relative) return { text: "", manifest: null, packet: null };
+  if (!relative) {
+    return {
+      text: "",
+      manifest: null,
+      packet: null,
+      packetFileHash: null,
+    };
+  }
   const reportPath = path.join(reportsRoot, ...relative);
   try {
     const text = await fs.readFile(reportPath, "utf8");
     const directory = path.dirname(reportPath);
+    let packetText = null;
+    try {
+      packetText = await fs.readFile(path.join(directory, "evidence_packet.json"), "utf8");
+    } catch {
+      packetText = null;
+    }
+    let packet = null;
+    if (packetText) {
+      try {
+        packet = JSON.parse(packetText);
+      } catch {
+        packet = null;
+      }
+    }
     return {
       text,
       manifest: await readJson(path.join(directory, "report_manifest.json")),
-      packet: await readJson(path.join(directory, "evidence_packet.json")),
+      packet,
+      packetFileHash: packetText
+        ? createHash("sha256").update(packetText).digest("hex")
+        : null,
     };
   } catch {
-    return { text: "", manifest: null, packet: null };
+    return {
+      text: "",
+      manifest: null,
+      packet: null,
+      packetFileHash: null,
+    };
   }
 }
 
-function hasVerifiedBundle({ manifest, packet, ticker, tradeDate }) {
+function hasConsistentEvidencePacket({
+  manifest,
+  packet,
+  packetFileHash,
+  ticker,
+  tradeDate,
+}) {
   const hash = manifest?.evidence?.contentHash;
+  const declaredFileHash = manifest?.evidence?.packetFileHash;
+  const fileHashIsRequired = declaredFileHash != null;
   return (
     manifest?.ticker === ticker
     && manifest?.tradeDate === tradeDate
-    && manifest?.analysisStatus === "rated"
-    && manifest?.auditStatus === "verified"
-    && manifest?.claimValidation?.status === "passed"
-    && manifest?.evidence?.status === "ok"
     && typeof hash === "string"
     && /^[a-f0-9]{64}$/i.test(hash)
     && packet?.schemaVersion === "EvidencePacketV1"
-    && packet?.status === "ok"
+    && PACKET_STATUSES.has(packet?.status)
+    && packet?.status === manifest?.evidence?.status
     && packet?.contentHash === hash
     && packet?.instrument?.symbol === ticker
+    && typeof packet?.canRate === "boolean"
+    && typeof packet?.asOf === "string"
+    && !Number.isNaN(new Date(packet.asOf).valueOf())
+    && packet.asOf.slice(0, 10) === tradeDate
+    && ["bars", "corporateActions", "news", "sources"].every(
+      (field) => Array.isArray(packet?.[field]),
+    )
+    && Array.isArray(packet?.integrity?.errors)
+    && Array.isArray(packet?.integrity?.warnings)
+    && (
+      !fileHashIsRequired
+      || (
+        typeof declaredFileHash === "string"
+        && /^[a-f0-9]{64}$/i.test(declaredFileHash)
+        && declaredFileHash === packetFileHash
+      )
+    )
+  );
+}
+
+function hasVerifiedBundle(bundle) {
+  return (
+    hasConsistentEvidencePacket(bundle)
+    && bundle.manifest?.analysisStatus === "rated"
+    && bundle.manifest?.auditStatus === "verified"
+    && bundle.manifest?.claimValidation?.status === "passed"
+    && bundle.manifest?.evidence?.status === "ok"
+    && bundle.packet?.status === "ok"
+    && /^[a-f0-9]{64}$/i.test(
+      String(bundle.manifest?.evidence?.packetFileHash || ""),
+    )
+    && bundle.manifest.evidence.packetFileHash === bundle.packetFileHash
   );
 }
 
@@ -149,6 +224,14 @@ export async function buildReportAudit({ history, reportsRoot }) {
         ticker,
         tradeDate,
       });
+      const invalidEvidencePacket = Boolean(
+        bundle.manifest?.evidence
+        && !hasConsistentEvidencePacket({
+          ...bundle,
+          ticker,
+          tradeDate,
+        }),
+      );
       const problemCodes = problemCodesFor({
         ticker,
         analysisStatus,
@@ -157,10 +240,11 @@ export async function buildReportAudit({ history, reportsRoot }) {
         text,
         evidence,
         verifiedEvidence,
+        invalidEvidencePacket,
       });
       const auditStatus = error || !report
         ? "invalid_record"
-        : isInvalidatedReport(report)
+        : isInvalidatedReport(report) || invalidEvidencePacket
           ? "invalidated"
           : verifiedEvidence
             ? "verified"

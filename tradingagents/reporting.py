@@ -6,6 +6,7 @@ CLI and ``TradingAgentsGraph.save_reports`` both call this, so a headless / API
 run produces the same on-disk report tree a CLI run does.
 """
 
+import hashlib
 import json
 import re
 from datetime import datetime, timezone
@@ -324,6 +325,16 @@ def write_report_tree(
             f"{' · ' + ', '.join(claim_validation['errorCodes']) if claim_validation['errorCodes'] else ''}\n\n"
         )
     (save_path / "complete_report.md").write_text(header + report_body, encoding="utf-8")
+    packet_text = (
+        json.dumps(packet, ensure_ascii=False, indent=2, allow_nan=False)
+        if packet
+        else None
+    )
+    packet_file_hash = (
+        hashlib.sha256(packet_text.encode("utf-8")).hexdigest()
+        if packet_text is not None
+        else None
+    )
     manifest = {
         "schemaVersion": 1,
         "ticker": str(ticker),
@@ -337,16 +348,16 @@ def write_report_tree(
                 "schemaVersion": packet.get("schemaVersion"),
                 "asOf": packet.get("asOf"),
                 "contentHash": packet.get("contentHash"),
+                "packetFileHash": packet_file_hash,
                 "status": packet.get("status"),
             }
             if packet else None
         ),
     }
     (save_path / "report_manifest.json").write_text(
-        json.dumps(manifest, ensure_ascii=False, indent=2), encoding="utf-8"
+        json.dumps(manifest, ensure_ascii=False, indent=2, allow_nan=False),
+        encoding="utf-8",
     )
-    if packet:
-        (save_path / "evidence_packet.json").write_text(
-            json.dumps(packet, ensure_ascii=False, indent=2), encoding="utf-8"
-        )
+    if packet_text is not None:
+        (save_path / "evidence_packet.json").write_bytes(packet_text.encode("utf-8"))
     return save_path / "complete_report.md"
