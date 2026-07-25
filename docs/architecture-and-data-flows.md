@@ -283,8 +283,9 @@ sequenceDiagram
         P->>F: data_validation_failed Packet
         P-->>A: 跳过模型评级
     else 校验通过
+        P->>F: 先持久化已验证 Packet
         P->>A: 运行 TradingAgents 并生成 Manifest
-        A->>F: Bearer token + Packet + Manifest
+        A->>F: 再提交 Packet + Manifest + 报告路径
     end
     F->>F: 校验 Schema、哈希、标的、时间、状态和路径
     F->>D: 参数化幂等 UPSERT
@@ -303,7 +304,13 @@ A 股深度任务不会再单独用 Yahoo 决定技术结论。Python 预检先�
 Yahoo，并继续执行跳变门禁。这样 `512480.SS` 的份额拆分不会因两条运行链口径不同而
 再次被写成暴跌。
 
-## 9. 期权双时钟
+## 9. 本地只读 MCP
+
+stdio MCP 只映射五个 GET 查询：设置、监控状态、行情、新闻和研究历史。客户端输入不能
+改变上游主机之外的路径，标的、周期、条数和日期均有白名单；协议进程不接收访问码或
+写入 token。详细契约见 [mcp-readonly.md](mcp-readonly.md)。
+
+## 10. 期权双时钟
 
 VolGuard `/api/live` schema v2 包含：
 
@@ -315,7 +322,7 @@ VolGuard `/api/live` schema v2 包含：
 
 研究工作台也兼容旧静态 snapshot，但会标记为 `snapshot/stale`。快速层每 30 秒轮询，慢速层沿用其独立计算时间。休市时行情源可以是健康的 `market_closed`，不能显示成“数据故障”。
 
-## 10. 保留的原 TradingAgents 契约
+## 11. 保留的原 TradingAgents 契约
 
 以下内容受回归测试保护：
 

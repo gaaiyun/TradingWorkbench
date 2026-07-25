@@ -278,6 +278,7 @@ flowchart LR
 - TradingAgents 运行、档案和报告入口；
 - VolGuard 实时 schema v2、快慢双时钟和合约链；
 - D1 对话、SSE、请求回放、断线恢复和证据编号。
+- 本地 stdio 只读 MCP：目标、状态、行情、新闻和研究运行五个 GET-only 工具。
 
 ### 尚未完成
 
@@ -286,7 +287,6 @@ flowchart LR
 - ETF 持仓、规模、费用、跟踪误差和份额变化；
 - 20/60 日相关性和隔夜传导统计；
 - PushPlus 高等级盘中事件闭环；
-- 只读 MCP 工具；
 - Qlib / QuantStats 离线研究。
 
 这些内容不会在生产页面用示例数据冒充完成。

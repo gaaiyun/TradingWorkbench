@@ -281,7 +281,20 @@ Invoke-RestMethod https://sh50-volguard.pages.dev/api/live
 3. 快层可用、慢层旧时，页面应保留报价并单独标记模型过期。
 4. 两层都失败时才退到 snapshot。
 
-## 9. 回退
+## 9. 只读 MCP
+
+`npm run mcp:readonly` 启动本地 stdio 服务。它默认连接生产 Pages，只发送 GET 请求；
+修改设置、触发分析和写入证据不在工具清单中。上线后用下面的协议测试确认边界没有被
+扩宽：
+
+```powershell
+node --test tests/test_workbench_mcp.mjs
+```
+
+完整客户端配置和五个工具的参数见 [mcp-readonly.md](mcp-readonly.md)。不要把
+`ACCESS_CODE`、`EVIDENCE_WRITE_TOKEN` 或 GitHub token 传给只读进程。
+
+## 10. 回退
 
 - Pages：在 Cloudflare deployments 中选择前一个已验证版本。
 - Worker：部署前一个 Git tag 对应的 `wrangler.monitor.toml` 和代码。

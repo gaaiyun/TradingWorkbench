@@ -6,7 +6,7 @@
 - 期权数据站：[sh50-volguard.pages.dev](https://sh50-volguard.pages.dev/)
 - 主仓库：[gaaiyun/TradingWorkbench](https://github.com/gaaiyun/TradingWorkbench)
 - 上游研究框架：[TauricResearch/TradingAgents](https://github.com/TauricResearch/TradingAgents)
-- 当前产品版本：2026-07-24
+- 当前产品版本：2026-07-25
 
 > 本项目只做研究、解释和提醒，不连接券商，不自动交易。“实时”指有来源和时间戳的近实时数据，不代表交易所逐笔行情。
 
@@ -250,6 +250,18 @@ flowchart TD
 - 没有足够证据时必须回答“无法归因”，不能编造涨跌原因。
 - 访问码只放请求头，不进入前端代码、D1 或日志。
 
+## Agent 只读工具
+
+本地 stdio MCP 提供五个只读工具：监控目标、监控快照、行情、新闻和研究运行。所有
+上游请求固定为 GET，不能修改网页设置、写入 D1、触发 GitHub Actions 或执行交易。
+
+```powershell
+npm run mcp:readonly
+```
+
+默认连接生产工作台；本地调试可用 `TRADING_WORKBENCH_URL` 改写基地址。客户端配置、
+输入上限和安全边界见 [只读 MCP](docs/mcp-readonly.md)。
+
 ## 本地运行
 
 ### Python / CLI
@@ -302,6 +314,7 @@ Python 核心测试应使用已经安装完整项目依赖的虚拟环境。浏�
 - SSE、请求幂等、断线恢复、持久会话、错误访问码和证据引用。
 - 报告审计隔离、拆分连续性、历史时点过滤、Evidence ID 和无证据不评级。
 - `GOOGL`/`GOOG` 实体归一、`03887`/`3887.HK` 港股归一和短历史保护。
+- 五个 MCP 查询工具保持 GET-only，未知写工具会被拒绝。
 - TradingAgents 核心、CLI、报告和 workflow 仍存在。
 
 ## 部署
@@ -331,6 +344,7 @@ Python 核心测试应使用已经安装完整项目依赖的虚拟环境。浏�
 - [报告质量审计与历史报告状态](docs/REPORT_QUALITY_AUDIT.md)
 - [参考项目、数据源与取舍](docs/etf-monitoring-reference-and-decisions.md)
 - [部署、密钥、验收与回退](docs/operations-and-deployment.md)
+- [本地只读 MCP 工具](docs/mcp-readonly.md)
 - [产品回归、迁移与防复发约束](docs/regression-and-migration.md)
 - [统一工作台设计记录](docs/superpowers/plans/2026-07-24-workbench-unification-design.md)
 
