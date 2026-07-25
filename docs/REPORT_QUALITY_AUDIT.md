@@ -68,6 +68,7 @@ flowchart LR
 - 官方公告、SEC、IR、HKEXnews 和监管机构属于证据层；Google News、Yahoo、GDELT 属于发现层。
 - 没有用户持仓、成本、期限和风险预算时，不输出“立即清仓”或具体组合比例。
 - 只有能够重建 point-in-time 证据时才重跑历史报告；无法重建的报告继续保留为 `legacy_unverified`。
+- 新报告落盘前执行 claim validation。无引用数字、未知 Evidence ID、无方法目标价和无持仓约束的具体比例会降为 `insufficient_evidence / Not Rated`；同日重跑写入版本目录，不覆盖旧报告。
 
 ## 参考项目取舍
 

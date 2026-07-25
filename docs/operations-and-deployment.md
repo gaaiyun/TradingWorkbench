@@ -269,6 +269,10 @@ Invoke-RestMethod https://sh50-volguard.pages.dev/api/live
 5. 数据校验失败时仍应保存 `data_validation_failed` 包，但不会生成评级或正式报告。
 6. A 股出现 `UNEXPLAINED_PRICE_JUMP` 时，对比 `/api/market?timeframe=1d` 的
    `adjustment`；正常深度任务应读取 `qfq`，只有工作台接口不可用时才会回退 Yahoo。
+7. `claimValidation.status=failed` 表示模型文本仍有无引用数字、未知 Evidence ID、
+   无方法目标价或无持仓上下文的配置比例；报告保留审计，但前端必须显示 Not Rated。
+8. 同标的同交易日补跑会创建 `YYYY-MM-DD-v2` 等新目录。不要删除旧目录；审计索引用
+   `supersededBy` 关联新版本。
 
 ### 期权指标不更新
 

@@ -225,7 +225,7 @@ def get_instrument_context_from_state(state: Mapping[str, Any]) -> str:
             f"asOf={packet.get('asOf', 'unknown')}, "
             f"contentHash={packet.get('contentHash', 'unknown')}. "
             "Every numerical claim must cite the packet's exact Evidence ID "
-            "(M=market, CA=corporate action, N=news, S=source). "
+            "(M=market, I=indicator, CA=corporate action, N=news, S=source). "
             "Separate verified facts, inference, transmission path, confidence, "
             "counter-evidence, and the next observation. "
         )
@@ -234,6 +234,35 @@ def get_instrument_context_from_state(state: Mapping[str, Any]) -> str:
                 f"Validation errors are present ({', '.join(map(str, errors))}); "
                 "do not issue a Buy/Sell rating or target price. "
             )
+        ledger: list[str] = []
+        for row in list(packet.get("bars") or [])[-8:]:
+            ledger.append(
+                f"[{row.get('evidenceId')}] {row.get('ts')} "
+                f"open={row.get('open')} high={row.get('high')} "
+                f"low={row.get('low')} close={row.get('close')} "
+                f"volume={row.get('volume')}"
+            )
+        for row in list(packet.get("indicatorEvidence") or [])[:12]:
+            ledger.append(
+                f"[{row.get('evidenceId')}] {row.get('name')}={row.get('value')}"
+            )
+        for row in list(packet.get("corporateActions") or [])[:6]:
+            ledger.append(
+                f"[{row.get('evidenceId')}] corporate action "
+                f"{row.get('type')} on {row.get('exDate') or row.get('date')}"
+            )
+        for row in list(packet.get("news") or [])[:8]:
+            ledger.append(
+                f"[{row.get('evidenceId')}] {row.get('publishedAt')} "
+                f"{str(row.get('title') or '')[:180]} ({row.get('source')})"
+            )
+        for row in list(packet.get("sources") or [])[:8]:
+            ledger.append(
+                f"[{row.get('evidenceId')}] source={row.get('source')} "
+                f"asOf={row.get('asOf')} tier={row.get('sourceTier')}"
+            )
+        if ledger:
+            result += " Citable evidence ledger:\n" + "\n".join(ledger) + "\n"
     return result
 
 

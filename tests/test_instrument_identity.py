@@ -153,6 +153,44 @@ class GetInstrumentContextFromStateTests(unittest.TestCase):
         self.assertIn("Evidence ID", context)
         self.assertIn("abc123", context)
 
+    def test_evidence_packet_context_includes_a_compact_citable_ledger(self):
+        context = get_instrument_context_from_state({
+            "company_of_interest": "GOOGL",
+            "evidence_packet": {
+                "status": "ok",
+                "asOf": "2026-07-23T08:00:00Z",
+                "contentHash": "abc123",
+                "integrity": {"errors": []},
+                "bars": [{
+                    "evidenceId": "M1",
+                    "ts": "2026-07-23T07:00:00Z",
+                    "open": 179,
+                    "high": 181,
+                    "low": 178,
+                    "close": 180,
+                    "volume": 100,
+                }],
+                "indicatorEvidence": [{
+                    "evidenceId": "I1",
+                    "name": "rsi14",
+                    "value": 55.2,
+                }],
+                "news": [{
+                    "evidenceId": "N1",
+                    "title": "Alphabet files results",
+                    "publishedAt": "2026-07-23T06:00:00Z",
+                    "source": "SEC",
+                }],
+                "sources": [{"evidenceId": "S1", "source": "SEC"}],
+            },
+        })
+        self.assertIn("[M1]", context)
+        self.assertIn("close=180", context)
+        self.assertIn("[I1]", context)
+        self.assertIn("rsi14=55.2", context)
+        self.assertIn("[N1]", context)
+        self.assertIn("[S1]", context)
+
 
 @pytest.mark.unit
 class ContextAnchoredPlaceholderTests(unittest.TestCase):

@@ -174,6 +174,10 @@ flowchart LR
 OHLCV、公司行动、指标样本数、新闻原文链接、来源降级过程、内容哈希和 Evidence ID。
 数据连续性检查失败时不会调用模型生成 Buy/Sell；目标价只有在方法、输入、区间和情景
 概率齐全时才展示。历史分析按 `asOf` 截断新闻与事实，避免把后来发布的信息带回过去。
+Agent 只接收证据包中最后八根行情、指标、公司行动、新闻和来源组成的紧凑账本。报告
+落盘前还会再次检查引用：未知 Evidence ID、无引用数字、无方法目标价或在缺少用户
+持仓约束时给出具体仓位比例，都会把结果降为 `insufficient_evidence / Not Rated`，
+不能标记为 `verified`。
 GitHub 深度任务生成证据包后，用独立写入密钥提交到 `/api/evidence`；Pages Function
 校验 Schema、哈希、标的、时间和 Manifest 后才参数化写入 D1。网页、问答和后续 Agent
 读取同一份只读快照，写入失败只标记发布降级，不会把未保存的包伪装成可追溯证据。
@@ -181,6 +185,7 @@ GitHub 深度任务生成证据包后，用独立写入密钥提交到 `/api/evi
 档案页默认隐藏 `invalidated` 报告，可在“历史审计”中查看原文和失效原因。当前全量审计
 结果见 [报告质量审计](docs/REPORT_QUALITY_AUDIT.md)，网页读取的同源索引位于
 [`public/data/report-audit.json`](public/data/report-audit.json)。
+同一交易日重跑不会覆盖旧目录，而是写入 `-v2`、`-v3` 版本并在审计索引中建立替代关系。
 
 ## TradingAgents 研究链
 

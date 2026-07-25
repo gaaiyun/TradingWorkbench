@@ -20,7 +20,15 @@ function keyFor(ticker, tradeDate) {
   return `${ticker}|${tradeDate}`;
 }
 
-function problemCodesFor({ ticker, tradeDate, error, report, text, evidence }) {
+function problemCodesFor({
+  ticker,
+  tradeDate,
+  error,
+  report,
+  text,
+  evidence,
+  verifiedEvidence = false,
+}) {
   const codes = [];
   if (error || !report) codes.push("INVALID_TICKER_INPUT");
   if (!report) return codes;
@@ -29,7 +37,7 @@ function problemCodesFor({ ticker, tradeDate, error, report, text, evidence }) {
     codes.push("CORPORATE_ACTION_CONTAMINATION");
   }
   if (ETF_SYMBOLS.has(ticker)) codes.push("ETF_TEMPLATE_MISMATCH");
-  if (evidence.claimCitationCount === 0 || evidence.urlCount === 0) {
+  if (!verifiedEvidence && (evidence.claimCitationCount === 0 || evidence.urlCount === 0)) {
     codes.push("MISSING_CLAIM_EVIDENCE");
   }
   if (evidence.finalProposalMarkers > 1) codes.push("DUPLICATE_FINAL_PROPOSAL");
@@ -54,14 +62,54 @@ function parseEvidence(text) {
   return evidence;
 }
 
-async function readReport(reportsRoot, report) {
-  if (!report) return "";
+function reportParts(report) {
+  if (!report) return null;
   const relative = report.replace(/^reports[\\/]/, "").split(/[\\/]/g);
+  if (relative.some((part) => !part || part === "." || part === "..")) return null;
+  return relative;
+}
+
+async function readJson(file) {
   try {
-    return await fs.readFile(path.join(reportsRoot, ...relative), "utf8");
+    return JSON.parse(await fs.readFile(file, "utf8"));
   } catch {
-    return "";
+    return null;
   }
+}
+
+async function readReportBundle(reportsRoot, report) {
+  const relative = reportParts(report);
+  if (!relative) return { text: "", manifest: null, packet: null };
+  const reportPath = path.join(reportsRoot, ...relative);
+  try {
+    const text = await fs.readFile(reportPath, "utf8");
+    const directory = path.dirname(reportPath);
+    return {
+      text,
+      manifest: await readJson(path.join(directory, "report_manifest.json")),
+      packet: await readJson(path.join(directory, "evidence_packet.json")),
+    };
+  } catch {
+    return { text: "", manifest: null, packet: null };
+  }
+}
+
+function hasVerifiedBundle({ manifest, packet, ticker, tradeDate }) {
+  const hash = manifest?.evidence?.contentHash;
+  return (
+    manifest?.ticker === ticker
+    && manifest?.tradeDate === tradeDate
+    && manifest?.analysisStatus === "rated"
+    && manifest?.auditStatus === "verified"
+    && manifest?.claimValidation?.status === "passed"
+    && manifest?.evidence?.status === "ok"
+    && typeof hash === "string"
+    && /^[a-f0-9]{64}$/i.test(hash)
+    && packet?.schemaVersion === "EvidencePacketV1"
+    && packet?.status === "ok"
+    && packet?.contentHash === hash
+    && packet?.instrument?.symbol === ticker
+  );
 }
 
 export async function buildReportAudit({ history, reportsRoot }) {
@@ -71,9 +119,15 @@ export async function buildReportAudit({ history, reportsRoot }) {
       const ticker = String(result?.ticker || "");
       const tradeDate = String(batch?.trade_date || "");
       const report = result?.report ? String(result.report) : null;
-      const text = await readReport(reportsRoot, report);
+      const bundle = await readReportBundle(reportsRoot, report);
+      const text = bundle.text;
       const evidence = parseEvidence(text);
       const error = result?.error === true;
+      const verifiedEvidence = hasVerifiedBundle({
+        ...bundle,
+        ticker,
+        tradeDate,
+      });
       const problemCodes = problemCodesFor({
         ticker,
         tradeDate,
@@ -81,18 +135,24 @@ export async function buildReportAudit({ history, reportsRoot }) {
         report,
         text,
         evidence,
+        verifiedEvidence,
       });
       const auditStatus = error || !report
         ? "invalid_record"
         : INVALIDATED_REPORTS.has(keyFor(ticker, tradeDate))
           ? "invalidated"
-          : "legacy_unverified";
+          : verifiedEvidence
+            ? "verified"
+            : "legacy_unverified";
       entries.push({
         ticker,
         tradeDate,
         generatedAt: batch?.generated_at || null,
         provider: batch?.provider || null,
         rating: result?.rating || null,
+        analysisStatus: bundle.manifest?.analysisStatus
+          || result?.analysis_status
+          || null,
         report,
         auditStatus,
         problemCodes,
@@ -104,8 +164,16 @@ export async function buildReportAudit({ history, reportsRoot }) {
 
   entries.sort((left, right) => String(right.generatedAt || right.tradeDate)
     .localeCompare(String(left.generatedAt || left.tradeDate)));
+  for (const entry of entries) {
+    if (entry.auditStatus !== "invalidated") continue;
+    entry.supersededBy = entries.find((candidate) =>
+      candidate.ticker === entry.ticker
+      && candidate.auditStatus === "verified"
+      && candidate.report !== entry.report)?.report || null;
+  }
   const summary = {
     successfulReports: entries.filter((entry) => entry.auditStatus !== "invalid_record").length,
+    verifiedReports: entries.filter((entry) => entry.auditStatus === "verified").length,
     invalidatedReports: entries.filter((entry) => entry.auditStatus === "invalidated").length,
     legacyUnverifiedReports: entries.filter((entry) => entry.auditStatus === "legacy_unverified").length,
     invalidRecords: entries.filter((entry) => entry.auditStatus === "invalid_record").length,

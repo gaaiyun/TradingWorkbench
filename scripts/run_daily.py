@@ -392,18 +392,33 @@ def update_history(data_dir: Path, payload: dict, cap: int = HISTORY_CAP) -> int
     except Exception:
         history = []
 
-    key = (payload.get("trade_date"), tuple(sorted(r["ticker"] for r in payload.get("results", []))))
+    key = (
+        payload.get("trade_date"),
+        tuple(sorted(r["ticker"] for r in payload.get("results", []))),
+        tuple(sorted(str(r.get("report") or "") for r in payload.get("results", []))),
+    )
     history = [
         h for h in history
-        if (h.get("trade_date"), tuple(sorted(r.get("ticker", "") for r in h.get("results", [])))) != key
+        if (
+            h.get("trade_date"),
+            tuple(sorted(r.get("ticker", "") for r in h.get("results", []))),
+            tuple(sorted(str(r.get("report") or "") for r in h.get("results", []))),
+        ) != key
     ]
     entry = {
         "trade_date": payload.get("trade_date"),
         "generated_at": payload.get("generated_at"),
         "provider": payload.get("provider"),
         "results": [
-            {"ticker": r["ticker"], "rating": r["rating"], "report": r["report"],
-             "error": bool(r.get("error"))}
+            {
+                "ticker": r["ticker"],
+                "rating": r["rating"],
+                "report": r["report"],
+                "error": bool(r.get("error")),
+                "analysis_status": r.get("analysis_status"),
+                "audit_status": r.get("audit_status"),
+                "evidence_publish": r.get("evidence_publish"),
+            }
             for r in payload.get("results", [])
         ],
     }
@@ -411,6 +426,17 @@ def update_history(data_dir: Path, payload: dict, cap: int = HISTORY_CAP) -> int
     history = history[:cap]
     hist_path.write_text(json.dumps(history, ensure_ascii=False, indent=2), encoding="utf-8")
     return len(history)
+
+
+def report_save_directory(reports_dir: Path, symbol: str, trade_date: str) -> Path:
+    """Choose a versioned directory without replacing an archived report."""
+    base = reports_dir / symbol / trade_date
+    if not (base / "complete_report.md").exists():
+        return base
+    version = 2
+    while (reports_dir / symbol / f"{trade_date}-v{version}").exists():
+        version += 1
+    return reports_dir / symbol / f"{trade_date}-v{version}"
 
 
 def last_us_trading_day(now_utc: datetime | None = None) -> str:
@@ -526,9 +552,11 @@ def run_ticker(ticker: str, trade_date: str, analysts: list[str], reports_dir: P
         evidence_packet=evidence_packet,
     )
 
-    save_dir = reports_dir / symbol / trade_date
+    save_dir = report_save_directory(reports_dir, symbol, trade_date)
     ta.save_reports(final_state, symbol, save_path=save_dir, evidence_packet=evidence_packet)
     manifest = json.loads((save_dir / "report_manifest.json").read_text(encoding="utf-8"))
+    if manifest.get("analysisStatus") != "rated":
+        rating = "Not Rated"
 
     # 各 agent 分报告的相对路径映射，供前端按角色分 tab 阅读
     files: dict[str, str] = {}
@@ -548,8 +576,8 @@ def run_ticker(ticker: str, trade_date: str, analysts: list[str], reports_dir: P
         "report": files.get("complete_report"),
         "files": files,
         "decision_excerpt": decision_md[:400],
-        "analysis_status": final_state.get("analysis_status", "rated"),
-        "audit_status": "verified",
+        "analysis_status": manifest.get("analysisStatus", "not_rated"),
+        "audit_status": manifest.get("auditStatus", "legacy_unverified"),
         "evidence_publish": evidence_publish,
         "error": None,
     }

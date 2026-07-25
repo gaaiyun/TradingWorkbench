@@ -73,6 +73,18 @@ def _bar(row: Mapping[str, Any], as_of: datetime) -> dict[str, Any]:
     return result
 
 
+def _indicator_evidence(indicators: Mapping[str, Any] | None) -> list[dict[str, Any]]:
+    rows = []
+    for name, value in sorted((indicators or {}).items()):
+        if isinstance(value, (str, int, float)) and not isinstance(value, bool):
+            rows.append({
+                "evidenceId": f"I{len(rows) + 1}",
+                "name": str(name),
+                "value": value,
+            })
+    return rows
+
+
 def _news(row: Mapping[str, Any], as_of: datetime) -> dict[str, Any] | None:
     published = row.get("publishedAt") or row.get("published_at")
     if not published:
@@ -165,6 +177,7 @@ def build_evidence_packet(
         }
         for index, row in enumerate((sources or []), start=1)
     ]
+    indicator_rows = _indicator_evidence(indicators)
     status = "ok"
     if errors:
         status = "data_validation_failed"
@@ -191,6 +204,7 @@ def build_evidence_packet(
         },
         "bars": normalized_bars,
         "indicators": dict(indicators or {}),
+        "indicatorEvidence": indicator_rows,
         "corporateActions": actions,
         "financials": dict(financials or {}),
         "news": normalized_news,
@@ -198,6 +212,7 @@ def build_evidence_packet(
         "integrity": {
             "barCount": len(normalized_bars),
             "newsCount": len(normalized_news),
+            "indicatorCount": len(indicator_rows),
             "errors": sorted(set(errors)),
             "warnings": sorted(set(warnings)),
             "pointInTime": True,

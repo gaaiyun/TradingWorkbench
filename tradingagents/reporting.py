@@ -18,6 +18,67 @@ class ReportValidationError(ValueError):
     """Raised when evidence explicitly says a report must not be rated."""
 
 
+_EVIDENCE_CITATION_RE = re.compile(r"\[((?:M|I|CA|N|S)\d+)\]", re.IGNORECASE)
+_NUMERIC_CLAIM_RE = re.compile(
+    r"(?<![A-Za-z])(?:[$¥£€]\s*)?[-+]?\d+(?:,\d{3})*(?:\.\d+)?%?"
+)
+_PRICE_TARGET_RE = re.compile(
+    r"(?:price\s*target|target\s*price|目标价|目标价格)",
+    re.IGNORECASE,
+)
+_ALLOCATION_RE = re.compile(
+    r"(?:\d+(?:\.\d+)?\s*%[^。\n]*(?:仓位|配置|减仓|加仓|清仓)|"
+    r"(?:仓位|配置|减仓|加仓|清仓)[^。\n]*\d+(?:\.\d+)?\s*%)",
+    re.IGNORECASE,
+)
+
+
+def _packet_evidence_ids(packet: dict) -> set[str]:
+    ids = set()
+    for key in ("bars", "indicatorEvidence", "corporateActions", "news", "sources"):
+        for row in packet.get(key) or []:
+            if isinstance(row, dict) and row.get("evidenceId"):
+                ids.add(str(row["evidenceId"]).upper())
+    return ids
+
+
+def validate_report_claims(text: str, packet: dict) -> dict:
+    """Validate that a rated narrative remains tied to packet evidence."""
+    known_ids = _packet_evidence_ids(packet)
+    cited_ids = {
+        match.upper() for match in _EVIDENCE_CITATION_RE.findall(str(text or ""))
+    }
+    unknown_ids = sorted(cited_ids - known_ids)
+    uncited_numeric = 0
+    for paragraph in re.split(r"\n\s*\n", str(text or "")):
+        without_urls = re.sub(r"https?://\S+", "", paragraph)
+        without_citations = _EVIDENCE_CITATION_RE.sub("", without_urls)
+        if _NUMERIC_CLAIM_RE.search(without_citations):
+            paragraph_ids = {
+                match.upper() for match in _EVIDENCE_CITATION_RE.findall(paragraph)
+            }
+            if not paragraph_ids.intersection(known_ids):
+                uncited_numeric += 1
+    error_codes = []
+    if not cited_ids.intersection(known_ids):
+        error_codes.append("MISSING_EVIDENCE_CITATION")
+    if unknown_ids:
+        error_codes.append("UNKNOWN_EVIDENCE_ID")
+    if uncited_numeric:
+        error_codes.append("UNCITED_NUMERIC_CLAIM")
+    if _PRICE_TARGET_RE.search(str(text or "")):
+        error_codes.append("UNSUPPORTED_PRICE_TARGET")
+    if _ALLOCATION_RE.search(str(text or "")):
+        error_codes.append("UNSUPPORTED_ALLOCATION")
+    return {
+        "status": "passed" if not error_codes else "failed",
+        "errorCodes": error_codes,
+        "citationCount": len(cited_ids.intersection(known_ids)),
+        "unknownEvidenceIds": unknown_ids,
+        "uncitedNumericParagraphs": uncited_numeric,
+    }
+
+
 def _sanitize_final_proposals(text: str) -> str:
     """Keep one final proposal marker in the consolidated report.
 
@@ -149,8 +210,31 @@ def write_report_tree(
 
     # Write consolidated report
     generated_at = datetime.now(timezone.utc).isoformat()
+    report_body = "\n\n".join(sections)
     status = str(final_state.get("analysis_status") or ("rated" if packet else "not_rated"))
-    audit_status = "verified" if packet and packet.get("status") == "ok" and status == "rated" else "legacy_unverified"
+    claim_validation = (
+        validate_report_claims(report_body, packet)
+        if packet else {
+            "status": "not_applicable",
+            "errorCodes": [],
+            "citationCount": 0,
+            "unknownEvidenceIds": [],
+            "uncitedNumericParagraphs": 0,
+        }
+    )
+    if packet and status == "rated" and claim_validation["status"] != "passed":
+        status = "insufficient_evidence"
+        final_state["analysis_status"] = status
+    audit_status = (
+        "verified"
+        if (
+            packet
+            and packet.get("status") == "ok"
+            and status == "rated"
+            and claim_validation["status"] == "passed"
+        )
+        else "legacy_unverified"
+    )
     header = (
         f"# Trading Analysis Report: {ticker}\n\n"
         f"Generated: {generated_at}\n\n"
@@ -161,7 +245,11 @@ def write_report_tree(
             f"Evidence as of: {packet.get('asOf', '—')} · "
             f"content hash: `{packet.get('contentHash', '—')}`\n\n"
         )
-    (save_path / "complete_report.md").write_text(header + "\n\n".join(sections), encoding="utf-8")
+        header += (
+            f"Evidence claim validation: `{claim_validation['status']}`"
+            f"{' · ' + ', '.join(claim_validation['errorCodes']) if claim_validation['errorCodes'] else ''}\n\n"
+        )
+    (save_path / "complete_report.md").write_text(header + report_body, encoding="utf-8")
     manifest = {
         "schemaVersion": 1,
         "ticker": str(ticker),
@@ -169,6 +257,7 @@ def write_report_tree(
         "generatedAt": generated_at,
         "analysisStatus": status,
         "auditStatus": audit_status,
+        "claimValidation": claim_validation,
         "evidence": (
             {
                 "schemaVersion": packet.get("schemaVersion"),

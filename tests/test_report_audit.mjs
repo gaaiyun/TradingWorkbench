@@ -1,5 +1,6 @@
 import assert from "node:assert/strict";
 import fs from "node:fs/promises";
+import os from "node:os";
 import path from "node:path";
 import test from "node:test";
 import {
@@ -55,4 +56,46 @@ test("audit parser records missing claim citations and forced final markers", as
   assert.ok(entry.evidence.finalProposalMarkers >= 1);
   assert.ok(entry.problemCodes.includes("CORPORATE_ACTION_CONTAMINATION"));
   assert.ok(entry.problemCodes.includes("MISSING_CLAIM_EVIDENCE"));
+});
+
+test("audit index accepts only a matching claim-validated report bundle as verified", async (t) => {
+  const root = await fs.mkdtemp(path.join(os.tmpdir(), "tradingworkbench-audit-"));
+  t.after(() => fs.rm(root, { recursive: true, force: true }));
+  const reportDir = path.join(root, "GOOGL", "2026-07-24");
+  await fs.mkdir(reportDir, { recursive: true });
+  await fs.writeFile(
+    path.join(reportDir, "complete_report.md"),
+    "Alphabet closed at 180 [M1].",
+  );
+  const contentHash = "a".repeat(64);
+  await fs.writeFile(path.join(reportDir, "report_manifest.json"), JSON.stringify({
+    ticker: "GOOGL",
+    tradeDate: "2026-07-24",
+    analysisStatus: "rated",
+    auditStatus: "verified",
+    claimValidation: { status: "passed", errorCodes: [] },
+    evidence: { status: "ok", contentHash },
+  }));
+  await fs.writeFile(path.join(reportDir, "evidence_packet.json"), JSON.stringify({
+    schemaVersion: "EvidencePacketV1",
+    status: "ok",
+    contentHash,
+    instrument: { symbol: "GOOGL" },
+  }));
+  const audit = await buildReportAudit({
+    history: [{
+      trade_date: "2026-07-24",
+      generated_at: "2026-07-25T08:00:00Z",
+      results: [{
+        ticker: "GOOGL",
+        rating: "Hold",
+        report: "reports/GOOGL/2026-07-24/complete_report.md",
+        error: false,
+      }],
+    }],
+    reportsRoot: root,
+  });
+  assert.equal(audit.summary.verifiedReports, 1);
+  assert.equal(audit.reports[0].auditStatus, "verified");
+  assert.equal(audit.reports[0].problemCodes.includes("MISSING_CLAIM_EVIDENCE"), false);
 });

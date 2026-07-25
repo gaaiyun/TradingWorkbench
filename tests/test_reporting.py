@@ -61,7 +61,15 @@ def test_report_manifest_and_evidence_metadata_are_written(tmp_path):
         sources=[{"source": "sec", "sourceTier": "evidence"}],
         generated_at="2026-07-23T08:05:00Z",
     )
-    state = {**_state(), "trade_date": "2026-07-23", "analysis_status": "rated", "evidence_packet": packet}
+    state = {
+        **{key: f"{value} [M1]" if isinstance(value, str) else value
+           for key, value in _state().items()},
+        "investment_debate_state": {"judge_decision": "RM PLAN [M1]"},
+        "risk_debate_state": {"judge_decision": "PM DECISION [M1]"},
+        "trade_date": "2026-07-23",
+        "analysis_status": "rated",
+        "evidence_packet": packet,
+    }
     out = write_report_tree(state, "GOOGL", tmp_path)
     manifest = __import__("json").loads((tmp_path / "report_manifest.json").read_text())
     assert manifest["analysisStatus"] == "rated"
@@ -69,6 +77,32 @@ def test_report_manifest_and_evidence_metadata_are_written(tmp_path):
     assert manifest["evidence"]["contentHash"] == packet["contentHash"]
     assert (tmp_path / "evidence_packet.json").exists()
     assert out.read_text().count("FINAL TRANSACTION PROPOSAL") <= 1
+
+
+@pytest.mark.unit
+def test_uncited_numeric_claims_are_saved_as_not_rated(tmp_path):
+    packet = build_evidence_packet(
+        ticker="GOOGL",
+        asset_type="us_equity",
+        as_of="2026-07-23T08:00:00Z",
+        bars=[{"ts": "2026-07-23T07:00:00Z", "close": 180}],
+        sources=[{"source": "sec", "sourceTier": "evidence"}],
+        generated_at="2026-07-23T08:05:00Z",
+    )
+    state = {
+        **_state(),
+        "market_report": "The close was 180 without a citation.",
+        "trade_date": "2026-07-23",
+        "analysis_status": "rated",
+        "evidence_packet": packet,
+    }
+    out = write_report_tree(state, "GOOGL", tmp_path)
+    manifest = __import__("json").loads((tmp_path / "report_manifest.json").read_text())
+    assert manifest["analysisStatus"] == "insufficient_evidence"
+    assert manifest["auditStatus"] == "legacy_unverified"
+    assert "UNCITED_NUMERIC_CLAIM" in manifest["claimValidation"]["errorCodes"]
+    assert state["analysis_status"] == "insufficient_evidence"
+    assert "Evidence claim validation: `failed`" in out.read_text()
 
 
 @pytest.mark.unit

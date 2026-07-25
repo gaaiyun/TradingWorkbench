@@ -27,6 +27,7 @@ def test_packet_filters_future_news_and_records_point_in_time_evidence():
         asset_type="hk_equity",
         as_of="2026-07-23T08:00:00Z",
         bars=[bar("2026-07-22T08:00:00Z", 10), bar("2026-07-23T08:00:00Z", 10.2)],
+        indicators={"ma20": 9.8, "rsi14": 55.2},
         sources=[{"source": "hkexnews", "sourceTier": "evidence"}],
         news=[
             {"id": "n1", "publishedAt": "2026-07-23T07:00:00Z", "title": "published"},
@@ -40,6 +41,10 @@ def test_packet_filters_future_news_and_records_point_in_time_evidence():
     assert packet["status"] == "ok"
     assert [item["id"] for item in packet["news"]] == ["n1"]
     assert packet["integrity"]["barCount"] == 2
+    assert packet["indicatorEvidence"] == [
+        {"evidenceId": "I1", "name": "ma20", "value": 9.8},
+        {"evidenceId": "I2", "name": "rsi14", "value": 55.2},
+    ]
     assert packet["contentHash"] and len(packet["contentHash"]) == 64
     validate_evidence_packet(packet)
 

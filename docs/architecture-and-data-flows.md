@@ -258,6 +258,12 @@ ORCL、SOXX 等美股读 1d。指标使用同一套服务端计算函数，不�
 
 证据编号不是因果证明。系统提示会要求模型区分“数据事实”“可能传导”和“证据不足”。
 
+深度报告还有独立的落盘门禁。模型上下文只暴露有编号的紧凑账本；写文件前按段落检查
+数字和 Evidence ID，并拒绝未知编号、无方法目标价和无持仓约束的具体配置比例。门禁
+失败仍保留草稿用于审计，但把评级改成 `Not Rated`，Manifest 写入
+`insufficient_evidence / legacy_unverified`。审计索引只有在报告、Manifest 和
+`evidence_packet.json` 的标的、日期、状态与内容哈希全部一致时才显示“已验证”。
+
 ### Evidence Packet 发布闭环
 
 ```mermaid
