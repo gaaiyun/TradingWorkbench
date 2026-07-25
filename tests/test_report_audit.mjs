@@ -31,6 +31,12 @@ test("audit index classifies every successful archived report and the malformed 
     audit.summary.successfulReports,
   );
   assert.equal(audit.summary.invalidRecords, allResults.length - successful.length);
+  assert.equal(
+    audit.summary.invalidRecords,
+    audit.summary.evidenceValidationFailures
+      + audit.summary.analysisExecutionFailures
+      + audit.summary.invalidInputs,
+  );
   assert.equal(audit.reports.length, allResults.length);
   assert.deepEqual(
     audit.reports.filter((entry) => entry.auditStatus === "invalidated")
@@ -40,7 +46,39 @@ test("audit index classifies every successful archived report and the malformed 
 
   const issue = audit.reports.find((entry) => entry.ticker === "ISSUE");
   assert.equal(issue.auditStatus, "invalid_record");
+  assert.equal(issue.failureClass, "invalid_input");
   assert.match(issue.problemCodes.join(","), /INVALID_TICKER_INPUT/);
+});
+
+test("audit separates evidence validation failures from model or workflow failures", async () => {
+  const audit = await buildReportAudit({
+    history: [{
+      trade_date: "2026-07-24",
+      generated_at: "2026-07-25T08:00:00Z",
+      results: [
+        {
+          ticker: "ORCL",
+          report: null,
+          error: true,
+          analysis_status: "data_validation_failed",
+        },
+        {
+          ticker: "GOOGL",
+          report: null,
+          error: true,
+        },
+      ],
+    }],
+    reportsRoot: path.join(repoRoot, "public", "reports"),
+  });
+
+  assert.equal(audit.summary.evidenceValidationFailures, 1);
+  assert.equal(audit.summary.analysisExecutionFailures, 1);
+  assert.equal(audit.summary.invalidInputs, 0);
+  assert.equal(audit.reports[0].failureClass, "evidence_validation");
+  assert.deepEqual(audit.reports[0].problemCodes, ["EVIDENCE_VALIDATION_FAILED"]);
+  assert.equal(audit.reports[1].failureClass, "analysis_execution");
+  assert.deepEqual(audit.reports[1].problemCodes, ["ANALYSIS_EXECUTION_FAILED"]);
 });
 
 test("a repaired versioned report is not invalidated only because it shares the legacy trade date", async (t) => {
@@ -130,5 +168,7 @@ test("audit index accepts only a matching claim-validated report bundle as verif
   });
   assert.equal(audit.summary.verifiedReports, 1);
   assert.equal(audit.reports[0].auditStatus, "verified");
+  assert.equal(audit.reports[0].claimValidation.status, "passed");
+  assert.equal(audit.reports[0].evidencePacket.contentHash, contentHash);
   assert.equal(audit.reports[0].problemCodes.includes("MISSING_CLAIM_EVIDENCE"), false);
 });

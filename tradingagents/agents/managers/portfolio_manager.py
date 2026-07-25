@@ -61,7 +61,16 @@ def create_portfolio_manager(llm):
 
 ---
 
-Be decisive and ground every conclusion in specific evidence from the analysts.{get_language_instruction()}"""
+Non-negotiable evidence rules:
+- Every numerical claim must carry an exact bracketed Evidence ID from the packet.
+- A statement from an earlier agent without an Evidence ID is not a verified fact.
+- No user holdings, cost basis, time horizon, or risk budget were supplied in this run. Do not
+  prescribe a numeric portfolio allocation, forced liquidation, entry level, or stop loss.
+- Leave the optional price target fields empty unless method, inputs, range, scenario probabilities,
+  and matching Evidence IDs are all present.
+- Separate verified fact, inference, confidence, counter-evidence, and the next observation.
+
+Be decisive only within those evidence limits.{get_language_instruction()}"""
 
         final_trade_decision = invoke_structured_or_freetext(
             structured_llm,

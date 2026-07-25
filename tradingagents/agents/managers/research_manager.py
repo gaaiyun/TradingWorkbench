@@ -40,7 +40,14 @@ Commit to a clear stance whenever the debate's strongest arguments warrant one; 
 ---
 
 **Debate History:**
-{history}""" + get_language_instruction()
+{history}
+
+Non-negotiable evidence rules:
+- Retain the exact bracketed Evidence IDs from the packet for every numerical claim.
+- Do not treat an analyst statement without an Evidence ID as a verified fact.
+- Do not propose a target price or a numeric portfolio allocation.
+- When evidence is missing or contradictory, say what is unresolved instead of inventing a value.
+""" + get_language_instruction()
 
         investment_plan = invoke_structured_or_freetext(
             structured_llm,

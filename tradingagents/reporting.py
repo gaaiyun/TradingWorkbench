@@ -98,6 +98,80 @@ def _sanitize_final_proposals(text: str) -> str:
     )
 
 
+def _render_evidence_snapshot(packet: dict) -> str:
+    """Render a compact, human-readable ledger without inventing analysis."""
+    bars = list(packet.get("bars") or [])
+    indicators = list(packet.get("indicatorEvidence") or [])
+    actions = list(packet.get("corporateActions") or [])
+    news = list(packet.get("news") or [])
+    sources = list(packet.get("sources") or [])
+    anchor = (
+        (bars[-1].get("evidenceId") if bars else None)
+        or (sources[0].get("evidenceId") if sources else None)
+        or "—"
+    )
+    lines = [
+        "## Evidence Snapshot",
+        "",
+        (
+            f"- Status `{packet.get('status', 'unknown')}`; "
+            f"as of `{packet.get('asOf', 'unknown')}`; "
+            f"instrument `{packet.get('instrument', {}).get('symbol', 'unknown')}` "
+            f"[{anchor}]"
+        ),
+    ]
+    if bars:
+        lines.extend(["", "### Latest market bars", ""])
+        for row in bars[-5:]:
+            lines.append(
+                f"- [{row.get('evidenceId')}] {row.get('ts')}: "
+                f"O {row.get('open')} · H {row.get('high')} · "
+                f"L {row.get('low')} · C {row.get('close')} · "
+                f"volume {row.get('volume')}"
+            )
+    if indicators:
+        lines.extend(["", "### Indicators", ""])
+        for row in indicators[:12]:
+            lines.append(
+                f"- [{row.get('evidenceId')}] {row.get('name')}: {row.get('value')}"
+            )
+    if actions:
+        lines.extend(["", "### Corporate actions", ""])
+        for row in actions[:6]:
+            lines.append(
+                f"- [{row.get('evidenceId')}] {row.get('type')}: "
+                f"{row.get('exDate') or row.get('date') or 'date unavailable'}"
+            )
+    if news:
+        lines.extend(["", "### Point-in-time news", ""])
+        for row in news[:8]:
+            title = str(row.get("title") or "Untitled").replace("\n", " ")
+            url = str(row.get("url") or "").strip()
+            label = f"[{title}]({url})" if url else title
+            lines.append(
+                f"- [{row.get('evidenceId')}] {row.get('publishedAt')}: "
+                f"{label} · {row.get('source')} · {row.get('sourceTier')}"
+            )
+    if sources:
+        lines.extend(["", "### Sources", ""])
+        for row in sources[:8]:
+            lines.append(
+                f"- [{row.get('evidenceId')}] {row.get('source')} · "
+                f"as of {row.get('asOf') or 'unavailable'} · "
+                f"tier {row.get('sourceTier')}"
+            )
+    integrity = packet.get("integrity") or {}
+    if integrity.get("warnings") or integrity.get("errors"):
+        lines.extend([
+            "",
+            "### Integrity",
+            "",
+            f"- [{anchor}] warnings: {', '.join(integrity.get('warnings') or []) or 'none'}",
+            f"- [{anchor}] errors: {', '.join(integrity.get('errors') or []) or 'none'}",
+        ])
+    return "\n".join(lines)
+
+
 def write_report_tree(
     final_state: dict,
     ticker: str,
@@ -115,7 +189,7 @@ def write_report_tree(
                 f"evidence validation failed; cannot generate a rated report for {ticker}"
             )
     save_path.mkdir(parents=True, exist_ok=True)
-    sections = []
+    sections = [_render_evidence_snapshot(packet)] if packet else []
 
     # 1. Analysts
     analysts_dir = save_path / "1_analysts"

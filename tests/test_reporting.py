@@ -76,6 +76,9 @@ def test_report_manifest_and_evidence_metadata_are_written(tmp_path):
     assert manifest["auditStatus"] == "verified"
     assert manifest["evidence"]["contentHash"] == packet["contentHash"]
     assert (tmp_path / "evidence_packet.json").exists()
+    assert "## Evidence Snapshot" in out.read_text()
+    assert "[M1]" in out.read_text()
+    assert "[S1]" in out.read_text()
     assert out.read_text().count("FINAL TRANSACTION PROPOSAL") <= 1
 
 

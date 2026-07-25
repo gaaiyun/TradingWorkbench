@@ -26,7 +26,7 @@ function isInvalidatedReport(report) {
 
 function problemCodesFor({
   ticker,
-  tradeDate,
+  analysisStatus,
   error,
   report,
   text,
@@ -36,7 +36,11 @@ function problemCodesFor({
   const codes = [];
   if (error || !report) {
     if (ticker === "ISSUE") codes.push("INVALID_TICKER_INPUT");
-    else codes.push("ANALYSIS_FAILED");
+    else if (analysisStatus === "data_validation_failed") {
+      codes.push("EVIDENCE_VALIDATION_FAILED");
+    } else {
+      codes.push("ANALYSIS_EXECUTION_FAILED");
+    }
   }
   if (!report) return codes;
   if (!text) codes.push("REPORT_MISSING");
@@ -53,6 +57,13 @@ function problemCodesFor({
   }
   if (evidence.publishedMarkerCount === 0) codes.push("MISSING_PUBLICATION_TIME");
   return [...new Set(codes)];
+}
+
+function failureClassFor({ ticker, analysisStatus, report }) {
+  if (report) return null;
+  if (ticker === "ISSUE") return "invalid_input";
+  if (analysisStatus === "data_validation_failed") return "evidence_validation";
+  return "analysis_execution";
 }
 
 function parseEvidence(text) {
@@ -130,6 +141,9 @@ export async function buildReportAudit({ history, reportsRoot }) {
       const text = bundle.text;
       const evidence = parseEvidence(text);
       const error = result?.error === true;
+      const analysisStatus = bundle.manifest?.analysisStatus
+        || result?.analysis_status
+        || null;
       const verifiedEvidence = hasVerifiedBundle({
         ...bundle,
         ticker,
@@ -137,7 +151,7 @@ export async function buildReportAudit({ history, reportsRoot }) {
       });
       const problemCodes = problemCodesFor({
         ticker,
-        tradeDate,
+        analysisStatus,
         error,
         report,
         text,
@@ -157,13 +171,21 @@ export async function buildReportAudit({ history, reportsRoot }) {
         generatedAt: batch?.generated_at || null,
         provider: batch?.provider || null,
         rating: result?.rating || null,
-        analysisStatus: bundle.manifest?.analysisStatus
-          || result?.analysis_status
-          || null,
+        analysisStatus,
         report,
         auditStatus,
+        failureClass: failureClassFor({ ticker, analysisStatus, report }),
         problemCodes,
         evidence,
+        claimValidation: bundle.manifest?.claimValidation || null,
+        evidencePacket: bundle.packet
+          ? {
+              status: bundle.packet.status || null,
+              asOf: bundle.packet.asOf || null,
+              contentHash: bundle.packet.contentHash || null,
+            }
+          : null,
+        evidencePublish: result?.evidence_publish || null,
         supersededBy: null,
       });
     }
@@ -184,6 +206,13 @@ export async function buildReportAudit({ history, reportsRoot }) {
     invalidatedReports: entries.filter((entry) => entry.auditStatus === "invalidated").length,
     legacyUnverifiedReports: entries.filter((entry) => entry.auditStatus === "legacy_unverified").length,
     invalidRecords: entries.filter((entry) => entry.auditStatus === "invalid_record").length,
+    evidenceValidationFailures: entries.filter(
+      (entry) => entry.failureClass === "evidence_validation",
+    ).length,
+    analysisExecutionFailures: entries.filter(
+      (entry) => entry.failureClass === "analysis_execution",
+    ).length,
+    invalidInputs: entries.filter((entry) => entry.failureClass === "invalid_input").length,
   };
   return {
     version: 1,

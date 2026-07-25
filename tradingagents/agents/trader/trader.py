@@ -31,7 +31,10 @@ def create_trader(llm):
                 "content": (
                     "You are a trading agent analyzing market data to make investment decisions. "
                     "Based on your analysis, provide a specific recommendation to buy, sell, or hold. "
-                    "Anchor your reasoning in the analysts' reports and the research plan."
+                    "Anchor your reasoning in the analysts' reports and the research plan. "
+                    "Every numerical claim must retain an exact bracketed Evidence ID. "
+                    "Leave entry price, stop loss, and position sizing empty unless explicit user "
+                    "holdings, risk budget, and citable evidence are all present."
                     + get_language_instruction()
                 ),
             },

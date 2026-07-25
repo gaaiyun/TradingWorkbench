@@ -1,12 +1,15 @@
 {
   "version": 1,
-  "generatedAt": "2026-07-25T10:24:57.564Z",
+  "generatedAt": "2026-07-25T10:35:57.521Z",
   "summary": {
     "successfulReports": 41,
     "verifiedReports": 0,
     "invalidatedReports": 3,
     "legacyUnverifiedReports": 38,
-    "invalidRecords": 6
+    "invalidRecords": 6,
+    "evidenceValidationFailures": 3,
+    "analysisExecutionFailures": 2,
+    "invalidInputs": 1
   },
   "reports": [
     {
@@ -18,8 +21,9 @@
       "analysisStatus": "data_validation_failed",
       "report": null,
       "auditStatus": "invalid_record",
+      "failureClass": "evidence_validation",
       "problemCodes": [
-        "ANALYSIS_FAILED"
+        "EVIDENCE_VALIDATION_FAILED"
       ],
       "evidence": {
         "urlCount": 0,
@@ -28,6 +32,12 @@
         "priceTargetCount": 0,
         "valuationMethodCount": 0,
         "publishedMarkerCount": 0
+      },
+      "claimValidation": null,
+      "evidencePacket": null,
+      "evidencePublish": {
+        "published": true,
+        "status": 201
       },
       "supersededBy": null
     },
@@ -40,6 +50,7 @@
       "analysisStatus": "insufficient_evidence",
       "report": "reports/GOOGL/2026-07-24-v2/complete_report.md",
       "auditStatus": "legacy_unverified",
+      "failureClass": null,
       "problemCodes": [
         "MISSING_CLAIM_EVIDENCE",
         "MISSING_PUBLICATION_TIME"
@@ -52,6 +63,28 @@
         "valuationMethodCount": 11,
         "publishedMarkerCount": 0
       },
+      "claimValidation": {
+        "status": "failed",
+        "errorCodes": [
+          "MISSING_EVIDENCE_CITATION",
+          "UNCITED_NUMERIC_CLAIM",
+          "UNSUPPORTED_PRICE_TARGET",
+          "UNSUPPORTED_ALLOCATION"
+        ],
+        "citationCount": 0,
+        "unknownEvidenceIds": [],
+        "uncitedNumericParagraphs": 154
+      },
+      "evidencePacket": {
+        "status": "ok",
+        "asOf": "2026-07-24T23:59:59Z",
+        "contentHash": "04f6004da8847e79150c6451d76a9a9e3d15328a7cb7cac4d452a2cd453df374"
+      },
+      "evidencePublish": {
+        "published": false,
+        "reason": "http_error",
+        "status": 400
+      },
       "supersededBy": null
     },
     {
@@ -63,6 +96,7 @@
       "analysisStatus": "insufficient_evidence",
       "report": "reports/3887.HK/2026-07-24-v3/complete_report.md",
       "auditStatus": "legacy_unverified",
+      "failureClass": null,
       "problemCodes": [
         "MISSING_CLAIM_EVIDENCE",
         "DUPLICATE_FINAL_PROPOSAL"
@@ -75,6 +109,28 @@
         "valuationMethodCount": 57,
         "publishedMarkerCount": 8
       },
+      "claimValidation": {
+        "status": "failed",
+        "errorCodes": [
+          "MISSING_EVIDENCE_CITATION",
+          "UNCITED_NUMERIC_CLAIM",
+          "UNSUPPORTED_PRICE_TARGET",
+          "UNSUPPORTED_ALLOCATION"
+        ],
+        "citationCount": 0,
+        "unknownEvidenceIds": [],
+        "uncitedNumericParagraphs": 183
+      },
+      "evidencePacket": {
+        "status": "ok",
+        "asOf": "2026-07-24T23:59:59Z",
+        "contentHash": "6cd1e4e1dda9a15527db335e176909f2468f7882b93723e57fed85a5835f43a8"
+      },
+      "evidencePublish": {
+        "published": false,
+        "reason": "http_error",
+        "status": 400
+      },
       "supersededBy": null
     },
     {
@@ -86,6 +142,7 @@
       "analysisStatus": "insufficient_evidence",
       "report": "reports/515880.SS/2026-07-24-v2/complete_report.md",
       "auditStatus": "legacy_unverified",
+      "failureClass": null,
       "problemCodes": [
         "ETF_TEMPLATE_MISMATCH",
         "MISSING_CLAIM_EVIDENCE"
@@ -98,6 +155,28 @@
         "valuationMethodCount": 46,
         "publishedMarkerCount": 2
       },
+      "claimValidation": {
+        "status": "failed",
+        "errorCodes": [
+          "MISSING_EVIDENCE_CITATION",
+          "UNCITED_NUMERIC_CLAIM",
+          "UNSUPPORTED_PRICE_TARGET",
+          "UNSUPPORTED_ALLOCATION"
+        ],
+        "citationCount": 0,
+        "unknownEvidenceIds": [],
+        "uncitedNumericParagraphs": 176
+      },
+      "evidencePacket": {
+        "status": "ok",
+        "asOf": "2026-07-24T23:59:59Z",
+        "contentHash": "0e155c3174f04d078020b91631225cccad7b5931f87a14ed705688c3191cdaef"
+      },
+      "evidencePublish": {
+        "published": false,
+        "reason": "http_error",
+        "status": 400
+      },
       "supersededBy": null
     },
     {
@@ -109,6 +188,7 @@
       "analysisStatus": "insufficient_evidence",
       "report": "reports/512480.SS/2026-07-24-v2/complete_report.md",
       "auditStatus": "legacy_unverified",
+      "failureClass": null,
       "problemCodes": [
         "ETF_TEMPLATE_MISMATCH",
         "MISSING_CLAIM_EVIDENCE"
@@ -121,6 +201,28 @@
         "valuationMethodCount": 40,
         "publishedMarkerCount": 2
       },
+      "claimValidation": {
+        "status": "failed",
+        "errorCodes": [
+          "MISSING_EVIDENCE_CITATION",
+          "UNCITED_NUMERIC_CLAIM",
+          "UNSUPPORTED_PRICE_TARGET",
+          "UNSUPPORTED_ALLOCATION"
+        ],
+        "citationCount": 0,
+        "unknownEvidenceIds": [],
+        "uncitedNumericParagraphs": 180
+      },
+      "evidencePacket": {
+        "status": "ok",
+        "asOf": "2026-07-24T23:59:59Z",
+        "contentHash": "b58c7d493222393fa30590ebe2012c509d835ec3c2afde2fd60a124b7295a81e"
+      },
+      "evidencePublish": {
+        "published": false,
+        "reason": "http_error",
+        "status": 400
+      },
       "supersededBy": null
     },
     {
@@ -132,8 +234,9 @@
       "analysisStatus": "data_validation_failed",
       "report": null,
       "auditStatus": "invalid_record",
+      "failureClass": "evidence_validation",
       "problemCodes": [
-        "ANALYSIS_FAILED"
+        "EVIDENCE_VALIDATION_FAILED"
       ],
       "evidence": {
         "urlCount": 0,
@@ -142,6 +245,12 @@
         "priceTargetCount": 0,
         "valuationMethodCount": 0,
         "publishedMarkerCount": 0
+      },
+      "claimValidation": null,
+      "evidencePacket": null,
+      "evidencePublish": {
+        "published": false,
+        "reason": "network_error"
       },
       "supersededBy": null
     },
@@ -154,8 +263,9 @@
       "analysisStatus": "data_validation_failed",
       "report": null,
       "auditStatus": "invalid_record",
+      "failureClass": "evidence_validation",
       "problemCodes": [
-        "ANALYSIS_FAILED"
+        "EVIDENCE_VALIDATION_FAILED"
       ],
       "evidence": {
         "urlCount": 0,
@@ -164,6 +274,12 @@
         "priceTargetCount": 0,
         "valuationMethodCount": 0,
         "publishedMarkerCount": 0
+      },
+      "claimValidation": null,
+      "evidencePacket": null,
+      "evidencePublish": {
+        "published": false,
+        "reason": "network_error"
       },
       "supersededBy": null
     },
@@ -176,6 +292,7 @@
       "analysisStatus": "insufficient_evidence",
       "report": "reports/3887.HK/2026-07-24-v2/complete_report.md",
       "auditStatus": "legacy_unverified",
+      "failureClass": null,
       "problemCodes": [
         "MISSING_CLAIM_EVIDENCE"
       ],
@@ -186,6 +303,28 @@
         "priceTargetCount": 1,
         "valuationMethodCount": 28,
         "publishedMarkerCount": 5
+      },
+      "claimValidation": {
+        "status": "failed",
+        "errorCodes": [
+          "MISSING_EVIDENCE_CITATION",
+          "UNCITED_NUMERIC_CLAIM",
+          "UNSUPPORTED_PRICE_TARGET",
+          "UNSUPPORTED_ALLOCATION"
+        ],
+        "citationCount": 0,
+        "unknownEvidenceIds": [],
+        "uncitedNumericParagraphs": 169
+      },
+      "evidencePacket": {
+        "status": "ok",
+        "asOf": "2026-07-24T23:59:59Z",
+        "contentHash": "2d933bb52ea550ade4644c43724cd2a1ed8f32036ac7258fe9c2258d758cd15e"
+      },
+      "evidencePublish": {
+        "published": false,
+        "reason": "http_error",
+        "status": 400
       },
       "supersededBy": null
     },
@@ -198,8 +337,9 @@
       "analysisStatus": null,
       "report": null,
       "auditStatus": "invalid_record",
+      "failureClass": "analysis_execution",
       "problemCodes": [
-        "ANALYSIS_FAILED"
+        "ANALYSIS_EXECUTION_FAILED"
       ],
       "evidence": {
         "urlCount": 0,
@@ -209,6 +349,9 @@
         "valuationMethodCount": 0,
         "publishedMarkerCount": 0
       },
+      "claimValidation": null,
+      "evidencePacket": null,
+      "evidencePublish": null,
       "supersededBy": null
     },
     {
@@ -220,8 +363,9 @@
       "analysisStatus": null,
       "report": null,
       "auditStatus": "invalid_record",
+      "failureClass": "analysis_execution",
       "problemCodes": [
-        "ANALYSIS_FAILED"
+        "ANALYSIS_EXECUTION_FAILED"
       ],
       "evidence": {
         "urlCount": 0,
@@ -231,6 +375,9 @@
         "valuationMethodCount": 0,
         "publishedMarkerCount": 0
       },
+      "claimValidation": null,
+      "evidencePacket": null,
+      "evidencePublish": null,
       "supersededBy": null
     },
     {
@@ -242,6 +389,7 @@
       "analysisStatus": "rated",
       "report": "reports/ORCL/2026-07-24/complete_report.md",
       "auditStatus": "legacy_unverified",
+      "failureClass": null,
       "problemCodes": [
         "MISSING_PUBLICATION_TIME"
       ],
@@ -253,6 +401,13 @@
         "valuationMethodCount": 3,
         "publishedMarkerCount": 0
       },
+      "claimValidation": null,
+      "evidencePacket": {
+        "status": "ok",
+        "asOf": "2026-07-24T23:59:59Z",
+        "contentHash": "ee89666f2f4d9e92ef0cc6da59d83673683e3f016847b9db974e008dcf15fd3f"
+      },
+      "evidencePublish": null,
       "supersededBy": null
     },
     {
@@ -264,6 +419,7 @@
       "analysisStatus": "rated",
       "report": "reports/GOOGL/2026-07-24/complete_report.md",
       "auditStatus": "legacy_unverified",
+      "failureClass": null,
       "problemCodes": [
         "MISSING_CLAIM_EVIDENCE",
         "MISSING_PUBLICATION_TIME"
@@ -276,6 +432,13 @@
         "valuationMethodCount": 0,
         "publishedMarkerCount": 0
       },
+      "claimValidation": null,
+      "evidencePacket": {
+        "status": "ok",
+        "asOf": "2026-07-24T23:59:59Z",
+        "contentHash": "8680481ff0824b665bda6eb2eb53e8db90436a3ef526e87cbe7bbaeec069a989"
+      },
+      "evidencePublish": null,
       "supersededBy": null
     },
     {
@@ -287,6 +450,7 @@
       "analysisStatus": "rated",
       "report": "reports/3887.HK/2026-07-24/complete_report.md",
       "auditStatus": "legacy_unverified",
+      "failureClass": null,
       "problemCodes": [],
       "evidence": {
         "urlCount": 6,
@@ -296,6 +460,13 @@
         "valuationMethodCount": 76,
         "publishedMarkerCount": 6
       },
+      "claimValidation": null,
+      "evidencePacket": {
+        "status": "ok",
+        "asOf": "2026-07-24T23:59:59Z",
+        "contentHash": "d0a315e4aeec2f70f48a6a8cf28f3e690e926e2a74a2fa03e47107e6a982f7b5"
+      },
+      "evidencePublish": null,
       "supersededBy": null
     },
     {
@@ -307,6 +478,7 @@
       "analysisStatus": null,
       "report": "reports/515880.SS/2026-07-24/complete_report.md",
       "auditStatus": "invalidated",
+      "failureClass": null,
       "problemCodes": [
         "CORPORATE_ACTION_CONTAMINATION",
         "ETF_TEMPLATE_MISMATCH",
@@ -321,6 +493,9 @@
         "valuationMethodCount": 36,
         "publishedMarkerCount": 6
       },
+      "claimValidation": null,
+      "evidencePacket": null,
+      "evidencePublish": null,
       "supersededBy": null
     },
     {
@@ -332,6 +507,7 @@
       "analysisStatus": null,
       "report": "reports/512480.SS/2026-07-24/complete_report.md",
       "auditStatus": "invalidated",
+      "failureClass": null,
       "problemCodes": [
         "CORPORATE_ACTION_CONTAMINATION",
         "ETF_TEMPLATE_MISMATCH",
@@ -346,6 +522,9 @@
         "valuationMethodCount": 43,
         "publishedMarkerCount": 9
       },
+      "claimValidation": null,
+      "evidencePacket": null,
+      "evidencePublish": null,
       "supersededBy": null
     },
     {
@@ -357,6 +536,7 @@
       "analysisStatus": null,
       "report": "reports/512480.SS/2026-07-23/complete_report.md",
       "auditStatus": "invalidated",
+      "failureClass": null,
       "problemCodes": [
         "CORPORATE_ACTION_CONTAMINATION",
         "ETF_TEMPLATE_MISMATCH"
@@ -369,6 +549,9 @@
         "valuationMethodCount": 22,
         "publishedMarkerCount": 11
       },
+      "claimValidation": null,
+      "evidencePacket": null,
+      "evidencePublish": null,
       "supersededBy": null
     },
     {
@@ -380,6 +563,7 @@
       "analysisStatus": null,
       "report": "reports/NVDA/2026-07-22/complete_report.md",
       "auditStatus": "legacy_unverified",
+      "failureClass": null,
       "problemCodes": [
         "MISSING_CLAIM_EVIDENCE",
         "MISSING_PUBLICATION_TIME"
@@ -392,6 +576,9 @@
         "valuationMethodCount": 44,
         "publishedMarkerCount": 0
       },
+      "claimValidation": null,
+      "evidencePacket": null,
+      "evidencePublish": null,
       "supersededBy": null
     },
     {
@@ -403,6 +590,7 @@
       "analysisStatus": null,
       "report": "reports/SPY/2026-07-22/complete_report.md",
       "auditStatus": "legacy_unverified",
+      "failureClass": null,
       "problemCodes": [
         "ETF_TEMPLATE_MISMATCH",
         "MISSING_CLAIM_EVIDENCE",
@@ -417,6 +605,9 @@
         "valuationMethodCount": 71,
         "publishedMarkerCount": 0
       },
+      "claimValidation": null,
+      "evidencePacket": null,
+      "evidencePublish": null,
       "supersededBy": null
     },
     {
@@ -428,6 +619,7 @@
       "analysisStatus": null,
       "report": "reports/600519.SS/2026-07-22/complete_report.md",
       "auditStatus": "legacy_unverified",
+      "failureClass": null,
       "problemCodes": [
         "MISSING_CLAIM_EVIDENCE",
         "MISSING_PUBLICATION_TIME"
@@ -440,6 +632,9 @@
         "valuationMethodCount": 34,
         "publishedMarkerCount": 0
       },
+      "claimValidation": null,
+      "evidencePacket": null,
+      "evidencePublish": null,
       "supersededBy": null
     },
     {
@@ -451,6 +646,7 @@
       "analysisStatus": null,
       "report": "reports/NVDA/2026-07-21/complete_report.md",
       "auditStatus": "legacy_unverified",
+      "failureClass": null,
       "problemCodes": [
         "MISSING_CLAIM_EVIDENCE",
         "MISSING_PUBLICATION_TIME"
@@ -463,6 +659,9 @@
         "valuationMethodCount": 2,
         "publishedMarkerCount": 0
       },
+      "claimValidation": null,
+      "evidencePacket": null,
+      "evidencePublish": null,
       "supersededBy": null
     },
     {
@@ -474,6 +673,7 @@
       "analysisStatus": null,
       "report": "reports/SPY/2026-07-21/complete_report.md",
       "auditStatus": "legacy_unverified",
+      "failureClass": null,
       "problemCodes": [
         "ETF_TEMPLATE_MISMATCH",
         "MISSING_CLAIM_EVIDENCE",
@@ -487,6 +687,9 @@
         "valuationMethodCount": 70,
         "publishedMarkerCount": 0
       },
+      "claimValidation": null,
+      "evidencePacket": null,
+      "evidencePublish": null,
       "supersededBy": null
     },
     {
@@ -498,6 +701,7 @@
       "analysisStatus": null,
       "report": "reports/600519.SS/2026-07-21/complete_report.md",
       "auditStatus": "legacy_unverified",
+      "failureClass": null,
       "problemCodes": [
         "MISSING_CLAIM_EVIDENCE",
         "MISSING_PUBLICATION_TIME"
@@ -510,6 +714,9 @@
         "valuationMethodCount": 21,
         "publishedMarkerCount": 0
       },
+      "claimValidation": null,
+      "evidencePacket": null,
+      "evidencePublish": null,
       "supersededBy": null
     },
     {
@@ -521,6 +728,7 @@
       "analysisStatus": null,
       "report": "reports/NVDA/2026-07-20/complete_report.md",
       "auditStatus": "legacy_unverified",
+      "failureClass": null,
       "problemCodes": [
         "MISSING_CLAIM_EVIDENCE",
         "MISSING_PUBLICATION_TIME"
@@ -533,6 +741,9 @@
         "valuationMethodCount": 39,
         "publishedMarkerCount": 0
       },
+      "claimValidation": null,
+      "evidencePacket": null,
+      "evidencePublish": null,
       "supersededBy": null
     },
     {
@@ -544,6 +755,7 @@
       "analysisStatus": null,
       "report": "reports/SPY/2026-07-20/complete_report.md",
       "auditStatus": "legacy_unverified",
+      "failureClass": null,
       "problemCodes": [
         "ETF_TEMPLATE_MISMATCH",
         "MISSING_CLAIM_EVIDENCE",
@@ -557,6 +769,9 @@
         "valuationMethodCount": 55,
         "publishedMarkerCount": 0
       },
+      "claimValidation": null,
+      "evidencePacket": null,
+      "evidencePublish": null,
       "supersededBy": null
     },
     {
@@ -568,6 +783,7 @@
       "analysisStatus": null,
       "report": "reports/600519.SS/2026-07-20/complete_report.md",
       "auditStatus": "legacy_unverified",
+      "failureClass": null,
       "problemCodes": [
         "MISSING_CLAIM_EVIDENCE",
         "MISSING_PUBLICATION_TIME"
@@ -580,6 +796,9 @@
         "valuationMethodCount": 47,
         "publishedMarkerCount": 0
       },
+      "claimValidation": null,
+      "evidencePacket": null,
+      "evidencePublish": null,
       "supersededBy": null
     },
     {
@@ -591,6 +810,7 @@
       "analysisStatus": null,
       "report": "reports/NVDA/2026-07-16/complete_report.md",
       "auditStatus": "legacy_unverified",
+      "failureClass": null,
       "problemCodes": [
         "MISSING_CLAIM_EVIDENCE",
         "MISSING_PUBLICATION_TIME"
@@ -603,6 +823,9 @@
         "valuationMethodCount": 25,
         "publishedMarkerCount": 0
       },
+      "claimValidation": null,
+      "evidencePacket": null,
+      "evidencePublish": null,
       "supersededBy": null
     },
     {
@@ -614,6 +837,7 @@
       "analysisStatus": null,
       "report": "reports/SPY/2026-07-16/complete_report.md",
       "auditStatus": "legacy_unverified",
+      "failureClass": null,
       "problemCodes": [
         "ETF_TEMPLATE_MISMATCH",
         "MISSING_CLAIM_EVIDENCE",
@@ -628,6 +852,9 @@
         "valuationMethodCount": 74,
         "publishedMarkerCount": 0
       },
+      "claimValidation": null,
+      "evidencePacket": null,
+      "evidencePublish": null,
       "supersededBy": null
     },
     {
@@ -639,6 +866,7 @@
       "analysisStatus": null,
       "report": "reports/600519.SS/2026-07-16/complete_report.md",
       "auditStatus": "legacy_unverified",
+      "failureClass": null,
       "problemCodes": [
         "MISSING_CLAIM_EVIDENCE",
         "DUPLICATE_FINAL_PROPOSAL",
@@ -652,6 +880,9 @@
         "valuationMethodCount": 33,
         "publishedMarkerCount": 0
       },
+      "claimValidation": null,
+      "evidencePacket": null,
+      "evidencePublish": null,
       "supersededBy": null
     },
     {
@@ -663,6 +894,7 @@
       "analysisStatus": null,
       "report": "reports/NVDA/2026-07-15/complete_report.md",
       "auditStatus": "legacy_unverified",
+      "failureClass": null,
       "problemCodes": [
         "MISSING_CLAIM_EVIDENCE",
         "DUPLICATE_FINAL_PROPOSAL",
@@ -676,6 +908,9 @@
         "valuationMethodCount": 88,
         "publishedMarkerCount": 0
       },
+      "claimValidation": null,
+      "evidencePacket": null,
+      "evidencePublish": null,
       "supersededBy": null
     },
     {
@@ -687,6 +922,7 @@
       "analysisStatus": null,
       "report": "reports/SPY/2026-07-15/complete_report.md",
       "auditStatus": "legacy_unverified",
+      "failureClass": null,
       "problemCodes": [
         "ETF_TEMPLATE_MISMATCH",
         "MISSING_CLAIM_EVIDENCE",
@@ -700,6 +936,9 @@
         "valuationMethodCount": 6,
         "publishedMarkerCount": 0
       },
+      "claimValidation": null,
+      "evidencePacket": null,
+      "evidencePublish": null,
       "supersededBy": null
     },
     {
@@ -711,6 +950,7 @@
       "analysisStatus": null,
       "report": "reports/600519.SS/2026-07-15/complete_report.md",
       "auditStatus": "legacy_unverified",
+      "failureClass": null,
       "problemCodes": [
         "MISSING_CLAIM_EVIDENCE",
         "MISSING_PUBLICATION_TIME"
@@ -723,6 +963,9 @@
         "valuationMethodCount": 25,
         "publishedMarkerCount": 0
       },
+      "claimValidation": null,
+      "evidencePacket": null,
+      "evidencePublish": null,
       "supersededBy": null
     },
     {
@@ -734,6 +977,7 @@
       "analysisStatus": null,
       "report": "reports/ORCL/2026-07-15/complete_report.md",
       "auditStatus": "legacy_unverified",
+      "failureClass": null,
       "problemCodes": [
         "MISSING_CLAIM_EVIDENCE",
         "MISSING_PUBLICATION_TIME"
@@ -746,6 +990,9 @@
         "valuationMethodCount": 36,
         "publishedMarkerCount": 0
       },
+      "claimValidation": null,
+      "evidencePacket": null,
+      "evidencePublish": null,
       "supersededBy": null
     },
     {
@@ -757,6 +1004,7 @@
       "analysisStatus": null,
       "report": "reports/NVDA/2026-07-14/complete_report.md",
       "auditStatus": "legacy_unverified",
+      "failureClass": null,
       "problemCodes": [
         "MISSING_CLAIM_EVIDENCE",
         "MISSING_PUBLICATION_TIME"
@@ -769,6 +1017,9 @@
         "valuationMethodCount": 37,
         "publishedMarkerCount": 0
       },
+      "claimValidation": null,
+      "evidencePacket": null,
+      "evidencePublish": null,
       "supersededBy": null
     },
     {
@@ -780,6 +1031,7 @@
       "analysisStatus": null,
       "report": "reports/SPY/2026-07-14/complete_report.md",
       "auditStatus": "legacy_unverified",
+      "failureClass": null,
       "problemCodes": [
         "ETF_TEMPLATE_MISMATCH",
         "MISSING_CLAIM_EVIDENCE",
@@ -794,6 +1046,9 @@
         "valuationMethodCount": 50,
         "publishedMarkerCount": 0
       },
+      "claimValidation": null,
+      "evidencePacket": null,
+      "evidencePublish": null,
       "supersededBy": null
     },
     {
@@ -805,6 +1060,7 @@
       "analysisStatus": null,
       "report": "reports/600519.SS/2026-07-14/complete_report.md",
       "auditStatus": "legacy_unverified",
+      "failureClass": null,
       "problemCodes": [
         "MISSING_CLAIM_EVIDENCE",
         "MISSING_PUBLICATION_TIME"
@@ -817,6 +1073,9 @@
         "valuationMethodCount": 30,
         "publishedMarkerCount": 0
       },
+      "claimValidation": null,
+      "evidencePacket": null,
+      "evidencePublish": null,
       "supersededBy": null
     },
     {
@@ -828,6 +1087,7 @@
       "analysisStatus": null,
       "report": "reports/ORCL/2026-07-14/complete_report.md",
       "auditStatus": "legacy_unverified",
+      "failureClass": null,
       "problemCodes": [
         "MISSING_CLAIM_EVIDENCE",
         "MISSING_PUBLICATION_TIME"
@@ -840,6 +1100,9 @@
         "valuationMethodCount": 25,
         "publishedMarkerCount": 0
       },
+      "claimValidation": null,
+      "evidencePacket": null,
+      "evidencePublish": null,
       "supersededBy": null
     },
     {
@@ -851,6 +1114,7 @@
       "analysisStatus": null,
       "report": "reports/NVDA/2026-07-13/complete_report.md",
       "auditStatus": "legacy_unverified",
+      "failureClass": null,
       "problemCodes": [
         "MISSING_CLAIM_EVIDENCE",
         "MISSING_PUBLICATION_TIME"
@@ -863,6 +1127,9 @@
         "valuationMethodCount": 30,
         "publishedMarkerCount": 0
       },
+      "claimValidation": null,
+      "evidencePacket": null,
+      "evidencePublish": null,
       "supersededBy": null
     },
     {
@@ -874,6 +1141,7 @@
       "analysisStatus": null,
       "report": "reports/SPY/2026-07-13/complete_report.md",
       "auditStatus": "legacy_unverified",
+      "failureClass": null,
       "problemCodes": [
         "ETF_TEMPLATE_MISMATCH",
         "MISSING_CLAIM_EVIDENCE",
@@ -887,6 +1155,9 @@
         "valuationMethodCount": 41,
         "publishedMarkerCount": 0
       },
+      "claimValidation": null,
+      "evidencePacket": null,
+      "evidencePublish": null,
       "supersededBy": null
     },
     {
@@ -898,6 +1169,7 @@
       "analysisStatus": null,
       "report": "reports/600519.SS/2026-07-13/complete_report.md",
       "auditStatus": "legacy_unverified",
+      "failureClass": null,
       "problemCodes": [
         "MISSING_CLAIM_EVIDENCE",
         "MISSING_PUBLICATION_TIME"
@@ -910,6 +1182,9 @@
         "valuationMethodCount": 44,
         "publishedMarkerCount": 0
       },
+      "claimValidation": null,
+      "evidencePacket": null,
+      "evidencePublish": null,
       "supersededBy": null
     },
     {
@@ -921,6 +1196,7 @@
       "analysisStatus": null,
       "report": "reports/ORCL/2026-07-10/complete_report.md",
       "auditStatus": "legacy_unverified",
+      "failureClass": null,
       "problemCodes": [
         "MISSING_CLAIM_EVIDENCE",
         "MISSING_PUBLICATION_TIME"
@@ -933,6 +1209,9 @@
         "valuationMethodCount": 6,
         "publishedMarkerCount": 0
       },
+      "claimValidation": null,
+      "evidencePacket": null,
+      "evidencePublish": null,
       "supersededBy": null
     },
     {
@@ -944,6 +1223,7 @@
       "analysisStatus": null,
       "report": "reports/002865.SZ/2026-07-10/complete_report.md",
       "auditStatus": "legacy_unverified",
+      "failureClass": null,
       "problemCodes": [
         "MISSING_CLAIM_EVIDENCE",
         "MISSING_PUBLICATION_TIME"
@@ -956,6 +1236,9 @@
         "valuationMethodCount": 30,
         "publishedMarkerCount": 0
       },
+      "claimValidation": null,
+      "evidencePacket": null,
+      "evidencePublish": null,
       "supersededBy": null
     },
     {
@@ -967,6 +1250,7 @@
       "analysisStatus": null,
       "report": "reports/000001.SZ/2026-07-10/complete_report.md",
       "auditStatus": "legacy_unverified",
+      "failureClass": null,
       "problemCodes": [
         "MISSING_CLAIM_EVIDENCE",
         "DUPLICATE_FINAL_PROPOSAL",
@@ -980,6 +1264,9 @@
         "valuationMethodCount": 23,
         "publishedMarkerCount": 0
       },
+      "claimValidation": null,
+      "evidencePacket": null,
+      "evidencePublish": null,
       "supersededBy": null
     },
     {
@@ -991,6 +1278,7 @@
       "analysisStatus": null,
       "report": "reports/SPY/2026-07-10/complete_report.md",
       "auditStatus": "legacy_unverified",
+      "failureClass": null,
       "problemCodes": [
         "ETF_TEMPLATE_MISMATCH",
         "MISSING_CLAIM_EVIDENCE",
@@ -1004,6 +1292,9 @@
         "valuationMethodCount": 50,
         "publishedMarkerCount": 0
       },
+      "claimValidation": null,
+      "evidencePacket": null,
+      "evidencePublish": null,
       "supersededBy": null
     },
     {
@@ -1015,6 +1306,7 @@
       "analysisStatus": null,
       "report": "reports/600519.SS/2026-07-10/complete_report.md",
       "auditStatus": "legacy_unverified",
+      "failureClass": null,
       "problemCodes": [
         "MISSING_CLAIM_EVIDENCE",
         "MISSING_PUBLICATION_TIME"
@@ -1027,6 +1319,9 @@
         "valuationMethodCount": 5,
         "publishedMarkerCount": 0
       },
+      "claimValidation": null,
+      "evidencePacket": null,
+      "evidencePublish": null,
       "supersededBy": null
     },
     {
@@ -1038,6 +1333,7 @@
       "analysisStatus": null,
       "report": "reports/510050.SS/2026-07-10/complete_report.md",
       "auditStatus": "legacy_unverified",
+      "failureClass": null,
       "problemCodes": [
         "ETF_TEMPLATE_MISMATCH",
         "MISSING_CLAIM_EVIDENCE",
@@ -1052,6 +1348,9 @@
         "valuationMethodCount": 39,
         "publishedMarkerCount": 0
       },
+      "claimValidation": null,
+      "evidencePacket": null,
+      "evidencePublish": null,
       "supersededBy": null
     },
     {
@@ -1063,6 +1362,7 @@
       "analysisStatus": null,
       "report": null,
       "auditStatus": "invalid_record",
+      "failureClass": "invalid_input",
       "problemCodes": [
         "INVALID_TICKER_INPUT"
       ],
@@ -1074,6 +1374,9 @@
         "valuationMethodCount": 0,
         "publishedMarkerCount": 0
       },
+      "claimValidation": null,
+      "evidencePacket": null,
+      "evidencePublish": null,
       "supersededBy": null
     },
     {
@@ -1085,6 +1388,7 @@
       "analysisStatus": null,
       "report": "reports/NVDA/2026-07-10/complete_report.md",
       "auditStatus": "legacy_unverified",
+      "failureClass": null,
       "problemCodes": [
         "MISSING_CLAIM_EVIDENCE",
         "MISSING_PUBLICATION_TIME"
@@ -1097,6 +1401,9 @@
         "valuationMethodCount": 53,
         "publishedMarkerCount": 0
       },
+      "claimValidation": null,
+      "evidencePacket": null,
+      "evidencePublish": null,
       "supersededBy": null
     }
   ]

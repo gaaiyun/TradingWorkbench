@@ -91,13 +91,15 @@ class ResearchPlan(BaseModel):
         description=(
             "Conversational summary of the key points from both sides of the "
             "debate, ending with which arguments led to the recommendation. "
+            "Every numerical claim must retain its exact bracketed Evidence ID. "
             "Speak naturally, as if to a teammate."
         ),
     )
     strategic_actions: str = Field(
         description=(
             "Concrete steps for the trader to implement the recommendation, "
-            "including position sizing guidance consistent with the rating."
+            "without numeric position sizing unless the prompt contains explicit "
+            "user holdings and risk-budget constraints."
         ),
     )
 
@@ -133,7 +135,8 @@ class TraderProposal(BaseModel):
     reasoning: str = Field(
         description=(
             "The case for this action, anchored in the analysts' reports and "
-            "the research plan. Two to four sentences."
+            "the research plan. Every numerical claim must retain its exact "
+            "bracketed Evidence ID. Two to four sentences."
         ),
     )
     entry_price: float | None = Field(
@@ -202,14 +205,16 @@ class PortfolioDecision(BaseModel):
     )
     executive_summary: str = Field(
         description=(
-            "A concise action plan covering entry strategy, position sizing, "
-            "key risk levels, and time horizon. Two to four sentences."
+            "A concise, non-personalized action summary. Do not include numeric "
+            "allocation, entry, or stop levels unless explicit user constraints "
+            "and matching Evidence IDs are present. Two to four sentences."
         ),
     )
     investment_thesis: str = Field(
         description=(
             "Detailed reasoning anchored in specific evidence from the analysts' "
-            "debate. If prior lessons are referenced in the prompt context, "
+            "debate. Every numerical claim must retain its exact bracketed "
+            "Evidence ID. If prior lessons are referenced in the prompt context, "
             "incorporate them; otherwise rely solely on the current analysis."
         ),
     )
