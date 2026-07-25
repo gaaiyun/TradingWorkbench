@@ -1,0 +1,26 @@
+{
+  "schemaVersion": 1,
+  "ticker": "3887.HK",
+  "tradeDate": "2026-07-24",
+  "generatedAt": "2026-07-25T08:39:00.427596+00:00",
+  "analysisStatus": "insufficient_evidence",
+  "auditStatus": "legacy_unverified",
+  "claimValidation": {
+    "status": "failed",
+    "errorCodes": [
+      "MISSING_EVIDENCE_CITATION",
+      "UNCITED_NUMERIC_CLAIM",
+      "UNSUPPORTED_PRICE_TARGET",
+      "UNSUPPORTED_ALLOCATION"
+    ],
+    "citationCount": 0,
+    "unknownEvidenceIds": [],
+    "uncitedNumericParagraphs": 169
+  },
+  "evidence": {
+    "schemaVersion": "EvidencePacketV1",
+    "asOf": "2026-07-24T23:59:59Z",
+    "contentHash": "2d933bb52ea550ade4644c43724cd2a1ed8f32036ac7258fe9c2258d758cd15e",
+    "status": "ok"
+  }
+}

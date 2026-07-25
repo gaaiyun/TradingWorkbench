@@ -1,6 +1,76 @@
 [
   {
     "trade_date": "2026-07-24",
+    "generated_at": "2026-07-25T16:03:55+08:00",
+    "provider": "openai_compatible",
+    "results": [
+      {
+        "ticker": "515880.SS",
+        "rating": "Not Rated",
+        "report": "reports/515880.SS/2026-07-24-v2/complete_report.md",
+        "error": false,
+        "analysis_status": "insufficient_evidence",
+        "audit_status": "legacy_unverified",
+        "evidence_publish": {
+          "published": false,
+          "reason": "http_error",
+          "status": 400
+        }
+      },
+      {
+        "ticker": "512480.SS",
+        "rating": "Not Rated",
+        "report": "reports/512480.SS/2026-07-24-v2/complete_report.md",
+        "error": false,
+        "analysis_status": "insufficient_evidence",
+        "audit_status": "legacy_unverified",
+        "evidence_publish": {
+          "published": false,
+          "reason": "http_error",
+          "status": 400
+        }
+      },
+      {
+        "ticker": "ORCL",
+        "rating": null,
+        "report": null,
+        "error": true,
+        "analysis_status": "data_validation_failed",
+        "audit_status": "invalidated",
+        "evidence_publish": {
+          "published": false,
+          "reason": "network_error"
+        }
+      },
+      {
+        "ticker": "GOOGL",
+        "rating": null,
+        "report": null,
+        "error": true,
+        "analysis_status": "data_validation_failed",
+        "audit_status": "invalidated",
+        "evidence_publish": {
+          "published": false,
+          "reason": "network_error"
+        }
+      },
+      {
+        "ticker": "3887.HK",
+        "rating": "Not Rated",
+        "report": "reports/3887.HK/2026-07-24-v2/complete_report.md",
+        "error": false,
+        "analysis_status": "insufficient_evidence",
+        "audit_status": "legacy_unverified",
+        "evidence_publish": {
+          "published": false,
+          "reason": "http_error",
+          "status": 400
+        }
+      }
+    ]
+  },
+  {
+    "trade_date": "2026-07-24",
     "generated_at": "2026-07-25T15:22:49+08:00",
     "provider": "openai_compatible",
     "results": [
