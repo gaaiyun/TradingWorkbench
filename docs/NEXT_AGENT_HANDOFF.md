@@ -68,7 +68,8 @@
   分隔线检查，退出码 0。
 - 报告审计：47 份成功报告；0 verified、43 legacy_unverified、4 invalidated；另有 7 条
   无报告记录，其中证据校验 4、模型/流程 2、错误输入 1。
-- GitHub `main` 已同步到 `61c882a`（实现提交 `d9b6b6f` 后的自动数据提交）。真实
+- GitHub `main` 已同步到 `7f373a3`（实现提交 `d9b6b6f`、自动数据提交
+  `61c882a` 与本交接更新）。真实
   MSFT 重验 `https://github.com/gaaiyun/TradingWorkbench/actions/runs/30169487987`
   已正确阻断缺失目标日完整行情；“Run multi-agent analysis”产生失败 outcome 后，
   “Persist reports to main”成功写入第 7 条失败记录，最后的显式失败步骤再将任务标红。
@@ -87,7 +88,7 @@
 ### 2026-07-25 最终生产验收基线
 
 - Pages 生产域名：`https://tradingagents-board.pages.dev/`；2026-07-26 最新手工发布预览为
-  `https://8359f8e8.tradingagents-board.pages.dev`。
+  `https://8d1db478.tradingagents-board.pages.dev`。
 - Worker 版本：`24776c52-43e4-4c79-86c4-2bf48d93eaf3`。
 - `/api/health`：`status=ok`，访问门禁、问答、分析调度和 D1 共享会话均已配置。
 - `/api/v1/evidence`：未授权请求返回 JSON 401，不再错误回退到 HTML。
