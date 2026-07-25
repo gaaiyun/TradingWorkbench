@@ -265,6 +265,8 @@ Invoke-RestMethod https://sh50-volguard.pages.dev/api/live
 4. 查询 D1 `evidence_packets` 和 `report_manifests`，核对 symbol、as_of 和
    content_hash；不要直接手写 JSON 入库。
 5. 数据校验失败时仍应保存 `data_validation_failed` 包，但不会生成评级或正式报告。
+6. A 股出现 `UNEXPLAINED_PRICE_JUMP` 时，对比 `/api/market?timeframe=1d` 的
+   `adjustment`；正常深度任务应读取 `qfq`，只有工作台接口不可用时才会回退 Yahoo。
 
 ### 期权指标不更新
 

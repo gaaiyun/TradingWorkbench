@@ -59,6 +59,7 @@ flowchart LR
 ## 修复边界
 
 - 新增 `EvidencePacketV1`、公司行动校验和 `report_manifests`。
+- A 股深度预检优先读取工作台 D1 的前复权日线，网页与 Agent 不再各用一套价格口径。
 - 报告状态与历史审计状态分离：
   - 分析：`rated`、`not_rated`、`insufficient_evidence`、`data_validation_failed`
   - 审计：`verified`、`legacy_unverified`、`invalidated`

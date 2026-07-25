@@ -242,21 +242,102 @@ def normalize_ticker(raw: str) -> str:
     return t
 
 
+def _load_workbench_daily(symbol: str, trade_date: str) -> dict[str, Any] | None:
+    """读取生产工作台已经校验和去重的前复权日线。"""
+    import requests
+
+    base = (
+        os.environ.get("EVIDENCE_MARKET_API_URL", "").strip()
+        or f"{os.environ.get('PAGES_URL', '').rstrip('/')}/api/market"
+    )
+    if not base.startswith("https://"):
+        return None
+    try:
+        response = requests.get(
+            base,
+            params={"symbol": symbol, "timeframe": "1d", "limit": 1260},
+            timeout=30,
+        )
+        if response.status_code != 200:
+            return None
+        payload = response.json()
+    except (requests.RequestException, ValueError, TypeError):
+        return None
+    if payload.get("status") not in {"ok", "degraded", "stale"}:
+        return None
+    rows = payload.get("data")
+    if not isinstance(rows, list) or not rows:
+        return None
+    bars: list[dict[str, Any]] = []
+    for row in rows:
+        timestamp = str(row.get("ts") or "")
+        if not timestamp or timestamp[:10] > trade_date:
+            continue
+        bars.append({
+            "ts": timestamp,
+            "open": row.get("open"),
+            "high": row.get("high"),
+            "low": row.get("low"),
+            "close": row.get("close"),
+            "volume": row.get("volume"),
+            "adjustment": row.get("adjustment") or "unknown",
+        })
+    if not bars:
+        return None
+    fetched_at = datetime.now(timezone.utc).isoformat()
+    sources = []
+    for row in payload.get("sources") or []:
+        sources.append({
+            "source": row.get("source") or "workbench-market",
+            "asOf": row.get("asOf") or row.get("as_of") or payload.get("asOf"),
+            "fetchedAt": row.get("fetchedAt") or row.get("fetched_at") or fetched_at,
+            "sourceTier": (
+                "evidence"
+                if row.get("quality") == "good" and row.get("adjustment") == "qfq"
+                else "discovery"
+            ),
+        })
+    if not sources:
+        for source in sorted({str(row.get("source") or "") for row in rows} - {""}):
+            sources.append({
+                "source": source,
+                "asOf": payload.get("asOf"),
+                "fetchedAt": fetched_at,
+                "sourceTier": "evidence",
+            })
+    return {
+        "bars": bars,
+        "sources": sources,
+        "indicators": payload.get("indicators") or {},
+    }
+
+
 def build_runtime_evidence(ticker: str, trade_date: str) -> dict[str, Any]:
-    """Build a small point-in-time packet before any model call.
+    """在模型调用前构建 point-in-time 证据包。
 
-    This preflight deliberately uses adjusted history and corporate actions.
-    If the vendor returns a split-contaminated series, the run is marked
-    non-rateable instead of allowing the LLM to turn the jump into a Sell.
+    A 股优先读取工作台 D1 中的前复权日线，使网页、问答和 Agent 使用同一数据口径；
+    工作台不可用时才回退 Yahoo。任何无法解释的价格跳变都会阻断评级。
     """
-    import yfinance as yf
-
     from cli.utils import detect_asset_type, normalize_ticker_symbol
     from tradingagents.evidence import build_evidence_packet
 
     symbol = normalize_ticker_symbol(ticker)
     asset_type = detect_asset_type(symbol).value
     cutoff = f"{trade_date}T23:59:59Z"
+    if symbol.endswith((".SS", ".SZ")):
+        workbench = _load_workbench_daily(symbol, trade_date)
+        if workbench:
+            return build_evidence_packet(
+                ticker=symbol,
+                asset_type=asset_type,
+                as_of=cutoff,
+                bars=workbench["bars"],
+                indicators=workbench["indicators"],
+                sources=workbench["sources"],
+            )
+
+    import yfinance as yf
+
     history = yf.Ticker(symbol).history(period="6mo", auto_adjust=True, actions=True)
     bars: list[dict[str, Any]] = []
     if history is not None and not history.empty:

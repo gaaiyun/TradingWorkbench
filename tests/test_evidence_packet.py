@@ -1,5 +1,6 @@
 import pytest
 
+from scripts.run_daily import build_runtime_evidence
 from tradingagents.evidence import (
     EvidenceValidationError,
     build_evidence_packet,
@@ -91,3 +92,79 @@ def test_propagator_carries_packet_status_into_agent_state():
     )
     assert state["analysis_status"] == "degraded"
     assert state["evidence_packet"]["contentHash"] == packet["contentHash"]
+
+
+def test_cn_runtime_evidence_prefers_workbench_qfq_history(monkeypatch):
+    observed = {}
+
+    class Response:
+        status_code = 200
+
+        @staticmethod
+        def json():
+            return {
+                "status": "ok",
+                "asOf": "2026-07-24T07:00:00Z",
+                "data": [
+                    {
+                        "symbol": "512480.SS",
+                        "timeframe": "1d",
+                        "ts": "2026-07-24T07:00:00Z",
+                        "open": 1.25,
+                        "high": 1.29,
+                        "low": 1.24,
+                        "close": 1.27,
+                        "volume": 100,
+                        "source": "tencent",
+                        "as_of": "2026-07-24T07:00:00Z",
+                        "fetched_at": "2026-07-24T07:01:00Z",
+                        "freshness": "fresh",
+                        "adjustment": "qfq",
+                        "quality": "good",
+                    },
+                    {
+                        "symbol": "512480.SS",
+                        "timeframe": "1d",
+                        "ts": "2026-07-23T07:00:00Z",
+                        "open": 1.24,
+                        "high": 1.27,
+                        "low": 1.23,
+                        "close": 1.25,
+                        "volume": 90,
+                        "source": "tencent",
+                        "as_of": "2026-07-23T07:00:00Z",
+                        "fetched_at": "2026-07-24T07:01:00Z",
+                        "freshness": "fresh",
+                        "adjustment": "qfq",
+                        "quality": "good",
+                    },
+                ],
+                "sources": [{
+                    "source": "tencent",
+                    "asOf": "2026-07-24T07:00:00Z",
+                    "fetchedAt": "2026-07-24T07:01:00Z",
+                    "freshness": "fresh",
+                    "adjustment": "qfq",
+                    "quality": "good",
+                }],
+            }
+
+    def get(url, *, params, timeout):
+        observed.update(url=url, params=params, timeout=timeout)
+        return Response()
+
+    monkeypatch.setenv("PAGES_URL", "https://board.example/")
+    monkeypatch.setattr("requests.get", get)
+    monkeypatch.setattr(
+        "yfinance.Ticker",
+        lambda *_: (_ for _ in ()).throw(AssertionError("Yahoo must not run")),
+    )
+
+    packet = build_runtime_evidence("512480.SS", "2026-07-24")
+
+    assert packet["status"] == "ok"
+    assert packet["canRate"] is True
+    assert packet["integrity"]["barCount"] == 2
+    assert {bar["adjustment"] for bar in packet["bars"]} == {"qfq"}
+    assert packet["sources"][0]["source"] == "tencent"
+    assert observed["params"]["limit"] == 1260

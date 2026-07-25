@@ -264,6 +264,9 @@ sequenceDiagram
     participant Q as 网页 / 问答 / Agent
 
     A->>P: 标的 + asOf
+    P->>API: A 股读取工作台前复权日线
+    API->>D: 读取已去重 qfq OHLCV
+    D-->>P: 同网页口径的行情与来源
     P->>P: 复权、公司行动、未来信息和连续性校验
     alt 校验失败
         P->>F: data_validation_failed Packet
@@ -283,6 +286,11 @@ POST 请求体上限为 1 MiB。写入口在没有 `EVIDENCE_WRITE_TOKEN` 时返
 期，报告目录中的 `evidence_packet.json` 和 `report_manifest.json` 继续作为长期审计
 副本。网络或 D1 写入失败不会改变报告结论，但运行结果会记录 `evidence_publish` 降级，
 运维人员必须补发后才能把该报告标为在线可追溯。
+
+A 股深度任务不会再单独用 Yahoo 决定技术结论。Python 预检先调用工作台
+`/api/market?timeframe=1d`，使用 D1 中与网页一致的去重前复权序列；接口故障时才回退
+Yahoo，并继续执行跳变门禁。这样 `512480.SS` 的份额拆分不会因两条运行链口径不同而
+再次被写成暴跌。
 
 ## 9. 期权双时钟
 
