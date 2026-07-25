@@ -74,3 +74,12 @@ test("buildHealthPayload exposes booleans only and marks partial failure degrade
   });
   assert.equal(JSON.stringify(payload).includes("do-not-return"), false);
 });
+
+test("health reports D1-backed persistent conversations as available", () => {
+  const payload = buildHealthPayload(
+    { DB: { prepare() {} } },
+    [{ name: "reports", ok: true }],
+    new Date("2026-07-22T10:00:00Z"),
+  );
+  assert.equal(payload.configured.shared_conversations, true);
+});

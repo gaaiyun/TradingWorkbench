@@ -77,3 +77,90 @@ test("manual analysis still dispatches the TradingAgents workflow", async () => 
     globalThis.fetch = originalFetch;
   }
 });
+
+test("production workflows scope secrets and deploy the latest main under one lock", () => {
+  const daily = readFileSync(rootFile(".github/workflows/daily-analysis.yml"), "utf8");
+  const deploy = readFileSync(rootFile(".github/workflows/deploy-workbench.yml"), "utf8");
+  const requested = readFileSync(rootFile(".github/workflows/analysis-request.yml"), "utf8");
+  const ci = readFileSync(rootFile(".github/workflows/ci.yml"), "utf8");
+
+  assert.match(daily, /^permissions:\r?\n  contents: read$/m);
+  assert.match(ci, /^permissions:\r?\n  contents: read$/m);
+
+  const dailyAnalysis = daily.match(
+    /^  analyze-and-persist:[\s\S]*?(?=^  deploy-github-pages:)/m,
+  )?.[0] || "";
+  assert.match(dailyAnalysis, /permissions:\r?\n      contents: write/);
+  assert.doesNotMatch(
+    dailyAnalysis.slice(0, dailyAnalysis.indexOf("    steps:")),
+    /\$\{\{\s*secrets\./,
+  );
+  assert.match(
+    dailyAnalysis,
+    /Run multi-agent analysis[\s\S]*?EVIDENCE_API_URL:\s*https:\/\/tradingagents-board\.pages\.dev\/api\/v1\/evidence/,
+  );
+
+  const dailyCloudflare = daily.match(
+    /^  deploy-cloudflare:[\s\S]*$/m,
+  )?.[0] || "";
+  assert.match(
+    dailyCloudflare,
+    /concurrency:\r?\n      group: cloudflare-workbench\r?\n      cancel-in-progress: true/,
+  );
+  assert.match(
+    dailyCloudflare,
+    /uses: actions\/checkout@v4\r?\n        with:\r?\n          ref: main/,
+  );
+  assert.doesNotMatch(
+    dailyCloudflare.slice(0, dailyCloudflare.indexOf("    steps:")),
+    /\$\{\{\s*secrets\./,
+  );
+
+  const deployHeader = deploy.slice(0, deploy.indexOf("    steps:"));
+  assert.doesNotMatch(deployHeader, /\$\{\{\s*secrets\./);
+  assert.match(
+    deploy,
+    /uses: actions\/checkout@v4\r?\n        with:\r?\n(?:          #.*\r?\n)*          ref: main/,
+  );
+  assert.match(
+    deploy,
+    /concurrency:\r?\n  group: cloudflare-workbench\r?\n  cancel-in-progress: true/,
+  );
+
+  assert.match(
+    requested,
+    /concurrency:\r?\n  group: report-analysis-persistence\r?\n  cancel-in-progress: false/,
+  );
+  assert.match(requested, /^permissions:\r?\n  contents: read$/m);
+  const requestedAnalysis = requested.match(
+    /^  analyze-request:[\s\S]*?(?=^  deploy-github-pages:)/m,
+  )?.[0] || "";
+  assert.match(
+    requestedAnalysis,
+    /permissions:\r?\n      contents: write\r?\n      issues: write/,
+  );
+  assert.doesNotMatch(requestedAnalysis, /^\s+pages: write$/m);
+  assert.doesNotMatch(requestedAnalysis, /^\s+id-token: write$/m);
+  assert.doesNotMatch(
+    requested.slice(0, requested.indexOf("    steps:")),
+    /\$\{\{\s*secrets\./,
+  );
+  const requestedGitHubPages = requested.match(
+    /^  deploy-github-pages:[\s\S]*?(?=^  deploy-cloudflare:)/m,
+  )?.[0] || "";
+  assert.match(
+    requestedGitHubPages,
+    /permissions:\r?\n      contents: read\r?\n      pages: write\r?\n      id-token: write/,
+  );
+  const requestedCloudflare = requested.match(
+    /^  deploy-cloudflare:[\s\S]*$/m,
+  )?.[0] || "";
+  assert.match(
+    requestedCloudflare,
+    /concurrency:\r?\n      group: cloudflare-workbench\r?\n      cancel-in-progress: true/,
+  );
+  assert.match(
+    requestedCloudflare,
+    /uses: actions\/checkout@v4\r?\n        with:\r?\n          ref: main/,
+  );
+});

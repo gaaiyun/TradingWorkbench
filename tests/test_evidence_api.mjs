@@ -188,3 +188,60 @@ test("evidence API write path fails closed and rejects malformed or oversized pa
   });
   assert.equal(oversized.status, 413);
 });
+
+test("EvidencePacketV1 versioned entrypoint requires strict bearer auth and keeps the body limit", async () => {
+  const versioned = await import("../functions/api/v1/evidence.js");
+  assert.equal(typeof versioned.onRequestGet, "function");
+  assert.equal(typeof versioned.onRequestPost, "function");
+
+  const rawReadToken = await versioned.onRequestGet({
+    request: request("/api/v1/evidence?symbol=GOOGL", {
+      authorization: "read-token",
+    }),
+    env: {
+      EVIDENCE_READ_TOKEN: "read-token",
+      DB: fakeDb(null, "GOOGL"),
+    },
+  });
+  assert.equal(rawReadToken.status, 401);
+
+  const bearerReadToken = await versioned.onRequestGet({
+    request: request("/api/v1/evidence?symbol=GOOGL", {
+      authorization: "Bearer read-token",
+    }),
+    env: {
+      EVIDENCE_READ_TOKEN: "read-token",
+      DB: fakeDb(null, "GOOGL"),
+    },
+  });
+  assert.equal(bearerReadToken.status, 200);
+
+  const rawWriteToken = await versioned.onRequestPost({
+    request: new Request("https://example.test/api/v1/evidence", {
+      method: "POST",
+      headers: { authorization: "write-token" },
+      body: "{}",
+    }),
+    env: {
+      EVIDENCE_WRITE_TOKEN: "write-token",
+      DB: fakeWriterDb([]),
+    },
+  });
+  assert.equal(rawWriteToken.status, 401);
+
+  const oversized = await versioned.onRequestPost({
+    request: new Request("https://example.test/api/v1/evidence", {
+      method: "POST",
+      headers: {
+        authorization: "Bearer write-token",
+        "content-length": String(1024 * 1024 + 1),
+      },
+      body: "{}",
+    }),
+    env: {
+      EVIDENCE_WRITE_TOKEN: "write-token",
+      DB: fakeWriterDb([]),
+    },
+  });
+  assert.equal(oversized.status, 413);
+});

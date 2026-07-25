@@ -50,7 +50,7 @@ export function buildHealthPayload(env, checks, checkedAt = new Date()) {
     access_gate: Boolean(env.ACCESS_CODE),
     chat: Boolean(env.OPENAI_COMPATIBLE_API_KEY),
     analysis_dispatch: Boolean(env.GITHUB_DISPATCH_TOKEN),
-    shared_conversations: Boolean(env.WORKBENCH_KV),
+    shared_conversations: Boolean(env.DB || env.WORKBENCH_KV),
   };
   return {
     status: checks.every((item) => item.ok) ? "ok" : "degraded",

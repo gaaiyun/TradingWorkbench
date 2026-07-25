@@ -8,13 +8,10 @@ on:
     types: [opened]
 
 permissions:
-  contents: write
-  pages: write
-  id-token: write
-  issues: write
+  contents: read
 
 concurrency:
-  group: "pages"
+  group: report-analysis-persistence
   cancel-in-progress: false
 
 jobs:
@@ -26,9 +23,9 @@ jobs:
        startsWith(github.event.issue.title, 'Analyze'))
     runs-on: ubuntu-latest
     timeout-minutes: 90
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
+    permissions:
+      contents: write
+      issues: write
     env:
       PYTHONIOENCODING: utf-8
       TRADINGAGENTS_LLM_PROVIDER: ${{ vars.TRADINGAGENTS_LLM_PROVIDER || 'deepseek' }}
@@ -37,27 +34,7 @@ jobs:
       TRADINGAGENTS_LLM_BACKEND_URL: ${{ vars.TRADINGAGENTS_LLM_BACKEND_URL }}
       TRADINGAGENTS_OUTPUT_LANGUAGE: ${{ vars.TRADINGAGENTS_OUTPUT_LANGUAGE || '中文' }}
       TRADINGAGENTS_ANALYSTS: ${{ vars.TRADINGAGENTS_ANALYSTS || 'market,news,fundamentals' }}
-      OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
-      DEEPSEEK_API_KEY: ${{ secrets.DEEPSEEK_API_KEY }}
-      OPENAI_COMPATIBLE_API_KEY: ${{ secrets.OPENAI_COMPATIBLE_API_KEY }}
-      ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
-      GOOGLE_API_KEY: ${{ secrets.GOOGLE_API_KEY }}
-      DASHSCOPE_API_KEY: ${{ secrets.DASHSCOPE_API_KEY }}
-      DASHSCOPE_CN_API_KEY: ${{ secrets.DASHSCOPE_CN_API_KEY }}
-      ZHIPU_API_KEY: ${{ secrets.ZHIPU_API_KEY }}
-      ZHIPU_CN_API_KEY: ${{ secrets.ZHIPU_CN_API_KEY }}
-      MOONSHOT_API_KEY: ${{ secrets.MOONSHOT_API_KEY }}
-      OPENROUTER_API_KEY: ${{ secrets.OPENROUTER_API_KEY }}
-      XAI_API_KEY: ${{ secrets.XAI_API_KEY }}
-      GROQ_API_KEY: ${{ secrets.GROQ_API_KEY }}
-      ALPHA_VANTAGE_API_KEY: ${{ secrets.ALPHA_VANTAGE_API_KEY }}
-      FRED_API_KEY: ${{ secrets.FRED_API_KEY }}
-      PUSHPLUS_TOKEN: ${{ secrets.PUSHPLUS_TOKEN }}
       PAGES_URL: https://tradingagents-board.pages.dev/
-      CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
-      CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID || vars.CLOUDFLARE_ACCOUNT_ID }}
-      CLOUDFLARE_PAGES_PROJECT: ${{ vars.CLOUDFLARE_PAGES_PROJECT || 'tradingagents-board' }}
-      GH_TOKEN: ${{ github.token }}
       ISSUE_NUMBER: ${{ github.event.issue.number }}
       ISSUE_TITLE: ${{ github.event.issue.title }}
       ISSUE_BODY: ${{ github.event.issue.body }}
@@ -81,6 +58,8 @@ jobs:
 
       - name: Reply parse failure
         if: steps.parse.outputs.tickers == ''
+        env:
+          GH_TOKEN: ${{ github.token }}
         run: |
           gh issue comment "$ISSUE_NUMBER" --repo "$GITHUB_REPOSITORY" --body \
             "未能从 Issue 表单的「标的代码」字段读取有效代码。请使用点名分析模板重新提交。"
@@ -98,11 +77,32 @@ jobs:
           pip install .
 
       - name: Acknowledge issue
+        env:
+          GH_TOKEN: ${{ github.token }}
         run: |
           gh issue comment "$ISSUE_NUMBER" --repo "$GITHUB_REPOSITORY" --body \
             "🤖 已受理：\`${{ steps.parse.outputs.tickers }}\`。多智能体分析运行中（约 5–20 分钟），完成后本楼回复结果并推送微信。[运行日志]($GITHUB_SERVER_URL/$GITHUB_REPOSITORY/actions/runs/$GITHUB_RUN_ID)"
 
       - name: Run multi-agent analysis
+        env:
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+          DEEPSEEK_API_KEY: ${{ secrets.DEEPSEEK_API_KEY }}
+          OPENAI_COMPATIBLE_API_KEY: ${{ secrets.OPENAI_COMPATIBLE_API_KEY }}
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          GOOGLE_API_KEY: ${{ secrets.GOOGLE_API_KEY }}
+          DASHSCOPE_API_KEY: ${{ secrets.DASHSCOPE_API_KEY }}
+          DASHSCOPE_CN_API_KEY: ${{ secrets.DASHSCOPE_CN_API_KEY }}
+          ZHIPU_API_KEY: ${{ secrets.ZHIPU_API_KEY }}
+          ZHIPU_CN_API_KEY: ${{ secrets.ZHIPU_CN_API_KEY }}
+          MOONSHOT_API_KEY: ${{ secrets.MOONSHOT_API_KEY }}
+          OPENROUTER_API_KEY: ${{ secrets.OPENROUTER_API_KEY }}
+          XAI_API_KEY: ${{ secrets.XAI_API_KEY }}
+          GROQ_API_KEY: ${{ secrets.GROQ_API_KEY }}
+          ALPHA_VANTAGE_API_KEY: ${{ secrets.ALPHA_VANTAGE_API_KEY }}
+          FRED_API_KEY: ${{ secrets.FRED_API_KEY }}
+          PUSHPLUS_TOKEN: ${{ secrets.PUSHPLUS_TOKEN }}
+          EVIDENCE_API_URL: https://tradingagents-board.pages.dev/api/v1/evidence
+          EVIDENCE_WRITE_TOKEN: ${{ secrets.EVIDENCE_WRITE_TOKEN }}
         run: |
           python scripts/run_daily.py --tickers "${{ steps.parse.outputs.tickers }}"
 
@@ -111,27 +111,11 @@ jobs:
         run: |
           bash scripts/persist_reports.sh "chore(data): Issue #${ISSUE_NUMBER} 点名分析报告 [skip ci]"
 
-      - name: Setup Pages
-        uses: actions/configure-pages@v5
-
-      - name: Upload site artifact
-        uses: actions/upload-pages-artifact@v3
-        with:
-          path: public
-
-      - name: Deploy to GitHub Pages
-        id: deployment
-        uses: actions/deploy-pages@v4
-
-      - name: Deploy CN mirror to Cloudflare Pages
-        if: ${{ env.CLOUDFLARE_API_TOKEN != '' && env.CLOUDFLARE_ACCOUNT_ID != '' }}
-        run: |
-          npm install -g wrangler
-          wrangler pages deploy public --project-name "$CLOUDFLARE_PAGES_PROJECT" --branch main
-
       - name: Comment results and close issue
         if: always()
         shell: python
+        env:
+          GH_TOKEN: ${{ github.token }}
         run: |
           import json, os, subprocess, sys
           repo = os.environ["GITHUB_REPOSITORY"]
@@ -155,3 +139,74 @@ jobs:
           subprocess.run(["gh", "issue", "comment", issue, "--repo", repo, "--body", body], check=False)
           if ok:
               subprocess.run(["gh", "issue", "close", issue, "--repo", repo, "--reason", "completed"], check=False)
+
+  deploy-github-pages:
+    needs: analyze-request
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    permissions:
+      contents: read
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+
+      - name: Setup Pages
+        uses: actions/configure-pages@v5
+
+      - name: Upload site artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: public
+
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
+
+  deploy-cloudflare:
+    needs: analyze-request
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    permissions:
+      contents: read
+    concurrency:
+      group: cloudflare-workbench
+      cancel-in-progress: true
+    env:
+      CLOUDFLARE_PAGES_PROJECT: ${{ vars.CLOUDFLARE_PAGES_PROJECT || 'tradingagents-board' }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+
+      - name: Check deployment credentials
+        id: cloudflare
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID || vars.CLOUDFLARE_ACCOUNT_ID }}
+        run: |
+          if [ -n "$CLOUDFLARE_API_TOKEN" ] && [ -n "$CLOUDFLARE_ACCOUNT_ID" ]; then
+            echo "available=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "available=false" >> "$GITHUB_OUTPUT"
+            echo "::notice::Cloudflare credentials are not configured; production deployment is skipped."
+          fi
+
+      - name: Test Pages Functions contracts
+        run: npm run test:functions
+
+      - name: Deploy CN mirror to Cloudflare Pages
+        if: ${{ steps.cloudflare.outputs.available == 'true' }}
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID || vars.CLOUDFLARE_ACCOUNT_ID }}
+        run: npx --yes wrangler@4.113.0 pages deploy public --project-name "$CLOUDFLARE_PAGES_PROJECT" --branch main

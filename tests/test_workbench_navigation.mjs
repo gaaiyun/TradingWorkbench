@@ -5,6 +5,7 @@ import test from "node:test";
 import * as router from "../public/assets/workbench-router.mjs";
 
 const html = readFileSync(new URL("../public/index.html", import.meta.url), "utf8");
+const css = readFileSync(new URL("../public/assets/workbench.css", import.meta.url), "utf8");
 const routerModule = new URL("../public/assets/workbench-router.mjs", import.meta.url);
 
 const routes = [
@@ -34,6 +35,17 @@ test("route contract normalizes hashes and generates stable links", () => {
   assert.equal(router.routeHref?.("unknown"), "#monitor");
 });
 
+test("switching primary workspaces returns the viewport to the new workspace heading", () => {
+  const script = readFileSync(
+    new URL("../public/assets/workbench.js", import.meta.url),
+    "utf8",
+  );
+  assert.match(
+    script,
+    /const previousRoute = document\.body\.dataset\.route[\s\S]*?previousRoute !== route\) window\.scrollTo\(0,\s*0\)/,
+  );
+});
+
 test("every primary route has a visible navigation target and workspace", () => {
   for (const [id, label] of routes) {
     assert.match(html, new RegExp(`href="#${id}"[^>]*>[\\s\\S]*?${label}`));
@@ -45,4 +57,32 @@ test("primary capabilities are workspaces instead of external-link substitutes",
   assert.doesNotMatch(html, /class="capability-nav"/);
   assert.match(html, /data-workspace="agents"/);
   assert.match(html, /data-workspace="options"/);
+});
+
+test("mobile primary navigation keeps all seven workspaces reachable", () => {
+  const mobileNav = /<nav class="mobile-nav"[\s\S]*?<\/nav>/.exec(html)?.[0] || "";
+  for (const [id] of routes) {
+    assert.match(mobileNav, new RegExp(`href="#${id}"[^>]*data-route-link="${id}"`));
+  }
+});
+
+test("responsive primary navigation has no tablet dead zone", () => {
+  const tabletMedia = css.slice(
+    css.indexOf("@media (max-width: 940px)"),
+    css.indexOf("@media (max-width: 760px)"),
+  );
+  assert.match(tabletMedia, /\.mobile-nav\s*\{[\s\S]*?display:\s*grid/);
+  assert.match(tabletMedia, /body\s*\{[\s\S]*?padding-bottom:\s*55px/);
+});
+
+test("mobile monitor switcher stays above the global navigation without forcing a page scroll", () => {
+  const mobileMedia = css.slice(css.indexOf("@media (max-width: 760px)"));
+  assert.match(
+    mobileMedia,
+    /body\[data-route="monitor"\]\s*\{[^}]*padding-bottom:\s*calc\(89px \+ env\(safe-area-inset-bottom\)\)/,
+  );
+  assert.match(
+    mobileMedia,
+    /body\[data-route="monitor"\]\s+\.monitor-mobile-nav\s*\{[\s\S]*?position:\s*fixed[\s\S]*?bottom:\s*calc\(55px \+ env\(safe-area-inset-bottom\)\)/,
+  );
 });

@@ -6,6 +6,11 @@ const MIIT_RSS_URL = [
   "&columnIds=d3e2bede1bc045e2875fc7161c01db7d",
 ].join("");
 const HASHKEY_IR_URL = "https://group.hashkey.com/en/news/categories/announcement-1";
+const SEC_EDGAR_CIK = {
+  ORCL: "0001341439",
+  GOOGL: "0001652044",
+};
+const EVIDENCE_PROVIDERS = new Set(["miit-rss", "hashkey-ir", "sec-edgar-8k"]);
 
 const TARGET_ALIASES = {
   "515880.SS": ["通信ETF", "通信 ETF", "光模块", "光通信", "通信设备", "5G", "6G"],
@@ -78,6 +83,89 @@ export function parseGoogleNewsRss(xml) {
       publishedAt: published.toISOString(),
       summary: cleanText(tagValue(body, "description"), 500),
       publisher: cleanText(tagValue(body, "source"), 120) || "未知发布者",
+    });
+  }
+  return items;
+}
+
+function atomTagValue(item, tag) {
+  const escaped = String(tag).replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+  const qualified = `(?:[A-Za-z_][\\w.-]*:)?${escaped}`;
+  const match = new RegExp(
+    `<${qualified}(?:\\s[^>]*)?>([\\s\\S]*?)<\\/${qualified}\\s*>`,
+    "i",
+  ).exec(item);
+  return match?.[1] ?? "";
+}
+
+function attributeValue(attributes, name) {
+  const escaped = String(name).replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+  const match = new RegExp(
+    `(?:^|\\s)${escaped}\\s*=\\s*(["'])([\\s\\S]*?)\\1`,
+    "i",
+  ).exec(attributes);
+  return decodeEntities(match?.[2] ?? "");
+}
+
+function atomAttributeValue(item, tag, attribute) {
+  const escaped = String(tag).replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+  const match = new RegExp(
+    `<(?:[A-Za-z_][\\w.-]*:)?${escaped}\\b([^>]*)\\/?>`,
+    "i",
+  ).exec(item);
+  return attributeValue(match?.[1] ?? "", attribute);
+}
+
+function secFilingUrl(entry) {
+  const contentUrl = cleanText(atomTagValue(entry, "filing-href"), 2000);
+  const candidates = [];
+  if (contentUrl) candidates.push(contentUrl);
+  for (const match of entry.matchAll(
+    /<(?:[A-Za-z_][\w.-]*:)?link\b([^>]*)\/?>/gi,
+  )) {
+    const href = attributeValue(match[1], "href");
+    const rel = attributeValue(match[1], "rel");
+    if (href && (!rel || rel.toLocaleLowerCase() === "alternate")) {
+      candidates.push(href);
+    }
+  }
+  return candidates.find((candidate) => {
+    try {
+      const url = new URL(candidate);
+      return url.protocol === "https:"
+        && ["sec.gov", "www.sec.gov"].includes(url.hostname.toLocaleLowerCase())
+        && /^\/Archives\/edgar\/data\//i.test(url.pathname);
+    } catch {
+      return false;
+    }
+  }) || "";
+}
+
+export function parseSecEdgarAtom(xml, fallbackPublisher = "SEC EDGAR") {
+  const value = String(xml || "");
+  const publisher = cleanText(atomTagValue(value, "conformed-name"), 120)
+    || cleanText(fallbackPublisher, 120)
+    || "SEC EDGAR";
+  const items = [];
+  for (const match of value.matchAll(
+    /<(?:[A-Za-z_][\w.-]*:)?entry(?:\s[^>]*)?>([\s\S]*?)<\/(?:[A-Za-z_][\w.-]*:)?entry\s*>/gi,
+  )) {
+    const body = match[1];
+    const filingType = cleanText(atomTagValue(body, "filing-type"), 30)
+      || cleanText(atomAttributeValue(body, "category", "term"), 30);
+    if (!/^8-K(?:\/A)?$/i.test(filingType)) continue;
+    const filingTitle = cleanText(atomTagValue(body, "title"), 250);
+    const url = secFilingUrl(body);
+    const sourceTime = cleanText(atomTagValue(body, "updated"), 100)
+      || cleanText(atomTagValue(body, "filing-date"), 30);
+    const published = new Date(sourceTime);
+    if (!filingTitle || !url || !Number.isFinite(published.valueOf())) continue;
+    items.push({
+      title: `${publisher} — ${filingTitle}`,
+      url,
+      publishedAt: published.toISOString(),
+      summary: cleanText(atomTagValue(body, "summary"), 500),
+      publisher,
     });
   }
   return items;
@@ -225,6 +313,18 @@ function yahooRssUrl(symbol) {
   return `https://feeds.finance.yahoo.com/rss/2.0/headline?${parameters}`;
 }
 
+function secEdgarAtomUrl(symbol) {
+  const parameters = new URLSearchParams({
+    action: "getcompany",
+    CIK: SEC_EDGAR_CIK[symbol],
+    type: "8-K",
+    owner: "exclude",
+    count: "40",
+    output: "atom",
+  });
+  return `https://www.sec.gov/cgi-bin/browse-edgar?${parameters}`;
+}
+
 function providerCandidates(plan) {
   const candidates = [{
     source: "google-news-rss",
@@ -236,6 +336,20 @@ function providerCandidates(plan) {
       source: "hashkey-ir",
       url: HASHKEY_IR_URL,
       format: "hashkey-feed",
+    });
+  } else if (plan.topic === "oracle") {
+    candidates.unshift({
+      source: "sec-edgar-8k",
+      url: secEdgarAtomUrl("ORCL"),
+      format: "sec-edgar-atom",
+      publisher: "Oracle Corporation",
+    });
+  } else if (plan.topic === "alphabet") {
+    candidates.unshift({
+      source: "sec-edgar-8k",
+      url: secEdgarAtomUrl("GOOGL"),
+      format: "sec-edgar-atom",
+      publisher: "Alphabet Inc.",
     });
   }
   if (["communications", "cn-semiconductor", "policy"].includes(plan.topic)) {
@@ -354,6 +468,8 @@ async function fetchContent(candidate, fetcher) {
       headers: {
         accept: candidate.format === "hashkey-feed"
           ? "text/html,application/xhtml+xml;q=0.9,*/*;q=0.5"
+          : candidate.format === "sec-edgar-atom"
+            ? "application/atom+xml,application/xml,text/xml;q=0.9,text/html;q=0.8,*/*;q=0.5"
           : "application/rss+xml,application/xml,text/xml;q=0.9,*/*;q=0.5",
         "user-agent": "TradingWorkbench/1.0 (+https://github.com/gaaiyun/TradingWorkbench)",
       },
@@ -364,6 +480,8 @@ async function fetchContent(candidate, fetcher) {
     const contentType = response.headers.get("content-type") || "";
     const supported = candidate.format === "hashkey-feed"
       ? /text\/html/i.test(contentType)
+      : candidate.format === "sec-edgar-atom"
+        ? /(?:atom\+xml|xml|text\/html|text\/plain)/i.test(contentType)
       : /(?:xml|rss|text\/plain)/i.test(contentType);
     if (!supported) {
       throw new NewsFetchError("NEWS_MALFORMED_RESPONSE");
@@ -392,6 +510,8 @@ async function fetchPlan(plan, fetcher, cache) {
       const content = await cachedContent(candidate, fetcher, cache);
       const parsed = candidate.format === "hashkey-feed"
         ? parseHashKeyFeedPage(content)
+        : candidate.format === "sec-edgar-atom"
+          ? parseSecEdgarAtom(content, candidate.publisher)
         : parseGoogleNewsRss(content);
       const items = parsed
         .filter((item) => relevantToPlan(item, plan))
@@ -418,6 +538,7 @@ async function fetchPlan(plan, fetcher, cache) {
 function itemSource(provider, item) {
   if (provider === "miit-rss") return "工业和信息化部 RSS";
   if (provider === "hashkey-ir") return "HashKey Investor Relations";
+  if (provider === "sec-edgar-8k") return `SEC EDGAR 8-K / ${item.publisher}`;
   if (provider === "yahoo-finance-rss") {
     let publisher = item.publisher;
     if (!publisher || publisher === "未知发布者") {
@@ -539,7 +660,7 @@ export async function collectNewsForProfile({
         url: item.url,
         publishedAt: item.publishedAt,
         source: itemSource(outcome.value.source, item),
-        sourceTier: ["miit-rss", "hashkey-ir"].includes(outcome.value.source)
+        sourceTier: EVIDENCE_PROVIDERS.has(outcome.value.source)
           ? "evidence"
           : "discovery",
         publisher: item.publisher,
@@ -549,7 +670,7 @@ export async function collectNewsForProfile({
         fetchedAt,
         freshness: age >= 0 && age <= 36 * 60 * 60 * 1000 ? "fresh" : "stale",
         adjustment: null,
-        quality: ["miit-rss", "hashkey-ir"].includes(outcome.value.source)
+        quality: EVIDENCE_PROVIDERS.has(outcome.value.source)
           ? "evidence"
           : "discovery",
         expiresAt,

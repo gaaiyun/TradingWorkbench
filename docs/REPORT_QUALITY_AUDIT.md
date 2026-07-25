@@ -1,7 +1,9 @@
 # Trading Workbench 报告质量审计
 
-更新日期：2026-07-25  
-机器索引：[`public/data/report-audit.json`](../public/data/report-audit.json)  
+更新日期：2026-07-25
+
+机器索引：[`public/data/report-audit.json`](../public/data/report-audit.json)
+
 生产接口：`GET /api/report-audit`
 
 ## 结论
@@ -17,22 +19,27 @@
 失效。其他旧报告若缺少可复算证据，状态为 `legacy_unverified`，表示“按当前标准无法
 验证”，不表示报告中的每句话都错误。
 
-截至本轮最终重验开始前，机器索引记录：
+最终五标的重验和索引再生成已完成。机器索引生成时间为
+`2026-07-25T12:59:29.656Z`，当前记录：
 
 | 项目 | 数量 |
 |---|---:|
-| 有报告的运行结果 | 41 |
+| 有报告的运行结果 | 46 |
 | `verified` | 0 |
-| `legacy_unverified` | 38 |
+| `legacy_unverified` | 43 |
 | `invalidated` | 3 |
 | 未形成报告的运行记录 | 6 |
 | 其中证据预检失败 | 3 |
 | 其中模型或流程失败 | 2 |
 | 其中错误输入 | 1 |
 
-最终五标的重验运行是
-[GitHub Actions 30154765352](https://github.com/gaaiyun/TradingWorkbench/actions/runs/30154765352)。
-它完成后，以上数量必须以机器索引重新生成的结果为准，不能手工改 JSON。
+最终五标的重验运行
+[GitHub Actions 30154765352](https://github.com/gaaiyun/TradingWorkbench/actions/runs/30154765352)
+已成功完成并保留五份版本报告。五份 Packet 均通过数据预检并发布到 D1，说明复权、
+历史覆盖、版本路径和发布链已经打通；但五份 Agent 文本仍因未引用数字和无用户约束的
+仓位建议未通过 claim validation，因此全部保持
+`insufficient_evidence / Not Rated / legacy_unverified`。系统没有为追求“有评级”而
+放松门禁，所以当前 `verified` 仍为 0。
 
 ## 状态定义
 
@@ -94,6 +101,21 @@
 - Agent Schema 不再强迫输出仓位和价格，分析师不再提前给最终交易提案；所有数值必须
   保留 Evidence ID。报告顶部增加程序生成的 Evidence Snapshot。
 
+最终运行的精确结果：
+
+| 标的 | 版本报告 | Packet 发布 | Claim validation |
+|---|---|---|---|
+| 515880.SS | `2026-07-24-v3` | 201 | 18 个引用；仍有未引用数字与无约束仓位 |
+| 512480.SS | `2026-07-24-v3` | 201 | 18 个引用；仍有未引用数字与无约束仓位 |
+| ORCL | `2026-07-24-v2` | 201 | 33 个引用；仍有未引用数字、无方法目标价与无约束仓位 |
+| GOOGL | `2026-07-24-v3` | 201 | 26 个引用；仍有未引用数字与无约束仓位 |
+| 3887.HK | `2026-07-24-v4` | 201 | 33 个引用；仍有未引用数字、无方法目标价与无约束仓位 |
+
+这轮结果证明引用提示和结构化输出已有改善，但还不足以通过确定性门禁。下一步若继续
+优化，应缩短各 Agent 草稿、让数字事实只从 Evidence Snapshot 或结构化字段渲染，并
+把仓位动作改成需要用户持仓上下文后才运行的独立步骤；不能删掉
+`UNCITED_NUMERIC_CLAIM` 或 `UNSUPPORTED_ALLOCATION` 检查来制造 verified 报告。
+
 ## 证据与报告数据流
 
 ```mermaid
@@ -142,7 +164,8 @@ Packet、Manifest 和版本报告路径。写接口校验鉴权、请求大小�
 - 首页“最新观点”只读取 `verified`；
 - 档案默认隐藏 `invalidated`，用户可进入“历史审计”查看原文；
 - `legacy_unverified` 和 Not Rated 报告明确显示质量标签；
-- 问答不把 `invalidated` 当作上下文；
+- 问答只读取同时满足 `rated + verified + claim validation passed + evidence ok` 的
+  报告；`invalidated`、`legacy_unverified` 和 Not Rated 草稿都不会进入上下文；
 - 同日重跑写入 `-v2`、`-v3`，不覆盖旧目录；
 - `supersededBy` 只指向真正通过当前门禁的替代报告。
 
@@ -186,4 +209,3 @@ Packet、Manifest 和版本报告路径。写接口校验鉴权、请求大小�
 - 失效报告不进入首页、问答、提醒或组合结论；
 - GOOGL/GOOG、03887/3887.HK 的身份与市场时钟一致；
 - 任一免费来源失败只产生局部降级，不让整页空白。
-

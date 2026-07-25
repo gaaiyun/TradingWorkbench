@@ -137,8 +137,9 @@ flowchart TD
 | 收盘深度分析 | `analysis=full` | 完整 Agent | GitHub run 和报告 |
 
 新闻实体表把 `03887`、`3887`、`03887.HK` 统一到 `3887.HK / HashKey Holdings`。
-该映射来自港交所发行人资料，不能与美股 `BTDR / Bitdeer` 混用。Google News RSS
-不可达时，GOOGL 使用 Yahoo Finance RSS；3887.HK 优先使用 HashKey 投资者关系公告，
+该映射来自港交所发行人资料，不能与美股 `BTDR / Bitdeer` 混用。ORCL 与 GOOGL
+优先读取 SEC EDGAR 8-K，官方源不可达后才进入 Google/Yahoo 发现链；3887.HK
+优先使用 HashKey 投资者关系公告，
 官方页不可达时才降级到 Google/Yahoo。失败轨迹与降级来源一并写入 run card。
 
 ## 5. Provider Registry
@@ -186,7 +187,8 @@ sequenceDiagram
 | `/api/history` | GET | 研究档案索引 | 只读 |
 | `/api/report` | GET | 报告正文 | 只读 |
 | `/api/report-audit` | GET | 历史报告审计状态 | 只读 |
-| `/api/evidence` | GET / POST | 读取或发布 EvidencePacketV1 | 可选读 token / 独立写 token |
+| `/api/v1/evidence` | GET / POST | 读取或发布 EvidencePacketV1 | 标准 Bearer；可选读 token / 独立写 token |
+| `/api/evidence` | GET / POST | EvidencePacketV1 兼容入口 | 与 v1 共用校验和存储 |
 | `/api/chat` | POST | 非流式或 SSE 问答 | 访问码 |
 | `/api/chat-sessions` | GET | 持久会话与恢复 | 访问码 |
 | `/api/volguard` | GET | 实时期权代理与快照降级 | 只读 |
@@ -302,7 +304,8 @@ sequenceDiagram
     F->>D: 读取不晚于 asOf 的最近有效包
 ```
 
-POST 请求体上限为 1 MiB。写入口在没有 `EVIDENCE_WRITE_TOKEN` 时返回 503，在 token
+POST 请求体上限为 1 MiB。权威入口是 `/api/v1/evidence`，只接受标准 Bearer header；
+旧 `/api/evidence` 保留给已部署客户端迁移。写入口在没有 `EVIDENCE_WRITE_TOKEN` 时返回 503，在 token
 不匹配时返回 401；服务端不接受客户端指定过期时间。D1 为每个包设置 180 天在线读取
 期，报告目录中的 `evidence_packet.json` 和 `report_manifest.json` 继续作为长期审计
 副本。网络或 D1 写入失败不会改变报告结论，但运行结果会记录 `evidence_publish` 降级，

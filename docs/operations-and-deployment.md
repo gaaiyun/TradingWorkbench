@@ -163,7 +163,8 @@ Cloudflare 出口访问免费源时可能需要来源请求头。当前 adapter 
 请求头后必须在生产 Worker 中补跑验证，不能用本机直连成功代替云端验收。
 
 新闻链同样必须做云端验证。Google News RSS 可能拒绝 Cloudflare 出口，Worker 会按
-主题改用工信部 RSS 或 Yahoo Finance RSS；Alphabet 使用 `GOOGL` feed，HashKey
+主题改用工信部 RSS 或 Yahoo Finance RSS；Oracle 与 Alphabet 先查询 SEC EDGAR 8-K，
+再进入 Google/Yahoo 发现链；HashKey
 Holdings 先读公司投资者关系公告，官方页失败后再使用 Google/Yahoo 的 `3887.HK`
 feed。返回的 `sources` 应同时保留主来源失败码和降级来源成功状态。不能因为本机
 Google 请求成功就删除这条降级链。
@@ -218,7 +219,8 @@ Invoke-RestMethod https://sh50-volguard.pages.dev/api/live
   精确的原始污染报告路径为 `invalidated`；不要把同日的 `-v2/-v3` 修复版连带失效。
 - `invalidRecords` 必须等于 `evidenceValidationFailures + analysisExecutionFailures
   + invalidInputs`，便于区分证据门禁、模型/流程故障和错误输入。
-- `/api/evidence?symbol=...` 在已有包时返回相同的 `contentHash`、`asOf` 和来源；尚未
+- `/api/v1/evidence?symbol=...` 在已有包时返回相同的 `contentHash`、`asOf` 和来源；
+  旧 `/api/evidence` 只用于兼容迁移；尚未
   生成有效包时返回 `unavailable`，不能回退到拼装的假证据。
 
 ## 7. 问答验收
@@ -265,17 +267,18 @@ Invoke-RestMethod https://sh50-volguard.pages.dev/api/live
 ### Evidence API 返回 unavailable
 
 1. 确认目标标的已完成一次新版本深度任务；旧报告不会机械补造证据包。
-2. 查看 `latest.json` 中该标的的 `evidence_publish`，区分 `not_configured`、
+2. 确认 `/api/v1/evidence` 返回 JSON，而不是 Pages 对未知路由的 HTML fallback。
+3. 查看 `latest.json` 中该标的的 `evidence_publish`，区分 `not_configured`、
    `network_error`、`http_error`。
-3. 确认 Cloudflare 与 GitHub 的 `EVIDENCE_WRITE_TOKEN` 已同步轮换。
-4. 查询 D1 `evidence_packets` 和 `report_manifests`，核对 symbol、as_of 和
+4. 确认 Cloudflare 与 GitHub 的 `EVIDENCE_WRITE_TOKEN` 已同步轮换。
+5. 查询 D1 `evidence_packets` 和 `report_manifests`，核对 symbol、as_of 和
    content_hash；不要直接手写 JSON 入库。
-5. 数据校验失败时仍应保存 `data_validation_failed` 包，但不会生成评级或正式报告。
-6. A 股出现 `UNEXPLAINED_PRICE_JUMP` 时，对比 `/api/market?timeframe=1d` 的
+6. 数据校验失败时仍应保存 `data_validation_failed` 包，但不会生成评级或正式报告。
+7. A 股出现 `UNEXPLAINED_PRICE_JUMP` 时，对比 `/api/market?timeframe=1d` 的
    `adjustment`；正常深度任务应读取 `qfq`，只有工作台接口不可用时才会回退 Yahoo。
-7. `claimValidation.status=failed` 表示模型文本仍有无引用数字、未知 Evidence ID、
+8. `claimValidation.status=failed` 表示模型文本仍有无引用数字、未知 Evidence ID、
    无方法目标价或无持仓上下文的配置比例；报告保留审计，但前端必须显示 Not Rated。
-8. 同标的同交易日补跑会创建 `YYYY-MM-DD-v2` 等新目录。不要删除旧目录；审计索引用
+9. 同标的同交易日补跑会创建 `YYYY-MM-DD-v2` 等新目录。不要删除旧目录；审计索引用
    `supersededBy` 关联新版本。
 
 ### 期权指标不更新

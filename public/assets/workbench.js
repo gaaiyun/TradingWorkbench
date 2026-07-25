@@ -208,12 +208,12 @@ import {
 
   function marketTone(change, market) {
     if (!Number.isFinite(Number(change))) return "neutral";
-    if (market === "US") return Number(change) >= 0 ? "us-market-up" : "us-market-down";
+    if (["US", "HK"].includes(market)) return Number(change) >= 0 ? "us-market-up" : "us-market-down";
     return Number(change) >= 0 ? "market-up" : "market-down";
   }
 
   function marketPalette(market) {
-    return market === "US"
+    return ["US", "HK"].includes(market)
       ? {
         up: "#38b788",
         down: "#e05f68",
@@ -1214,6 +1214,7 @@ import {
   function applyRoute() {
     const requested = String(location.hash || "").replace(/^#/, "");
     const route = normalizeRoute(requested);
+    const previousRoute = document.body.dataset.route;
     if (requested !== route) history.replaceState(null, "", routeHref(route));
     document.body.dataset.route = route;
     $$("[data-workspace]").forEach((workspace) => {
@@ -1228,18 +1229,39 @@ import {
     const descriptor = PRIMARY_ROUTES.find(({ id }) => id === route) || PRIMARY_ROUTES[0];
     $("#workspace-title").textContent = descriptor.label;
     document.title = `${descriptor.label} · Trading Workbench`;
+    if (previousRoute && previousRoute !== route) window.scrollTo(0, 0);
     window.dispatchEvent(new CustomEvent("workbench:routechange", { detail: { route } }));
   }
 
+  const drawerFocusReturn = new WeakMap();
+
   function openDrawer(drawer, overlay) {
+    const drawerElement = $(drawer);
+    const activeElement = document.activeElement;
+    if (activeElement instanceof HTMLElement && !drawerElement.contains(activeElement)) {
+      drawerFocusReturn.set(drawerElement, activeElement);
+    }
     $(overlay).hidden = false;
-    $(drawer).classList.add("is-open");
-    $(drawer).setAttribute("aria-hidden", "false");
+    drawerElement.inert = false;
+    drawerElement.classList.add("is-open");
+    drawerElement.setAttribute("aria-hidden", "false");
+    requestAnimationFrame(() => {
+      drawerElement.querySelector(
+        "[autofocus], button:not([disabled]), input:not([disabled]), select:not([disabled]), textarea:not([disabled]), a[href]",
+      )?.focus();
+    });
   }
 
   function closeDrawer(drawer, overlay) {
-    $(drawer).classList.remove("is-open");
-    $(drawer).setAttribute("aria-hidden", "true");
+    const drawerElement = $(drawer);
+    if (drawerElement.contains(document.activeElement)) {
+      const returnTarget = drawerFocusReturn.get(drawerElement);
+      if (returnTarget?.isConnected) returnTarget.focus();
+      else document.activeElement?.blur();
+    }
+    drawerElement.classList.remove("is-open");
+    drawerElement.setAttribute("aria-hidden", "true");
+    drawerElement.inert = true;
     $(overlay).hidden = true;
   }
 

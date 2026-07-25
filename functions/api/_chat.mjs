@@ -18,7 +18,8 @@ const DEFAULT_TIMEOUTS = Object.freeze({
 const DEFAULT_CONTEXT_WINDOW_TOKENS = 65536;
 const CONTEXT_SAFETY_TOKENS = 512;
 
-const REPORT_PATH_RE = /^reports\/[A-Za-z0-9._\-\/]+\.md$/;
+const REPORT_PATH_RE =
+  /^reports\/[A-Za-z0-9._-]+\/\d{4}-\d{2}-\d{2}(?:-v(?:[2-9]|[1-9]\d+))?\/complete_report\.md$/;
 
 function envText(env, ...names) {
   for (const name of names) {
@@ -469,6 +470,24 @@ export function isValidReportPath(path) {
   return REPORT_PATH_RE.test(path) && !path.includes("..");
 }
 
+function verifiedReportManifest(text, reportPath) {
+  try {
+    const manifest = JSON.parse(text);
+    const [, ticker, directory] = reportPath.split("/");
+    return (
+      manifest?.ticker === ticker
+      && manifest?.tradeDate === directory.slice(0, 10)
+      && manifest?.analysisStatus === "rated"
+      && manifest?.auditStatus === "verified"
+      && manifest?.claimValidation?.status === "passed"
+      && manifest?.evidence?.status === "ok"
+      && /^[a-f0-9]{64}$/i.test(String(manifest?.evidence?.contentHash || ""))
+    );
+  } catch {
+    return false;
+  }
+}
+
 async function readResponseTextLimited(response, maxChars) {
   if (!response.body?.getReader) {
     const text = await response.text();
@@ -571,6 +590,7 @@ export async function loadResearchContext({
   if (isValidReportPath(reportPath)) {
     candidates.push({
       url: `${rawBase}/${reportPath}`,
+      manifestUrl: `${rawBase}/${reportPath.replace(/complete_report\.md$/, "report_manifest.json")}`,
       label: reportPath,
       type: "report",
       path: reportPath,
@@ -589,11 +609,37 @@ export async function loadResearchContext({
     if (signal?.aborted) break;
     const remainingMs = Math.trunc(deadline - now());
     if (remainingMs <= 0) break;
+    if (candidate.type === "report") {
+      const manifest = await fetchContextSource({
+        fetchImpl,
+        url: candidate.manifestUrl,
+        label: `${candidate.label} manifest`,
+        type: "report-manifest",
+        path: candidate.path,
+        cf: candidate.cf,
+        limit: 64 * 1024,
+        timeoutMs: remainingMs,
+        parentSignal: signal,
+      });
+      if (!manifest.ok || !verifiedReportManifest(manifest.context, candidate.path)) {
+        attempts.push({
+          ...manifest,
+          ok: false,
+          type: "report-manifest",
+          error: manifest.ok ? "report_not_verified" : manifest.error,
+          context: undefined,
+          contextLabel: undefined,
+        });
+        continue;
+      }
+    }
+    const contextRemainingMs = Math.trunc(deadline - now());
+    if (contextRemainingMs <= 0) break;
     const result = await fetchContextSource({
       fetchImpl,
       ...candidate,
       limit: contextLimit,
-      timeoutMs: remainingMs,
+      timeoutMs: contextRemainingMs,
       parentSignal: signal,
     });
     if (result.ok && result.context) return { ...result, attempts };

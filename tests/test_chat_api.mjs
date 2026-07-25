@@ -15,6 +15,15 @@ const BASE_ENV = Object.freeze({
   ACCESS_CODE: "access-code",
   OPENAI_COMPATIBLE_API_KEY: "api-secret",
 });
+const REPORT_PATH = "reports/NVDA/2026-07-22/complete_report.md";
+const VERIFIED_MANIFEST = Object.freeze({
+  ticker: "NVDA",
+  tradeDate: "2026-07-22",
+  analysisStatus: "rated",
+  auditStatus: "verified",
+  claimValidation: { status: "passed" },
+  evidence: { status: "ok", contentHash: "a".repeat(64) },
+});
 
 function chatRequest(body, extraHeaders = {}) {
   return new Request("https://example.test/api/chat", {
@@ -157,24 +166,27 @@ test("统一输入预算预留输出窗口，并优先裁剪旧历史和上下�
 test("上下文按 VolGuard、报告、latest 降级，并返回来源和截断元数据", async () => {
   const calls = [];
   const result = await loadResearchContext({
-    body: { volguard: true, report: "reports/NVDA/report.md" },
+    body: { volguard: true, report: REPORT_PATH },
     rawBase: "https://raw.example/public",
     contextLimit: 5,
     timeoutMs: 1000,
     fetchImpl: async (url) => {
       calls.push(String(url));
       if (calls.length === 1) return new Response("unavailable", { status: 503 });
+      if (String(url).endsWith("report_manifest.json")) {
+        return jsonResponse(VERIFIED_MANIFEST);
+      }
       return new Response("123456789", { status: 200 });
     },
   });
 
-  assert.equal(calls.length, 2);
+  assert.equal(calls.length, 3);
   assert.equal(result.context, "12345");
-  assert.equal(result.contextLabel, "reports/NVDA/report.md");
+  assert.equal(result.contextLabel, REPORT_PATH);
   assert.deepEqual(result.source, {
     type: "report",
-    label: "reports/NVDA/report.md",
-    path: "reports/NVDA/report.md",
+    label: REPORT_PATH,
+    path: REPORT_PATH,
     chars: 5,
     truncated: true,
   });
@@ -183,7 +195,7 @@ test("上下文按 VolGuard、报告、latest 降级，并返回来源和截断�
 test("成功但为空的高优先级上下文会继续降级", async () => {
   const calls = [];
   const result = await loadResearchContext({
-    body: { volguard: true, report: "reports/NVDA/report.md" },
+    body: { volguard: true, report: REPORT_PATH },
     rawBase: "https://raw.example/public",
     contextLimit: 100,
     timeoutMs: 1000,
@@ -201,7 +213,7 @@ test("上下文候选共享总 deadline，并随浏览器 signal 取消", async 
   let clock = 0;
   let calls = 0;
   const result = await loadResearchContext({
-    body: { volguard: true, report: "reports/NVDA/report.md" },
+    body: { volguard: true, report: REPORT_PATH },
     rawBase: "https://raw.example/public",
     contextLimit: 100,
     timeoutMs: 1000,
@@ -230,6 +242,37 @@ test("上下文候选共享总 deadline，并随浏览器 signal 取消", async 
     },
   });
   assert.equal(calls, 0);
+});
+
+test("未验证或失效报告不能进入问答上下文", async () => {
+  const calls = [];
+  const result = await loadResearchContext({
+    body: { report: REPORT_PATH },
+    rawBase: "https://raw.example/public",
+    contextLimit: 100,
+    timeoutMs: 1000,
+    fetchImpl: async (url) => {
+      calls.push(String(url));
+      if (String(url).endsWith("report_manifest.json")) {
+        return jsonResponse({
+          ...VERIFIED_MANIFEST,
+          auditStatus: "invalidated",
+          claimValidation: { status: "failed" },
+        });
+      }
+      if (String(url).endsWith("latest.json")) return new Response("verified latest context");
+      throw new Error("invalidated report body must not be fetched");
+    },
+  });
+
+  assert.equal(calls.some((url) => url.endsWith("complete_report.md")), false);
+  assert.equal(result.context, "verified latest context");
+  assert.equal(result.source.type, "latest");
+  assert.equal(
+    result.attempts.some(({ type, error }) =>
+      type === "report-manifest" && error === "report_not_verified"),
+    true,
+  );
 });
 
 test("header 访问码先于 body 解析，legacy body code 仍兼容且 body 有硬上限", async () => {

@@ -24,7 +24,7 @@
 | 期权风控 | 现货与期权风险如何变化 | 认购/认沽链、IV/HV、Greeks、GEX/DEX、PCR、Max Pain、VaR、BSADF、双刷新时钟 |
 | 设置 | 监控目标如何调整 | `WorkbenchSettingsV2`、标的角色、分析深度、时区、任务频率和提醒阈值 |
 
-页面采用统一的石墨灰研究终端样式：普通文字使用产品字体，只有价格和指标使用等宽数字；A 股红涨绿跌，美股绿涨红跌，系统健康色与行情色分离。
+页面采用统一的石墨灰研究终端样式：普通文字使用产品字体，只有价格和指标使用等宽数字；A 股红涨绿跌，美股和港股绿涨红跌，系统健康色与行情色分离。
 
 ## 默认研究目标
 
@@ -139,12 +139,13 @@ Worker 每五分钟读取 D1 设置，按“任务 + 理论计划时间槽”生
 盘中每五分钟采集，每十五分钟计算价格异动和成交量 z-score。只有高等级事件进入 PushPlus；完整多智能体分析默认每天一次，避免把所有驱动标的都扩成高成本辩论。
 
 新闻发现任务在 08:25 执行，按通信、A 股半导体、美股半导体、Oracle、Alphabet、
-HashKey 和工信部政策主题采集。HashKey 优先读取公司投资者关系公告，其他主题先查询
-Google News RSS。Google 从 Cloudflare 出口不可用时，
+HashKey 和工信部政策主题采集。Oracle 与 Alphabet 优先读取 SEC EDGAR 8-K，
+HashKey 优先读取公司投资者关系公告，其他主题先查询 Google News RSS。官方源或
+Google 从 Cloudflare 出口不可用时，
 A 股与政策主题降级到工信部官方 RSS，半导体、Oracle、Alphabet 与 HashKey 主题降级
 到对应的 Yahoo Finance RSS。D1 只保存
 标题、短摘要、原始发布者、发布时间、采集时间、来源等级和原文链接；聚合结果标记为
-`discovery`，HashKey 公司公告则标记为 `evidence`。`SMH` 只有匹配
+`discovery`，SEC 8-K、工信部和 HashKey 公司公告标记为 `evidence`。`SMH` 只有匹配
 `VanEck Semiconductor ETF` 等完整
 实体名称时才关联到标的。
 
@@ -182,9 +183,10 @@ Agent 只接收证据包中最后八根行情、指标、公司行动、新闻�
 行动、时点新闻、来源和完整性警告；它与 Agent 草稿分开，便于先核对事实再阅读推断。
 证据包本身仍保留完整历史：A 股和美股/港股都优先读取工作台已落库的日线，目标上限
 1260 根；页面和 Agent 因而不会一个看五年、另一个只看六个月。
-GitHub 深度任务生成证据包后，用独立写入密钥提交到 `/api/evidence`；Pages Function
+GitHub 深度任务生成证据包后，用独立写入密钥提交到 `/api/v1/evidence`；Pages Function
 校验 Schema、哈希、标的、时间和 Manifest 后才参数化写入 D1。网页、问答和后续 Agent
-读取同一份只读快照，写入失败只标记发布降级，不会把未保存的包伪装成可追溯证据。
+读取同一份只读快照；旧 `/api/evidence` 保留为兼容入口。写入失败只标记发布降级，
+不会把未保存的包伪装成可追溯证据。
 
 档案页默认隐藏 `invalidated` 报告，可在“历史审计”中查看原文和失效原因。当前全量审计
 结果见 [报告质量审计](docs/REPORT_QUALITY_AUDIT.md)，网页读取的同源索引位于
@@ -288,7 +290,7 @@ npx wrangler pages dev public
 本地 D1：
 
 ```powershell
-npx wrangler d1 migrations apply tradingagents-workbench --local
+npx --yes wrangler@4.113.0 d1 migrations apply tradingagents-workbench --local --config wrangler.monitor.toml
 ```
 
 不要把真实密钥写进仓库。可配置项见 [.env.example](.env.example) 和 [部署与运维](docs/operations-and-deployment.md)。
@@ -350,6 +352,7 @@ Python 核心测试应使用已经安装完整项目依赖的虚拟环境。浏�
 - [部署、密钥、验收与回退](docs/operations-and-deployment.md)
 - [本地只读 MCP 工具](docs/mcp-readonly.md)
 - [产品回归、迁移与防复发约束](docs/regression-and-migration.md)
+- [下一 Agent 交接](docs/NEXT_AGENT_HANDOFF.md)
 - [统一工作台设计记录](docs/superpowers/plans/2026-07-24-workbench-unification-design.md)
 
 ## 参考与许可证

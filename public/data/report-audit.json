@@ -1,17 +1,230 @@
 {
   "version": 1,
-  "generatedAt": "2026-07-25T10:35:57.521Z",
+  "generatedAt": "2026-07-25T12:59:29.656Z",
   "summary": {
-    "successfulReports": 41,
+    "successfulReports": 46,
     "verifiedReports": 0,
     "invalidatedReports": 3,
-    "legacyUnverifiedReports": 38,
+    "legacyUnverifiedReports": 43,
     "invalidRecords": 6,
     "evidenceValidationFailures": 3,
     "analysisExecutionFailures": 2,
     "invalidInputs": 1
   },
   "reports": [
+    {
+      "ticker": "515880.SS",
+      "tradeDate": "2026-07-24",
+      "generatedAt": "2026-07-25T18:37:27+08:00",
+      "provider": "openai_compatible",
+      "rating": "Not Rated",
+      "analysisStatus": "insufficient_evidence",
+      "report": "reports/515880.SS/2026-07-24-v3/complete_report.md",
+      "auditStatus": "legacy_unverified",
+      "failureClass": null,
+      "problemCodes": [
+        "ETF_TEMPLATE_MISMATCH",
+        "MISSING_CLAIM_EVIDENCE"
+      ],
+      "evidence": {
+        "urlCount": 5,
+        "claimCitationCount": 0,
+        "finalProposalMarkers": 1,
+        "priceTargetCount": 0,
+        "valuationMethodCount": 50,
+        "publishedMarkerCount": 5
+      },
+      "claimValidation": {
+        "status": "failed",
+        "errorCodes": [
+          "UNCITED_NUMERIC_CLAIM",
+          "UNSUPPORTED_ALLOCATION"
+        ],
+        "citationCount": 18,
+        "unknownEvidenceIds": [],
+        "uncitedNumericParagraphs": 160
+      },
+      "evidencePacket": {
+        "status": "ok",
+        "asOf": "2026-07-24T23:59:59Z",
+        "contentHash": "0e155c3174f04d078020b91631225cccad7b5931f87a14ed705688c3191cdaef"
+      },
+      "evidencePublish": {
+        "published": true,
+        "status": 201
+      },
+      "supersededBy": null
+    },
+    {
+      "ticker": "512480.SS",
+      "tradeDate": "2026-07-24",
+      "generatedAt": "2026-07-25T18:37:27+08:00",
+      "provider": "openai_compatible",
+      "rating": "Not Rated",
+      "analysisStatus": "insufficient_evidence",
+      "report": "reports/512480.SS/2026-07-24-v3/complete_report.md",
+      "auditStatus": "legacy_unverified",
+      "failureClass": null,
+      "problemCodes": [
+        "ETF_TEMPLATE_MISMATCH",
+        "MISSING_CLAIM_EVIDENCE",
+        "MISSING_PUBLICATION_TIME"
+      ],
+      "evidence": {
+        "urlCount": 0,
+        "claimCitationCount": 0,
+        "finalProposalMarkers": 1,
+        "priceTargetCount": 0,
+        "valuationMethodCount": 4,
+        "publishedMarkerCount": 0
+      },
+      "claimValidation": {
+        "status": "failed",
+        "errorCodes": [
+          "UNCITED_NUMERIC_CLAIM",
+          "UNSUPPORTED_ALLOCATION"
+        ],
+        "citationCount": 18,
+        "unknownEvidenceIds": [],
+        "uncitedNumericParagraphs": 129
+      },
+      "evidencePacket": {
+        "status": "ok",
+        "asOf": "2026-07-24T23:59:59Z",
+        "contentHash": "b58c7d493222393fa30590ebe2012c509d835ec3c2afde2fd60a124b7295a81e"
+      },
+      "evidencePublish": {
+        "published": true,
+        "status": 201
+      },
+      "supersededBy": null
+    },
+    {
+      "ticker": "ORCL",
+      "tradeDate": "2026-07-24",
+      "generatedAt": "2026-07-25T18:37:27+08:00",
+      "provider": "openai_compatible",
+      "rating": "Not Rated",
+      "analysisStatus": "insufficient_evidence",
+      "report": "reports/ORCL/2026-07-24-v2/complete_report.md",
+      "auditStatus": "legacy_unverified",
+      "failureClass": null,
+      "problemCodes": [],
+      "evidence": {
+        "urlCount": 23,
+        "claimCitationCount": 1,
+        "finalProposalMarkers": 1,
+        "priceTargetCount": 0,
+        "valuationMethodCount": 3,
+        "publishedMarkerCount": 15
+      },
+      "claimValidation": {
+        "status": "failed",
+        "errorCodes": [
+          "UNCITED_NUMERIC_CLAIM",
+          "UNSUPPORTED_PRICE_TARGET",
+          "UNSUPPORTED_ALLOCATION"
+        ],
+        "citationCount": 33,
+        "unknownEvidenceIds": [],
+        "uncitedNumericParagraphs": 181
+      },
+      "evidencePacket": {
+        "status": "ok",
+        "asOf": "2026-07-24T23:59:59Z",
+        "contentHash": "ed2faa952e7fa4adf8a4ad864d90d9ead674de153273ffcd6cca06e30c85f2b8"
+      },
+      "evidencePublish": {
+        "published": true,
+        "status": 201
+      },
+      "supersededBy": null
+    },
+    {
+      "ticker": "GOOGL",
+      "tradeDate": "2026-07-24",
+      "generatedAt": "2026-07-25T18:37:27+08:00",
+      "provider": "openai_compatible",
+      "rating": "Not Rated",
+      "analysisStatus": "insufficient_evidence",
+      "report": "reports/GOOGL/2026-07-24-v3/complete_report.md",
+      "auditStatus": "legacy_unverified",
+      "failureClass": null,
+      "problemCodes": [
+        "MISSING_CLAIM_EVIDENCE"
+      ],
+      "evidence": {
+        "urlCount": 16,
+        "claimCitationCount": 0,
+        "finalProposalMarkers": 1,
+        "priceTargetCount": 0,
+        "valuationMethodCount": 5,
+        "publishedMarkerCount": 13
+      },
+      "claimValidation": {
+        "status": "failed",
+        "errorCodes": [
+          "UNCITED_NUMERIC_CLAIM",
+          "UNSUPPORTED_ALLOCATION"
+        ],
+        "citationCount": 26,
+        "unknownEvidenceIds": [],
+        "uncitedNumericParagraphs": 173
+      },
+      "evidencePacket": {
+        "status": "ok",
+        "asOf": "2026-07-24T23:59:59Z",
+        "contentHash": "240f68a27fcbbdc167cddd7738f6bed50c8fe4761505394e8b0922c5f08c1379"
+      },
+      "evidencePublish": {
+        "published": true,
+        "status": 201
+      },
+      "supersededBy": null
+    },
+    {
+      "ticker": "3887.HK",
+      "tradeDate": "2026-07-24",
+      "generatedAt": "2026-07-25T18:37:27+08:00",
+      "provider": "openai_compatible",
+      "rating": "Not Rated",
+      "analysisStatus": "insufficient_evidence",
+      "report": "reports/3887.HK/2026-07-24-v4/complete_report.md",
+      "auditStatus": "legacy_unverified",
+      "failureClass": null,
+      "problemCodes": [
+        "MISSING_CLAIM_EVIDENCE"
+      ],
+      "evidence": {
+        "urlCount": 15,
+        "claimCitationCount": 0,
+        "finalProposalMarkers": 1,
+        "priceTargetCount": 0,
+        "valuationMethodCount": 45,
+        "publishedMarkerCount": 8
+      },
+      "claimValidation": {
+        "status": "failed",
+        "errorCodes": [
+          "UNCITED_NUMERIC_CLAIM",
+          "UNSUPPORTED_PRICE_TARGET",
+          "UNSUPPORTED_ALLOCATION"
+        ],
+        "citationCount": 33,
+        "unknownEvidenceIds": [],
+        "uncitedNumericParagraphs": 166
+      },
+      "evidencePacket": {
+        "status": "ok",
+        "asOf": "2026-07-24T23:59:59Z",
+        "contentHash": "1b11e68786a2c3988f13047c975b2564f95134ef9a431f035f331bf3d1707c75"
+      },
+      "evidencePublish": {
+        "published": true,
+        "status": 201
+      },
+      "supersededBy": null
+    },
     {
       "ticker": "ORCL",
       "tradeDate": "2026-07-24",

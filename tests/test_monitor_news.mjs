@@ -26,6 +26,27 @@ const RSS = `<?xml version="1.0" encoding="UTF-8"?>
   </item>
 </channel></rss>`;
 
+const SEC_ATOM = `<?xml version="1.0" encoding="ISO-8859-1"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <company-info>
+    <cik>0001341439</cik>
+    <conformed-name>ORACLE CORP</conformed-name>
+  </company-info>
+  <entry>
+    <category term="8-K" scheme="https://www.sec.gov/" label="form type" />
+    <content type="text/xml">
+      <accession-number>0001193125-26-265848</accession-number>
+      <filing-date>2026-07-23</filing-date>
+      <filing-type>8-K</filing-type>
+      <form-name>Current report</form-name>
+    </content>
+    <link type="text/html" href="https://www.sec.gov/Archives/edgar/data/1341439/000119312526265848/example-index.htm" rel="alternate" />
+    <summary type="html">&lt;b&gt;Filed:&lt;/b&gt; 2026-07-23&lt;br&gt;Item 2.02: Results of Operations and Financial Condition</summary>
+    <title>8-K  - Current report</title>
+    <updated>2026-07-23T16:13:46-04:00</updated>
+  </entry>
+</feed>`;
+
 test("Google News RSS parser preserves evidence metadata and strips markup", async () => {
   const { parseGoogleNewsRss } = await import(newsUrl);
   assert.deepEqual(parseGoogleNewsRss(RSS), [
@@ -44,6 +65,112 @@ test("Google News RSS parser preserves evidence metadata and strips markup", asy
       publisher: "Local Daily",
     },
   ]);
+});
+
+test("SEC EDGAR Atom parser keeps the official filing URL and source timestamp", async () => {
+  const { parseSecEdgarAtom } = await import(newsUrl);
+  assert.deepEqual(parseSecEdgarAtom(SEC_ATOM), [{
+    title: "ORACLE CORP — 8-K - Current report",
+    url: "https://www.sec.gov/Archives/edgar/data/1341439/000119312526265848/example-index.htm",
+    publishedAt: "2026-07-23T20:13:46.000Z",
+    summary: "Filed: 2026-07-23 Item 2.02: Results of Operations and Financial Condition",
+    publisher: "ORACLE CORP",
+  }]);
+});
+
+test("SEC EDGAR Atom parser accepts namespace prefixes and rejects non-8-K entries", async () => {
+  const { parseSecEdgarAtom } = await import(newsUrl);
+  const xml = `<?xml version="1.0"?>
+  <atom:feed xmlns:atom="http://www.w3.org/2005/Atom">
+    <atom:entry>
+      <atom:category label="form type" term="8-K" />
+      <atom:link rel="alternate" href="https://example.com/not-sec" />
+      <atom:link
+        href="https://www.sec.gov/Archives/edgar/data/1652044/official-index.htm"
+        type="text/html"
+        rel="alternate"
+      />
+      <atom:summary><![CDATA[Item 8.01: Other Events]]></atom:summary>
+      <atom:title>8-K - Current report</atom:title>
+      <atom:updated>2026-07-22T18:01:02Z</atom:updated>
+    </atom:entry>
+    <atom:entry>
+      <atom:category term="10-Q" label="form type" />
+      <atom:link rel="alternate" href="https://www.sec.gov/Archives/edgar/data/1652044/quarterly-index.htm" />
+      <atom:title>10-Q - Quarterly report</atom:title>
+      <atom:updated>2026-07-22T18:00:00Z</atom:updated>
+    </atom:entry>
+  </atom:feed>`;
+  assert.deepEqual(parseSecEdgarAtom(xml, "Alphabet Inc."), [{
+    title: "Alphabet Inc. — 8-K - Current report",
+    url: "https://www.sec.gov/Archives/edgar/data/1652044/official-index.htm",
+    publishedAt: "2026-07-22T18:01:02.000Z",
+    summary: "Item 8.01: Other Events",
+    publisher: "Alphabet Inc.",
+  }]);
+});
+
+test("Oracle and Alphabet prefer deduplicated SEC 8-K evidence before discovery feeds", async () => {
+  const { collectNewsForProfile } = await import(newsUrl);
+  const calls = [];
+  const writes = [];
+  const duplicateEntry = SEC_ATOM.match(/<entry>[\s\S]*?<\/entry>/)[0]
+    .replace("example-index.htm", "example-index.htm?utm_source=edgar");
+  const oracleAtom = SEC_ATOM.replace("</feed>", `${duplicateEntry}</feed>`);
+  const alphabetAtom = SEC_ATOM
+    .replaceAll("0001341439", "0001652044")
+    .replace("ORACLE CORP", "Alphabet Inc.")
+    .replaceAll("1341439/", "1652044/")
+    .replace("example-index.htm", "alphabet-index.htm");
+  const result = await collectNewsForProfile({
+    profile: {
+      ...monitorSettings().profiles[0],
+      targets: [{ symbol: "ORCL" }, { symbol: "GOOGL" }],
+    },
+    db: {},
+    fetcher: async (url) => {
+      const value = new URL(url);
+      calls.push(value);
+      const xml = value.searchParams.get("CIK") === "0001341439"
+        ? oracleAtom
+        : alphabetAtom;
+      return new Response(xml, {
+        status: 200,
+        headers: { "content-type": "text/html; charset=utf-8" },
+      });
+    },
+    writeItems: async (_db, payload) => writes.push(payload),
+    now: new Date("2026-07-23T20:30:00.000Z"),
+  });
+  const items = writes.flatMap(({ items: rows }) => rows);
+  assert.equal(result.status, "completed");
+  assert.equal(calls.length, 2);
+  assert.deepEqual(
+    calls.map((url) => url.searchParams.get("CIK")).sort(),
+    ["0001341439", "0001652044"],
+  );
+  assert.equal(calls.every((url) =>
+    url.hostname === "www.sec.gov"
+    && url.searchParams.get("type") === "8-K"
+    && url.searchParams.get("output") === "atom"), true);
+  assert.equal(items.length, 2);
+  assert.deepEqual(items.map(({ symbol }) => symbol).sort(), ["GOOGL", "ORCL"]);
+  assert.equal(items.every(({ sourceTier }) => sourceTier === "evidence"), true);
+  assert.equal(items.every(({ quality }) => quality === "evidence"), true);
+  assert.equal(items.every(({ publishedAt, asOf }) =>
+    publishedAt === "2026-07-23T20:13:46.000Z"
+    && asOf === publishedAt), true);
+  assert.equal(items.every(({ url }) =>
+    new URL(url).hostname === "www.sec.gov"
+    && new URL(url).pathname.startsWith("/Archives/edgar/data/")), true);
+  assert.equal(
+    items.some(({ source }) => source === "SEC EDGAR 8-K / ORACLE CORP"),
+    true,
+  );
+  assert.equal(
+    items.some(({ source }) => source === "SEC EDGAR 8-K / Alphabet Inc."),
+    true,
+  );
 });
 
 test("HashKey investor page parser extracts the embedded official post feed", async () => {
@@ -195,7 +322,11 @@ test("news collection falls back to Yahoo feeds for Alphabet and HashKey", async
     fetcher: async (url) => {
       const value = String(url);
       calls.push(value);
-      if (value.includes("group.hashkey.com") || value.includes("news.google.com")) {
+      if (
+        value.includes("sec.gov")
+        || value.includes("group.hashkey.com")
+        || value.includes("news.google.com")
+      ) {
         return new Response("", { status: 503 });
       }
       const symbol = new URL(value).searchParams.get("s");
@@ -215,8 +346,16 @@ test("news collection falls back to Yahoo feeds for Alphabet and HashKey", async
   assert.equal(items.some(({ symbol }) => symbol === "GOOGL"), true);
   assert.equal(items.some(({ symbol }) => symbol === "3887.HK"), true);
   assert.equal(items.every(({ source }) => source.startsWith("Yahoo Finance RSS /")), true);
+  assert.equal(items.every(({ sourceTier }) => sourceTier === "discovery"), true);
   assert.equal(calls.some((url) => url.includes("s=GOOGL")), true);
   assert.equal(calls.some((url) => url.includes("s=3887.HK")), true);
+  assert.equal(
+    result.sources.some(({ source, status, reason }) =>
+      source === "sec-edgar-8k"
+      && status === "failed"
+      && reason === "NEWS_HTTP_503"),
+    true,
+  );
   assert.equal(
     result.sources.filter(({ source, status }) =>
       source === "google-news-rss" && status === "failed").length,

@@ -374,7 +374,7 @@ test("report archive uses the audit index and visibly labels unverified evidence
   assert.match(html, /历史审计/);
 });
 
-test("market direction follows A-share and US conventions without changing health colors", () => {
+test("market direction follows A-share and US/Hong Kong conventions without changing health colors", () => {
   assert.match(css, /--market-up:\s*#e05f68/);
   assert.match(css, /--market-down:\s*#38b788/);
   assert.match(css, /--us-market-up:\s*#38b788/);
@@ -385,7 +385,23 @@ test("market direction follows A-share and US conventions without changing healt
   assert.match(css, /\.us-market-down\s*\{\s*color:\s*var\(--us-market-down\)/);
   assert.match(script, /function marketTone\(change,\s*market\)/);
   assert.match(script, /function marketPalette\(market\)/);
+  assert.equal(
+    (script.match(/\["US",\s*"HK"\]\.includes\(market\)/g) || []).length,
+    2,
+  );
   assert.match(script, /series\.candles\.applyOptions/);
   assert.match(css, /--positive:\s*#38b788/);
   assert.match(css, /--negative:\s*#e05f68/);
+});
+
+test("drawers move focus before becoming hidden and keep closed controls inert", () => {
+  assert.match(html, /id="settings-drawer"[^>]*aria-hidden="true"[^>]*inert/);
+  assert.match(html, /id="assistant"[^>]*aria-hidden="true"[^>]*inert/);
+  assert.match(script, /drawerFocusReturn\s*=\s*new WeakMap/);
+  assert.match(script, /drawerElement\.inert\s*=\s*false/);
+  assert.match(
+    script,
+    /drawerElement\.contains\(document\.activeElement\)[\s\S]*?returnTarget\.focus\(\)[\s\S]*?drawerElement\.setAttribute\("aria-hidden",\s*"true"\)/,
+  );
+  assert.match(script, /drawerElement\.inert\s*=\s*true/);
 });
