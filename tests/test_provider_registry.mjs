@@ -95,6 +95,45 @@ function eastmoneyUsFixture() {
   };
 }
 
+test("exposes additive provider governance metadata without changing market fetch results", async () => {
+  const { createProviderRegistry } = await import(registryUrl);
+  const registry = createProviderRegistry({
+    fetch: async () => jsonResponse(tencentFixture()),
+    now: () => new Date("2026-07-23T02:05:00.000Z"),
+  });
+
+  assert.deepEqual(registry.getProviderMetadata("sec-edgar-submissions"), {
+    authorityTier: "evidence",
+    transportTier: "official-json",
+    usageScope: "issuer-filings",
+    limits: {
+      maxResponseBytes: 524288,
+      maxItems: 8,
+      maxScannedItems: 200,
+      timeoutMs: 8000,
+    },
+  });
+  assert.deepEqual(registry.getProviderMetadata("federal-reserve-rss"), {
+    authorityTier: "evidence",
+    transportTier: "official-rss",
+    usageScope: "us-monetary-policy",
+    limits: {
+      maxResponseBytes: 131072,
+      maxItems: 8,
+      timeoutMs: 8000,
+    },
+  });
+  assert.equal(registry.getProviderMetadata("unknown-provider"), null);
+
+  const result = await registry.fetchMarketData({
+    symbol: "515880.SS",
+    market: "CN",
+    timeframe: "5m",
+  });
+  assert.equal(result.source, "tencent");
+  assert.equal(result.status, "ok");
+});
+
 test("routes CN symbols through Tencent first and returns normalized bars and quote", async () => {
   const { createProviderRegistry } = await import(registryUrl);
   const urls = [];

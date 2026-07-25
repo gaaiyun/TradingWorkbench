@@ -7,6 +7,65 @@ import {
   recordSourceSuccess,
 } from "./health.mjs";
 
+function providerMetadata({
+  authorityTier = "discovery",
+  transportTier = "best-effort-http",
+  usageScope = "market-data",
+  limits = {},
+} = {}) {
+  return Object.freeze({
+    authorityTier,
+    transportTier,
+    usageScope,
+    limits: Object.freeze({ timeoutMs: 8_000, ...limits }),
+  });
+}
+
+export const PROVIDER_METADATA = Object.freeze({
+  tencent: providerMetadata(),
+  eastmoney: providerMetadata(),
+  "eastmoney-us": providerMetadata(),
+  "tencent-us": providerMetadata(),
+  yahoo: providerMetadata(),
+  alphavantage: providerMetadata({
+    transportTier: "licensed-api",
+    usageScope: "market-data-by-api-key",
+  }),
+  stooq: providerMetadata(),
+  "miit-policy-api": providerMetadata({
+    authorityTier: "evidence",
+    transportTier: "official-json",
+    usageScope: "cn-policy-notices",
+    limits: { maxResponseBytes: 262_144, maxItems: 8 },
+  }),
+  "hashkey-ir": providerMetadata({
+    authorityTier: "evidence",
+    transportTier: "official-web",
+    usageScope: "issuer-announcements",
+    limits: { maxResponseBytes: 262_144, maxItems: 8 },
+  }),
+  "sec-edgar-submissions": providerMetadata({
+    authorityTier: "evidence",
+    transportTier: "official-json",
+    usageScope: "issuer-filings",
+    limits: {
+      maxResponseBytes: 524_288,
+      maxItems: 8,
+      maxScannedItems: 200,
+    },
+  }),
+  "federal-reserve-rss": providerMetadata({
+    authorityTier: "evidence",
+    transportTier: "official-rss",
+    usageScope: "us-monetary-policy",
+    limits: { maxResponseBytes: 131_072, maxItems: 8 },
+  }),
+});
+
+export function getProviderMetadata(source) {
+  return PROVIDER_METADATA[String(source || "")] ?? null;
+}
+
 function providerOrder(request, apiKey) {
   if (request.market === "CN") {
     return request.timeframe === "1d"
@@ -52,6 +111,8 @@ export function createProviderRegistry(options = {}) {
   const adapters = createAdapters({ fetch: fetcher, apiKey, timeoutMs });
 
   return {
+    providerMetadata: PROVIDER_METADATA,
+    getProviderMetadata,
     async fetchMarketData(rawRequest) {
       const marketRequest = normalizeMarketRequest(rawRequest);
       const requestedAt = now();

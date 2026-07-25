@@ -1,5 +1,9 @@
 const DAY_MS = 24 * 60 * 60 * 1000;
 const RSS_LIMIT_PER_QUERY = 8;
+const SEC_SCAN_LIMIT = 200;
+const DEFAULT_RESPONSE_LIMIT_BYTES = 256 * 1024;
+const SEC_RESPONSE_LIMIT_BYTES = 512 * 1024;
+const FED_RSS_RESPONSE_LIMIT_BYTES = 128 * 1024;
 const MIIT_POLICY_SEARCH_URL =
   "https://www.miit.gov.cn/search-front-server/api/search/info";
 const MIIT_POLICY_COLUMN_IDS = new Set([
@@ -9,6 +13,8 @@ const MIIT_POLICY_COLUMN_IDS = new Set([
   "f208042346424978bb16d077ca4c475b", // 意见
 ]);
 const HASHKEY_IR_URL = "https://group.hashkey.com/en/news/categories/announcement-1";
+const FEDERAL_RESERVE_RSS_URL =
+  "https://www.federalreserve.gov/feeds/press_all.xml";
 const DEFAULT_SEC_CONTACT_EMAIL =
   "115156322+gaaiyun@users.noreply.github.com";
 const SEC_EDGAR_CIK = {
@@ -18,6 +24,8 @@ const SEC_EDGAR_CIK = {
 const EVIDENCE_PROVIDERS = new Set([
   "miit-policy-api",
   "hashkey-ir",
+  "federal-reserve-rss",
+  "sec-edgar-submissions",
   "sec-edgar-8k",
 ]);
 
@@ -79,6 +87,7 @@ function tagValue(item, tag) {
 export function parseGoogleNewsRss(xml) {
   const items = [];
   for (const match of String(xml || "").matchAll(/<item(?:\s[^>]*)?>([\s\S]*?)<\/item>/gi)) {
+    if (items.length >= RSS_LIMIT_PER_QUERY) break;
     const body = match[1];
     const title = cleanText(tagValue(body, "title"), 300);
     const url = cleanText(tagValue(body, "link"), 2000);
@@ -109,7 +118,7 @@ export function parseEastmoneySearch(jsonp) {
   }
   const rows = payload?.result?.cmsArticleWebOld;
   if (!Array.isArray(rows)) return [];
-  return rows.flatMap((row) => {
+  return rows.slice(0, RSS_LIMIT_PER_QUERY).flatMap((row) => {
     const title = cleanText(row?.title, 300);
     const summary = cleanText(row?.content, 500);
     const publisher = cleanText(row?.mediaName, 120) || "未知发布者";
@@ -288,6 +297,99 @@ export function parseSecEdgarAtom(xml, fallbackPublisher = "SEC EDGAR") {
   return items;
 }
 
+function secSubmissionDate(acceptedAt, filingDate) {
+  const accepted = new Date(String(acceptedAt || ""));
+  if (Number.isFinite(accepted.valueOf())) return accepted;
+  return new Date(`${String(filingDate || "")}T00:00:00.000Z`);
+}
+
+export function parseSecEdgarSubmissions(
+  payload,
+  fallbackPublisher = "SEC EDGAR",
+) {
+  let response;
+  try {
+    response = typeof payload === "string" ? JSON.parse(payload) : payload;
+  } catch {
+    return [];
+  }
+  const recent = response?.filings?.recent;
+  const forms = recent?.form;
+  if (!recent || !Array.isArray(forms)) return [];
+  const cik = String(response?.cik || "").replace(/^0+/, "");
+  const publisher = cleanText(response?.name, 120)
+    || cleanText(fallbackPublisher, 120)
+    || "SEC EDGAR";
+  if (!/^\d+$/.test(cik)) return [];
+  const items = [];
+  const scanLimit = Math.min(forms.length, SEC_SCAN_LIMIT);
+  for (let index = 0; index < scanLimit; index += 1) {
+    if (items.length >= RSS_LIMIT_PER_QUERY) break;
+    const form = cleanText(forms[index], 30);
+    if (!/^8-K(?:\/A)?$/i.test(form)) continue;
+    const accessionNumber = String(
+      recent.accessionNumber?.[index] || "",
+    ).trim();
+    const primaryDocument = String(
+      recent.primaryDocument?.[index] || "",
+    ).trim();
+    if (
+      !/^\d{10}-\d{2}-\d{6}$/.test(accessionNumber)
+      || !/^[A-Za-z0-9._-]{1,255}$/.test(primaryDocument)
+    ) {
+      continue;
+    }
+    const filingDate = String(recent.filingDate?.[index] || "").trim();
+    const published = secSubmissionDate(
+      recent.acceptanceDateTime?.[index],
+      filingDate,
+    );
+    if (!Number.isFinite(published.valueOf())) continue;
+    const description = cleanText(
+      recent.primaryDocDescription?.[index],
+      180,
+    ) || "Current report";
+    const reportDate = String(recent.reportDate?.[index] || "").trim();
+    const filingItems = cleanText(recent.items?.[index], 120);
+    const summary = [
+      filingDate ? `Filed: ${filingDate}` : "",
+      reportDate ? `report period: ${reportDate}` : "",
+      filingItems ? `items: ${filingItems}` : "",
+    ].filter(Boolean).join("; ");
+    items.push({
+      title: `${publisher} — ${form} - ${description}`,
+      url: `https://www.sec.gov/Archives/edgar/data/${cik}/${accessionNumber.replaceAll("-", "")}/${primaryDocument}`,
+      publishedAt: published.toISOString(),
+      summary,
+      publisher,
+    });
+  }
+  return items;
+}
+
+export function parseFederalReserveRss(xml) {
+  return parseGoogleNewsRss(xml).flatMap((item) => {
+    try {
+      const url = new URL(item.url);
+      if (
+        url.protocol !== "https:"
+        || !["federalreserve.gov", "www.federalreserve.gov"].includes(
+          url.hostname.toLocaleLowerCase(),
+        )
+        || !url.pathname.startsWith("/newsevents/pressreleases/")
+      ) {
+        return [];
+      }
+      return [{
+        ...item,
+        publisher: "Board of Governors of the Federal Reserve System",
+      }];
+    } catch {
+      return [];
+    }
+  }).slice(0, RSS_LIMIT_PER_QUERY);
+}
+
 export function parseHashKeyFeedPage(html) {
   const value = String(html || "");
   const marker = '\\"posts\\":{\\"posts\\":';
@@ -300,7 +402,7 @@ export function parseHashKeyFeedPage(html) {
     const encodedPosts = value.slice(bodyStart, bodyEnd + 1);
     const posts = JSON.parse(JSON.parse(`"${encodedPosts}"`));
     if (!Array.isArray(posts)) return [];
-    return posts.flatMap((post) => {
+    return posts.slice(0, RSS_LIMIT_PER_QUERY).flatMap((post) => {
       const title = cleanText(post?.title, 300);
       const summary = cleanText(post?.excerpt, 500);
       const published = new Date(post?.firstPublishedDate || "");
@@ -459,16 +561,8 @@ function eastmoneySearchUrl(keyword) {
   return `https://search-api-web.eastmoney.com/search/jsonp?${parameters}`;
 }
 
-function secEdgarAtomUrl(symbol) {
-  const parameters = new URLSearchParams({
-    action: "getcompany",
-    CIK: SEC_EDGAR_CIK[symbol],
-    type: "8-K",
-    owner: "exclude",
-    count: "40",
-    output: "atom",
-  });
-  return `https://www.sec.gov/cgi-bin/browse-edgar?${parameters}`;
+function secEdgarSubmissionsUrl(symbol) {
+  return `https://data.sec.gov/submissions/CIK${SEC_EDGAR_CIK[symbol]}.json`;
 }
 
 function miitPolicySearchUrl(plan, now) {
@@ -523,26 +617,38 @@ function providerCandidates(plan, now) {
     source: "google-news-rss",
     url: rssUrl(plan),
     format: "rss",
+    maxResponseBytes: DEFAULT_RESPONSE_LIMIT_BYTES,
   }];
   if (plan.topic === "hashkey") {
     candidates.unshift({
       source: "hashkey-ir",
       url: HASHKEY_IR_URL,
       format: "hashkey-feed",
+      maxResponseBytes: DEFAULT_RESPONSE_LIMIT_BYTES,
     });
   } else if (plan.topic === "oracle") {
     candidates.unshift({
-      source: "sec-edgar-8k",
-      url: secEdgarAtomUrl("ORCL"),
-      format: "sec-edgar-atom",
+      source: "sec-edgar-submissions",
+      url: secEdgarSubmissionsUrl("ORCL"),
+      format: "sec-submissions-json",
       publisher: "Oracle Corporation",
+      maxResponseBytes: SEC_RESPONSE_LIMIT_BYTES,
     });
   } else if (plan.topic === "alphabet") {
     candidates.unshift({
-      source: "sec-edgar-8k",
-      url: secEdgarAtomUrl("GOOGL"),
-      format: "sec-edgar-atom",
+      source: "sec-edgar-submissions",
+      url: secEdgarSubmissionsUrl("GOOGL"),
+      format: "sec-submissions-json",
       publisher: "Alphabet Inc.",
+      maxResponseBytes: SEC_RESPONSE_LIMIT_BYTES,
+    });
+  } else if (plan.topic === "us-semiconductor") {
+    candidates.unshift({
+      source: "federal-reserve-rss",
+      url: FEDERAL_RESERVE_RSS_URL,
+      format: "federal-reserve-rss",
+      appliesToAllSymbols: true,
+      maxResponseBytes: FED_RSS_RESPONSE_LIMIT_BYTES,
     });
   }
   if (["communications", "cn-semiconductor", "policy"].includes(plan.topic)) {
@@ -550,6 +656,7 @@ function providerCandidates(plan, now) {
       source: "eastmoney-search",
       url: eastmoneySearchUrl(plan.eastmoneyKeyword),
       format: "eastmoney-jsonp",
+      maxResponseBytes: DEFAULT_RESPONSE_LIMIT_BYTES,
     });
     const miit = miitPolicySearchUrl(plan, now);
     candidates.push({
@@ -557,30 +664,35 @@ function providerCandidates(plan, now) {
       url: miit.url,
       format: "miit-policy-json",
       policyWindow: miit.window,
+      maxResponseBytes: DEFAULT_RESPONSE_LIMIT_BYTES,
     });
   } else if (plan.topic === "us-semiconductor") {
     candidates.push({
       source: "yahoo-finance-rss",
       url: yahooRssUrl("SOXX"),
       format: "rss",
+      maxResponseBytes: DEFAULT_RESPONSE_LIMIT_BYTES,
     });
   } else if (plan.topic === "oracle") {
     candidates.push({
       source: "yahoo-finance-rss",
       url: yahooRssUrl("ORCL"),
       format: "rss",
+      maxResponseBytes: DEFAULT_RESPONSE_LIMIT_BYTES,
     });
   } else if (plan.topic === "alphabet") {
     candidates.push({
       source: "yahoo-finance-rss",
       url: yahooRssUrl("GOOGL"),
       format: "rss",
+      maxResponseBytes: DEFAULT_RESPONSE_LIMIT_BYTES,
     });
   } else if (plan.topic === "hashkey") {
     candidates.push({
       source: "yahoo-finance-rss",
       url: yahooRssUrl("3887.HK"),
       format: "rss",
+      maxResponseBytes: DEFAULT_RESPONSE_LIMIT_BYTES,
     });
   }
   return candidates;
@@ -607,6 +719,7 @@ function matchedSymbol(item, symbols) {
 }
 
 function matchedSymbols(item, plan) {
+  if (item._allSymbols) return plan.symbols;
   const direct = matchedSymbol(item, plan.symbols);
   if (plan.topic === "cn-semiconductor") {
     return plan.symbols.filter((symbol) =>
@@ -685,15 +798,68 @@ function fetchErrorCode(error) {
     : "NEWS_NETWORK_ERROR";
 }
 
-function secUserAgent(contactEmail) {
-  const candidate = String(contactEmail || "").trim();
-  const email = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(candidate)
-    ? candidate
+function secUserAgent({ configuredUserAgent, organization, contactEmail } = {}) {
+  const configured = String(configuredUserAgent || "").trim();
+  const configuredEmail = configured.match(/[^\s@]+@[^\s@]+\.[^\s@]+/)?.[0];
+  if (
+    configured.length <= 200
+    && !/[\r\n]/.test(configured)
+    && configuredEmail
+    && configured.replace(configuredEmail, "").trim()
+  ) {
+    return configured;
+  }
+  const candidateEmail = String(contactEmail || "").trim();
+  const email = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(candidateEmail)
+    ? candidateEmail
     : DEFAULT_SEC_CONTACT_EMAIL;
-  return `TradingWorkbench ${email}`;
+  const candidateOrganization = String(organization || "")
+    .replace(/[\r\n]+/g, " ")
+    .replace(/\s+/g, " ")
+    .trim()
+    .slice(0, 80);
+  return `${candidateOrganization || "TradingWorkbench"} ${email}`;
 }
 
-async function fetchContent(candidate, fetcher, { secContactEmail } = {}) {
+async function boundedResponseText(response, maxBytes) {
+  const declaredLength = Number(response.headers.get("content-length"));
+  if (Number.isFinite(declaredLength) && declaredLength > maxBytes) {
+    throw new NewsFetchError("NEWS_RESPONSE_TOO_LARGE");
+  }
+  if (!response.body || typeof response.body.getReader !== "function") {
+    const content = await response.text();
+    if (new TextEncoder().encode(content).byteLength > maxBytes) {
+      throw new NewsFetchError("NEWS_RESPONSE_TOO_LARGE");
+    }
+    return content;
+  }
+  const reader = response.body.getReader();
+  const chunks = [];
+  let received = 0;
+  try {
+    while (true) {
+      const { done, value } = await reader.read();
+      if (done) break;
+      received += value.byteLength;
+      if (received > maxBytes) {
+        await reader.cancel().catch(() => {});
+        throw new NewsFetchError("NEWS_RESPONSE_TOO_LARGE");
+      }
+      chunks.push(value);
+    }
+  } finally {
+    reader.releaseLock();
+  }
+  const bytes = new Uint8Array(received);
+  let offset = 0;
+  for (const chunk of chunks) {
+    bytes.set(chunk, offset);
+    offset += chunk.byteLength;
+  }
+  return new TextDecoder().decode(bytes);
+}
+
+async function fetchContent(candidate, fetcher, requestConfig = {}) {
   const controller = new AbortController();
   const timer = setTimeout(() => controller.abort(), 8_000);
   try {
@@ -706,11 +872,11 @@ async function fetchContent(candidate, fetcher, { secContactEmail } = {}) {
             ? "text/javascript,application/json,text/plain;q=0.9,*/*;q=0.5"
           : candidate.format === "miit-policy-json"
             ? "application/json,text/plain;q=0.8,*/*;q=0.5"
-          : candidate.format === "sec-edgar-atom"
-            ? "application/atom+xml,application/xml,text/xml;q=0.9,text/html;q=0.8,*/*;q=0.5"
+          : candidate.format === "sec-submissions-json"
+            ? "application/json,text/plain;q=0.8,*/*;q=0.5"
           : "application/rss+xml,application/xml,text/xml;q=0.9,*/*;q=0.5",
-        "user-agent": candidate.format === "sec-edgar-atom"
-          ? secUserAgent(secContactEmail)
+        "user-agent": candidate.format === "sec-submissions-json"
+          ? secUserAgent(requestConfig)
           : "TradingWorkbench/1.0 (+https://github.com/gaaiyun/TradingWorkbench)",
       },
     });
@@ -724,13 +890,16 @@ async function fetchContent(candidate, fetcher, { secContactEmail } = {}) {
         ? /(?:javascript|json|text\/plain)/i.test(contentType)
       : candidate.format === "miit-policy-json"
         ? /(?:application\/json|text\/plain)/i.test(contentType)
-      : candidate.format === "sec-edgar-atom"
-        ? /(?:atom\+xml|xml|text\/html|text\/plain)/i.test(contentType)
+      : candidate.format === "sec-submissions-json"
+        ? /(?:application\/json|text\/plain)/i.test(contentType)
       : /(?:xml|rss|text\/plain)/i.test(contentType);
     if (!supported) {
       throw new NewsFetchError("NEWS_MALFORMED_RESPONSE");
     }
-    return await response.text();
+    return await boundedResponseText(
+      response,
+      candidate.maxResponseBytes ?? DEFAULT_RESPONSE_LIMIT_BYTES,
+    );
   } catch (error) {
     if (controller.signal.aborted) throw new NewsFetchError("NEWS_TIMEOUT");
     throw error;
@@ -758,10 +927,26 @@ function validateEvidenceEnvelope(candidate, content) {
     if (!Array.isArray(payload?.data?.searchResult?.dataResults)) {
       throw new NewsFetchError("NEWS_MALFORMED_RESPONSE");
     }
-  } else if (candidate.format === "sec-edgar-atom") {
-    const open = /<(?:[A-Za-z_][\w.-]*:)?feed(?:\s[^>]*)?>/i.test(value);
-    const close = /<\/(?:[A-Za-z_][\w.-]*:)?feed\s*>/i.test(value);
-    if (!open || !close) throw new NewsFetchError("NEWS_MALFORMED_RESPONSE");
+  } else if (candidate.format === "sec-submissions-json") {
+    let payload;
+    try {
+      payload = JSON.parse(value);
+    } catch {
+      throw new NewsFetchError("NEWS_MALFORMED_RESPONSE");
+    }
+    const recent = payload?.filings?.recent;
+    if (
+      !recent
+      || !Array.isArray(recent.form)
+      || !Array.isArray(recent.accessionNumber)
+      || !Array.isArray(recent.primaryDocument)
+    ) {
+      throw new NewsFetchError("NEWS_MALFORMED_RESPONSE");
+    }
+  } else if (candidate.format === "federal-reserve-rss") {
+    const rss = /<rss(?:\s[^>]*)?>/i.test(value);
+    const channel = /<channel(?:\s[^>]*)?>/i.test(value);
+    if (!rss || !channel) throw new NewsFetchError("NEWS_MALFORMED_RESPONSE");
   } else if (candidate.format === "hashkey-feed") {
     const start = value.indexOf('\\"posts\\":{\\"posts\\":');
     const end = value.indexOf('],\\"metaData\\":', Math.max(start, 0));
@@ -793,11 +978,17 @@ async function fetchPlan(plan, fetcher, cache, requestConfig) {
             ...candidate.policyWindow,
             now: requestConfig.now,
           })
-        : candidate.format === "sec-edgar-atom"
-          ? parseSecEdgarAtom(content, candidate.publisher)
+        : candidate.format === "sec-submissions-json"
+          ? parseSecEdgarSubmissions(content, candidate.publisher)
+        : candidate.format === "federal-reserve-rss"
+          ? parseFederalReserveRss(content)
         : parseGoogleNewsRss(content);
       const items = parsed
-        .filter((item) => relevantToPlan(item, plan))
+        .filter((item) =>
+          candidate.appliesToAllSymbols || relevantToPlan(item, plan))
+        .map((item) => candidate.appliesToAllSymbols
+          ? { ...item, _allSymbols: true }
+          : item)
         .slice(0, RSS_LIMIT_PER_QUERY);
       trail.push({ source: candidate.source, status: "success", reason: null });
       firstSuccessfulSource ||= candidate.source;
@@ -846,6 +1037,12 @@ async function fetchPlan(plan, fetcher, cache, requestConfig) {
 function itemSource(provider, item) {
   if (provider === "miit-policy-api") return "工业和信息化部政策文件库";
   if (provider === "hashkey-ir") return "HashKey Investor Relations";
+  if (provider === "federal-reserve-rss") {
+    return "Federal Reserve Board Press Releases";
+  }
+  if (provider === "sec-edgar-submissions") {
+    return `SEC EDGAR Submissions / ${item.publisher}`;
+  }
   if (provider === "sec-edgar-8k") return `SEC EDGAR 8-K / ${item.publisher}`;
   if (provider === "eastmoney-search") return `东方财富搜索 / ${item.publisher}`;
   if (provider === "yahoo-finance-rss") {
@@ -926,7 +1123,10 @@ export async function collectNewsForProfile({
   const responseCache = new Map();
   const outcomes = await Promise.allSettled(
     plans.map((plan) => fetchPlan(plan, fetcher, responseCache, {
+      configuredUserAgent: env?.SEC_USER_AGENT,
+      organization: env?.SEC_ORGANIZATION,
       secContactEmail: env?.SEC_CONTACT_EMAIL,
+      contactEmail: env?.SEC_CONTACT_EMAIL,
       now,
     })),
   );

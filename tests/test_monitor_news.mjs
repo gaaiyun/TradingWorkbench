@@ -47,6 +47,31 @@ const SEC_ATOM = `<?xml version="1.0" encoding="ISO-8859-1"?>
   </entry>
 </feed>`;
 
+const SEC_SUBMISSIONS = JSON.stringify({
+  cik: "1341439",
+  entityType: "operating",
+  name: "ORACLE CORP",
+  tickers: ["ORCL"],
+  filings: {
+    recent: {
+      accessionNumber: [
+        "0001193125-26-265848",
+        "0001193125-26-260001",
+      ],
+      filingDate: ["2026-07-23", "2026-07-22"],
+      reportDate: ["2026-07-23", "2026-05-31"],
+      acceptanceDateTime: [
+        "2026-07-23T20:13:46.000Z",
+        "2026-07-22T18:00:00.000Z",
+      ],
+      form: ["8-K", "10-Q"],
+      items: ["2.02", ""],
+      primaryDocument: ["example-index.htm", "quarterly.htm"],
+      primaryDocDescription: ["Current report", "Quarterly report"],
+    },
+  },
+});
+
 const EASTMONEY_JSONP = `callback({
   "code": 0,
   "result": {
@@ -136,6 +161,158 @@ test("SEC EDGAR Atom parser accepts namespace prefixes and rejects non-8-K entri
   }]);
 });
 
+test("SEC submissions parser keeps bounded current reports and official archive URLs", async () => {
+  const { parseSecEdgarSubmissions } = await import(newsUrl);
+  assert.deepEqual(parseSecEdgarSubmissions(SEC_SUBMISSIONS), [{
+    title: "ORACLE CORP — 8-K - Current report",
+    url: "https://www.sec.gov/Archives/edgar/data/1341439/000119312526265848/example-index.htm",
+    publishedAt: "2026-07-23T20:13:46.000Z",
+    summary: "Filed: 2026-07-23; report period: 2026-07-23; items: 2.02",
+    publisher: "ORACLE CORP",
+  }]);
+});
+
+test("Federal Reserve official RSS parser rejects foreign links and caps evidence items", async () => {
+  const { parseFederalReserveRss } = await import(newsUrl);
+  const entries = Array.from({ length: 12 }, (_value, index) => `
+    <item>
+      <title>Federal Reserve semiconductor policy update ${index + 1}</title>
+      <link>https://www.federalreserve.gov/newsevents/pressreleases/monetary202607${String(index + 1).padStart(2, "0")}a.htm</link>
+      <pubDate>Thu, 23 Jul 2026 0${index % 9}:00:00 GMT</pubDate>
+      <description>Official monetary policy evidence for the semiconductor sector.</description>
+    </item>`).join("");
+  const foreign = `
+    <item>
+      <title>Copied Federal Reserve announcement</title>
+      <link>https://example.com/copied-fed-release</link>
+      <pubDate>Thu, 23 Jul 2026 09:00:00 GMT</pubDate>
+      <description>Not an official link.</description>
+    </item>`;
+  const items = parseFederalReserveRss(
+    `<?xml version="1.0"?><rss><channel>${entries}${foreign}</channel></rss>`,
+  );
+  assert.equal(items.length, 8);
+  assert.equal(
+    items.every(({ url }) =>
+      new URL(url).hostname === "www.federalreserve.gov"),
+    true,
+  );
+  assert.equal(
+    items.every(({ publisher }) =>
+      publisher === "Board of Governors of the Federal Reserve System"),
+    true,
+  );
+});
+
+test("Federal Reserve RSS is a bounded evidence source for configured US drivers", async () => {
+  const { collectNewsForProfile } = await import(newsUrl);
+  const writes = [];
+  const calls = [];
+  const entries = Array.from({ length: 12 }, (_value, index) => `
+    <item>
+      <title>Federal Reserve semiconductor policy update ${index + 1}</title>
+      <link>https://www.federalreserve.gov/newsevents/pressreleases/monetary202607${String(index + 1).padStart(2, "0")}a.htm</link>
+      <pubDate>Thu, 23 Jul 2026 0${index % 9}:00:00 GMT</pubDate>
+      <description>Official monetary policy evidence for the semiconductor sector.</description>
+    </item>`).join("");
+  const result = await collectNewsForProfile({
+    profile: {
+      ...monitorSettings().profiles[0],
+      targets: [{ symbol: "NVDA" }],
+    },
+    db: {},
+    fetcher: async (url) => {
+      calls.push(String(url));
+      return new Response(
+        `<?xml version="1.0"?><rss><channel>${entries}</channel></rss>`,
+        {
+          status: 200,
+          headers: { "content-type": "application/rss+xml" },
+        },
+      );
+    },
+    writeItems: async (_db, payload) => writes.push(payload),
+    now: new Date("2026-07-23T20:30:00.000Z"),
+  });
+  const items = writes.flatMap(({ items: rows }) => rows);
+  assert.equal(result.status, "completed");
+  assert.equal(calls.length, 1);
+  assert.equal(items.length, 8);
+  assert.equal(items.every(({ symbol }) => symbol === "NVDA"), true);
+  assert.equal(items.every(({ sourceTier }) => sourceTier === "evidence"), true);
+  assert.equal(items.every(({ quality }) => quality === "evidence"), true);
+});
+
+test("Federal Reserve RSS response limit produces an evidence failure trace", async () => {
+  const { collectNewsForProfile } = await import(newsUrl);
+  const result = await collectNewsForProfile({
+    profile: {
+      ...monitorSettings().profiles[0],
+      targets: [{ symbol: "NVDA" }],
+    },
+    db: {},
+    fetcher: async (url) => {
+      if (new URL(url).hostname === "www.federalreserve.gov") {
+        return new Response("<rss><channel></channel></rss>", {
+          status: 200,
+          headers: {
+            "content-type": "application/rss+xml",
+            "content-length": "131073",
+          },
+        });
+      }
+      return new Response('<?xml version="1.0"?><rss><channel></channel></rss>', {
+        status: 200,
+        headers: { "content-type": "application/rss+xml" },
+      });
+    },
+    writeItems: async () => {},
+    now: new Date("2026-07-23T20:30:00.000Z"),
+  });
+  assert.equal(result.status, "degraded");
+  assert.equal(
+    result.sources.some(({ source, status, reason }) =>
+      source === "federal-reserve-rss"
+      && status === "failed"
+      && reason === "NEWS_RESPONSE_TOO_LARGE"),
+    true,
+  );
+});
+
+test("SEC submissions requests use configured organization and contact without leaking it", async () => {
+  const { collectNewsForProfile } = await import(newsUrl);
+  const requests = [];
+  const configuredUserAgent = "Example Research sec-ops@example.com";
+  const result = await collectNewsForProfile({
+    profile: {
+      ...monitorSettings().profiles[0],
+      targets: [{ symbol: "ORCL" }],
+    },
+    db: {},
+    env: { SEC_USER_AGENT: configuredUserAgent },
+    fetcher: async (url, options) => {
+      requests.push({ url: new URL(url), options });
+      return new Response(SEC_SUBMISSIONS, {
+        status: 200,
+        headers: { "content-type": "application/json" },
+      });
+    },
+    writeItems: async () => {},
+    now: new Date("2026-07-23T20:30:00.000Z"),
+  });
+  assert.equal(result.status, "completed");
+  assert.equal(requests.length, 1);
+  assert.equal(
+    requests[0].url.toString(),
+    "https://data.sec.gov/submissions/CIK0001341439.json",
+  );
+  assert.equal(
+    requests[0].options.headers["user-agent"],
+    configuredUserAgent,
+  );
+  assert.equal(JSON.stringify(result).includes(configuredUserAgent), false);
+});
+
 test("SEC requests identify TradingWorkbench with the configured contact email", async () => {
   const { collectNewsForProfile } = await import(newsUrl);
   const requests = [];
@@ -148,9 +325,9 @@ test("SEC requests identify TradingWorkbench with the configured contact email",
     env: { SEC_CONTACT_EMAIL: "sec-ops@example.com" },
     fetcher: async (url, options) => {
       requests.push({ url: String(url), options });
-      return new Response(SEC_ATOM, {
+      return new Response(SEC_SUBMISSIONS, {
         status: 200,
-        headers: { "content-type": "application/atom+xml" },
+        headers: { "content-type": "application/json" },
       });
     },
     writeItems: async () => {},
@@ -176,9 +353,9 @@ test("SEC requests use the project contact when no email is configured", async (
     env: {},
     fetcher: async (url, options) => {
       requests.push({ url: String(url), options });
-      return new Response(SEC_ATOM, {
+      return new Response(SEC_SUBMISSIONS, {
         status: 200,
-        headers: { "content-type": "application/atom+xml" },
+        headers: { "content-type": "application/json" },
       });
     },
     writeItems: async () => {},
@@ -201,7 +378,7 @@ test("SEC 403 remains a failed source when discovery fallbacks are empty", async
     db: {},
     env: { SEC_CONTACT_EMAIL: contact },
     fetcher: async (url) => {
-      if (new URL(url).hostname === "www.sec.gov") {
+      if (new URL(url).hostname === "data.sec.gov") {
         return new Response("", { status: 403 });
       }
       return new Response('<?xml version="1.0"?><rss><channel></channel></rss>', {
@@ -216,7 +393,7 @@ test("SEC 403 remains a failed source when discovery fallbacks are empty", async
   assert.equal(result.written, 0);
   assert.equal(
     result.sources.some(({ source, status, reason }) =>
-      source === "sec-edgar-8k"
+      source === "sec-edgar-submissions"
       && status === "failed"
       && reason === "NEWS_HTTP_403"),
     true,
@@ -224,7 +401,7 @@ test("SEC 403 remains a failed source when discovery fallbacks are empty", async
   assert.equal(JSON.stringify(result).includes(contact), false);
 });
 
-test("SEC HTTP 200 without an Atom feed remains a failed source", async () => {
+test("SEC HTTP 200 without a submissions envelope remains a failed source", async () => {
   const { collectNewsForProfile } = await import(newsUrl);
   const result = await collectNewsForProfile({
     profile: {
@@ -233,10 +410,10 @@ test("SEC HTTP 200 without an Atom feed remains a failed source", async () => {
     },
     db: {},
     fetcher: async (url) => (
-      new URL(url).hostname === "www.sec.gov"
-        ? new Response("<html>request accepted but no feed</html>", {
+      new URL(url).hostname === "data.sec.gov"
+        ? new Response("{}", {
           status: 200,
-          headers: { "content-type": "text/html" },
+          headers: { "content-type": "application/json" },
         })
         : new Response('<?xml version="1.0"?><rss><channel></channel></rss>', {
           status: 200,
@@ -249,7 +426,7 @@ test("SEC HTTP 200 without an Atom feed remains a failed source", async () => {
   assert.equal(result.status, "degraded");
   assert.equal(
     result.sources.some(({ source, status, reason }) =>
-      source === "sec-edgar-8k"
+      source === "sec-edgar-submissions"
       && status === "failed"
       && reason === "NEWS_MALFORMED_RESPONSE"),
     true,
@@ -272,7 +449,7 @@ test("SEC evidence failure keeps the run degraded when discovery still returns n
     },
     db: {},
     fetcher: async (url) => (
-      new URL(url).hostname === "www.sec.gov"
+      new URL(url).hostname === "data.sec.gov"
         ? new Response("", { status: 403 })
         : new Response(discovery, {
           status: 200,
@@ -288,18 +465,22 @@ test("SEC evidence failure keeps the run degraded when discovery still returns n
   assert.equal(result.errorCode, "NEWS_COLLECTION_PARTIAL");
 });
 
-test("Oracle and Alphabet prefer deduplicated SEC 8-K evidence before discovery feeds", async () => {
+test("Oracle and Alphabet prefer deduplicated SEC submissions evidence before discovery feeds", async () => {
   const { collectNewsForProfile } = await import(newsUrl);
   const calls = [];
   const writes = [];
-  const duplicateEntry = SEC_ATOM.match(/<entry>[\s\S]*?<\/entry>/)[0]
-    .replace("example-index.htm", "example-index.htm?utm_source=edgar");
-  const oracleAtom = SEC_ATOM.replace("</feed>", `${duplicateEntry}</feed>`);
-  const alphabetAtom = SEC_ATOM
-    .replaceAll("0001341439", "0001652044")
-    .replace("ORACLE CORP", "Alphabet Inc.")
-    .replaceAll("1341439/", "1652044/")
-    .replace("example-index.htm", "alphabet-index.htm");
+  const oracleSubmissions = JSON.parse(SEC_SUBMISSIONS);
+  oracleSubmissions.filings.recent.form[1] = "8-K";
+  oracleSubmissions.filings.recent.accessionNumber[1] =
+    oracleSubmissions.filings.recent.accessionNumber[0];
+  oracleSubmissions.filings.recent.primaryDocument[1] =
+    oracleSubmissions.filings.recent.primaryDocument[0];
+  const alphabetSubmissions = structuredClone(oracleSubmissions);
+  alphabetSubmissions.cik = "1652044";
+  alphabetSubmissions.name = "Alphabet Inc.";
+  alphabetSubmissions.tickers = ["GOOGL"];
+  alphabetSubmissions.filings.recent.primaryDocument =
+    ["alphabet-index.htm", "alphabet-index.htm"];
   const result = await collectNewsForProfile({
     profile: {
       ...monitorSettings().profiles[0],
@@ -309,12 +490,12 @@ test("Oracle and Alphabet prefer deduplicated SEC 8-K evidence before discovery 
     fetcher: async (url) => {
       const value = new URL(url);
       calls.push(value);
-      const xml = value.searchParams.get("CIK") === "0001341439"
-        ? oracleAtom
-        : alphabetAtom;
-      return new Response(xml, {
+      const payload = value.pathname.endsWith("CIK0001341439.json")
+        ? oracleSubmissions
+        : alphabetSubmissions;
+      return new Response(JSON.stringify(payload), {
         status: 200,
-        headers: { "content-type": "text/html; charset=utf-8" },
+        headers: { "content-type": "application/json" },
       });
     },
     writeItems: async (_db, payload) => writes.push(payload),
@@ -324,13 +505,12 @@ test("Oracle and Alphabet prefer deduplicated SEC 8-K evidence before discovery 
   assert.equal(result.status, "completed");
   assert.equal(calls.length, 2);
   assert.deepEqual(
-    calls.map((url) => url.searchParams.get("CIK")).sort(),
-    ["0001341439", "0001652044"],
+    calls.map((url) => url.pathname.split("/").at(-1)).sort(),
+    ["CIK0001341439.json", "CIK0001652044.json"],
   );
   assert.equal(calls.every((url) =>
-    url.hostname === "www.sec.gov"
-    && url.searchParams.get("type") === "8-K"
-    && url.searchParams.get("output") === "atom"), true);
+    url.hostname === "data.sec.gov"
+    && url.pathname.startsWith("/submissions/CIK")), true);
   assert.equal(items.length, 2);
   assert.deepEqual(items.map(({ symbol }) => symbol).sort(), ["GOOGL", "ORCL"]);
   assert.equal(items.every(({ sourceTier }) => sourceTier === "evidence"), true);
@@ -342,11 +522,13 @@ test("Oracle and Alphabet prefer deduplicated SEC 8-K evidence before discovery 
     new URL(url).hostname === "www.sec.gov"
     && new URL(url).pathname.startsWith("/Archives/edgar/data/")), true);
   assert.equal(
-    items.some(({ source }) => source === "SEC EDGAR 8-K / ORACLE CORP"),
+    items.some(({ source }) =>
+      source === "SEC EDGAR Submissions / ORACLE CORP"),
     true,
   );
   assert.equal(
-    items.some(({ source }) => source === "SEC EDGAR 8-K / Alphabet Inc."),
+    items.some(({ source }) =>
+      source === "SEC EDGAR Submissions / Alphabet Inc."),
     true,
   );
 });
@@ -552,7 +734,7 @@ test("news collection falls back to Yahoo feeds for Alphabet and HashKey", async
   assert.equal(calls.some((url) => url.includes("s=3887.HK")), true);
   assert.equal(
     result.sources.some(({ source, status, reason }) =>
-      source === "sec-edgar-8k"
+      source === "sec-edgar-submissions"
       && status === "failed"
       && reason === "NEWS_HTTP_503"),
     true,
