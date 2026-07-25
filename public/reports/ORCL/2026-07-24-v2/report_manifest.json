@@ -1,0 +1,25 @@
+{
+  "schemaVersion": 1,
+  "ticker": "ORCL",
+  "tradeDate": "2026-07-24",
+  "generatedAt": "2026-07-25T11:07:03.187265+00:00",
+  "analysisStatus": "insufficient_evidence",
+  "auditStatus": "legacy_unverified",
+  "claimValidation": {
+    "status": "failed",
+    "errorCodes": [
+      "UNCITED_NUMERIC_CLAIM",
+      "UNSUPPORTED_PRICE_TARGET",
+      "UNSUPPORTED_ALLOCATION"
+    ],
+    "citationCount": 33,
+    "unknownEvidenceIds": [],
+    "uncitedNumericParagraphs": 181
+  },
+  "evidence": {
+    "schemaVersion": "EvidencePacketV1",
+    "asOf": "2026-07-24T23:59:59Z",
+    "contentHash": "ed2faa952e7fa4adf8a4ad864d90d9ead674de153273ffcd6cca06e30c85f2b8",
+    "status": "ok"
+  }
+}

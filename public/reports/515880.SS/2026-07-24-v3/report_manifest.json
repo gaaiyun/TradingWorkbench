@@ -1,0 +1,24 @@
+{
+  "schemaVersion": 1,
+  "ticker": "515880.SS",
+  "tradeDate": "2026-07-24",
+  "generatedAt": "2026-07-25T10:47:16.346037+00:00",
+  "analysisStatus": "insufficient_evidence",
+  "auditStatus": "legacy_unverified",
+  "claimValidation": {
+    "status": "failed",
+    "errorCodes": [
+      "UNCITED_NUMERIC_CLAIM",
+      "UNSUPPORTED_ALLOCATION"
+    ],
+    "citationCount": 18,
+    "unknownEvidenceIds": [],
+    "uncitedNumericParagraphs": 160
+  },
+  "evidence": {
+    "schemaVersion": "EvidencePacketV1",
+    "asOf": "2026-07-24T23:59:59Z",
+    "contentHash": "0e155c3174f04d078020b91631225cccad7b5931f87a14ed705688c3191cdaef",
+    "status": "ok"
+  }
+}
