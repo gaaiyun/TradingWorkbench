@@ -68,8 +68,8 @@
   分隔线检查，退出码 0。
 - 报告审计：47 份成功报告；0 verified、43 legacy_unverified、4 invalidated；另有 7 条
   无报告记录，其中证据校验 4、模型/流程 2、错误输入 1。
-- GitHub `main` 已同步到 `7f373a3`（实现提交 `d9b6b6f`、自动数据提交
-  `61c882a` 与本交接更新）。真实
+- GitHub `main` 已包含实现提交 `d9b6b6f`、自动数据提交 `61c882a` 与本交接更新。
+  接手时以 `git rev-parse origin/main` 为最终主线位置。真实
   MSFT 重验 `https://github.com/gaaiyun/TradingWorkbench/actions/runs/30169487987`
   已正确阻断缺失目标日完整行情；“Run multi-agent analysis”产生失败 outcome 后，
   “Persist reports to main”成功写入第 7 条失败记录，最后的显式失败步骤再将任务标红。
