@@ -1,7 +1,7 @@
 {
   "version": 1,
   "status": "partial",
-  "generated_at": "2026-07-25T16:03:55+08:00",
+  "generated_at": "2026-07-25T16:39:48+08:00",
   "trade_date": "2026-07-24",
   "global": {
     "status": "ok",
@@ -9,7 +9,7 @@
     "ticker": null,
     "start_date": "2026-07-17",
     "end_date": "2026-07-24",
-    "fetched_at": "2026-07-25T08:03:56Z",
+    "fetched_at": "2026-07-25T08:39:49Z",
     "items": [
       {
         "title": "Ovintiv Inc (OVV) Q2 2026 Earnings Call Highlights: Strong Cash Flow and Production Growth Amid ...",
@@ -17,7 +17,7 @@
         "url": "https://finance.yahoo.com/energy/articles/ovintiv-inc-ovv-q2-2026-230019199.html",
         "source": "GuruFocus.com",
         "published_at": "2026-07-24T23:00:19Z",
-        "fetched_at": "2026-07-25T08:03:56Z",
+        "fetched_at": "2026-07-25T08:39:49Z",
         "ticker": null,
         "source_tier": "aggregator"
       },
@@ -27,7 +27,7 @@
         "url": "https://finance.yahoo.com/m/479dd690-44bb-3d0f-94b7-f6bf29601cdf/s%26p-500%2C-dow%2C-nasdaq-end.html",
         "source": "Stocktwits",
         "published_at": "2026-07-24T22:54:48Z",
-        "fetched_at": "2026-07-25T08:03:56Z",
+        "fetched_at": "2026-07-25T08:39:49Z",
         "ticker": null,
         "source_tier": "aggregator"
       },
@@ -37,7 +37,7 @@
         "url": "https://finance.yahoo.com/m/76a5a4a5-afa1-3f93-94a0-752b807a5f47/analyst-report%3A-mplx-lp.html",
         "source": "Morningstar Research",
         "published_at": "2026-07-24T22:44:37Z",
-        "fetched_at": "2026-07-25T08:03:56Z",
+        "fetched_at": "2026-07-25T08:39:49Z",
         "ticker": null,
         "source_tier": "aggregator"
       },
@@ -47,7 +47,7 @@
         "url": "https://finance.yahoo.com/small-business/articles/walmart-walmart-foundation-announce-500-215400033.html",
         "source": "Business Wire",
         "published_at": "2026-07-24T21:54:00Z",
-        "fetched_at": "2026-07-25T08:03:56Z",
+        "fetched_at": "2026-07-25T08:39:49Z",
         "ticker": null,
         "source_tier": "aggregator"
       },
@@ -57,7 +57,7 @@
         "url": "https://finance.yahoo.com/m/bd8f4811-b7d7-3fd2-82e8-a284a27ac5f2/paramount-stock-falls-on.html",
         "source": "Barrons.com",
         "published_at": "2026-07-24T20:38:00Z",
-        "fetched_at": "2026-07-25T08:03:56Z",
+        "fetched_at": "2026-07-25T08:39:49Z",
         "ticker": null,
         "source_tier": "aggregator"
       },
@@ -67,7 +67,7 @@
         "url": "https://finance.yahoo.com/markets/stocks/articles/2-quantum-stocks-set-strong-190000511.html",
         "source": "Zacks",
         "published_at": "2026-07-24T19:00:00Z",
-        "fetched_at": "2026-07-25T08:03:56Z",
+        "fetched_at": "2026-07-25T08:39:49Z",
         "ticker": null,
         "source_tier": "aggregator"
       },
@@ -77,7 +77,7 @@
         "url": "https://finance.yahoo.com/m/24800a3c-18a4-39a8-89f7-e072b93d88b1/amazon-stock-slides-as-prime.html",
         "source": "TheStreet",
         "published_at": "2026-07-24T18:17:00Z",
-        "fetched_at": "2026-07-25T08:03:56Z",
+        "fetched_at": "2026-07-25T08:39:49Z",
         "ticker": null,
         "source_tier": "aggregator"
       },
@@ -87,7 +87,7 @@
         "url": "https://finance.yahoo.com/m/71fde92b-18c1-3747-aa30-e29dd63c3c88/disney%E2%80%99s-kraft-heinz.html",
         "source": "Barrons.com",
         "published_at": "2026-07-24T17:25:00Z",
-        "fetched_at": "2026-07-25T08:03:56Z",
+        "fetched_at": "2026-07-25T08:39:49Z",
         "ticker": null,
         "source_tier": "aggregator"
       },
@@ -97,7 +97,7 @@
         "url": "https://finance.yahoo.com/m/401f1358-d93e-3a61-bc83-f11d392e2f94/ebay-showered-owners-with.html",
         "source": "Trefis",
         "published_at": "2026-07-24T17:08:32Z",
-        "fetched_at": "2026-07-25T08:03:56Z",
+        "fetched_at": "2026-07-25T08:39:49Z",
         "ticker": null,
         "source_tier": "aggregator"
       },
@@ -107,7 +107,7 @@
         "url": "https://finance.yahoo.com/m/f4231a1f-0ff0-32aa-a314-df7379c9564a/3-reasons-disney-stock-can.html",
         "source": "Motley Fool",
         "published_at": "2026-07-24T15:38:50Z",
-        "fetched_at": "2026-07-25T08:03:56Z",
+        "fetched_at": "2026-07-25T08:39:49Z",
         "ticker": null,
         "source_tier": "aggregator"
       }
@@ -126,65 +126,13 @@
     ]
   },
   "tickers": {
-    "515880.SS": {
-      "status": "empty",
-      "query_type": "ticker",
-      "ticker": "515880.SS",
-      "start_date": "2026-07-24",
-      "end_date": "2026-07-24",
-      "fetched_at": "2026-07-25T08:03:57Z",
-      "items": [],
-      "source_statuses": [
-        {
-          "source": "Yahoo Finance",
-          "status": "empty",
-          "item_count": 0
-        },
-        {
-          "source": "Google News RSS",
-          "status": "empty",
-          "item_count": 0
-        },
-        {
-          "source": "SEC EDGAR",
-          "status": "empty",
-          "item_count": 0
-        }
-      ]
-    },
-    "512480.SS": {
-      "status": "empty",
-      "query_type": "ticker",
-      "ticker": "512480.SS",
-      "start_date": "2026-07-24",
-      "end_date": "2026-07-24",
-      "fetched_at": "2026-07-25T08:03:59Z",
-      "items": [],
-      "source_statuses": [
-        {
-          "source": "Yahoo Finance",
-          "status": "empty",
-          "item_count": 0
-        },
-        {
-          "source": "Google News RSS",
-          "status": "empty",
-          "item_count": 0
-        },
-        {
-          "source": "SEC EDGAR",
-          "status": "empty",
-          "item_count": 0
-        }
-      ]
-    },
     "ORCL": {
       "status": "partial",
       "query_type": "ticker",
       "ticker": "ORCL",
       "start_date": "2026-07-24",
       "end_date": "2026-07-24",
-      "fetched_at": "2026-07-25T08:04:14Z",
+      "fetched_at": "2026-07-25T08:39:51Z",
       "items": [
         {
           "title": "Oracle’s defense pivot lands its biggest government win yet",
@@ -192,7 +140,7 @@
           "url": "https://finance.yahoo.com/m/af691027-f31d-3a3e-b6b7-00013f6be661/oracle%E2%80%99s-defense-pivot-lands.html",
           "source": "TheStreet",
           "published_at": "2026-07-25T02:33:00Z",
-          "fetched_at": "2026-07-25T08:04:14Z",
+          "fetched_at": "2026-07-25T08:39:51Z",
           "ticker": "ORCL",
           "source_tier": "aggregator"
         },
@@ -202,37 +150,17 @@
           "url": "https://finance.yahoo.com/m/c217d11e-37d4-362e-95a4-11b4cd90f44c/oracle-just-hit-a-new-52-week.html",
           "source": "Motley Fool",
           "published_at": "2026-07-24T22:57:00Z",
-          "fetched_at": "2026-07-25T08:04:14Z",
-          "ticker": "ORCL",
-          "source_tier": "aggregator"
-        },
-        {
-          "title": "Stocks to Watch: Bank of America, Intel, SAP, Oracle",
-          "summary": "",
-          "url": "https://finance.yahoo.com/m/11cdad22-a23f-3779-a81d-e87f9fea1e3a/stocks-to-watch%3A-bank-of.html",
-          "source": "The Wall Street Journal",
-          "published_at": "2026-07-24T21:27:19Z",
-          "fetched_at": "2026-07-25T08:04:14Z",
+          "fetched_at": "2026-07-25T08:39:51Z",
           "ticker": "ORCL",
           "source_tier": "aggregator"
         },
         {
           "title": "ORCL Has Left Its Peers Behind. Or Has It?",
-          "summary": "ORCL Has Left Its Peers Behind. Or Has It? Yahoo Finance",
+          "summary": "ORCL Has Left Its Peers Behind. Or Has It? Yahoo Finance Oracle Corporation (NYSE:ORCL)’s Stock Is The One To Watch, Says Jim Cramer Yahoo Finance Oracle Stock (ORCL) Opinions on AI Infrastructure Investments and Stock Decline Moomoo",
           "url": "https://news.google.com/rss/articles/CBMikAFBVV95cUxPQXlFbndvb080Q2ptSVRjNWtjRGNCR3RaZU05VjlkdWdWcndJQ1RxU1ZXa1ZMZUFuVnJPUjNsMzM5NlU3bUlfSTdBaEVPaUN5UlNPNmRLQjQxNWM0MGgtQ0VuZDZaV18wMnpuYzUtR0tKbHBJUkRSTjRpdmhLY2taTkVqWndrX0xiTTl1LVRBdkg?oc=5",
           "source": "Google News / Yahoo Finance",
           "published_at": "2026-07-24T20:47:37Z",
-          "fetched_at": "2026-07-25T08:04:14Z",
-          "ticker": "ORCL",
-          "source_tier": "aggregator"
-        },
-        {
-          "title": "Oracle Corp Stock (ORCL) Closed Down by 4.27% on Jul 24: What Signal Does It Send?",
-          "summary": "Oracle Corp Stock (ORCL) Closed Down by 4.27% on Jul 24: What Signal Does It Send? TradingKey",
-          "url": "https://news.google.com/rss/articles/CBMiiwFBVV95cUxOS0wxOFQzd0dHei13QnBZQVo2bnQzLUNrUmZiaXlYenpsbW92ZVVQcm1iUWdEaU5iaVVXbjhVQXI4SmdXQTN2d0pSOVA1UkhMYjAzTHA0OXNnZlJTUm1ubFpuUkpfVC1nOVJiV3RDVWhnaDlDWDcyVkhoajc5NmlDblBOaHhFaU9TZnRN?oc=5",
-          "source": "Google News / TradingKey",
-          "published_at": "2026-07-24T20:23:10Z",
-          "fetched_at": "2026-07-25T08:04:14Z",
+          "fetched_at": "2026-07-25T08:39:51Z",
           "ticker": "ORCL",
           "source_tier": "aggregator"
         },
@@ -242,7 +170,7 @@
           "url": "https://finance.yahoo.com/m/c1027afd-45b4-3f7d-987b-5ee0bcd56f03/the-%247-billion-reason-oracle.html",
           "source": "Barchart",
           "published_at": "2026-07-24T17:49:40Z",
-          "fetched_at": "2026-07-25T08:04:14Z",
+          "fetched_at": "2026-07-25T08:39:51Z",
           "ticker": "ORCL",
           "source_tier": "aggregator"
         },
@@ -252,7 +180,7 @@
           "url": "https://news.google.com/rss/articles/CBMi4wFBVV95cUxQck1zVU13cFlUQncwWDlQRVBCTVg4NWFlU3UtVlNLeW5nTU0zUUZ1U1p1QWg4SkhOd2UxaVBCdk5RZm02SXZKTzNUM0Q4YXpUWWxPbUJ1YzdEUkRSdkxqYTdLbmdSbWFVa2ViNU1sdHp3YVloUDI5RGd3XzFJdUZaLThvcmZNVURxd1ptYm4wclU1ZVB5VnFmSXBsZk5CUDhFOUQ3M0oyQ0xHaHdrZ09qdXpzUDRvTFRKNWFiOFkzWnprdkJGcnNsSjU2OTVwRVZSUTZhSE03dHdRWVdiemVwSFUxVQ?oc=5",
           "source": "Google News / foreignpolicyjournal.com",
           "published_at": "2026-07-24T17:12:00Z",
-          "fetched_at": "2026-07-25T08:04:14Z",
+          "fetched_at": "2026-07-25T08:39:51Z",
           "ticker": "ORCL",
           "source_tier": "aggregator"
         },
@@ -262,7 +190,7 @@
           "url": "https://news.google.com/rss/articles/CBMiggJBVV95cUxPVm1xS3JWQ1VFc2V0TU9ja3hFclN6dE1ldjZVTFc3cnBkb0UzdHd4WGlLZS11RWNRY3pUQnQyd3pEbGxManJCdkVobjZfcnEwZjdOc3pJY0ZOWlB1SlFGZ0dKdjJKVEIyTEZhYlo3c1hpeU5MN0NrUndpV2k4MW9LVWt4bTNvbEFSNGx1WnRob3FlS0JONkhTZGhZZUM1RVN4eEJpOVlka0FubmxmOHliRy15QjJYTWZUdDVUdnF0cTlxMTNrUjA3NTVObnhiRXJoT3RGWjdRZUhPMnJtSEFHZmdGVGxUN2NGcmRfbUd6cFNfa1RwcVhiNkU0Q0M0dGNqdlE?oc=5",
           "source": "Google News / Stocktwits",
           "published_at": "2026-07-24T17:03:55Z",
-          "fetched_at": "2026-07-25T08:04:14Z",
+          "fetched_at": "2026-07-25T08:39:51Z",
           "ticker": "ORCL",
           "source_tier": "aggregator"
         },
@@ -272,7 +200,7 @@
           "url": "https://news.google.com/rss/articles/CBMirwFBVV95cUxNTHZSVzFxOFhrODdlTnExYmF5UzRXV255aWo5RWx5amdGNWpiQzBidm9rVmlkZFZ2UFBlMmpYNzJEZGpSV2JlWHEwSExvcktaSjdUV1NFOXBrMXdjYlNGR3NoaEdUQ3dHNW4zeHNPVnVDUzYxeVJnX3lMOGJfaWh1X3FaRlBkbTVtdThZaExtLVg1c3pzVHAtbXoyeGVubTJ4UEFUSmtJd3RVTlAtdEM0?oc=5",
           "source": "Google News / GuruFocus",
           "published_at": "2026-07-24T14:06:48Z",
-          "fetched_at": "2026-07-25T08:04:14Z",
+          "fetched_at": "2026-07-25T08:39:51Z",
           "ticker": "ORCL",
           "source_tier": "aggregator"
         },
@@ -282,7 +210,7 @@
           "url": "https://news.google.com/rss/articles/CBMiigFBVV95cUxOTzB1NU01eWltYUJETUMzOVlzMG90clVGaFVOV21WWEpqVnBXb3oxb012ZTN0TVZVNkFHM1VVZnVvbzZhWjRqQ01ERHRiVC1XX2JpUFRidllQLXgwMFZLcGdfdTdIcG5NdS1HcElaaFJDMHdZeVdoaF9KaTU3Sy02OThUdGRlSXdGaWc?oc=5",
           "source": "Google News / Seeking Alpha",
           "published_at": "2026-07-24T13:25:54Z",
-          "fetched_at": "2026-07-25T08:04:14Z",
+          "fetched_at": "2026-07-25T08:39:51Z",
           "ticker": "ORCL",
           "source_tier": "aggregator"
         },
@@ -292,7 +220,7 @@
           "url": "https://news.google.com/rss/articles/CBMiqgFBVV95cUxOMEZjZzJfTURSeU94dmFhTHNfS2xpQ082U2dNNm0ybGhLX3p2dmFiVzdGYnJJZ2ZyX1Z3OXZMTkZVWXBKVzh3QmR6UmNxbGtwOVpYeldjcm9WWFNqcjhkd3NsSUZJUTdia0lWTmcyYmxNZk11TVltT3RaLXkybEpkcENaQjJiRGdJZjVQQktoQ0RZZjQxdk53a3RFVElmMFhUdVgyWEgwTjdTUQ?oc=5",
           "source": "Google News / GuruFocus",
           "published_at": "2026-07-24T11:20:04Z",
-          "fetched_at": "2026-07-25T08:04:14Z",
+          "fetched_at": "2026-07-25T08:39:51Z",
           "ticker": "ORCL",
           "source_tier": "aggregator"
         },
@@ -302,7 +230,7 @@
           "url": "https://news.google.com/rss/articles/CBMimAFBVV95cUxPN2FHX2pwTlY1R0JRUmtVRzZMWm5qc0pTcEVncEZSN3hRUHk0Y1FYQzRCUkVzZ3JqQnBLOXEzdzNSODUwYmlUZWd0SUNVckxVbnJNWGU0UTk5eW9OS25CV3A1VWtTOU1QS1VEbUI1eFBGaWdxZnFZdGxZWWxEXzJJaGQ5SWlMZXFyT210TExMaXdpeHV3V3NkQw?oc=5",
           "source": "Google News / Yahoo Finance",
           "published_at": "2026-07-24T11:13:21Z",
-          "fetched_at": "2026-07-25T08:04:14Z",
+          "fetched_at": "2026-07-25T08:39:51Z",
           "ticker": "ORCL",
           "source_tier": "aggregator"
         },
@@ -312,7 +240,7 @@
           "url": "https://news.google.com/rss/articles/CBMiugFBVV95cUxQMzk3c2RidnUwcEpVcElmWEdMZVhrYVJUX3JoRVhRZWxzeHBCb1B1aWsyYm5FNGhrcmNISlpXYzMtMVF6aS1UbUs2S04zUHVFNExPeFJjOXgyX2FvZ3N6SE5xczZ0dzNsSTVoQk85U29FbDhFbU40WmxVUG5nZFVvWmpjVmxST1lwZmx4ZTJwN0pmLWtUSXNiRndVOFZIMmk3cktRYzNZbmlSMmYzZFNxRENfT1JqY1pndUE?oc=5",
           "source": "Google News / TechStock²",
           "published_at": "2026-07-24T09:49:09Z",
-          "fetched_at": "2026-07-25T08:04:14Z",
+          "fetched_at": "2026-07-25T08:39:51Z",
           "ticker": "ORCL",
           "source_tier": "aggregator"
         },
@@ -322,7 +250,7 @@
           "url": "https://news.google.com/rss/articles/CBMi6gFBVV95cUxPZUtuYkwwV2ZaczBZZmpWem1wN00tcnVDYzg2eU9lODR4NVlYamxQb19iRHJiSHZKSUc2alJjSWo5UHRiWi1zTy1sNDl3bXF4N1NlNEsxOENPZmtlb3ZiNzZidXBnNnFTT1ZqMlB5aUl4WkNvZTZnRmhMb0hjVDY3UDlPZXlQTjBGR1JRU0VmYkFIaXRxX2RFMk1kWVZQWXJyaERsTXIwLW9tVm90VzhzYzhWeXc1VUQwUFo0ZnRneVNQcXRMaTdSbGFmQVREckJHQ0dLWnd5Y1FiQWMxOGljazZTS2VBOHpvUEE?oc=5",
           "source": "Google News / TradingView",
           "published_at": "2026-07-24T09:18:58Z",
-          "fetched_at": "2026-07-25T08:04:14Z",
+          "fetched_at": "2026-07-25T08:39:51Z",
           "ticker": "ORCL",
           "source_tier": "aggregator"
         },
@@ -332,7 +260,7 @@
           "url": "https://finance.yahoo.com/technology/articles/oracle-wins-7-billion-us-090153368.html",
           "source": "MT Newswires",
           "published_at": "2026-07-24T09:01:53Z",
-          "fetched_at": "2026-07-25T08:04:14Z",
+          "fetched_at": "2026-07-25T08:39:51Z",
           "ticker": "ORCL",
           "source_tier": "aggregator"
         },
@@ -342,7 +270,7 @@
           "url": "https://news.google.com/rss/articles/CBMiuAFBVV95cUxQbFpMdUdJMi1LeWN6QlZkNHNGbGNfWFRFN0tqaGs4WGhCUWlBTmR3dmdfcWk5NDRFLTZ5MEx1VmdYNERSYnZfWTlUM3NyMlFpVDZmbnRJYlBVSzVaeVJtUC1NQk9iUzY3UzFmVl9nd3IzU0RPdkJlS3FPaWk1N09IaDZGdU9Bb0NlOEhPb0dYVGt0UXRzRXlNbGpzWWRUdU1EWUl1eFd1YWxFRURlb1Q0X1hZeEI1UmNL?oc=5",
           "source": "Google News / Seeking Alpha",
           "published_at": "2026-07-24T08:34:49Z",
-          "fetched_at": "2026-07-25T08:04:14Z",
+          "fetched_at": "2026-07-25T08:39:51Z",
           "ticker": "ORCL",
           "source_tier": "aggregator"
         },
@@ -352,7 +280,7 @@
           "url": "https://news.google.com/rss/articles/CBMiogJBVV95cUxQa2traDZEQ0NWdnV1ZTZ6MWdhVndNVkRzRVRPdm40UGNLVmk5aUR2alRhNWxXMzZkbW9FOGJxZkVkUWVIbzRwcThJRDBzakc3WW8xNUExa18tMExzcVkxamZibWY4UWRkVjByNE42UmMzakoxX1RwdmpUaUx5RS1JVnFCQ1pyeXItWnJVWk95aEhpNXRxOEhUUWw5akt1OElHRnZKRHdfMDhJQ3hCRXREb0pYNHpZTFhqbHBSNzlUTGhsUTEwYXNiWjZCMXBKNXU1X1RIQWhHSFJRRUl1X2dxQkloUHBPY0hXVW1NS1A5c2Vqd0RKMzdtN2d3YW1mcnlNSGJYZkIydFkwQmxHX3BMcTlnSE1VeFRyVEpFRWtYM2ZuUQ?oc=5",
           "source": "Google News / GuruFocus",
           "published_at": "2026-07-24T08:21:38Z",
-          "fetched_at": "2026-07-25T08:04:14Z",
+          "fetched_at": "2026-07-25T08:39:51Z",
           "ticker": "ORCL",
           "source_tier": "aggregator"
         },
@@ -362,7 +290,7 @@
           "url": "https://news.google.com/rss/articles/CBMivAFBVV95cUxQTHg0bXpoZHczYkg1aGpCMUhPS2dYR2Q1b3hMcEZDUm0yYXRzR1Q0ZmJ4Mk1QTks2ckdoRlF3YUFXVF8taTdTVEVlWGpRNURmdFU5aEtuaFJBWUtYd016eXZIb1BDR2pQQjdCRW9YMUpnSWtZd1NpNlRvblM0a24xb3NfclZ6LWlOWExwYWdkM2ZmYU96RXROVXRTc09YZGFZU1FFMzhESnF6RWFuZWJOalBxRVQzdXNuOFhZSw?oc=5",
           "source": "Google News / Stocktwits",
           "published_at": "2026-07-24T06:09:10Z",
-          "fetched_at": "2026-07-25T08:04:14Z",
+          "fetched_at": "2026-07-25T08:39:51Z",
           "ticker": "ORCL",
           "source_tier": "aggregator"
         }
@@ -376,7 +304,7 @@
         {
           "source": "Google News RSS",
           "status": "ok",
-          "item_count": 13
+          "item_count": 12
         },
         {
           "source": "SEC EDGAR",
@@ -391,7 +319,7 @@
       "ticker": "GOOGL",
       "start_date": "2026-07-24",
       "end_date": "2026-07-24",
-      "fetched_at": "2026-07-25T08:04:15Z",
+      "fetched_at": "2026-07-25T08:39:51Z",
       "items": [
         {
           "title": "Mag 7 Earnings Preview: Alphabet's Cloud Surge and CapEx Hike Raise the Stakes",
@@ -399,7 +327,7 @@
           "url": "https://finance.yahoo.com/markets/stocks/articles/mag-7-earnings-preview-alphabets-230100437.html",
           "source": "Zacks",
           "published_at": "2026-07-24T23:01:00Z",
-          "fetched_at": "2026-07-25T08:04:15Z",
+          "fetched_at": "2026-07-25T08:39:51Z",
           "ticker": "GOOGL",
           "source_tier": "aggregator"
         },
@@ -409,7 +337,7 @@
           "url": "https://news.google.com/rss/articles/CBMi0wFBVV95cUxNellZUW84SGNaWFlVVlRabE54eHIwRzNCdFg1TE5lLV9ZbFZZSUkwRlJmZnA0Z0lsNG4yTy1FNEt2ZWRiX2NPSFZTTTRGM3RjdVdNaGZGYkFyYmx3S2dvRzJvOUV0TW5ZTW1NSTJ6dDZlcGNPbDdUNEE3SU05QlRjZmQ3WVFyR192N204Uk1uc1BqYTAyblJQa3daVkRyZTQtRmxRLXpWa2VoUHQ2eTM5N1h3RzN6OFhsNlBZa01mZW11alQ2bDNiV253bDhrVFhTZnow?oc=5",
           "source": "Google News / GuruFocus",
           "published_at": "2026-07-24T21:22:30Z",
-          "fetched_at": "2026-07-25T08:04:15Z",
+          "fetched_at": "2026-07-25T08:39:51Z",
           "ticker": "GOOGL",
           "source_tier": "aggregator"
         },
@@ -419,7 +347,7 @@
           "url": "https://news.google.com/rss/articles/CBMirAFBVV95cUxQMzlBX3BVX04yNXotekxFYVp3QTBxbEswQ1d2MU5ET1llNTRTSjd6c2xrOXEyQ0g5TEJTRElxN1FvRHZ1bkFFZThjMjJ2ZHlic01jbS1jX1lCdHF3QmRGM2ozVDY4eWYwT25vRDBRQnhMUlhtYTdOUmFzTkRKRFhnWGtubG1ud01Ua2NSaDcwZU5QSlhrMEVFTkxCOTMzMmw0T0xDSHZpS2d4VE9z?oc=5",
           "source": "Google News / TipRanks",
           "published_at": "2026-07-24T20:50:55Z",
-          "fetched_at": "2026-07-25T08:04:15Z",
+          "fetched_at": "2026-07-25T08:39:51Z",
           "ticker": "GOOGL",
           "source_tier": "aggregator"
         },
@@ -429,7 +357,7 @@
           "url": "https://news.google.com/rss/articles/CBMiwgFBVV95cUxOT1VtMlFjQ0RMUllhbE9iSDVybVJaN2hPMkgzcXFGaldrZmUwWlg2cUtKcXpyVWZJaGplU3JZa1owVDhaTC1TS2FHaGxlcFAzVnY5ekRkajZGTWR3clJXNHFJU1l1aHdWR21HNl9EYVFHd3Y1dzk4X25RbFlUaFlPdjlYMWNsM3ozNUU3WjJFTVJ4TGR3bU8xd2RtVDJCaDJfS09GaUZ1bUhWVTE2QzVNSGZ1cnN3RzNzWFA2MHdROXFsd9IBxwFBVV95cUxObUpuS05vai1fZ1NJZ1lYUV9mWDBvakNLOGR2QUtlU0ZPOGNiNlVWdVcteGhfaGU0RmlhenhuMGpiaHVBVzNFQWloQ2o0aF8xTXlxR3lKSmFWTzVJcXNVdi1VZUF4bFNSb0NibklLcVlEOEpidnhjaDYtdXlhdEZFdXFtSGt5eFRrZ1ItWC0wcXV1bGtiUmlrLW13LS1zYlpTdTZELTFGQ0NvRlNqWjUxOFpRNXhLMklHemRiSlFrdmxWbF82ZEtZ?oc=5",
           "source": "Google News / simplywall.st",
           "published_at": "2026-07-24T20:28:37Z",
-          "fetched_at": "2026-07-25T08:04:15Z",
+          "fetched_at": "2026-07-25T08:39:51Z",
           "ticker": "GOOGL",
           "source_tier": "aggregator"
         },
@@ -439,7 +367,7 @@
           "url": "https://news.google.com/rss/articles/CBMinAFBVV95cUxQRHJQNDBRNFFjLUJCWTBqd3BreVpCR3hfU3JHaXBucjF3Q1V0T283UlhsSnVfNWtvMzE1SWZoa20xYjBTVkxZM0tqc1d4TXZOaS15MDFrVGo1cFRXOUs1VW44QW5SUURINmJHUUZfVUVIbDcxdWxrS25Lc3hJd1ZRYnJFQWlfbWlOZFhsSVdsUzEwOTItOGtJclpTQjE?oc=5",
           "source": "Google News / Seeking Alpha",
           "published_at": "2026-07-24T17:06:52Z",
-          "fetched_at": "2026-07-25T08:04:15Z",
+          "fetched_at": "2026-07-25T08:39:51Z",
           "ticker": "GOOGL",
           "source_tier": "aggregator"
         },
@@ -449,7 +377,7 @@
           "url": "https://finance.yahoo.com/technology/ai/articles/alphabet-apos-google-signs-eu-165348705.html",
           "source": "MT Newswires",
           "published_at": "2026-07-24T16:53:48Z",
-          "fetched_at": "2026-07-25T08:04:15Z",
+          "fetched_at": "2026-07-25T08:39:51Z",
           "ticker": "GOOGL",
           "source_tier": "aggregator"
         },
@@ -459,7 +387,7 @@
           "url": "https://news.google.com/rss/articles/CBMi7wFBVV95cUxQUjZDVDVHZjBJcmxHbmhfVWFBV3ItampZSHFzZXp3dFRFREk4Vkxyb0x0MXZwS1JaQmJjSUQ2aVV6UUxPZk1fdTRFUTFSZFcxOWQyVDB0ZFA5WWVPTEc0dlZtZUhIQVdhTV9WV3IzVGY0UExkVWFadUFJVFRPM1V5YllLQ05lZUNoS0xpZEJXMmtHWmloMjZIMXdVUUItRUJpRmktR2VXUWQ4djluZTRfVFNUTEdqM25SRlZybzMtamtNWklBaDZrMklpN2lhQVJxNlhDZ2JzVDMycGNhdGZqdUNjQjQwVEVzM1RQMXZSdw?oc=5",
           "source": "Google News / Stocktwits",
           "published_at": "2026-07-24T15:35:33Z",
-          "fetched_at": "2026-07-25T08:04:15Z",
+          "fetched_at": "2026-07-25T08:39:51Z",
           "ticker": "GOOGL",
           "source_tier": "aggregator"
         },
@@ -469,17 +397,7 @@
           "url": "https://news.google.com/rss/articles/CBMilgFBVV95cUxPREZvU0x4LTBaczZSN3ExZlpSd1R3TW83UzE3cVZiTUdHRTJESEZLTFRkZGhIdS1VcU0yUjNlSDNLTnBtZjBTWFVwNmFzOW1hcEV6c3ZwTThFMkY2YzNqY3dZWFZyNGpoZ1ZLd2tNYTlySWZkZzJZVWsxemtKOXljaHozUjhXUUM3YlBVREdTTGI5WTBaUGc?oc=5",
           "source": "Google News / Yahoo Finance",
           "published_at": "2026-07-24T15:12:00Z",
-          "fetched_at": "2026-07-25T08:04:15Z",
-          "ticker": "GOOGL",
-          "source_tier": "aggregator"
-        },
-        {
-          "title": "GOOGL Stock: Should You Buy the Best-Performing Magnificent Seven Stock Right Now?",
-          "summary": "GOOGL Stock: Should You Buy the Best-Performing Magnificent Seven Stock Right Now? TradingKey",
-          "url": "https://news.google.com/rss/articles/CBMi5gFBVV95cUxPTmVpTE0zd1RjSFd3Q0tQRzFTdEh1dG9vdWNsYVZfb0pJTlYtZzV5bFNDckNXRWFMSzFyZ1hUVTVvVERNYnFSZnZVSHdjNXFTTk9MTElKVWJ3M2dwWnZXTFVtYVhXNktFcmZPQlRacXpsMnVseHJTcnNTM2d5c2FQdWZGOHd3MjZQS0VEZlBwSmFmaHZ4RTVLdzRtejZrSGtHTDRMVG9lV190UldWb0tmbF9reXdySWVPNnFpOHg0WVJPSjltMEltNHhuUFh2MkRSTGY4UDJlWk96eWhpTThmX3EwQ2RRQQ?oc=5",
-          "source": "Google News / TradingKey",
-          "published_at": "2026-07-24T15:08:48Z",
-          "fetched_at": "2026-07-25T08:04:15Z",
+          "fetched_at": "2026-07-25T08:39:51Z",
           "ticker": "GOOGL",
           "source_tier": "aggregator"
         },
@@ -489,7 +407,7 @@
           "url": "https://news.google.com/rss/articles/CBMipwFBVV95cUxQY2gyTEhhUE5hY3FDTTRXVHd5M3lPN3BUMHFHOUNvcjBGci1OejF1UW12MUJaR1pTT3lXdVd1Tmh4emtVZEZrY0h5a1dNNHNheDNwVFhvbnA1MFRSRDQxS2ZjanhmVDFCSlE5SHV1ZHVzaXlBU09ycVFSZjBxWGJGdUR3RE04d3B6ekE1WV92bkVPQXUtcG4zQlZsTklKMjNiUHo2Mi1HTQ?oc=5",
           "source": "Google News / Trefis",
           "published_at": "2026-07-24T13:57:38Z",
-          "fetched_at": "2026-07-25T08:04:15Z",
+          "fetched_at": "2026-07-25T08:39:51Z",
           "ticker": "GOOGL",
           "source_tier": "aggregator"
         },
@@ -499,7 +417,7 @@
           "url": "https://news.google.com/rss/articles/CBMivgFBVV95cUxOMmExeERRY2R3NWlBbHFUSG5kdk5EaG5mTE9XOUk0bURySDRPTUJfemVJVldwSi1kUGFBWXlJdzduX2t0dl9qVWwtLTFpSkZpbEs0VnJUZjRQcXplaks4YkxNU2R4bjRrVXNJa3l6NlFZNHF1dzFLWVFrMzA1VFNaR3FjQmxrV3BzUHcxNFo4b3c5YkdBeWVEYThlVW1SWS1QV1lnQy1nSUZmT21WWkc0TlluTlZKVEE5U2ZoT1R3?oc=5",
           "source": "Google News / GuruFocus",
           "published_at": "2026-07-24T13:52:30Z",
-          "fetched_at": "2026-07-25T08:04:15Z",
+          "fetched_at": "2026-07-25T08:39:51Z",
           "ticker": "GOOGL",
           "source_tier": "aggregator"
         },
@@ -509,7 +427,7 @@
           "url": "https://news.google.com/rss/articles/CBMi2AFBVV95cUxNT3VtU0ZOS1haRFRNbVpfXzRTVTBDRmtRYzdrSUVwVVUzUkZQNTRUZGNzTE1zb2xhd2VRR0s1Xy1FY2RFbFZnU01xOXpOSmJzZGVxV2ttVms1VDNlajVuSXJ1ekcyZDlQaGlpdWlKb3BWNHZmLVBGRUJ5MVR4V3hYcTF6Z0dMeFRmUUhCU0laNzFGY29NYThUSDhJOUltTVVhX3Y2ek1xMXRRM2UxVFhUSWo0cWluMl85b2xJOXNZNnJBREtVSDJEZG50RXVBaWJiWjBPYkQxX3U?oc=5",
           "source": "Google News / Stocktwits",
           "published_at": "2026-07-24T12:55:12Z",
-          "fetched_at": "2026-07-25T08:04:15Z",
+          "fetched_at": "2026-07-25T08:39:51Z",
           "ticker": "GOOGL",
           "source_tier": "aggregator"
         },
@@ -519,7 +437,7 @@
           "url": "https://news.google.com/rss/articles/CBMijgFBVV95cUxQQVJnaUo2a2RwUTZHNXl3ODdsaTBocVRnRHcxSUoxZHgtaDdBTWo5QWV3cHc3anhhMkl2bWotek5ndnVzRnp3clFHLVAzUGpSNURXVW9nZklSb183cDFSMFpVV3prVm5iQ0ZHV2FtbURkaVlfelVOVFFRSFhMbVFmVDFRcUpXMXNBbUhELXBR?oc=5",
           "source": "Google News / Yahoo! Finance Canada",
           "published_at": "2026-07-24T11:48:09Z",
-          "fetched_at": "2026-07-25T08:04:15Z",
+          "fetched_at": "2026-07-25T08:39:51Z",
           "ticker": "GOOGL",
           "source_tier": "aggregator"
         },
@@ -529,7 +447,7 @@
           "url": "https://news.google.com/rss/articles/CBMipwFBVV95cUxPMkRtUWZSLUJTdXhRZ2x0THFncFpTMTlKb0pTOXV4WHV4cWdNUzc2XzBhbTVKNVFSOFlLNldJRE1NUERUODBEemhrY3J5cnNFTHVFeC1KQkNadlUwa0JhZUlBel9mRDRiZTJhT2lyUjdhajhDNFVDTGJZQ21iTWthaFF0MU9kSXhVeXpRTE9ST3loSGFXY2xqTWg4c0tLbXM2NkhzLUM2WQ?oc=5",
           "source": "Google News / GuruFocus",
           "published_at": "2026-07-24T11:32:06Z",
-          "fetched_at": "2026-07-25T08:04:15Z",
+          "fetched_at": "2026-07-25T08:39:51Z",
           "ticker": "GOOGL",
           "source_tier": "aggregator"
         },
@@ -539,7 +457,7 @@
           "url": "https://news.google.com/rss/articles/CBMi4wFBVV95cUxNVDFDX3NsQWJuZm5aSm4za2JKRDV6TTVfZl9wZG1nUk1ZbUhpeW5FX08yelNJTENlZ0l5LU5MeDVqM1dXVHJ6SHZoeWFhbE00RHNDd255UzlfY0hfNmRfNEZmdTRvZzV3eDI0QzJiaXh0dm05TlhSLWFNOUxfTVQ0SzVvWHROUU1Cd0d6a2dhdlJub3dxZ0JVY2l1RjgzSi1XNnExVGdNa0puZkhEWWw3SlVQOGFsV3ppejF4VVRxT05lTFNlbHUyOURUaGlBM3F1UGZHeU5YeEVRQmpvd3NtUXd1dw?oc=5",
           "source": "Google News / ChartMill",
           "published_at": "2026-07-24T10:10:30Z",
-          "fetched_at": "2026-07-25T08:04:15Z",
+          "fetched_at": "2026-07-25T08:39:51Z",
           "ticker": "GOOGL",
           "source_tier": "aggregator"
         },
@@ -549,7 +467,17 @@
           "url": "https://news.google.com/rss/articles/CBMi7gFBVV95cUxQV3JVZy05Smp3ZzlqejNJTzhtaVYzQ1JyMVk0RmZqaDl5T3NmVmZ2VmFFR09OcmtPYngxM0hTWUhMNFdjRG1ERWcyaDJiWV84N2NfTTliUEt6aGxhLWRRLUwzS0RFclJMSmFDRVNCSVJYMXY3MHM0TWRkVkFKbVZ5ellLZWV5bGlxWTc0c0ZKLXFjbE5sWS1wdmxuYmZqX0xFWEFoVEt3NlpwOTRxY2ZZdkpKTEFkQzV2M0M0OVZUOVRGcHhadDdjRWR5NEZPSWxCWXVaX2tSckxsVnhmVlVVUE5aZ0M0UWVRckdBbm1B?oc=5",
           "source": "Google News / Stocktwits",
           "published_at": "2026-07-24T10:08:14Z",
-          "fetched_at": "2026-07-25T08:04:15Z",
+          "fetched_at": "2026-07-25T08:39:51Z",
+          "ticker": "GOOGL",
+          "source_tier": "aggregator"
+        },
+        {
+          "title": "Why Is Alphabet (GOOGL) Still Falling After a Record Q2 Beat?",
+          "summary": "Why Is Alphabet (GOOGL) Still Falling After a Record Q2 Beat? TradingKey",
+          "url": "https://news.google.com/rss/articles/CBMi1wFBVV95cUxOdzhJdHYwX2QyRDRDOHJzajZYQ1ZLUW9rNG9uQjFVVjVfTWRzaXZsSDZ2T3JneUxRcGsxQjNsaXlpYXRIMEdQbDFQdHJfVV9JSUpZcldkeHVmbUVicjdfbWpJbnF2Z2tlUWpUWUFMSWR6cEpsZjl1dFR1Q3dqeHFfR2tnZVZTMEJkT0ZscWZIbmpnR0F4bWhQLTQzYW82MFZZV1poaWp6amVjNTFQNW14MU01RGNuTFhnZUVGQUFqTW1yUDZmYkdhRlVEVWVtWDlJNTlmV2VBbw?oc=5",
+          "source": "Google News / TradingKey",
+          "published_at": "2026-07-24T08:58:12Z",
+          "fetched_at": "2026-07-25T08:39:51Z",
           "ticker": "GOOGL",
           "source_tier": "aggregator"
         },
@@ -559,7 +487,7 @@
           "url": "https://news.google.com/rss/articles/CBMiygFBVV95cUxNX2FhcVJpWTQ0eWphNmhnclZsajRmdzViQWxfekhJWjBOcGZaaEdFRmpkZFJMYlpYbFhHVjdnd3g2RU9KWVlxQTJDZ0Y1WW5wMUNVLWoxUzZZZ2Qta3A5WTFrblAtWmJpMHV2aXY3ZElBNUZTV2xCVzhkWEtUVlFMNXJWVlltR2R4S29Ob05Nd1lHODhONjJMTG9rTDFTN2JhZTU2ZXhGTEhUZTNxanhSY3B3dHFpdWxMMVVwWElNR1p2LXRUQ3Iza1Zn?oc=5",
           "source": "Google News / MarketBeat",
           "published_at": "2026-07-24T08:41:02Z",
-          "fetched_at": "2026-07-25T08:04:15Z",
+          "fetched_at": "2026-07-25T08:39:51Z",
           "ticker": "GOOGL",
           "source_tier": "aggregator"
         },
@@ -569,7 +497,7 @@
           "url": "https://news.google.com/rss/articles/CBMiwgFBVV95cUxPWDZWTDZ1SUVDZ2FrT2E3ek5MajBHZ2NTOEF2cnlsSzY1eGZYR094NWcydklEcllvLVM5SzdhQmNtTHhKbC11UnN2NFR6TVBwLXYtdHpZTzhkTkpqLWdLYkVVNWppYkYzLU9ITTVkMkFONTFOT3JDNGdTNndiSDlYeUhNNUpxc1RnQV9QSzhoUUNIZ1ctcFo5RmxKQlE0UmVpbWdOb2RYMFJCYm9ELXZWenZpblFlek1ON1N1b3o2MjBiQQ?oc=5",
           "source": "Google News / MarketBeat",
           "published_at": "2026-07-24T08:41:02Z",
-          "fetched_at": "2026-07-25T08:04:15Z",
+          "fetched_at": "2026-07-25T08:39:51Z",
           "ticker": "GOOGL",
           "source_tier": "aggregator"
         },
@@ -579,7 +507,7 @@
           "url": "https://news.google.com/rss/articles/CBMirAFBVV95cUxQbUdIaWtaV0JuY3Bac2pXcnVsWjkwMGxlQXVYWE5DbXdscW91eDJvdWFtMHJCb1dJYWstRnFDcE5ycGtKTHo1ZVdIaExkeDhYNWZ6ZFREUHUtMTQ5dW55ZnlWLTZBSmFZTU9PSlI5RFJUUXF0RmNVaGF6d0g1RWVPUXROaTRrM3hGaW1oRTZmQ3huQ1dDUjB2bVo5eGZxOWdHMGgxXzV2NFhuTjRF?oc=5",
           "source": "Google News / MarketBeat",
           "published_at": "2026-07-24T08:41:02Z",
-          "fetched_at": "2026-07-25T08:04:15Z",
+          "fetched_at": "2026-07-25T08:39:51Z",
           "ticker": "GOOGL",
           "source_tier": "aggregator"
         },
@@ -589,7 +517,7 @@
           "url": "https://news.google.com/rss/articles/CBMiwAFBVV95cUxPczhkLXJrdU5HVE1Id0J5aGpiUDZrLWUyTnVUN3A5TUl3bXBoQjJrVUpJTFA0SHg5aGhlcGQ5SFdqX3FkbnlEdWprRmZ0ZXhYT2RvNEpTRDZrXzM3YWdYZkVjYUoxcUNrcWlfVW9VOGpLaVlWYUFRZ2dQNVpjVGlEa3RKaW5FUm9hMWFiN3hsbGdjZXVPRFpQbElXeVdkN09XMXFuR05GMkJyb25wSlhMY1Z0UGFTVXdpdU54bXp1OEg?oc=5",
           "source": "Google News / MarketBeat",
           "published_at": "2026-07-24T07:56:36Z",
-          "fetched_at": "2026-07-25T08:04:15Z",
+          "fetched_at": "2026-07-25T08:39:51Z",
           "ticker": "GOOGL",
           "source_tier": "aggregator"
         }
@@ -618,7 +546,7 @@
       "ticker": "3887.HK",
       "start_date": "2026-07-24",
       "end_date": "2026-07-24",
-      "fetched_at": "2026-07-25T08:04:16Z",
+      "fetched_at": "2026-07-25T08:39:52Z",
       "items": [],
       "source_statuses": [
         {
@@ -646,7 +574,7 @@
       "url": "https://finance.yahoo.com/m/af691027-f31d-3a3e-b6b7-00013f6be661/oracle%E2%80%99s-defense-pivot-lands.html",
       "source": "TheStreet",
       "published_at": "2026-07-25T02:33:00Z",
-      "fetched_at": "2026-07-25T08:04:14Z",
+      "fetched_at": "2026-07-25T08:39:51Z",
       "ticker": "ORCL",
       "source_tier": "aggregator"
     },
@@ -656,7 +584,7 @@
       "url": "https://finance.yahoo.com/markets/stocks/articles/mag-7-earnings-preview-alphabets-230100437.html",
       "source": "Zacks",
       "published_at": "2026-07-24T23:01:00Z",
-      "fetched_at": "2026-07-25T08:04:15Z",
+      "fetched_at": "2026-07-25T08:39:51Z",
       "ticker": "GOOGL",
       "source_tier": "aggregator"
     },
@@ -666,7 +594,7 @@
       "url": "https://finance.yahoo.com/energy/articles/ovintiv-inc-ovv-q2-2026-230019199.html",
       "source": "GuruFocus.com",
       "published_at": "2026-07-24T23:00:19Z",
-      "fetched_at": "2026-07-25T08:03:56Z",
+      "fetched_at": "2026-07-25T08:39:49Z",
       "ticker": null,
       "source_tier": "aggregator"
     },
@@ -676,7 +604,7 @@
       "url": "https://finance.yahoo.com/m/c217d11e-37d4-362e-95a4-11b4cd90f44c/oracle-just-hit-a-new-52-week.html",
       "source": "Motley Fool",
       "published_at": "2026-07-24T22:57:00Z",
-      "fetched_at": "2026-07-25T08:04:14Z",
+      "fetched_at": "2026-07-25T08:39:51Z",
       "ticker": "ORCL",
       "source_tier": "aggregator"
     },
@@ -686,7 +614,7 @@
       "url": "https://finance.yahoo.com/m/479dd690-44bb-3d0f-94b7-f6bf29601cdf/s%26p-500%2C-dow%2C-nasdaq-end.html",
       "source": "Stocktwits",
       "published_at": "2026-07-24T22:54:48Z",
-      "fetched_at": "2026-07-25T08:03:56Z",
+      "fetched_at": "2026-07-25T08:39:49Z",
       "ticker": null,
       "source_tier": "aggregator"
     },
@@ -696,7 +624,7 @@
       "url": "https://finance.yahoo.com/m/76a5a4a5-afa1-3f93-94a0-752b807a5f47/analyst-report%3A-mplx-lp.html",
       "source": "Morningstar Research",
       "published_at": "2026-07-24T22:44:37Z",
-      "fetched_at": "2026-07-25T08:03:56Z",
+      "fetched_at": "2026-07-25T08:39:49Z",
       "ticker": null,
       "source_tier": "aggregator"
     },
@@ -706,18 +634,8 @@
       "url": "https://finance.yahoo.com/small-business/articles/walmart-walmart-foundation-announce-500-215400033.html",
       "source": "Business Wire",
       "published_at": "2026-07-24T21:54:00Z",
-      "fetched_at": "2026-07-25T08:03:56Z",
+      "fetched_at": "2026-07-25T08:39:49Z",
       "ticker": null,
-      "source_tier": "aggregator"
-    },
-    {
-      "title": "Stocks to Watch: Bank of America, Intel, SAP, Oracle",
-      "summary": "",
-      "url": "https://finance.yahoo.com/m/11cdad22-a23f-3779-a81d-e87f9fea1e3a/stocks-to-watch%3A-bank-of.html",
-      "source": "The Wall Street Journal",
-      "published_at": "2026-07-24T21:27:19Z",
-      "fetched_at": "2026-07-25T08:04:14Z",
-      "ticker": "ORCL",
       "source_tier": "aggregator"
     },
     {
@@ -726,7 +644,7 @@
       "url": "https://news.google.com/rss/articles/CBMi0wFBVV95cUxNellZUW84SGNaWFlVVlRabE54eHIwRzNCdFg1TE5lLV9ZbFZZSUkwRlJmZnA0Z0lsNG4yTy1FNEt2ZWRiX2NPSFZTTTRGM3RjdVdNaGZGYkFyYmx3S2dvRzJvOUV0TW5ZTW1NSTJ6dDZlcGNPbDdUNEE3SU05QlRjZmQ3WVFyR192N204Uk1uc1BqYTAyblJQa3daVkRyZTQtRmxRLXpWa2VoUHQ2eTM5N1h3RzN6OFhsNlBZa01mZW11alQ2bDNiV253bDhrVFhTZnow?oc=5",
       "source": "Google News / GuruFocus",
       "published_at": "2026-07-24T21:22:30Z",
-      "fetched_at": "2026-07-25T08:04:15Z",
+      "fetched_at": "2026-07-25T08:39:51Z",
       "ticker": "GOOGL",
       "source_tier": "aggregator"
     },
@@ -736,17 +654,17 @@
       "url": "https://news.google.com/rss/articles/CBMirAFBVV95cUxQMzlBX3BVX04yNXotekxFYVp3QTBxbEswQ1d2MU5ET1llNTRTSjd6c2xrOXEyQ0g5TEJTRElxN1FvRHZ1bkFFZThjMjJ2ZHlic01jbS1jX1lCdHF3QmRGM2ozVDY4eWYwT25vRDBRQnhMUlhtYTdOUmFzTkRKRFhnWGtubG1ud01Ua2NSaDcwZU5QSlhrMEVFTkxCOTMzMmw0T0xDSHZpS2d4VE9z?oc=5",
       "source": "Google News / TipRanks",
       "published_at": "2026-07-24T20:50:55Z",
-      "fetched_at": "2026-07-25T08:04:15Z",
+      "fetched_at": "2026-07-25T08:39:51Z",
       "ticker": "GOOGL",
       "source_tier": "aggregator"
     },
     {
       "title": "ORCL Has Left Its Peers Behind. Or Has It?",
-      "summary": "ORCL Has Left Its Peers Behind. Or Has It? Yahoo Finance",
+      "summary": "ORCL Has Left Its Peers Behind. Or Has It? Yahoo Finance Oracle Corporation (NYSE:ORCL)’s Stock Is The One To Watch, Says Jim Cramer Yahoo Finance Oracle Stock (ORCL) Opinions on AI Infrastructure Investments and Stock Decline Moomoo",
       "url": "https://news.google.com/rss/articles/CBMikAFBVV95cUxPQXlFbndvb080Q2ptSVRjNWtjRGNCR3RaZU05VjlkdWdWcndJQ1RxU1ZXa1ZMZUFuVnJPUjNsMzM5NlU3bUlfSTdBaEVPaUN5UlNPNmRLQjQxNWM0MGgtQ0VuZDZaV18wMnpuYzUtR0tKbHBJUkRSTjRpdmhLY2taTkVqWndrX0xiTTl1LVRBdkg?oc=5",
       "source": "Google News / Yahoo Finance",
       "published_at": "2026-07-24T20:47:37Z",
-      "fetched_at": "2026-07-25T08:04:14Z",
+      "fetched_at": "2026-07-25T08:39:51Z",
       "ticker": "ORCL",
       "source_tier": "aggregator"
     },
@@ -756,7 +674,7 @@
       "url": "https://finance.yahoo.com/m/bd8f4811-b7d7-3fd2-82e8-a284a27ac5f2/paramount-stock-falls-on.html",
       "source": "Barrons.com",
       "published_at": "2026-07-24T20:38:00Z",
-      "fetched_at": "2026-07-25T08:03:56Z",
+      "fetched_at": "2026-07-25T08:39:49Z",
       "ticker": null,
       "source_tier": "aggregator"
     },
@@ -766,18 +684,8 @@
       "url": "https://news.google.com/rss/articles/CBMiwgFBVV95cUxOT1VtMlFjQ0RMUllhbE9iSDVybVJaN2hPMkgzcXFGaldrZmUwWlg2cUtKcXpyVWZJaGplU3JZa1owVDhaTC1TS2FHaGxlcFAzVnY5ekRkajZGTWR3clJXNHFJU1l1aHdWR21HNl9EYVFHd3Y1dzk4X25RbFlUaFlPdjlYMWNsM3ozNUU3WjJFTVJ4TGR3bU8xd2RtVDJCaDJfS09GaUZ1bUhWVTE2QzVNSGZ1cnN3RzNzWFA2MHdROXFsd9IBxwFBVV95cUxObUpuS05vai1fZ1NJZ1lYUV9mWDBvakNLOGR2QUtlU0ZPOGNiNlVWdVcteGhfaGU0RmlhenhuMGpiaHVBVzNFQWloQ2o0aF8xTXlxR3lKSmFWTzVJcXNVdi1VZUF4bFNSb0NibklLcVlEOEpidnhjaDYtdXlhdEZFdXFtSGt5eFRrZ1ItWC0wcXV1bGtiUmlrLW13LS1zYlpTdTZELTFGQ0NvRlNqWjUxOFpRNXhLMklHemRiSlFrdmxWbF82ZEtZ?oc=5",
       "source": "Google News / simplywall.st",
       "published_at": "2026-07-24T20:28:37Z",
-      "fetched_at": "2026-07-25T08:04:15Z",
+      "fetched_at": "2026-07-25T08:39:51Z",
       "ticker": "GOOGL",
-      "source_tier": "aggregator"
-    },
-    {
-      "title": "Oracle Corp Stock (ORCL) Closed Down by 4.27% on Jul 24: What Signal Does It Send?",
-      "summary": "Oracle Corp Stock (ORCL) Closed Down by 4.27% on Jul 24: What Signal Does It Send? TradingKey",
-      "url": "https://news.google.com/rss/articles/CBMiiwFBVV95cUxOS0wxOFQzd0dHei13QnBZQVo2bnQzLUNrUmZiaXlYenpsbW92ZVVQcm1iUWdEaU5iaVVXbjhVQXI4SmdXQTN2d0pSOVA1UkhMYjAzTHA0OXNnZlJTUm1ubFpuUkpfVC1nOVJiV3RDVWhnaDlDWDcyVkhoajc5NmlDblBOaHhFaU9TZnRN?oc=5",
-      "source": "Google News / TradingKey",
-      "published_at": "2026-07-24T20:23:10Z",
-      "fetched_at": "2026-07-25T08:04:14Z",
-      "ticker": "ORCL",
       "source_tier": "aggregator"
     },
     {
@@ -786,7 +694,7 @@
       "url": "https://finance.yahoo.com/markets/stocks/articles/2-quantum-stocks-set-strong-190000511.html",
       "source": "Zacks",
       "published_at": "2026-07-24T19:00:00Z",
-      "fetched_at": "2026-07-25T08:03:56Z",
+      "fetched_at": "2026-07-25T08:39:49Z",
       "ticker": null,
       "source_tier": "aggregator"
     },
@@ -796,7 +704,7 @@
       "url": "https://finance.yahoo.com/m/24800a3c-18a4-39a8-89f7-e072b93d88b1/amazon-stock-slides-as-prime.html",
       "source": "TheStreet",
       "published_at": "2026-07-24T18:17:00Z",
-      "fetched_at": "2026-07-25T08:03:56Z",
+      "fetched_at": "2026-07-25T08:39:49Z",
       "ticker": null,
       "source_tier": "aggregator"
     },
@@ -806,7 +714,7 @@
       "url": "https://finance.yahoo.com/m/c1027afd-45b4-3f7d-987b-5ee0bcd56f03/the-%247-billion-reason-oracle.html",
       "source": "Barchart",
       "published_at": "2026-07-24T17:49:40Z",
-      "fetched_at": "2026-07-25T08:04:14Z",
+      "fetched_at": "2026-07-25T08:39:51Z",
       "ticker": "ORCL",
       "source_tier": "aggregator"
     },
@@ -816,7 +724,7 @@
       "url": "https://finance.yahoo.com/m/71fde92b-18c1-3747-aa30-e29dd63c3c88/disney%E2%80%99s-kraft-heinz.html",
       "source": "Barrons.com",
       "published_at": "2026-07-24T17:25:00Z",
-      "fetched_at": "2026-07-25T08:03:56Z",
+      "fetched_at": "2026-07-25T08:39:49Z",
       "ticker": null,
       "source_tier": "aggregator"
     },
@@ -826,7 +734,7 @@
       "url": "https://news.google.com/rss/articles/CBMi4wFBVV95cUxQck1zVU13cFlUQncwWDlQRVBCTVg4NWFlU3UtVlNLeW5nTU0zUUZ1U1p1QWg4SkhOd2UxaVBCdk5RZm02SXZKTzNUM0Q4YXpUWWxPbUJ1YzdEUkRSdkxqYTdLbmdSbWFVa2ViNU1sdHp3YVloUDI5RGd3XzFJdUZaLThvcmZNVURxd1ptYm4wclU1ZVB5VnFmSXBsZk5CUDhFOUQ3M0oyQ0xHaHdrZ09qdXpzUDRvTFRKNWFiOFkzWnprdkJGcnNsSjU2OTVwRVZSUTZhSE03dHdRWVdiemVwSFUxVQ?oc=5",
       "source": "Google News / foreignpolicyjournal.com",
       "published_at": "2026-07-24T17:12:00Z",
-      "fetched_at": "2026-07-25T08:04:14Z",
+      "fetched_at": "2026-07-25T08:39:51Z",
       "ticker": "ORCL",
       "source_tier": "aggregator"
     },
@@ -836,7 +744,7 @@
       "url": "https://finance.yahoo.com/m/401f1358-d93e-3a61-bc83-f11d392e2f94/ebay-showered-owners-with.html",
       "source": "Trefis",
       "published_at": "2026-07-24T17:08:32Z",
-      "fetched_at": "2026-07-25T08:03:56Z",
+      "fetched_at": "2026-07-25T08:39:49Z",
       "ticker": null,
       "source_tier": "aggregator"
     },
@@ -846,7 +754,7 @@
       "url": "https://news.google.com/rss/articles/CBMinAFBVV95cUxQRHJQNDBRNFFjLUJCWTBqd3BreVpCR3hfU3JHaXBucjF3Q1V0T283UlhsSnVfNWtvMzE1SWZoa20xYjBTVkxZM0tqc1d4TXZOaS15MDFrVGo1cFRXOUs1VW44QW5SUURINmJHUUZfVUVIbDcxdWxrS25Lc3hJd1ZRYnJFQWlfbWlOZFhsSVdsUzEwOTItOGtJclpTQjE?oc=5",
       "source": "Google News / Seeking Alpha",
       "published_at": "2026-07-24T17:06:52Z",
-      "fetched_at": "2026-07-25T08:04:15Z",
+      "fetched_at": "2026-07-25T08:39:51Z",
       "ticker": "GOOGL",
       "source_tier": "aggregator"
     },
@@ -856,7 +764,7 @@
       "url": "https://news.google.com/rss/articles/CBMiggJBVV95cUxPVm1xS3JWQ1VFc2V0TU9ja3hFclN6dE1ldjZVTFc3cnBkb0UzdHd4WGlLZS11RWNRY3pUQnQyd3pEbGxManJCdkVobjZfcnEwZjdOc3pJY0ZOWlB1SlFGZ0dKdjJKVEIyTEZhYlo3c1hpeU5MN0NrUndpV2k4MW9LVWt4bTNvbEFSNGx1WnRob3FlS0JONkhTZGhZZUM1RVN4eEJpOVlka0FubmxmOHliRy15QjJYTWZUdDVUdnF0cTlxMTNrUjA3NTVObnhiRXJoT3RGWjdRZUhPMnJtSEFHZmdGVGxUN2NGcmRfbUd6cFNfa1RwcVhiNkU0Q0M0dGNqdlE?oc=5",
       "source": "Google News / Stocktwits",
       "published_at": "2026-07-24T17:03:55Z",
-      "fetched_at": "2026-07-25T08:04:14Z",
+      "fetched_at": "2026-07-25T08:39:51Z",
       "ticker": "ORCL",
       "source_tier": "aggregator"
     },
@@ -866,7 +774,7 @@
       "url": "https://finance.yahoo.com/technology/ai/articles/alphabet-apos-google-signs-eu-165348705.html",
       "source": "MT Newswires",
       "published_at": "2026-07-24T16:53:48Z",
-      "fetched_at": "2026-07-25T08:04:15Z",
+      "fetched_at": "2026-07-25T08:39:51Z",
       "ticker": "GOOGL",
       "source_tier": "aggregator"
     },
@@ -876,7 +784,7 @@
       "url": "https://finance.yahoo.com/m/f4231a1f-0ff0-32aa-a314-df7379c9564a/3-reasons-disney-stock-can.html",
       "source": "Motley Fool",
       "published_at": "2026-07-24T15:38:50Z",
-      "fetched_at": "2026-07-25T08:03:56Z",
+      "fetched_at": "2026-07-25T08:39:49Z",
       "ticker": null,
       "source_tier": "aggregator"
     },
@@ -886,7 +794,7 @@
       "url": "https://news.google.com/rss/articles/CBMi7wFBVV95cUxQUjZDVDVHZjBJcmxHbmhfVWFBV3ItampZSHFzZXp3dFRFREk4Vkxyb0x0MXZwS1JaQmJjSUQ2aVV6UUxPZk1fdTRFUTFSZFcxOWQyVDB0ZFA5WWVPTEc0dlZtZUhIQVdhTV9WV3IzVGY0UExkVWFadUFJVFRPM1V5YllLQ05lZUNoS0xpZEJXMmtHWmloMjZIMXdVUUItRUJpRmktR2VXUWQ4djluZTRfVFNUTEdqM25SRlZybzMtamtNWklBaDZrMklpN2lhQVJxNlhDZ2JzVDMycGNhdGZqdUNjQjQwVEVzM1RQMXZSdw?oc=5",
       "source": "Google News / Stocktwits",
       "published_at": "2026-07-24T15:35:33Z",
-      "fetched_at": "2026-07-25T08:04:15Z",
+      "fetched_at": "2026-07-25T08:39:51Z",
       "ticker": "GOOGL",
       "source_tier": "aggregator"
     },
@@ -896,17 +804,7 @@
       "url": "https://news.google.com/rss/articles/CBMilgFBVV95cUxPREZvU0x4LTBaczZSN3ExZlpSd1R3TW83UzE3cVZiTUdHRTJESEZLTFRkZGhIdS1VcU0yUjNlSDNLTnBtZjBTWFVwNmFzOW1hcEV6c3ZwTThFMkY2YzNqY3dZWFZyNGpoZ1ZLd2tNYTlySWZkZzJZVWsxemtKOXljaHozUjhXUUM3YlBVREdTTGI5WTBaUGc?oc=5",
       "source": "Google News / Yahoo Finance",
       "published_at": "2026-07-24T15:12:00Z",
-      "fetched_at": "2026-07-25T08:04:15Z",
-      "ticker": "GOOGL",
-      "source_tier": "aggregator"
-    },
-    {
-      "title": "GOOGL Stock: Should You Buy the Best-Performing Magnificent Seven Stock Right Now?",
-      "summary": "GOOGL Stock: Should You Buy the Best-Performing Magnificent Seven Stock Right Now? TradingKey",
-      "url": "https://news.google.com/rss/articles/CBMi5gFBVV95cUxPTmVpTE0zd1RjSFd3Q0tQRzFTdEh1dG9vdWNsYVZfb0pJTlYtZzV5bFNDckNXRWFMSzFyZ1hUVTVvVERNYnFSZnZVSHdjNXFTTk9MTElKVWJ3M2dwWnZXTFVtYVhXNktFcmZPQlRacXpsMnVseHJTcnNTM2d5c2FQdWZGOHd3MjZQS0VEZlBwSmFmaHZ4RTVLdzRtejZrSGtHTDRMVG9lV190UldWb0tmbF9reXdySWVPNnFpOHg0WVJPSjltMEltNHhuUFh2MkRSTGY4UDJlWk96eWhpTThmX3EwQ2RRQQ?oc=5",
-      "source": "Google News / TradingKey",
-      "published_at": "2026-07-24T15:08:48Z",
-      "fetched_at": "2026-07-25T08:04:15Z",
+      "fetched_at": "2026-07-25T08:39:51Z",
       "ticker": "GOOGL",
       "source_tier": "aggregator"
     },
@@ -916,7 +814,7 @@
       "url": "https://news.google.com/rss/articles/CBMirwFBVV95cUxNTHZSVzFxOFhrODdlTnExYmF5UzRXV255aWo5RWx5amdGNWpiQzBidm9rVmlkZFZ2UFBlMmpYNzJEZGpSV2JlWHEwSExvcktaSjdUV1NFOXBrMXdjYlNGR3NoaEdUQ3dHNW4zeHNPVnVDUzYxeVJnX3lMOGJfaWh1X3FaRlBkbTVtdThZaExtLVg1c3pzVHAtbXoyeGVubTJ4UEFUSmtJd3RVTlAtdEM0?oc=5",
       "source": "Google News / GuruFocus",
       "published_at": "2026-07-24T14:06:48Z",
-      "fetched_at": "2026-07-25T08:04:14Z",
+      "fetched_at": "2026-07-25T08:39:51Z",
       "ticker": "ORCL",
       "source_tier": "aggregator"
     },
@@ -926,7 +824,7 @@
       "url": "https://news.google.com/rss/articles/CBMipwFBVV95cUxQY2gyTEhhUE5hY3FDTTRXVHd5M3lPN3BUMHFHOUNvcjBGci1OejF1UW12MUJaR1pTT3lXdVd1Tmh4emtVZEZrY0h5a1dNNHNheDNwVFhvbnA1MFRSRDQxS2ZjanhmVDFCSlE5SHV1ZHVzaXlBU09ycVFSZjBxWGJGdUR3RE04d3B6ekE1WV92bkVPQXUtcG4zQlZsTklKMjNiUHo2Mi1HTQ?oc=5",
       "source": "Google News / Trefis",
       "published_at": "2026-07-24T13:57:38Z",
-      "fetched_at": "2026-07-25T08:04:15Z",
+      "fetched_at": "2026-07-25T08:39:51Z",
       "ticker": "GOOGL",
       "source_tier": "aggregator"
     },
@@ -936,7 +834,7 @@
       "url": "https://news.google.com/rss/articles/CBMivgFBVV95cUxOMmExeERRY2R3NWlBbHFUSG5kdk5EaG5mTE9XOUk0bURySDRPTUJfemVJVldwSi1kUGFBWXlJdzduX2t0dl9qVWwtLTFpSkZpbEs0VnJUZjRQcXplaks4YkxNU2R4bjRrVXNJa3l6NlFZNHF1dzFLWVFrMzA1VFNaR3FjQmxrV3BzUHcxNFo4b3c5YkdBeWVEYThlVW1SWS1QV1lnQy1nSUZmT21WWkc0TlluTlZKVEE5U2ZoT1R3?oc=5",
       "source": "Google News / GuruFocus",
       "published_at": "2026-07-24T13:52:30Z",
-      "fetched_at": "2026-07-25T08:04:15Z",
+      "fetched_at": "2026-07-25T08:39:51Z",
       "ticker": "GOOGL",
       "source_tier": "aggregator"
     },
@@ -946,7 +844,7 @@
       "url": "https://news.google.com/rss/articles/CBMiigFBVV95cUxOTzB1NU01eWltYUJETUMzOVlzMG90clVGaFVOV21WWEpqVnBXb3oxb012ZTN0TVZVNkFHM1VVZnVvbzZhWjRqQ01ERHRiVC1XX2JpUFRidllQLXgwMFZLcGdfdTdIcG5NdS1HcElaaFJDMHdZeVdoaF9KaTU3Sy02OThUdGRlSXdGaWc?oc=5",
       "source": "Google News / Seeking Alpha",
       "published_at": "2026-07-24T13:25:54Z",
-      "fetched_at": "2026-07-25T08:04:14Z",
+      "fetched_at": "2026-07-25T08:39:51Z",
       "ticker": "ORCL",
       "source_tier": "aggregator"
     },
@@ -956,7 +854,7 @@
       "url": "https://news.google.com/rss/articles/CBMi2AFBVV95cUxNT3VtU0ZOS1haRFRNbVpfXzRTVTBDRmtRYzdrSUVwVVUzUkZQNTRUZGNzTE1zb2xhd2VRR0s1Xy1FY2RFbFZnU01xOXpOSmJzZGVxV2ttVms1VDNlajVuSXJ1ekcyZDlQaGlpdWlKb3BWNHZmLVBGRUJ5MVR4V3hYcTF6Z0dMeFRmUUhCU0laNzFGY29NYThUSDhJOUltTVVhX3Y2ek1xMXRRM2UxVFhUSWo0cWluMl85b2xJOXNZNnJBREtVSDJEZG50RXVBaWJiWjBPYkQxX3U?oc=5",
       "source": "Google News / Stocktwits",
       "published_at": "2026-07-24T12:55:12Z",
-      "fetched_at": "2026-07-25T08:04:15Z",
+      "fetched_at": "2026-07-25T08:39:51Z",
       "ticker": "GOOGL",
       "source_tier": "aggregator"
     },
@@ -966,7 +864,7 @@
       "url": "https://news.google.com/rss/articles/CBMijgFBVV95cUxQQVJnaUo2a2RwUTZHNXl3ODdsaTBocVRnRHcxSUoxZHgtaDdBTWo5QWV3cHc3anhhMkl2bWotek5ndnVzRnp3clFHLVAzUGpSNURXVW9nZklSb183cDFSMFpVV3prVm5iQ0ZHV2FtbURkaVlfelVOVFFRSFhMbVFmVDFRcUpXMXNBbUhELXBR?oc=5",
       "source": "Google News / Yahoo! Finance Canada",
       "published_at": "2026-07-24T11:48:09Z",
-      "fetched_at": "2026-07-25T08:04:15Z",
+      "fetched_at": "2026-07-25T08:39:51Z",
       "ticker": "GOOGL",
       "source_tier": "aggregator"
     },
@@ -976,7 +874,7 @@
       "url": "https://news.google.com/rss/articles/CBMipwFBVV95cUxPMkRtUWZSLUJTdXhRZ2x0THFncFpTMTlKb0pTOXV4WHV4cWdNUzc2XzBhbTVKNVFSOFlLNldJRE1NUERUODBEemhrY3J5cnNFTHVFeC1KQkNadlUwa0JhZUlBel9mRDRiZTJhT2lyUjdhajhDNFVDTGJZQ21iTWthaFF0MU9kSXhVeXpRTE9ST3loSGFXY2xqTWg4c0tLbXM2NkhzLUM2WQ?oc=5",
       "source": "Google News / GuruFocus",
       "published_at": "2026-07-24T11:32:06Z",
-      "fetched_at": "2026-07-25T08:04:15Z",
+      "fetched_at": "2026-07-25T08:39:51Z",
       "ticker": "GOOGL",
       "source_tier": "aggregator"
     },
@@ -986,7 +884,7 @@
       "url": "https://news.google.com/rss/articles/CBMiqgFBVV95cUxOMEZjZzJfTURSeU94dmFhTHNfS2xpQ082U2dNNm0ybGhLX3p2dmFiVzdGYnJJZ2ZyX1Z3OXZMTkZVWXBKVzh3QmR6UmNxbGtwOVpYeldjcm9WWFNqcjhkd3NsSUZJUTdia0lWTmcyYmxNZk11TVltT3RaLXkybEpkcENaQjJiRGdJZjVQQktoQ0RZZjQxdk53a3RFVElmMFhUdVgyWEgwTjdTUQ?oc=5",
       "source": "Google News / GuruFocus",
       "published_at": "2026-07-24T11:20:04Z",
-      "fetched_at": "2026-07-25T08:04:14Z",
+      "fetched_at": "2026-07-25T08:39:51Z",
       "ticker": "ORCL",
       "source_tier": "aggregator"
     },
@@ -996,7 +894,7 @@
       "url": "https://news.google.com/rss/articles/CBMimAFBVV95cUxPN2FHX2pwTlY1R0JRUmtVRzZMWm5qc0pTcEVncEZSN3hRUHk0Y1FYQzRCUkVzZ3JqQnBLOXEzdzNSODUwYmlUZWd0SUNVckxVbnJNWGU0UTk5eW9OS25CV3A1VWtTOU1QS1VEbUI1eFBGaWdxZnFZdGxZWWxEXzJJaGQ5SWlMZXFyT210TExMaXdpeHV3V3NkQw?oc=5",
       "source": "Google News / Yahoo Finance",
       "published_at": "2026-07-24T11:13:21Z",
-      "fetched_at": "2026-07-25T08:04:14Z",
+      "fetched_at": "2026-07-25T08:39:51Z",
       "ticker": "ORCL",
       "source_tier": "aggregator"
     },
@@ -1006,7 +904,7 @@
       "url": "https://news.google.com/rss/articles/CBMi4wFBVV95cUxNVDFDX3NsQWJuZm5aSm4za2JKRDV6TTVfZl9wZG1nUk1ZbUhpeW5FX08yelNJTENlZ0l5LU5MeDVqM1dXVHJ6SHZoeWFhbE00RHNDd255UzlfY0hfNmRfNEZmdTRvZzV3eDI0QzJiaXh0dm05TlhSLWFNOUxfTVQ0SzVvWHROUU1Cd0d6a2dhdlJub3dxZ0JVY2l1RjgzSi1XNnExVGdNa0puZkhEWWw3SlVQOGFsV3ppejF4VVRxT05lTFNlbHUyOURUaGlBM3F1UGZHeU5YeEVRQmpvd3NtUXd1dw?oc=5",
       "source": "Google News / ChartMill",
       "published_at": "2026-07-24T10:10:30Z",
-      "fetched_at": "2026-07-25T08:04:15Z",
+      "fetched_at": "2026-07-25T08:39:51Z",
       "ticker": "GOOGL",
       "source_tier": "aggregator"
     },
@@ -1016,7 +914,7 @@
       "url": "https://news.google.com/rss/articles/CBMi7gFBVV95cUxQV3JVZy05Smp3ZzlqejNJTzhtaVYzQ1JyMVk0RmZqaDl5T3NmVmZ2VmFFR09OcmtPYngxM0hTWUhMNFdjRG1ERWcyaDJiWV84N2NfTTliUEt6aGxhLWRRLUwzS0RFclJMSmFDRVNCSVJYMXY3MHM0TWRkVkFKbVZ5ellLZWV5bGlxWTc0c0ZKLXFjbE5sWS1wdmxuYmZqX0xFWEFoVEt3NlpwOTRxY2ZZdkpKTEFkQzV2M0M0OVZUOVRGcHhadDdjRWR5NEZPSWxCWXVaX2tSckxsVnhmVlVVUE5aZ0M0UWVRckdBbm1B?oc=5",
       "source": "Google News / Stocktwits",
       "published_at": "2026-07-24T10:08:14Z",
-      "fetched_at": "2026-07-25T08:04:15Z",
+      "fetched_at": "2026-07-25T08:39:51Z",
       "ticker": "GOOGL",
       "source_tier": "aggregator"
     },
@@ -1026,7 +924,7 @@
       "url": "https://news.google.com/rss/articles/CBMiugFBVV95cUxQMzk3c2RidnUwcEpVcElmWEdMZVhrYVJUX3JoRVhRZWxzeHBCb1B1aWsyYm5FNGhrcmNISlpXYzMtMVF6aS1UbUs2S04zUHVFNExPeFJjOXgyX2FvZ3N6SE5xczZ0dzNsSTVoQk85U29FbDhFbU40WmxVUG5nZFVvWmpjVmxST1lwZmx4ZTJwN0pmLWtUSXNiRndVOFZIMmk3cktRYzNZbmlSMmYzZFNxRENfT1JqY1pndUE?oc=5",
       "source": "Google News / TechStock²",
       "published_at": "2026-07-24T09:49:09Z",
-      "fetched_at": "2026-07-25T08:04:14Z",
+      "fetched_at": "2026-07-25T08:39:51Z",
       "ticker": "ORCL",
       "source_tier": "aggregator"
     },
@@ -1036,7 +934,7 @@
       "url": "https://news.google.com/rss/articles/CBMi6gFBVV95cUxPZUtuYkwwV2ZaczBZZmpWem1wN00tcnVDYzg2eU9lODR4NVlYamxQb19iRHJiSHZKSUc2alJjSWo5UHRiWi1zTy1sNDl3bXF4N1NlNEsxOENPZmtlb3ZiNzZidXBnNnFTT1ZqMlB5aUl4WkNvZTZnRmhMb0hjVDY3UDlPZXlQTjBGR1JRU0VmYkFIaXRxX2RFMk1kWVZQWXJyaERsTXIwLW9tVm90VzhzYzhWeXc1VUQwUFo0ZnRneVNQcXRMaTdSbGFmQVREckJHQ0dLWnd5Y1FiQWMxOGljazZTS2VBOHpvUEE?oc=5",
       "source": "Google News / TradingView",
       "published_at": "2026-07-24T09:18:58Z",
-      "fetched_at": "2026-07-25T08:04:14Z",
+      "fetched_at": "2026-07-25T08:39:51Z",
       "ticker": "ORCL",
       "source_tier": "aggregator"
     },
@@ -1046,8 +944,18 @@
       "url": "https://finance.yahoo.com/technology/articles/oracle-wins-7-billion-us-090153368.html",
       "source": "MT Newswires",
       "published_at": "2026-07-24T09:01:53Z",
-      "fetched_at": "2026-07-25T08:04:14Z",
+      "fetched_at": "2026-07-25T08:39:51Z",
       "ticker": "ORCL",
+      "source_tier": "aggregator"
+    },
+    {
+      "title": "Why Is Alphabet (GOOGL) Still Falling After a Record Q2 Beat?",
+      "summary": "Why Is Alphabet (GOOGL) Still Falling After a Record Q2 Beat? TradingKey",
+      "url": "https://news.google.com/rss/articles/CBMi1wFBVV95cUxOdzhJdHYwX2QyRDRDOHJzajZYQ1ZLUW9rNG9uQjFVVjVfTWRzaXZsSDZ2T3JneUxRcGsxQjNsaXlpYXRIMEdQbDFQdHJfVV9JSUpZcldkeHVmbUVicjdfbWpJbnF2Z2tlUWpUWUFMSWR6cEpsZjl1dFR1Q3dqeHFfR2tnZVZTMEJkT0ZscWZIbmpnR0F4bWhQLTQzYW82MFZZV1poaWp6amVjNTFQNW14MU01RGNuTFhnZUVGQUFqTW1yUDZmYkdhRlVEVWVtWDlJNTlmV2VBbw?oc=5",
+      "source": "Google News / TradingKey",
+      "published_at": "2026-07-24T08:58:12Z",
+      "fetched_at": "2026-07-25T08:39:51Z",
+      "ticker": "GOOGL",
       "source_tier": "aggregator"
     },
     {
@@ -1056,7 +964,7 @@
       "url": "https://news.google.com/rss/articles/CBMiygFBVV95cUxNX2FhcVJpWTQ0eWphNmhnclZsajRmdzViQWxfekhJWjBOcGZaaEdFRmpkZFJMYlpYbFhHVjdnd3g2RU9KWVlxQTJDZ0Y1WW5wMUNVLWoxUzZZZ2Qta3A5WTFrblAtWmJpMHV2aXY3ZElBNUZTV2xCVzhkWEtUVlFMNXJWVlltR2R4S29Ob05Nd1lHODhONjJMTG9rTDFTN2JhZTU2ZXhGTEhUZTNxanhSY3B3dHFpdWxMMVVwWElNR1p2LXRUQ3Iza1Zn?oc=5",
       "source": "Google News / MarketBeat",
       "published_at": "2026-07-24T08:41:02Z",
-      "fetched_at": "2026-07-25T08:04:15Z",
+      "fetched_at": "2026-07-25T08:39:51Z",
       "ticker": "GOOGL",
       "source_tier": "aggregator"
     },
@@ -1066,7 +974,7 @@
       "url": "https://news.google.com/rss/articles/CBMiwgFBVV95cUxPWDZWTDZ1SUVDZ2FrT2E3ek5MajBHZ2NTOEF2cnlsSzY1eGZYR094NWcydklEcllvLVM5SzdhQmNtTHhKbC11UnN2NFR6TVBwLXYtdHpZTzhkTkpqLWdLYkVVNWppYkYzLU9ITTVkMkFONTFOT3JDNGdTNndiSDlYeUhNNUpxc1RnQV9QSzhoUUNIZ1ctcFo5RmxKQlE0UmVpbWdOb2RYMFJCYm9ELXZWenZpblFlek1ON1N1b3o2MjBiQQ?oc=5",
       "source": "Google News / MarketBeat",
       "published_at": "2026-07-24T08:41:02Z",
-      "fetched_at": "2026-07-25T08:04:15Z",
+      "fetched_at": "2026-07-25T08:39:51Z",
       "ticker": "GOOGL",
       "source_tier": "aggregator"
     },
@@ -1076,7 +984,7 @@
       "url": "https://news.google.com/rss/articles/CBMirAFBVV95cUxQbUdIaWtaV0JuY3Bac2pXcnVsWjkwMGxlQXVYWE5DbXdscW91eDJvdWFtMHJCb1dJYWstRnFDcE5ycGtKTHo1ZVdIaExkeDhYNWZ6ZFREUHUtMTQ5dW55ZnlWLTZBSmFZTU9PSlI5RFJUUXF0RmNVaGF6d0g1RWVPUXROaTRrM3hGaW1oRTZmQ3huQ1dDUjB2bVo5eGZxOWdHMGgxXzV2NFhuTjRF?oc=5",
       "source": "Google News / MarketBeat",
       "published_at": "2026-07-24T08:41:02Z",
-      "fetched_at": "2026-07-25T08:04:15Z",
+      "fetched_at": "2026-07-25T08:39:51Z",
       "ticker": "GOOGL",
       "source_tier": "aggregator"
     },
@@ -1086,7 +994,7 @@
       "url": "https://news.google.com/rss/articles/CBMiuAFBVV95cUxQbFpMdUdJMi1LeWN6QlZkNHNGbGNfWFRFN0tqaGs4WGhCUWlBTmR3dmdfcWk5NDRFLTZ5MEx1VmdYNERSYnZfWTlUM3NyMlFpVDZmbnRJYlBVSzVaeVJtUC1NQk9iUzY3UzFmVl9nd3IzU0RPdkJlS3FPaWk1N09IaDZGdU9Bb0NlOEhPb0dYVGt0UXRzRXlNbGpzWWRUdU1EWUl1eFd1YWxFRURlb1Q0X1hZeEI1UmNL?oc=5",
       "source": "Google News / Seeking Alpha",
       "published_at": "2026-07-24T08:34:49Z",
-      "fetched_at": "2026-07-25T08:04:14Z",
+      "fetched_at": "2026-07-25T08:39:51Z",
       "ticker": "ORCL",
       "source_tier": "aggregator"
     },
@@ -1096,7 +1004,7 @@
       "url": "https://news.google.com/rss/articles/CBMiogJBVV95cUxQa2traDZEQ0NWdnV1ZTZ6MWdhVndNVkRzRVRPdm40UGNLVmk5aUR2alRhNWxXMzZkbW9FOGJxZkVkUWVIbzRwcThJRDBzakc3WW8xNUExa18tMExzcVkxamZibWY4UWRkVjByNE42UmMzakoxX1RwdmpUaUx5RS1JVnFCQ1pyeXItWnJVWk95aEhpNXRxOEhUUWw5akt1OElHRnZKRHdfMDhJQ3hCRXREb0pYNHpZTFhqbHBSNzlUTGhsUTEwYXNiWjZCMXBKNXU1X1RIQWhHSFJRRUl1X2dxQkloUHBPY0hXVW1NS1A5c2Vqd0RKMzdtN2d3YW1mcnlNSGJYZkIydFkwQmxHX3BMcTlnSE1VeFRyVEpFRWtYM2ZuUQ?oc=5",
       "source": "Google News / GuruFocus",
       "published_at": "2026-07-24T08:21:38Z",
-      "fetched_at": "2026-07-25T08:04:14Z",
+      "fetched_at": "2026-07-25T08:39:51Z",
       "ticker": "ORCL",
       "source_tier": "aggregator"
     },
@@ -1106,7 +1014,7 @@
       "url": "https://news.google.com/rss/articles/CBMiwAFBVV95cUxPczhkLXJrdU5HVE1Id0J5aGpiUDZrLWUyTnVUN3A5TUl3bXBoQjJrVUpJTFA0SHg5aGhlcGQ5SFdqX3FkbnlEdWprRmZ0ZXhYT2RvNEpTRDZrXzM3YWdYZkVjYUoxcUNrcWlfVW9VOGpLaVlWYUFRZ2dQNVpjVGlEa3RKaW5FUm9hMWFiN3hsbGdjZXVPRFpQbElXeVdkN09XMXFuR05GMkJyb25wSlhMY1Z0UGFTVXdpdU54bXp1OEg?oc=5",
       "source": "Google News / MarketBeat",
       "published_at": "2026-07-24T07:56:36Z",
-      "fetched_at": "2026-07-25T08:04:15Z",
+      "fetched_at": "2026-07-25T08:39:51Z",
       "ticker": "GOOGL",
       "source_tier": "aggregator"
     },
@@ -1116,7 +1024,7 @@
       "url": "https://news.google.com/rss/articles/CBMivAFBVV95cUxQTHg0bXpoZHczYkg1aGpCMUhPS2dYR2Q1b3hMcEZDUm0yYXRzR1Q0ZmJ4Mk1QTks2ckdoRlF3YUFXVF8taTdTVEVlWGpRNURmdFU5aEtuaFJBWUtYd016eXZIb1BDR2pQQjdCRW9YMUpnSWtZd1NpNlRvblM0a24xb3NfclZ6LWlOWExwYWdkM2ZmYU96RXROVXRTc09YZGFZU1FFMzhESnF6RWFuZWJOalBxRVQzdXNuOFhZSw?oc=5",
       "source": "Google News / Stocktwits",
       "published_at": "2026-07-24T06:09:10Z",
-      "fetched_at": "2026-07-25T08:04:14Z",
+      "fetched_at": "2026-07-25T08:39:51Z",
       "ticker": "ORCL",
       "source_tier": "aggregator"
     }

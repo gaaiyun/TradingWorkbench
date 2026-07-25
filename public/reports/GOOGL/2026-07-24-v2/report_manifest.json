@@ -1,0 +1,26 @@
+{
+  "schemaVersion": 1,
+  "ticker": "GOOGL",
+  "tradeDate": "2026-07-24",
+  "generatedAt": "2026-07-25T08:49:57.712900+00:00",
+  "analysisStatus": "insufficient_evidence",
+  "auditStatus": "legacy_unverified",
+  "claimValidation": {
+    "status": "failed",
+    "errorCodes": [
+      "MISSING_EVIDENCE_CITATION",
+      "UNCITED_NUMERIC_CLAIM",
+      "UNSUPPORTED_PRICE_TARGET",
+      "UNSUPPORTED_ALLOCATION"
+    ],
+    "citationCount": 0,
+    "unknownEvidenceIds": [],
+    "uncitedNumericParagraphs": 154
+  },
+  "evidence": {
+    "schemaVersion": "EvidencePacketV1",
+    "asOf": "2026-07-24T23:59:59Z",
+    "contentHash": "04f6004da8847e79150c6451d76a9a9e3d15328a7cb7cac4d452a2cd453df374",
+    "status": "ok"
+  }
+}

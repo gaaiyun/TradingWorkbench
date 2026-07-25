@@ -1,6 +1,51 @@
 [
   {
     "trade_date": "2026-07-24",
+    "generated_at": "2026-07-25T16:39:48+08:00",
+    "provider": "openai_compatible",
+    "results": [
+      {
+        "ticker": "ORCL",
+        "rating": null,
+        "report": null,
+        "error": true,
+        "analysis_status": "data_validation_failed",
+        "audit_status": "invalidated",
+        "evidence_publish": {
+          "published": true,
+          "status": 201
+        }
+      },
+      {
+        "ticker": "GOOGL",
+        "rating": "Not Rated",
+        "report": "reports/GOOGL/2026-07-24-v2/complete_report.md",
+        "error": false,
+        "analysis_status": "insufficient_evidence",
+        "audit_status": "legacy_unverified",
+        "evidence_publish": {
+          "published": false,
+          "reason": "http_error",
+          "status": 400
+        }
+      },
+      {
+        "ticker": "3887.HK",
+        "rating": "Not Rated",
+        "report": "reports/3887.HK/2026-07-24-v3/complete_report.md",
+        "error": false,
+        "analysis_status": "insufficient_evidence",
+        "audit_status": "legacy_unverified",
+        "evidence_publish": {
+          "published": false,
+          "reason": "http_error",
+          "status": 400
+        }
+      }
+    ]
+  },
+  {
+    "trade_date": "2026-07-24",
     "generated_at": "2026-07-25T16:03:55+08:00",
     "provider": "openai_compatible",
     "results": [
