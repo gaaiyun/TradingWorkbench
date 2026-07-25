@@ -43,14 +43,15 @@
   `split-and-dividend-adjusted` 与 A 股 D1 `qfq`。
 - 状态关联：临时请求使用 UUID `requestId`，页面只匹配自身 GitHub run；未入队时不借用
   其他定时任务状态。
-- 档案：当前索引包含 23 次运行、53 条结果，其中 47 份成功报告均已按真实文件回填
+- 档案：当前索引包含 24 次运行、54 条结果，其中 47 份成功报告均已按真实文件回填
   `files`；13 个固定分栏缺失即隐藏，默认组合决策，支持键盘与重试。
 - 问答：完整报告 Manifest 仍是门禁；选中分栏由服务端枚举映射，同栏缺失只回退同一份
   完整报告。
 - Sentiment 暂不开放：Reddit 可达，StockTwits 实际返回 403，尚无可信来源健康 Manifest。
 - 已同步实现提交：`0dace87`、`90b2d9d`、`1e487a7`、`93123cd`、`ea9727c`、
-  `0263f89`、`9cbaf14`、`ed6acb7`。`ed6acb7` 修复真实 MSFT 任务暴露的非有限行情、
-  严格 JSON、目标日缺口、Evidence API 语义校验和报告文件哈希门禁。
+  `0263f89`、`9cbaf14`、`ed6acb7`、`d9b6b6f`。`ed6acb7` 修复真实 MSFT
+  任务暴露的非有限行情、严格 JSON、目标日缺口、Evidence API 语义校验和报告文件
+  哈希门禁；`d9b6b6f` 完成报告 Markdown 渲染和失败记录持久化。
 - 报告 Markdown 已拆成独立安全渲染模块，支持 GFM 表格、引用、裸链接、分隔线、
   有序列表和代码块；13 个角色分栏及监控配置不变。
 
@@ -65,12 +66,13 @@
   均通过 `node --check`。
 - 浏览器 E2E：62/62 个显式断言通过，包含档案页真实挂载后的表格、链接、引用和
   分隔线检查，退出码 0。
-- 报告审计：47 份成功报告；0 verified、43 legacy_unverified、4 invalidated；另有 6 条
-  无报告记录，其中证据校验 3、模型/流程 2、错误输入 1。
-- GitHub `main` 已同步到 `ed6acb7`。真实 MSFT 重验
-  `https://github.com/gaaiyun/TradingWorkbench/actions/runs/30168909752` 已正确阻断
-  缺失目标日完整行情；该次失败未持久化，后续已修改 workflow 为“先持久化失败记录，
-  再将任务标红”，必须用下一次真实运行确认。
+- 报告审计：47 份成功报告；0 verified、43 legacy_unverified、4 invalidated；另有 7 条
+  无报告记录，其中证据校验 4、模型/流程 2、错误输入 1。
+- GitHub `main` 已同步到 `61c882a`（实现提交 `d9b6b6f` 后的自动数据提交）。真实
+  MSFT 重验 `https://github.com/gaaiyun/TradingWorkbench/actions/runs/30169487987`
+  已正确阻断缺失目标日完整行情；“Run multi-agent analysis”产生失败 outcome 后，
+  “Persist reports to main”成功写入第 7 条失败记录，最后的显式失败步骤再将任务标红。
+  这证明数据失败不生成评级，同时失败记录可追溯。
 
 ### 会话与审计材料位置
 
@@ -84,8 +86,8 @@
 
 ### 2026-07-25 最终生产验收基线
 
-- Pages 生产域名：`https://tradingagents-board.pages.dev/`；2026-07-26 已验证预览为
-  `https://e55f95bc.tradingagents-board.pages.dev`。
+- Pages 生产域名：`https://tradingagents-board.pages.dev/`；2026-07-26 最新手工发布预览为
+  `https://8359f8e8.tradingagents-board.pages.dev`。
 - Worker 版本：`24776c52-43e4-4c79-86c4-2bf48d93eaf3`。
 - `/api/health`：`status=ok`，访问门禁、问答、分析调度和 D1 共享会话均已配置。
 - `/api/v1/evidence`：未授权请求返回 JSON 401，不再错误回退到 HTML。
