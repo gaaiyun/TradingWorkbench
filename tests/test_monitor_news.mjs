@@ -78,7 +78,7 @@ test("news collection writes relevant discovery items and rejects bare SMH false
   assert.equal(semiconductor.expiresAt, "2027-01-19T01:30:00.000Z");
 });
 
-test("news routing recognizes Alphabet and Bitdeer while requiring full aliases", async () => {
+test("news routing recognizes Alphabet and HashKey while requiring full aliases", async () => {
   const { collectNewsForProfile } = await import(newsUrl);
   const writes = [];
   const profile = {
@@ -90,7 +90,7 @@ test("news routing recognizes Alphabet and Bitdeer while requiring full aliases"
   };
   const rss = `<?xml version="1.0"?><rss><channel>
     <item><title>Alphabet Cloud earnings update</title><link>https://example.com/googl</link><pubDate>Thu, 23 Jul 2026 01:20:00 GMT</pubDate><description>Google Cloud and AI investment.</description><source>Reuters</source></item>
-    <item><title>Bitdeer Technologies expands mining capacity</title><link>https://example.com/bitdeer</link><pubDate>Thu, 23 Jul 2026 01:10:00 GMT</pubDate><description>Bitdeer reports a new data center plan.</description><source>HKEXnews</source></item>
+    <item><title>HashKey Holdings expands licensed digital asset services</title><link>https://example.com/hashkey</link><pubDate>Thu, 23 Jul 2026 01:10:00 GMT</pubDate><description>HashKey Group reports a regulated exchange update.</description><source>HKEXnews</source></item>
     <item><title>Google maps traffic update</title><link>https://example.com/maps</link><pubDate>Thu, 23 Jul 2026 01:00:00 GMT</pubDate><description>Ordinary local news.</description><source>Local Daily</source></item>
   </channel></rss>`;
   await collectNewsForProfile({
@@ -108,6 +108,52 @@ test("news routing recognizes Alphabet and Bitdeer while requiring full aliases"
   assert.equal(items.some((item) => item.symbol === "3887.HK"), true);
   assert.equal(items.some((item) => item.url.endsWith("/maps")), false);
   assert.equal(items.every((item) => item.sourceTier === "discovery"), true);
+});
+
+test("news collection falls back to Yahoo feeds for Alphabet and HashKey", async () => {
+  const { collectNewsForProfile } = await import(newsUrl);
+  const calls = [];
+  const writes = [];
+  const profile = {
+    ...monitorSettings().profiles[0],
+    targets: [
+      { symbol: "GOOGL" },
+      { symbol: "3887.HK" },
+    ],
+  };
+  const result = await collectNewsForProfile({
+    profile,
+    db: {},
+    fetcher: async (url) => {
+      const value = String(url);
+      calls.push(value);
+      if (value.includes("news.google.com")) {
+        return new Response("", { status: 503 });
+      }
+      const symbol = new URL(value).searchParams.get("s");
+      const item = symbol === "GOOGL"
+        ? "<item><title>Alphabet reports Google Cloud growth</title><link>https://finance.example/googl</link><pubDate>Thu, 23 Jul 2026 01:20:00 GMT</pubDate><description>Alphabet discusses AI investment.</description><source>Company IR</source></item>"
+        : "<item><title>HashKey Holdings issues licensed exchange update</title><link>https://finance.example/hashkey</link><pubDate>Thu, 23 Jul 2026 01:10:00 GMT</pubDate><description>HashKey Group discusses digital asset regulation.</description><source>HKEXnews</source></item>";
+      return new Response(`<?xml version="1.0"?><rss><channel>${item}</channel></rss>`, {
+        status: 200,
+        headers: { "content-type": "application/rss+xml" },
+      });
+    },
+    writeItems: async (_db, payload) => writes.push(payload),
+    now: new Date("2026-07-23T01:30:00.000Z"),
+  });
+  const items = writes.flatMap(({ items: rows }) => rows);
+  assert.equal(result.status, "completed");
+  assert.equal(items.some(({ symbol }) => symbol === "GOOGL"), true);
+  assert.equal(items.some(({ symbol }) => symbol === "3887.HK"), true);
+  assert.equal(items.every(({ source }) => source.startsWith("Yahoo Finance RSS /")), true);
+  assert.equal(calls.some((url) => url.includes("s=GOOGL")), true);
+  assert.equal(calls.some((url) => url.includes("s=3887.HK")), true);
+  assert.equal(
+    result.sources.filter(({ source, status }) =>
+      source === "google-news-rss" && status === "failed").length,
+    2,
+  );
 });
 
 test("news collection falls back to one cached MIIT RSS request when Google is blocked", async () => {

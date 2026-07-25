@@ -15,8 +15,16 @@ const oracleMigrationUrl = new URL(
   "../migrations/0007_add_oracle_monitor.sql",
   import.meta.url,
 );
+const globalTechMigrationUrl = new URL(
+  "../migrations/0009_seed_global_tech_targets.sql",
+  import.meta.url,
+);
 const evidenceMigrationUrl = new URL(
   "../migrations/0010_news_evidence_metadata.sql",
+  import.meta.url,
+);
+const hashKeyMigrationUrl = new URL(
+  "../migrations/0012_fix_hashkey_identity.sql",
   import.meta.url,
 );
 
@@ -190,4 +198,45 @@ test("Oracle monitor migration appends once without replacing existing targets",
     role: "driver",
     analysis: "signal",
   });
+});
+
+test("HashKey identity migration corrects only the 3887.HK display name", async (t) => {
+  let DatabaseSync;
+  try {
+    ({ DatabaseSync } = await import("node:sqlite"));
+  } catch {
+    t.skip("node:sqlite is unavailable on this Node version");
+    return;
+  }
+  const db = new DatabaseSync(":memory:");
+  db.exec(readFileSync(migrationUrl, "utf8"));
+  db.exec(readFileSync(seedMigrationUrl, "utf8"));
+  db.exec(readFileSync(oracleMigrationUrl, "utf8"));
+  db.exec(readFileSync(globalTechMigrationUrl, "utf8"));
+  const before = JSON.parse(
+    db.prepare("SELECT settings_json FROM workbench_settings WHERE id = 1").get().settings_json,
+  );
+  const target = before.profiles[0].targets.find(({ symbol }) => symbol === "3887.HK");
+  target.name = "错误旧名称";
+  db.prepare("UPDATE workbench_settings SET settings_json = ? WHERE id = 1")
+    .run(JSON.stringify(before));
+
+  const sql = readFileSync(hashKeyMigrationUrl, "utf8");
+  db.exec(sql);
+  db.exec(sql);
+
+  const after = JSON.parse(
+    db.prepare("SELECT settings_json FROM workbench_settings WHERE id = 1").get().settings_json,
+  );
+  assert.deepEqual(
+    after.profiles[0].targets.find(({ symbol }) => symbol === "3887.HK"),
+    {
+      symbol: "3887.HK",
+      name: "HashKey Holdings",
+      market: "HK",
+      role: "driver",
+      analysis: "signal",
+    },
+  );
+  assert.equal(after.profiles[0].targets.find(({ symbol }) => symbol === "ORCL").name, "Oracle");
 });

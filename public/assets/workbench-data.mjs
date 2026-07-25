@@ -11,7 +11,7 @@ export const DEFAULT_TARGETS = Object.freeze([
   { symbol: "ASML", name: "ASML", market: "US", role: "driver", analysis: "signal" },
   { symbol: "ORCL", name: "Oracle", market: "US", role: "driver", analysis: "signal" },
   { symbol: "GOOGL", name: "Alphabet", market: "US", role: "driver", analysis: "signal" },
-  { symbol: "3887.HK", name: "比特小鹿", market: "HK", role: "driver", analysis: "signal" },
+  { symbol: "3887.HK", name: "HashKey Holdings", market: "HK", role: "driver", analysis: "signal" },
 ]);
 
 const VALID_STATUSES = new Set(["ok", "degraded", "stale", "unavailable"]);

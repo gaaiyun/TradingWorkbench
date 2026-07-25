@@ -27,7 +27,7 @@ SET
     json_insert(
       json_extract(settings_json, '$.profiles[0].targets'),
       '$[#]',
-      json('{"symbol":"3887.HK","name":"比特小鹿","market":"HK","role":"driver","analysis":"signal"}')
+      json('{"symbol":"3887.HK","name":"HashKey Holdings","market":"HK","role":"driver","analysis":"signal"}')
     )
   ),
   updated_at = strftime('%Y-%m-%dT%H:%M:%fZ', 'now')

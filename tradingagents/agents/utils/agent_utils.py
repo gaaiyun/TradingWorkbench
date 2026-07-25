@@ -62,9 +62,9 @@ _STATIC_IDENTITIES = {
         "exchange": "NASDAQ",
     },
     "3887.HK": {
-        "company_name": "Bitdeer Technologies Group",
-        "sector": "Technology",
-        "industry": "Computer Hardware",
+        "company_name": "HashKey Holdings Limited",
+        "sector": "Financial Services",
+        "industry": "Financial Data & Stock Exchanges",
         "exchange": "HKG",
     },
 }

@@ -70,9 +70,10 @@ class ResolveInstrumentIdentityTests(unittest.TestCase):
             side_effect=RuntimeError("blocked"),
         ):
             googl = resolve_instrument_identity("GOOGL")
-            bitdeer = resolve_instrument_identity("03887")
+            hashkey = resolve_instrument_identity("03887")
         self.assertEqual(googl["company_name"], "Alphabet Inc.")
-        self.assertEqual(bitdeer["company_name"], "Bitdeer Technologies Group")
+        self.assertEqual(hashkey["company_name"], "HashKey Holdings Limited")
+        self.assertEqual(hashkey["industry"], "Financial Data & Stock Exchanges")
 
 
 @pytest.mark.unit

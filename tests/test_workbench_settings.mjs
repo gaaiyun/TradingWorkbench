@@ -68,7 +68,7 @@ test("the checked-in v2 settings contain the only default research profile", () 
       { symbol: "ASML", name: "ASML", role: "driver", analysis: "signal" },
       { symbol: "ORCL", name: "Oracle", role: "driver", analysis: "signal" },
       { symbol: "GOOGL", name: "Alphabet", role: "driver", analysis: "signal" },
-      { symbol: "3887.HK", name: "比特小鹿", role: "driver", analysis: "signal" },
+      { symbol: "3887.HK", name: "HashKey Holdings", role: "driver", analysis: "signal" },
     ],
   );
   assert.deepEqual(

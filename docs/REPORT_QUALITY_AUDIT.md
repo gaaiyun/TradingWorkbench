@@ -64,7 +64,7 @@ flowchart LR
   - 分析：`rated`、`not_rated`、`insufficient_evidence`、`data_validation_failed`
   - 审计：`verified`、`legacy_unverified`、`invalidated`
 - ETF 改用指数、持仓、AUM、份额、NAV、折溢价、费用和跟踪误差模板。
-- `GOOGL` 为 Alphabet 主标的，`GOOG` 为别名；`03887`/`3887`/`03887.HK` 规范化为 `3887.HK`。
+- `GOOGL` 为 Alphabet 主标的，`GOOG` 为别名；`03887`/`3887`/`03887.HK` 规范化为 `3887.HK / HashKey Holdings`。发行人身份以港交所披露易为准，禁止与 `BTDR / Bitdeer` 混用。
 - 官方公告、SEC、IR、HKEXnews 和监管机构属于证据层；Google News、Yahoo、GDELT 属于发现层。
 - 没有用户持仓、成本、期限和风险预算时，不输出“立即清仓”或具体组合比例。
 - 只有能够重建 point-in-time 证据时才重跑历史报告；无法重建的报告继续保留为 `legacy_unverified`。

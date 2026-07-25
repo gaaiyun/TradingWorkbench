@@ -19,7 +19,14 @@ const TARGET_ALIASES = {
   ASML: ["ASML"],
   ORCL: ["Oracle", "甲骨文", "Oracle Cloud"],
   GOOGL: ["Alphabet", "Google LLC", "Google Cloud", "谷歌", "GOOGL"],
-  "3887.HK": ["Bitdeer", "Bitdeer Technologies", "比特小鹿", "03887", "3887.HK"],
+  "3887.HK": [
+    "HashKey Holdings",
+    "HashKey Group",
+    "HashKey Exchange",
+    "HASHKEY HLDGS",
+    "03887",
+    "3887.HK",
+  ],
 };
 
 function decodeEntities(value) {
@@ -132,21 +139,24 @@ function queryPlans(profile) {
       locale: "en-US",
     });
   }
-  const bitdeer = availableSymbols(profile, ["3887.HK"]);
-  if (bitdeer.length) {
+  const hashkey = availableSymbols(profile, ["3887.HK"]);
+  if (hashkey.length) {
     plans.push({
-      topic: "bitdeer",
-      symbols: bitdeer,
-      query: '("Bitdeer" OR "Bitdeer Technologies" OR 比特小鹿 OR 03887) when:30d',
+      topic: "hashkey",
+      symbols: hashkey,
+      query: '("HashKey Holdings" OR "HashKey Group" OR "HashKey Exchange" OR 03887) (regulation OR exchange OR crypto OR earnings) when:30d',
       locale: "en-US",
     });
   }
-  plans.push({
-    topic: "policy",
-    symbols: availableSymbols(profile, ["515880.SS", "512480.SS", "159995.SZ"]),
-    query: "site:miit.gov.cn (半导体 OR 芯片 OR 通信 OR 光模块) when:30d",
-    locale: "zh-CN",
-  });
+  const policy = availableSymbols(profile, ["515880.SS", "512480.SS", "159995.SZ"]);
+  if (policy.length) {
+    plans.push({
+      topic: "policy",
+      symbols: policy,
+      query: "site:miit.gov.cn (半导体 OR 芯片 OR 通信 OR 光模块) when:30d",
+      locale: "zh-CN",
+    });
+  }
   return plans;
 }
 
@@ -181,6 +191,10 @@ function providerCandidates(plan) {
     candidates.push({ source: "yahoo-finance-rss", url: yahooRssUrl("SOXX") });
   } else if (plan.topic === "oracle") {
     candidates.push({ source: "yahoo-finance-rss", url: yahooRssUrl("ORCL") });
+  } else if (plan.topic === "alphabet") {
+    candidates.push({ source: "yahoo-finance-rss", url: yahooRssUrl("GOOGL") });
+  } else if (plan.topic === "hashkey") {
+    candidates.push({ source: "yahoo-finance-rss", url: yahooRssUrl("3887.HK") });
   }
   return candidates;
 }
