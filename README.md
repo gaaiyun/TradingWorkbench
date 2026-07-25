@@ -188,6 +188,8 @@ GitHub 深度任务生成证据包后，用独立写入密钥提交到 `/api/evi
 结果见 [报告质量审计](docs/REPORT_QUALITY_AUDIT.md)，网页读取的同源索引位于
 [`public/data/report-audit.json`](public/data/report-audit.json)。
 同一交易日重跑不会覆盖旧目录，而是写入 `-v2`、`-v3` 版本并在审计索引中建立替代关系。
+首页“最新观点”只读取 `verified` 报告；`legacy_unverified` 和 Not Rated 草稿仍可在
+研究档案中查看，但不会伪装成当前投资结论。
 
 ## TradingAgents 研究链
 

@@ -54,6 +54,10 @@ test("invalidated reports stay available to audit but are hidden from the defaul
   assert.deepEqual(buildArchiveEntries(history, audit).map(({ ticker }) => ticker), ["ORCL"]);
   assert.deepEqual(buildArchiveEntries(history, audit, { includeInvalidated: true }).map(({ ticker }) => ticker), ["515880.SS", "ORCL"]);
   assert.equal(filterAuditedResults(history[0].results, audit).length, 1);
+  assert.equal(
+    filterAuditedResults(history[0].results, audit, { verifiedOnly: true }).length,
+    0,
+  );
 });
 
 test("workflow status maps honestly to the four visible research stages", () => {

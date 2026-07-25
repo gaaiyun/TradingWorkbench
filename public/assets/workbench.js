@@ -889,7 +889,14 @@ import {
       catch { state.reportAudit = null; }
     }
     if (state.latest) {
-      state.latest = { ...state.latest, results: filterAuditedResults(state.latest.results, state.reportAudit) };
+      state.latest = {
+        ...state.latest,
+        results: filterAuditedResults(
+          state.latest.results,
+          state.reportAudit,
+          { verifiedOnly: true },
+        ),
+      };
     }
     renderAgentWorkspace();
     renderTaskBoard();
@@ -948,7 +955,14 @@ import {
       catch { state.latest = null; }
     }
     if (state.latest) {
-      state.latest = { ...state.latest, results: filterAuditedResults(state.latest.results, state.reportAudit) };
+      state.latest = {
+        ...state.latest,
+        results: filterAuditedResults(
+          state.latest.results,
+          state.reportAudit,
+          { verifiedOnly: true },
+        ),
+      };
     }
     renderConclusion();
     renderAgentWorkspace();

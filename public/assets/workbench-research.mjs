@@ -33,12 +33,20 @@ export function buildArchiveEntries(history, auditIndex = null, { includeInvalid
       .localeCompare(String(left.generatedAt || left.tradeDate || "")));
 }
 
-export function filterAuditedResults(results, auditIndex, { includeInvalidated = false } = {}) {
+export function filterAuditedResults(
+  results,
+  auditIndex,
+  { includeInvalidated = false, verifiedOnly = false } = {},
+) {
   const audits = auditMap(auditIndex);
   return (Array.isArray(results) ? results : [])
     .filter((result) => result && result.error !== true && result.report)
     .map((result) => ({ ...result, audit: audits.get(String(result.report)) || null }))
-    .filter(({ audit }) => includeInvalidated || !["invalidated", "invalid_record"].includes(audit?.auditStatus));
+    .filter(({ audit }) => (
+      verifiedOnly
+        ? audit?.auditStatus === "verified"
+        : includeInvalidated || !["invalidated", "invalid_record"].includes(audit?.auditStatus)
+    ));
 }
 
 export function buildPipelineStages(run) {
