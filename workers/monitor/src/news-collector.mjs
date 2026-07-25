@@ -746,12 +746,44 @@ function cachedContent(candidate, fetcher, cache, requestConfig) {
   return cache.get(candidate.url);
 }
 
+function validateEvidenceEnvelope(candidate, content) {
+  const value = String(content || "");
+  if (candidate.format === "miit-policy-json") {
+    let payload;
+    try {
+      payload = JSON.parse(value);
+    } catch {
+      throw new NewsFetchError("NEWS_MALFORMED_RESPONSE");
+    }
+    if (!Array.isArray(payload?.data?.searchResult?.dataResults)) {
+      throw new NewsFetchError("NEWS_MALFORMED_RESPONSE");
+    }
+  } else if (candidate.format === "sec-edgar-atom") {
+    const open = /<(?:[A-Za-z_][\w.-]*:)?feed(?:\s[^>]*)?>/i.test(value);
+    const close = /<\/(?:[A-Za-z_][\w.-]*:)?feed\s*>/i.test(value);
+    if (!open || !close) throw new NewsFetchError("NEWS_MALFORMED_RESPONSE");
+  } else if (candidate.format === "hashkey-feed") {
+    const start = value.indexOf('\\"posts\\":{\\"posts\\":');
+    const end = value.indexOf('],\\"metaData\\":', Math.max(start, 0));
+    if (start < 0 || end < start) {
+      throw new NewsFetchError("NEWS_MALFORMED_RESPONSE");
+    }
+  }
+}
+
 async function fetchPlan(plan, fetcher, cache, requestConfig) {
   const trail = [];
   let firstSuccessfulSource = null;
-  for (const candidate of providerCandidates(plan, requestConfig.now)) {
+  let discoverySatisfied = false;
+  const collectedItems = [];
+  const candidates = providerCandidates(plan, requestConfig.now);
+  for (let index = 0; index < candidates.length; index += 1) {
+    const candidate = candidates[index];
+    const evidenceCandidate = EVIDENCE_PROVIDERS.has(candidate.source);
+    if (discoverySatisfied && !evidenceCandidate) continue;
     try {
       const content = await cachedContent(candidate, fetcher, cache, requestConfig);
+      if (evidenceCandidate) validateEvidenceEnvelope(candidate, content);
       const parsed = candidate.format === "hashkey-feed"
         ? parseHashKeyFeedPage(content)
         : candidate.format === "eastmoney-jsonp"
@@ -770,7 +802,25 @@ async function fetchPlan(plan, fetcher, cache, requestConfig) {
       trail.push({ source: candidate.source, status: "success", reason: null });
       firstSuccessfulSource ||= candidate.source;
       if (items.length) {
-        return { items, source: candidate.source, trail };
+        const tagged = items.map((item) => ({
+          ...item,
+          _provider: candidate.source,
+        }));
+        if (evidenceCandidate && collectedItems.length === 0) {
+          return { items: tagged, source: candidate.source, trail };
+        }
+        collectedItems.push(...tagged);
+        if (!evidenceCandidate) discoverySatisfied = true;
+        const hasRemainingEvidence = candidates
+          .slice(index + 1)
+          .some(({ source }) => EVIDENCE_PROVIDERS.has(source));
+        if (!hasRemainingEvidence) {
+          return {
+            items: collectedItems,
+            source: collectedItems[0]?._provider || candidate.source,
+            trail,
+          };
+        }
       }
     } catch (error) {
       trail.push({
@@ -779,6 +829,13 @@ async function fetchPlan(plan, fetcher, cache, requestConfig) {
         reason: fetchErrorCode(error),
       });
     }
+  }
+  if (collectedItems.length) {
+    return {
+      items: collectedItems,
+      source: collectedItems[0]._provider,
+      trail,
+    };
   }
   if (firstSuccessfulSource) {
     return { items: [], source: firstSuccessfulSource, trail };
@@ -899,19 +956,17 @@ export async function collectNewsForProfile({
     }
     succeeded += 1;
     sources.push(...outcome.value.trail);
-    if (
-      outcome.value.trail.some(({ source, status }) =>
-        source === "sec-edgar-8k" && status === "failed")
-    ) {
+    if (outcome.value.trail.some(({ source, status }) =>
+      EVIDENCE_PROVIDERS.has(source) && status === "failed")) {
       coverageGaps += 1;
     }
     for (const item of outcome.value.items) {
+      const provider = item._provider || outcome.value.source;
       for (const symbol of matchedSymbols(item, plan)) {
         const id = await itemId(profile.id, symbol, item.url);
-        if (byId.has(id)) continue;
         const clusterId = await itemClusterId(item.title);
         const age = now.valueOf() - Date.parse(item.publishedAt);
-        byId.set(id, {
+        const row = {
           id,
           symbol,
           profileId: profile.id,
@@ -920,8 +975,8 @@ export async function collectNewsForProfile({
           summary: item.summary,
           url: item.url,
           publishedAt: item.publishedAt,
-          source: itemSource(outcome.value.source, item),
-          sourceTier: EVIDENCE_PROVIDERS.has(outcome.value.source)
+          source: itemSource(provider, item),
+          sourceTier: EVIDENCE_PROVIDERS.has(provider)
             ? "evidence"
             : "discovery",
           publisher: item.publisher,
@@ -931,11 +986,17 @@ export async function collectNewsForProfile({
           fetchedAt,
           freshness: age >= 0 && age <= 36 * 60 * 60 * 1000 ? "fresh" : "stale",
           adjustment: null,
-          quality: EVIDENCE_PROVIDERS.has(outcome.value.source)
+          quality: EVIDENCE_PROVIDERS.has(provider)
             ? "evidence"
             : "discovery",
           expiresAt,
-        });
+        };
+        const existing = byId.get(id);
+        if (!existing || (
+          existing.sourceTier !== "evidence" && row.sourceTier === "evidence"
+        )) {
+          byId.set(id, row);
+        }
       }
     }
   }

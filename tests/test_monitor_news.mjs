@@ -224,6 +224,38 @@ test("SEC 403 remains a failed source when discovery fallbacks are empty", async
   assert.equal(JSON.stringify(result).includes(contact), false);
 });
 
+test("SEC HTTP 200 without an Atom feed remains a failed source", async () => {
+  const { collectNewsForProfile } = await import(newsUrl);
+  const result = await collectNewsForProfile({
+    profile: {
+      ...monitorSettings().profiles[0],
+      targets: [{ symbol: "GOOGL" }],
+    },
+    db: {},
+    fetcher: async (url) => (
+      new URL(url).hostname === "www.sec.gov"
+        ? new Response("<html>request accepted but no feed</html>", {
+          status: 200,
+          headers: { "content-type": "text/html" },
+        })
+        : new Response('<?xml version="1.0"?><rss><channel></channel></rss>', {
+          status: 200,
+          headers: { "content-type": "application/rss+xml" },
+        })
+    ),
+    writeItems: async () => {},
+    now: new Date("2026-07-23T20:30:00.000Z"),
+  });
+  assert.equal(result.status, "degraded");
+  assert.equal(
+    result.sources.some(({ source, status, reason }) =>
+      source === "sec-edgar-8k"
+      && status === "failed"
+      && reason === "NEWS_MALFORMED_RESPONSE"),
+    true,
+  );
+});
+
 test("SEC evidence failure keeps the run degraded when discovery still returns news", async () => {
   const { collectNewsForProfile } = await import(newsUrl);
   const discovery = `<?xml version="1.0"?><rss><channel><item>
@@ -351,6 +383,29 @@ test("news collection writes relevant discovery items and rejects bare SMH false
     db: {},
     fetcher: async (url) => {
       calls.push(url);
+      if (String(url).includes("group.hashkey.com")) {
+        return new Response(
+          'prefix \\"posts\\":{\\"posts\\":[],\\"metaData\\":{\\"count\\":0} suffix',
+          {
+          status: 200,
+          headers: { "content-type": "text/html" },
+          },
+        );
+      }
+      if (String(url).includes("sec.gov")) {
+        return new Response("<?xml version=\"1.0\"?><feed></feed>", {
+          status: 200,
+          headers: { "content-type": "application/atom+xml" },
+        });
+      }
+      if (String(url).includes("search-front-server/api/search/info")) {
+        return new Response(JSON.stringify({
+          data: { searchResult: { dataResults: [] } },
+        }), {
+          status: 200,
+          headers: { "content-type": "application/json" },
+        });
+      }
       return new Response(RSS, {
         status: 200,
         headers: { "content-type": "application/rss+xml" },
@@ -763,6 +818,25 @@ test("A-share ETF news falls back to Eastmoney when Google News is blocked at th
   const { collectNewsForProfile } = await import(newsUrl);
   const calls = [];
   const writes = [];
+  const miitPayload = {
+    data: {
+      searchResult: {
+        dataResults: [{
+          groupData: [{
+            data: {
+              title: "工业和信息化部关于芯片产业高质量发展的通知",
+              url: "/zwgk/zcwj/wjfb/tz/art/2026/art_chip_policy.html",
+              deploytime: String(Date.parse("2026-07-24T01:00:00.000Z")),
+              infocontent: "工业和信息化部发布芯片产业政策通知。",
+              columnname: "通知",
+              columnid: "3e3ad1a3bec74939890a0d3e54815141",
+              publishgroupname: "电子信息司",
+            },
+          }],
+        }],
+      },
+    },
+  };
   const result = await collectNewsForProfile({
     profile: {
       ...monitorSettings().profiles[0],
@@ -780,6 +854,12 @@ test("A-share ETF news falls back to Eastmoney when Google News is blocked at th
           headers: { "content-type": "text/javascript; charset=UTF-8" },
         });
       }
+      if (String(url).includes("search-front-server/api/search/info")) {
+        return new Response(JSON.stringify(miitPayload), {
+          status: 200,
+          headers: { "content-type": "application/json" },
+        });
+      }
       return new Response("", {
         status: 200,
         headers: { "content-type": "application/xml" },
@@ -790,19 +870,104 @@ test("A-share ETF news falls back to Eastmoney when Google News is blocked at th
   });
   const items = writes.flatMap(({ items: rows }) => rows);
   assert.equal(result.status, "completed");
-  assert.equal(items.length, 1);
-  assert.equal(items[0].symbol, "512480.SS");
-  assert.equal(items[0].source, "东方财富搜索 / 每日经济新闻");
-  assert.equal(items[0].sourceTier, "discovery");
-  assert.equal(items[0].publisher, "每日经济新闻");
-  assert.equal(items[0].freshness, "fresh");
+  assert.equal(items.length, 2);
+  const discovery = items.find(({ sourceTier }) => sourceTier === "discovery");
+  const evidence = items.find(({ sourceTier }) => sourceTier === "evidence");
+  assert.equal(discovery.symbol, "512480.SS");
+  assert.equal(discovery.source, "东方财富搜索 / 每日经济新闻");
+  assert.equal(discovery.publisher, "每日经济新闻");
+  assert.equal(discovery.freshness, "fresh");
+  assert.equal(evidence.symbol, "512480.SS");
+  assert.equal(evidence.source, "工业和信息化部政策文件库");
+  assert.equal(evidence.publisher, "电子信息司");
   assert.equal(
     calls.some((url) => url.includes("search-api-web.eastmoney.com")),
     true,
   );
   assert.equal(
+    calls.some((url) => url.includes("search-front-server/api/search/info")),
+    true,
+    "发现层成功后仍应查询官方工信部证据层",
+  );
+  assert.equal(
     result.sources.some(({ source, status }) =>
       source === "eastmoney-search" && status === "success"),
+    true,
+  );
+  assert.equal(
+    result.sources.some(({ source, status }) =>
+      source === "miit-policy-api" && status === "success"),
+    true,
+  );
+});
+
+test("MIIT evidence failure remains degraded after Eastmoney discovery succeeds", async () => {
+  const { collectNewsForProfile } = await import(newsUrl);
+  const writes = [];
+  const result = await collectNewsForProfile({
+    profile: {
+      ...monitorSettings().profiles[0],
+      targets: [{ symbol: "512480.SS" }],
+    },
+    db: {},
+    fetcher: async (url) => {
+      if (String(url).includes("news.google.com")) {
+        return new Response("", { status: 503 });
+      }
+      if (String(url).includes("search-api-web.eastmoney.com")) {
+        return new Response(EASTMONEY_JSONP, {
+          status: 200,
+          headers: { "content-type": "text/javascript; charset=UTF-8" },
+        });
+      }
+      return new Response("", { status: 503 });
+    },
+    writeItems: async (_db, payload) => writes.push(payload),
+    now: new Date("2026-07-25T05:00:00.000Z"),
+  });
+  assert.equal(result.status, "degraded");
+  assert.equal(writes.flatMap(({ items }) => items).length, 1);
+  assert.equal(
+    result.sources.some(({ source, status, reason }) =>
+      source === "miit-policy-api"
+      && status === "failed"
+      && reason === "NEWS_HTTP_503"),
+    true,
+  );
+});
+
+test("MIIT HTTP 200 with a malformed envelope remains degraded", async () => {
+  const { collectNewsForProfile } = await import(newsUrl);
+  const result = await collectNewsForProfile({
+    profile: {
+      ...monitorSettings().profiles[0],
+      targets: [{ symbol: "512480.SS" }],
+    },
+    db: {},
+    fetcher: async (url) => {
+      if (String(url).includes("news.google.com")) {
+        return new Response("", { status: 503 });
+      }
+      if (String(url).includes("search-api-web.eastmoney.com")) {
+        return new Response(EASTMONEY_JSONP, {
+          status: 200,
+          headers: { "content-type": "text/javascript; charset=UTF-8" },
+        });
+      }
+      return new Response("{}", {
+        status: 200,
+        headers: { "content-type": "application/json" },
+      });
+    },
+    writeItems: async () => {},
+    now: new Date("2026-07-25T05:00:00.000Z"),
+  });
+  assert.equal(result.status, "degraded");
+  assert.equal(
+    result.sources.some(({ source, status, reason }) =>
+      source === "miit-policy-api"
+      && status === "failed"
+      && reason === "NEWS_MALFORMED_RESPONSE"),
     true,
   );
 });
