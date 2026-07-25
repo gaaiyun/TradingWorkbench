@@ -17,7 +17,7 @@ const MAX_EVIDENCE_BYTES = 1024 * 1024;
 
 function readAuthorized(request, env) {
   const expected = String(env?.EVIDENCE_READ_TOKEN || "");
-  if (!expected) return true;
+  if (!expected) return false;
   const header = request.headers.get("authorization") || "";
   const token = header.replace(/^Bearer\s+/i, "").trim()
     || request.headers.get("x-evidence-token") || "";
@@ -129,6 +129,12 @@ function parseQuery(request) {
 }
 
 export async function onRequestGet({ request, env }) {
+  if (!env?.EVIDENCE_READ_TOKEN) {
+    return json(
+      { status: "unavailable", error: "READ_NOT_CONFIGURED" },
+      503,
+    );
+  }
   if (!readAuthorized(request, env)) return json({ status: "unavailable", error: "UNAUTHORIZED" }, 401);
   let query;
   try {

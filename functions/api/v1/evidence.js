@@ -16,7 +16,13 @@ function hasBearerToken(request, expected) {
 
 export async function onRequestGet(context) {
   const expected = context.env?.EVIDENCE_READ_TOKEN;
-  if (expected && !hasBearerToken(context.request, expected)) {
+  if (!expected) {
+    return json(
+      { status: "unavailable", error: "READ_NOT_CONFIGURED" },
+      503,
+    );
+  }
+  if (!hasBearerToken(context.request, expected)) {
     return json({ status: "unavailable", error: "UNAUTHORIZED" }, 401);
   }
   return legacyGet(context);

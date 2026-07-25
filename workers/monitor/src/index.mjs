@@ -130,6 +130,7 @@ async function executeTask({
     return collectNews({
       profile,
       db,
+      env,
       fetcher: deps.newsFetcher ?? globalThis.fetch,
       writeItems: deps.writeNews ?? writeNewsItems,
       now,
@@ -327,6 +328,7 @@ export async function runManualCollection(taskType, env, deps = {}) {
     ignoreCircuitBreaker: true,
   });
   const totals = { targets: 0, succeeded: 0, failed: 0 };
+  let degradedProfiles = 0;
   let written = 0;
   const sources = [];
   for (const profile of loaded.settings.profiles.filter(({ enabled }) => enabled)) {
@@ -334,6 +336,7 @@ export async function runManualCollection(taskType, env, deps = {}) {
       ? await (deps.collectNews ?? collectNewsForProfile)({
         profile,
         db: env.DB,
+        env,
         fetcher: deps.newsFetcher ?? globalThis.fetch,
         writeItems: deps.writeNews ?? writeNewsItems,
         now: clock(),
@@ -350,11 +353,12 @@ export async function runManualCollection(taskType, env, deps = {}) {
     totals.targets += Number(result.counts?.targets ?? result.counts?.queries ?? 0);
     totals.succeeded += Number(result.counts?.succeeded || 0);
     totals.failed += Number(result.counts?.failed || 0);
+    if (result.status === "degraded") degradedProfiles += 1;
     if (Array.isArray(result.sources)) sources.push(...result.sources);
   }
   const status = totals.succeeded === 0
     ? "failed"
-    : totals.failed > 0 ? "degraded" : "completed";
+    : totals.failed > 0 || degradedProfiles > 0 ? "degraded" : "completed";
   return {
     status,
     ...(status === "failed" ? { errorCode: "COLLECTION_UNAVAILABLE" } : {}),

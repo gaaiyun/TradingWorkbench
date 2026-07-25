@@ -264,7 +264,7 @@ test("an empty production database bootstraps CN and US market snapshots outside
   assert.equal(db.barWrites.length, 5);
 });
 
-test("close scheduled run dispatches one full analysis with the claimed slot metadata", async () => {
+test("a 204 dispatch completes the slot and queued workflow time never causes a lease retry", async () => {
   const { runScheduled } = await import(workerUrl);
   const db = new WorkerD1(monitorSettings());
   const requests = [];
@@ -305,6 +305,31 @@ test("close scheduled run dispatches one full analysis with the claimed slot met
   assert.equal(payload.inputs.scheduledFor, "2026-07-23T07:20:00.000Z");
   assert.equal(payload.inputs.tickers, "515880.SS,QQQ");
   assert.equal(JSON.stringify(result).includes("worker-secret"), false);
+
+  const slot = [...db.slots.values()].find(({ slot_type: type }) => type === "closeFullAnalysis");
+  assert.equal(slot.status, "completed");
+  assert.equal(slot.attempt_count, 1);
+  assert.equal(slot.lease_until, null);
+
+  const later = await runScheduled(
+    Date.parse("2026-07-23T07:25:00.000Z"),
+    {
+      DB: db,
+      GITHUB_DISPATCH_TOKEN: "worker-secret",
+      GITHUB_REPOSITORY: "owner/repo",
+      GITHUB_WORKFLOW_ID: "daily-analysis.yml",
+    },
+    {
+      registryFactory: () => ({
+        fetchMarketData: async () => assert.fail("no market collection is due"),
+      }),
+      fetcher: async () => assert.fail("completed dispatch slot must not retry"),
+      now: () => new Date("2026-07-23T07:25:00.000Z"),
+    },
+  );
+  assert.equal(later.counts.due, 0);
+  assert.equal(requests.length, 1);
+  assert.equal(slot.attempt_count, 1);
 });
 
 test("missing and invalid D1 settings fail safely with stable summaries", async () => {
@@ -462,20 +487,25 @@ test("protected manual collection backfills configured CN daily targets", async 
 test("protected manual news collection reports discovery query counts", async () => {
   const { handleFetch } = await import(workerUrl);
   let receivedProfile;
+  let receivedEnv;
+  const workerEnv = {
+    DB: new WorkerD1(monitorSettings()),
+    MONITOR_RUN_TOKEN: "monitor-secret",
+    SEC_CONTACT_EMAIL: "sec-ops@example.com",
+  };
   const response = await handleFetch(
     new Request("https://monitor.example/run-collection?task=newsCollect", {
       method: "POST",
       headers: { authorization: "Bearer monitor-secret" },
     }),
+    workerEnv,
     {
-      DB: new WorkerD1(monitorSettings()),
-      MONITOR_RUN_TOKEN: "monitor-secret",
-    },
-    {
-      collectNews: async ({ profile }) => {
+      collectNews: async ({ profile, env }) => {
         receivedProfile = profile;
+        receivedEnv = env;
         return {
-          status: "completed",
+          status: "degraded",
+          errorCode: "NEWS_COLLECTION_PARTIAL",
           written: 12,
           counts: { queries: 3, succeeded: 3, failed: 0, items: 12 },
           sources: [{ source: "google-news-rss", status: "success", reason: null }],
@@ -486,8 +516,10 @@ test("protected manual news collection reports discovery query counts", async ()
   const payload = await response.json();
   assert.equal(response.status, 200);
   assert.equal(receivedProfile.id, "etf-main");
+  assert.equal(receivedEnv, workerEnv);
   assert.deepEqual(payload.counts, { targets: 3, succeeded: 3, failed: 0 });
   assert.equal(payload.written, 12);
+  assert.equal(payload.status, "degraded");
 });
 
 test("monitor wrangler config uses five-minute cron and the same deployed D1 binding", () => {

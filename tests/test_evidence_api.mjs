@@ -70,13 +70,19 @@ test("evidence API returns a point-in-time packet and supports HK normalization"
     contentHash: "abc",
   };
   const response = await onRequestGet({
-    request: request("/api/evidence?symbol=03887&asOf=2026-07-24T00:00:00Z&depth=summary"),
-    env: { DB: fakeDb({
-      symbol: "3887.HK",
-      as_of: "2026-07-23T08:00:00Z",
-      status: "ok",
-      packet_json: JSON.stringify(packet),
-    }, "3887.HK") },
+    request: request(
+      "/api/evidence?symbol=03887&asOf=2026-07-24T00:00:00Z&depth=summary",
+      { authorization: "Bearer read-token" },
+    ),
+    env: {
+      EVIDENCE_READ_TOKEN: "read-token",
+      DB: fakeDb({
+        symbol: "3887.HK",
+        as_of: "2026-07-23T08:00:00Z",
+        status: "ok",
+        packet_json: JSON.stringify(packet),
+      }, "3887.HK"),
+    },
   });
   assert.equal(response.status, 200);
   const body = await response.json();
@@ -85,7 +91,7 @@ test("evidence API returns a point-in-time packet and supports HK normalization"
   assert.deepEqual(body.sources, packet.sources);
 });
 
-test("evidence API requires the configured read token and returns unavailable without a packet", async () => {
+test("evidence API fails closed when the read token is missing or invalid", async () => {
   const denied = await onRequestGet({
     request: request("/api/evidence?symbol=GOOGL", { authorization: "Bearer wrong" }),
     env: { EVIDENCE_READ_TOKEN: "right", DB: fakeDb(null, "GOOGL") },
@@ -96,8 +102,8 @@ test("evidence API requires the configured read token and returns unavailable wi
     request: request("/api/evidence?symbol=GOOGL"),
     env: { DB: fakeDb(null, "GOOGL") },
   });
-  assert.equal(missing.status, 200);
-  assert.equal((await missing.json()).status, "unavailable");
+  assert.equal(missing.status, 503);
+  assert.equal((await missing.json()).error, "READ_NOT_CONFIGURED");
 });
 
 test("evidence API accepts only authenticated validated bundles and upserts packet plus manifest", async () => {
@@ -204,6 +210,16 @@ test("EvidencePacketV1 versioned entrypoint requires strict bearer auth and keep
     },
   });
   assert.equal(rawReadToken.status, 401);
+
+  const missingReadConfiguration = await versioned.onRequestGet({
+    request: request("/api/v1/evidence?symbol=GOOGL"),
+    env: { DB: fakeDb(null, "GOOGL") },
+  });
+  assert.equal(missingReadConfiguration.status, 503);
+  assert.equal(
+    (await missingReadConfiguration.json()).error,
+    "READ_NOT_CONFIGURED",
+  );
 
   const bearerReadToken = await versioned.onRequestGet({
     request: request("/api/v1/evidence?symbol=GOOGL", {

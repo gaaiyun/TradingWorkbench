@@ -1,16 +1,25 @@
 const DAY_MS = 24 * 60 * 60 * 1000;
 const RSS_LIMIT_PER_QUERY = 8;
-const MIIT_RSS_URL = [
-  "https://www.miit.gov.cn/api-gateway/jpaas-plugins-web-server/front/rss/getinfo",
-  "?webId=8d828e408d90447786ddbe128d495e9e",
-  "&columnIds=d3e2bede1bc045e2875fc7161c01db7d",
-].join("");
+const MIIT_POLICY_SEARCH_URL =
+  "https://www.miit.gov.cn/search-front-server/api/search/info";
+const MIIT_POLICY_COLUMN_IDS = new Set([
+  "03b4fad2648149f0b9735dbb7300f34c", // 通告
+  "cd969bf2ce7e4dd9a90f35e667f22255", // 公告
+  "3e3ad1a3bec74939890a0d3e54815141", // 通知
+  "f208042346424978bb16d077ca4c475b", // 意见
+]);
 const HASHKEY_IR_URL = "https://group.hashkey.com/en/news/categories/announcement-1";
+const DEFAULT_SEC_CONTACT_EMAIL =
+  "115156322+gaaiyun@users.noreply.github.com";
 const SEC_EDGAR_CIK = {
   ORCL: "0001341439",
   GOOGL: "0001652044",
 };
-const EVIDENCE_PROVIDERS = new Set(["miit-rss", "hashkey-ir", "sec-edgar-8k"]);
+const EVIDENCE_PROVIDERS = new Set([
+  "miit-policy-api",
+  "hashkey-ir",
+  "sec-edgar-8k",
+]);
 
 const TARGET_ALIASES = {
   "515880.SS": ["通信ETF", "通信 ETF", "光模块", "光通信", "通信设备", "5G", "6G"],
@@ -124,6 +133,76 @@ export function parseEastmoneySearch(jsonp) {
       publisher,
     }];
   });
+}
+
+function shanghaiDate(value) {
+  const parts = new Intl.DateTimeFormat("en-CA", {
+    timeZone: "Asia/Shanghai",
+    year: "numeric",
+    month: "2-digit",
+    day: "2-digit",
+  }).formatToParts(value);
+  const part = (type) => parts.find((entry) => entry.type === type)?.value;
+  return `${part("year")}-${part("month")}-${part("day")}`;
+}
+
+export function parseMiitPolicySearch(payload, {
+  begin = null,
+  end = null,
+  now = null,
+} = {}) {
+  let response;
+  try {
+    response = typeof payload === "string" ? JSON.parse(payload) : payload;
+  } catch {
+    return [];
+  }
+  const rows = response?.data?.searchResult?.dataResults;
+  if (!Array.isArray(rows)) return [];
+  const items = [];
+  for (const row of rows) {
+    if (items.length >= RSS_LIMIT_PER_QUERY) break;
+    const data = row?.groupData?.[0]?.data || row?.data;
+    if (!data || !MIIT_POLICY_COLUMN_IDS.has(String(data.columnid || ""))) {
+      continue;
+    }
+    const title = cleanText(
+      data.title_text || data.xxgkextend1 || data.title,
+      300,
+    );
+    const summary = cleanText(
+      data.infocontent || data.filenumbername || data.xxgkextend2,
+      500,
+    );
+    const published = new Date(Number(data.deploytime));
+    let url;
+    try {
+      url = new URL(String(data.url || ""), "https://www.miit.gov.cn");
+      if (url.hostname !== "www.miit.gov.cn") continue;
+      if (!url.pathname.startsWith("/zwgk/zcwj/wjfb/")) continue;
+      url.protocol = "https:";
+    } catch {
+      continue;
+    }
+    if (!title || !Number.isFinite(published.valueOf())) continue;
+    const publishedDate = shanghaiDate(published);
+    if (
+      (now && published.valueOf() > now.valueOf())
+      || (begin && publishedDate < begin)
+      || (end && publishedDate > end)
+    ) continue;
+    items.push({
+      title,
+      url: url.toString(),
+      publishedAt: published.toISOString(),
+      summary,
+      publisher: cleanText(
+        data.publishgroupname || data.xxgkextend2,
+        120,
+      ) || "工业和信息化部",
+    });
+  }
+  return items;
 }
 
 function atomTagValue(item, tag) {
@@ -392,7 +471,54 @@ function secEdgarAtomUrl(symbol) {
   return `https://www.sec.gov/cgi-bin/browse-edgar?${parameters}`;
 }
 
-function providerCandidates(plan) {
+function miitPolicySearchUrl(plan, now) {
+  const chipSymbols = ["512480.SS", "159995.SZ"];
+  const query = plan.topic === "communications"
+    ? "通信"
+    : plan.symbols.some((symbol) => chipSymbols.includes(symbol))
+      ? "芯片"
+      : "通信";
+  const window = {
+    begin: shanghaiDate(new Date(now.valueOf() - 30 * DAY_MS)),
+    end: shanghaiDate(now),
+  };
+  const parameters = new URLSearchParams({
+    websiteid: "110000000000000",
+    scope: "basic",
+    q: query,
+    pg: "10",
+    cateid: "58",
+    pos: "title_text,infocontent,titlepy",
+    ...window,
+    dateField: "deploytime",
+    selectFields: [
+      "title",
+      "deploytime",
+      "url",
+      "columnname",
+      "columnid",
+      "filenumbername",
+      "publishgroupname",
+      "publishtime",
+      "xxgkextend1",
+      "xxgkextend2",
+      "themename",
+      "typename",
+      "indexcode",
+      "createdate",
+    ].join(","),
+    group: "distinct",
+    level: "6",
+    sortFields: JSON.stringify([{ name: "deploytime", type: "desc" }]),
+    p: "1",
+  });
+  return {
+    url: `${MIIT_POLICY_SEARCH_URL}?${parameters}`,
+    window,
+  };
+}
+
+function providerCandidates(plan, now) {
   const candidates = [{
     source: "google-news-rss",
     url: rssUrl(plan),
@@ -425,7 +551,13 @@ function providerCandidates(plan) {
       url: eastmoneySearchUrl(plan.eastmoneyKeyword),
       format: "eastmoney-jsonp",
     });
-    candidates.push({ source: "miit-rss", url: MIIT_RSS_URL, format: "rss" });
+    const miit = miitPolicySearchUrl(plan, now);
+    candidates.push({
+      source: "miit-policy-api",
+      url: miit.url,
+      format: "miit-policy-json",
+      policyWindow: miit.window,
+    });
   } else if (plan.topic === "us-semiconductor") {
     candidates.push({
       source: "yahoo-finance-rss",
@@ -553,7 +685,15 @@ function fetchErrorCode(error) {
     : "NEWS_NETWORK_ERROR";
 }
 
-async function fetchContent(candidate, fetcher) {
+function secUserAgent(contactEmail) {
+  const candidate = String(contactEmail || "").trim();
+  const email = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(candidate)
+    ? candidate
+    : DEFAULT_SEC_CONTACT_EMAIL;
+  return `TradingWorkbench ${email}`;
+}
+
+async function fetchContent(candidate, fetcher, { secContactEmail } = {}) {
   const controller = new AbortController();
   const timer = setTimeout(() => controller.abort(), 8_000);
   try {
@@ -564,10 +704,14 @@ async function fetchContent(candidate, fetcher) {
           ? "text/html,application/xhtml+xml;q=0.9,*/*;q=0.5"
           : candidate.format === "eastmoney-jsonp"
             ? "text/javascript,application/json,text/plain;q=0.9,*/*;q=0.5"
+          : candidate.format === "miit-policy-json"
+            ? "application/json,text/plain;q=0.8,*/*;q=0.5"
           : candidate.format === "sec-edgar-atom"
             ? "application/atom+xml,application/xml,text/xml;q=0.9,text/html;q=0.8,*/*;q=0.5"
           : "application/rss+xml,application/xml,text/xml;q=0.9,*/*;q=0.5",
-        "user-agent": "TradingWorkbench/1.0 (+https://github.com/gaaiyun/TradingWorkbench)",
+        "user-agent": candidate.format === "sec-edgar-atom"
+          ? secUserAgent(secContactEmail)
+          : "TradingWorkbench/1.0 (+https://github.com/gaaiyun/TradingWorkbench)",
       },
     });
     if (!response?.ok) {
@@ -578,6 +722,8 @@ async function fetchContent(candidate, fetcher) {
       ? /text\/html/i.test(contentType)
       : candidate.format === "eastmoney-jsonp"
         ? /(?:javascript|json|text\/plain)/i.test(contentType)
+      : candidate.format === "miit-policy-json"
+        ? /(?:application\/json|text\/plain)/i.test(contentType)
       : candidate.format === "sec-edgar-atom"
         ? /(?:atom\+xml|xml|text\/html|text\/plain)/i.test(contentType)
       : /(?:xml|rss|text\/plain)/i.test(contentType);
@@ -593,23 +739,28 @@ async function fetchContent(candidate, fetcher) {
   }
 }
 
-function cachedContent(candidate, fetcher, cache) {
+function cachedContent(candidate, fetcher, cache, requestConfig) {
   if (!cache.has(candidate.url)) {
-    cache.set(candidate.url, fetchContent(candidate, fetcher));
+    cache.set(candidate.url, fetchContent(candidate, fetcher, requestConfig));
   }
   return cache.get(candidate.url);
 }
 
-async function fetchPlan(plan, fetcher, cache) {
+async function fetchPlan(plan, fetcher, cache, requestConfig) {
   const trail = [];
   let firstSuccessfulSource = null;
-  for (const candidate of providerCandidates(plan)) {
+  for (const candidate of providerCandidates(plan, requestConfig.now)) {
     try {
-      const content = await cachedContent(candidate, fetcher, cache);
+      const content = await cachedContent(candidate, fetcher, cache, requestConfig);
       const parsed = candidate.format === "hashkey-feed"
         ? parseHashKeyFeedPage(content)
         : candidate.format === "eastmoney-jsonp"
           ? parseEastmoneySearch(content)
+        : candidate.format === "miit-policy-json"
+          ? parseMiitPolicySearch(content, {
+            ...candidate.policyWindow,
+            now: requestConfig.now,
+          })
         : candidate.format === "sec-edgar-atom"
           ? parseSecEdgarAtom(content, candidate.publisher)
         : parseGoogleNewsRss(content);
@@ -636,7 +787,7 @@ async function fetchPlan(plan, fetcher, cache) {
 }
 
 function itemSource(provider, item) {
-  if (provider === "miit-rss") return "工业和信息化部 RSS";
+  if (provider === "miit-policy-api") return "工业和信息化部政策文件库";
   if (provider === "hashkey-ir") return "HashKey Investor Relations";
   if (provider === "sec-edgar-8k") return `SEC EDGAR 8-K / ${item.publisher}`;
   if (provider === "eastmoney-search") return `东方财富搜索 / ${item.publisher}`;
@@ -709,6 +860,7 @@ export async function writeNewsItems(db, { items }) {
 export async function collectNewsForProfile({
   profile,
   db,
+  env = {},
   fetcher = globalThis.fetch,
   writeItems = writeNewsItems,
   now = new Date(),
@@ -716,13 +868,17 @@ export async function collectNewsForProfile({
   const plans = queryPlans(profile);
   const responseCache = new Map();
   const outcomes = await Promise.allSettled(
-    plans.map((plan) => fetchPlan(plan, fetcher, responseCache)),
+    plans.map((plan) => fetchPlan(plan, fetcher, responseCache, {
+      secContactEmail: env?.SEC_CONTACT_EMAIL,
+      now,
+    })),
   );
   const fetchedAt = now.toISOString();
   const expiresAt = new Date(now.valueOf() + 180 * DAY_MS).toISOString();
   const byId = new Map();
   let succeeded = 0;
   let failed = 0;
+  let coverageGaps = 0;
   const sources = [];
 
   for (let index = 0; index < outcomes.length; index += 1) {
@@ -743,6 +899,12 @@ export async function collectNewsForProfile({
     }
     succeeded += 1;
     sources.push(...outcome.value.trail);
+    if (
+      outcome.value.trail.some(({ source, status }) =>
+        source === "sec-edgar-8k" && status === "failed")
+    ) {
+      coverageGaps += 1;
+    }
     for (const item of outcome.value.items) {
       for (const symbol of matchedSymbols(item, plan)) {
         const id = await itemId(profile.id, symbol, item.url);
@@ -790,9 +952,10 @@ export async function collectNewsForProfile({
       sources,
     };
   }
+  const degraded = failed > 0 || coverageGaps > 0;
   return {
-    status: failed > 0 ? "degraded" : "completed",
-    ...(failed > 0 ? { errorCode: "NEWS_COLLECTION_PARTIAL" } : {}),
+    status: degraded ? "degraded" : "completed",
+    ...(degraded ? { errorCode: "NEWS_COLLECTION_PARTIAL" } : {}),
     written: items.length,
     counts: { queries: plans.length, succeeded, failed, items: items.length },
     sources,

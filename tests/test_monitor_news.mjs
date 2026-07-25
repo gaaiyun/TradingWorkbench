@@ -136,6 +136,126 @@ test("SEC EDGAR Atom parser accepts namespace prefixes and rejects non-8-K entri
   }]);
 });
 
+test("SEC requests identify TradingWorkbench with the configured contact email", async () => {
+  const { collectNewsForProfile } = await import(newsUrl);
+  const requests = [];
+  const result = await collectNewsForProfile({
+    profile: {
+      ...monitorSettings().profiles[0],
+      targets: [{ symbol: "ORCL" }],
+    },
+    db: {},
+    env: { SEC_CONTACT_EMAIL: "sec-ops@example.com" },
+    fetcher: async (url, options) => {
+      requests.push({ url: String(url), options });
+      return new Response(SEC_ATOM, {
+        status: 200,
+        headers: { "content-type": "application/atom+xml" },
+      });
+    },
+    writeItems: async () => {},
+    now: new Date("2026-07-23T20:30:00.000Z"),
+  });
+  assert.equal(result.status, "completed");
+  assert.equal(requests.length, 1);
+  assert.equal(
+    requests[0].options.headers["user-agent"],
+    "TradingWorkbench sec-ops@example.com",
+  );
+});
+
+test("SEC requests use the project contact when no email is configured", async () => {
+  const { collectNewsForProfile } = await import(newsUrl);
+  const requests = [];
+  await collectNewsForProfile({
+    profile: {
+      ...monitorSettings().profiles[0],
+      targets: [{ symbol: "ORCL" }],
+    },
+    db: {},
+    env: {},
+    fetcher: async (url, options) => {
+      requests.push({ url: String(url), options });
+      return new Response(SEC_ATOM, {
+        status: 200,
+        headers: { "content-type": "application/atom+xml" },
+      });
+    },
+    writeItems: async () => {},
+    now: new Date("2026-07-23T20:30:00.000Z"),
+  });
+  assert.equal(
+    requests[0].options.headers["user-agent"],
+    "TradingWorkbench 115156322+gaaiyun@users.noreply.github.com",
+  );
+});
+
+test("SEC 403 remains a failed source when discovery fallbacks are empty", async () => {
+  const { collectNewsForProfile } = await import(newsUrl);
+  const contact = "private-sec-contact@example.com";
+  const result = await collectNewsForProfile({
+    profile: {
+      ...monitorSettings().profiles[0],
+      targets: [{ symbol: "ORCL" }],
+    },
+    db: {},
+    env: { SEC_CONTACT_EMAIL: contact },
+    fetcher: async (url) => {
+      if (new URL(url).hostname === "www.sec.gov") {
+        return new Response("", { status: 403 });
+      }
+      return new Response('<?xml version="1.0"?><rss><channel></channel></rss>', {
+        status: 200,
+        headers: { "content-type": "application/rss+xml" },
+      });
+    },
+    writeItems: async () => {},
+    now: new Date("2026-07-23T20:30:00.000Z"),
+  });
+  assert.equal(result.status, "degraded");
+  assert.equal(result.written, 0);
+  assert.equal(
+    result.sources.some(({ source, status, reason }) =>
+      source === "sec-edgar-8k"
+      && status === "failed"
+      && reason === "NEWS_HTTP_403"),
+    true,
+  );
+  assert.equal(JSON.stringify(result).includes(contact), false);
+});
+
+test("SEC evidence failure keeps the run degraded when discovery still returns news", async () => {
+  const { collectNewsForProfile } = await import(newsUrl);
+  const discovery = `<?xml version="1.0"?><rss><channel><item>
+    <title>Oracle cloud demand expands after earnings - Reuters</title>
+    <link>https://example.com/oracle-cloud</link>
+    <pubDate>Thu, 23 Jul 2026 18:00:00 GMT</pubDate>
+    <description>Oracle cloud infrastructure demand remains in focus.</description>
+    <source url="https://www.reuters.com">Reuters</source>
+  </item></channel></rss>`;
+  const result = await collectNewsForProfile({
+    profile: {
+      ...monitorSettings().profiles[0],
+      targets: [{ symbol: "ORCL" }],
+    },
+    db: {},
+    fetcher: async (url) => (
+      new URL(url).hostname === "www.sec.gov"
+        ? new Response("", { status: 403 })
+        : new Response(discovery, {
+          status: 200,
+          headers: { "content-type": "application/rss+xml" },
+        })
+    ),
+    writeItems: async () => {},
+    now: new Date("2026-07-23T20:30:00.000Z"),
+  });
+
+  assert.equal(result.written, 1);
+  assert.equal(result.status, "degraded");
+  assert.equal(result.errorCode, "NEWS_COLLECTION_PARTIAL");
+});
+
 test("Oracle and Alphabet prefer deduplicated SEC 8-K evidence before discovery feeds", async () => {
   const { collectNewsForProfile } = await import(newsUrl);
   const calls = [];
@@ -368,7 +488,7 @@ test("news collection falls back to Yahoo feeds for Alphabet and HashKey", async
     now: new Date("2026-07-23T01:30:00.000Z"),
   });
   const items = writes.flatMap(({ items: rows }) => rows);
-  assert.equal(result.status, "completed");
+  assert.equal(result.status, "degraded");
   assert.equal(items.some(({ symbol }) => symbol === "GOOGL"), true);
   assert.equal(items.some(({ symbol }) => symbol === "3887.HK"), true);
   assert.equal(items.every(({ source }) => source.startsWith("Yahoo Finance RSS /")), true);
@@ -389,10 +509,29 @@ test("news collection falls back to Yahoo feeds for Alphabet and HashKey", async
   );
 });
 
-test("news collection falls back to one cached MIIT RSS request when Google is blocked", async () => {
+test("news collection uses bounded current MIIT policy queries when Google is blocked", async () => {
   const { collectNewsForProfile } = await import(newsUrl);
   const calls = [];
   const writes = [];
+  const miitPayload = {
+    data: {
+      searchResult: {
+        dataResults: [{
+          groupData: [{
+            data: {
+              title: "工业和信息化部关于通信设备产业高质量发展的通知",
+              url: "/zwgk/zcwj/wjfb/tz/art/2026/art_communications.html",
+              deploytime: String(Date.parse("2026-07-22T01:00:00.000Z")),
+              infocontent: "工业和信息化部发布通信设备产业政策通知。",
+              columnname: "通知",
+              columnid: "3e3ad1a3bec74939890a0d3e54815141",
+              publishgroupname: "信息通信发展司",
+            },
+          }],
+        }],
+      },
+    },
+  };
   const result = await collectNewsForProfile({
     profile: monitorSettings().profiles[0],
     db: {},
@@ -401,9 +540,12 @@ test("news collection falls back to one cached MIIT RSS request when Google is b
       if (String(url).includes("news.google.com")) {
         return new Response("", { status: 403 });
       }
-      return new Response(RSS, {
+      if (String(url).includes("search-api-web.eastmoney.com")) {
+        return new Response("", { status: 503 });
+      }
+      return new Response(JSON.stringify(miitPayload), {
         status: 200,
-        headers: { "content-type": "application/xml" },
+        headers: { "content-type": "application/json" },
       });
     },
     writeItems: async (_db, payload) => writes.push(payload),
@@ -412,11 +554,33 @@ test("news collection falls back to one cached MIIT RSS request when Google is b
   const items = writes.flatMap(({ items }) => items);
   assert.equal(result.status, "completed");
   assert.equal(
-    calls.filter((url) => new URL(url).hostname === "www.miit.gov.cn").length,
-    1,
-    "多个 A 股主题共用同一官方 RSS 响应，避免重复下载大文档",
+    calls.filter((url) =>
+      new URL(url).pathname === "/search-front-server/api/search/info").length,
+    2,
+    "通信与芯片主题各使用一个有界政策检索，policy 计划复用缓存",
   );
-  assert.equal(items.some(({ source }) => source === "工业和信息化部 RSS"), true);
+  const miitUrls = calls
+    .map((url) => new URL(url))
+    .filter(({ pathname }) => pathname === "/search-front-server/api/search/info");
+  assert.deepEqual(
+    miitUrls.map((url) => url.searchParams.get("q")).sort(),
+    ["芯片", "通信"],
+  );
+  assert.equal(miitUrls.every((url) => url.searchParams.get("cateid") === "58"), true);
+  assert.equal(miitUrls.every((url) => url.searchParams.get("pg") === "10"), true);
+  assert.equal(miitUrls.every((url) => url.searchParams.get("p") === "1"), true);
+  assert.equal(
+    miitUrls.every((url) => url.searchParams.get("begin") === "2026-06-23"),
+    true,
+  );
+  assert.equal(
+    miitUrls.every((url) => url.searchParams.get("end") === "2026-07-23"),
+    true,
+  );
+  assert.equal(
+    items.some(({ source }) => source === "工业和信息化部政策文件库"),
+    true,
+  );
   assert.equal(
     result.sources.some(({ source, status, reason }) =>
       source === "google-news-rss" &&
@@ -426,9 +590,125 @@ test("news collection falls back to one cached MIIT RSS request when Google is b
   );
   assert.equal(
     result.sources.some(({ source, status }) =>
-      source === "miit-rss" && status === "success"),
+      source === "miit-policy-api" && status === "success"),
     true,
   );
+});
+
+test("MIIT policy API bounds parsed items and excludes leadership activity noise", async () => {
+  const { collectNewsForProfile } = await import(newsUrl);
+  const calls = [];
+  const writes = [];
+  const miitResult = ({ title, path, publishedAt, columnname, columnid }) => ({
+    groupData: [{
+      data: {
+        title,
+        url: path,
+        deploytime: String(publishedAt),
+        infocontent: "工业和信息化部发布半导体与集成电路政策通知。",
+        columnname,
+        columnid,
+        publishgroupname: "电子信息司",
+      },
+    }],
+  });
+  const leadership = miitResult({
+    title: "部长调研半导体与集成电路产业",
+    path: "/xwfb/bldhd/art/2026/art_leadership.html",
+    publishedAt: Date.parse("2026-07-25T01:00:00.000Z"),
+    columnname: "部领导活动",
+    columnid: "d3e2bede1bc045e2875fc7161c01db7d",
+  });
+  const futurePolicy = miitResult({
+    title: "未来发布时间不应进入证据包",
+    path: "/zwgk/zcwj/wjfb/art/2026/art_future.html",
+    publishedAt: Date.parse("2026-07-25T10:00:00.000Z"),
+    columnname: "通知",
+    columnid: "3e3ad1a3bec74939890a0d3e54815141",
+  });
+  const expiredPolicy = miitResult({
+    title: "窗口外旧政策不应进入证据包",
+    path: "/zwgk/zcwj/wjfb/art/2026/art_expired.html",
+    publishedAt: Date.parse("2026-06-20T01:00:00.000Z"),
+    columnname: "通知",
+    columnid: "3e3ad1a3bec74939890a0d3e54815141",
+  });
+  const policies = Array.from({ length: 12 }, (_value, index) => miitResult({
+    title: `工业和信息化部关于半导体与集成电路产业的政策通知 ${index + 1}`,
+    path: `/zwgk/zcwj/wjfb/art/2026/art_policy_${index + 1}.html`,
+    publishedAt: Date.parse(`2026-07-${String(24 - index).padStart(2, "0")}T01:00:00.000Z`),
+    columnname: "通知",
+    columnid: "3e3ad1a3bec74939890a0d3e54815141",
+  }));
+  const miitPayload = {
+    data: {
+      searchResult: {
+        dataResults: [leadership, futurePolicy, expiredPolicy, ...policies],
+      },
+    },
+  };
+  const result = await collectNewsForProfile({
+    profile: {
+      ...monitorSettings().profiles[0],
+      targets: [{ symbol: "159995.SZ" }],
+    },
+    db: {},
+    fetcher: async (url) => {
+      calls.push(String(url));
+      const pathname = new URL(url).pathname;
+      if (pathname === "/search-front-server/api/search/info") {
+        return new Response(JSON.stringify(miitPayload), {
+          status: 200,
+          headers: { "content-type": "application/json" },
+        });
+      }
+      return new Response("", { status: 503 });
+    },
+    writeItems: async (_db, payload) => writes.push(payload),
+    now: new Date("2026-07-25T02:00:00.000Z"),
+  });
+  const items = writes.flatMap(({ items: rows }) => rows);
+  assert.equal(result.status, "completed");
+  assert.equal(items.length, 8);
+  assert.equal(items.every(({ url }) => url.includes("/zwgk/zcwj/")), true);
+  assert.equal(items.some(({ url }) => url.includes("/bldhd/")), false);
+  assert.equal(items.some(({ url }) => url.includes("future")), false);
+  assert.equal(items.some(({ url }) => url.includes("expired")), false);
+  assert.equal(items.every(({ sourceTier }) => sourceTier === "evidence"), true);
+  assert.equal(items[0].publishedAt, "2026-07-24T01:00:00.000Z");
+  assert.equal(
+    calls.filter((url) =>
+      new URL(url).pathname === "/search-front-server/api/search/info").length,
+    1,
+  );
+});
+
+test("MIIT search window follows the Shanghai calendar across the UTC date boundary", async () => {
+  const { collectNewsForProfile } = await import(newsUrl);
+  const calls = [];
+  await collectNewsForProfile({
+    profile: {
+      ...monitorSettings().profiles[0],
+      targets: [{ symbol: "159995.SZ" }],
+    },
+    db: {},
+    fetcher: async (url) => {
+      calls.push(String(url));
+      return new Response(JSON.stringify({
+        data: { searchResult: { dataResults: [] } },
+      }), {
+        status: 200,
+        headers: { "content-type": "application/json" },
+      });
+    },
+    writeItems: async () => {},
+    now: new Date("2026-07-24T16:30:00.000Z"),
+  });
+  const miit = calls.map((url) => new URL(url)).find(
+    ({ pathname }) => pathname === "/search-front-server/api/search/info",
+  );
+  assert.equal(miit.searchParams.get("begin"), "2026-06-25");
+  assert.equal(miit.searchParams.get("end"), "2026-07-25");
 });
 
 test("news writer uses idempotent upserts without storing article bodies", async () => {
