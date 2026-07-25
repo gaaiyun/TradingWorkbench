@@ -11,6 +11,7 @@ export const MAX_SYSTEM_BENCHMARKS = 12;
 export const MAX_BENCHMARK_ID_BYTES = 64;
 export const MAX_BENCHMARK_NAME_BYTES = 96;
 export const MAX_SCHEDULE_WINDOWS = 8;
+export const MAX_WORKBENCH_SETTINGS_BYTES = 50 * 1024;
 
 const A_SHARE = /^(\d{6})(?:\.(SS|SH|SZ))?$/;
 const US_EQUITY = /^([A-Z]{1,5})(?:[.-]([A-Z]))?$/;
@@ -21,8 +22,10 @@ const TARGET_ROLES = new Set(["core", "comparison", "driver", "benchmark"]);
 const ANALYSIS_DEPTHS = new Set(["full", "signal"]);
 const ALERT_SEVERITIES = new Set(["low", "medium", "high", "critical"]);
 const CLOCK_TIME = /^(?:[01]\d|2[0-3]):[0-5]\d$/;
+const CONTROL_CHAR = /[\u0000-\u001f\u007f-\u009f]/u;
 const UNSAFE_MERGE_KEYS = new Set(["__proto__", "prototype", "constructor"]);
 const COPY_OPTION_KEYS = new Set(["id", "name"]);
+const COPY_NAME_SUFFIX = " 副本";
 const UTF8_ENCODER = new TextEncoder();
 
 export class WorkbenchSettingsError extends Error {
@@ -129,10 +132,30 @@ function requiredString(value, field, code = "INVALID_PROFILE") {
 
 function boundedString(value, field, maxBytes, tooLongCode, invalidCode = tooLongCode) {
   const normalized = requiredString(value, field, invalidCode);
+  if (CONTROL_CHAR.test(value)) {
+    fail("CONTROL_CHAR_NOT_ALLOWED", `${field} 不能包含控制字符`);
+  }
   if (UTF8_ENCODER.encode(normalized).byteLength > maxBytes) {
     fail(tooLongCode, `${field} 最多允许 ${maxBytes} 个 UTF-8 字节`);
   }
   return normalized;
+}
+
+function truncateUtf8(value, maxBytes) {
+  let result = "";
+  let bytes = 0;
+  for (const character of value) {
+    const characterBytes = UTF8_ENCODER.encode(character).byteLength;
+    if (bytes + characterBytes > maxBytes) break;
+    result += character;
+    bytes += characterBytes;
+  }
+  return result;
+}
+
+function defaultCopyProfileName(sourceName) {
+  const suffixBytes = UTF8_ENCODER.encode(COPY_NAME_SUFFIX).byteLength;
+  return `${truncateUtf8(sourceName, MAX_PROFILE_NAME_BYTES - suffixBytes)}${COPY_NAME_SUFFIX}`;
 }
 
 export function normalizeWorkbenchProfileId(value) {
@@ -547,10 +570,17 @@ export function buildWorkbenchSettings(input) {
     }
     profileIds.add(profile.id);
   }
-  return withLegacyTickers({
+  const settings = {
     version: WORKBENCH_SETTINGS_VERSION,
     profiles,
-  });
+  };
+  if (UTF8_ENCODER.encode(JSON.stringify(settings)).byteLength > MAX_WORKBENCH_SETTINGS_BYTES) {
+    fail(
+      "SETTINGS_TOO_LARGE",
+      `settings 序列化后最多允许 ${MAX_WORKBENCH_SETTINGS_BYTES} 个 UTF-8 字节`,
+    );
+  }
+  return withLegacyTickers(settings);
 }
 
 export function parseWorkbenchSettings(value) {
@@ -662,7 +692,7 @@ export function copyWorkbenchProfile(value, id, options = {}) {
   const copy = {
     ...source,
     id: copyId,
-    name: options.name ?? `${source.name} 副本`,
+    name: options.name ?? defaultCopyProfileName(source.name),
     enabled: false,
   };
   return buildWorkbenchSettings({

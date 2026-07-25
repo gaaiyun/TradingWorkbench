@@ -37,7 +37,7 @@ const MAXIMAL_TARGET_SYMBOLS = [
   "AAAAH", "AAAAI", "AAAAJ", "AAAAK", "AAAAL", "AAAAM", "AAAAN",
 ];
 
-function maximalSettings() {
+function largeEightProfileSettings({ objectiveBytes = 300 } = {}) {
   const template = structuredClone(staticSettings.profiles[0]);
   const windows = Array.from({ length: 8 }, (_, index) => {
     const hour = String(index * 2).padStart(2, "0");
@@ -50,7 +50,7 @@ function maximalSettings() {
       ...structuredClone(template),
       id: `profile-${profileIndex + 1}`.padEnd(64, "x"),
       name: "n".repeat(96),
-      objective: "o".repeat(512),
+      objective: "o".repeat(objectiveBytes),
       timezone: "America/Argentina/Buenos_Aires",
       targets: MAXIMAL_TARGET_SYMBOLS.map((symbol) => ({
         symbol,
@@ -240,8 +240,8 @@ test("D1 revisions remain strictly monotonic when repeated writes share a fixed 
   assert.equal(DB.settings.updated_at, third);
 });
 
-test("PUT and legacy POST accept an explicit maximal eight-profile document below 64 KiB", async () => {
-  const settings = maximalSettings();
+test("PUT and legacy POST accept an explicit large eight-profile document below 64 KiB", async () => {
+  const settings = largeEightProfileSettings();
   const putBody = { settings, revision: "2026-07-23T00:00:00.000Z" };
   const encodedBytes = new TextEncoder().encode(JSON.stringify(putBody)).byteLength;
   assert.ok(encodedBytes > 16 * 1024);
@@ -271,14 +271,14 @@ test("PUT and legacy POST accept an explicit maximal eight-profile document belo
   assert.equal(postPayload.settings.profiles.length, 8);
 });
 
-test("a bare v2 PUT strips revision metadata and persists the submitted document", async () => {
+test("a response-shaped bare v2 PUT is a full replacement even when it contains tickers", async () => {
   const initialUpdatedAt = "2026-07-23T00:00:00.000Z";
   const DB = new FakeD1({ settings: settingsRow(staticSettings, initialUpdatedAt) });
   const submitted = structuredClone(staticSettings);
   submitted.profiles[0].name = "裸 V2 PUT 已修改";
 
   const response = await settingsApi.onRequestPut({
-    request: put({ ...submitted, revision: initialUpdatedAt }),
+    request: put({ ...submitted, tickers: ["SPY"], revision: initialUpdatedAt }),
     env: { DB, ACCESS_CODE: "correct-code" },
   });
   const payload = await response.json();
@@ -286,8 +286,81 @@ test("a bare v2 PUT strips revision metadata and persists the submitted document
 
   assert.equal(response.status, 200);
   assert.equal(payload.settings.profiles[0].name, "裸 V2 PUT 已修改");
+  assert.deepEqual(payload.settings.tickers, ["515880.SS", "512480.SS"]);
   assert.equal(persisted.profiles[0].name, "裸 V2 PUT 已修改");
   assert.equal(Object.hasOwn(persisted, "revision"), false);
+  assert.equal(Object.hasOwn(persisted, "tickers"), false);
+});
+
+test("response-shaped and wrapped full PUTs require revision and never become legacy updates", async () => {
+  const initialUpdatedAt = "2026-07-23T00:00:00.000Z";
+  const missingDB = new FakeD1({ settings: settingsRow(staticSettings, initialUpdatedAt) });
+  const missing = await settingsApi.onRequestPut({
+    request: put({ ...staticSettings, tickers: ["SPY"] }),
+    env: { DB: missingDB, ACCESS_CODE: "correct-code" },
+  });
+  assert.equal(missing.status, 428);
+  assert.equal((await missing.json()).error_code, "SETTINGS_REVISION_REQUIRED");
+  assert.equal(missingDB.settings.updated_at, initialUpdatedAt);
+
+  const wrapped = structuredClone(staticSettings);
+  wrapped.profiles[0].name = "包装完整 PUT";
+  const wrappedDB = new FakeD1({ settings: settingsRow(staticSettings, initialUpdatedAt) });
+  const wrappedResponse = await settingsApi.onRequestPut({
+    request: put({
+      settings: wrapped,
+      tickers: ["SPY"],
+      revision: initialUpdatedAt,
+    }),
+    env: { DB: wrappedDB, ACCESS_CODE: "correct-code" },
+  });
+  const wrappedPayload = await wrappedResponse.json();
+  assert.equal(wrappedResponse.status, 200);
+  assert.equal(wrappedPayload.settings.profiles[0].name, "包装完整 PUT");
+  assert.deepEqual(wrappedPayload.settings.tickers, ["515880.SS", "512480.SS"]);
+
+  const legacyDB = new FakeD1({ settings: settingsRow(staticSettings, initialUpdatedAt) });
+  const legacyResponse = await settingsApi.onRequestPut({
+    request: put({ tickers: ["SPY"], revision: initialUpdatedAt }),
+    env: { DB: legacyDB, ACCESS_CODE: "correct-code" },
+  });
+  const legacyPayload = await legacyResponse.json();
+  assert.equal(legacyResponse.status, 200);
+  assert.deepEqual(legacyPayload.settings.tickers, ["SPY"]);
+});
+
+test("PUT and legacy POST reject a normalized settings document above the total byte cap", async () => {
+  const oversizedSettings = largeEightProfileSettings({ objectiveBytes: 512 });
+  const requestBytes = new TextEncoder().encode(JSON.stringify({
+    settings: oversizedSettings,
+    revision: "2026-07-23T00:00:00.000Z",
+  })).byteLength;
+  assert.ok(requestBytes < 64 * 1024);
+
+  const putDB = new FakeD1({ settings: settingsRow(staticSettings) });
+  const putResponse = await settingsApi.onRequestPut({
+    request: put({
+      settings: oversizedSettings,
+      revision: "2026-07-23T00:00:00.000Z",
+    }),
+    env: { DB: putDB, ACCESS_CODE: "correct-code" },
+  });
+  assert.equal(putResponse.status, 400);
+  assert.equal((await putResponse.json()).error_code, "SETTINGS_TOO_LARGE");
+  assert.equal(putDB.settings.updated_at, "2026-07-23T00:00:00.000Z");
+
+  const postDB = new FakeD1({ settings: settingsRow(staticSettings) });
+  const postResponse = await settingsApi.onRequestPost({
+    request: post({
+      settings: oversizedSettings,
+      tickers: MAXIMAL_TARGET_SYMBOLS.slice(0, 10),
+      revision: "2026-07-23T00:00:00.000Z",
+    }),
+    env: { DB: postDB, ACCESS_CODE: "correct-code" },
+  });
+  assert.equal(postResponse.status, 400);
+  assert.equal((await postResponse.json()).error_code, "SETTINGS_TOO_LARGE");
+  assert.equal(postDB.settings.updated_at, "2026-07-23T00:00:00.000Z");
 });
 
 test("GET falls back to the static GitHub settings when D1 is unavailable", async () => {

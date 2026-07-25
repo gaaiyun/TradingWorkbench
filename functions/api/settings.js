@@ -122,6 +122,16 @@ function directSettingsDocument(body) {
   return settings;
 }
 
+function isFullSettingsPut(body) {
+  return (
+    Object.prototype.hasOwnProperty.call(body, "settings") ||
+    (
+      Object.prototype.hasOwnProperty.call(body, "version") &&
+      Object.prototype.hasOwnProperty.call(body, "profiles")
+    )
+  );
+}
+
 function storageFailure() {
   return json(
     { error: "设置存储暂不可用", error_code: "SETTINGS_STORAGE_UNAVAILABLE" },
@@ -243,14 +253,20 @@ export async function onRequestPut({ request, env }) {
   let settings;
   let expectedUpdatedAt;
   try {
+    const fullSettingsPut = isFullSettingsPut(body);
     expectedUpdatedAt = expectedRevision(body, stored, {
-      requireExisting: body.tickers === undefined,
+      requireExisting: fullSettingsPut,
     });
-    if (body.tickers === undefined) {
+    if (fullSettingsPut) {
       settings = parseWorkbenchSettings(body.settings ?? directSettingsDocument(body));
-    } else {
-      const current = body.settings ?? stored?.settings ?? directSettingsDocument(body);
+    } else if (Object.prototype.hasOwnProperty.call(body, "tickers")) {
+      const current = stored?.settings ?? directSettingsDocument(body);
       settings = updateWorkbenchFullAnalysisTargets(current, body.tickers);
+    } else {
+      throw new WorkbenchSettingsError(
+        "INVALID_SETTINGS",
+        "PUT 必须提供 settings、version/profiles 或 tickers",
+      );
     }
   } catch (error) {
     if (error instanceof WorkbenchSettingsError) {

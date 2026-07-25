@@ -15,6 +15,10 @@ const staticSettings = JSON.parse(
   readFileSync(new URL("../public/data/workbench-settings.json", import.meta.url), "utf8"),
 );
 const INITIAL_REVISION = "2026-07-23T00:00:00.000Z";
+const DENSE_TARGET_SYMBOLS = [
+  "AAAAA", "AAAAB", "AAAAC", "AAAAD", "AAAAE", "AAAAF", "AAAAG",
+  "AAAAH", "AAAAI", "AAAAJ", "AAAAK", "AAAAL", "AAAAM", "AAAAN",
+];
 
 function settingsRow(settings = staticSettings, updatedAt = INITIAL_REVISION) {
   return {
@@ -47,6 +51,43 @@ function context(method, path, body, {
     request: request(method, path, body, { code, includeHeader }),
     env: { DB, ACCESS_CODE: "correct-code" },
     params,
+  };
+}
+
+function denseSettings({ profileCount = 8, objectiveBytes = 512 } = {}) {
+  const template = structuredClone(staticSettings.profiles[0]);
+  const windows = Array.from({ length: 8 }, (_, index) => ({
+    start: `${String(index * 2).padStart(2, "0")}:00`,
+    end: `${String(index * 2 + 1).padStart(2, "0")}:00`,
+  }));
+  return {
+    version: 2,
+    profiles: Array.from({ length: profileCount }, (_, profileIndex) => ({
+      ...structuredClone(template),
+      id: `profile-${profileIndex + 1}`.padEnd(64, "x"),
+      name: "n".repeat(96),
+      objective: "o".repeat(objectiveBytes),
+      timezone: "America/Argentina/Buenos_Aires",
+      targets: DENSE_TARGET_SYMBOLS.map((symbol) => ({
+        symbol,
+        name: "t".repeat(96),
+        market: "M".repeat(16),
+        role: "core",
+        analysis: "full",
+      })),
+      systemBenchmarks: Array.from({ length: 12 }, (_, benchmarkIndex) => ({
+        id: `${benchmarkIndex}`.padEnd(64, "b"),
+        name: "b".repeat(96),
+        market: "M".repeat(16),
+      })),
+      schedules: {
+        ...structuredClone(template.schedules),
+        cnIntraday: {
+          ...structuredClone(template.schedules.cnIntraday),
+          windows,
+        },
+      },
+    })),
   };
 }
 
@@ -351,6 +392,88 @@ test("profile patch rejects prototype-pollution keys", () => {
     settingsDomain.updateWorkbenchProfile(staticSettings, "cn-semi-comms", malicious));
   assert.equal({}.polluted, undefined);
   assert.equal({}.owned, undefined);
+});
+
+test("profile text fields reject control characters", () => {
+  const cases = [
+    (settings) => { settings.profiles[0].name = "bad\u0000name"; },
+    (settings) => { settings.profiles[0].objective = "line\nbreak"; },
+    (settings) => { settings.profiles[0].targets[0].name = "bad\tname"; },
+    (settings) => { settings.profiles[0].systemBenchmarks[0].name = "bad\u007fname"; },
+    (settings) => { settings.profiles[0].timezone = "Asia/Shanghai\n"; },
+  ];
+  for (const mutate of cases) {
+    const settings = structuredClone(staticSettings);
+    mutate(settings);
+    assertSettingsError(
+      "CONTROL_CHAR_NOT_ALLOWED",
+      () => settingsDomain.buildWorkbenchSettings(settings),
+    );
+  }
+});
+
+test("copy default names truncate safely at UTF-8 boundaries and preserve the suffix", () => {
+  const cases = [
+    { source: "a".repeat(96), expected: `${"a".repeat(89)} 副本` },
+    { source: "研".repeat(32), expected: `${"研".repeat(29)} 副本` },
+  ];
+  for (const { source, expected } of cases) {
+    const settings = structuredClone(staticSettings);
+    settings.profiles[0].name = source;
+    const copied = settingsDomain.copyWorkbenchProfile(settings, "cn-semi-comms");
+    const copy = copied.profiles[1];
+    assert.equal(copy.name, expected);
+    assert.equal(copy.name.endsWith(" 副本"), true);
+    assert.ok(new TextEncoder().encode(copy.name).byteLength <= 96);
+  }
+});
+
+test("profile POST, PATCH, and copy cannot persist a document above the total byte cap", async () => {
+  const sevenDenseProfiles = denseSettings({ profileCount: 7, objectiveBytes: 512 });
+  const createDB = new FakeD1({ settings: settingsRow(sevenDenseProfiles) });
+  const createResponse = await profilesIndexApi.onRequestPost(context(
+    "POST",
+    "/api/settings/profiles",
+    {
+      revision: INITIAL_REVISION,
+      profile: {
+        ...denseSettings({ profileCount: 1, objectiveBytes: 512 }).profiles[0],
+        id: "profile-new".padEnd(64, "x"),
+      },
+    },
+    { DB: createDB },
+  ));
+  assert.equal(createResponse.status, 400);
+  assert.equal((await createResponse.json()).error_code, "SETTINGS_TOO_LARGE");
+  assert.equal(createDB.settings.updated_at, INITIAL_REVISION);
+
+  const legalEightProfiles = denseSettings({ profileCount: 8, objectiveBytes: 300 });
+  const patchId = legalEightProfiles.profiles[0].id;
+  const patchDB = new FakeD1({ settings: settingsRow(legalEightProfiles) });
+  const patchResponse = await profileApi.onRequestPatch(context(
+    "PATCH",
+    `/api/settings/profiles/${patchId}`,
+    {
+      revision: INITIAL_REVISION,
+      patch: { objective: "o".repeat(512) },
+    },
+    { DB: patchDB, params: { profileId: patchId } },
+  ));
+  assert.equal(patchResponse.status, 400);
+  assert.equal((await patchResponse.json()).error_code, "SETTINGS_TOO_LARGE");
+  assert.equal(patchDB.settings.updated_at, INITIAL_REVISION);
+
+  const copyId = sevenDenseProfiles.profiles[0].id;
+  const copyDB = new FakeD1({ settings: settingsRow(sevenDenseProfiles) });
+  const copyResponse = await profileCopyApi.onRequestPost(context(
+    "POST",
+    `/api/settings/profiles/${copyId}/copy`,
+    { revision: INITIAL_REVISION },
+    { DB: copyDB, params: { profileId: copyId } },
+  ));
+  assert.equal(copyResponse.status, 400);
+  assert.equal((await copyResponse.json()).error_code, "SETTINGS_TOO_LARGE");
+  assert.equal(copyDB.settings.updated_at, INITIAL_REVISION);
 });
 
 test("copy accepts only explicit options or compatible newId/newName aliases", async () => {
