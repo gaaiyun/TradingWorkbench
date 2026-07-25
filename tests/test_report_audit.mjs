@@ -34,13 +34,39 @@ test("audit index classifies every successful archived report and the malformed 
   assert.equal(audit.reports.length, allResults.length);
   assert.deepEqual(
     audit.reports.filter((entry) => entry.auditStatus === "invalidated")
-      .map((entry) => `${entry.ticker}|${entry.tradeDate}`).sort(),
+      .map((entry) => entry.report).sort(),
     [...INVALIDATED_REPORTS].sort(),
   );
 
   const issue = audit.reports.find((entry) => entry.ticker === "ISSUE");
   assert.equal(issue.auditStatus, "invalid_record");
   assert.match(issue.problemCodes.join(","), /INVALID_TICKER_INPUT/);
+});
+
+test("a repaired versioned report is not invalidated only because it shares the legacy trade date", async (t) => {
+  const root = await fs.mkdtemp(path.join(os.tmpdir(), "tradingworkbench-audit-versioned-"));
+  t.after(() => fs.rm(root, { recursive: true, force: true }));
+  const reportDir = path.join(root, "515880.SS", "2026-07-24-v2");
+  await fs.mkdir(reportDir, { recursive: true });
+  await fs.writeFile(path.join(reportDir, "complete_report.md"), "Not Rated.");
+  const audit = await buildReportAudit({
+    history: [{
+      trade_date: "2026-07-24",
+      generated_at: "2026-07-25T08:00:00Z",
+      results: [{
+        ticker: "515880.SS",
+        rating: "Not Rated",
+        report: "reports/515880.SS/2026-07-24-v2/complete_report.md",
+        error: false,
+      }],
+    }],
+    reportsRoot: root,
+  });
+  assert.equal(audit.reports[0].auditStatus, "legacy_unverified");
+  assert.equal(
+    audit.reports[0].problemCodes.includes("CORPORATE_ACTION_CONTAMINATION"),
+    false,
+  );
 });
 
 test("audit parser records missing claim citations and forced final markers", async () => {

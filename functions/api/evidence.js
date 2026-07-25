@@ -92,6 +92,8 @@ function validateBundle(body) {
       typeof manifest !== "object"
       || manifest.schemaVersion !== 1
       || normalizeWorkbenchTicker(manifest.ticker || "") !== symbol
+      || !/^\d{4}-\d{2}-\d{2}$/.test(String(manifest.tradeDate || ""))
+      || packet.asOf.slice(0, 10) !== manifest.tradeDate
       || !validIso(manifest.generatedAt)
       || !ANALYSIS_STATUSES.has(manifest.analysisStatus)
       || !AUDIT_STATUSES.has(manifest.auditStatus)
@@ -101,7 +103,7 @@ function validateBundle(body) {
     }
     const escaped = symbol.replaceAll(".", "\\.");
     const reportPattern = new RegExp(
-      `^reports/${escaped}/\\d{4}-\\d{2}-\\d{2}/complete_report\\.md$`,
+      `^reports/${escaped}/${manifest.tradeDate}(?:-v(?:[2-9]|[1-9]\\d+))?/complete_report\\.md$`,
     );
     if (typeof report !== "string" || !reportPattern.test(report)) {
       throw new Error("报告路径无效");

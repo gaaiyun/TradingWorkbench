@@ -112,7 +112,7 @@ test("evidence API accepts only authenticated validated bundles and upserts pack
       },
       body: JSON.stringify({
         packet,
-        report: "reports/3887.HK/2026-07-24/complete_report.md",
+        report: "reports/3887.HK/2026-07-24-v2/complete_report.md",
         manifest: {
           schemaVersion: 1,
           ticker: "3887.HK",
@@ -141,7 +141,7 @@ test("evidence API accepts only authenticated validated bundles and upserts pack
   assert.match(calls[0].sql, /INSERT INTO evidence_packets/i);
   assert.match(calls[1].sql, /INSERT INTO report_manifests/i);
   assert.equal(calls[0].params[1], "3887.HK");
-  assert.equal(calls[1].params[0], "reports/3887.HK/2026-07-24/complete_report.md");
+  assert.equal(calls[1].params[0], "reports/3887.HK/2026-07-24-v2/complete_report.md");
 });
 
 test("evidence API write path fails closed and rejects malformed or oversized packets", async () => {

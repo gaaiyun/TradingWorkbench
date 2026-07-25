@@ -122,7 +122,9 @@ def build_evidence_packet(
 
     The packet never invents missing rows.  A provider can return a degraded
     packet, but a corporate-action jump on an unadjusted series is explicitly
-    non-rateable.
+    non-rateable. Extreme single-stock gaps are retained as warnings because
+    earnings and other company events can legitimately move equities by more
+    than the ETF continuity threshold.
     """
 
     cutoff = _time(as_of)
@@ -151,8 +153,10 @@ def build_evidence_packet(
             == current["ts"][:10]
             for action in actions
         )
-        if not nearby_action:
+        if not nearby_action and asset_type in {"cn_etf", "us_etf"}:
             errors.append("UNEXPLAINED_PRICE_JUMP")
+        elif not nearby_action:
+            warnings.append("EXTREME_PRICE_MOVE")
         elif str(current.get("adjustment") or previous.get("adjustment") or "none").lower() in {
             "none",
             "raw",

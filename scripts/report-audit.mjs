@@ -3,9 +3,9 @@ import path from "node:path";
 import { fileURLToPath } from "node:url";
 
 export const INVALIDATED_REPORTS = new Set([
-  "515880.SS|2026-07-24",
-  "512480.SS|2026-07-23",
-  "512480.SS|2026-07-24",
+  "reports/515880.SS/2026-07-24/complete_report.md",
+  "reports/512480.SS/2026-07-23/complete_report.md",
+  "reports/512480.SS/2026-07-24/complete_report.md",
 ]);
 
 const ETF_SYMBOLS = new Set(["510050.SS", "512480.SS", "515880.SS", "SPY"]);
@@ -16,8 +16,12 @@ const VALUATION_RE = /(?:DCF|discounted cash flow|估值方法|情景分析|valu
 const FINAL_PROPOSAL_RE = /FINAL TRANSACTION PROPOSAL/gi;
 const PUBLISHED_RE = /(?:published|发布时间|发布日期|published_at|发表时间)/gi;
 
-function keyFor(ticker, tradeDate) {
-  return `${ticker}|${tradeDate}`;
+function normalizedReportPath(report) {
+  return String(report || "").replaceAll("\\", "/");
+}
+
+function isInvalidatedReport(report) {
+  return INVALIDATED_REPORTS.has(normalizedReportPath(report));
 }
 
 function problemCodesFor({
@@ -36,7 +40,7 @@ function problemCodesFor({
   }
   if (!report) return codes;
   if (!text) codes.push("REPORT_MISSING");
-  if (INVALIDATED_REPORTS.has(keyFor(ticker, tradeDate))) {
+  if (isInvalidatedReport(report)) {
     codes.push("CORPORATE_ACTION_CONTAMINATION");
   }
   if (ETF_SYMBOLS.has(ticker)) codes.push("ETF_TEMPLATE_MISMATCH");
@@ -142,7 +146,7 @@ export async function buildReportAudit({ history, reportsRoot }) {
       });
       const auditStatus = error || !report
         ? "invalid_record"
-        : INVALIDATED_REPORTS.has(keyFor(ticker, tradeDate))
+        : isInvalidatedReport(report)
           ? "invalidated"
           : verifiedEvidence
             ? "verified"

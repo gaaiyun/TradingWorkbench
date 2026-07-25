@@ -68,6 +68,39 @@ def test_unadjusted_split_jump_blocks_rating():
     assert packet["canRate"] is False
 
 
+def test_unexplained_etf_jump_still_blocks_rating():
+    packet = build_evidence_packet(
+        ticker="512480.SS",
+        asset_type="cn_etf",
+        as_of="2026-07-04T07:00:00Z",
+        bars=[bar("2026-07-02T07:00:00Z", 1.4), bar("2026-07-03T07:00:00Z", 0.7)],
+        generated_at="2026-07-04T07:05:00Z",
+    )
+
+    assert packet["status"] == "data_validation_failed"
+    assert "UNEXPLAINED_PRICE_JUMP" in packet["integrity"]["errors"]
+    assert packet["canRate"] is False
+
+
+def test_extreme_equity_move_is_flagged_without_treating_a_real_gap_as_a_split():
+    packet = build_evidence_packet(
+        ticker="ORCL",
+        asset_type="us_equity",
+        as_of="2025-09-11T23:59:59Z",
+        bars=[
+            bar("2025-09-10T20:00:00Z", 241.51),
+            bar("2025-09-11T20:00:00Z", 328.33),
+        ],
+        sources=[{"source": "yahoo", "sourceTier": "evidence"}],
+        generated_at="2025-09-12T00:05:00Z",
+    )
+
+    assert packet["status"] == "ok"
+    assert packet["canRate"] is True
+    assert "EXTREME_PRICE_MOVE" in packet["integrity"]["warnings"]
+    assert "UNEXPLAINED_PRICE_JUMP" not in packet["integrity"]["errors"]
+
+
 def test_packet_rejects_malformed_and_future_bars():
     with pytest.raises(EvidenceValidationError, match="future"):
         build_evidence_packet(
