@@ -72,6 +72,8 @@ jobs:
       # ── 微信推送 ────────────────────────────────────────────────
       PUSHPLUS_TOKEN: ${{ secrets.PUSHPLUS_TOKEN }}
       PAGES_URL: https://tradingagents-board.pages.dev/
+      EVIDENCE_API_URL: https://tradingagents-board.pages.dev/api/evidence
+      EVIDENCE_WRITE_TOKEN: ${{ secrets.EVIDENCE_WRITE_TOKEN }}
       ENABLE_GITHUB_PAGES: ${{ vars.ENABLE_GITHUB_PAGES || 'false' }}
       # ── Cloudflare 国内镜像（配置 CLOUDFLARE_API_TOKEN 后自动启用）──
       CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}

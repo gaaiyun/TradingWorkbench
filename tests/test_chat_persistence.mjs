@@ -20,6 +20,7 @@ const migrations = [
   "../migrations/0004_monitor_slot_leases.sql",
   "../migrations/0005_chat_persistence.sql",
   "../migrations/0010_news_evidence_metadata.sql",
+  "../migrations/0011_evidence_packets.sql",
 ];
 
 async function createD1(t) {
@@ -260,6 +261,68 @@ test("US chat evidence reads daily bars for Oracle", async (t) => {
 
   assert.match(result.context, /\[M1\].*行情 ORCL.*周期 1d.*收 246\.18/s);
   assert.equal(result.evidence.find(({ id }) => id === "I1")?.title, "ORCL 1d 技术指标");
+});
+
+test("chat evidence includes the exact published EvidencePacket and validation state", async (t) => {
+  const fixture = await createD1(t);
+  if (!fixture) return;
+  const packet = {
+    schemaVersion: "EvidencePacketV1",
+    status: "data_validation_failed",
+    canRate: false,
+    asOf: "2026-07-24T02:15:00.000Z",
+    generatedAt: "2026-07-24T02:16:00.000Z",
+    instrument: { symbol: "512480.SS", assetType: "cn_etf", market: "CN" },
+    bars: [{
+      evidenceId: "M1",
+      ts: "2026-07-24T02:15:00.000Z",
+      close: 1.27,
+      adjustment: "none",
+    }],
+    indicators: {},
+    corporateActions: [],
+    financials: {},
+    news: [],
+    sources: [{
+      evidenceId: "S1",
+      source: "eastmoney",
+      sourceTier: "evidence",
+      asOf: "2026-07-24T02:15:00.000Z",
+    }],
+    integrity: {
+      barCount: 1,
+      newsCount: 0,
+      errors: ["UNEXPLAINED_PRICE_JUMP"],
+      warnings: [],
+      pointInTime: true,
+    },
+    contentHash: "b".repeat(64),
+  };
+  fixture.sqlite.prepare(`
+    INSERT INTO evidence_packets (
+      id, symbol, as_of, generated_at, status, packet_json, content_hash, expires_at
+    ) VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+  `).run(
+    "evidence:512480",
+    "512480.SS",
+    packet.asOf,
+    packet.generatedAt,
+    packet.status,
+    JSON.stringify(packet),
+    packet.contentHash,
+    "2027-07-24T00:00:00.000Z",
+  );
+
+  const result = await loadWorkbenchEvidence(fixture.DB, {
+    profileId: "etf-semiconductor",
+    symbol: "512480.SS",
+    now: new Date("2026-07-24T02:20:00.000Z"),
+  });
+
+  assert.match(result.context, /\[P1\].*EvidencePacketV1.*data_validation_failed.*不可评级/s);
+  assert.match(result.context, /\[PK-M1\].*收 1\.27.*复权 none/s);
+  assert.match(result.context, /UNEXPLAINED_PRICE_JUMP/);
+  assert.equal(result.evidence.find(({ id }) => id === "P1")?.contentHash, packet.contentHash);
 });
 
 test("chat prompt receives auditable evidence IDs and returns evidence metadata", async (t) => {

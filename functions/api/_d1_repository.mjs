@@ -149,3 +149,61 @@ export async function queryEvidencePacket(db, { symbol, asOf = null }) {
   `).bind(symbol, cutoff, new Date().toISOString()).first();
   return row || null;
 }
+
+export async function upsertEvidenceBundle(db, {
+  packet,
+  report = null,
+  manifest = null,
+  expiresAt,
+}) {
+  const symbol = packet.instrument.symbol;
+  const packetId = `evidence:${symbol}:${packet.asOf}:${packet.contentHash}`;
+  const statements = [
+    db.prepare(`
+      INSERT INTO evidence_packets (
+        id, symbol, as_of, generated_at, status, packet_json, content_hash, expires_at
+      ) VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+      ON CONFLICT(id) DO UPDATE SET
+        generated_at = excluded.generated_at,
+        status = excluded.status,
+        packet_json = excluded.packet_json,
+        content_hash = excluded.content_hash,
+        expires_at = excluded.expires_at
+    `).bind(
+      packetId,
+      symbol,
+      packet.asOf,
+      packet.generatedAt,
+      packet.status,
+      JSON.stringify(packet),
+      packet.contentHash,
+      expiresAt,
+    ),
+  ];
+  if (manifest && report) {
+    statements.push(db.prepare(`
+      INSERT INTO report_manifests (
+        report, symbol, trade_date, analysis_status, audit_status,
+        evidence_hash, manifest_json, created_at
+      ) VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+      ON CONFLICT(report) DO UPDATE SET
+        symbol = excluded.symbol,
+        trade_date = excluded.trade_date,
+        analysis_status = excluded.analysis_status,
+        audit_status = excluded.audit_status,
+        evidence_hash = excluded.evidence_hash,
+        manifest_json = excluded.manifest_json,
+        created_at = excluded.created_at
+    `).bind(
+      report,
+      symbol,
+      manifest.tradeDate || null,
+      manifest.analysisStatus,
+      manifest.auditStatus,
+      packet.contentHash,
+      JSON.stringify(manifest),
+      manifest.generatedAt,
+    ));
+  }
+  return db.batch(statements);
+}

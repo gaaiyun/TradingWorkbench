@@ -376,6 +376,44 @@ def push_wechat(title: str, content: str) -> dict:
         return {"sent": False, "reason": str(exc)}
 
 
+def publish_evidence_bundle(
+    packet: dict,
+    *,
+    manifest: dict | None = None,
+    report: str | None = None,
+) -> dict:
+    """把本次确定性证据包写入 D1；未配置或失败时不泄露响应正文。"""
+    endpoint = os.environ.get("EVIDENCE_API_URL", "").strip()
+    token = os.environ.get("EVIDENCE_WRITE_TOKEN", "").strip()
+    if not endpoint or not token:
+        return {"published": False, "reason": "not_configured"}
+
+    import requests
+
+    payload: dict = {"packet": packet}
+    if manifest is not None and report is not None:
+        payload.update({"manifest": manifest, "report": report})
+    try:
+        response = requests.post(
+            endpoint,
+            json=payload,
+            headers={
+                "authorization": f"Bearer {token}",
+                "content-type": "application/json",
+            },
+            timeout=20,
+        )
+    except requests.RequestException:
+        return {"published": False, "reason": "network_error"}
+    if response.status_code != 201:
+        return {
+            "published": False,
+            "reason": "http_error",
+            "status": response.status_code,
+        }
+    return {"published": True, "status": response.status_code}
+
+
 def run_ticker(ticker: str, trade_date: str, analysts: list[str], reports_dir: Path) -> dict:
     """跑单个 ticker 的完整多智能体分析，返回结果摘要 dict。"""
     from cli.utils import detect_asset_type, normalize_ticker_symbol
@@ -385,6 +423,7 @@ def run_ticker(ticker: str, trade_date: str, analysts: list[str], reports_dir: P
     symbol = normalize_ticker_symbol(ticker)
     evidence_packet = build_runtime_evidence(symbol, trade_date)
     if not evidence_packet.get("canRate"):
+        evidence_publish = publish_evidence_bundle(evidence_packet)
         return {
             "ticker": symbol,
             "rating": None,
@@ -393,6 +432,7 @@ def run_ticker(ticker: str, trade_date: str, analysts: list[str], reports_dir: P
             "decision_excerpt": "",
             "analysis_status": evidence_packet.get("status", "not_rated"),
             "audit_status": "invalidated" if evidence_packet.get("status") == "data_validation_failed" else "legacy_unverified",
+            "evidence_publish": evidence_publish,
             "error": "evidence validation failed; model run skipped",
         }
     asset_type = detect_asset_type(symbol).value
@@ -407,6 +447,7 @@ def run_ticker(ticker: str, trade_date: str, analysts: list[str], reports_dir: P
 
     save_dir = reports_dir / symbol / trade_date
     ta.save_reports(final_state, symbol, save_path=save_dir, evidence_packet=evidence_packet)
+    manifest = json.loads((save_dir / "report_manifest.json").read_text(encoding="utf-8"))
 
     # 各 agent 分报告的相对路径映射，供前端按角色分 tab 阅读
     files: dict[str, str] = {}
@@ -415,6 +456,11 @@ def run_ticker(ticker: str, trade_date: str, analysts: list[str], reports_dir: P
         files[md.stem] = rel
 
     decision_md = str(final_state.get("final_trade_decision", "")).strip()
+    evidence_publish = publish_evidence_bundle(
+        evidence_packet,
+        manifest=manifest,
+        report=files.get("complete_report"),
+    )
     return {
         "ticker": symbol,
         "rating": rating,
@@ -423,6 +469,7 @@ def run_ticker(ticker: str, trade_date: str, analysts: list[str], reports_dir: P
         "decision_excerpt": decision_md[:400],
         "analysis_status": final_state.get("analysis_status", "rated"),
         "audit_status": "verified",
+        "evidence_publish": evidence_publish,
         "error": None,
     }
 

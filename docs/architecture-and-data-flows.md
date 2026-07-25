@@ -1,6 +1,6 @@
 # 架构、接口与数据流
 
-更新日期：2026-07-24
+更新日期：2026-07-25
 
 本文描述当前代码实际运行的结构。页面原型、未来设想和已经下线的旧入口不算“已实现”。
 
@@ -29,6 +29,7 @@ flowchart TB
         WF["daily-analysis workflow"]
         TA["TradingAgentsGraph"]
         REP["public/data 报告与索引"]
+        EV["Evidence Packet + Manifest"]
     end
 
     subgraph Options["VolGuard"]
@@ -42,6 +43,7 @@ flowchart TB
     CRON <--> D1
     CRON --> WF
     WF --> TA --> REP --> UI
+    TA --> EV --> API
     API --> LIVE
     LIVE --> FAST
     LIVE --> SLOW
@@ -126,7 +128,7 @@ flowchart TD
 
 | 任务 | 标的 | 周期 | 输出 |
 |---|---|---|---|
-| 美股收盘快照 | `role=driver` 且 `market=US` | 1d | 美股驱动日线 |
+| 美股收盘快照 | `role=driver` 且 `market=US/HK` | 1d | 全球科技驱动日线 |
 | 新闻发现 | 当前 profile 的主题与实体别名 | 每交易日 08:25 | D1 新闻证据流 |
 | 盘前简报 | 当前 profile | 轻量 | 盘前上下文 |
 | A 股盘中采集 | `core/comparison` 且 `market=CN` | 5m | D1 行情 |
@@ -178,6 +180,8 @@ sequenceDiagram
 | `/api/runs` | GET | GitHub 运行状态 | 只读 |
 | `/api/history` | GET | 研究档案索引 | 只读 |
 | `/api/report` | GET | 报告正文 | 只读 |
+| `/api/report-audit` | GET | 历史报告审计状态 | 只读 |
+| `/api/evidence` | GET / POST | 读取或发布 EvidencePacketV1 | 可选读 token / 独立写 token |
 | `/api/chat` | POST | 非流式或 SSE 问答 | 访问码 |
 | `/api/chat-sessions` | GET | 持久会话与恢复 | 访问码 |
 | `/api/volguard` | GET | 实时期权代理与快照降级 | 只读 |
@@ -248,6 +252,37 @@ ORCL、SOXX 等美股读 1d。指标使用同一套服务端计算函数，不�
 - 报告和 VolGuard 作为具名上下文源。
 
 证据编号不是因果证明。系统提示会要求模型区分“数据事实”“可能传导”和“证据不足”。
+
+### Evidence Packet 发布闭环
+
+```mermaid
+sequenceDiagram
+    participant A as GitHub Action
+    participant P as Python 预检
+    participant F as Evidence Function
+    participant D as D1
+    participant Q as 网页 / 问答 / Agent
+
+    A->>P: 标的 + asOf
+    P->>P: 复权、公司行动、未来信息和连续性校验
+    alt 校验失败
+        P->>F: data_validation_failed Packet
+        P-->>A: 跳过模型评级
+    else 校验通过
+        P->>A: 运行 TradingAgents 并生成 Manifest
+        A->>F: Bearer token + Packet + Manifest
+    end
+    F->>F: 校验 Schema、哈希、标的、时间、状态和路径
+    F->>D: 参数化幂等 UPSERT
+    Q->>F: GET symbol + asOf + depth
+    F->>D: 读取不晚于 asOf 的最近有效包
+```
+
+POST 请求体上限为 1 MiB。写入口在没有 `EVIDENCE_WRITE_TOKEN` 时返回 503，在 token
+不匹配时返回 401；服务端不接受客户端指定过期时间。D1 为每个包设置 180 天在线读取
+期，报告目录中的 `evidence_packet.json` 和 `report_manifest.json` 继续作为长期审计
+副本。网络或 D1 写入失败不会改变报告结论，但运行结果会记录 `evidence_publish` 降级，
+运维人员必须补发后才能把该报告标为在线可追溯。
 
 ## 9. 期权双时钟
 

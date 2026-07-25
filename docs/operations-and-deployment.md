@@ -1,6 +1,6 @@
 # 部署、密钥、验收与回退
 
-更新日期：2026-07-24
+更新日期：2026-07-25
 
 本文只记录可以复现的操作。命令中的项目名是当前生产名，不要自行替换 opaque ID。
 
@@ -30,6 +30,8 @@
 | `GITHUB_DISPATCH_TOKEN` | 是 | 网页触发 `daily-analysis.yml` |
 | `VOLGUARD_LIVE_URL` | 建议 | 默认指向 VolGuard `/api/live` |
 | `VOLGUARD_SNAPSHOT_URL` | 建议 | 实时接口失败后的静态快照 |
+| `EVIDENCE_READ_TOKEN` | 建议 | 保护 Evidence Packet 读取；未配置时保持公开只读 |
+| `EVIDENCE_WRITE_TOKEN` | 是 | 只允许 GitHub 深度任务发布证据包与 Manifest |
 
 ### Monitor Worker
 
@@ -43,7 +45,7 @@
 
 ### GitHub Actions
 
-至少配置一个可用 LLM key。当前支持 `OPENAI_COMPATIBLE_API_KEY`、`OPENAI_API_KEY`、`ANTHROPIC_API_KEY`、`GOOGLE_API_KEY`、`DEEPSEEK_API_KEY` 等；可选数据 key 包括 `ALPHA_VANTAGE_API_KEY`、`FRED_API_KEY`。重大事件提醒使用 `PUSHPLUS_TOKEN`。
+至少配置一个可用 LLM key。当前支持 `OPENAI_COMPATIBLE_API_KEY`、`OPENAI_API_KEY`、`ANTHROPIC_API_KEY`、`GOOGLE_API_KEY`、`DEEPSEEK_API_KEY` 等；可选数据 key 包括 `ALPHA_VANTAGE_API_KEY`、`FRED_API_KEY`。重大事件提醒使用 `PUSHPLUS_TOKEN`。`EVIDENCE_WRITE_TOKEN` 必须与 Pages Functions 中的同名 Secret 一致，workflow 只把它放入 Authorization header，不写进报告和运行摘要。
 
 GitHub 只能列出 Secret 名称和更新时间，不能读取原值。忘记 `ACCESS_CODE` 时不要“查日志”，应在 Cloudflare 中轮换，然后用新值重新做问答和设置冒烟。
 
@@ -170,6 +172,15 @@ Cloudflare 出口访问免费源时可能需要来源请求头。当前 adapter 
 npx --yes wrangler@4.113.0 pages deploy public --project-name tradingagents-board --branch main
 ```
 
+证据写入密钥首次配置或轮换时，用密码管理器生成随机值，并把同一个值分别写入
+Cloudflare Pages Secret 与 GitHub Actions Secret。命令必须从进程标准输入读取，
+不要把值放进命令历史：
+
+```powershell
+npx --yes wrangler@4.113.0 pages secret put EVIDENCE_WRITE_TOKEN --project-name tradingagents-board
+gh secret set EVIDENCE_WRITE_TOKEN --repo gaaiyun/TradingWorkbench
+```
+
 VolGuard 仓库当前保存的 Cloudflare token 只有 Pages Edit 权限。
 `pages-snapshot` 会定时发布 VolGuard 和 Trading Workbench 两个 Pages 项目；
 `deploy-trading-workbench` 的默认路径也只验证并发布工作台 Pages。
@@ -200,6 +211,9 @@ Invoke-RestMethod https://sh50-volguard.pages.dev/api/live
 - 休市可以返回 stale 或 market closed，但不能用 fixture 冒充实时。
 - VolGuard 要同时有报价时间和模型时间；合约表可以为空，但不能显示伪造的零 Greeks。
 - 页面七个一级入口可进入，横向无溢出，移动端可以完成设置、运行和查看报告。
+- `/api/report-audit` 返回 33 份成功报告的审计索引，其中 3 份为 `invalidated`。
+- `/api/evidence?symbol=...` 在已有包时返回相同的 `contentHash`、`asOf` 和来源；尚未
+  生成有效包时返回 `unavailable`，不能回退到拼装的假证据。
 
 ## 7. 问答验收
 
@@ -241,6 +255,16 @@ Invoke-RestMethod https://sh50-volguard.pages.dev/api/live
 2. 检查时间槽状态是 `completed`、`deferred` 还是 `failed`。
 3. `deferred` 通常表示 Worker 缺 `GITHUB_DISPATCH_TOKEN`。
 4. 检查 GitHub workflow run，而不是只看网页按钮。
+
+### Evidence API 返回 unavailable
+
+1. 确认目标标的已完成一次新版本深度任务；旧报告不会机械补造证据包。
+2. 查看 `latest.json` 中该标的的 `evidence_publish`，区分 `not_configured`、
+   `network_error`、`http_error`。
+3. 确认 Cloudflare 与 GitHub 的 `EVIDENCE_WRITE_TOKEN` 已同步轮换。
+4. 查询 D1 `evidence_packets` 和 `report_manifests`，核对 symbol、as_of 和
+   content_hash；不要直接手写 JSON 入库。
+5. 数据校验失败时仍应保存 `data_validation_failed` 包，但不会生成评级或正式报告。
 
 ### 期权指标不更新
 

@@ -1,4 +1,5 @@
 import {
+  queryEvidencePacket,
   queryMarketBars,
   queryMarketEvents,
   queryNewsItems,
@@ -47,6 +48,16 @@ function aliasIndex(question, alias) {
     return match?.index ?? -1;
   }
   return question.indexOf(value);
+}
+
+function parsePacket(row) {
+  if (!row?.packet_json) return null;
+  try {
+    const packet = JSON.parse(row.packet_json);
+    return packet?.schemaVersion === "EvidencePacketV1" ? packet : null;
+  } catch {
+    return null;
+  }
 }
 
 export function resolveWorkbenchTarget(settings, {
@@ -101,13 +112,15 @@ export async function loadWorkbenchEvidence(db, {
     to: null,
   };
   const timeframes = evidenceTimeframes(symbol);
-  const [barGroups, news, events] = await Promise.all([
+  const [barGroups, news, events, packetRow] = await Promise.all([
     Promise.all(timeframes.map((timeframe) => (
       queryMarketBars(db, { ...query, timeframe, limit: 80 })
     ))),
     queryNewsItems(db, { ...query, topic: null, limit: 8 }),
     queryMarketEvents(db, { ...query, topic: null, importance: null, limit: 8 }),
+    queryEvidencePacket(db, { symbol, asOf: now.toISOString() }),
   ]);
+  const packet = parsePacket(packetRow);
   const selectedIndex = barGroups.findIndex((rows) => rows.length);
   const bars = selectedIndex >= 0 ? barGroups[selectedIndex] : [];
   const timeframe = selectedIndex >= 0 ? timeframes[selectedIndex] : timeframes[0];
@@ -115,6 +128,65 @@ export async function loadWorkbenchEvidence(db, {
   const lines = [
     "以下是服务端动态证据账本。只能依据这些记录和随后附加的研究报告作答；引用时使用证据编号。",
   ];
+  if (packet) {
+    const errors = packet.integrity?.errors || [];
+    lines.push(`[P1] ${line([
+      "EvidencePacketV1",
+      `标的 ${packet.instrument?.symbol || symbol}`,
+      `截止 ${packet.asOf}`,
+      `状态 ${packet.status}`,
+      `评级 ${packet.canRate ? "可评级" : "不可评级"}`,
+      `哈希 ${packet.contentHash}`,
+      errors.length ? `校验错误 ${errors.join(",")}` : "",
+    ])}`);
+    evidence.push({
+      id: "P1",
+      type: "evidence_packet",
+      title: `${symbol} EvidencePacketV1`,
+      asOf: packet.asOf,
+      source: "EvidencePacketV1",
+      contentHash: packet.contentHash,
+      url: null,
+    });
+    [...(packet.bars || [])].slice(-4).forEach((row) => {
+      const id = `PK-${row.evidenceId || "M"}`;
+      lines.push(`[${id}] ${line([
+        `证据包行情 ${symbol}`,
+        `时间 ${row.ts}`,
+        `开 ${value(row.open)}`,
+        `高 ${value(row.high)}`,
+        `低 ${value(row.low)}`,
+        `收 ${value(row.close)}`,
+        `量 ${value(row.volume)}`,
+        `复权 ${value(row.adjustment)}`,
+      ])}`);
+      evidence.push({
+        id,
+        type: "packet_market",
+        title: `${symbol} 证据包行情`,
+        asOf: row.ts,
+        source: "EvidencePacketV1",
+        url: null,
+      });
+    });
+    (packet.corporateActions || []).forEach((row) => {
+      const id = `PK-${row.evidenceId || "CA"}`;
+      lines.push(`[${id}] ${line([
+        `公司行动 ${row.actionType || row.type || "unknown"}`,
+        `除权日 ${row.exDate || row.date || "—"}`,
+        `比例 ${value(row.ratio)}`,
+        `来源 ${row.source || "—"}`,
+      ])}`);
+      evidence.push({
+        id,
+        type: "corporate_action",
+        title: `${symbol} 公司行动`,
+        asOf: row.exDate || row.date || packet.asOf,
+        source: row.source || "EvidencePacketV1",
+        url: row.url || null,
+      });
+    });
+  }
 
   [...bars].slice(0, 4).reverse().forEach((row, index) => {
     const id = `M${index + 1}`;
@@ -208,7 +280,7 @@ export async function loadWorkbenchEvidence(db, {
     });
   });
 
-  const allRows = [...bars, ...news, ...events];
+  const allRows = [...bars, ...news, ...events, ...(packet ? [{ as_of: packet.asOf }] : [])];
   if (!evidence.length) {
     lines.push("当前没有该标的的动态行情、新闻或事件证据。涉及今日涨跌原因时，必须明确回答“证据不足，无法可靠归因”。");
   }
