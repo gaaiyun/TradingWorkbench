@@ -155,6 +155,17 @@ def test_cn_runtime_evidence_prefers_workbench_qfq_history(monkeypatch):
             }
 
     def get(url, *, params, timeout):
+        if url.endswith("/api/news"):
+            return type(
+                "EmptyNewsResponse",
+                (),
+                {
+                    "status_code": 200,
+                    "json": staticmethod(
+                        lambda: {"status": "unavailable", "data": [], "sources": []}
+                    ),
+                },
+            )()
         observed.update(url=url, params=params, timeout=timeout)
         return Response()
 
@@ -220,6 +231,17 @@ def test_us_runtime_evidence_uses_the_same_five_year_workbench_history(monkeypat
             }
 
     def get(url, *, params, timeout):
+        if url.endswith("/api/news"):
+            return type(
+                "EmptyNewsResponse",
+                (),
+                {
+                    "status_code": 200,
+                    "json": staticmethod(
+                        lambda: {"status": "unavailable", "data": [], "sources": []}
+                    ),
+                },
+            )()
         observed.update(url=url, params=params, timeout=timeout)
         return Response()
 
@@ -241,3 +263,76 @@ def test_us_runtime_evidence_uses_the_same_five_year_workbench_history(monkeypat
         "timeframe": "1d",
         "limit": 1260,
     }
+
+
+def test_runtime_evidence_includes_point_in_time_workbench_news(monkeypatch):
+    observed = {}
+
+    monkeypatch.setattr(
+        "scripts.run_daily._load_workbench_daily",
+        lambda _symbol, _trade_date: {
+            "bars": [
+                {
+                    "ts": "2026-07-24T08:00:00Z",
+                    "open": 6.1,
+                    "high": 6.3,
+                    "low": 6.0,
+                    "close": 6.2,
+                    "volume": 1000,
+                    "adjustment": "qfq",
+                },
+            ],
+            "sources": [
+                {
+                    "source": "yahoo",
+                    "asOf": "2026-07-24T08:00:00Z",
+                    "fetchedAt": "2026-07-25T05:35:00Z",
+                    "sourceTier": "evidence",
+                },
+            ],
+            "indicators": {},
+        },
+    )
+
+    class Response:
+        status_code = 200
+
+        @staticmethod
+        def json():
+            return {
+                "status": "stale",
+                "data": [
+                    {
+                        "id": "official-1",
+                        "title": "HashKey publishes a licensed exchange update",
+                        "url": "https://group.hashkey.com/en/newsroom/update",
+                        "published_at": "2026-07-21T01:39:24Z",
+                        "source": "HashKey Investor Relations",
+                        "source_tier": "evidence",
+                    },
+                    {
+                        "id": "future-1",
+                        "title": "Future announcement",
+                        "url": "https://example.com/future",
+                        "published_at": "2026-07-25T01:00:00Z",
+                        "source": "Example",
+                        "source_tier": "discovery",
+                    },
+                ],
+                "sources": [],
+            }
+
+    def get(url, *, params, timeout):
+        observed.update(url=url, params=params, timeout=timeout)
+        return Response()
+
+    monkeypatch.setenv("PAGES_URL", "https://board.example/")
+    monkeypatch.setattr("requests.get", get)
+
+    packet = build_runtime_evidence("3887.HK", "2026-07-24")
+
+    assert packet["integrity"]["newsCount"] == 1
+    assert packet["news"][0]["evidenceId"] == "N1"
+    assert packet["news"][0]["sourceTier"] == "evidence"
+    assert observed["url"] == "https://board.example/api/news"
+    assert observed["params"] == {"symbol": "3887.HK", "limit": 50}

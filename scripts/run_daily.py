@@ -312,6 +312,63 @@ def _load_workbench_daily(symbol: str, trade_date: str) -> dict[str, Any] | None
     }
 
 
+def _load_workbench_news(symbol: str, trade_date: str) -> dict[str, Any]:
+    """读取工作台新闻账本，并在建包前执行 point-in-time 截断。"""
+    import requests
+
+    base = (
+        os.environ.get("EVIDENCE_NEWS_API_URL", "").strip()
+        or f"{os.environ.get('PAGES_URL', '').rstrip('/')}/api/news"
+    )
+    empty = {"items": [], "sources": []}
+    if not base.startswith("https://"):
+        return empty
+    try:
+        response = requests.get(
+            base,
+            params={"symbol": symbol, "limit": 50},
+            timeout=20,
+        )
+        if response.status_code != 200:
+            return empty
+        payload = response.json()
+    except (requests.RequestException, ValueError, TypeError):
+        return empty
+    if payload.get("status") not in {"ok", "degraded", "stale"}:
+        return empty
+    rows = payload.get("data")
+    if not isinstance(rows, list):
+        return empty
+    cutoff = f"{trade_date}T23:59:59Z"
+    items = []
+    for row in rows:
+        published_at = str(row.get("published_at") or row.get("publishedAt") or "")
+        if not published_at or published_at > cutoff or not row.get("title"):
+            continue
+        items.append({
+            "id": row.get("id"),
+            "title": row.get("title"),
+            "url": row.get("url"),
+            "publishedAt": published_at,
+            "source": row.get("source"),
+            "sourceTier": row.get("source_tier") or row.get("sourceTier") or "discovery",
+        })
+    sources = [
+        {
+            "source": row.get("source") or "workbench-news",
+            "asOf": row.get("asOf") or row.get("as_of") or payload.get("asOf"),
+            "fetchedAt": row.get("fetchedAt") or row.get("fetched_at"),
+            "sourceTier": (
+                row.get("sourceTier")
+                or row.get("source_tier")
+                or ("evidence" if row.get("quality") == "evidence" else "discovery")
+            ),
+        }
+        for row in (payload.get("sources") or [])
+    ]
+    return {"items": items, "sources": sources}
+
+
 def build_runtime_evidence(ticker: str, trade_date: str) -> dict[str, Any]:
     """在模型调用前构建 point-in-time 证据包。
 
@@ -325,6 +382,7 @@ def build_runtime_evidence(ticker: str, trade_date: str) -> dict[str, Any]:
     asset_type = detect_asset_type(symbol).value
     cutoff = f"{trade_date}T23:59:59Z"
     workbench = _load_workbench_daily(symbol, trade_date)
+    workbench_news = _load_workbench_news(symbol, trade_date)
     if workbench:
         return build_evidence_packet(
             ticker=symbol,
@@ -332,7 +390,8 @@ def build_runtime_evidence(ticker: str, trade_date: str) -> dict[str, Any]:
             as_of=cutoff,
             bars=workbench["bars"],
             indicators=workbench["indicators"],
-            sources=workbench["sources"],
+            sources=[*workbench["sources"], *workbench_news["sources"]],
+            news=workbench_news["items"],
         )
 
     import yfinance as yf
@@ -377,7 +436,8 @@ def build_runtime_evidence(ticker: str, trade_date: str) -> dict[str, Any]:
             "asOf": cutoff,
             "fetchedAt": datetime.now(timezone.utc).isoformat(),
             "sourceTier": "discovery",
-        }],
+        }, *workbench_news["sources"]],
+        news=workbench_news["items"],
     )
 
 
