@@ -1,6 +1,6 @@
 # Trading Workbench 下一 Agent 交接
 
-更新日期：2026-07-25
+更新日期：2026-07-26
 
 用途：在当前 Codex 任务中断、重启或换 Agent 后，直接恢复工程状态，不重复推翻已经完成的产品结构。
 
@@ -21,7 +21,7 @@
 | 项目 | 当前值 |
 |---|---|
 | 工作树 | `G:\worktrees\TradingWorkbench\report-evidence-pipeline` |
-| 当前本地工作树分支 | `fix/report-evidence-pipeline`（远程已合并并删除，仅本地保留） |
+| 当前本地工作树分支 | `fix/report-evidence-pipeline`（完成验收后快进到 `main`，不长期保留） |
 | 权威分支 | `main` |
 | 远程 | `https://github.com/gaaiyun/TradingWorkbench.git` |
 | Python 虚拟环境 | `G:\venvs\tradingworkbench-report-evidence` |
@@ -31,6 +31,48 @@
 | D1 | `tradingagents-workbench` |
 | Pages 项目 | `tradingagents-board` |
 | Worker 名称 | `tradingagents-monitor` |
+
+### 2026-07-26 本轮交付内容
+
+- 官方证据源：SEC User-Agent 支持 `SEC_CONTACT_EMAIL`，403 保留失败轨迹；工信部改为
+  官方文件发布 API，不再读取“部领导活动”RSS。A 股发现层成功后仍会查询工信部，
+  两层结果可同时入库；官方失败不能被发现层掩盖。
+- 临时研究：网页可独立输入新标的，不写 `WorkbenchSettingsV2`；standard 最多 6 个，
+  deep 最多 3 个。监控组合仍保留最多 10 个标的和原有调度契约。
+- 临时行情：按需读取约五年、最多 1260 根；补 MA200，并明确区分 Yahoo
+  `split-and-dividend-adjusted` 与 A 股 D1 `qfq`。
+- 状态关联：临时请求使用 UUID `requestId`，页面只匹配自身 GitHub run；未入队时不借用
+  其他定时任务状态。
+- 档案：当前索引包含 22 次运行、52 条结果，其中 46 份成功报告均已按真实文件回填
+  `files`；13 个固定分栏缺失即隐藏，默认组合决策，支持键盘与重试。
+- 问答：完整报告 Manifest 仍是门禁；选中分栏由服务端枚举映射，同栏缺失只回退同一份
+  完整报告。
+- Sentiment 暂不开放：Reddit 可达，StockTwits 实际返回 403，尚无可信来源健康 Manifest。
+- 三个实现提交：`0dace87`、`90b2d9d`、`1e487a7`。文档与生产发布提交在最终验收后追加到本节。
+
+### 2026-07-26 本轮新鲜验证
+
+- Functions：224 passed / 1 skipped；跳过项只在显式启用时调用真实免费 Provider。
+- 前端与导航：53 passed。
+- Python：617 passed / 2 skipped；跳过原因分别是本机未安装 `langchain_aws`、未配置
+  DeepSeek 测试密钥。
+- Ruff：`All checks passed`。
+- 前端语法：`public/assets/workbench.js` 通过 `node --check`。
+- 浏览器 E2E：58/58 个显式断言通过，主任务与独立复核均为退出码 0。
+- 报告审计：46 份成功报告；0 verified、43 legacy_unverified、3 invalidated；另有 6 条
+  无报告记录，其中证据校验 3、模型/流程 2、错误输入 1。
+- GitHub 主线同步、Cloudflare 发布与生产冒烟仍必须以本节后续记录为准；
+  未写入实际版本号前不得宣称已经上线。
+
+### 会话与审计材料位置
+
+- Codex 会话目录：`G:\codex-home\sessions\2026\07\25\`；可搜索短语
+  `临时标的数据通道` 找到本轮并行审计记录。
+- Codex 会话索引：`G:\codex-home\session_index.jsonl`。
+- Claude 可读历史：`G:\ClaudeCode\readable\`；原始归档：
+  `G:\ClaudeCode\archive\`。
+- 用户粘贴的完整对话附件：
+  `G:\codex-home\attachments\abf231d7-7ccb-4ece-bfa9-da37dad5ba99\pasted-text.txt`。
 
 ### 2026-07-25 最终生产验收基线
 
@@ -157,7 +199,7 @@ VolGuard 在另一个仓库运行。工作台通过 `/api/volguard` 读取实时
 |---|---|---|
 | 官方证据 | SEC EDGAR 8-K（ORCL、GOOGL） | 首选，`sourceTier=evidence` |
 | 官方证据 | HashKey Investor Relations | 3887.HK 首选，`sourceTier=evidence` |
-| 官方证据 | 工信部 RSS | A 股通信、半导体和政策证据 |
+| 官方证据 | 工信部文件发布 API | A 股通信、半导体和政策证据；上海 30 天窗口 |
 | 发现层 | Google News RSS | 主题发现，不作为最终事实来源 |
 | 发现降级 | 东方财富资讯搜索 | Cloudflare 出口访问 Google 失败时补齐 A 股主题；仍为 `discovery` |
 | 发现降级 | Yahoo Finance RSS | Google/官方页失败后的发现层 |
@@ -168,6 +210,11 @@ SEC CIK：
 - Alphabet：`0001652044`
 
 SEC 只接受 `8-K`/`8-K/A`，链接必须是 `https://www.sec.gov/Archives/edgar/data/...`。每条新闻保存标题、短摘要、原始发布者、原文链接、发布时间、采集时间、来源层级、标的、主题和重复簇，不保存付费全文。
+
+A 股通信与芯片主题始终查询工信部证据层；Google/东方财富只构成一条“首个有效来源”
+的发现链。发现层成功不能让工信部候选提前结束，工信部失败也必须保留轨迹并使本次采集
+标记为 `degraded`。官方端点即使返回 HTTP 200，若缺少 MIIT JSON envelope、SEC Atom
+`feed` 或 HashKey 文章 feed，也按 `NEWS_MALFORMED_RESPONSE` 降级，不能当作合法零条。
 
 未来官方源仍有缺口：上交所/深交所基金公告、巨潮、基金管理人、中证指数、更多公司 IR 和 HKEXnews 尚未全部成为直接采集器。增加时必须保留 Provider Registry、失败轨迹、去重和原始链接，不能把聚合标题升级为官方证据。
 
@@ -312,6 +359,7 @@ Monitor Worker：
 - `ALPHA_VANTAGE_API_KEY`
 - `CN_HOLIDAY_DATES`
 - `US_HOLIDAY_DATES`
+- `SEC_CONTACT_EMAIL`
 
 GitHub Actions：
 

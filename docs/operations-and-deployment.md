@@ -1,6 +1,6 @@
 # 部署、密钥、验收与回退
 
-更新日期：2026-07-25
+更新日期：2026-07-26
 
 本文只记录可以复现的操作。命令中的项目名是当前生产名，不要自行替换 opaque ID。
 
@@ -30,7 +30,7 @@
 | `GITHUB_DISPATCH_TOKEN` | 是 | 网页触发 `daily-analysis.yml` |
 | `VOLGUARD_LIVE_URL` | 建议 | 默认指向 VolGuard `/api/live` |
 | `VOLGUARD_SNAPSHOT_URL` | 建议 | 实时接口失败后的静态快照 |
-| `EVIDENCE_READ_TOKEN` | 建议 | 保护 Evidence Packet 读取；未配置时保持公开只读 |
+| `EVIDENCE_READ_TOKEN` | 是 | 保护 Evidence Packet 读取；未配置时 fail-closed 返回 `503 READ_NOT_CONFIGURED` |
 | `EVIDENCE_WRITE_TOKEN` | 是 | 只允许 GitHub 深度任务发布证据包与 Manifest |
 
 ### Monitor Worker
@@ -42,6 +42,7 @@
 | `ALPHA_VANTAGE_API_KEY` | 否 | 美股日线可选来源 |
 | `CN_HOLIDAY_DATES` | 否 | 额外 A 股休市日 |
 | `US_HOLIDAY_DATES` | 否 | 额外美股休市日 |
+| `SEC_CONTACT_EMAIL` | 是 | SEC fair-access 联系邮箱；生产必须使用可收信地址 |
 
 ### GitHub Actions
 
@@ -163,12 +164,17 @@ Cloudflare 出口访问免费源时可能需要来源请求头。当前 adapter 
 请求头后必须在生产 Worker 中补跑验证，不能用本机直连成功代替云端验收。
 
 新闻链同样必须做云端验证。Google News RSS 可能拒绝 Cloudflare 出口，Worker 会按
-主题改用东方财富资讯搜索、工信部 RSS 或 Yahoo Finance RSS；A 股主题在 Google
-失败后先读取东方财富发现结果，再读取工信部官方 RSS。Oracle 与 Alphabet 先查询
+主题改用东方财富资讯搜索或 Yahoo Finance RSS；A 股主题无论发现层是否成功都查询
+工信部官方文件发布库，Google 失败时只把发现层切换到东方财富。Oracle 与 Alphabet 先查询
 SEC EDGAR 8-K，再进入 Google/Yahoo 发现链；HashKey
 Holdings 先读公司投资者关系公告，官方页失败后再使用 Google/Yahoo 的 `3887.HK`
 feed。返回的 `sources` 应同时保留主来源失败码和降级来源成功状态。不能因为本机
 Google 请求成功就删除这条降级链。
+
+SEC 返回 403 时先检查 `SEC_CONTACT_EMAIL`。官方 evidence 层失败不能被 discovery
+结果掩盖：接口应保留失败轨迹并返回 `degraded`。工信部适配器使用上海日历 30 天窗口，
+并在客户端拒绝未来时间、窗口外结果、领导活动和非通知/公告/通告/意见栏目。HTTP 200
+但缺少预期 MIIT JSON、SEC Atom 或 HashKey feed 结构时属于软失败，同样必须降级。
 
 工作台：
 

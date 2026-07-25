@@ -187,7 +187,7 @@ sequenceDiagram
 | `/api/history` | GET | 研究档案索引 | 只读 |
 | `/api/report` | GET | 报告正文 | 只读 |
 | `/api/report-audit` | GET | 历史报告审计状态 | 只读 |
-| `/api/v1/evidence` | GET / POST | 读取或发布 EvidencePacketV1 | 标准 Bearer；可选读 token / 独立写 token |
+| `/api/v1/evidence` | GET / POST | 读取或发布 EvidencePacketV1 | 标准 Bearer；读写 token 均 fail-closed |
 | `/api/evidence` | GET / POST | EvidencePacketV1 兼容入口 | 与 v1 共用校验和存储 |
 | `/api/chat` | POST | 非流式或 SSE 问答 | 访问码 |
 | `/api/chat-sessions` | GET | 持久会话与恢复 | 访问码 |

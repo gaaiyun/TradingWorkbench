@@ -6,7 +6,7 @@
 - 期权数据站：[sh50-volguard.pages.dev](https://sh50-volguard.pages.dev/)
 - 主仓库：[gaaiyun/TradingWorkbench](https://github.com/gaaiyun/TradingWorkbench)
 - 上游研究框架：[TauricResearch/TradingAgents](https://github.com/TauricResearch/TradingAgents)
-- 当前产品版本：2026-07-25
+- 当前产品版本：2026-07-26
 
 > 本项目只做研究、解释和提醒，不连接券商，不自动交易。“实时”指有来源和时间戳的近实时数据，不代表交易所逐笔行情。
 
@@ -17,9 +17,9 @@
 | 工作区 | 解决的问题 | 当前实现 |
 |---|---|---|
 | 市场监控 | 主题标的现在发生了什么 | 自选、5m/15m/1h/1d、K 线、成交量、MA20/60、MACD、RSI、事件和跨市场驱动 |
-| Agent 研究 | TradingAgents 正在做什么 | 发起深度分析、阶段状态、最近运行、run card、报告入口 |
+| Agent 研究 | 临时想到一只股票时如何研究 | 独立临时表单、标准/深度模式、精确请求状态、完整 TradingAgents 链路 |
 | 研究任务 | 今天会跑什么 | 网页编辑标的角色、任务时间、启停、下一次执行、立即运行 |
-| 研究档案 | 以前得出过什么结论 | 报告索引、标的和日期、正文阅读、问答上下文 |
+| 研究档案 | 以前得出过什么结论 | 13 个角色分栏、审计状态、标的和日期、问答上下文 |
 | 新闻/事件 | 结论依据是什么 | 来源、数据时间、标的、重要性、原文链接和证据流 |
 | 期权风控 | 现货与期权风险如何变化 | 认购/认沽链、IV/HV、Greeks、GEX/DEX、PCR、Max Pain、VaR、BSADF、双刷新时钟 |
 | 设置 | 监控目标如何调整 | `WorkbenchSettingsV2`、标的角色、分析深度、时区、任务频率和提醒阈值 |
@@ -140,11 +140,14 @@ Worker 每五分钟读取 D1 设置，按“任务 + 理论计划时间槽”生
 
 新闻发现任务在 08:25 执行，按通信、A 股半导体、美股半导体、Oracle、Alphabet、
 HashKey 和工信部政策主题采集。Oracle 与 Alphabet 优先读取 SEC EDGAR 8-K，
-HashKey 优先读取公司投资者关系公告，其他主题先查询 Google News RSS。官方源或
-Google 从 Cloudflare 出口不可用时，
-A 股主题先降级到东方财富资讯搜索，再读取工信部官方 RSS；美股半导体、Oracle、
-Alphabet 与 HashKey 主题降级到对应的 Yahoo Finance RSS。东方财富仅属于发现层，
-工信部原文才属于证据层。D1 只保存
+HashKey 优先读取公司投资者关系公告；A 股通信与芯片主题始终查询工信部官方
+“文件发布”政策库，同时使用 Google News RSS 做发现。Google 从 Cloudflare 出口
+不可用时，A 股发现层降级到东方财富资讯搜索；美股半导体、Oracle、Alphabet 与
+HashKey 主题降级到对应的 Yahoo Finance RSS。东方财富仅属于发现层，
+工信部政策原文才属于证据层。工信部查询固定 `cateid=58`、通信/芯片主题、上海日历
+30 天窗口和最多 8 条结果，并在本地再次拒绝未来、窗口外、领导活动及非政策栏目。
+SEC 请求使用符合 fair-access 要求的组织名与联系邮箱；官方源失败时，即使发现层有结果，
+整次采集仍明确标为 `degraded`。D1 只保存
 标题、短摘要、原始发布者、发布时间、采集时间、来源等级和原文链接；聚合结果标记为
 `discovery`，SEC 8-K、工信部和 HashKey 公司公告标记为 `evidence`。`SMH` 只有匹配
 `VanEck Semiconductor ETF` 等完整
@@ -182,8 +185,11 @@ Agent 只接收证据包中最后八根行情、指标、公司行动、新闻�
 不能标记为 `verified`。
 每份新报告先显示一段由程序直接生成的 Evidence Snapshot，包括最近行情、指标、公司
 行动、时点新闻、来源和完整性警告；它与 Agent 草稿分开，便于先核对事实再阅读推断。
-证据包本身仍保留完整历史：A 股和美股/港股都优先读取工作台已落库的日线，目标上限
-1260 根；页面和 Agent 因而不会一个看五年、另一个只看六个月。
+证据包本身仍保留完整历史：已监控标的优先读取工作台已落库的日线；临时标的按需请求
+约五年并限制为 1260 根。Yahoo `auto_adjust` 明确记录为
+`split-and-dividend-adjusted`，不再冒充 A 股 `qfq`；两种复权口径会在 Packet 中披露。
+技术快照包含 MA20/60/200、MACD、RSI14、ATR14 和 20 日实现波动率，避免临时研究只能
+看到六个月、无法计算 MA200。
 GitHub 深度任务生成证据包后，用独立写入密钥提交到 `/api/v1/evidence`；Pages Function
 校验 Schema、哈希、标的、时间和 Manifest 后才参数化写入 D1。网页、问答和后续 Agent
 读取同一份只读快照；旧 `/api/evidence` 保留为兼容入口。写入失败只标记发布降级，
@@ -213,6 +219,33 @@ flowchart LR
 ```
 
 Python 包、CLI、LangGraph、检查点恢复、历史决策和多模型 Provider 仍可单独使用。工作台只是为它增加网页任务编排、监控上下文、阶段状态和报告入口。
+
+### 临时研究与持续监控的边界
+
+```mermaid
+flowchart LR
+    U["临时研究表单"] -->|"UUID requestId"| API["POST /api/analyze"]
+    API --> G["串行 GitHub Workflow"]
+    G --> P["Evidence + TradingAgents"]
+    P --> H["档案与 13 个分栏"]
+
+    S["WorkbenchSettingsV2"] --> W["五分钟 Monitor Worker"]
+    W --> K["幂等计划槽"]
+    K --> G
+
+    U -. "不写设置、不改计划" .-> S
+```
+
+临时研究默认使用市场、新闻和基本面分析师。标准模式最多 6 个标的，深度模式最多 3 个；
+上限只约束临时请求，监控组合仍保留原有最多 10 个标的和 240 分钟运行契约。网页只跟踪
+本次 `requestId`，GitHub 尚未创建运行记录时显示“已受理，等待进入队列”，不会把其他
+定时任务误认为当前请求。Sentiment 目前不开放：Reddit 可用但 StockTwits 在实际出口
+返回 403，来源健康尚未进入 Manifest，不能把占位文本当成可信情绪分卷。
+
+报告分栏固定为：技术/市场、基本面、市场情绪、新闻、多方、空方、研究经理、交易方案、
+激进风险、中性风险、保守风险、组合决策、完整报告。不存在的分卷直接隐藏，默认打开
+组合决策；路径必须与完整报告位于同一版本目录。问答先验证完整报告 Manifest，再读取
+选中分卷；分卷缺失只回退同一份完整报告，不会回退到其他标的。
 
 Agent 对 ETF 不应套用普通公司的财务模板。主题报告应优先检查跟踪指数、持仓与权重、规模、流动性、费用、跟踪偏离、份额变化和公司行动，并按以下结构输出：
 
