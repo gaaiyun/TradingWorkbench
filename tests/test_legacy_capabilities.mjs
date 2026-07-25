@@ -75,7 +75,11 @@ test("manual analysis still dispatches the TradingAgents workflow", async () => 
     assert.equal(dispatched.inputs.tickers, "515880.SS,512480.SS");
     assert.equal(dispatched.inputs.analysts, "market,news,fundamentals");
     assert.equal(dispatched.inputs.researchDepth, "standard");
-    assert.match(dispatched.inputs.requestId, /^[0-9a-f-]{36}$/i);
+    assert.equal(
+      dispatched.inputs.requestId,
+      "",
+      "legacy monitor-combination runs must not enter the ad-hoc workload guard",
+    );
   } finally {
     globalThis.fetch = originalFetch;
   }
