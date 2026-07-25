@@ -21,7 +21,7 @@
 | 项目 | 当前值 |
 |---|---|
 | 工作树 | `G:\worktrees\TradingWorkbench\report-evidence-pipeline` |
-| 当前开发分支 | `fix/report-evidence-pipeline` |
+| 当前本地工作树分支 | `fix/report-evidence-pipeline`（远程已合并并删除，仅本地保留） |
 | 权威分支 | `main` |
 | 远程 | `https://github.com/gaaiyun/TradingWorkbench.git` |
 | Python 虚拟环境 | `G:\venvs\tradingworkbench-report-evidence` |
@@ -34,7 +34,7 @@
 
 ### 2026-07-25 最终生产验收基线
 
-- Pages 版本预览：`https://263c42d8.tradingagents-board.pages.dev`，生产域名已指向同一版。
+- Pages 生产域名：`https://tradingagents-board.pages.dev/`；本轮最终发布预览为 `https://e808d120.tradingagents-board.pages.dev`。
 - Worker 版本：`c03d0e4a-6493-4f4a-b664-c9891c6a71e6`。
 - `/api/health`：`status=ok`，访问门禁、问答、分析调度和 D1 共享会话均已配置。
 - `/api/v1/evidence`：未授权请求返回 JSON 401，不再错误回退到 HTML。
