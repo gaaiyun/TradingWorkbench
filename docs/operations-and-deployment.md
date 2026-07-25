@@ -213,7 +213,11 @@ Invoke-RestMethod https://sh50-volguard.pages.dev/api/live
 - 休市可以返回 stale 或 market closed，但不能用 fixture 冒充实时。
 - VolGuard 要同时有报价时间和模型时间；合约表可以为空，但不能显示伪造的零 Greeks。
 - 页面七个一级入口可进入，横向无溢出，移动端可以完成设置、运行和查看报告。
-- `/api/report-audit` 返回 33 份成功报告的审计索引，其中 3 份为 `invalidated`。
+- `/api/report-audit` 的状态数量满足
+  `verified + legacy_unverified + invalidated = successfulReports`，并且只有三条
+  精确的原始污染报告路径为 `invalidated`；不要把同日的 `-v2/-v3` 修复版连带失效。
+- `invalidRecords` 必须等于 `evidenceValidationFailures + analysisExecutionFailures
+  + invalidInputs`，便于区分证据门禁、模型/流程故障和错误输入。
 - `/api/evidence?symbol=...` 在已有包时返回相同的 `contentHash`、`asOf` 和来源；尚未
   生成有效包时返回 `unavailable`，不能回退到拼装的假证据。
 

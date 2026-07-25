@@ -172,3 +172,16 @@ test("audit index accepts only a matching claim-validated report bundle as verif
   assert.equal(audit.reports[0].evidencePacket.contentHash, contentHash);
   assert.equal(audit.reports[0].problemCodes.includes("MISSING_CLAIM_EVIDENCE"), false);
 });
+
+test("report persistence regenerates the audit index after merging history", async () => {
+  const script = await fs.readFile(
+    path.join(repoRoot, "scripts", "persist_reports.sh"),
+    "utf8",
+  );
+  const historyUpdate = script.indexOf("update_history(Path(\"public/data\"), payload)");
+  const auditUpdate = script.indexOf("node scripts/report-audit.mjs");
+  const gitAdd = script.indexOf("git add public/data public/reports");
+  assert.ok(historyUpdate >= 0);
+  assert.ok(auditUpdate > historyUpdate);
+  assert.ok(gitAdd > auditUpdate);
+});

@@ -1,93 +1,189 @@
-# TradingWorkbench 报告质量审计
+# Trading Workbench 报告质量审计
 
-审计时间：2026-07-24
-审计范围：生产 `latest/history`、仓库 `public/reports` 中的 33 份成功报告，以及 1 条失败记录。
+更新日期：2026-07-25  
+机器索引：[`public/data/report-audit.json`](../public/data/report-audit.json)  
+生产接口：`GET /api/report-audit`
 
 ## 结论
 
-这批报告不能作为同一质量等级的研究结论使用：
+旧报告原文全部保留，但只按证据等级使用。当前只有三条原始报告被确认失效：
 
-- `515880.SS/2026-07-24`、`512480.SS/2026-07-23`、`512480.SS/2026-07-24` 已确认被 ETF 份额拆分污染，状态为 `invalidated`。
-- 其余 30 份报告标记为 `legacy_unverified`。这是“当前无法按证据标准验证”，不是断言每个数字都错误。
-- `ISSUE` 是工作流输入解析错误，不是股票报告，状态为 `invalid_record`。
-- 所有报告缺少逐项数字到原始证据的稳定映射；仓库中的基本面章节没有可审计的来源账本。
-- ETF 使用了公司财务分析模板，目标价、组合比例、止损和清仓建议没有稳定的用户约束或可复算方法。
+- `reports/515880.SS/2026-07-24/complete_report.md`
+- `reports/512480.SS/2026-07-23/complete_report.md`
+- `reports/512480.SS/2026-07-24/complete_report.md`
 
-默认规则：失效报告保留用于审计，但不进入首页最新结论、推送和问答上下文。
+它们把 ETF 份额拆分或复权断点当成价格暴跌，技术指标和方向性结论不可继续使用。
+`invalidated` 按完整报告路径判定；同一交易日生成的 `-v2`、`-v3` 修复版不会被连带
+失效。其他旧报告若缺少可复算证据，状态为 `legacy_unverified`，表示“按当前标准无法
+验证”，不表示报告中的每句话都错误。
 
-## 报告清单
+截至本轮最终重验开始前，机器索引记录：
 
-| 标的 | 日期 | 数量 | 状态 | 主要问题 |
-|---|---|---:|---|---|
-| 515880.SS | 2026-07-24 | 1 | invalidated | 拆分污染、ETF 模板、无逐项引用、重复最终提案 |
-| 512480.SS | 2026-07-23、2026-07-24 | 2 | invalidated | 拆分污染、ETF 模板、强制 Sell/目标价 |
-| 510050.SS | 2026-07-10 | 1 | legacy_unverified | ETF 结构数据不足 |
-| SPY | 07-10、07-13、07-14、07-15、07-16、07-20、07-21、07-22 | 8 | legacy_unverified | ETF 结构证据不足、目标价不可复算 |
-| 600519.SS | 07-10、07-13、07-14、07-15、07-16、07-20、07-21、07-22 | 8 | legacy_unverified | 评级频繁反转，缺少观点变更证据 |
-| NVDA | 07-10、07-13、07-14、07-15、07-16、07-20、07-21、07-22 | 8 | legacy_unverified | 财务数字和目标价无逐项引用 |
-| ORCL | 07-10、07-14、07-15 | 3 | legacy_unverified | 价格跳变、无依据的组合配置 |
-| 000001.SZ | 2026-07-10 | 1 | legacy_unverified | 精确基本面数字无证据账本 |
-| 002865.SZ | 2026-07-10 | 1 | legacy_unverified | 精确数字、极端措辞和交易动作缺少证据 |
-| ISSUE | 2026-07-10 | 1 | invalid_record | Issue 标题被误解析成 ticker |
+| 项目 | 数量 |
+|---|---:|
+| 有报告的运行结果 | 41 |
+| `verified` | 0 |
+| `legacy_unverified` | 38 |
+| `invalidated` | 3 |
+| 未形成报告的运行记录 | 6 |
+| 其中证据预检失败 | 3 |
+| 其中模型或流程失败 | 2 |
+| 其中错误输入 | 1 |
 
-机器可读明细见 [`public/data/report-audit.json`](../public/data/report-audit.json)。
+最终五标的重验运行是
+[GitHub Actions 30154765352](https://github.com/gaaiyun/TradingWorkbench/actions/runs/30154765352)。
+它完成后，以上数量必须以机器索引重新生成的结果为准，不能手工改 JSON。
 
-## 根因
+## 状态定义
+
+分析状态和审计状态是两条独立轴：
+
+| 维度 | 状态 | 含义 |
+|---|---|---|
+| 分析 | `rated` | 数据与文本门禁均通过，可以显示研究评级 |
+| 分析 | `not_rated` | 本次没有形成评级 |
+| 分析 | `insufficient_evidence` | 数据可用，但 Agent 文本的引用、目标价或仓位约束未通过 |
+| 分析 | `data_validation_failed` | 确定性数据预检失败，模型不应运行 |
+| 审计 | `verified` | Packet、Manifest、报告、引用和哈希全部一致 |
+| 审计 | `legacy_unverified` | 报告保留，但无法按当前标准验证 |
+| 审计 | `invalidated` | 已确认基础数据或方法错误，禁止进入当前结论 |
+
+没有报告文件的运行另外记录 `failureClass`：
+
+- `evidence_validation`：行情、复权、公司行动或时点检查失败，模型未运行；
+- `analysis_execution`：模型、工具或工作流执行失败；
+- `invalid_input`：输入不是合法标的，例如历史上的 `ISSUE`。
+
+这三个数量之和必须等于 `invalidRecords`。
+
+## 全量审计结果
+
+### 原始存档
+
+| 标的 | 日期 / 数量 | 审计状态 | 主要问题 |
+|---|---|---|---|
+| 515880.SS | 2026-07-24 | `invalidated` | 拆分污染、ETF 模板、无逐项引用 |
+| 512480.SS | 2026-07-23、07-24 | `invalidated` | 拆分污染、强制评级和目标价 |
+| 510050.SS | 1 份 | `legacy_unverified` | ETF 结构证据不足 |
+| SPY | 8 份 | `legacy_unverified` | ETF 结构证据不足、目标价不可复算 |
+| 600519.SS | 8 份 | `legacy_unverified` | 评级反复变化，缺少证据差异 |
+| NVDA | 8 份 | `legacy_unverified` | 财务数字和目标价没有逐项证据 |
+| ORCL | 3 份 | `legacy_unverified` | 价格异常未解释、组合比例没有用户约束 |
+| 000001.SZ | 1 份 | `legacy_unverified` | 精确基本面数字缺少来源账本 |
+| 002865.SZ | 1 份 | `legacy_unverified` | 精确数字和交易动作缺少证据 |
+| ISSUE | 1 条失败记录 | `invalid_record` | Issue 标题曾被误识别为代码 |
+
+### 2026-07-25 严格重验
+
+两轮早期重验保留为版本化档案，不覆盖原报告：
+
+1. [30150410693](https://github.com/gaaiyun/TradingWorkbench/actions/runs/30150410693)
+   首次启用 Evidence Packet 和 claim validation。515880、512480、3887.HK 的数据预检
+   通过，但模型文本没有保留 Evidence ID，因此为 `insufficient_evidence / Not Rated`；
+   ORCL、GOOGL 当时读取到的历史链不完整，数据预检失败。
+2. [30150722479](https://github.com/gaaiyun/TradingWorkbench/actions/runs/30150722479)
+   补齐五年美股日线。GOOGL 与 3887.HK 形成版本报告，但引用门禁仍失败；ORCL 的
+   2025-09-10 财报跳空被通用 25% 规则误当拆分异常。
+
+随后完成三项修复：
+
+- 版本目录路径允许 `YYYY-MM-DD-v2` 及后续版本，并同时校验 Manifest 日期与 Packet
+  `asOf`，解决报告最终发布的 HTTP 400；
+- ETF 的无公司行动大跳变继续硬拦截；单只股票的真实极端跳空改为
+  `EXTREME_PRICE_MOVE` 警告，不能再把 ORCL 的真实事件行情当成拆分；
+- Agent Schema 不再强迫输出仓位和价格，分析师不再提前给最终交易提案；所有数值必须
+  保留 Evidence ID。报告顶部增加程序生成的 Evidence Snapshot。
+
+## 证据与报告数据流
 
 ```mermaid
 flowchart LR
-    P["行情 / 公司行动 / 新闻 / 财报"] --> V["确定性预检"]
-    V -->|"失败"| B["Data Validation Failed"]
-    V -->|"通过"| E["Evidence Packet"]
-    E --> UI["工作台"]
-    E --> A["TradingAgents"]
-    E --> Q["问答"]
-    A --> C["数字与引用校验"]
-    C -->|"通过"| R["Rated 报告"]
-    C -->|"失败"| N["Not Rated"]
+    S["行情、公司行动、公告、财报、新闻"] --> V["确定性校验"]
+    V -->|"失败"| F["data_validation_failed<br/>跳过模型"]
+    V -->|"通过"| E["EvidencePacketV1"]
+    E --> P["先发布 Packet 到 D1"]
+    P --> A["TradingAgents 多角色研究"]
+    A --> C["Claim validation"]
+    C -->|"通过"| R["rated / verified"]
+    C -->|"失败"| N["Not Rated / legacy_unverified"]
+    E --> Q["Evidence Snapshot"]
+    Q --> R
+    Q --> N
 ```
 
-当前系统的问题不是单一提示词：
+`EvidencePacketV1` 包含标的身份、资产类型、市场、`asOf`、复权 OHLCV、公司行动、
+指标、时点新闻、来源、降级过程、完整性状态和内容哈希。编号含义：
 
-1. 工作台与 TradingAgents 曾经使用不同的行情链，A 股 ETF 的份额拆分没有进入 Python 深度分析。
-2. 验证快照只检查空值、过期和未来日期，没有检查拆分、分红、除权和成交量单位。
-3. Schema 只允许 Buy/Overweight/Hold/Underweight/Sell，底层数据错误时仍然会生成明确动作。
-4. 目标价没有统一保存估值方法、输入、区间和概率。
-5. 新闻没有稳定区分官方证据、发现层、事实、传导推断和反证。
-6. 历史财报按报告期而不是实际发布时间过滤，存在 look-ahead 风险。
+- `M#`：行情；
+- `I#`：指标；
+- `CA#`：公司行动；
+- `N#`：新闻或公告；
+- `S#`：来源。
 
-## 修复边界
+模型运行前先发布 Packet，因此模型失败也不会丢失确定性证据。报告完成后再提交
+Packet、Manifest 和版本报告路径。写接口校验鉴权、请求大小、Schema、哈希、标的、
+日期、状态和路径，之后才参数化写入 D1。
 
-- 新增 `EvidencePacketV1`、公司行动校验和 `report_manifests`。
-- A 股深度预检优先读取工作台 D1 的前复权日线，网页与 Agent 不再各用一套价格口径。
-- 报告状态与历史审计状态分离：
-  - 分析：`rated`、`not_rated`、`insufficient_evidence`、`data_validation_failed`
-  - 审计：`verified`、`legacy_unverified`、`invalidated`
-- ETF 改用指数、持仓、AUM、份额、NAV、折溢价、费用和跟踪误差模板。
-- `GOOGL` 为 Alphabet 主标的，`GOOG` 为别名；`03887`/`3887`/`03887.HK` 规范化为 `3887.HK / HashKey Holdings`。发行人身份以港交所披露易为准，禁止与 `BTDR / Bitdeer` 混用。
-- 官方公告、SEC、IR、HKEXnews 和监管机构属于证据层；Google News、Yahoo、GDELT 属于发现层。
-- 没有用户持仓、成本、期限和风险预算时，不输出“立即清仓”或具体组合比例。
-- 只有能够重建 point-in-time 证据时才重跑历史报告；无法重建的报告继续保留为 `legacy_unverified`。
-- 新报告落盘前执行 claim validation。无引用数字、未知 Evidence ID、无方法目标价和无持仓约束的具体比例会降为 `insufficient_evidence / Not Rated`；同日重跑写入版本目录，不覆盖旧报告。
+## Claim validation
 
-## 参考项目取舍
+以下任一情况都会把报告降为 `insufficient_evidence / Not Rated`：
 
-| 项目 | 吸收 | 不整体引入的原因 |
+- 没有任何已知 Evidence ID；
+- 引用了 Packet 中不存在的 Evidence ID；
+- 数字所在段落没有可对应的 Evidence ID；
+- 出现目标价但缺少方法、输入、区间和情景概率；
+- 没有用户持仓、成本、期限和风险预算，却给出具体仓位、加减仓或清仓比例。
+
+门禁失败不会删除草稿。完整 Agent 过程和 `evidence_packet.json` 保留用于复核，但首页、
+问答、推送和组合结论只接受 `verified`。
+
+## 页面和问答隔离
+
+- 首页“最新观点”只读取 `verified`；
+- 档案默认隐藏 `invalidated`，用户可进入“历史审计”查看原文；
+- `legacy_unverified` 和 Not Rated 报告明确显示质量标签；
+- 问答不把 `invalidated` 当作上下文；
+- 同日重跑写入 `-v2`、`-v3`，不覆盖旧目录；
+- `supersededBy` 只指向真正通过当前门禁的替代报告。
+
+## 根因与修复
+
+| 根因 | 修复 |
+|---|---|
+| 网页和 Python 曾使用不同的行情链 | 两者统一读取 D1 日线；A 股优先前复权 |
+| ETF 拆分没有进入深度分析 | Packet 保存公司行动、复权口径和连续性错误 |
+| 任意 25% 跳变都被视为坏数据 | ETF 保持硬门禁，个股极端跳空改为事件警告 |
+| Schema 强迫输出动作、仓位和目标价 | 字段改为证据和用户约束不足时留空 |
+| 分析师也输出最终提案 | 只有组合经理拥有最终评级出口 |
+| 仅靠提示词要求引用 | 文件落盘前做确定性 claim validation |
+| 失败原因混成一类 | 审计增加三种 `failureClass` |
+| 同日重跑覆盖或无法发布 | 版本目录、路径白名单和日期一致性校验 |
+
+## 参考项目与取舍
+
+| 项目 | 借鉴 | 没有整体引入的原因 |
 |---|---|---|
-| Vibe-Trading | Research Goal、证据账本、run card、降级链 | 全栈和 skills 过重 |
-| OpenBB | 统一模型与可替换 provider | 避免平台级依赖和密钥膨胀 |
-| Qlib | 后续离线 IC/ICIR、回测成本和最大回撤 | 不放入五分钟 Worker |
-| FinGPT | 新闻实体、方向和情绪标注 | 情绪不直接当交易结论 |
-| AI Hedge Fund | 技术、情绪、风险角色分工 | ETF 不照搬个股人物 Agent |
-| Ashare / adata | A 股多源热备思想 | Python 深度任务适用，Worker 保持轻量 |
-| Lightweight Charts | 多窗格、十字线、事件标记 | Apache 2.0 且不依赖授权库 |
+| HKUDS Vibe-Trading | Research Goal、证据账本、run card、数据源降级 | 全栈与 skills 规模超过当前需要 |
+| OpenBB | 标准模型、可替换 provider | 避免平台依赖与付费密钥膨胀 |
+| Microsoft Qlib | 后续离线 IC/ICIR、回测成本和最大回撤 | 不放入五分钟 Worker |
+| FinGPT | 新闻实体、方向和情绪标签 | 情绪不直接等于交易结论 |
+| AI Hedge Fund | 技术、情绪、风险角色分工 | ETF 不照搬个股人物型 Agent |
+| Ashare / adata / AKShare | A 股多源热备 | 适合 Python 深度任务，边缘 Worker 保持轻量 |
+| TradingView Lightweight Charts | 多窗格、十字线、事件标记 | Apache 2.0，且不把图表库当数据源 |
+
+更完整的来源与架构取舍见
+[`etf-monitoring-reference-and-decisions.md`](etf-monitoring-reference-and-decisions.md)。
 
 ## 验收标准
 
-- 拆分日不会被报告写成资产价值腰斩。
-- 数据校验失败不调用交易评级模型。
-- 每个数字结论能够展开到 Evidence ID、来源、发布时间和采集时间。
-- 目标价缺少方法时不展示。
-- 失效报告不进入最新结论、推送和问答。
-- GOOGL、GOOG、03887 和 3887.HK 的身份、市场时钟和历史样本状态正确。
-- 任一新闻或行情 provider 失效只造成局部降级，不造成整页空白。
+- 515880、512480 的拆分日不会再被写成资产价值腰斩；
+- 数据校验失败时不调用评级模型；
+- 版本报告可以发布到 D1，旧目录不被覆盖；
+- 单股真实财报跳空保留警告，但不被 ETF 拆分规则误拦截；
+- 报告顶部能直接看到带 Evidence ID 的行情、指标、新闻和来源；
+- 目标价和仓位缺少方法或用户约束时不会成为正式结论；
+- 审计数量守恒，三类失败之和等于 `invalidRecords`；
+- 失效报告不进入首页、问答、提醒或组合结论；
+- GOOGL/GOOG、03887/3887.HK 的身份与市场时钟一致；
+- 任一免费来源失败只产生局部降级，不让整页空白。
+

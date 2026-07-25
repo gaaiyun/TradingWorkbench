@@ -263,6 +263,15 @@ ORCL、SOXX 等美股读 1d。指标使用同一套服务端计算函数，不�
 失败仍保留草稿用于审计，但把评级改成 `Not Rated`，Manifest 写入
 `insufficient_evidence / legacy_unverified`。审计索引只有在报告、Manifest 和
 `evidence_packet.json` 的标的、日期、状态与内容哈希全部一致时才显示“已验证”。
+合并报告先渲染确定性的 Evidence Snapshot，再附上各 Agent 的分析过程；前者只转录
+Packet 中已有的行情、指标、公司行动、时点新闻和来源，后者仍需通过 claim validation。
+分析师不再生成最终交易提案，只有组合经理拥有最终评级出口。
+
+未形成报告的运行不会再统一写成“分析失败”。审计索引按 `failureClass` 区分：
+
+- `evidence_validation`：确定性数据预检未通过，模型未运行；
+- `analysis_execution`：模型、工具或工作流运行失败；
+- `invalid_input`：输入根本不是合法研究标的。
 
 ### Evidence Packet 发布闭环
 

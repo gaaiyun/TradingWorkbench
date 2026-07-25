@@ -178,6 +178,8 @@ Agent 只接收证据包中最后八根行情、指标、公司行动、新闻�
 落盘前还会再次检查引用：未知 Evidence ID、无引用数字、无方法目标价或在缺少用户
 持仓约束时给出具体仓位比例，都会把结果降为 `insufficient_evidence / Not Rated`，
 不能标记为 `verified`。
+每份新报告先显示一段由程序直接生成的 Evidence Snapshot，包括最近行情、指标、公司
+行动、时点新闻、来源和完整性警告；它与 Agent 草稿分开，便于先核对事实再阅读推断。
 证据包本身仍保留完整历史：A 股和美股/港股都优先读取工作台已落库的日线，目标上限
 1260 根；页面和 Agent 因而不会一个看五年、另一个只看六个月。
 GitHub 深度任务生成证据包后，用独立写入密钥提交到 `/api/evidence`；Pages Function
@@ -190,6 +192,8 @@ GitHub 深度任务生成证据包后，用独立写入密钥提交到 `/api/evi
 同一交易日重跑不会覆盖旧目录，而是写入 `-v2`、`-v3` 版本并在审计索引中建立替代关系。
 首页“最新观点”只读取 `verified` 报告；`legacy_unverified` 和 Not Rated 草稿仍可在
 研究档案中查看，但不会伪装成当前投资结论。
+审计索引还把未产出报告的运行拆成 `evidence_validation`、`analysis_execution` 和
+`invalid_input`，避免把数据门禁、模型/流程故障和错误代码输入混成一种“分析失败”。
 
 ## TradingAgents 研究链
 

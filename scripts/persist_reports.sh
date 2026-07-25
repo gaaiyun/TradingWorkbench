@@ -30,6 +30,8 @@ payload = json.loads(Path("public/data/latest.json").read_text(encoding="utf-8")
 if payload.get("results"):
     update_history(Path("public/data"), payload)
 PY
+  # 审计索引必须和刚融合的 history 及版本化报告同一提交发布。
+  node scripts/report-audit.mjs
 
   git add public/data public/reports
   if git diff --cached --quiet; then
