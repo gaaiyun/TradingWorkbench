@@ -359,8 +359,8 @@ def run_browser():
         page.click('#archive-report-tabs [data-report-section="market"]')
         page.wait_for_selector('#archive-report-tabs [data-report-section="market"].is-active')
         assert page.locator("#archive-report-warning").is_visible()
-        assert page.locator("#archive-report-body blockquote").is_visible()
-        assert page.locator("#archive-report-body .markdown-table-wrap table").is_visible()
+        page.wait_for_selector("#archive-report-body blockquote")
+        page.wait_for_selector("#archive-report-body .markdown-table-wrap table")
         assert page.locator("#archive-report-body a").get_attribute("href") == "https://example.com/filing"
         assert page.locator("#archive-report-body hr").is_visible()
 
