@@ -2,12 +2,14 @@ import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
 import test from "node:test";
 
-import {
+import * as settingsDomain from "../functions/api/_workbench_settings.mjs";
+
+const {
   WorkbenchSettingsError,
   buildWorkbenchSettings,
   normalizeWorkbenchTickers,
   parseWorkbenchSettings,
-} from "../functions/api/_workbench_settings.mjs";
+} = settingsDomain;
 
 const DEFAULT_OBJECTIVE =
   "持续监控 A 股通信与半导体 ETF，识别美股半导体隔夜行情、行业新闻和政策变化对 A 股 ETF 的传导影响。";
@@ -136,7 +138,7 @@ test("accepts only the supported target roles and analysis depths", () => {
   assert.equal(buildWorkbenchSettings(benchmarkRole).profiles[0].targets[0].role, "benchmark");
 });
 
-test("de-duplicates normalized target symbols before enforcing the twelve-target cap", () => {
+test("de-duplicates normalized target symbols before enforcing the fourteen-target cap", () => {
   const duplicate = defaultSettingsInput();
   duplicate.profiles[0].targets.push({
     symbol: "515880.sh",
@@ -308,12 +310,91 @@ test("returns deeply immutable canonical settings detached from the input", () =
   assert.throws(() => settings.profiles.push(settings.profiles[0]), TypeError);
 });
 
-test("rejects duplicate profile ids after normalization", () => {
+test("rejects duplicate profile ids", () => {
   const input = defaultSettingsInput();
   const duplicate = structuredClone(input.profiles[0]);
-  duplicate.id = ` ${input.profiles[0].id} `;
+  duplicate.id = input.profiles[0].id;
   input.profiles.push(duplicate);
   assertSettingsError("DUPLICATE_PROFILE_ID", () => buildWorkbenchSettings(input));
+});
+
+test("accepts only immutable profile ids matching the public 1-64 character contract", () => {
+  for (const invalidId of [" profile", "profile ", "profile.name", "中文", "", "x".repeat(65)]) {
+    const input = defaultSettingsInput();
+    input.profiles[0].id = invalidId;
+    assertSettingsError("INVALID_PROFILE_ID", () => buildWorkbenchSettings(input));
+  }
+
+  for (const validId of ["A", "profile_2", "profile-2", "x".repeat(64)]) {
+    const input = defaultSettingsInput();
+    input.profiles[0].id = validId;
+    assert.equal(buildWorkbenchSettings(input).profiles[0].id, validId);
+  }
+
+  assert.equal(typeof settingsDomain.updateWorkbenchProfile, "function");
+  assertSettingsError("IMMUTABLE_PROFILE_ID", () =>
+    settingsDomain.updateWorkbenchProfile(defaultSettingsInput(), "cn-semi-comms", {
+      id: "renamed-profile",
+    }),
+  );
+});
+
+test("accepts at most eight profiles", () => {
+  const input = defaultSettingsInput();
+  input.profiles = Array.from({ length: 8 }, (_, index) => ({
+    ...structuredClone(input.profiles[0]),
+    id: `profile-${index + 1}`,
+  }));
+  assert.equal(buildWorkbenchSettings(input).profiles.length, 8);
+
+  input.profiles.push({
+    ...structuredClone(input.profiles[0]),
+    id: "profile-9",
+  });
+  assertSettingsError("TOO_MANY_PROFILES", () => buildWorkbenchSettings(input));
+});
+
+test("profile domain helpers create blank profiles, patch nested fields, copy safely, and protect the last profile", () => {
+  assert.equal(typeof settingsDomain.createWorkbenchProfile, "function");
+  assert.equal(typeof settingsDomain.updateWorkbenchProfile, "function");
+  assert.equal(typeof settingsDomain.copyWorkbenchProfile, "function");
+  assert.equal(typeof settingsDomain.deleteWorkbenchProfile, "function");
+
+  const created = settingsDomain.createWorkbenchProfile(defaultSettingsInput(), {
+    id: "us_tech",
+    name: "美国科技",
+    objective: "跟踪美国科技股。",
+    timezone: "America/New_York",
+  });
+  const blank = created.profiles.find(({ id }) => id === "us_tech");
+  assert.deepEqual(blank.targets, []);
+  assert.deepEqual(blank.systemBenchmarks, []);
+  assert.equal(blank.enabled, false);
+
+  const patched = settingsDomain.updateWorkbenchProfile(created, "us_tech", {
+    enabled: true,
+    alerts: { pushMinSeverity: "critical" },
+  });
+  const updated = patched.profiles.find(({ id }) => id === "us_tech");
+  assert.equal(updated.enabled, true);
+  assert.equal(updated.alerts.pushMinSeverity, "critical");
+  assert.deepEqual(updated.alerts.channels, blank.alerts.channels);
+  assert.deepEqual(updated.alerts.quietHours, blank.alerts.quietHours);
+
+  const copied = settingsDomain.copyWorkbenchProfile(patched, "us_tech");
+  const duplicate = copied.profiles.find(({ id }) => id === "us_tech-copy");
+  assert.equal(duplicate.name, "美国科技 副本");
+  assert.equal(duplicate.enabled, false);
+  assert.deepEqual(duplicate.targets, updated.targets);
+
+  const withoutCopy = settingsDomain.deleteWorkbenchProfile(copied, "us_tech-copy");
+  assert.equal(withoutCopy.profiles.some(({ id }) => id === "us_tech-copy"), false);
+  assertSettingsError("LAST_PROFILE_REQUIRED", () =>
+    settingsDomain.deleteWorkbenchProfile(
+      { version: 2, profiles: [structuredClone(defaultSettingsInput().profiles[0])] },
+      "cn-semi-comms",
+    ),
+  );
 });
 
 test("de-duplicates the legacy analysis list across profiles in first-seen order", () => {
@@ -329,7 +410,7 @@ test("de-duplicates the legacy analysis list across profiles in first-seen order
   assert.deepEqual(buildWorkbenchSettings(input).tickers, ["515880.SS", "512480.SS", "SPY"]);
 });
 
-test("rejects a legacy analysis list with more than ten unique full targets across profiles", () => {
+test("accepts valid v2 profiles above the legacy cap and truncates only the legacy projection", () => {
   const input = defaultSettingsInput();
   input.profiles[0].targets = ["A", "B", "C", "D", "E", "F"].map((symbol) => ({
     symbol,
@@ -349,7 +430,9 @@ test("rejects a legacy analysis list with more than ten unique full targets acro
   }));
   input.profiles.push(secondProfile);
 
-  assertSettingsError("TOO_MANY_TICKERS", () => buildWorkbenchSettings(input));
+  const settings = buildWorkbenchSettings(input);
+  assert.equal(settings.profiles.length, 2);
+  assert.deepEqual(settings.tickers, ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J"]);
 });
 
 test("rejects empty, unsupported, and exchange-mismatched symbols", () => {

@@ -59,6 +59,35 @@ test("PUT persists v1 settings in D1 and GET reads the normalized value immediat
   assert.equal(JSON.stringify(DB.calls).includes("correct-code"), false);
 });
 
+test("the first D1 PUT may omit a revision for compatibility", async () => {
+  const DB = new FakeD1();
+  const response = await settingsApi.onRequestPut({
+    request: put({ settings: { version: 1, tickers: ["SPY"] } }),
+    env: { DB, ACCESS_CODE: "correct-code" },
+  });
+  const payload = await response.json();
+
+  assert.equal(response.status, 200);
+  assert.equal(payload.revision, payload.updatedAt);
+  assert.deepEqual(payload.settings.tickers, ["SPY"]);
+});
+
+test("a full PUT over existing D1 settings requires the observed revision", async () => {
+  const initialUpdatedAt = "2026-07-23T00:00:00.000Z";
+  const DB = new FakeD1({ settings: settingsRow(staticSettings, initialUpdatedAt) });
+  const response = await settingsApi.onRequestPut({
+    request: put({ settings: staticSettings }),
+    env: { DB, ACCESS_CODE: "correct-code" },
+  });
+  const payload = await response.json();
+
+  assert.equal(response.status, 428);
+  assert.equal(payload.error_code, "SETTINGS_REVISION_REQUIRED");
+  assert.equal(payload.revision, initialUpdatedAt);
+  assert.equal(payload.settings.version, 2);
+  assert.equal(DB.settings.updated_at, initialUpdatedAt);
+});
+
 test("legacy POST with a D1 binding updates D1 and GET immediately observes the new settings", async () => {
   const DB = new FakeD1({ settings: settingsRow(staticSettings) });
   const env = {

@@ -1,11 +1,13 @@
 export const WORKBENCH_SETTINGS_VERSION = 2;
 export const MAX_WORKBENCH_TICKERS = 10;
 export const MAX_WORKBENCH_TARGETS = 14;
+export const MAX_WORKBENCH_PROFILES = 8;
 
 const A_SHARE = /^(\d{6})(?:\.(SS|SH|SZ))?$/;
 const US_EQUITY = /^([A-Z]{1,5})(?:[.-]([A-Z]))?$/;
 const HK_EQUITY = /^(\d{4,5})\.HK$/;
 const HK_BARE = /^(\d{4,5})$/;
+const PROFILE_ID = /^[A-Za-z0-9_-]{1,64}$/;
 const TARGET_ROLES = new Set(["core", "comparison", "driver", "benchmark"]);
 const ANALYSIS_DEPTHS = new Set(["full", "signal"]);
 const ALERT_SEVERITIES = new Set(["low", "medium", "high", "critical"]);
@@ -111,6 +113,16 @@ function requiredString(value, field, code = "INVALID_PROFILE") {
     fail(code, `${field} 必须是非空字符串`);
   }
   return value.trim();
+}
+
+export function normalizeWorkbenchProfileId(value) {
+  if (typeof value !== "string" || !PROFILE_ID.test(value)) {
+    fail(
+      "INVALID_PROFILE_ID",
+      "profile.id 必须由 1-64 个英文字母、数字、下划线或连字符组成",
+    );
+  }
+  return value;
 }
 
 function objectValue(value, field, code) {
@@ -323,8 +335,8 @@ function normalizeProfile(profile) {
   if (!profile || typeof profile !== "object" || Array.isArray(profile)) {
     fail("INVALID_PROFILE", "profile 必须是对象");
   }
-  if (!Array.isArray(profile.targets) || profile.targets.length === 0) {
-    fail("INVALID_TARGETS", "profile.targets 必须是非空数组");
+  if (!Array.isArray(profile.targets)) {
+    fail("INVALID_TARGETS", "profile.targets 必须是数组");
   }
   if (!Array.isArray(profile.systemBenchmarks)) {
     fail("INVALID_BENCHMARKS", "profile.systemBenchmarks 必须是数组");
@@ -333,7 +345,7 @@ function normalizeProfile(profile) {
     fail("INVALID_PROFILE", "profile.enabled 必须是布尔值");
   }
   return {
-    id: requiredString(profile.id, "profile.id"),
+    id: normalizeWorkbenchProfileId(profile.id),
     name: requiredString(profile.name, "profile.name"),
     objective: requiredString(profile.objective, "profile.objective"),
     enabled: profile.enabled,
@@ -363,13 +375,7 @@ function withLegacyTickers(settings) {
     for (const target of profile.targets) {
       if (target.analysis !== "full" || seen.has(target.symbol)) continue;
       seen.add(target.symbol);
-      tickers.push(target.symbol);
-      if (tickers.length > MAX_WORKBENCH_TICKERS) {
-        fail(
-          "TOO_MANY_TICKERS",
-          `兼容分析清单最多 ${MAX_WORKBENCH_TICKERS} 个唯一 full 标的`,
-        );
-      }
+      if (tickers.length < MAX_WORKBENCH_TICKERS) tickers.push(target.symbol);
     }
   }
   Object.defineProperty(settings, "tickers", {
@@ -451,6 +457,9 @@ export function buildWorkbenchSettings(input) {
   if (!Array.isArray(input.profiles) || input.profiles.length === 0) {
     fail("INVALID_PROFILES", "profiles 必须是非空数组");
   }
+  if (input.profiles.length > MAX_WORKBENCH_PROFILES) {
+    fail("TOO_MANY_PROFILES", `最多允许 ${MAX_WORKBENCH_PROFILES} 个 profile`);
+  }
   const profiles = input.profiles.map(normalizeProfile);
   const profileIds = new Set();
   for (const profile of profiles) {
@@ -473,6 +482,119 @@ export function parseWorkbenchSettings(value) {
     return migrateV1Tickers(value.tickers);
   }
   return buildWorkbenchSettings(value);
+}
+
+function profileIndex(settings, id) {
+  const normalizedId = normalizeWorkbenchProfileId(id);
+  const index = settings.profiles.findIndex((profile) => profile.id === normalizedId);
+  if (index < 0) {
+    fail("PROFILE_NOT_FOUND", `profile 不存在：${normalizedId}`);
+  }
+  return index;
+}
+
+function plainObject(value) {
+  return Boolean(value) && typeof value === "object" && !Array.isArray(value);
+}
+
+function mergeProfileValue(current, patch) {
+  if (!plainObject(current) || !plainObject(patch)) return patch;
+  const merged = { ...current };
+  for (const [key, value] of Object.entries(patch)) {
+    merged[key] = plainObject(value) && plainObject(current[key])
+      ? mergeProfileValue(current[key], value)
+      : value;
+  }
+  return merged;
+}
+
+function blankProfile(input) {
+  const profile = objectValue(input, "profile", "INVALID_PROFILE");
+  return {
+    id: profile.id,
+    name: profile.name,
+    objective: profile.objective ?? profile.name,
+    enabled: profile.enabled ?? false,
+    timezone: profile.timezone ?? "Asia/Shanghai",
+    targets: profile.targets ?? [],
+    systemBenchmarks: profile.systemBenchmarks ?? [],
+    schedules: profile.schedules ?? defaultSchedules(),
+    alerts: profile.alerts ?? defaultAlerts(),
+    agentBudget: profile.agentBudget ?? defaultAgentBudget(),
+  };
+}
+
+export function createWorkbenchProfile(value, input) {
+  const settings = parseWorkbenchSettings(value);
+  if (settings.profiles.length >= MAX_WORKBENCH_PROFILES) {
+    fail("TOO_MANY_PROFILES", `最多允许 ${MAX_WORKBENCH_PROFILES} 个 profile`);
+  }
+  return buildWorkbenchSettings({
+    version: WORKBENCH_SETTINGS_VERSION,
+    profiles: [...settings.profiles, blankProfile(input)],
+  });
+}
+
+export function updateWorkbenchProfile(value, id, patch) {
+  const settings = parseWorkbenchSettings(value);
+  const index = profileIndex(settings, id);
+  if (!plainObject(patch)) {
+    fail("INVALID_PROFILE_PATCH", "profile patch 必须是对象");
+  }
+  if (Object.prototype.hasOwnProperty.call(patch, "id")) {
+    fail("IMMUTABLE_PROFILE_ID", "profile.id 创建后不可修改");
+  }
+  const profiles = settings.profiles.map((profile, candidateIndex) =>
+    candidateIndex === index
+      ? mergeProfileValue(profile, patch)
+      : profile,
+  );
+  return buildWorkbenchSettings({ version: WORKBENCH_SETTINGS_VERSION, profiles });
+}
+
+function nextCopyProfileId(settings, sourceId) {
+  const ids = new Set(settings.profiles.map(({ id }) => id));
+  for (let index = 1; index <= MAX_WORKBENCH_PROFILES; index += 1) {
+    const suffix = index === 1 ? "-copy" : `-copy-${index}`;
+    const candidate = `${sourceId.slice(0, 64 - suffix.length)}${suffix}`;
+    if (!ids.has(candidate)) return candidate;
+  }
+  fail("DUPLICATE_PROFILE_ID", `无法为 ${sourceId} 生成唯一副本 ID`);
+}
+
+export function copyWorkbenchProfile(value, id, options = {}) {
+  const settings = parseWorkbenchSettings(value);
+  if (settings.profiles.length >= MAX_WORKBENCH_PROFILES) {
+    fail("TOO_MANY_PROFILES", `最多允许 ${MAX_WORKBENCH_PROFILES} 个 profile`);
+  }
+  const source = settings.profiles[profileIndex(settings, id)];
+  if (!plainObject(options)) {
+    fail("INVALID_PROFILE", "profile copy 选项必须是对象");
+  }
+  const copyId = options.id ?? nextCopyProfileId(settings, source.id);
+  const copy = {
+    ...source,
+    ...options,
+    id: copyId,
+    name: options.name ?? `${source.name} 副本`,
+    enabled: options.enabled ?? false,
+  };
+  return buildWorkbenchSettings({
+    version: WORKBENCH_SETTINGS_VERSION,
+    profiles: [...settings.profiles, copy],
+  });
+}
+
+export function deleteWorkbenchProfile(value, id) {
+  const settings = parseWorkbenchSettings(value);
+  const index = profileIndex(settings, id);
+  if (settings.profiles.length === 1) {
+    fail("LAST_PROFILE_REQUIRED", "至少保留一个 profile");
+  }
+  return buildWorkbenchSettings({
+    version: WORKBENCH_SETTINGS_VERSION,
+    profiles: settings.profiles.filter((_, candidateIndex) => candidateIndex !== index),
+  });
 }
 
 /** Replace the first enabled profile's full-analysis list without dropping its v2 metadata. */

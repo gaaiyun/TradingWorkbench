@@ -3,9 +3,10 @@ export function d1Binding(env) {
 }
 
 export class SettingsConflictError extends Error {
-  constructor() {
+  constructor(latest = null) {
     super("settings revision conflict");
     this.name = "SettingsConflictError";
+    this.latest = latest;
   }
 }
 
@@ -44,6 +45,25 @@ export async function writeSettingsToD1(db, settings, expectedUpdatedAt, now = n
   const changes = result?.meta?.changes ?? result?.changes ?? 0;
   if (changes !== 1) throw new SettingsConflictError();
   return updatedAt;
+}
+
+export async function mutateSettingsInD1(
+  db,
+  mutation,
+  expectedUpdatedAt = undefined,
+  now = new Date(),
+) {
+  const stored = await readSettingsFromD1(db);
+  if (!stored) return null;
+  if (
+    expectedUpdatedAt !== undefined &&
+    expectedUpdatedAt !== stored.updatedAt
+  ) {
+    throw new SettingsConflictError(stored);
+  }
+  const settings = await mutation(stored.settings);
+  const updatedAt = await writeSettingsToD1(db, settings, stored.updatedAt, now);
+  return { settings, updatedAt };
 }
 
 async function queryRows(db, { table, columns, filters, timeColumn, from, to, limit }) {
