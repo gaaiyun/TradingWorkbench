@@ -29,6 +29,17 @@ import {
   routeHref,
 } from "./workbench-router.mjs";
 import {
+  PROFILE_LIMIT,
+  PROFILE_STORAGE_KEY,
+  TARGET_LIMIT,
+  currentProfileFor,
+  marketForProfileTarget,
+  normalizeProfileTargetSymbol,
+  profileRequestUrl,
+  resetProfileContext,
+  resolveSelectedProfileId,
+} from "./workbench-profiles.mjs";
+import {
   OPTIONS_FAST_REFRESH_MS,
   normalizeVolguardPayload,
 } from "./workbench-options.mjs";
@@ -62,10 +73,12 @@ import {
     encryptedCode: "ta.workbench.access.encrypted.v1",
     threads: "ta.workbench.threads.v1",
     pendingResearch: "ta.workbench.pending-research.v1",
+    selectedProfileId: PROFILE_STORAGE_KEY,
   };
   const state = {
     settings: null,
     settingsUpdatedAt: null,
+    selectedProfileId: null,
     selectedSymbol: "515880.SS",
     timeframe: "15m",
     historyRange: "5y",
@@ -129,7 +142,7 @@ import {
     const date = new Date(value);
     if (Number.isNaN(date.valueOf())) return String(value);
     return new Intl.DateTimeFormat("zh-CN", {
-      timeZone: state.settings?.profiles?.[0]?.timezone || "Asia/Shanghai",
+      timeZone: currentProfile()?.timezone || "Asia/Shanghai",
       ...(full ? { month: "2-digit", day: "2-digit" } : {}),
       hour: "2-digit", minute: "2-digit", second: full ? "2-digit" : undefined, hour12: false,
     }).format(date);
@@ -140,7 +153,7 @@ import {
     const date = new Date(value);
     if (Number.isNaN(date.valueOf())) return String(value);
     return new Intl.DateTimeFormat("zh-CN", {
-      timeZone: state.settings?.profiles?.[0]?.timezone || "Asia/Shanghai",
+      timeZone: currentProfile()?.timezone || "Asia/Shanghai",
       year: "numeric",
       month: "2-digit",
       day: "2-digit",
@@ -209,20 +222,51 @@ import {
     return payload;
   }
 
+  function currentProfile() {
+    return currentProfileFor(state.settings, state.selectedProfileId);
+  }
+
+  function persistSelectedProfileId() {
+    if (!state.selectedProfileId) return;
+    try {
+      localStorage.setItem(STORAGE.selectedProfileId, state.selectedProfileId);
+    } catch {
+      // Profile selection remains valid for the current page even if storage is full.
+    }
+  }
+
   function targets() {
-    return state.settings?.profiles?.find((profile) => profile.enabled)?.targets || DEFAULT_TARGETS;
+    const profile = currentProfile();
+    return profile ? profile.targets || [] : DEFAULT_TARGETS;
   }
 
   function settingsTickers(settings) {
-    const primaryProfile = (settings?.profiles || []).find((profile) => profile.enabled);
-    if (!primaryProfile) return Array.isArray(settings?.tickers) ? settings.tickers : [];
-    return (primaryProfile.targets || [])
+    const profile = currentProfileFor(settings, state.selectedProfileId);
+    if (!profile) return Array.isArray(settings?.tickers) ? settings.tickers : [];
+    return (profile.targets || [])
       .filter((target) => target.analysis === "full")
       .map((target) => target.symbol);
   }
 
+  function renderProfileSelectors() {
+    const profiles = state.settings?.profiles || [];
+    const options = profiles.map((profile) =>
+      `<option value="${escapeHtml(profile.id)}">${escapeHtml(profile.name)}${profile.enabled ? "" : " · 已停用"}</option>`
+    ).join("");
+    for (const selector of ["#profile-selector", "#settings-profile-selector"]) {
+      const select = $(selector);
+      select.innerHTML = options;
+      select.value = state.selectedProfileId || "";
+    }
+    $("#profile-count").textContent = `${profiles.length} / ${PROFILE_LIMIT} 组`;
+    $("#profile-create").disabled = profiles.length >= PROFILE_LIMIT;
+    $("#profile-copy").disabled = profiles.length >= PROFILE_LIMIT || !currentProfile();
+    $("#profile-delete").disabled = profiles.length <= 1 || !currentProfile();
+  }
+
   function renderSettingsSummary() {
-    const profile = state.settings?.profiles?.[0];
+    renderProfileSelectors();
+    const profile = currentProfile();
     if (!profile) return;
     const fullAnalysisTickers = settingsTickers(state.settings);
     $("#watchlist-count").title = `深度分析 ${fullAnalysisTickers.length} 个`;
@@ -285,6 +329,20 @@ import {
     };
   }
 
+  function restoreSelectedProfile() {
+    let storedId = null;
+    try { storedId = localStorage.getItem(STORAGE.selectedProfileId); } catch { /* unavailable */ }
+    state.selectedProfileId = resolveSelectedProfileId(
+      state.settings?.profiles,
+      state.selectedProfileId || storedId,
+    );
+    persistSelectedProfileId();
+    const profile = currentProfile();
+    if (profile && !profile.targets?.some(({ symbol }) => symbol === state.selectedSymbol)) {
+      state.selectedSymbol = profile.targets?.[0]?.symbol || null;
+    }
+  }
+
   function renderWatchlist() {
     const list = targets();
     $("#watchlist-count").textContent = `${list.length} 标的`;
@@ -303,7 +361,20 @@ import {
   }
 
   function renderInstrument() {
-    const target = targets().find((item) => item.symbol === state.selectedSymbol) || DEFAULT_TARGETS[0];
+    const target = targets().find((item) => item.symbol === state.selectedSymbol) || targets()[0];
+    if (!target) {
+      $("#instrument-symbol").textContent = "—";
+      $("#instrument-name").textContent = "当前监控组没有标的";
+      $("#instrument-role").textContent = "空";
+      $("#instrument-price").textContent = "—";
+      $("#instrument-change").textContent = "—";
+      $("#instrument-change").className = "neutral";
+      for (const selector of ["#quote-open", "#quote-high", "#quote-low", "#quote-volume"]) {
+        $(selector).textContent = "—";
+      }
+      $("#history-range-tabs").hidden = true;
+      return;
+    }
     const isDailyMarket = target.market !== "CN";
     const isDaily = state.timeframe === "1d";
     const bars = state.chart.bars;
@@ -362,23 +433,39 @@ import {
       }
     }
     ensureSettings();
+    restoreSelectedProfile();
     renderSettingsSummary();
   }
 
-  function marketUrl(symbol, timeframe, limit = 240) {
-    return `/api/market?symbol=${encodeURIComponent(symbol)}&timeframe=${encodeURIComponent(timeframe)}&limit=${limit}`;
+  function marketUrl(symbol, timeframe, profileId, limit = 240) {
+    return profileRequestUrl("/api/market", profileId, { symbol, timeframe, limit });
   }
 
   function sortBars(rows) {
     return rows.filter((bar) => bar?.ts).sort((a, b) => a.ts.localeCompare(b.ts));
   }
 
+  function marketContext(profileId, symbol) {
+    return `${profileId || "no-profile"}:${symbol || "no-symbol"}`;
+  }
+
   async function loadMarket({ incremental = false } = {}) {
     const symbol = state.selectedSymbol;
     const timeframe = state.timeframe;
+    const profileId = currentProfile()?.id;
+    if (!symbol || !profileId) {
+      state.chart.bars = [];
+      state.chart.hydrated = false;
+      state.market = normalizeEnvelope(null);
+      $("#chart-empty").hidden = false;
+      renderInstrument();
+      syncChartData({ strategy: "setData" });
+      return;
+    }
+    const requestContext = marketContext(profileId, symbol);
     const contextChanged = state.chart.symbol !== symbol || state.chart.timeframe !== timeframe;
     if (incremental && (contextChanged || !state.chart.hydrated)) return;
-    const request = marketRequestGate.begin(symbol, timeframe, incremental ? "incremental" : "full");
+    const request = marketRequestGate.begin(requestContext, timeframe, incremental ? "incremental" : "full");
     if (!request) return;
     if (!incremental && contextChanged) {
       state.chart.symbol = symbol;
@@ -397,10 +484,14 @@ import {
         ? dailyHistoryLimit(state.historyRange)
         : 240;
       const envelope = normalizeEnvelope(await requestJson(
-        marketUrl(symbol, timeframe, incremental ? 2 : fullLimit),
+        marketUrl(symbol, timeframe, currentProfile()?.id, incremental ? 2 : fullLimit),
         { signal: request.signal },
       ));
-      if (!marketRequestGate.isCurrent(request, state.selectedSymbol, state.timeframe)) return;
+      if (!marketRequestGate.isCurrent(
+        request,
+        marketContext(currentProfile()?.id, state.selectedSymbol),
+        state.timeframe,
+      )) return;
       state.market = envelope;
       const incoming = sortBars(envelope.data);
       if (incremental) {
@@ -415,7 +506,11 @@ import {
       if (last) state.quotes.set(symbol, { close: Number(last.close), change: prior ? (Number(last.close) / Number(prior.close) - 1) * 100 : null });
       updateFreshness(envelope);
     } catch (error) {
-      if (request.signal.aborted || !marketRequestGate.isCurrent(request, state.selectedSymbol, state.timeframe)) return;
+      if (request.signal.aborted || !marketRequestGate.isCurrent(
+        request,
+        marketContext(currentProfile()?.id, state.selectedSymbol),
+        state.timeframe,
+      )) return;
       state.market = normalizeEnvelope(null);
       if (!incremental) {
         state.chart.bars = [];
@@ -425,7 +520,11 @@ import {
     } finally {
       marketRequestGate.finish(request);
     }
-    if (!marketRequestGate.isCurrent(request, state.selectedSymbol, state.timeframe)) return;
+    if (!marketRequestGate.isCurrent(
+      request,
+      marketContext(currentProfile()?.id, state.selectedSymbol),
+      state.timeframe,
+    )) return;
     $("#chart-empty").hidden = state.chart.bars.length > 0;
     renderInstrument();
     renderWatchlist();
@@ -437,10 +536,15 @@ import {
   }
 
   async function loadQuoteStrip() {
+    const profileId = currentProfile()?.id;
+    if (!profileId) return;
     const otherTargets = targets().filter(({ symbol }) => symbol !== state.selectedSymbol);
     await Promise.allSettled(otherTargets.map(async ({ symbol, market }) => {
       const quoteTimeframe = market === "CN" ? state.timeframe : "1d";
-      const envelope = normalizeEnvelope(await requestJson(marketUrl(symbol, quoteTimeframe, 2)));
+      const envelope = normalizeEnvelope(await requestJson(
+        marketUrl(symbol, quoteTimeframe, profileId, 2),
+      ));
+      if (currentProfile()?.id !== profileId) return;
       const bars = sortBars(envelope.data);
       const last = bars.at(-1);
       const previous = bars.at(-2);
@@ -462,12 +566,13 @@ import {
   }
 
   async function loadFeeds() {
-    const profile = state.settings?.profiles?.[0]?.id;
-    const suffix = profile ? `?profile=${encodeURIComponent(profile)}&limit=200` : "?limit=200";
+    const profileId = currentProfile()?.id;
+    if (!profileId) return;
     const [newsResult, eventsResult] = await Promise.allSettled([
-      requestJson(`/api/news${suffix}`),
-      requestJson(`/api/events${suffix}`),
+      requestJson(profileRequestUrl("/api/news", profileId, { limit: 200 })),
+      requestJson(profileRequestUrl("/api/events", profileId, { limit: 200 })),
     ]);
+    if (currentProfile()?.id !== profileId) return;
     const news = normalizeEnvelope(newsResult.status === "fulfilled" ? newsResult.value : null);
     const events = normalizeEnvelope(eventsResult.status === "fulfilled" ? eventsResult.value : null);
     state.feeds = [...normalizeFeed(news, "news"), ...normalizeFeed(events, "event")]
@@ -517,14 +622,25 @@ import {
   }
 
   async function loadMonitor() {
-    try { state.monitor = normalizeEnvelope(await requestJson("/api/monitor-status?limit=20")); }
-    catch { state.monitor = normalizeEnvelope(null); }
+    const profileId = currentProfile()?.id;
+    if (!profileId) return;
+    try {
+      const monitor = normalizeEnvelope(await requestJson(
+        profileRequestUrl("/api/monitor-status", profileId, { limit: 20 }),
+      ));
+      if (currentProfile()?.id !== profileId) return;
+      state.monitor = monitor;
+    }
+    catch {
+      if (currentProfile()?.id !== profileId) return;
+      state.monitor = normalizeEnvelope(null);
+    }
     renderTimeline();
     renderMonitorStatus();
   }
 
   function renderTimeline() {
-    const profile = state.settings?.profiles?.[0];
+    const profile = currentProfile();
     const schedules = buildTaskTimeline(profile);
     $("#task-timeline").innerHTML = schedules.map(({ time, label, status, detail }) => {
       return `<li class="is-${escapeHtml(status)}"><time>${escapeHtml(time)}</time><span><b>${escapeHtml(label)}</b><small>${escapeHtml(detail)}</small></span></li>`;
@@ -750,7 +866,7 @@ import {
   }
 
   function renderTaskBoard() {
-    const profile = state.settings?.profiles?.[0];
+    const profile = currentProfile();
     const rows = buildTaskTimeline(profile);
     $("#task-board").innerHTML = rows.map(({ time, label, status, detail }) => `<li class="is-${escapeHtml(status)}">
       <time>${escapeHtml(time)}</time>
@@ -794,8 +910,10 @@ import {
   }
 
   async function fetchReportText(path) {
-    const encoded = encodeURIComponent(path);
-    let response = await fetch(`/api/report?path=${encoded}`, { cache: "no-store" });
+    let response = await fetch(
+      profileRequestUrl("/api/report", currentProfile()?.id, { path }),
+      { cache: "no-store" },
+    );
     if (!response.ok) response = await fetch(`/${path.replace(/^\/+/, "")}`, { cache: "no-store" });
     if (!response.ok) throw new Error(`报告读取失败 (${response.status})`);
     return response.text();
@@ -889,17 +1007,19 @@ import {
   }
 
   async function loadResearchWorkspace() {
+    const profileId = currentProfile()?.id;
+    if (!profileId) return;
     const [historyResult, runsResult, auditResult] = await Promise.allSettled([
-      requestJson("/api/history"),
-      requestJson("/api/runs"),
-      requestJson("/api/report-audit"),
+      requestJson(profileRequestUrl("/api/history", profileId)),
+      requestJson(profileRequestUrl("/api/runs", profileId)),
+      requestJson(profileRequestUrl("/api/report-audit", profileId)),
     ]);
+    if (currentProfile()?.id !== profileId) return;
     if (historyResult.status === "fulfilled") {
       const payload = historyResult.value;
       state.history = Array.isArray(payload) ? payload : payload?.data || payload?.history || [];
     } else {
-      try { state.history = await requestJson("./data/history.json"); }
-      catch { state.history = []; }
+      state.history = [];
     }
     if (runsResult.status === "fulfilled") {
       const payload = runsResult.value;
@@ -910,8 +1030,7 @@ import {
     if (auditResult.status === "fulfilled") {
       state.reportAudit = auditResult.value?.data || auditResult.value;
     } else {
-      try { state.reportAudit = await requestJson("./data/report-audit.json"); }
-      catch { state.reportAudit = null; }
+      state.reportAudit = null;
     }
     if (state.latest) {
       state.latest = {
@@ -952,7 +1071,7 @@ import {
   }
 
   function renderSettingsWorkspace() {
-    const profile = state.settings?.profiles?.[0];
+    const profile = currentProfile();
     if (!profile) return;
     const enabledTargets = profile.targets || [];
     $("#settings-workspace-status").textContent = profile.enabled ? "已启用" : "已停用";
@@ -965,19 +1084,22 @@ import {
   }
 
   function renderNextRun() {
-    const next = computeNextRun(state.settings?.profiles?.[0]);
+    const next = computeNextRun(currentProfile());
     const text = next ? `${next.label} ${formatTime(next.at, true)}` : "下一次 —";
     $("#next-run").textContent = text;
     $("#next-run-compact").textContent = text;
   }
 
   async function loadLatest() {
+    const profileId = currentProfile()?.id;
+    if (!profileId) return;
     try {
-      const payload = await requestJson("/api/latest");
+      const payload = await requestJson(profileRequestUrl("/api/latest", profileId));
+      if (currentProfile()?.id !== profileId) return;
       state.latest = payload?.data || payload;
     } catch {
-      try { state.latest = await requestJson("./data/latest.json"); }
-      catch { state.latest = null; }
+      if (currentProfile()?.id !== profileId) return;
+      state.latest = null;
     }
     if (state.latest) {
       state.latest = {
@@ -1222,6 +1344,60 @@ import {
     await loadMarket();
   }
 
+  function renderClearedProfileContext() {
+    renderSettingsSummary();
+    renderInstrument();
+    renderConclusion();
+    renderFeed();
+    renderNewsWorkspace();
+    renderMonitorStatus();
+    renderArchiveList();
+    updateFreshness(state.market);
+    syncChartData({ strategy: "setData" });
+    $("#archive-report-title").textContent = "选择一份报告";
+    $("#archive-report-warning").hidden = true;
+    $("#archive-report-tabs").hidden = true;
+    $("#archive-report-body").className = "panel-empty";
+    $("#archive-report-body").innerHTML = "<b>尚未选择研究报告</b><span>报告原文、证据与运行记录将在此显示。</span>";
+    $("#chat-context").textContent = "基于当前监控组的已归档研究资料回答；缺失信息会明确说明。";
+  }
+
+  async function loadProfileContext() {
+    await Promise.allSettled([
+      loadMarket(),
+      loadQuoteStrip(),
+      loadFeeds(),
+      loadMonitor(),
+      loadLatest(),
+      loadResearchWorkspace(),
+    ]);
+  }
+
+  async function selectProfile(profileId, {
+    forceReset = false,
+    reload = true,
+    newThread = true,
+  } = {}) {
+    const nextId = resolveSelectedProfileId(state.settings?.profiles, profileId);
+    if (!nextId) return;
+    const changed = nextId !== state.selectedProfileId;
+    state.selectedProfileId = nextId;
+    persistSelectedProfileId();
+    if (!changed && !forceReset) {
+      renderSettingsSummary();
+      return;
+    }
+
+    Object.assign(state, resetProfileContext(state, currentProfile()));
+    const selectedTarget = targets().find(({ symbol }) => symbol === state.selectedSymbol);
+    if (selectedTarget?.market !== "CN") state.timeframe = "1d";
+    renderClearedProfileContext();
+    if (newThread && state.threads.length) {
+      createThread(`${currentProfile()?.name || "监控组"}问答`, currentProfile()?.id);
+    }
+    if (reload) await loadProfileContext();
+  }
+
   function setMobileView(view) {
     document.body.dataset.mobileView = view;
     $$("[data-mobile-section]").forEach((button) => button.classList.toggle("is-active", button.dataset.mobileSection === view));
@@ -1259,6 +1435,45 @@ import {
   }
 
   const drawerFocusReturn = new WeakMap();
+  const modalBackgroundSelectors = [
+    ".product-sidebar",
+    ".terminal-header",
+    ".freshness-bar",
+    ".workspace-stack",
+    ".mobile-nav",
+  ];
+
+  function setBackgroundInert(inert) {
+    for (const selector of modalBackgroundSelectors) {
+      $$(selector).forEach((element) => { element.inert = inert; });
+    }
+  }
+
+  function focusableDrawerElements(drawerElement) {
+    return $$(
+      'button:not([disabled]), input:not([disabled]), select:not([disabled]), textarea:not([disabled]), a[href], [tabindex]:not([tabindex="-1"])',
+      drawerElement,
+    ).filter((element) => !element.hidden && element.getAttribute("aria-hidden") !== "true");
+  }
+
+  function trapDrawerFocus(event, drawerElement) {
+    if (event.key !== "Tab") return;
+    const focusable = focusableDrawerElements(drawerElement);
+    if (!focusable.length) {
+      event.preventDefault();
+      drawerElement.focus();
+      return;
+    }
+    const first = focusable[0];
+    const last = focusable.at(-1);
+    if (event.shiftKey && document.activeElement === first) {
+      event.preventDefault();
+      last.focus();
+    } else if (!event.shiftKey && document.activeElement === last) {
+      event.preventDefault();
+      first.focus();
+    }
+  }
 
   function openDrawer(drawer, overlay) {
     const drawerElement = $(drawer);
@@ -1270,6 +1485,7 @@ import {
     drawerElement.inert = false;
     drawerElement.classList.add("is-open");
     drawerElement.setAttribute("aria-hidden", "false");
+    setBackgroundInert(true);
     requestAnimationFrame(() => {
       drawerElement.querySelector(
         "[autofocus], button:not([disabled]), input:not([disabled]), select:not([disabled]), textarea:not([disabled]), a[href]",
@@ -1279,21 +1495,23 @@ import {
 
   function closeDrawer(drawer, overlay) {
     const drawerElement = $(drawer);
+    drawerElement.classList.remove("is-open");
+    const anotherModalOpen = $(".settings-drawer.is-open, .assistant-drawer.is-open");
+    if (!anotherModalOpen) setBackgroundInert(false);
     if (drawerElement.contains(document.activeElement)) {
       const returnTarget = drawerFocusReturn.get(drawerElement);
       if (returnTarget?.isConnected) returnTarget.focus();
       else document.activeElement?.blur();
     }
-    drawerElement.classList.remove("is-open");
     drawerElement.setAttribute("aria-hidden", "true");
     drawerElement.inert = true;
     $(overlay).hidden = true;
   }
 
   function renderTargetEditor() {
-    const profile = state.settings?.profiles?.[0];
+    const profile = currentProfile();
     if (!profile) return;
-    $("#target-editor").innerHTML = profile.targets.map((target, index) => `<div class="target-row" data-target-index="${index}">
+    $("#target-editor").innerHTML = (profile.targets || []).map((target, index) => `<div class="target-row" data-target-index="${index}">
       <span class="target-symbol"><strong>${escapeHtml(target.symbol)}</strong><small>${escapeHtml(target.name)}</small></span>
       <select data-target-role aria-label="${escapeHtml(target.symbol)} 角色">${Object.entries(roleLabels).map(([value, label]) => `<option value="${value}" ${target.role === value ? "selected" : ""}>${label}</option>`).join("")}</select>
       <select data-target-analysis aria-label="${escapeHtml(target.symbol)} analysisDepth"><option value="full" ${target.analysis === "full" ? "selected" : ""}>深度</option><option value="signal" ${target.analysis === "signal" ? "selected" : ""}>信号</option></select>
@@ -1306,33 +1524,30 @@ import {
       profile.targets[Number(select.closest("[data-target-index]").dataset.targetIndex)].analysis = select.value;
     }));
     $$("[data-target-remove]", $("#target-editor")).forEach((button) => button.addEventListener("click", () => {
-      if (profile.targets.length <= 1) { toast("研究目标至少保留一个标的", true); return; }
       profile.targets.splice(Number(button.closest("[data-target-index]").dataset.targetIndex), 1);
-      if (!profile.targets.some((target) => target.symbol === state.selectedSymbol)) state.selectedSymbol = profile.targets[0].symbol;
-      renderTargetEditor(); renderWatchlist();
+      if (!profile.targets.some((target) => target.symbol === state.selectedSymbol)) {
+        state.selectedSymbol = profile.targets[0]?.symbol || null;
+      }
+      renderTargetEditor(); renderWatchlist(); renderInstrument();
     }));
   }
 
-  function normalizeSymbol(raw) {
-    const value = String(raw || "").trim().toUpperCase();
-    if (/^\d{6}$/.test(value)) return `${value}.${"569".includes(value[0]) ? "SS" : "SZ"}`;
-    if (/^\d{6}\.(?:SS|SZ)$/.test(value) || /^[A-Z]{1,5}(?:-[A-Z])?$/.test(value)) return value;
-    return null;
-  }
-
   function addTarget() {
-    const profile = state.settings.profiles[0];
-    const symbol = normalizeSymbol($("#target-search").value);
-    if (!symbol) { toast("请输入支持的 A 股或美股代码", true); return; }
+    const profile = currentProfile();
+    if (!profile) return;
+    const symbol = normalizeProfileTargetSymbol($("#target-search").value);
+    if (!symbol) { toast("请输入支持的 A 股、港股或美股代码", true); return; }
     if (profile.targets.some((target) => target.symbol === symbol)) { toast("该标的已在研究目标中", true); return; }
-    if (profile.targets.length >= 12) { toast("每个研究目标最多 12 个标的", true); return; }
-    profile.targets.push({ symbol, name: symbol, market: symbol.includes(".S") ? "CN" : "US", role: "comparison", analysis: "signal" });
+    if (profile.targets.length >= TARGET_LIMIT) { toast(`每个监控组最多 ${TARGET_LIMIT} 个标的`, true); return; }
+    profile.targets.push({ symbol, name: symbol, market: marketForProfileTarget(symbol), role: "comparison", analysis: "signal" });
+    if (!state.selectedSymbol) state.selectedSymbol = symbol;
     $("#target-search").value = "";
     renderTargetEditor(); renderWatchlist();
   }
 
   function collectSettingsForm() {
-    const profile = state.settings.profiles[0];
+    const profile = currentProfile();
+    if (!profile) return null;
     profile.enabled = $("#profile-enabled").checked;
     profile.name = $("#profile-name").value.trim();
     profile.objective = $("#profile-objective").value.trim();
@@ -1355,7 +1570,8 @@ import {
     profile.alerts.quietHours.end = $("#quiet-end").value;
     profile.alerts.channels.web = $("#alert-web").checked;
     profile.alerts.channels.pushPlus = $("#alert-pushplus").checked;
-    return state.settings;
+    const { id: _immutableId, ...patch } = structuredClone(profile);
+    return patch;
   }
 
   async function submitAction(path, body, method = "POST") {
@@ -1367,24 +1583,169 @@ import {
     });
   }
 
+  function updateAccessCodeFromSettings() {
+    state.accessCode = $("#settings-code").value.trim() || state.accessCode;
+    if (state.accessCode) sessionStorage.setItem(STORAGE.sessionCode, state.accessCode);
+  }
+
+  function acceptSettingsPayload(payload) {
+    if (!payload?.settings?.profiles?.length) {
+      throw new Error("服务端未返回最新监控配置");
+    }
+    state.settings = payload.settings;
+    state.settingsUpdatedAt = payload.updatedAt ?? null;
+  }
+
+  function showSettingsConflict(error) {
+    const notice = $("#settings-notice");
+    notice.classList.add("is-error");
+    if (error.status === 409) {
+      notice.textContent = "版本冲突：远端配置已变化。";
+      $("#settings-reload-remote").hidden = false;
+      return;
+    }
+    notice.textContent = error.message;
+  }
+
   async function saveSettings(event) {
     event.preventDefault();
     const notice = $("#settings-notice");
     notice.textContent = "正在保存并核验版本…"; notice.className = "settings-notice";
-    state.accessCode = $("#settings-code").value.trim();
-    if (state.accessCode) sessionStorage.setItem(STORAGE.sessionCode, state.accessCode);
+    $("#settings-reload-remote").hidden = true;
+    updateAccessCodeFromSettings();
     try {
-      collectSettingsForm();
-      const payload = await submitAction("/api/settings", { settings: state.settings, expectedUpdatedAt: state.settingsUpdatedAt }, "PUT");
-      state.settings = payload.settings;
-      state.settingsUpdatedAt = payload.updatedAt;
+      const profile = currentProfile();
+      const patch = collectSettingsForm();
+      const payload = await submitAction(
+        `/api/settings/profiles/${encodeURIComponent(profile.id)}`,
+        { patch, expectedUpdatedAt: state.settingsUpdatedAt },
+        "PATCH",
+      );
+      acceptSettingsPayload(payload);
       notice.textContent = payload.message || "配置已保存";
       renderSettingsSummary();
       await persistCredential();
       toast("监控配置已保存");
     } catch (error) {
+      showSettingsConflict(error);
+    }
+  }
+
+  function nextProfileCopyId(sourceId) {
+    const ids = new Set((state.settings?.profiles || []).map(({ id }) => id));
+    for (let index = 1; index <= PROFILE_LIMIT; index += 1) {
+      const suffix = index === 1 ? "-copy" : `-copy-${index}`;
+      const candidate = `${sourceId.slice(0, 64 - suffix.length)}${suffix}`;
+      if (!ids.has(candidate)) return candidate;
+    }
+    return null;
+  }
+
+  async function createProfile() {
+    const id = $("#new-profile-id").value.trim();
+    const name = $("#new-profile-name").value.trim();
+    if (!/^[A-Za-z0-9_-]{1,64}$/.test(id)) {
+      toast("新组 ID 只能包含字母、数字、下划线和连字符", true);
+      return;
+    }
+    if (!name) {
+      toast("请输入新监控组名称", true);
+      return;
+    }
+    if ((state.settings?.profiles || []).length >= PROFILE_LIMIT) {
+      toast(`最多创建 ${PROFILE_LIMIT} 个监控组`, true);
+      return;
+    }
+    updateAccessCodeFromSettings();
+    try {
+      const payload = await submitAction("/api/settings/profiles", {
+        profile: {
+          id,
+          name,
+          objective: name,
+          enabled: false,
+          timezone: currentProfile()?.timezone || "Asia/Shanghai",
+          targets: [],
+        },
+        expectedUpdatedAt: state.settingsUpdatedAt,
+      });
+      acceptSettingsPayload(payload);
+      $("#new-profile-id").value = "";
+      $("#new-profile-name").value = "";
+      await selectProfile(id);
+      toast(`已创建监控组：${name}`);
+    } catch (error) {
+      showSettingsConflict(error);
+    }
+  }
+
+  async function copyProfile() {
+    const profile = currentProfile();
+    const newId = nextProfileCopyId(profile?.id || "profile");
+    if (!profile || !newId) {
+      toast("无法生成唯一的监控组副本 ID", true);
+      return;
+    }
+    updateAccessCodeFromSettings();
+    try {
+      const payload = await submitAction(
+        `/api/settings/profiles/${encodeURIComponent(profile.id)}/copy`,
+        {
+          options: {
+            id: newId,
+            name: `${profile.name} 副本`,
+          },
+          expectedUpdatedAt: state.settingsUpdatedAt,
+        },
+      );
+      acceptSettingsPayload(payload);
+      await selectProfile(newId);
+      toast(`已复制监控组：${profile.name}`);
+    } catch (error) {
+      showSettingsConflict(error);
+    }
+  }
+
+  async function deleteProfile() {
+    const profile = currentProfile();
+    if (!profile || (state.settings?.profiles || []).length <= 1) {
+      toast("至少保留一个监控组", true);
+      return;
+    }
+    if (!window.confirm(`删除监控组“${profile.name}”？历史行情、报告和事件不会被删除。`)) return;
+    updateAccessCodeFromSettings();
+    try {
+      const payload = await submitAction(
+        `/api/settings/profiles/${encodeURIComponent(profile.id)}`,
+        { expectedUpdatedAt: state.settingsUpdatedAt },
+        "DELETE",
+      );
+      acceptSettingsPayload(payload);
+      const nextId = resolveSelectedProfileId(state.settings.profiles, null);
+      await selectProfile(nextId);
+      toast(`已删除监控组：${profile.name}`);
+    } catch (error) {
+      showSettingsConflict(error);
+    }
+  }
+
+  async function reloadRemoteSettings() {
+    const notice = $("#settings-notice");
+    notice.className = "settings-notice";
+    notice.textContent = "正在重新载入远端配置…";
+    try {
+      const payload = await requestJson("/api/settings");
+      const settings = payload?.data && !payload.profiles ? payload.data : payload;
+      state.settings = settings;
+      state.settingsUpdatedAt = settings?.updatedAt ?? payload?.updatedAt ?? null;
+      ensureSettings();
+      const nextId = resolveSelectedProfileId(state.settings.profiles, state.selectedProfileId);
+      $("#settings-reload-remote").hidden = true;
+      await selectProfile(nextId, { forceReset: true });
+      notice.textContent = "已重新载入远端配置";
+    } catch (error) {
       notice.classList.add("is-error");
-      notice.textContent = error.status === 409 ? "版本冲突：远端配置已变化，请关闭设置并刷新后重试。" : error.message;
+      notice.textContent = `重新载入失败：${error.message}`;
     }
   }
 
@@ -1446,9 +1807,14 @@ import {
     const notice = $("#settings-notice");
     notice.textContent = "正在提交研究任务…"; notice.className = "settings-notice";
     try {
+      const profile = currentProfile();
+      if (!profile) throw new Error("当前没有可运行的监控组");
       const fullAnalysisTargets = targets().filter(({ analysis }) => analysis === "full");
       if (!fullAnalysisTargets.length) throw new Error("请先把至少一个标的的分析方式设为“深度”");
-      const payload = await submitAction("/api/analyze", { tickers: fullAnalysisTargets.map(({ symbol }) => symbol) });
+      const payload = await submitAction("/api/analyze", {
+        profileId: profile.id,
+        tickers: fullAnalysisTargets.map(({ symbol }) => symbol),
+      });
       notice.textContent = payload.message || "服务端已受理";
       toast(`多智能体分析已受理：${fullAnalysisTargets.map(({ symbol }) => symbol).join("、")}`);
       setTimeout(loadMonitor, 2500);
@@ -1545,7 +1911,15 @@ import {
   }
 
   function currentThread() {
-    return state.threads.find((thread) => thread.id === state.threadId) || null;
+    const profileId = currentProfile()?.id;
+    return state.threads.find((thread) =>
+      thread.id === state.threadId && thread.profileId === profileId
+    ) || null;
+  }
+
+  function profileThreads() {
+    const profileId = currentProfile()?.id;
+    return state.threads.filter((thread) => thread.profileId === profileId);
   }
 
   function renderThread() {
@@ -1564,15 +1938,23 @@ import {
 
   function renderThreads() {
     const select = $("#thread-select");
-    select.innerHTML = state.threads.map((thread) => `<option value="${escapeHtml(thread.id)}">${escapeHtml(thread.title || "新研究会话")}</option>`).join("");
+    const visibleThreads = profileThreads();
+    select.innerHTML = visibleThreads.map((thread) => `<option value="${escapeHtml(thread.id)}">${escapeHtml(thread.title || "新研究会话")}</option>`).join("");
     select.value = state.threadId || "";
-    $("#delete-thread").disabled = state.threads.length <= 1;
+    $("#delete-thread").disabled = visibleThreads.length <= 1;
     renderThread();
   }
 
-  function createThread(title = "新研究会话") {
+  function createThread(title = "新研究会话", profileId = currentProfile()?.id) {
     const now = new Date().toISOString();
-    const thread = { id: threadId(), title, createdAt: now, updatedAt: now, messages: [] };
+    const thread = {
+      id: threadId(),
+      profileId,
+      title,
+      createdAt: now,
+      updatedAt: now,
+      messages: [],
+    };
     state.threads.unshift(thread);
     state.threadId = thread.id;
     saveThreads();
@@ -1581,19 +1963,22 @@ import {
   }
 
   function loadThreads() {
+    const profileId = currentProfile()?.id;
     try {
       const stored = JSON.parse(localStorage.getItem(STORAGE.threads) || "[]");
       state.threads = compactThreads(Array.isArray(stored)
         ? stored.filter((thread) => thread && typeof thread.id === "string" && Array.isArray(thread.messages))
+          .map((thread) => ({ ...thread, profileId: thread.profileId || profileId }))
         : []);
     } catch {
       state.threads = [];
     }
-    if (!state.threads.length) {
-      createThread();
+    const visibleThreads = profileThreads();
+    if (!visibleThreads.length) {
+      createThread("新研究会话", profileId);
       return;
     }
-    state.threadId = state.threads[0].id;
+    state.threadId = visibleThreads[0].id;
     renderThreads();
   }
 
@@ -1603,10 +1988,11 @@ import {
       fetch("/api/chat-sessions", {
         method: "DELETE",
         headers: { "content-type": "application/json", "x-access-code": state.accessCode },
-        body: JSON.stringify({ sessionId: deletedId }),
+        body: JSON.stringify({ sessionId: deletedId, profileId: currentProfile()?.id }),
       }).catch(() => {});
     }
-    if (state.threads.length <= 1) {
+    const visibleThreads = profileThreads();
+    if (visibleThreads.length <= 1) {
       currentThread().messages = [];
       currentThread().updatedAt = new Date().toISOString();
       saveThreads();
@@ -1614,7 +2000,7 @@ import {
       return;
     }
     state.threads = state.threads.filter((thread) => thread.id !== state.threadId);
-    state.threadId = state.threads[0].id;
+    state.threadId = profileThreads()[0]?.id || null;
     saveThreads();
     renderThreads();
   }
@@ -1648,15 +2034,17 @@ import {
 
   async function recoverThread(targetThreadId = state.threadId) {
     if (!state.accessCode || !targetThreadId) return false;
+    const thread = state.threads.find(({ id }) => id === targetThreadId);
+    if (!thread?.profileId) return false;
     try {
       const payload = await requestJson(
-        `/api/chat-sessions?sessionId=${encodeURIComponent(targetThreadId)}`,
+        profileRequestUrl("/api/chat-sessions", thread.profileId, {
+          sessionId: targetThreadId,
+        }),
         { headers: { "x-access-code": state.accessCode } },
       );
       const remote = payload?.data;
       if (!Array.isArray(remote?.messages) || !remote.messages.length) return false;
-      const thread = state.threads.find(({ id }) => id === targetThreadId);
-      if (!thread) return false;
       for (const remoteMessage of remote.messages) {
         const recoveredRequestId = serverMessageRequestId(remoteMessage);
         const local = thread.messages.find((message) =>
@@ -1771,8 +2159,7 @@ import {
     if (!state.accessCode) { openDrawer("#settings-drawer", "#settings-overlay"); toast("研究问答需要访问码", true); return; }
     const thread = currentThread() || createThread();
     const historyMessages = buildChatHistory(thread.messages);
-    const currentProfile = state.settings?.profiles?.find((profile) => profile.enabled)
-      || state.settings?.profiles?.[0];
+    const profile = currentProfile();
     const chatRequestId = threadId();
     state.chatBusy = true;
     $("#chat-send").disabled = true;
@@ -1795,7 +2182,7 @@ import {
         body: JSON.stringify({
           requestId: chatRequestId,
           sessionId: thread.id,
-          profileId: currentProfile?.id,
+          profileId: profile?.id,
           symbol: state.selectedSymbol,
           question,
           history: historyMessages,
@@ -1878,6 +2265,8 @@ import {
     }));
     $("#chart-reset").addEventListener("click", () => state.chart.api?.timeScale().fitContent());
     $("#refresh-all").addEventListener("click", refreshAll);
+    $("#profile-selector").addEventListener("change", (event) => selectProfile(event.target.value));
+    $("#settings-profile-selector").addEventListener("change", (event) => selectProfile(event.target.value));
     $("#refresh-feed").addEventListener("click", loadFeeds);
     ["#feed-symbol", "#feed-source", "#feed-importance"].forEach((selector) => $(selector).addEventListener("change", renderFeed));
     $$("[data-mobile-section]").forEach((button) => button.addEventListener("click", () => setMobileView(button.dataset.mobileSection)));
@@ -1901,13 +2290,17 @@ import {
     $("#global-status").addEventListener("click", () => navigateRoute("settings"));
     $("#settings-close").addEventListener("click", () => closeDrawer("#settings-drawer", "#settings-overlay"));
     $("#settings-overlay").addEventListener("click", () => closeDrawer("#settings-drawer", "#settings-overlay"));
+    $("#profile-create").addEventListener("click", createProfile);
+    $("#profile-copy").addEventListener("click", copyProfile);
+    $("#profile-delete").addEventListener("click", deleteProfile);
+    $("#settings-reload-remote").addEventListener("click", reloadRemoteSettings);
     $("#target-add").addEventListener("click", addTarget);
     $("#target-search").addEventListener("keydown", (event) => { if (event.key === "Enter") { event.preventDefault(); addTarget(); } });
     $("#settings-form").addEventListener("submit", saveSettings);
     $("#agent-research-form").addEventListener("submit", submitTemporaryResearch);
     $("#agent-research-depth").addEventListener("change", renderAgentWorkspace);
     $("#run-analysis").addEventListener("click", runAnalysis);
-    $("#run-analysis-left").addEventListener("click", openDeepAnalysis);
+    $("#run-analysis-left").addEventListener("click", runAnalysis);
     $("#toggle-code").addEventListener("click", () => { const input = $("#settings-code"); input.type = input.type === "password" ? "text" : "password"; $("#toggle-code").textContent = input.type === "password" ? "显示" : "隐藏"; });
     $("#clear-credential").addEventListener("click", clearCredential);
     $("#assistant-open").addEventListener("click", openAssistant);
@@ -1939,7 +2332,7 @@ import {
       openAssistant();
     });
     $("#news-workspace-refresh").addEventListener("click", loadFeeds);
-    $("#tasks-run-now").addEventListener("click", openDeepAnalysis);
+    $("#tasks-run-now").addEventListener("click", runAnalysis);
     $("#options-refresh").addEventListener("click", () => loadOptions({ announce: true }));
     window.addEventListener("workbench:routechange", (event) => {
       if (event.detail?.route === "options") loadOptions();
@@ -1951,6 +2344,8 @@ import {
     });
     window.addEventListener("hashchange", applyRoute);
     window.addEventListener("keydown", (event) => {
+      const activeDrawer = $(".settings-drawer.is-open, .assistant-drawer.is-open");
+      if (activeDrawer && event.key === "Tab") trapDrawerFocus(event, activeDrawer);
       if (event.key === "Escape") {
         closeDrawer("#settings-drawer", "#settings-overlay");
         closeAssistant();
@@ -1972,15 +2367,15 @@ import {
     } catch {
       localStorage.removeItem(STORAGE.pendingResearch);
     }
-    loadThreads();
     bindEvents();
     applyRoute();
     updateClock();
     setInterval(updateClock, 1000);
     await loadCredential();
     await loadSettings();
+    loadThreads();
     await recoverThread(state.threadId);
-    await Promise.allSettled([loadMarket(), loadQuoteStrip(), loadFeeds(), loadMonitor(), loadLatest(), loadResearchWorkspace()]);
+    await loadProfileContext();
     setInterval(pollWorkbenchData, 60000);
     setInterval(refreshOptionsIfVisible, OPTIONS_FAST_REFRESH_MS);
     setInterval(renderOptionsCountdown, 1000);

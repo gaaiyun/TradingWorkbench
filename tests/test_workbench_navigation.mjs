@@ -66,6 +66,15 @@ test("mobile primary navigation keeps all seven workspaces reachable", () => {
   }
 });
 
+test("the current profile selector stays in the persistent top bar", () => {
+  const header = /<header class="terminal-header"[\s\S]*?<\/header>/.exec(html)?.[0] || "";
+  assert.match(header, /id="profile-selector"/);
+  assert.match(header, /aria-label="当前监控组"/);
+  const mobileMedia = css.slice(css.indexOf("@media (max-width: 760px)"));
+  assert.match(mobileMedia, /\.profile-selector/);
+  assert.doesNotMatch(mobileMedia, /\.profile-selector\s*\{[^}]*display:\s*none/);
+});
+
 test("responsive primary navigation has no tablet dead zone", () => {
   const tabletMedia = css.slice(
     css.indexOf("@media (max-width: 940px)"),

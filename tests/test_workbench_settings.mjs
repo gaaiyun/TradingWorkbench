@@ -459,7 +459,7 @@ test("assistant drawer styles do not match assistant chat messages", () => {
   assert.match(css, /#assistant\.is-open\s*\{\s*transform:\s*translateX\(0\)/);
 });
 
-test("the legacy workbench view derives its ticker list from enabled v2 full-analysis targets", () => {
+test("the workbench view derives its ticker list from the explicitly selected profile", () => {
   const script = readFileSync(
     new URL("../public/assets/workbench.js", import.meta.url),
     "utf8",
@@ -469,20 +469,22 @@ test("the legacy workbench view derives its ticker list from enabled v2 full-ana
   );
   assert.match(script, /function settingsTickers\(settings\)/);
   assert.ok(helper);
-  assert.match(helper[1], /\.find\(\(profile\) => profile\.enabled\)/);
+  assert.match(helper[1], /currentProfileFor\(settings,\s*state\.selectedProfileId\)/);
+  assert.doesNotMatch(helper[1], /\.find\(\(profile\) => profile\.enabled\)/);
   assert.doesNotMatch(helper[1], /\.flatMap\(/);
   assert.match(helper[1], /target\.analysis === "full"/);
   assert.match(script, /settingsTickers\(state\.settings\)/);
-  assert.match(script, /settings:\s*state\.settings/);
+  assert.match(script, /function currentProfile\(\)/);
 });
 
-test("the workbench saves settings with PUT and the last observed D1 revision", () => {
+test("the workbench patches the selected profile with the last observed D1 revision", () => {
   const script = readFileSync(
     new URL("../public/assets/workbench.js", import.meta.url),
     "utf8",
   );
   assert.match(script, /settingsUpdatedAt:\s*null/);
   assert.match(script, /expectedUpdatedAt:\s*state\.settingsUpdatedAt/);
-  assert.match(script, /submitAction\("\/api\/settings",[\s\S]*?,\s*"PUT"\)/);
+  assert.match(script, /`\/api\/settings\/profiles\/\$\{encodeURIComponent\(profile\.id\)\}`/);
+  assert.match(script, /"PATCH"/);
   assert.match(script, /state\.settingsUpdatedAt\s*=\s*payload\.updatedAt/);
 });

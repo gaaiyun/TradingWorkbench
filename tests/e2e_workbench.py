@@ -2,6 +2,7 @@ import json
 import math
 import os
 import threading
+from copy import deepcopy
 from datetime import datetime, timedelta, timezone
 from functools import partial
 from http.server import SimpleHTTPRequestHandler, ThreadingHTTPServer
@@ -19,9 +20,28 @@ SCREENSHOT_DIR = Path(os.environ.get(
 ))
 BASE_URL = "http://127.0.0.1:4207"
 SETTINGS = json.loads((ROOT / "public/data/workbench-settings.json").read_text(encoding="utf-8"))
+SECOND_PROFILE = deepcopy(SETTINGS["profiles"][0])
+SECOND_PROFILE.update({
+    "id": "profile-b",
+    "name": "B 组同标的监控",
+    "objective": "验证同一标的在不同监控组中的上下文隔离。",
+    "enabled": False,
+})
+SECOND_PROFILE["targets"] = [
+    deepcopy(SETTINGS["profiles"][0]["targets"][0]),
+    deepcopy(next(
+        target for target in SETTINGS["profiles"][0]["targets"]
+        if target["symbol"] == "NVDA"
+    )),
+]
+ACTIVE_SETTINGS = deepcopy(SETTINGS)
+ACTIVE_SETTINGS["profiles"].append(SECOND_PROFILE)
+ACTIVE_UPDATED_AT = ["2026-07-23T07:00:00.000Z"]
 MARKET_REQUESTS = []
+MARKET_PROFILE_REQUESTS = []
 ANALYZE_REQUESTS = []
 SETTINGS_REQUESTS = []
+PROFILE_REQUESTS = []
 CHAT_REQUESTS = []
 API_COUNTS = {}
 BROWSER_DIAGNOSTICS = []
@@ -110,6 +130,32 @@ def fulfill_json(route, payload, status=200):
     route.fulfill(status=status, content_type="application/json; charset=utf-8", body=json.dumps(payload, ensure_ascii=False))
 
 
+def merge_dict(current, patch):
+    merged = deepcopy(current)
+    for key, value in patch.items():
+        if isinstance(value, dict) and isinstance(merged.get(key), dict):
+            merged[key] = merge_dict(merged[key], value)
+        else:
+            merged[key] = deepcopy(value)
+    return merged
+
+
+def settings_response():
+    return {
+        "ok": True,
+        "settings": deepcopy(ACTIVE_SETTINGS),
+        "updatedAt": ACTIVE_UPDATED_AT[0],
+        "message": "设置已保存并即时生效",
+    }
+
+
+def advance_settings_revision():
+    current = datetime.fromisoformat(ACTIVE_UPDATED_AT[0].replace("Z", "+00:00"))
+    ACTIVE_UPDATED_AT[0] = (
+        current + timedelta(seconds=1)
+    ).isoformat().replace("+00:00", "Z")
+
+
 def route_api(route):
     parsed = urlparse(route.request.url)
     query = parse_qs(parsed.query)
@@ -119,17 +165,74 @@ def route_api(route):
         if route.request.method == "PUT":
             request = route.request.post_data_json
             SETTINGS_REQUESTS.append(request)
-            fulfill_json(route, {
-                "ok": True, "settings": request["settings"],
-                "updatedAt": "2026-07-23T07:12:00.000Z", "message": "设置已保存并即时生效",
-            })
+            ACTIVE_SETTINGS.clear()
+            ACTIVE_SETTINGS.update(deepcopy(request["settings"]))
+            advance_settings_revision()
+            fulfill_json(route, settings_response())
         else:
-            fulfill_json(route, {**SETTINGS, "updatedAt": "2026-07-23T07:00:00.000Z"})
+            fulfill_json(route, {
+                **deepcopy(ACTIVE_SETTINGS),
+                "updatedAt": ACTIVE_UPDATED_AT[0],
+            })
+    elif path == "/api/settings/profiles":
+        request = route.request.post_data_json
+        PROFILE_REQUESTS.append({
+            "method": route.request.method,
+            "path": path,
+            "body": deepcopy(request),
+        })
+        profile = deepcopy(request["profile"])
+        profile.setdefault("objective", profile["name"])
+        profile.setdefault("enabled", False)
+        profile.setdefault("timezone", "Asia/Shanghai")
+        profile.setdefault("targets", [])
+        profile.setdefault("systemBenchmarks", [])
+        profile.setdefault("schedules", deepcopy(SETTINGS["profiles"][0]["schedules"]))
+        profile.setdefault("alerts", deepcopy(SETTINGS["profiles"][0]["alerts"]))
+        profile.setdefault("agentBudget", deepcopy(SETTINGS["profiles"][0]["agentBudget"]))
+        ACTIVE_SETTINGS["profiles"].append(profile)
+        advance_settings_revision()
+        fulfill_json(route, settings_response())
+    elif path.startswith("/api/settings/profiles/"):
+        request = route.request.post_data_json or {}
+        PROFILE_REQUESTS.append({
+            "method": route.request.method,
+            "path": path,
+            "body": deepcopy(request),
+        })
+        suffix = path.removeprefix("/api/settings/profiles/")
+        is_copy = suffix.endswith("/copy")
+        profile_id = suffix.removesuffix("/copy")
+        profile_index = next(
+            index for index, profile in enumerate(ACTIVE_SETTINGS["profiles"])
+            if profile["id"] == profile_id
+        )
+        if is_copy:
+            options = request.get("options") or {
+                "id": request.get("newId"),
+                "name": request.get("newName"),
+            }
+            copied = deepcopy(ACTIVE_SETTINGS["profiles"][profile_index])
+            copied["id"] = options["id"]
+            copied["name"] = options.get("name") or f"{copied['name']} 副本"
+            copied["enabled"] = False
+            ACTIVE_SETTINGS["profiles"].append(copied)
+        elif route.request.method == "PATCH":
+            ACTIVE_SETTINGS["profiles"][profile_index] = merge_dict(
+                ACTIVE_SETTINGS["profiles"][profile_index],
+                request["patch"],
+            )
+        elif route.request.method == "DELETE":
+            ACTIVE_SETTINGS["profiles"].pop(profile_index)
+        advance_settings_revision()
+        fulfill_json(route, settings_response())
     elif path == "/api/market":
+        profile = query.get("profile", [None])[0]
         symbol = query.get("symbol", ["515880.SS"])[0]
         timeframe = query.get("timeframe", ["15m"])[0]
         limit = int(query.get("limit", ["240"])[0])
         MARKET_REQUESTS.append((symbol, timeframe, limit))
+        MARKET_PROFILE_REQUESTS.append((profile, symbol, timeframe, limit))
         fulfill_json(route, envelope(bars(symbol, timeframe)[-limit:]))
     elif path == "/api/news":
         fulfill_json(route, envelope(NEWS))
@@ -290,6 +393,80 @@ def run_browser():
         ) == "rgb(224, 95, 104)"
         assert "最近采集成功" not in page.locator("#task-timeline").inner_text()
         assert "任务结果接口未提供" in page.locator("#task-timeline").inner_text()
+
+        assert page.input_value("#profile-selector") == "cn-semi-comms"
+        assert page.locator("#watchlist .watch-row").count() == 13
+        page.select_option("#profile-selector", "profile-b")
+        page.wait_for_function(
+            "document.querySelector('#profile-selector').value === 'profile-b'"
+        )
+        page.wait_for_timeout(180)
+        assert urlparse(page.url).fragment == "monitor"
+        assert page.locator("#watchlist .watch-row").count() == 2
+        assert page.evaluate(
+            "localStorage.getItem('ta.workbench.selected-profile.v1')"
+        ) == "profile-b"
+        assert any(
+            profile == "cn-semi-comms" and symbol == "515880.SS"
+            for profile, symbol, _, _ in MARKET_PROFILE_REQUESTS
+        )
+        assert any(
+            profile == "profile-b" and symbol == "515880.SS"
+            for profile, symbol, _, _ in MARKET_PROFILE_REQUESTS
+        )
+
+        page.click("#watchlist-edit")
+        page.wait_for_selector("#settings-drawer.is-open")
+        assert page.input_value("#settings-profile-selector") == "profile-b"
+        original_a_name = ACTIVE_SETTINGS["profiles"][0]["name"]
+        page.fill("#target-search", "03887.HK")
+        page.click("#target-add")
+        assert "3887.HK" in page.locator("#target-editor .target-symbol strong").all_inner_texts()
+        page.fill("#profile-name", "B 组已编辑")
+        page.fill("#settings-code", "fixture-code")
+        page.click("#save-settings")
+        page.wait_for_function(
+            "document.querySelector('#settings-notice').textContent.includes('保存')"
+        )
+        assert ACTIVE_SETTINGS["profiles"][0]["name"] == original_a_name
+        assert next(
+            profile for profile in ACTIVE_SETTINGS["profiles"]
+            if profile["id"] == "profile-b"
+        )["name"] == "B 组已编辑"
+        assert any(
+            target["symbol"] == "3887.HK" and target["market"] == "HK"
+            for target in next(
+                profile for profile in ACTIVE_SETTINGS["profiles"]
+                if profile["id"] == "profile-b"
+            )["targets"]
+        )
+        page.click("#settings-close")
+
+        page.locator('[data-route-link="options"]').first.click()
+        page.wait_for_function("document.body.dataset.route === 'options'")
+        page.wait_for_function(
+            "document.querySelector('#options-status').textContent.includes('正常')"
+        )
+        volguard_status = page.locator("#options-status").inner_text()
+        page.select_option("#profile-selector", "cn-semi-comms")
+        page.wait_for_timeout(180)
+        assert urlparse(page.url).fragment == "options"
+        assert page.locator("#options-status").inner_text() == volguard_status
+
+        page.select_option("#profile-selector", "profile-b")
+        page.wait_for_timeout(180)
+        page.reload(wait_until="domcontentloaded")
+        page.wait_for_function(
+            "document.querySelector('#profile-selector').value === 'profile-b'"
+        )
+        assert page.evaluate(
+            "localStorage.getItem('ta.workbench.selected-profile.v1')"
+        ) == "profile-b"
+        page.select_option("#profile-selector", "cn-semi-comms")
+        page.locator('[data-route-link="monitor"]').first.click()
+        page.wait_for_function("document.body.dataset.route === 'monitor'")
+        page.wait_for_selector("#watchlist .watch-row")
+
         page.get_by_role("tab", name="1h").click()
         assert page.get_by_role("tab", name="1h").get_attribute("aria-selected") == "true"
         page.wait_for_selector("#research-feed .feed-item")
@@ -323,6 +500,39 @@ def run_browser():
         page.wait_for_function("document.body.dataset.route === 'settings'")
         page.click("#settings-workspace-open")
         page.wait_for_selector("#settings-drawer.is-open")
+        assert page.locator("#settings-drawer").get_attribute("role") == "dialog"
+        assert page.locator("#settings-drawer").get_attribute("aria-modal") == "true"
+        assert page.locator("#workbench").evaluate("element => element.inert")
+        page.fill("#settings-code", "fixture-code")
+
+        page.fill("#new-profile-id", "profile-new")
+        page.fill("#new-profile-name", "新建监控组")
+        page.click("#profile-create")
+        page.wait_for_function(
+            "document.querySelector('#settings-profile-selector').value === 'profile-new'"
+        )
+        assert PROFILE_REQUESTS[-1]["method"] == "POST"
+        assert PROFILE_REQUESTS[-1]["path"] == "/api/settings/profiles"
+        page.click("#profile-copy")
+        page.wait_for_function(
+            "document.querySelector('#settings-profile-selector').value === 'profile-new-copy'"
+        )
+        assert PROFILE_REQUESTS[-1]["path"].endswith("/profile-new/copy")
+        page.once("dialog", lambda dialog: dialog.accept())
+        page.click("#profile-delete")
+        page.wait_for_function(
+            "document.querySelector('#settings-profile-selector').value === 'cn-semi-comms'"
+        )
+        page.select_option("#settings-profile-selector", "profile-new")
+        page.wait_for_function(
+            "document.querySelector('#settings-profile-selector').value === 'profile-new'"
+        )
+        page.once("dialog", lambda dialog: dialog.accept())
+        page.click("#profile-delete")
+        page.wait_for_function(
+            "document.querySelector('#settings-profile-selector').value === 'cn-semi-comms'"
+        )
+
         page.select_option("#profile-timezone", "Asia/Singapore")
         page.uncheck("#enable-us-close")
         page.uncheck("#enable-premarket")
@@ -330,11 +540,10 @@ def run_browser():
         page.uncheck("#enable-close-analysis")
         page.uncheck("#alert-pushplus")
         page.screenshot(path=str(SCREENSHOT_DIR / "etf-workbench-settings.png"), full_page=True)
-        page.fill("#settings-code", "fixture-code")
         page.check("#settings-remember")
         page.click("#save-settings")
         page.wait_for_function("document.querySelector('#settings-notice').textContent.includes('保存')")
-        saved_profile = SETTINGS_REQUESTS[-1]["settings"]["profiles"][0]
+        saved_profile = PROFILE_REQUESTS[-1]["body"]["patch"]
         assert saved_profile["schedules"]["usCloseSnapshot"]["enabled"] is False
         assert saved_profile["schedules"]["preMarketBrief"]["enabled"] is False
         assert saved_profile["schedules"]["cnIntraday"]["enabled"] is False
@@ -347,6 +556,7 @@ def run_browser():
             for item in SETTINGS["profiles"][0]["targets"]
             if item["analysis"] == "full"
         ]
+        assert ANALYZE_REQUESTS[-1]["profileId"] == "cn-semi-comms"
         page.click("#settings-close")
         page.locator('[data-route-link="archive"]').first.click()
         page.wait_for_function("document.body.dataset.route === 'archive'")
@@ -381,6 +591,24 @@ def run_browser():
         mobile.click('[data-mobile-section="chart"]')
         assert mobile.locator("#cross-market-drivers").is_visible()
         mobile.screenshot(path=str(SCREENSHOT_DIR / "etf-workbench-mobile.png"), full_page=True)
+
+        mobile.set_viewport_size({"width": 320, "height": 700})
+        mobile.locator('[data-route-link="settings"]').last.click()
+        mobile.wait_for_function("document.body.dataset.route === 'settings'")
+        mobile.click("#settings-workspace-open")
+        mobile.wait_for_selector("#settings-drawer.is-open")
+        mobile.wait_for_timeout(250)
+        assert mobile.evaluate(
+            "document.documentElement.scrollWidth <= window.innerWidth"
+        )
+        assert mobile.locator("#target-editor .target-row").first.evaluate(
+            "element => element.getBoundingClientRect().right <= window.innerWidth"
+        )
+        assert mobile.locator("#target-editor .target-remove").first.evaluate(
+            "element => element.getBoundingClientRect().height >= 44"
+        )
+        mobile.click("#settings-close")
+        mobile.locator('[data-route-link="monitor"]').last.click()
 
         mobile.click('[data-mobile-section="watch"]')
         mobile.locator('[data-symbol="NVDA"]').click()

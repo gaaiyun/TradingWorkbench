@@ -22,6 +22,7 @@ const html = readFileSync(new URL("../public/index.html", import.meta.url), "utf
 const css = readFileSync(new URL("../public/assets/workbench.css", import.meta.url), "utf8");
 const script = readFileSync(new URL("../public/assets/workbench.js", import.meta.url), "utf8");
 const dataScript = readFileSync(new URL("../public/assets/workbench-data.mjs", import.meta.url), "utf8");
+const profilesScript = readFileSync(new URL("../public/assets/workbench-profiles.mjs", import.meta.url), "utf8");
 
 test("research terminal exposes the continuous three-column workspace and indicator panes", () => {
   assert.match(html, /class="research-layout"/);
@@ -280,11 +281,11 @@ test("chat keeps persistent local threads and streams SSE with history context",
   assert.match(script, /history:\s*historyMessages/);
   assert.match(script, /requestId:\s*chatRequestId/);
   assert.match(script, /sessionId:\s*thread\.id/);
-  assert.match(script, /profileId:\s*currentProfile\?\.id/);
+  assert.match(script, /profileId:\s*profile\?\.id/);
   assert.match(script, /symbol:\s*state\.selectedSymbol/);
   assert.match(script, /x-request-id/);
   assert.match(script, /function recoverThread/);
-  assert.match(script, /\/api\/chat-sessions\?sessionId=/);
+  assert.match(script, /profileRequestUrl\("\/api\/chat-sessions"/);
   assert.match(script, /function recoverChatRequest/);
   assert.match(script, /stream:\s*true/);
   assert.match(script, /response\.body\.getReader\(\)/);
@@ -332,8 +333,8 @@ test("chat history excludes failed messages and local thread compaction enforces
 
 test("market rendering replays every changed point and storage quota failures are contained", () => {
   assert.match(dataScript, /for\s*\(let index = changedFromIndex; index < length; index \+= 1\)/);
-  assert.match(script, /marketRequestGate\.begin\(symbol,\s*timeframe,\s*incremental\s*\?\s*"incremental"\s*:\s*"full"\)/);
-  assert.match(script, /marketRequestGate\.isCurrent\(request,\s*state\.selectedSymbol,\s*state\.timeframe\)/);
+  assert.match(script, /marketRequestGate\.begin\(requestContext,\s*timeframe,\s*incremental\s*\?\s*"incremental"\s*:\s*"full"\)/);
+  assert.match(script, /marketContext\(currentProfile\(\)\?\.id,\s*state\.selectedSymbol\)/);
   assert.match(script, /state\.chart\.hydrated/);
   assert.match(script, /catch\s*\(error\)\s*\{[\s\S]*本地会话无法继续持久化/);
 });
@@ -392,7 +393,7 @@ test("settings and task workspaces retain the configured monitor combination run
   assert.match(html, /id="run-analysis"[^>]*>立即运行</);
   assert.match(html, /id="tasks-run-now"[^>]*>立即运行</);
   assert.match(script, /#run-analysis"\)\.addEventListener\("click",\s*runAnalysis/);
-  assert.match(script, /#tasks-run-now"\)\.addEventListener\("click",\s*openDeepAnalysis/);
+  assert.match(script, /#tasks-run-now"\)\.addEventListener\("click",\s*runAnalysis/);
 });
 
 test("report archive uses the audit index and visibly labels unverified evidence", () => {
@@ -438,8 +439,8 @@ test("market direction follows A-share and US/Hong Kong conventions without chan
 });
 
 test("drawers move focus before becoming hidden and keep closed controls inert", () => {
-  assert.match(html, /id="settings-drawer"[^>]*aria-hidden="true"[^>]*inert/);
-  assert.match(html, /id="assistant"[^>]*aria-hidden="true"[^>]*inert/);
+  assert.match(html, /id="settings-drawer"[^>]*role="dialog"[^>]*aria-modal="true"[^>]*aria-hidden="true"[^>]*inert/);
+  assert.match(html, /id="assistant"[^>]*role="dialog"[^>]*aria-modal="true"[^>]*aria-hidden="true"[^>]*inert/);
   assert.match(script, /drawerFocusReturn\s*=\s*new WeakMap/);
   assert.match(script, /drawerElement\.inert\s*=\s*false/);
   assert.match(
@@ -447,4 +448,74 @@ test("drawers move focus before becoming hidden and keep closed controls inert",
     /drawerElement\.contains\(document\.activeElement\)[\s\S]*?returnTarget\.focus\(\)[\s\S]*?drawerElement\.setAttribute\("aria-hidden",\s*"true"\)/,
   );
   assert.match(script, /drawerElement\.inert\s*=\s*true/);
+  assert.match(script, /function trapDrawerFocus/);
+  assert.match(script, /setBackgroundInert/);
+});
+
+test("one selected profile drives every profile-scoped view and request", () => {
+  assert.match(script, /selectedProfileId/);
+  assert.match(script, /function currentProfile\(\)/);
+  assert.match(script, /localStorage\.setItem\(STORAGE\.selectedProfileId/);
+  assert.doesNotMatch(script, /profiles\?\.\[0\]|profiles\[0\]/);
+  assert.doesNotMatch(script, /\.find\(\(profile\) => profile\.enabled\)/);
+  assert.match(script, /marketUrl\(symbol,\s*timeframe,\s*currentProfile\(\)\?\.id/);
+  assert.match(script, /profileRequestUrl\("\/api\/news",\s*profileId/);
+  assert.match(script, /profileRequestUrl\("\/api\/events",\s*profileId/);
+  assert.match(script, /profileRequestUrl\("\/api\/monitor-status",\s*profileId/);
+  assert.match(script, /profileId:\s*currentProfile\(\)\?\.id/);
+  assert.match(script, /profileId:\s*profile\.id/);
+});
+
+test("settings expose profile CRUD, server conflict recovery, and documented limits", () => {
+  for (const id of [
+    "profile-selector",
+    "settings-profile-selector",
+    "new-profile-id",
+    "new-profile-name",
+    "profile-create",
+    "profile-copy",
+    "profile-delete",
+    "settings-reload-remote",
+  ]) {
+    assert.match(html, new RegExp(`id="${id}"`));
+  }
+  assert.match(html, /最多 8 组/);
+  assert.match(html, /每组最多 14 个标的/);
+  assert.match(script, /\/api\/settings\/profiles/);
+  assert.match(script, /expectedUpdatedAt:\s*state\.settingsUpdatedAt/);
+  assert.match(script, /"PATCH"/);
+  assert.match(script, /method:\s*"DELETE"/);
+  assert.match(script, /\/copy/);
+  assert.match(script, /重新载入远端/);
+  assert.match(profilesScript, /PROFILE_LIMIT\s*=\s*8/);
+  assert.match(profilesScript, /TARGET_LIMIT\s*=\s*14/);
+});
+
+test("target editor accepts A-share, Hong Kong, and US symbols with explicit market mapping", () => {
+  assert.match(script, /请输入支持的 A 股、港股或美股代码/);
+  assert.match(script, /marketForProfileTarget\(symbol\)/);
+  assert.doesNotMatch(script, /symbol\.includes\("\.S"\)\s*\?\s*"CN"\s*:\s*"US"/);
+});
+
+test("profile switches reset scoped state without rebuilding VolGuard or temporary research", () => {
+  assert.match(script, /resetProfileContext/);
+  assert.match(script, /async function selectProfile/);
+  assert.match(script, /createThread\([^)]*profile/);
+  assert.doesNotMatch(script, /state\.options\s*=\s*normalizeVolguardPayload\(null\)[\s\S]*selectProfile/);
+  assert.doesNotMatch(script, /agent-research-form"\)\.reset/);
+  assert.doesNotMatch(profilesScript, /options:\s*null/);
+  assert.doesNotMatch(profilesScript, /pendingResearch:\s*null/);
+});
+
+test("threads load only after settings restore the selected profile", () => {
+  const initBody = /async function init\(\) \{([\s\S]*?)\r?\n  \}\r?\n\r?\n  init/.exec(script)?.[1] || "";
+  assert.ok(initBody);
+  assert.ok(initBody.indexOf("await loadSettings()") < initBody.indexOf("loadThreads()"));
+  assert.match(script, /profileId:\s*thread\.profileId \|\| profileId/);
+});
+
+test("mobile profile and target controls meet narrow-screen and keyboard contracts", () => {
+  assert.match(css, /\.switch input:focus-visible \+ span/);
+  assert.match(css, /@media\s*\(max-width:\s*420px\)[\s\S]*\.target-row/);
+  assert.match(css, /min-height:\s*44px/);
 });

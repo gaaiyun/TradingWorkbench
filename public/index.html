@@ -7,11 +7,11 @@
   <meta name="color-scheme" content="dark">
   <meta name="description" content="Trading Workbench 多市场研究与风险工作台">
   <title>Trading Workbench · 交易研究工作台</title>
-  <link rel="stylesheet" href="./assets/workbench.css?v=20260726e">
+  <link rel="stylesheet" href="./assets/workbench.css?v=20260726f">
   <script type="importmap">
     { "imports": { "fancy-canvas": "./vendor/fancy-canvas/index.mjs" } }
   </script>
-  <script type="module" src="./assets/workbench.js?v=20260726e"></script>
+  <script type="module" src="./assets/workbench.js?v=20260726f"></script>
 </head>
 <body data-mobile-view="chart" data-route="monitor">
   <a class="skip-link" href="#market-chart">跳到行情图表</a>
@@ -41,6 +41,10 @@
       <span class="wordmark-glyph">TA</span>
       <span><strong id="workspace-title">市场监控</strong><small>TRADING WORKBENCH / ASIA</small></span>
     </a>
+    <label class="profile-selector" for="profile-selector">
+      <span>当前监控组</span>
+      <select id="profile-selector" aria-label="当前监控组"></select>
+    </label>
     <div class="session-strip" aria-label="工作台状态">
       <span class="market-session"><i></i><b>沪深</b><span id="cn-session">核验中</span></span>
       <span class="market-session"><i></i><b>美股</b><span id="us-session">核验中</span></span>
@@ -354,12 +358,27 @@
   </nav>
 
   <div class="overlay" id="settings-overlay" hidden></div>
-  <aside class="settings-drawer" id="settings-drawer" aria-labelledby="settings-title" aria-hidden="true" inert>
+  <aside class="settings-drawer" id="settings-drawer" role="dialog" aria-modal="true" aria-labelledby="settings-title" aria-hidden="true" inert>
     <header class="drawer-head">
       <div><span>WORKBENCH SETTINGS V2</span><h2 id="settings-title">监控配置</h2></div>
       <button class="icon-button" id="settings-close" type="button" aria-label="关闭设置">×</button>
     </header>
     <form id="settings-form" autocomplete="off">
+      <section class="settings-section profile-manager">
+        <div class="settings-section-head"><h3>监控组</h3><span id="profile-count">最多 8 组</span></div>
+        <label class="field" for="settings-profile-selector"><span>正在编辑</span><select id="settings-profile-selector" aria-label="正在编辑的监控组"></select></label>
+        <div class="profile-create-fields">
+          <label class="field" for="new-profile-id"><span>新组 ID</span><input id="new-profile-id" maxlength="64" pattern="[A-Za-z0-9_\x2D]{1,64}" placeholder="例如 us-semiconductors"></label>
+          <label class="field" for="new-profile-name"><span>新组名称</span><input id="new-profile-name" maxlength="120" placeholder="例如 美股半导体监控"></label>
+        </div>
+        <div class="profile-actions">
+          <button class="button secondary" id="profile-create" type="button">新建</button>
+          <button class="button secondary" id="profile-copy" type="button">复制当前组</button>
+          <button class="button danger" id="profile-delete" type="button">删除当前组</button>
+        </div>
+        <small class="profile-limits">最多 8 组；每组最多 14 个标的。ID 创建后不可修改。</small>
+      </section>
+
       <section class="settings-section profile-fields">
         <div class="settings-section-head"><h3>研究目标</h3><label class="switch"><input id="profile-enabled" type="checkbox"><span></span>启用</label></div>
         <label class="field"><span>目标名称</span><input id="profile-name" required></label>
@@ -368,7 +387,7 @@
       </section>
 
       <section class="settings-section">
-        <div class="settings-section-head"><h3>标的与角色</h3><span>最多 12 个</span></div>
+        <div class="settings-section-head"><h3>标的与角色</h3><span>每组最多 14 个标的</span></div>
         <div class="target-search">
           <input id="target-search" type="search" placeholder="输入代码，如 159995.SZ">
           <button type="button" id="target-add">添加</button>
@@ -409,6 +428,7 @@
       </section>
 
       <div class="settings-notice" id="settings-notice" role="status" aria-live="polite"></div>
+      <button class="settings-reload-remote" id="settings-reload-remote" type="button" hidden>重新载入远端</button>
       <footer class="drawer-actions">
         <button class="button secondary" id="run-analysis" type="button">立即运行</button>
         <button class="button primary" id="save-settings" type="submit">保存配置</button>
@@ -417,7 +437,7 @@
   </aside>
 
   <div class="overlay" id="assistant-backdrop" hidden></div>
-  <aside class="assistant-drawer" id="assistant" aria-labelledby="assistant-title" aria-hidden="true" inert>
+  <aside class="assistant-drawer" id="assistant" role="dialog" aria-modal="true" aria-labelledby="assistant-title" aria-hidden="true" inert>
     <header class="drawer-head">
       <div><span>RESEARCH COPILOT</span><h2 id="assistant-title">研究问答</h2></div>
       <button class="icon-button" id="assistant-close" type="button" aria-label="关闭研究问答">×</button>
