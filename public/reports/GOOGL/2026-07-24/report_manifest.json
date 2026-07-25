@@ -1,0 +1,14 @@
+{
+  "schemaVersion": 1,
+  "ticker": "GOOGL",
+  "tradeDate": "2026-07-24",
+  "generatedAt": "2026-07-25T07:44:56.379176+00:00",
+  "analysisStatus": "rated",
+  "auditStatus": "verified",
+  "evidence": {
+    "schemaVersion": "EvidencePacketV1",
+    "asOf": "2026-07-24T23:59:59Z",
+    "contentHash": "8680481ff0824b665bda6eb2eb53e8db90436a3ef526e87cbe7bbaeec069a989",
+    "status": "ok"
+  }
+}

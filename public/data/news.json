@@ -1,7 +1,7 @@
 {
   "version": 1,
-  "status": "ok",
-  "generated_at": "2026-07-24T15:21:07+08:00",
+  "status": "partial",
+  "generated_at": "2026-07-25T15:22:49+08:00",
   "trade_date": "2026-07-24",
   "global": {
     "status": "ok",
@@ -9,105 +9,105 @@
     "ticker": null,
     "start_date": "2026-07-17",
     "end_date": "2026-07-24",
-    "fetched_at": "2026-07-24T07:21:08Z",
+    "fetched_at": "2026-07-25T07:22:51Z",
     "items": [
       {
-        "title": "Oil prices head for weekly rise on Middle East escalation",
+        "title": "Ovintiv Inc (OVV) Q2 2026 Earnings Call Highlights: Strong Cash Flow and Production Growth Amid ...",
         "summary": "",
-        "url": "https://finance.yahoo.com/news/brent-hovers-above-100-bbl-035115480.html",
-        "source": "Reuters",
-        "published_at": "2026-07-24T07:07:19Z",
-        "fetched_at": "2026-07-24T07:21:08Z",
-        "ticker": null,
-        "source_tier": "aggregator"
-      },
-      {
-        "title": "FTSE 100 Live: London stocks called lower as Big Tech burns cash and oil hits $100",
-        "summary": "",
-        "url": "https://finance.yahoo.com/m/a29be53f-56d9-33c1-84fa-e7db2449b60f/ftse-100-live%3A-london-stocks.html",
-        "source": "Proactive",
-        "published_at": "2026-07-24T06:15:00Z",
-        "fetched_at": "2026-07-24T07:21:08Z",
-        "ticker": null,
-        "source_tier": "aggregator"
-      },
-      {
-        "title": "U.S. Treasury Yields Edge Lower as Oil Looks to Stabilize",
-        "summary": "",
-        "url": "https://finance.yahoo.com/m/7f98ce1d-c968-3f77-9cf4-1d6dccd53738/u.s.-treasury-yields-edge.html",
-        "source": "The Wall Street Journal",
-        "published_at": "2026-07-24T05:58:00Z",
-        "fetched_at": "2026-07-24T07:21:08Z",
-        "ticker": null,
-        "source_tier": "aggregator"
-      },
-      {
-        "title": "US Weekly Jobless Claims Hit 1969 Low: What Does It Mean For Crypto?",
-        "summary": "",
-        "url": "https://finance.yahoo.com/m/40dfbfec-48d6-3f53-92d8-21d854b7b9ed/us-weekly-jobless-claims-hit.html",
-        "source": "BeInCrypto",
-        "published_at": "2026-07-24T05:43:43Z",
-        "fetched_at": "2026-07-24T07:21:08Z",
-        "ticker": null,
-        "source_tier": "aggregator"
-      },
-      {
-        "title": "Oil Tops $100 as Supply Crisis Deepens",
-        "summary": "",
-        "url": "https://finance.yahoo.com/energy/articles/oil-tops-100-supply-crisis-054000369.html",
-        "source": "Oilprice.com",
-        "published_at": "2026-07-24T05:40:00Z",
-        "fetched_at": "2026-07-24T07:21:08Z",
-        "ticker": null,
-        "source_tier": "aggregator"
-      },
-      {
-        "title": "Dollar gets yields boost as Middle East and trade wars raise inflation stakes",
-        "summary": "",
-        "url": "https://finance.yahoo.com/news/dollar-rides-yield-surge-middle-005503376.html",
-        "source": "Reuters",
-        "published_at": "2026-07-24T05:39:55Z",
-        "fetched_at": "2026-07-24T07:21:08Z",
-        "ticker": null,
-        "source_tier": "aggregator"
-      },
-      {
-        "title": "Shares skid in Asia in sell-off of AI-related shares as Brent oil trades near $100 per barrel",
-        "summary": "",
-        "url": "https://finance.yahoo.com/markets/articles/shares-skid-asia-sell-off-051338979.html",
-        "source": "Associated Press",
-        "published_at": "2026-07-24T05:13:38Z",
-        "fetched_at": "2026-07-24T07:21:08Z",
-        "ticker": null,
-        "source_tier": "aggregator"
-      },
-      {
-        "title": "Newmont Corp (NEM) Q2 2026 Earnings Call Highlights: Record Free Cash Flow and Strategic ...",
-        "summary": "",
-        "url": "https://finance.yahoo.com/markets/stocks/articles/newmont-corp-nem-q2-2026-050155908.html",
+        "url": "https://finance.yahoo.com/energy/articles/ovintiv-inc-ovv-q2-2026-230019199.html",
         "source": "GuruFocus.com",
-        "published_at": "2026-07-24T05:01:55Z",
-        "fetched_at": "2026-07-24T07:21:08Z",
+        "published_at": "2026-07-24T23:00:19Z",
+        "fetched_at": "2026-07-25T07:22:51Z",
         "ticker": null,
         "source_tier": "aggregator"
       },
       {
-        "title": "Teck Resources (TSX:TECK.B) Could Be About Right Following The Q2 Earnings Beat",
+        "title": "S&P 500, Dow, Nasdaq End Second Week Lower Over Elevated Oil Prices, Chipmaker Rout — PSKY, UBER, QCOM, VZ, INTC In Focus",
         "summary": "",
-        "url": "https://finance.yahoo.com/markets/stocks/articles/teck-resources-tsx-teck-b-042952255.html",
-        "source": "Simply Wall St.",
-        "published_at": "2026-07-24T04:29:52Z",
-        "fetched_at": "2026-07-24T07:21:08Z",
+        "url": "https://finance.yahoo.com/m/479dd690-44bb-3d0f-94b7-f6bf29601cdf/s%26p-500%2C-dow%2C-nasdaq-end.html",
+        "source": "Stocktwits",
+        "published_at": "2026-07-24T22:54:48Z",
+        "fetched_at": "2026-07-25T07:22:51Z",
         "ticker": null,
         "source_tier": "aggregator"
       },
       {
-        "title": "AP Top Financial News at 2:49 a.m. EDT",
+        "title": "Analyst Report: MPLX LP",
         "summary": "",
-        "url": "https://finance.yahoo.com/markets/stocks/articles/ap-top-financial-news-1-040000822.html",
-        "source": "Associated Press",
-        "published_at": "2026-07-24T04:00:00Z",
-        "fetched_at": "2026-07-24T07:21:08Z",
+        "url": "https://finance.yahoo.com/m/76a5a4a5-afa1-3f93-94a0-752b807a5f47/analyst-report%3A-mplx-lp.html",
+        "source": "Morningstar Research",
+        "published_at": "2026-07-24T22:44:37Z",
+        "fetched_at": "2026-07-25T07:22:51Z",
+        "ticker": null,
+        "source_tier": "aggregator"
+      },
+      {
+        "title": "Walmart and the Walmart Foundation Announce $500,000 Commitment to West Virginia Flood Relief",
+        "summary": "",
+        "url": "https://finance.yahoo.com/small-business/articles/walmart-walmart-foundation-announce-500-215400033.html",
+        "source": "Business Wire",
+        "published_at": "2026-07-24T21:54:00Z",
+        "fetched_at": "2026-07-25T07:22:51Z",
+        "ticker": null,
+        "source_tier": "aggregator"
+      },
+      {
+        "title": "Paramount Stock Falls on Warner Bros. Merger Delay",
+        "summary": "",
+        "url": "https://finance.yahoo.com/m/bd8f4811-b7d7-3fd2-82e8-a284a27ac5f2/paramount-stock-falls-on.html",
+        "source": "Barrons.com",
+        "published_at": "2026-07-24T20:38:00Z",
+        "fetched_at": "2026-07-25T07:22:51Z",
+        "ticker": null,
+        "source_tier": "aggregator"
+      },
+      {
+        "title": "2 Quantum Stocks Set for Strong Q2 Earnings, Triple-Digit Price Target",
+        "summary": "",
+        "url": "https://finance.yahoo.com/markets/stocks/articles/2-quantum-stocks-set-strong-190000511.html",
+        "source": "Zacks",
+        "published_at": "2026-07-24T19:00:00Z",
+        "fetched_at": "2026-07-25T07:22:51Z",
+        "ticker": null,
+        "source_tier": "aggregator"
+      },
+      {
+        "title": "Amazon stock slides as Prime Day data reveals shopper shift ahead of earnings",
+        "summary": "",
+        "url": "https://finance.yahoo.com/m/24800a3c-18a4-39a8-89f7-e072b93d88b1/amazon-stock-slides-as-prime.html",
+        "source": "TheStreet",
+        "published_at": "2026-07-24T18:17:00Z",
+        "fetched_at": "2026-07-25T07:22:51Z",
+        "ticker": null,
+        "source_tier": "aggregator"
+      },
+      {
+        "title": "Disney’s Kraft Heinz Partnership Offers a Way Forward for the Stock",
+        "summary": "",
+        "url": "https://finance.yahoo.com/m/71fde92b-18c1-3747-aa30-e29dd63c3c88/disney%E2%80%99s-kraft-heinz.html",
+        "source": "Barrons.com",
+        "published_at": "2026-07-24T17:25:00Z",
+        "fetched_at": "2026-07-25T07:22:51Z",
+        "ticker": null,
+        "source_tier": "aggregator"
+      },
+      {
+        "title": "EBAY Showered Owners With Cash. The Stock Did Not Cooperate",
+        "summary": "",
+        "url": "https://finance.yahoo.com/m/401f1358-d93e-3a61-bc83-f11d392e2f94/ebay-showered-owners-with.html",
+        "source": "Trefis",
+        "published_at": "2026-07-24T17:08:32Z",
+        "fetched_at": "2026-07-25T07:22:51Z",
+        "ticker": null,
+        "source_tier": "aggregator"
+      },
+      {
+        "title": "3 Reasons Disney Stock Can Bounce Back in the Second Half",
+        "summary": "",
+        "url": "https://finance.yahoo.com/m/f4231a1f-0ff0-32aa-a314-df7379c9564a/3-reasons-disney-stock-can.html",
+        "source": "Motley Fool",
+        "published_at": "2026-07-24T15:38:50Z",
+        "fetched_at": "2026-07-25T07:22:51Z",
         "ticker": null,
         "source_tier": "aggregator"
       }
@@ -127,13 +127,24 @@
   },
   "tickers": {
     "515880.SS": {
-      "status": "empty",
+      "status": "ok",
       "query_type": "ticker",
       "ticker": "515880.SS",
       "start_date": "2026-07-24",
       "end_date": "2026-07-24",
-      "fetched_at": "2026-07-24T07:21:09Z",
-      "items": [],
+      "fetched_at": "2026-07-25T07:22:53Z",
+      "items": [
+        {
+          "title": "通信ETF国泰：7月23日融资买入2.04亿元，融资融券余额14.63亿元",
+          "summary": "通信ETF国泰：7月23日融资买入2.04亿元，融资融券余额14.63亿元 手机网易网",
+          "url": "https://news.google.com/rss/articles/CBMiYkFVX3lxTE5LNThQRnNzc29Sc2JEN0pDLXd3RDNSOHNxM2dmUnYzY1cxTlNYMkZ4VS0xbm1TYmp1cXlDSW9YdTNLVFVFSjJCOG4wZV9US29DOGEwbjBwa3hzQW9SdmRzOXR3?oc=5",
+          "source": "Google News / 手机网易网",
+          "published_at": "2026-07-24T01:37:44Z",
+          "fetched_at": "2026-07-25T07:22:53Z",
+          "ticker": "515880.SS",
+          "source_tier": "aggregator"
+        }
+      ],
       "source_statuses": [
         {
           "source": "Yahoo Finance",
@@ -142,8 +153,8 @@
         },
         {
           "source": "Google News RSS",
-          "status": "empty",
-          "item_count": 0
+          "status": "ok",
+          "item_count": 1
         },
         {
           "source": "SEC EDGAR",
@@ -158,7 +169,7 @@
       "ticker": "512480.SS",
       "start_date": "2026-07-24",
       "end_date": "2026-07-24",
-      "fetched_at": "2026-07-24T07:21:24Z",
+      "fetched_at": "2026-07-25T07:22:56Z",
       "items": [
         {
           "title": "半导体ETF国联安：7月23日融资净买入7105.74万元，当日排名第38",
@@ -166,7 +177,7 @@
           "url": "https://news.google.com/rss/articles/CBMiYkFVX3lxTE1HdnhWS3hfb1lOR0w2RGE2ZnprU0M5MERDTDN0c0JFTDJnanZFaXUwZVkxclhWempORnVWRk1yckJOV19Xa0JWMldqNTJrRThLMDQ1S2tCSjd0Q3UyWnBLcjlR?oc=5",
           "source": "Google News / 手机网易网",
           "published_at": "2026-07-24T01:37:44Z",
-          "fetched_at": "2026-07-24T07:21:24Z",
+          "fetched_at": "2026-07-25T07:22:56Z",
           "ticker": "512480.SS",
           "source_tier": "aggregator"
         }
@@ -188,107 +199,937 @@
           "item_count": 0
         }
       ]
+    },
+    "ORCL": {
+      "status": "partial",
+      "query_type": "ticker",
+      "ticker": "ORCL",
+      "start_date": "2026-07-24",
+      "end_date": "2026-07-24",
+      "fetched_at": "2026-07-25T07:22:59Z",
+      "items": [
+        {
+          "title": "Oracle’s defense pivot lands its biggest government win yet",
+          "summary": "",
+          "url": "https://finance.yahoo.com/m/af691027-f31d-3a3e-b6b7-00013f6be661/oracle%E2%80%99s-defense-pivot-lands.html",
+          "source": "TheStreet",
+          "published_at": "2026-07-25T02:33:00Z",
+          "fetched_at": "2026-07-25T07:22:59Z",
+          "ticker": "ORCL",
+          "source_tier": "aggregator"
+        },
+        {
+          "title": "Oracle Just Hit a New 52-Week Low. Wall Street's Average Target Is Still More Than Double the Stock.",
+          "summary": "",
+          "url": "https://finance.yahoo.com/m/c217d11e-37d4-362e-95a4-11b4cd90f44c/oracle-just-hit-a-new-52-week.html",
+          "source": "Motley Fool",
+          "published_at": "2026-07-24T22:57:00Z",
+          "fetched_at": "2026-07-25T07:22:59Z",
+          "ticker": "ORCL",
+          "source_tier": "aggregator"
+        },
+        {
+          "title": "Stocks to Watch: Bank of America, Intel, SAP, Oracle",
+          "summary": "",
+          "url": "https://finance.yahoo.com/m/11cdad22-a23f-3779-a81d-e87f9fea1e3a/stocks-to-watch%3A-bank-of.html",
+          "source": "The Wall Street Journal",
+          "published_at": "2026-07-24T21:27:19Z",
+          "fetched_at": "2026-07-25T07:22:59Z",
+          "ticker": "ORCL",
+          "source_tier": "aggregator"
+        },
+        {
+          "title": "ORCL Has Left Its Peers Behind. Or Has It?",
+          "summary": "ORCL Has Left Its Peers Behind. Or Has It? Yahoo Finance",
+          "url": "https://news.google.com/rss/articles/CBMikAFBVV95cUxPQXlFbndvb080Q2ptSVRjNWtjRGNCR3RaZU05VjlkdWdWcndJQ1RxU1ZXa1ZMZUFuVnJPUjNsMzM5NlU3bUlfSTdBaEVPaUN5UlNPNmRLQjQxNWM0MGgtQ0VuZDZaV18wMnpuYzUtR0tKbHBJUkRSTjRpdmhLY2taTkVqWndrX0xiTTl1LVRBdkg?oc=5",
+          "source": "Google News / Yahoo Finance",
+          "published_at": "2026-07-24T20:47:37Z",
+          "fetched_at": "2026-07-25T07:22:59Z",
+          "ticker": "ORCL",
+          "source_tier": "aggregator"
+        },
+        {
+          "title": "Oracle Corp Stock (ORCL) Closed Down by 4.27% on Jul 24: What Signal Does It Send?",
+          "summary": "Oracle Corp Stock (ORCL) Closed Down by 4.27% on Jul 24: What Signal Does It Send? TradingKey",
+          "url": "https://news.google.com/rss/articles/CBMiiwFBVV95cUxOS0wxOFQzd0dHei13QnBZQVo2bnQzLUNrUmZiaXlYenpsbW92ZVVQcm1iUWdEaU5iaVVXbjhVQXI4SmdXQTN2d0pSOVA1UkhMYjAzTHA0OXNnZlJTUm1ubFpuUkpfVC1nOVJiV3RDVWhnaDlDWDcyVkhoajc5NmlDblBOaHhFaU9TZnRN?oc=5",
+          "source": "Google News / TradingKey",
+          "published_at": "2026-07-24T20:23:10Z",
+          "fetched_at": "2026-07-25T07:22:59Z",
+          "ticker": "ORCL",
+          "source_tier": "aggregator"
+        },
+        {
+          "title": "The $7 Billion Reason Oracle Stock Is in Focus Today",
+          "summary": "",
+          "url": "https://finance.yahoo.com/m/c1027afd-45b4-3f7d-987b-5ee0bcd56f03/the-%247-billion-reason-oracle.html",
+          "source": "Barchart",
+          "published_at": "2026-07-24T17:49:40Z",
+          "fetched_at": "2026-07-25T07:22:59Z",
+          "ticker": "ORCL",
+          "source_tier": "aggregator"
+        },
+        {
+          "title": "SpaceX (SPCX), Oracle (NASDAQ: ORCL), And QuantumScape (NYSE: QS) Sink To 52-Week Lows As Tech Selloff Deepens",
+          "summary": "SpaceX (SPCX), Oracle (NASDAQ: ORCL), And QuantumScape (NYSE: QS) Sink To 52-Week Lows As Tech Selloff Deepens foreignpolicyjournal.com",
+          "url": "https://news.google.com/rss/articles/CBMi4wFBVV95cUxQck1zVU13cFlUQncwWDlQRVBCTVg4NWFlU3UtVlNLeW5nTU0zUUZ1U1p1QWg4SkhOd2UxaVBCdk5RZm02SXZKTzNUM0Q4YXpUWWxPbUJ1YzdEUkRSdkxqYTdLbmdSbWFVa2ViNU1sdHp3YVloUDI5RGd3XzFJdUZaLThvcmZNVURxd1ptYm4wclU1ZVB5VnFmSXBsZk5CUDhFOUQ3M0oyQ0xHaHdrZ09qdXpzUDRvTFRKNWFiOFkzWnprdkJGcnNsSjU2OTVwRVZSUTZhSE03dHdRWVdiemVwSFUxVQ?oc=5",
+          "source": "Google News / foreignpolicyjournal.com",
+          "published_at": "2026-07-24T17:12:00Z",
+          "fetched_at": "2026-07-25T07:22:59Z",
+          "ticker": "ORCL",
+          "source_tier": "aggregator"
+        },
+        {
+          "title": "Oracle (ORCL) Secures $6.9 Billion Software Deal with U.S. Defen",
+          "summary": "Oracle (ORCL) Secures $6.9 Billion Software Deal with U.S. Defen GuruFocus",
+          "url": "https://news.google.com/rss/articles/CBMirwFBVV95cUxNTHZSVzFxOFhrODdlTnExYmF5UzRXV255aWo5RWx5amdGNWpiQzBidm9rVmlkZFZ2UFBlMmpYNzJEZGpSV2JlWHEwSExvcktaSjdUV1NFOXBrMXdjYlNGR3NoaEdUQ3dHNW4zeHNPVnVDUzYxeVJnX3lMOGJfaWh1X3FaRlBkbTVtdThZaExtLVg1c3pzVHAtbXoyeGVubTJ4UEFUSmtJd3RVTlAtdEM0?oc=5",
+          "source": "Google News / GuruFocus",
+          "published_at": "2026-07-24T14:06:48Z",
+          "fetched_at": "2026-07-25T07:22:59Z",
+          "ticker": "ORCL",
+          "source_tier": "aggregator"
+        },
+        {
+          "title": "4 stocks to watch on Friday: VZ, LLY, ORCL, DELL (SPX:)",
+          "summary": "4 stocks to watch on Friday: VZ, LLY, ORCL, DELL (SPX:) Seeking Alpha",
+          "url": "https://news.google.com/rss/articles/CBMiigFBVV95cUxOTzB1NU01eWltYUJETUMzOVlzMG90clVGaFVOV21WWEpqVnBXb3oxb012ZTN0TVZVNkFHM1VVZnVvbzZhWjRqQ01ERHRiVC1XX2JpUFRidllQLXgwMFZLcGdfdTdIcG5NdS1HcElaaFJDMHdZeVdoaF9KaTU3Sy02OThUdGRlSXdGaWc?oc=5",
+          "source": "Google News / Seeking Alpha",
+          "published_at": "2026-07-24T13:25:54Z",
+          "fetched_at": "2026-07-25T07:22:59Z",
+          "ticker": "ORCL",
+          "source_tier": "aggregator"
+        },
+        {
+          "title": "Oracle (ORCL) Secures $7 Billion Defense Contract Amid Stock Str",
+          "summary": "Oracle (ORCL) Secures $7 Billion Defense Contract Amid Stock Str GuruFocus",
+          "url": "https://news.google.com/rss/articles/CBMiqgFBVV95cUxOMEZjZzJfTURSeU94dmFhTHNfS2xpQ082U2dNNm0ybGhLX3p2dmFiVzdGYnJJZ2ZyX1Z3OXZMTkZVWXBKVzh3QmR6UmNxbGtwOVpYeldjcm9WWFNqcjhkd3NsSUZJUTdia0lWTmcyYmxNZk11TVltT3RaLXkybEpkcENaQjJiRGdJZjVQQktoQ0RZZjQxdk53a3RFVElmMFhUdVgyWEgwTjdTUQ?oc=5",
+          "source": "Google News / GuruFocus",
+          "published_at": "2026-07-24T11:20:04Z",
+          "fetched_at": "2026-07-25T07:22:59Z",
+          "ticker": "ORCL",
+          "source_tier": "aggregator"
+        },
+        {
+          "title": "Oracle (ORCL) Secures Nearly $7 Billion Pentagon Software Contract",
+          "summary": "Oracle (ORCL) Secures Nearly $7 Billion Pentagon Software Contract Yahoo Finance",
+          "url": "https://news.google.com/rss/articles/CBMimAFBVV95cUxPN2FHX2pwTlY1R0JRUmtVRzZMWm5qc0pTcEVncEZSN3hRUHk0Y1FYQzRCUkVzZ3JqQnBLOXEzdzNSODUwYmlUZWd0SUNVckxVbnJNWGU0UTk5eW9OS25CV3A1VWtTOU1QS1VEbUI1eFBGaWdxZnFZdGxZWWxEXzJJaGQ5SWlMZXFyT210TExMaXdpeHV3V3NkQw?oc=5",
+          "source": "Google News / Yahoo Finance",
+          "published_at": "2026-07-24T11:13:21Z",
+          "fetched_at": "2026-07-25T07:22:59Z",
+          "ticker": "ORCL",
+          "source_tier": "aggregator"
+        },
+        {
+          "title": "Oracle Corporation (NYSE:ORCL) Stock Rises on $7 Billion Pentagon Deal as Contract Math Tempers Rally",
+          "summary": "Oracle Corporation (NYSE:ORCL) Stock Rises on $7 Billion Pentagon Deal as Contract Math Tempers Rally TechStock²",
+          "url": "https://news.google.com/rss/articles/CBMiugFBVV95cUxQMzk3c2RidnUwcEpVcElmWEdMZVhrYVJUX3JoRVhRZWxzeHBCb1B1aWsyYm5FNGhrcmNISlpXYzMtMVF6aS1UbUs2S04zUHVFNExPeFJjOXgyX2FvZ3N6SE5xczZ0dzNsSTVoQk85U29FbDhFbU40WmxVUG5nZFVvWmpjVmxST1lwZmx4ZTJwN0pmLWtUSXNiRndVOFZIMmk3cktRYzNZbmlSMmYzZFNxRENfT1JqY1pndUE?oc=5",
+          "source": "Google News / TechStock²",
+          "published_at": "2026-07-24T09:49:09Z",
+          "fetched_at": "2026-07-25T07:22:59Z",
+          "ticker": "ORCL",
+          "source_tier": "aggregator"
+        },
+        {
+          "title": "Oracle’s $7B Pentagon Deal Win Sparks 'Buy' Calls From Retail Traders As ORCL Rebounds Premarket",
+          "summary": "Oracle’s $7B Pentagon Deal Win Sparks 'Buy' Calls From Retail Traders As ORCL Rebounds Premarket TradingView",
+          "url": "https://news.google.com/rss/articles/CBMi6gFBVV95cUxPZUtuYkwwV2ZaczBZZmpWem1wN00tcnVDYzg2eU9lODR4NVlYamxQb19iRHJiSHZKSUc2alJjSWo5UHRiWi1zTy1sNDl3bXF4N1NlNEsxOENPZmtlb3ZiNzZidXBnNnFTT1ZqMlB5aUl4WkNvZTZnRmhMb0hjVDY3UDlPZXlQTjBGR1JRU0VmYkFIaXRxX2RFMk1kWVZQWXJyaERsTXIwLW9tVm90VzhzYzhWeXc1VUQwUFo0ZnRneVNQcXRMaTdSbGFmQVREckJHQ0dLWnd5Y1FiQWMxOGljazZTS2VBOHpvUEE?oc=5",
+          "source": "Google News / TradingView",
+          "published_at": "2026-07-24T09:18:58Z",
+          "fetched_at": "2026-07-25T07:22:59Z",
+          "ticker": "ORCL",
+          "source_tier": "aggregator"
+        },
+        {
+          "title": "Oracle Wins Up to $7 Billion US Department of War Software Contract",
+          "summary": "",
+          "url": "https://finance.yahoo.com/technology/articles/oracle-wins-7-billion-us-090153368.html",
+          "source": "MT Newswires",
+          "published_at": "2026-07-24T09:01:53Z",
+          "fetched_at": "2026-07-25T07:22:59Z",
+          "ticker": "ORCL",
+          "source_tier": "aggregator"
+        },
+        {
+          "title": "Mr. Market Hates Oracle For Doing The Right Thing, Creating A Buying Opportunity (ORCL)",
+          "summary": "Mr. Market Hates Oracle For Doing The Right Thing, Creating A Buying Opportunity (ORCL) Seeking Alpha",
+          "url": "https://news.google.com/rss/articles/CBMiuAFBVV95cUxQbFpMdUdJMi1LeWN6QlZkNHNGbGNfWFRFN0tqaGs4WGhCUWlBTmR3dmdfcWk5NDRFLTZ5MEx1VmdYNERSYnZfWTlUM3NyMlFpVDZmbnRJYlBVSzVaeVJtUC1NQk9iUzY3UzFmVl9nd3IzU0RPdkJlS3FPaWk1N09IaDZGdU9Bb0NlOEhPb0dYVGt0UXRzRXlNbGpzWWRUdU1EWUl1eFd1YWxFRURlb1Q0X1hZeEI1UmNL?oc=5",
+          "source": "Google News / Seeking Alpha",
+          "published_at": "2026-07-24T08:34:49Z",
+          "fetched_at": "2026-07-25T07:22:59Z",
+          "ticker": "ORCL",
+          "source_tier": "aggregator"
+        },
+        {
+          "title": "Oracle Corp (ORCL) Stock Down 4.6% -- Now Undervalued? GF Score: 88/100",
+          "summary": "Oracle Corp (ORCL) Stock Down 4.6% -- Now Undervalued? GF Score: 88/100 GuruFocus",
+          "url": "https://news.google.com/rss/articles/CBMiogJBVV95cUxQa2traDZEQ0NWdnV1ZTZ6MWdhVndNVkRzRVRPdm40UGNLVmk5aUR2alRhNWxXMzZkbW9FOGJxZkVkUWVIbzRwcThJRDBzakc3WW8xNUExa18tMExzcVkxamZibWY4UWRkVjByNE42UmMzakoxX1RwdmpUaUx5RS1JVnFCQ1pyeXItWnJVWk95aEhpNXRxOEhUUWw5akt1OElHRnZKRHdfMDhJQ3hCRXREb0pYNHpZTFhqbHBSNzlUTGhsUTEwYXNiWjZCMXBKNXU1X1RIQWhHSFJRRUl1X2dxQkloUHBPY0hXVW1NS1A5c2Vqd0RKMzdtN2d3YW1mcnlNSGJYZkIydFkwQmxHX3BMcTlnSE1VeFRyVEpFRWtYM2ZuUQ?oc=5",
+          "source": "Google News / GuruFocus",
+          "published_at": "2026-07-24T08:21:38Z",
+          "fetched_at": "2026-07-25T07:22:59Z",
+          "ticker": "ORCL",
+          "source_tier": "aggregator"
+        },
+        {
+          "title": "Why Did SPCX, ORCL, QS Stocks Plunge To 52-Week Lows Today?",
+          "summary": "Why Did SPCX, ORCL, QS Stocks Plunge To 52-Week Lows Today? Stocktwits",
+          "url": "https://news.google.com/rss/articles/CBMivAFBVV95cUxQTHg0bXpoZHczYkg1aGpCMUhPS2dYR2Q1b3hMcEZDUm0yYXRzR1Q0ZmJ4Mk1QTks2ckdoRlF3YUFXVF8taTdTVEVlWGpRNURmdFU5aEtuaFJBWUtYd016eXZIb1BDR2pQQjdCRW9YMUpnSWtZd1NpNlRvblM0a24xb3NfclZ6LWlOWExwYWdkM2ZmYU96RXROVXRTc09YZGFZU1FFMzhESnF6RWFuZWJOalBxRVQzdXNuOFhZSw?oc=5",
+          "source": "Google News / Stocktwits",
+          "published_at": "2026-07-24T06:09:10Z",
+          "fetched_at": "2026-07-25T07:22:59Z",
+          "ticker": "ORCL",
+          "source_tier": "aggregator"
+        }
+      ],
+      "source_statuses": [
+        {
+          "source": "Yahoo Finance",
+          "status": "ok",
+          "item_count": 10
+        },
+        {
+          "source": "Google News RSS",
+          "status": "ok",
+          "item_count": 12
+        },
+        {
+          "source": "SEC EDGAR",
+          "status": "failed",
+          "item_count": 0
+        }
+      ]
+    },
+    "GOOGL": {
+      "status": "partial",
+      "query_type": "ticker",
+      "ticker": "GOOGL",
+      "start_date": "2026-07-24",
+      "end_date": "2026-07-24",
+      "fetched_at": "2026-07-25T07:23:00Z",
+      "items": [
+        {
+          "title": "Mag 7 Earnings Preview: Alphabet's Cloud Surge and CapEx Hike Raise the Stakes",
+          "summary": "",
+          "url": "https://finance.yahoo.com/markets/stocks/articles/mag-7-earnings-preview-alphabets-230100437.html",
+          "source": "Zacks",
+          "published_at": "2026-07-24T23:01:00Z",
+          "fetched_at": "2026-07-25T07:23:00Z",
+          "ticker": "GOOGL",
+          "source_tier": "aggregator"
+        },
+        {
+          "title": "Alphabet Inc. (GOOGL) Shares Drop Below 200-Day Moving Average",
+          "summary": "Alphabet Inc. (GOOGL) Shares Drop Below 200-Day Moving Average GuruFocus",
+          "url": "https://news.google.com/rss/articles/CBMi0wFBVV95cUxNellZUW84SGNaWFlVVlRabE54eHIwRzNCdFg1TE5lLV9ZbFZZSUkwRlJmZnA0Z0lsNG4yTy1FNEt2ZWRiX2NPSFZTTTRGM3RjdVdNaGZGYkFyYmx3S2dvRzJvOUV0TW5ZTW1NSTJ6dDZlcGNPbDdUNEE3SU05QlRjZmQ3WVFyR192N204Uk1uc1BqYTAyblJQa3daVkRyZTQtRmxRLXpWa2VoUHQ2eTM5N1h3RzN6OFhsNlBZa01mZW11alQ2bDNiV253bDhrVFhTZnow?oc=5",
+          "source": "Google News / GuruFocus",
+          "published_at": "2026-07-24T21:22:30Z",
+          "fetched_at": "2026-07-25T07:23:00Z",
+          "ticker": "GOOGL",
+          "source_tier": "aggregator"
+        },
+        {
+          "title": "Alphabet (GOOGL) Stock Faces Earnings Quality Questions After 55% Net Margin Headline Beat",
+          "summary": "Alphabet (GOOGL) Stock Faces Earnings Quality Questions After 55% Net Margin Headline Beat simplywall.st",
+          "url": "https://news.google.com/rss/articles/CBMiwgFBVV95cUxOT1VtMlFjQ0RMUllhbE9iSDVybVJaN2hPMkgzcXFGaldrZmUwWlg2cUtKcXpyVWZJaGplU3JZa1owVDhaTC1TS2FHaGxlcFAzVnY5ekRkajZGTWR3clJXNHFJU1l1aHdWR21HNl9EYVFHd3Y1dzk4X25RbFlUaFlPdjlYMWNsM3ozNUU3WjJFTVJ4TGR3bU8xd2RtVDJCaDJfS09GaUZ1bUhWVTE2QzVNSGZ1cnN3RzNzWFA2MHdROXFsd9IBxwFBVV95cUxObUpuS05vai1fZ1NJZ1lYUV9mWDBvakNLOGR2QUtlU0ZPOGNiNlVWdVcteGhfaGU0RmlhenhuMGpiaHVBVzNFQWloQ2o0aF8xTXlxR3lKSmFWTzVJcXNVdi1VZUF4bFNSb0NibklLcVlEOEpidnhjaDYtdXlhdEZFdXFtSGt5eFRrZ1ItWC0wcXV1bGtiUmlrLW13LS1zYlpTdTZELTFGQ0NvRlNqWjUxOFpRNXhLMklHemRiSlFrdmxWbF82ZEtZ?oc=5",
+          "source": "Google News / simplywall.st",
+          "published_at": "2026-07-24T20:28:37Z",
+          "fetched_at": "2026-07-25T07:23:00Z",
+          "ticker": "GOOGL",
+          "source_tier": "aggregator"
+        },
+        {
+          "title": "Alphabet: Making Money The 'Wrong' Way: Worst Bear Case Yet (NASDAQ:GOOGL)",
+          "summary": "Alphabet: Making Money The 'Wrong' Way: Worst Bear Case Yet (NASDAQ:GOOGL) Seeking Alpha",
+          "url": "https://news.google.com/rss/articles/CBMinAFBVV95cUxQRHJQNDBRNFFjLUJCWTBqd3BreVpCR3hfU3JHaXBucjF3Q1V0T283UlhsSnVfNWtvMzE1SWZoa20xYjBTVkxZM0tqc1d4TXZOaS15MDFrVGo1cFRXOUs1VW44QW5SUURINmJHUUZfVUVIbDcxdWxrS25Lc3hJd1ZRYnJFQWlfbWlOZFhsSVdsUzEwOTItOGtJclpTQjE?oc=5",
+          "source": "Google News / Seeking Alpha",
+          "published_at": "2026-07-24T17:06:52Z",
+          "fetched_at": "2026-07-25T07:23:00Z",
+          "ticker": "GOOGL",
+          "source_tier": "aggregator"
+        },
+        {
+          "title": "Alphabet's Google Signs EU AI Content Transparency Code",
+          "summary": "",
+          "url": "https://finance.yahoo.com/technology/ai/articles/alphabet-apos-google-signs-eu-165348705.html",
+          "source": "MT Newswires",
+          "published_at": "2026-07-24T16:53:48Z",
+          "fetched_at": "2026-07-25T07:23:00Z",
+          "ticker": "GOOGL",
+          "source_tier": "aggregator"
+        },
+        {
+          "title": "GOOGL Stock Drops In Premarket: Report Says Search Giant Trims Cloud Team Amid AI Spending Push",
+          "summary": "GOOGL Stock Drops In Premarket: Report Says Search Giant Trims Cloud Team Amid AI Spending Push Stocktwits",
+          "url": "https://news.google.com/rss/articles/CBMi7wFBVV95cUxQUjZDVDVHZjBJcmxHbmhfVWFBV3ItampZSHFzZXp3dFRFREk4Vkxyb0x0MXZwS1JaQmJjSUQ2aVV6UUxPZk1fdTRFUTFSZFcxOWQyVDB0ZFA5WWVPTEc0dlZtZUhIQVdhTV9WV3IzVGY0UExkVWFadUFJVFRPM1V5YllLQ05lZUNoS0xpZEJXMmtHWmloMjZIMXdVUUItRUJpRmktR2VXUWQ4djluZTRfVFNUTEdqM25SRlZybzMtamtNWklBaDZrMklpN2lhQVJxNlhDZ2JzVDMycGNhdGZqdUNjQjQwVEVzM1RQMXZSdw?oc=5",
+          "source": "Google News / Stocktwits",
+          "published_at": "2026-07-24T15:35:33Z",
+          "fetched_at": "2026-07-25T07:23:00Z",
+          "ticker": "GOOGL",
+          "source_tier": "aggregator"
+        },
+        {
+          "title": "GOOGL Bets on AI to Defend Search Leadership: More Upside Ahead?",
+          "summary": "GOOGL Bets on AI to Defend Search Leadership: More Upside Ahead? Yahoo Finance",
+          "url": "https://news.google.com/rss/articles/CBMilgFBVV95cUxPREZvU0x4LTBaczZSN3ExZlpSd1R3TW83UzE3cVZiTUdHRTJESEZLTFRkZGhIdS1VcU0yUjNlSDNLTnBtZjBTWFVwNmFzOW1hcEV6c3ZwTThFMkY2YzNqY3dZWFZyNGpoZ1ZLd2tNYTlySWZkZzJZVWsxemtKOXljaHozUjhXUUM3YlBVREdTTGI5WTBaUGc?oc=5",
+          "source": "Google News / Yahoo Finance",
+          "published_at": "2026-07-24T15:12:00Z",
+          "fetched_at": "2026-07-25T07:23:00Z",
+          "ticker": "GOOGL",
+          "source_tier": "aggregator"
+        },
+        {
+          "title": "GOOGL Stock: Should You Buy the Best-Performing Magnificent Seven Stock Right Now?",
+          "summary": "GOOGL Stock: Should You Buy the Best-Performing Magnificent Seven Stock Right Now? TradingKey",
+          "url": "https://news.google.com/rss/articles/CBMi5gFBVV95cUxPTmVpTE0zd1RjSFd3Q0tQRzFTdEh1dG9vdWNsYVZfb0pJTlYtZzV5bFNDckNXRWFMSzFyZ1hUVTVvVERNYnFSZnZVSHdjNXFTTk9MTElKVWJ3M2dwWnZXTFVtYVhXNktFcmZPQlRacXpsMnVseHJTcnNTM2d5c2FQdWZGOHd3MjZQS0VEZlBwSmFmaHZ4RTVLdzRtejZrSGtHTDRMVG9lV190UldWb0tmbF9reXdySWVPNnFpOHg0WVJPSjltMEltNHhuUFh2MkRSTGY4UDJlWk96eWhpTThmX3EwQ2RRQQ?oc=5",
+          "source": "Google News / TradingKey",
+          "published_at": "2026-07-24T15:08:48Z",
+          "fetched_at": "2026-07-25T07:23:00Z",
+          "ticker": "GOOGL",
+          "source_tier": "aggregator"
+        },
+        {
+          "title": "The Discount On GOOGL Stock Looks Overdone",
+          "summary": "The Discount On GOOGL Stock Looks Overdone Trefis",
+          "url": "https://news.google.com/rss/articles/CBMipwFBVV95cUxQY2gyTEhhUE5hY3FDTTRXVHd5M3lPN3BUMHFHOUNvcjBGci1OejF1UW12MUJaR1pTT3lXdVd1Tmh4emtVZEZrY0h5a1dNNHNheDNwVFhvbnA1MFRSRDQxS2ZjanhmVDFCSlE5SHV1ZHVzaXlBU09ycVFSZjBxWGJGdUR3RE04d3B6ekE1WV92bkVPQXUtcG4zQlZsTklKMjNiUHo2Mi1HTQ?oc=5",
+          "source": "Google News / Trefis",
+          "published_at": "2026-07-24T13:57:38Z",
+          "fetched_at": "2026-07-25T07:23:00Z",
+          "ticker": "GOOGL",
+          "source_tier": "aggregator"
+        },
+        {
+          "title": "Alphabet (GOOGL) Stock Plummets Amid Rising Capital Expenditure Concerns",
+          "summary": "Alphabet (GOOGL) Stock Plummets Amid Rising Capital Expenditure Concerns GuruFocus",
+          "url": "https://news.google.com/rss/articles/CBMivgFBVV95cUxOMmExeERRY2R3NWlBbHFUSG5kdk5EaG5mTE9XOUk0bURySDRPTUJfemVJVldwSi1kUGFBWXlJdzduX2t0dl9qVWwtLTFpSkZpbEs0VnJUZjRQcXplaks4YkxNU2R4bjRrVXNJa3l6NlFZNHF1dzFLWVFrMzA1VFNaR3FjQmxrV3BzUHcxNFo4b3c5YkdBeWVEYThlVW1SWS1QV1lnQy1nSUZmT21WWkc0TlluTlZKVEE5U2ZoT1R3?oc=5",
+          "source": "Google News / GuruFocus",
+          "published_at": "2026-07-24T13:52:30Z",
+          "fetched_at": "2026-07-25T07:23:00Z",
+          "ticker": "GOOGL",
+          "source_tier": "aggregator"
+        },
+        {
+          "title": "Gene Munster Sees GOOGL Q2 Cloud Revenue Jump Over 65% Ahead Of Estimates — But Traders Eye Capex",
+          "summary": "Gene Munster Sees GOOGL Q2 Cloud Revenue Jump Over 65% Ahead Of Estimates — But Traders Eye Capex Stocktwits",
+          "url": "https://news.google.com/rss/articles/CBMi2AFBVV95cUxNT3VtU0ZOS1haRFRNbVpfXzRTVTBDRmtRYzdrSUVwVVUzUkZQNTRUZGNzTE1zb2xhd2VRR0s1Xy1FY2RFbFZnU01xOXpOSmJzZGVxV2ttVms1VDNlajVuSXJ1ekcyZDlQaGlpdWlKb3BWNHZmLVBGRUJ5MVR4V3hYcTF6Z0dMeFRmUUhCU0laNzFGY29NYThUSDhJOUltTVVhX3Y2ek1xMXRRM2UxVFhUSWo0cWluMl85b2xJOXNZNnJBREtVSDJEZG50RXVBaWJiWjBPYkQxX3U?oc=5",
+          "source": "Google News / Stocktwits",
+          "published_at": "2026-07-24T12:55:12Z",
+          "fetched_at": "2026-07-25T07:23:00Z",
+          "ticker": "GOOGL",
+          "source_tier": "aggregator"
+        },
+        {
+          "title": "Alphabet Inc. (GOOGL) Stock Forecasts",
+          "summary": "Alphabet Inc. (GOOGL) Stock Forecasts Yahoo! Finance Canada",
+          "url": "https://news.google.com/rss/articles/CBMijgFBVV95cUxQQVJnaUo2a2RwUTZHNXl3ODdsaTBocVRnRHcxSUoxZHgtaDdBTWo5QWV3cHc3anhhMkl2bWotek5ndnVzRnp3clFHLVAzUGpSNURXVW9nZklSb183cDFSMFpVV3prVm5iQ0ZHV2FtbURkaVlfelVOVFFRSFhMbVFmVDFRcUpXMXNBbUhELXBR?oc=5",
+          "source": "Google News / Yahoo! Finance Canada",
+          "published_at": "2026-07-24T11:48:09Z",
+          "fetched_at": "2026-07-25T07:23:00Z",
+          "ticker": "GOOGL",
+          "source_tier": "aggregator"
+        },
+        {
+          "title": "Alphabet (GOOGL) Faces Market Skepticism Amid Rising AI Investme",
+          "summary": "Alphabet (GOOGL) Faces Market Skepticism Amid Rising AI Investme GuruFocus",
+          "url": "https://news.google.com/rss/articles/CBMipwFBVV95cUxPMkRtUWZSLUJTdXhRZ2x0THFncFpTMTlKb0pTOXV4WHV4cWdNUzc2XzBhbTVKNVFSOFlLNldJRE1NUERUODBEemhrY3J5cnNFTHVFeC1KQkNadlUwa0JhZUlBel9mRDRiZTJhT2lyUjdhajhDNFVDTGJZQ21iTWthaFF0MU9kSXhVeXpRTE9ST3loSGFXY2xqTWg4c0tLbXM2NkhzLUM2WQ?oc=5",
+          "source": "Google News / GuruFocus",
+          "published_at": "2026-07-24T11:32:06Z",
+          "fetched_at": "2026-07-25T07:23:00Z",
+          "ticker": "GOOGL",
+          "source_tier": "aggregator"
+        },
+        {
+          "title": "Alphabet Inc. (NASDAQ:GOOGL) Passes Peter Lynch’s GARP Screen as a Growth at a Reasonable Price Stock",
+          "summary": "Alphabet Inc. (NASDAQ:GOOGL) Passes Peter Lynch’s GARP Screen as a Growth at a Reasonable Price Stock ChartMill",
+          "url": "https://news.google.com/rss/articles/CBMi4wFBVV95cUxNVDFDX3NsQWJuZm5aSm4za2JKRDV6TTVfZl9wZG1nUk1ZbUhpeW5FX08yelNJTENlZ0l5LU5MeDVqM1dXVHJ6SHZoeWFhbE00RHNDd255UzlfY0hfNmRfNEZmdTRvZzV3eDI0QzJiaXh0dm05TlhSLWFNOUxfTVQ0SzVvWHROUU1Cd0d6a2dhdlJub3dxZ0JVY2l1RjgzSi1XNnExVGdNa0puZkhEWWw3SlVQOGFsV3ppejF4VVRxT05lTFNlbHUyOURUaGlBM3F1UGZHeU5YeEVRQmpvd3NtUXd1dw?oc=5",
+          "source": "Google News / ChartMill",
+          "published_at": "2026-07-24T10:10:30Z",
+          "fetched_at": "2026-07-25T07:23:00Z",
+          "ticker": "GOOGL",
+          "source_tier": "aggregator"
+        },
+        {
+          "title": "GOOGL Stock Inches Up Premarket: Retail Traders Are Buying The Dip After CapEx-Fueled Selloff",
+          "summary": "GOOGL Stock Inches Up Premarket: Retail Traders Are Buying The Dip After CapEx-Fueled Selloff Stocktwits",
+          "url": "https://news.google.com/rss/articles/CBMi7gFBVV95cUxQV3JVZy05Smp3ZzlqejNJTzhtaVYzQ1JyMVk0RmZqaDl5T3NmVmZ2VmFFR09OcmtPYngxM0hTWUhMNFdjRG1ERWcyaDJiWV84N2NfTTliUEt6aGxhLWRRLUwzS0RFclJMSmFDRVNCSVJYMXY3MHM0TWRkVkFKbVZ5ellLZWV5bGlxWTc0c0ZKLXFjbE5sWS1wdmxuYmZqX0xFWEFoVEt3NlpwOTRxY2ZZdkpKTEFkQzV2M0M0OVZUOVRGcHhadDdjRWR5NEZPSWxCWXVaX2tSckxsVnhmVlVVUE5aZ0M0UWVRckdBbm1B?oc=5",
+          "source": "Google News / Stocktwits",
+          "published_at": "2026-07-24T10:08:14Z",
+          "fetched_at": "2026-07-25T07:23:00Z",
+          "ticker": "GOOGL",
+          "source_tier": "aggregator"
+        },
+        {
+          "title": "Alphabet Inc. $GOOGL Shares Sold by Legacy Capital Group California Inc.",
+          "summary": "Alphabet Inc. $GOOGL Shares Sold by Legacy Capital Group California Inc. MarketBeat",
+          "url": "https://news.google.com/rss/articles/CBMiygFBVV95cUxNX2FhcVJpWTQ0eWphNmhnclZsajRmdzViQWxfekhJWjBOcGZaaEdFRmpkZFJMYlpYbFhHVjdnd3g2RU9KWVlxQTJDZ0Y1WW5wMUNVLWoxUzZZZ2Qta3A5WTFrblAtWmJpMHV2aXY3ZElBNUZTV2xCVzhkWEtUVlFMNXJWVlltR2R4S29Ob05Nd1lHODhONjJMTG9rTDFTN2JhZTU2ZXhGTEhUZTNxanhSY3B3dHFpdWxMMVVwWElNR1p2LXRUQ3Iza1Zn?oc=5",
+          "source": "Google News / MarketBeat",
+          "published_at": "2026-07-24T08:41:02Z",
+          "fetched_at": "2026-07-25T07:23:00Z",
+          "ticker": "GOOGL",
+          "source_tier": "aggregator"
+        },
+        {
+          "title": "Alphabet Inc. $GOOGL Shares Sold by Retirement Planning Group LLC",
+          "summary": "Alphabet Inc. $GOOGL Shares Sold by Retirement Planning Group LLC MarketBeat",
+          "url": "https://news.google.com/rss/articles/CBMiwgFBVV95cUxPWDZWTDZ1SUVDZ2FrT2E3ek5MajBHZ2NTOEF2cnlsSzY1eGZYR094NWcydklEcllvLVM5SzdhQmNtTHhKbC11UnN2NFR6TVBwLXYtdHpZTzhkTkpqLWdLYkVVNWppYkYzLU9ITTVkMkFONTFOT3JDNGdTNndiSDlYeUhNNUpxc1RnQV9QSzhoUUNIZ1ctcFo5RmxKQlE0UmVpbWdOb2RYMFJCYm9ELXZWenZpblFlek1ON1N1b3o2MjBiQQ?oc=5",
+          "source": "Google News / MarketBeat",
+          "published_at": "2026-07-24T08:41:02Z",
+          "fetched_at": "2026-07-25T07:23:00Z",
+          "ticker": "GOOGL",
+          "source_tier": "aggregator"
+        },
+        {
+          "title": "Nwam LLC Buys 8,055 Shares of Alphabet Inc. $GOOGL",
+          "summary": "Nwam LLC Buys 8,055 Shares of Alphabet Inc. $GOOGL MarketBeat",
+          "url": "https://news.google.com/rss/articles/CBMirAFBVV95cUxQbUdIaWtaV0JuY3Bac2pXcnVsWjkwMGxlQXVYWE5DbXdscW91eDJvdWFtMHJCb1dJYWstRnFDcE5ycGtKTHo1ZVdIaExkeDhYNWZ6ZFREUHUtMTQ5dW55ZnlWLTZBSmFZTU9PSlI5RFJUUXF0RmNVaGF6d0g1RWVPUXROaTRrM3hGaW1oRTZmQ3huQ1dDUjB2bVo5eGZxOWdHMGgxXzV2NFhuTjRF?oc=5",
+          "source": "Google News / MarketBeat",
+          "published_at": "2026-07-24T08:41:02Z",
+          "fetched_at": "2026-07-25T07:23:00Z",
+          "ticker": "GOOGL",
+          "source_tier": "aggregator"
+        },
+        {
+          "title": "Alphabet Inc. $GOOGL Shares Sold by Bryn Mawr Trust Advisors LLC",
+          "summary": "Alphabet Inc. $GOOGL Shares Sold by Bryn Mawr Trust Advisors LLC MarketBeat",
+          "url": "https://news.google.com/rss/articles/CBMiwAFBVV95cUxPczhkLXJrdU5HVE1Id0J5aGpiUDZrLWUyTnVUN3A5TUl3bXBoQjJrVUpJTFA0SHg5aGhlcGQ5SFdqX3FkbnlEdWprRmZ0ZXhYT2RvNEpTRDZrXzM3YWdYZkVjYUoxcUNrcWlfVW9VOGpLaVlWYUFRZ2dQNVpjVGlEa3RKaW5FUm9hMWFiN3hsbGdjZXVPRFpQbElXeVdkN09XMXFuR05GMkJyb25wSlhMY1Z0UGFTVXdpdU54bXp1OEg?oc=5",
+          "source": "Google News / MarketBeat",
+          "published_at": "2026-07-24T07:56:36Z",
+          "fetched_at": "2026-07-25T07:23:00Z",
+          "ticker": "GOOGL",
+          "source_tier": "aggregator"
+        },
+        {
+          "title": "Alphabet Inc. $GOOGL Shares Purchased by Bleakley Financial Group LLC",
+          "summary": "Alphabet Inc. $GOOGL Shares Purchased by Bleakley Financial Group LLC MarketBeat",
+          "url": "https://news.google.com/rss/articles/CBMixwFBVV95cUxPYzd3YzdoVllONEVxMV95UmdqUE9MWUhGdm9OblJRRFY2a01yTThPYnZUVmZpaUZ1c2JOeDdTN1c4WVFGaEJoNmJyQXFFaC01Q3FNR00zVEhhWEpnQWN2ajB6cUJwbXNVYVI3UkRoanlkTXlYUlphMmg0LWhHNlRQMm5sV1B0MzdPMEFTNWw4TkdDSy1LeUx4ZjdDN3NSdTdtcnlPT09ZTTVTbE5TU0pJR2RxazZXZlZCUWlzYnNXNFRNb2N6UEFF?oc=5",
+          "source": "Google News / MarketBeat",
+          "published_at": "2026-07-24T07:56:33Z",
+          "fetched_at": "2026-07-25T07:23:00Z",
+          "ticker": "GOOGL",
+          "source_tier": "aggregator"
+        }
+      ],
+      "source_statuses": [
+        {
+          "source": "Yahoo Finance",
+          "status": "ok",
+          "item_count": 3
+        },
+        {
+          "source": "Google News RSS",
+          "status": "ok",
+          "item_count": 20
+        },
+        {
+          "source": "SEC EDGAR",
+          "status": "failed",
+          "item_count": 0
+        }
+      ]
+    },
+    "3887.HK": {
+      "status": "empty",
+      "query_type": "ticker",
+      "ticker": "3887.HK",
+      "start_date": "2026-07-24",
+      "end_date": "2026-07-24",
+      "fetched_at": "2026-07-25T07:23:00Z",
+      "items": [],
+      "source_statuses": [
+        {
+          "source": "Yahoo Finance",
+          "status": "empty",
+          "item_count": 0
+        },
+        {
+          "source": "Google News RSS",
+          "status": "empty",
+          "item_count": 0
+        },
+        {
+          "source": "SEC EDGAR",
+          "status": "empty",
+          "item_count": 0
+        }
+      ]
     }
   },
   "items": [
     {
-      "title": "Oil prices head for weekly rise on Middle East escalation",
+      "title": "Oracle’s defense pivot lands its biggest government win yet",
       "summary": "",
-      "url": "https://finance.yahoo.com/news/brent-hovers-above-100-bbl-035115480.html",
-      "source": "Reuters",
-      "published_at": "2026-07-24T07:07:19Z",
-      "fetched_at": "2026-07-24T07:21:08Z",
-      "ticker": null,
+      "url": "https://finance.yahoo.com/m/af691027-f31d-3a3e-b6b7-00013f6be661/oracle%E2%80%99s-defense-pivot-lands.html",
+      "source": "TheStreet",
+      "published_at": "2026-07-25T02:33:00Z",
+      "fetched_at": "2026-07-25T07:22:59Z",
+      "ticker": "ORCL",
       "source_tier": "aggregator"
     },
     {
-      "title": "FTSE 100 Live: London stocks called lower as Big Tech burns cash and oil hits $100",
+      "title": "Mag 7 Earnings Preview: Alphabet's Cloud Surge and CapEx Hike Raise the Stakes",
       "summary": "",
-      "url": "https://finance.yahoo.com/m/a29be53f-56d9-33c1-84fa-e7db2449b60f/ftse-100-live%3A-london-stocks.html",
-      "source": "Proactive",
-      "published_at": "2026-07-24T06:15:00Z",
-      "fetched_at": "2026-07-24T07:21:08Z",
-      "ticker": null,
+      "url": "https://finance.yahoo.com/markets/stocks/articles/mag-7-earnings-preview-alphabets-230100437.html",
+      "source": "Zacks",
+      "published_at": "2026-07-24T23:01:00Z",
+      "fetched_at": "2026-07-25T07:23:00Z",
+      "ticker": "GOOGL",
       "source_tier": "aggregator"
     },
     {
-      "title": "U.S. Treasury Yields Edge Lower as Oil Looks to Stabilize",
+      "title": "Ovintiv Inc (OVV) Q2 2026 Earnings Call Highlights: Strong Cash Flow and Production Growth Amid ...",
       "summary": "",
-      "url": "https://finance.yahoo.com/m/7f98ce1d-c968-3f77-9cf4-1d6dccd53738/u.s.-treasury-yields-edge.html",
-      "source": "The Wall Street Journal",
-      "published_at": "2026-07-24T05:58:00Z",
-      "fetched_at": "2026-07-24T07:21:08Z",
-      "ticker": null,
-      "source_tier": "aggregator"
-    },
-    {
-      "title": "US Weekly Jobless Claims Hit 1969 Low: What Does It Mean For Crypto?",
-      "summary": "",
-      "url": "https://finance.yahoo.com/m/40dfbfec-48d6-3f53-92d8-21d854b7b9ed/us-weekly-jobless-claims-hit.html",
-      "source": "BeInCrypto",
-      "published_at": "2026-07-24T05:43:43Z",
-      "fetched_at": "2026-07-24T07:21:08Z",
-      "ticker": null,
-      "source_tier": "aggregator"
-    },
-    {
-      "title": "Oil Tops $100 as Supply Crisis Deepens",
-      "summary": "",
-      "url": "https://finance.yahoo.com/energy/articles/oil-tops-100-supply-crisis-054000369.html",
-      "source": "Oilprice.com",
-      "published_at": "2026-07-24T05:40:00Z",
-      "fetched_at": "2026-07-24T07:21:08Z",
-      "ticker": null,
-      "source_tier": "aggregator"
-    },
-    {
-      "title": "Dollar gets yields boost as Middle East and trade wars raise inflation stakes",
-      "summary": "",
-      "url": "https://finance.yahoo.com/news/dollar-rides-yield-surge-middle-005503376.html",
-      "source": "Reuters",
-      "published_at": "2026-07-24T05:39:55Z",
-      "fetched_at": "2026-07-24T07:21:08Z",
-      "ticker": null,
-      "source_tier": "aggregator"
-    },
-    {
-      "title": "Shares skid in Asia in sell-off of AI-related shares as Brent oil trades near $100 per barrel",
-      "summary": "",
-      "url": "https://finance.yahoo.com/markets/articles/shares-skid-asia-sell-off-051338979.html",
-      "source": "Associated Press",
-      "published_at": "2026-07-24T05:13:38Z",
-      "fetched_at": "2026-07-24T07:21:08Z",
-      "ticker": null,
-      "source_tier": "aggregator"
-    },
-    {
-      "title": "Newmont Corp (NEM) Q2 2026 Earnings Call Highlights: Record Free Cash Flow and Strategic ...",
-      "summary": "",
-      "url": "https://finance.yahoo.com/markets/stocks/articles/newmont-corp-nem-q2-2026-050155908.html",
+      "url": "https://finance.yahoo.com/energy/articles/ovintiv-inc-ovv-q2-2026-230019199.html",
       "source": "GuruFocus.com",
-      "published_at": "2026-07-24T05:01:55Z",
-      "fetched_at": "2026-07-24T07:21:08Z",
+      "published_at": "2026-07-24T23:00:19Z",
+      "fetched_at": "2026-07-25T07:22:51Z",
       "ticker": null,
       "source_tier": "aggregator"
     },
     {
-      "title": "Teck Resources (TSX:TECK.B) Could Be About Right Following The Q2 Earnings Beat",
+      "title": "Oracle Just Hit a New 52-Week Low. Wall Street's Average Target Is Still More Than Double the Stock.",
       "summary": "",
-      "url": "https://finance.yahoo.com/markets/stocks/articles/teck-resources-tsx-teck-b-042952255.html",
-      "source": "Simply Wall St.",
-      "published_at": "2026-07-24T04:29:52Z",
-      "fetched_at": "2026-07-24T07:21:08Z",
+      "url": "https://finance.yahoo.com/m/c217d11e-37d4-362e-95a4-11b4cd90f44c/oracle-just-hit-a-new-52-week.html",
+      "source": "Motley Fool",
+      "published_at": "2026-07-24T22:57:00Z",
+      "fetched_at": "2026-07-25T07:22:59Z",
+      "ticker": "ORCL",
+      "source_tier": "aggregator"
+    },
+    {
+      "title": "S&P 500, Dow, Nasdaq End Second Week Lower Over Elevated Oil Prices, Chipmaker Rout — PSKY, UBER, QCOM, VZ, INTC In Focus",
+      "summary": "",
+      "url": "https://finance.yahoo.com/m/479dd690-44bb-3d0f-94b7-f6bf29601cdf/s%26p-500%2C-dow%2C-nasdaq-end.html",
+      "source": "Stocktwits",
+      "published_at": "2026-07-24T22:54:48Z",
+      "fetched_at": "2026-07-25T07:22:51Z",
       "ticker": null,
       "source_tier": "aggregator"
     },
     {
-      "title": "AP Top Financial News at 2:49 a.m. EDT",
+      "title": "Analyst Report: MPLX LP",
       "summary": "",
-      "url": "https://finance.yahoo.com/markets/stocks/articles/ap-top-financial-news-1-040000822.html",
-      "source": "Associated Press",
-      "published_at": "2026-07-24T04:00:00Z",
-      "fetched_at": "2026-07-24T07:21:08Z",
+      "url": "https://finance.yahoo.com/m/76a5a4a5-afa1-3f93-94a0-752b807a5f47/analyst-report%3A-mplx-lp.html",
+      "source": "Morningstar Research",
+      "published_at": "2026-07-24T22:44:37Z",
+      "fetched_at": "2026-07-25T07:22:51Z",
       "ticker": null,
+      "source_tier": "aggregator"
+    },
+    {
+      "title": "Walmart and the Walmart Foundation Announce $500,000 Commitment to West Virginia Flood Relief",
+      "summary": "",
+      "url": "https://finance.yahoo.com/small-business/articles/walmart-walmart-foundation-announce-500-215400033.html",
+      "source": "Business Wire",
+      "published_at": "2026-07-24T21:54:00Z",
+      "fetched_at": "2026-07-25T07:22:51Z",
+      "ticker": null,
+      "source_tier": "aggregator"
+    },
+    {
+      "title": "Stocks to Watch: Bank of America, Intel, SAP, Oracle",
+      "summary": "",
+      "url": "https://finance.yahoo.com/m/11cdad22-a23f-3779-a81d-e87f9fea1e3a/stocks-to-watch%3A-bank-of.html",
+      "source": "The Wall Street Journal",
+      "published_at": "2026-07-24T21:27:19Z",
+      "fetched_at": "2026-07-25T07:22:59Z",
+      "ticker": "ORCL",
+      "source_tier": "aggregator"
+    },
+    {
+      "title": "Alphabet Inc. (GOOGL) Shares Drop Below 200-Day Moving Average",
+      "summary": "Alphabet Inc. (GOOGL) Shares Drop Below 200-Day Moving Average GuruFocus",
+      "url": "https://news.google.com/rss/articles/CBMi0wFBVV95cUxNellZUW84SGNaWFlVVlRabE54eHIwRzNCdFg1TE5lLV9ZbFZZSUkwRlJmZnA0Z0lsNG4yTy1FNEt2ZWRiX2NPSFZTTTRGM3RjdVdNaGZGYkFyYmx3S2dvRzJvOUV0TW5ZTW1NSTJ6dDZlcGNPbDdUNEE3SU05QlRjZmQ3WVFyR192N204Uk1uc1BqYTAyblJQa3daVkRyZTQtRmxRLXpWa2VoUHQ2eTM5N1h3RzN6OFhsNlBZa01mZW11alQ2bDNiV253bDhrVFhTZnow?oc=5",
+      "source": "Google News / GuruFocus",
+      "published_at": "2026-07-24T21:22:30Z",
+      "fetched_at": "2026-07-25T07:23:00Z",
+      "ticker": "GOOGL",
+      "source_tier": "aggregator"
+    },
+    {
+      "title": "ORCL Has Left Its Peers Behind. Or Has It?",
+      "summary": "ORCL Has Left Its Peers Behind. Or Has It? Yahoo Finance",
+      "url": "https://news.google.com/rss/articles/CBMikAFBVV95cUxPQXlFbndvb080Q2ptSVRjNWtjRGNCR3RaZU05VjlkdWdWcndJQ1RxU1ZXa1ZMZUFuVnJPUjNsMzM5NlU3bUlfSTdBaEVPaUN5UlNPNmRLQjQxNWM0MGgtQ0VuZDZaV18wMnpuYzUtR0tKbHBJUkRSTjRpdmhLY2taTkVqWndrX0xiTTl1LVRBdkg?oc=5",
+      "source": "Google News / Yahoo Finance",
+      "published_at": "2026-07-24T20:47:37Z",
+      "fetched_at": "2026-07-25T07:22:59Z",
+      "ticker": "ORCL",
+      "source_tier": "aggregator"
+    },
+    {
+      "title": "Paramount Stock Falls on Warner Bros. Merger Delay",
+      "summary": "",
+      "url": "https://finance.yahoo.com/m/bd8f4811-b7d7-3fd2-82e8-a284a27ac5f2/paramount-stock-falls-on.html",
+      "source": "Barrons.com",
+      "published_at": "2026-07-24T20:38:00Z",
+      "fetched_at": "2026-07-25T07:22:51Z",
+      "ticker": null,
+      "source_tier": "aggregator"
+    },
+    {
+      "title": "Alphabet (GOOGL) Stock Faces Earnings Quality Questions After 55% Net Margin Headline Beat",
+      "summary": "Alphabet (GOOGL) Stock Faces Earnings Quality Questions After 55% Net Margin Headline Beat simplywall.st",
+      "url": "https://news.google.com/rss/articles/CBMiwgFBVV95cUxOT1VtMlFjQ0RMUllhbE9iSDVybVJaN2hPMkgzcXFGaldrZmUwWlg2cUtKcXpyVWZJaGplU3JZa1owVDhaTC1TS2FHaGxlcFAzVnY5ekRkajZGTWR3clJXNHFJU1l1aHdWR21HNl9EYVFHd3Y1dzk4X25RbFlUaFlPdjlYMWNsM3ozNUU3WjJFTVJ4TGR3bU8xd2RtVDJCaDJfS09GaUZ1bUhWVTE2QzVNSGZ1cnN3RzNzWFA2MHdROXFsd9IBxwFBVV95cUxObUpuS05vai1fZ1NJZ1lYUV9mWDBvakNLOGR2QUtlU0ZPOGNiNlVWdVcteGhfaGU0RmlhenhuMGpiaHVBVzNFQWloQ2o0aF8xTXlxR3lKSmFWTzVJcXNVdi1VZUF4bFNSb0NibklLcVlEOEpidnhjaDYtdXlhdEZFdXFtSGt5eFRrZ1ItWC0wcXV1bGtiUmlrLW13LS1zYlpTdTZELTFGQ0NvRlNqWjUxOFpRNXhLMklHemRiSlFrdmxWbF82ZEtZ?oc=5",
+      "source": "Google News / simplywall.st",
+      "published_at": "2026-07-24T20:28:37Z",
+      "fetched_at": "2026-07-25T07:23:00Z",
+      "ticker": "GOOGL",
+      "source_tier": "aggregator"
+    },
+    {
+      "title": "Oracle Corp Stock (ORCL) Closed Down by 4.27% on Jul 24: What Signal Does It Send?",
+      "summary": "Oracle Corp Stock (ORCL) Closed Down by 4.27% on Jul 24: What Signal Does It Send? TradingKey",
+      "url": "https://news.google.com/rss/articles/CBMiiwFBVV95cUxOS0wxOFQzd0dHei13QnBZQVo2bnQzLUNrUmZiaXlYenpsbW92ZVVQcm1iUWdEaU5iaVVXbjhVQXI4SmdXQTN2d0pSOVA1UkhMYjAzTHA0OXNnZlJTUm1ubFpuUkpfVC1nOVJiV3RDVWhnaDlDWDcyVkhoajc5NmlDblBOaHhFaU9TZnRN?oc=5",
+      "source": "Google News / TradingKey",
+      "published_at": "2026-07-24T20:23:10Z",
+      "fetched_at": "2026-07-25T07:22:59Z",
+      "ticker": "ORCL",
+      "source_tier": "aggregator"
+    },
+    {
+      "title": "2 Quantum Stocks Set for Strong Q2 Earnings, Triple-Digit Price Target",
+      "summary": "",
+      "url": "https://finance.yahoo.com/markets/stocks/articles/2-quantum-stocks-set-strong-190000511.html",
+      "source": "Zacks",
+      "published_at": "2026-07-24T19:00:00Z",
+      "fetched_at": "2026-07-25T07:22:51Z",
+      "ticker": null,
+      "source_tier": "aggregator"
+    },
+    {
+      "title": "Amazon stock slides as Prime Day data reveals shopper shift ahead of earnings",
+      "summary": "",
+      "url": "https://finance.yahoo.com/m/24800a3c-18a4-39a8-89f7-e072b93d88b1/amazon-stock-slides-as-prime.html",
+      "source": "TheStreet",
+      "published_at": "2026-07-24T18:17:00Z",
+      "fetched_at": "2026-07-25T07:22:51Z",
+      "ticker": null,
+      "source_tier": "aggregator"
+    },
+    {
+      "title": "The $7 Billion Reason Oracle Stock Is in Focus Today",
+      "summary": "",
+      "url": "https://finance.yahoo.com/m/c1027afd-45b4-3f7d-987b-5ee0bcd56f03/the-%247-billion-reason-oracle.html",
+      "source": "Barchart",
+      "published_at": "2026-07-24T17:49:40Z",
+      "fetched_at": "2026-07-25T07:22:59Z",
+      "ticker": "ORCL",
+      "source_tier": "aggregator"
+    },
+    {
+      "title": "Disney’s Kraft Heinz Partnership Offers a Way Forward for the Stock",
+      "summary": "",
+      "url": "https://finance.yahoo.com/m/71fde92b-18c1-3747-aa30-e29dd63c3c88/disney%E2%80%99s-kraft-heinz.html",
+      "source": "Barrons.com",
+      "published_at": "2026-07-24T17:25:00Z",
+      "fetched_at": "2026-07-25T07:22:51Z",
+      "ticker": null,
+      "source_tier": "aggregator"
+    },
+    {
+      "title": "SpaceX (SPCX), Oracle (NASDAQ: ORCL), And QuantumScape (NYSE: QS) Sink To 52-Week Lows As Tech Selloff Deepens",
+      "summary": "SpaceX (SPCX), Oracle (NASDAQ: ORCL), And QuantumScape (NYSE: QS) Sink To 52-Week Lows As Tech Selloff Deepens foreignpolicyjournal.com",
+      "url": "https://news.google.com/rss/articles/CBMi4wFBVV95cUxQck1zVU13cFlUQncwWDlQRVBCTVg4NWFlU3UtVlNLeW5nTU0zUUZ1U1p1QWg4SkhOd2UxaVBCdk5RZm02SXZKTzNUM0Q4YXpUWWxPbUJ1YzdEUkRSdkxqYTdLbmdSbWFVa2ViNU1sdHp3YVloUDI5RGd3XzFJdUZaLThvcmZNVURxd1ptYm4wclU1ZVB5VnFmSXBsZk5CUDhFOUQ3M0oyQ0xHaHdrZ09qdXpzUDRvTFRKNWFiOFkzWnprdkJGcnNsSjU2OTVwRVZSUTZhSE03dHdRWVdiemVwSFUxVQ?oc=5",
+      "source": "Google News / foreignpolicyjournal.com",
+      "published_at": "2026-07-24T17:12:00Z",
+      "fetched_at": "2026-07-25T07:22:59Z",
+      "ticker": "ORCL",
+      "source_tier": "aggregator"
+    },
+    {
+      "title": "EBAY Showered Owners With Cash. The Stock Did Not Cooperate",
+      "summary": "",
+      "url": "https://finance.yahoo.com/m/401f1358-d93e-3a61-bc83-f11d392e2f94/ebay-showered-owners-with.html",
+      "source": "Trefis",
+      "published_at": "2026-07-24T17:08:32Z",
+      "fetched_at": "2026-07-25T07:22:51Z",
+      "ticker": null,
+      "source_tier": "aggregator"
+    },
+    {
+      "title": "Alphabet: Making Money The 'Wrong' Way: Worst Bear Case Yet (NASDAQ:GOOGL)",
+      "summary": "Alphabet: Making Money The 'Wrong' Way: Worst Bear Case Yet (NASDAQ:GOOGL) Seeking Alpha",
+      "url": "https://news.google.com/rss/articles/CBMinAFBVV95cUxQRHJQNDBRNFFjLUJCWTBqd3BreVpCR3hfU3JHaXBucjF3Q1V0T283UlhsSnVfNWtvMzE1SWZoa20xYjBTVkxZM0tqc1d4TXZOaS15MDFrVGo1cFRXOUs1VW44QW5SUURINmJHUUZfVUVIbDcxdWxrS25Lc3hJd1ZRYnJFQWlfbWlOZFhsSVdsUzEwOTItOGtJclpTQjE?oc=5",
+      "source": "Google News / Seeking Alpha",
+      "published_at": "2026-07-24T17:06:52Z",
+      "fetched_at": "2026-07-25T07:23:00Z",
+      "ticker": "GOOGL",
+      "source_tier": "aggregator"
+    },
+    {
+      "title": "Alphabet's Google Signs EU AI Content Transparency Code",
+      "summary": "",
+      "url": "https://finance.yahoo.com/technology/ai/articles/alphabet-apos-google-signs-eu-165348705.html",
+      "source": "MT Newswires",
+      "published_at": "2026-07-24T16:53:48Z",
+      "fetched_at": "2026-07-25T07:23:00Z",
+      "ticker": "GOOGL",
+      "source_tier": "aggregator"
+    },
+    {
+      "title": "3 Reasons Disney Stock Can Bounce Back in the Second Half",
+      "summary": "",
+      "url": "https://finance.yahoo.com/m/f4231a1f-0ff0-32aa-a314-df7379c9564a/3-reasons-disney-stock-can.html",
+      "source": "Motley Fool",
+      "published_at": "2026-07-24T15:38:50Z",
+      "fetched_at": "2026-07-25T07:22:51Z",
+      "ticker": null,
+      "source_tier": "aggregator"
+    },
+    {
+      "title": "GOOGL Stock Drops In Premarket: Report Says Search Giant Trims Cloud Team Amid AI Spending Push",
+      "summary": "GOOGL Stock Drops In Premarket: Report Says Search Giant Trims Cloud Team Amid AI Spending Push Stocktwits",
+      "url": "https://news.google.com/rss/articles/CBMi7wFBVV95cUxQUjZDVDVHZjBJcmxHbmhfVWFBV3ItampZSHFzZXp3dFRFREk4Vkxyb0x0MXZwS1JaQmJjSUQ2aVV6UUxPZk1fdTRFUTFSZFcxOWQyVDB0ZFA5WWVPTEc0dlZtZUhIQVdhTV9WV3IzVGY0UExkVWFadUFJVFRPM1V5YllLQ05lZUNoS0xpZEJXMmtHWmloMjZIMXdVUUItRUJpRmktR2VXUWQ4djluZTRfVFNUTEdqM25SRlZybzMtamtNWklBaDZrMklpN2lhQVJxNlhDZ2JzVDMycGNhdGZqdUNjQjQwVEVzM1RQMXZSdw?oc=5",
+      "source": "Google News / Stocktwits",
+      "published_at": "2026-07-24T15:35:33Z",
+      "fetched_at": "2026-07-25T07:23:00Z",
+      "ticker": "GOOGL",
+      "source_tier": "aggregator"
+    },
+    {
+      "title": "GOOGL Bets on AI to Defend Search Leadership: More Upside Ahead?",
+      "summary": "GOOGL Bets on AI to Defend Search Leadership: More Upside Ahead? Yahoo Finance",
+      "url": "https://news.google.com/rss/articles/CBMilgFBVV95cUxPREZvU0x4LTBaczZSN3ExZlpSd1R3TW83UzE3cVZiTUdHRTJESEZLTFRkZGhIdS1VcU0yUjNlSDNLTnBtZjBTWFVwNmFzOW1hcEV6c3ZwTThFMkY2YzNqY3dZWFZyNGpoZ1ZLd2tNYTlySWZkZzJZVWsxemtKOXljaHozUjhXUUM3YlBVREdTTGI5WTBaUGc?oc=5",
+      "source": "Google News / Yahoo Finance",
+      "published_at": "2026-07-24T15:12:00Z",
+      "fetched_at": "2026-07-25T07:23:00Z",
+      "ticker": "GOOGL",
+      "source_tier": "aggregator"
+    },
+    {
+      "title": "GOOGL Stock: Should You Buy the Best-Performing Magnificent Seven Stock Right Now?",
+      "summary": "GOOGL Stock: Should You Buy the Best-Performing Magnificent Seven Stock Right Now? TradingKey",
+      "url": "https://news.google.com/rss/articles/CBMi5gFBVV95cUxPTmVpTE0zd1RjSFd3Q0tQRzFTdEh1dG9vdWNsYVZfb0pJTlYtZzV5bFNDckNXRWFMSzFyZ1hUVTVvVERNYnFSZnZVSHdjNXFTTk9MTElKVWJ3M2dwWnZXTFVtYVhXNktFcmZPQlRacXpsMnVseHJTcnNTM2d5c2FQdWZGOHd3MjZQS0VEZlBwSmFmaHZ4RTVLdzRtejZrSGtHTDRMVG9lV190UldWb0tmbF9reXdySWVPNnFpOHg0WVJPSjltMEltNHhuUFh2MkRSTGY4UDJlWk96eWhpTThmX3EwQ2RRQQ?oc=5",
+      "source": "Google News / TradingKey",
+      "published_at": "2026-07-24T15:08:48Z",
+      "fetched_at": "2026-07-25T07:23:00Z",
+      "ticker": "GOOGL",
+      "source_tier": "aggregator"
+    },
+    {
+      "title": "Oracle (ORCL) Secures $6.9 Billion Software Deal with U.S. Defen",
+      "summary": "Oracle (ORCL) Secures $6.9 Billion Software Deal with U.S. Defen GuruFocus",
+      "url": "https://news.google.com/rss/articles/CBMirwFBVV95cUxNTHZSVzFxOFhrODdlTnExYmF5UzRXV255aWo5RWx5amdGNWpiQzBidm9rVmlkZFZ2UFBlMmpYNzJEZGpSV2JlWHEwSExvcktaSjdUV1NFOXBrMXdjYlNGR3NoaEdUQ3dHNW4zeHNPVnVDUzYxeVJnX3lMOGJfaWh1X3FaRlBkbTVtdThZaExtLVg1c3pzVHAtbXoyeGVubTJ4UEFUSmtJd3RVTlAtdEM0?oc=5",
+      "source": "Google News / GuruFocus",
+      "published_at": "2026-07-24T14:06:48Z",
+      "fetched_at": "2026-07-25T07:22:59Z",
+      "ticker": "ORCL",
+      "source_tier": "aggregator"
+    },
+    {
+      "title": "The Discount On GOOGL Stock Looks Overdone",
+      "summary": "The Discount On GOOGL Stock Looks Overdone Trefis",
+      "url": "https://news.google.com/rss/articles/CBMipwFBVV95cUxQY2gyTEhhUE5hY3FDTTRXVHd5M3lPN3BUMHFHOUNvcjBGci1OejF1UW12MUJaR1pTT3lXdVd1Tmh4emtVZEZrY0h5a1dNNHNheDNwVFhvbnA1MFRSRDQxS2ZjanhmVDFCSlE5SHV1ZHVzaXlBU09ycVFSZjBxWGJGdUR3RE04d3B6ekE1WV92bkVPQXUtcG4zQlZsTklKMjNiUHo2Mi1HTQ?oc=5",
+      "source": "Google News / Trefis",
+      "published_at": "2026-07-24T13:57:38Z",
+      "fetched_at": "2026-07-25T07:23:00Z",
+      "ticker": "GOOGL",
+      "source_tier": "aggregator"
+    },
+    {
+      "title": "Alphabet (GOOGL) Stock Plummets Amid Rising Capital Expenditure Concerns",
+      "summary": "Alphabet (GOOGL) Stock Plummets Amid Rising Capital Expenditure Concerns GuruFocus",
+      "url": "https://news.google.com/rss/articles/CBMivgFBVV95cUxOMmExeERRY2R3NWlBbHFUSG5kdk5EaG5mTE9XOUk0bURySDRPTUJfemVJVldwSi1kUGFBWXlJdzduX2t0dl9qVWwtLTFpSkZpbEs0VnJUZjRQcXplaks4YkxNU2R4bjRrVXNJa3l6NlFZNHF1dzFLWVFrMzA1VFNaR3FjQmxrV3BzUHcxNFo4b3c5YkdBeWVEYThlVW1SWS1QV1lnQy1nSUZmT21WWkc0TlluTlZKVEE5U2ZoT1R3?oc=5",
+      "source": "Google News / GuruFocus",
+      "published_at": "2026-07-24T13:52:30Z",
+      "fetched_at": "2026-07-25T07:23:00Z",
+      "ticker": "GOOGL",
+      "source_tier": "aggregator"
+    },
+    {
+      "title": "4 stocks to watch on Friday: VZ, LLY, ORCL, DELL (SPX:)",
+      "summary": "4 stocks to watch on Friday: VZ, LLY, ORCL, DELL (SPX:) Seeking Alpha",
+      "url": "https://news.google.com/rss/articles/CBMiigFBVV95cUxOTzB1NU01eWltYUJETUMzOVlzMG90clVGaFVOV21WWEpqVnBXb3oxb012ZTN0TVZVNkFHM1VVZnVvbzZhWjRqQ01ERHRiVC1XX2JpUFRidllQLXgwMFZLcGdfdTdIcG5NdS1HcElaaFJDMHdZeVdoaF9KaTU3Sy02OThUdGRlSXdGaWc?oc=5",
+      "source": "Google News / Seeking Alpha",
+      "published_at": "2026-07-24T13:25:54Z",
+      "fetched_at": "2026-07-25T07:22:59Z",
+      "ticker": "ORCL",
+      "source_tier": "aggregator"
+    },
+    {
+      "title": "Gene Munster Sees GOOGL Q2 Cloud Revenue Jump Over 65% Ahead Of Estimates — But Traders Eye Capex",
+      "summary": "Gene Munster Sees GOOGL Q2 Cloud Revenue Jump Over 65% Ahead Of Estimates — But Traders Eye Capex Stocktwits",
+      "url": "https://news.google.com/rss/articles/CBMi2AFBVV95cUxNT3VtU0ZOS1haRFRNbVpfXzRTVTBDRmtRYzdrSUVwVVUzUkZQNTRUZGNzTE1zb2xhd2VRR0s1Xy1FY2RFbFZnU01xOXpOSmJzZGVxV2ttVms1VDNlajVuSXJ1ekcyZDlQaGlpdWlKb3BWNHZmLVBGRUJ5MVR4V3hYcTF6Z0dMeFRmUUhCU0laNzFGY29NYThUSDhJOUltTVVhX3Y2ek1xMXRRM2UxVFhUSWo0cWluMl85b2xJOXNZNnJBREtVSDJEZG50RXVBaWJiWjBPYkQxX3U?oc=5",
+      "source": "Google News / Stocktwits",
+      "published_at": "2026-07-24T12:55:12Z",
+      "fetched_at": "2026-07-25T07:23:00Z",
+      "ticker": "GOOGL",
+      "source_tier": "aggregator"
+    },
+    {
+      "title": "Alphabet Inc. (GOOGL) Stock Forecasts",
+      "summary": "Alphabet Inc. (GOOGL) Stock Forecasts Yahoo! Finance Canada",
+      "url": "https://news.google.com/rss/articles/CBMijgFBVV95cUxQQVJnaUo2a2RwUTZHNXl3ODdsaTBocVRnRHcxSUoxZHgtaDdBTWo5QWV3cHc3anhhMkl2bWotek5ndnVzRnp3clFHLVAzUGpSNURXVW9nZklSb183cDFSMFpVV3prVm5iQ0ZHV2FtbURkaVlfelVOVFFRSFhMbVFmVDFRcUpXMXNBbUhELXBR?oc=5",
+      "source": "Google News / Yahoo! Finance Canada",
+      "published_at": "2026-07-24T11:48:09Z",
+      "fetched_at": "2026-07-25T07:23:00Z",
+      "ticker": "GOOGL",
+      "source_tier": "aggregator"
+    },
+    {
+      "title": "Alphabet (GOOGL) Faces Market Skepticism Amid Rising AI Investme",
+      "summary": "Alphabet (GOOGL) Faces Market Skepticism Amid Rising AI Investme GuruFocus",
+      "url": "https://news.google.com/rss/articles/CBMipwFBVV95cUxPMkRtUWZSLUJTdXhRZ2x0THFncFpTMTlKb0pTOXV4WHV4cWdNUzc2XzBhbTVKNVFSOFlLNldJRE1NUERUODBEemhrY3J5cnNFTHVFeC1KQkNadlUwa0JhZUlBel9mRDRiZTJhT2lyUjdhajhDNFVDTGJZQ21iTWthaFF0MU9kSXhVeXpRTE9ST3loSGFXY2xqTWg4c0tLbXM2NkhzLUM2WQ?oc=5",
+      "source": "Google News / GuruFocus",
+      "published_at": "2026-07-24T11:32:06Z",
+      "fetched_at": "2026-07-25T07:23:00Z",
+      "ticker": "GOOGL",
+      "source_tier": "aggregator"
+    },
+    {
+      "title": "Oracle (ORCL) Secures $7 Billion Defense Contract Amid Stock Str",
+      "summary": "Oracle (ORCL) Secures $7 Billion Defense Contract Amid Stock Str GuruFocus",
+      "url": "https://news.google.com/rss/articles/CBMiqgFBVV95cUxOMEZjZzJfTURSeU94dmFhTHNfS2xpQ082U2dNNm0ybGhLX3p2dmFiVzdGYnJJZ2ZyX1Z3OXZMTkZVWXBKVzh3QmR6UmNxbGtwOVpYeldjcm9WWFNqcjhkd3NsSUZJUTdia0lWTmcyYmxNZk11TVltT3RaLXkybEpkcENaQjJiRGdJZjVQQktoQ0RZZjQxdk53a3RFVElmMFhUdVgyWEgwTjdTUQ?oc=5",
+      "source": "Google News / GuruFocus",
+      "published_at": "2026-07-24T11:20:04Z",
+      "fetched_at": "2026-07-25T07:22:59Z",
+      "ticker": "ORCL",
+      "source_tier": "aggregator"
+    },
+    {
+      "title": "Oracle (ORCL) Secures Nearly $7 Billion Pentagon Software Contract",
+      "summary": "Oracle (ORCL) Secures Nearly $7 Billion Pentagon Software Contract Yahoo Finance",
+      "url": "https://news.google.com/rss/articles/CBMimAFBVV95cUxPN2FHX2pwTlY1R0JRUmtVRzZMWm5qc0pTcEVncEZSN3hRUHk0Y1FYQzRCUkVzZ3JqQnBLOXEzdzNSODUwYmlUZWd0SUNVckxVbnJNWGU0UTk5eW9OS25CV3A1VWtTOU1QS1VEbUI1eFBGaWdxZnFZdGxZWWxEXzJJaGQ5SWlMZXFyT210TExMaXdpeHV3V3NkQw?oc=5",
+      "source": "Google News / Yahoo Finance",
+      "published_at": "2026-07-24T11:13:21Z",
+      "fetched_at": "2026-07-25T07:22:59Z",
+      "ticker": "ORCL",
+      "source_tier": "aggregator"
+    },
+    {
+      "title": "Alphabet Inc. (NASDAQ:GOOGL) Passes Peter Lynch’s GARP Screen as a Growth at a Reasonable Price Stock",
+      "summary": "Alphabet Inc. (NASDAQ:GOOGL) Passes Peter Lynch’s GARP Screen as a Growth at a Reasonable Price Stock ChartMill",
+      "url": "https://news.google.com/rss/articles/CBMi4wFBVV95cUxNVDFDX3NsQWJuZm5aSm4za2JKRDV6TTVfZl9wZG1nUk1ZbUhpeW5FX08yelNJTENlZ0l5LU5MeDVqM1dXVHJ6SHZoeWFhbE00RHNDd255UzlfY0hfNmRfNEZmdTRvZzV3eDI0QzJiaXh0dm05TlhSLWFNOUxfTVQ0SzVvWHROUU1Cd0d6a2dhdlJub3dxZ0JVY2l1RjgzSi1XNnExVGdNa0puZkhEWWw3SlVQOGFsV3ppejF4VVRxT05lTFNlbHUyOURUaGlBM3F1UGZHeU5YeEVRQmpvd3NtUXd1dw?oc=5",
+      "source": "Google News / ChartMill",
+      "published_at": "2026-07-24T10:10:30Z",
+      "fetched_at": "2026-07-25T07:23:00Z",
+      "ticker": "GOOGL",
+      "source_tier": "aggregator"
+    },
+    {
+      "title": "GOOGL Stock Inches Up Premarket: Retail Traders Are Buying The Dip After CapEx-Fueled Selloff",
+      "summary": "GOOGL Stock Inches Up Premarket: Retail Traders Are Buying The Dip After CapEx-Fueled Selloff Stocktwits",
+      "url": "https://news.google.com/rss/articles/CBMi7gFBVV95cUxQV3JVZy05Smp3ZzlqejNJTzhtaVYzQ1JyMVk0RmZqaDl5T3NmVmZ2VmFFR09OcmtPYngxM0hTWUhMNFdjRG1ERWcyaDJiWV84N2NfTTliUEt6aGxhLWRRLUwzS0RFclJMSmFDRVNCSVJYMXY3MHM0TWRkVkFKbVZ5ellLZWV5bGlxWTc0c0ZKLXFjbE5sWS1wdmxuYmZqX0xFWEFoVEt3NlpwOTRxY2ZZdkpKTEFkQzV2M0M0OVZUOVRGcHhadDdjRWR5NEZPSWxCWXVaX2tSckxsVnhmVlVVUE5aZ0M0UWVRckdBbm1B?oc=5",
+      "source": "Google News / Stocktwits",
+      "published_at": "2026-07-24T10:08:14Z",
+      "fetched_at": "2026-07-25T07:23:00Z",
+      "ticker": "GOOGL",
+      "source_tier": "aggregator"
+    },
+    {
+      "title": "Oracle Corporation (NYSE:ORCL) Stock Rises on $7 Billion Pentagon Deal as Contract Math Tempers Rally",
+      "summary": "Oracle Corporation (NYSE:ORCL) Stock Rises on $7 Billion Pentagon Deal as Contract Math Tempers Rally TechStock²",
+      "url": "https://news.google.com/rss/articles/CBMiugFBVV95cUxQMzk3c2RidnUwcEpVcElmWEdMZVhrYVJUX3JoRVhRZWxzeHBCb1B1aWsyYm5FNGhrcmNISlpXYzMtMVF6aS1UbUs2S04zUHVFNExPeFJjOXgyX2FvZ3N6SE5xczZ0dzNsSTVoQk85U29FbDhFbU40WmxVUG5nZFVvWmpjVmxST1lwZmx4ZTJwN0pmLWtUSXNiRndVOFZIMmk3cktRYzNZbmlSMmYzZFNxRENfT1JqY1pndUE?oc=5",
+      "source": "Google News / TechStock²",
+      "published_at": "2026-07-24T09:49:09Z",
+      "fetched_at": "2026-07-25T07:22:59Z",
+      "ticker": "ORCL",
+      "source_tier": "aggregator"
+    },
+    {
+      "title": "Oracle’s $7B Pentagon Deal Win Sparks 'Buy' Calls From Retail Traders As ORCL Rebounds Premarket",
+      "summary": "Oracle’s $7B Pentagon Deal Win Sparks 'Buy' Calls From Retail Traders As ORCL Rebounds Premarket TradingView",
+      "url": "https://news.google.com/rss/articles/CBMi6gFBVV95cUxPZUtuYkwwV2ZaczBZZmpWem1wN00tcnVDYzg2eU9lODR4NVlYamxQb19iRHJiSHZKSUc2alJjSWo5UHRiWi1zTy1sNDl3bXF4N1NlNEsxOENPZmtlb3ZiNzZidXBnNnFTT1ZqMlB5aUl4WkNvZTZnRmhMb0hjVDY3UDlPZXlQTjBGR1JRU0VmYkFIaXRxX2RFMk1kWVZQWXJyaERsTXIwLW9tVm90VzhzYzhWeXc1VUQwUFo0ZnRneVNQcXRMaTdSbGFmQVREckJHQ0dLWnd5Y1FiQWMxOGljazZTS2VBOHpvUEE?oc=5",
+      "source": "Google News / TradingView",
+      "published_at": "2026-07-24T09:18:58Z",
+      "fetched_at": "2026-07-25T07:22:59Z",
+      "ticker": "ORCL",
+      "source_tier": "aggregator"
+    },
+    {
+      "title": "Oracle Wins Up to $7 Billion US Department of War Software Contract",
+      "summary": "",
+      "url": "https://finance.yahoo.com/technology/articles/oracle-wins-7-billion-us-090153368.html",
+      "source": "MT Newswires",
+      "published_at": "2026-07-24T09:01:53Z",
+      "fetched_at": "2026-07-25T07:22:59Z",
+      "ticker": "ORCL",
+      "source_tier": "aggregator"
+    },
+    {
+      "title": "Alphabet Inc. $GOOGL Shares Sold by Legacy Capital Group California Inc.",
+      "summary": "Alphabet Inc. $GOOGL Shares Sold by Legacy Capital Group California Inc. MarketBeat",
+      "url": "https://news.google.com/rss/articles/CBMiygFBVV95cUxNX2FhcVJpWTQ0eWphNmhnclZsajRmdzViQWxfekhJWjBOcGZaaEdFRmpkZFJMYlpYbFhHVjdnd3g2RU9KWVlxQTJDZ0Y1WW5wMUNVLWoxUzZZZ2Qta3A5WTFrblAtWmJpMHV2aXY3ZElBNUZTV2xCVzhkWEtUVlFMNXJWVlltR2R4S29Ob05Nd1lHODhONjJMTG9rTDFTN2JhZTU2ZXhGTEhUZTNxanhSY3B3dHFpdWxMMVVwWElNR1p2LXRUQ3Iza1Zn?oc=5",
+      "source": "Google News / MarketBeat",
+      "published_at": "2026-07-24T08:41:02Z",
+      "fetched_at": "2026-07-25T07:23:00Z",
+      "ticker": "GOOGL",
+      "source_tier": "aggregator"
+    },
+    {
+      "title": "Alphabet Inc. $GOOGL Shares Sold by Retirement Planning Group LLC",
+      "summary": "Alphabet Inc. $GOOGL Shares Sold by Retirement Planning Group LLC MarketBeat",
+      "url": "https://news.google.com/rss/articles/CBMiwgFBVV95cUxPWDZWTDZ1SUVDZ2FrT2E3ek5MajBHZ2NTOEF2cnlsSzY1eGZYR094NWcydklEcllvLVM5SzdhQmNtTHhKbC11UnN2NFR6TVBwLXYtdHpZTzhkTkpqLWdLYkVVNWppYkYzLU9ITTVkMkFONTFOT3JDNGdTNndiSDlYeUhNNUpxc1RnQV9QSzhoUUNIZ1ctcFo5RmxKQlE0UmVpbWdOb2RYMFJCYm9ELXZWenZpblFlek1ON1N1b3o2MjBiQQ?oc=5",
+      "source": "Google News / MarketBeat",
+      "published_at": "2026-07-24T08:41:02Z",
+      "fetched_at": "2026-07-25T07:23:00Z",
+      "ticker": "GOOGL",
+      "source_tier": "aggregator"
+    },
+    {
+      "title": "Nwam LLC Buys 8,055 Shares of Alphabet Inc. $GOOGL",
+      "summary": "Nwam LLC Buys 8,055 Shares of Alphabet Inc. $GOOGL MarketBeat",
+      "url": "https://news.google.com/rss/articles/CBMirAFBVV95cUxQbUdIaWtaV0JuY3Bac2pXcnVsWjkwMGxlQXVYWE5DbXdscW91eDJvdWFtMHJCb1dJYWstRnFDcE5ycGtKTHo1ZVdIaExkeDhYNWZ6ZFREUHUtMTQ5dW55ZnlWLTZBSmFZTU9PSlI5RFJUUXF0RmNVaGF6d0g1RWVPUXROaTRrM3hGaW1oRTZmQ3huQ1dDUjB2bVo5eGZxOWdHMGgxXzV2NFhuTjRF?oc=5",
+      "source": "Google News / MarketBeat",
+      "published_at": "2026-07-24T08:41:02Z",
+      "fetched_at": "2026-07-25T07:23:00Z",
+      "ticker": "GOOGL",
+      "source_tier": "aggregator"
+    },
+    {
+      "title": "Mr. Market Hates Oracle For Doing The Right Thing, Creating A Buying Opportunity (ORCL)",
+      "summary": "Mr. Market Hates Oracle For Doing The Right Thing, Creating A Buying Opportunity (ORCL) Seeking Alpha",
+      "url": "https://news.google.com/rss/articles/CBMiuAFBVV95cUxQbFpMdUdJMi1LeWN6QlZkNHNGbGNfWFRFN0tqaGs4WGhCUWlBTmR3dmdfcWk5NDRFLTZ5MEx1VmdYNERSYnZfWTlUM3NyMlFpVDZmbnRJYlBVSzVaeVJtUC1NQk9iUzY3UzFmVl9nd3IzU0RPdkJlS3FPaWk1N09IaDZGdU9Bb0NlOEhPb0dYVGt0UXRzRXlNbGpzWWRUdU1EWUl1eFd1YWxFRURlb1Q0X1hZeEI1UmNL?oc=5",
+      "source": "Google News / Seeking Alpha",
+      "published_at": "2026-07-24T08:34:49Z",
+      "fetched_at": "2026-07-25T07:22:59Z",
+      "ticker": "ORCL",
+      "source_tier": "aggregator"
+    },
+    {
+      "title": "Oracle Corp (ORCL) Stock Down 4.6% -- Now Undervalued? GF Score: 88/100",
+      "summary": "Oracle Corp (ORCL) Stock Down 4.6% -- Now Undervalued? GF Score: 88/100 GuruFocus",
+      "url": "https://news.google.com/rss/articles/CBMiogJBVV95cUxQa2traDZEQ0NWdnV1ZTZ6MWdhVndNVkRzRVRPdm40UGNLVmk5aUR2alRhNWxXMzZkbW9FOGJxZkVkUWVIbzRwcThJRDBzakc3WW8xNUExa18tMExzcVkxamZibWY4UWRkVjByNE42UmMzakoxX1RwdmpUaUx5RS1JVnFCQ1pyeXItWnJVWk95aEhpNXRxOEhUUWw5akt1OElHRnZKRHdfMDhJQ3hCRXREb0pYNHpZTFhqbHBSNzlUTGhsUTEwYXNiWjZCMXBKNXU1X1RIQWhHSFJRRUl1X2dxQkloUHBPY0hXVW1NS1A5c2Vqd0RKMzdtN2d3YW1mcnlNSGJYZkIydFkwQmxHX3BMcTlnSE1VeFRyVEpFRWtYM2ZuUQ?oc=5",
+      "source": "Google News / GuruFocus",
+      "published_at": "2026-07-24T08:21:38Z",
+      "fetched_at": "2026-07-25T07:22:59Z",
+      "ticker": "ORCL",
+      "source_tier": "aggregator"
+    },
+    {
+      "title": "Alphabet Inc. $GOOGL Shares Sold by Bryn Mawr Trust Advisors LLC",
+      "summary": "Alphabet Inc. $GOOGL Shares Sold by Bryn Mawr Trust Advisors LLC MarketBeat",
+      "url": "https://news.google.com/rss/articles/CBMiwAFBVV95cUxPczhkLXJrdU5HVE1Id0J5aGpiUDZrLWUyTnVUN3A5TUl3bXBoQjJrVUpJTFA0SHg5aGhlcGQ5SFdqX3FkbnlEdWprRmZ0ZXhYT2RvNEpTRDZrXzM3YWdYZkVjYUoxcUNrcWlfVW9VOGpLaVlWYUFRZ2dQNVpjVGlEa3RKaW5FUm9hMWFiN3hsbGdjZXVPRFpQbElXeVdkN09XMXFuR05GMkJyb25wSlhMY1Z0UGFTVXdpdU54bXp1OEg?oc=5",
+      "source": "Google News / MarketBeat",
+      "published_at": "2026-07-24T07:56:36Z",
+      "fetched_at": "2026-07-25T07:23:00Z",
+      "ticker": "GOOGL",
+      "source_tier": "aggregator"
+    },
+    {
+      "title": "Alphabet Inc. $GOOGL Shares Purchased by Bleakley Financial Group LLC",
+      "summary": "Alphabet Inc. $GOOGL Shares Purchased by Bleakley Financial Group LLC MarketBeat",
+      "url": "https://news.google.com/rss/articles/CBMixwFBVV95cUxPYzd3YzdoVllONEVxMV95UmdqUE9MWUhGdm9OblJRRFY2a01yTThPYnZUVmZpaUZ1c2JOeDdTN1c4WVFGaEJoNmJyQXFFaC01Q3FNR00zVEhhWEpnQWN2ajB6cUJwbXNVYVI3UkRoanlkTXlYUlphMmg0LWhHNlRQMm5sV1B0MzdPMEFTNWw4TkdDSy1LeUx4ZjdDN3NSdTdtcnlPT09ZTTVTbE5TU0pJR2RxazZXZlZCUWlzYnNXNFRNb2N6UEFF?oc=5",
+      "source": "Google News / MarketBeat",
+      "published_at": "2026-07-24T07:56:33Z",
+      "fetched_at": "2026-07-25T07:23:00Z",
+      "ticker": "GOOGL",
+      "source_tier": "aggregator"
+    },
+    {
+      "title": "Why Did SPCX, ORCL, QS Stocks Plunge To 52-Week Lows Today?",
+      "summary": "Why Did SPCX, ORCL, QS Stocks Plunge To 52-Week Lows Today? Stocktwits",
+      "url": "https://news.google.com/rss/articles/CBMivAFBVV95cUxQTHg0bXpoZHczYkg1aGpCMUhPS2dYR2Q1b3hMcEZDUm0yYXRzR1Q0ZmJ4Mk1QTks2ckdoRlF3YUFXVF8taTdTVEVlWGpRNURmdFU5aEtuaFJBWUtYd016eXZIb1BDR2pQQjdCRW9YMUpnSWtZd1NpNlRvblM0a24xb3NfclZ6LWlOWExwYWdkM2ZmYU96RXROVXRTc09YZGFZU1FFMzhESnF6RWFuZWJOalBxRVQzdXNuOFhZSw?oc=5",
+      "source": "Google News / Stocktwits",
+      "published_at": "2026-07-24T06:09:10Z",
+      "fetched_at": "2026-07-25T07:22:59Z",
+      "ticker": "ORCL",
+      "source_tier": "aggregator"
+    },
+    {
+      "title": "通信ETF国泰：7月23日融资买入2.04亿元，融资融券余额14.63亿元",
+      "summary": "通信ETF国泰：7月23日融资买入2.04亿元，融资融券余额14.63亿元 手机网易网",
+      "url": "https://news.google.com/rss/articles/CBMiYkFVX3lxTE5LNThQRnNzc29Sc2JEN0pDLXd3RDNSOHNxM2dmUnYzY1cxTlNYMkZ4VS0xbm1TYmp1cXlDSW9YdTNLVFVFSjJCOG4wZV9US29DOGEwbjBwa3hzQW9SdmRzOXR3?oc=5",
+      "source": "Google News / 手机网易网",
+      "published_at": "2026-07-24T01:37:44Z",
+      "fetched_at": "2026-07-25T07:22:53Z",
+      "ticker": "515880.SS",
       "source_tier": "aggregator"
     },
     {
@@ -297,7 +1138,7 @@
       "url": "https://news.google.com/rss/articles/CBMiYkFVX3lxTE1HdnhWS3hfb1lOR0w2RGE2ZnprU0M5MERDTDN0c0JFTDJnanZFaXUwZVkxclhWempORnVWRk1yckJOV19Xa0JWMldqNTJrRThLMDQ1S2tCSjd0Q3UyWnBLcjlR?oc=5",
       "source": "Google News / 手机网易网",
       "published_at": "2026-07-24T01:37:44Z",
-      "fetched_at": "2026-07-24T07:21:24Z",
+      "fetched_at": "2026-07-25T07:22:56Z",
       "ticker": "512480.SS",
       "source_tier": "aggregator"
     }

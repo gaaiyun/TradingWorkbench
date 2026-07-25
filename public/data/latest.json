@@ -1,6 +1,6 @@
 {
   "status": "ok",
-  "generated_at": "2026-07-24T15:21:07+08:00",
+  "generated_at": "2026-07-25T15:22:49+08:00",
   "trade_date": "2026-07-24",
   "provider": "openai_compatible",
   "analysts": [
@@ -18,44 +18,111 @@
   "results": [
     {
       "ticker": "515880.SS",
-      "rating": "Sell",
-      "report": "reports/515880.SS/2026-07-24/complete_report.md",
-      "files": {
-        "fundamentals": "reports/515880.SS/2026-07-24/1_analysts/fundamentals.md",
-        "market": "reports/515880.SS/2026-07-24/1_analysts/market.md",
-        "news": "reports/515880.SS/2026-07-24/1_analysts/news.md",
-        "bear": "reports/515880.SS/2026-07-24/2_research/bear.md",
-        "bull": "reports/515880.SS/2026-07-24/2_research/bull.md",
-        "manager": "reports/515880.SS/2026-07-24/2_research/manager.md",
-        "trader": "reports/515880.SS/2026-07-24/3_trading/trader.md",
-        "aggressive": "reports/515880.SS/2026-07-24/4_risk/aggressive.md",
-        "conservative": "reports/515880.SS/2026-07-24/4_risk/conservative.md",
-        "neutral": "reports/515880.SS/2026-07-24/4_risk/neutral.md",
-        "decision": "reports/515880.SS/2026-07-24/5_portfolio/decision.md",
-        "complete_report": "reports/515880.SS/2026-07-24/complete_report.md"
+      "rating": null,
+      "report": null,
+      "files": {},
+      "decision_excerpt": "",
+      "analysis_status": "data_validation_failed",
+      "audit_status": "invalidated",
+      "evidence_publish": {
+        "published": true,
+        "status": 201
       },
-      "decision_excerpt": "**Rating**: Sell\n\n**Executive Summary**: 515880.SS（国泰中证全指通信设备ETF）当前面临技术结构全面崩塌、流动性枯竭与宏观逆风三重叠加的极端不利环境，建议立即清仓退出。当前价格0.65元距52周低点0.608元仅6.5%，距布林带下轨0.40元仍有38%下行空间，而ATR高达17%意味着单日波动即可触发0.60元止损。在成交量萎缩90%以上的流动性荒漠中，杠杆融资盘构成连环踩踏的定时炸弹，保留任何敞口的风险收益比均极为不利。\n\n**Investment Thesis**: 综合三位风险分析师的辩论，SELL决策获得跨派系共识，核心逻辑可归纳为以下五个维度：\n\n**一、技术结构已遭不可逆破坏，反弹缺乏可行性。** 三位分析师一致确认：50日均线（1.34元）与200日均线（1.94元）形成教科书级死叉，当前价格仅为50日均线的49%、200日",
-      "error": null
+      "error": "evidence validation failed; model run skipped"
     },
     {
       "ticker": "512480.SS",
-      "rating": "Sell",
-      "report": "reports/512480.SS/2026-07-24/complete_report.md",
-      "files": {
-        "fundamentals": "reports/512480.SS/2026-07-24/1_analysts/fundamentals.md",
-        "market": "reports/512480.SS/2026-07-24/1_analysts/market.md",
-        "news": "reports/512480.SS/2026-07-24/1_analysts/news.md",
-        "bear": "reports/512480.SS/2026-07-24/2_research/bear.md",
-        "bull": "reports/512480.SS/2026-07-24/2_research/bull.md",
-        "manager": "reports/512480.SS/2026-07-24/2_research/manager.md",
-        "trader": "reports/512480.SS/2026-07-24/3_trading/trader.md",
-        "aggressive": "reports/512480.SS/2026-07-24/4_risk/aggressive.md",
-        "conservative": "reports/512480.SS/2026-07-24/4_risk/conservative.md",
-        "neutral": "reports/512480.SS/2026-07-24/4_risk/neutral.md",
-        "decision": "reports/512480.SS/2026-07-24/5_portfolio/decision.md",
-        "complete_report": "reports/512480.SS/2026-07-24/complete_report.md"
+      "rating": null,
+      "report": null,
+      "files": {},
+      "decision_excerpt": "",
+      "analysis_status": "data_validation_failed",
+      "audit_status": "invalidated",
+      "evidence_publish": {
+        "published": true,
+        "status": 201
       },
-      "decision_excerpt": "**Rating**: Sell\n\n**Executive Summary**: 对512480.SS执行卖出减仓决策。建议采用混合执行策略：当前价格1.11附近立即减仓20%锁定确定性，剩余仓位在反弹至1.15/1.20/1.28时按梯度分批减持（20%/30%/50%），止损设在1.06。若PBOC在减仓完成前实质性降息，暂停减持观察3个交易日。持仓时间窗口1-3个月，完成减仓后释放资金转向低Beta防御性资产，待出现右侧反转信号再评估回流。\n\n**Investment Thesis**: 三方风险分析师在卖出方向上已形成完全共识，核心分歧仅在执行细节。综合判断，512480.SS的技术面、宏观面和产业面均指向结构性下行，当前1.11的价格不是\"黄金坑\"而是\"价值重估的中途\"。\n\n**技术面：下行通道完好，死亡交叉迫在眉睫。** 当前价格1.11距离50日SMA（1.89）和200日S",
+      "error": "evidence validation failed; model run skipped"
+    },
+    {
+      "ticker": "ORCL",
+      "rating": "Underweight",
+      "report": "reports/ORCL/2026-07-24/complete_report.md",
+      "files": {
+        "fundamentals": "reports/ORCL/2026-07-24/1_analysts/fundamentals.md",
+        "market": "reports/ORCL/2026-07-24/1_analysts/market.md",
+        "news": "reports/ORCL/2026-07-24/1_analysts/news.md",
+        "bear": "reports/ORCL/2026-07-24/2_research/bear.md",
+        "bull": "reports/ORCL/2026-07-24/2_research/bull.md",
+        "manager": "reports/ORCL/2026-07-24/2_research/manager.md",
+        "trader": "reports/ORCL/2026-07-24/3_trading/trader.md",
+        "aggressive": "reports/ORCL/2026-07-24/4_risk/aggressive.md",
+        "conservative": "reports/ORCL/2026-07-24/4_risk/conservative.md",
+        "neutral": "reports/ORCL/2026-07-24/4_risk/neutral.md",
+        "decision": "reports/ORCL/2026-07-24/5_portfolio/decision.md",
+        "complete_report": "reports/ORCL/2026-07-24/complete_report.md"
+      },
+      "decision_excerpt": "**Rating**: Underweight\n\n**Executive Summary**: 将ORCL仓位减持至基准权重的50%以下。鉴于极度超卖的技术面（偏离50日SMA -32.8%），避免在$115附近的52周新低恐慌性全仓抛售，但采纳保守派建议立即在当前价位先行减持25-30%锁定现金，不等可能永远不来的反弹。若股价技术性反弹至$123-128区间再减持20-25%，保留约15-20%底仓。止损设在$102（而非原计划的$100），跌破即清仓剩余仓位。预计持有期3-6个月，待FCF拐点或债务风险进一步明朗后重新评估。\n\n**Investment Thesis**: 综合三位风险分析师的辩论，空头论点在证据权重上占据明显优势，核心风险建立在已发生的财务数据而非假设之上：\n\n**1. 资产负债表风险真实且严峻（空头共识）：** ORCL总债务$1,561亿，债务股本比388.87%",
+      "analysis_status": "rated",
+      "audit_status": "verified",
+      "evidence_publish": {
+        "published": true,
+        "status": 201
+      },
+      "error": null
+    },
+    {
+      "ticker": "GOOGL",
+      "rating": "Hold",
+      "report": "reports/GOOGL/2026-07-24/complete_report.md",
+      "files": {
+        "fundamentals": "reports/GOOGL/2026-07-24/1_analysts/fundamentals.md",
+        "market": "reports/GOOGL/2026-07-24/1_analysts/market.md",
+        "news": "reports/GOOGL/2026-07-24/1_analysts/news.md",
+        "bear": "reports/GOOGL/2026-07-24/2_research/bear.md",
+        "bull": "reports/GOOGL/2026-07-24/2_research/bull.md",
+        "manager": "reports/GOOGL/2026-07-24/2_research/manager.md",
+        "trader": "reports/GOOGL/2026-07-24/3_trading/trader.md",
+        "aggressive": "reports/GOOGL/2026-07-24/4_risk/aggressive.md",
+        "conservative": "reports/GOOGL/2026-07-24/4_risk/conservative.md",
+        "neutral": "reports/GOOGL/2026-07-24/4_risk/neutral.md",
+        "decision": "reports/GOOGL/2026-07-24/5_portfolio/decision.md",
+        "complete_report": "reports/GOOGL/2026-07-24/complete_report.md"
+      },
+      "decision_excerpt": "**Rating**: Hold\n\n**Executive Summary**: 维持现有仓位不变，暂不新建头寸。GOOGL当前多空因素高度均衡——看多方拥有Q2营收同比+24.2%、Cloud收入暴涨82%、远期PE仅21.63x等估值与增长优势；看空方则指出TTM自由现金流仅287亿、单季度CapEx达449亿、长期债务四倍激增至982亿、优先股突然出现180亿等资产负债表恶化信号。建议若持仓较重则买入行权价300美元、3个月到期的轻度价外看跌期权作为下行保护。止损位设于310美元（但须注意ATR高达11.84，日内波动可达12美元，止损易被噪音触发），任何后续操作须分批执行。持有期限：3个月，等待下季度FCF趋势和Cloud利润率数据验证。\n\n**Investment Thesis**: 综合三位风险分析师的辩论，GOOGL当前处于一个真正均衡的多空博弈状态，维持Hold评级是吸收各",
+      "analysis_status": "rated",
+      "audit_status": "verified",
+      "evidence_publish": {
+        "published": true,
+        "status": 201
+      },
+      "error": null
+    },
+    {
+      "ticker": "3887.HK",
+      "rating": "Sell",
+      "report": "reports/3887.HK/2026-07-24/complete_report.md",
+      "files": {
+        "fundamentals": "reports/3887.HK/2026-07-24/1_analysts/fundamentals.md",
+        "market": "reports/3887.HK/2026-07-24/1_analysts/market.md",
+        "news": "reports/3887.HK/2026-07-24/1_analysts/news.md",
+        "bear": "reports/3887.HK/2026-07-24/2_research/bear.md",
+        "bull": "reports/3887.HK/2026-07-24/2_research/bull.md",
+        "manager": "reports/3887.HK/2026-07-24/2_research/manager.md",
+        "trader": "reports/3887.HK/2026-07-24/3_trading/trader.md",
+        "aggressive": "reports/3887.HK/2026-07-24/4_risk/aggressive.md",
+        "conservative": "reports/3887.HK/2026-07-24/4_risk/conservative.md",
+        "neutral": "reports/3887.HK/2026-07-24/4_risk/neutral.md",
+        "decision": "reports/3887.HK/2026-07-24/5_portfolio/decision.md",
+        "complete_report": "reports/3887.HK/2026-07-24/complete_report.md"
+      },
+      "decision_excerpt": "**Rating**: Sell\n\n**Executive Summary**: 对3887.HK执行卖出决策，退出或避免建仓。基本面系统性恶化——自由现金流连续四年为负、营收增速从247%坍塌至0.3%、毛利率从97.2%暴跌至56.5%，28亿港元现金来源于股权稀释而非经营创造，按每年约7亿港元烧钱速度仅够维持约4年。技术面处于-73%下行趋势且流动性极低（日均成交100-300万股），宏观面面临美联储鹰派与BTC下行双重逆风。若因特殊情况需保留极少量观察仓位，止损严格设在1.60港元，跌破即无条件离场。建议持有期即时执行，不设定固定时间框架，以风险消除为退出标准。\n\n**Investment Thesis**: 综合三位风险分析师的辩论，卖出3887.HK的决策在基本面、技术面和宏观面三个维度均有压倒性证据支撑，且2/3分析师（激进与保守）明确支持SELL，仅中性分析师主张保留半仓，",
+      "analysis_status": "rated",
+      "audit_status": "verified",
+      "evidence_publish": {
+        "published": true,
+        "status": 201
+      },
       "error": null
     }
   ]

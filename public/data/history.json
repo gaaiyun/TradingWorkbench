@@ -1,6 +1,43 @@
 [
   {
     "trade_date": "2026-07-24",
+    "generated_at": "2026-07-25T15:22:49+08:00",
+    "provider": "openai_compatible",
+    "results": [
+      {
+        "ticker": "515880.SS",
+        "rating": null,
+        "report": null,
+        "error": true
+      },
+      {
+        "ticker": "512480.SS",
+        "rating": null,
+        "report": null,
+        "error": true
+      },
+      {
+        "ticker": "ORCL",
+        "rating": "Underweight",
+        "report": "reports/ORCL/2026-07-24/complete_report.md",
+        "error": false
+      },
+      {
+        "ticker": "GOOGL",
+        "rating": "Hold",
+        "report": "reports/GOOGL/2026-07-24/complete_report.md",
+        "error": false
+      },
+      {
+        "ticker": "3887.HK",
+        "rating": "Sell",
+        "report": "reports/3887.HK/2026-07-24/complete_report.md",
+        "error": false
+      }
+    ]
+  },
+  {
+    "trade_date": "2026-07-24",
     "generated_at": "2026-07-24T15:21:07+08:00",
     "provider": "openai_compatible",
     "results": [
