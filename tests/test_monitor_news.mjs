@@ -176,10 +176,10 @@ test("Federal Reserve official RSS parser rejects foreign links and caps evidenc
   const { parseFederalReserveRss } = await import(newsUrl);
   const entries = Array.from({ length: 12 }, (_value, index) => `
     <item>
-      <title>Federal Reserve semiconductor policy update ${index + 1}</title>
+      <title>Federal Reserve issues FOMC monetary policy update ${index + 1}</title>
       <link>https://www.federalreserve.gov/newsevents/pressreleases/monetary202607${String(index + 1).padStart(2, "0")}a.htm</link>
       <pubDate>Thu, 23 Jul 2026 0${index % 9}:00:00 GMT</pubDate>
-      <description>Official monetary policy evidence for the semiconductor sector.</description>
+      <description>Official economic developments and monetary policy evidence.</description>
     </item>`).join("");
   const foreign = `
     <item>
@@ -204,43 +204,188 @@ test("Federal Reserve official RSS parser rejects foreign links and caps evidenc
   );
 });
 
-test("Federal Reserve RSS is a bounded evidence source for configured US drivers", async () => {
+test("Federal Reserve RSS bounds ETF fan-out and hashes each cluster once", async () => {
   const { collectNewsForProfile } = await import(newsUrl);
   const writes = [];
   const calls = [];
+  const hashMaterials = [];
   const entries = Array.from({ length: 12 }, (_value, index) => `
     <item>
-      <title>Federal Reserve semiconductor policy update ${index + 1}</title>
+      <title>Federal Reserve issues FOMC monetary policy update ${index + 1}</title>
       <link>https://www.federalreserve.gov/newsevents/pressreleases/monetary202607${String(index + 1).padStart(2, "0")}a.htm</link>
       <pubDate>Thu, 23 Jul 2026 0${index % 9}:00:00 GMT</pubDate>
-      <description>Official monetary policy evidence for the semiconductor sector.</description>
+      <description>Official economic developments and monetary policy evidence.</description>
     </item>`).join("");
   const result = await collectNewsForProfile({
     profile: {
       ...monitorSettings().profiles[0],
-      targets: [{ symbol: "NVDA" }],
+      targets: [
+        { symbol: "SOXX" },
+        { symbol: "SMH" },
+        { symbol: "NVDA" },
+        { symbol: "AMD" },
+      ],
     },
     db: {},
     fetcher: async (url) => {
       calls.push(String(url));
-      return new Response(
-        `<?xml version="1.0"?><rss><channel>${entries}</channel></rss>`,
-        {
+      const body = new URL(url).hostname === "www.federalreserve.gov"
+        ? `<?xml version="1.0"?><rss><channel>${entries}</channel></rss>`
+        : '<?xml version="1.0"?><rss><channel></channel></rss>';
+      return new Response(body, {
+        status: 200,
+        headers: { "content-type": "application/rss+xml" },
+      });
+    },
+    writeItems: async (_db, payload) => writes.push(payload),
+    hashMaterial: async (material) => {
+      hashMaterials.push(material);
+      return hashMaterials.length.toString(16).padStart(64, "0");
+    },
+    now: new Date("2026-07-23T20:30:00.000Z"),
+  });
+  const items = writes.flatMap(({ items: rows }) => rows);
+  assert.equal(result.status, "completed");
+  assert.equal(calls.length, 3);
+  assert.equal(items.length, 16);
+  assert.deepEqual(
+    [...new Set(items.map(({ symbol }) => symbol))].sort(),
+    ["SMH", "SOXX"],
+  );
+  assert.equal(items.every(({ sourceTier }) => sourceTier === "evidence"), true);
+  assert.equal(items.every(({ quality }) => quality === "evidence"), true);
+  assert.equal(
+    hashMaterials.filter((material) => material.includes("\n")).length,
+    16,
+    "每个持久化目标仅计算一次新闻 ID",
+  );
+  assert.equal(
+    hashMaterials.filter((material) => !material.includes("\n")).length,
+    8,
+    "每条来源新闻仅计算一次 cluster ID，不随 symbol 扇出重复",
+  );
+});
+
+test("Federal Reserve filters non-macro releases and never blocks discovery fallbacks", async () => {
+  const { collectNewsForProfile } = await import(newsUrl);
+  const calls = [];
+  const writes = [];
+  const fedRss = `<?xml version="1.0"?><rss><channel>
+    <item>
+      <title>Federal Reserve finalizes bank capital reporting rule</title>
+      <link>https://www.federalreserve.gov/newsevents/pressreleases/bcreg20260723a.htm</link>
+      <pubDate>Thu, 23 Jul 2026 09:00:00 GMT</pubDate>
+      <description>Bank supervision and regulation release.</description>
+    </item>
+    <item>
+      <title>Federal Reserve announces enforcement action</title>
+      <link>https://www.federalreserve.gov/newsevents/pressreleases/enforcement20260723a.htm</link>
+      <pubDate>Thu, 23 Jul 2026 08:00:00 GMT</pubDate>
+      <description>Enforcement action against a banking organization.</description>
+    </item>
+    <item>
+      <title>Federal Reserve issues FOMC statement</title>
+      <link>https://www.federalreserve.gov/newsevents/pressreleases/monetary20260723a.htm</link>
+      <pubDate>Thu, 23 Jul 2026 07:00:00 GMT</pubDate>
+      <description>The Committee discussed monetary policy and economic developments.</description>
+    </item>
+  </channel></rss>`;
+  const yahooRss = `<?xml version="1.0"?><rss><channel><item>
+    <title>NVIDIA semiconductor demand expands - Market Desk</title>
+    <link>https://example.com/nvidia-demand</link>
+    <pubDate>Thu, 23 Jul 2026 06:00:00 GMT</pubDate>
+    <description>NVIDIA reports stronger semiconductor demand.</description>
+    <source>Market Desk</source>
+  </item></channel></rss>`;
+  const result = await collectNewsForProfile({
+    profile: {
+      ...monitorSettings().profiles[0],
+      targets: [
+        { symbol: "SOXX" },
+        { symbol: "SMH" },
+        { symbol: "NVDA" },
+      ],
+    },
+    db: {},
+    fetcher: async (url) => {
+      const value = new URL(url);
+      calls.push(value);
+      if (value.hostname === "www.federalreserve.gov") {
+        return new Response(fedRss, {
           status: 200,
           headers: { "content-type": "application/rss+xml" },
-        },
-      );
+        });
+      }
+      if (value.hostname === "news.google.com") {
+        return new Response("<rss><channel></channel></rss>", {
+          status: 200,
+          headers: { "content-type": "application/rss+xml" },
+        });
+      }
+      return new Response(yahooRss, {
+        status: 200,
+        headers: { "content-type": "application/rss+xml" },
+      });
     },
     writeItems: async (_db, payload) => writes.push(payload),
     now: new Date("2026-07-23T20:30:00.000Z"),
   });
   const items = writes.flatMap(({ items: rows }) => rows);
+  const fedItems = items.filter(({ source }) =>
+    source === "Federal Reserve Board Press Releases");
   assert.equal(result.status, "completed");
-  assert.equal(calls.length, 1);
-  assert.equal(items.length, 8);
-  assert.equal(items.every(({ symbol }) => symbol === "NVDA"), true);
-  assert.equal(items.every(({ sourceTier }) => sourceTier === "evidence"), true);
-  assert.equal(items.every(({ quality }) => quality === "evidence"), true);
+  assert.equal(calls.some(({ hostname }) => hostname === "news.google.com"), true);
+  assert.equal(
+    calls.some(({ hostname }) => hostname === "feeds.finance.yahoo.com"),
+    true,
+  );
+  assert.equal(fedItems.length, 2);
+  assert.deepEqual(
+    fedItems.map(({ symbol }) => symbol).sort(),
+    ["SMH", "SOXX"],
+  );
+  assert.equal(
+    fedItems.every(({ title }) => title.includes("FOMC statement")),
+    true,
+  );
+  assert.equal(
+    items.some(({ symbol, sourceTier }) =>
+      symbol === "NVDA" && sourceTier === "discovery"),
+    true,
+  );
+});
+
+test("Federal Reserve macro evidence stays topic-level without a theme ETF target", async () => {
+  const { collectNewsForProfile } = await import(newsUrl);
+  const writes = [];
+  const rss = `<?xml version="1.0"?><rss><channel><item>
+    <title>Federal Reserve publishes economic developments summary</title>
+    <link>https://www.federalreserve.gov/newsevents/pressreleases/monetary20260723a.htm</link>
+    <pubDate>Thu, 23 Jul 2026 07:00:00 GMT</pubDate>
+    <description>FOMC monetary policy and economic outlook.</description>
+  </item></channel></rss>`;
+  await collectNewsForProfile({
+    profile: {
+      ...monitorSettings().profiles[0],
+      targets: [{ symbol: "NVDA" }],
+    },
+    db: {},
+    fetcher: async (url) => new Response(
+      new URL(url).hostname === "www.federalreserve.gov"
+        ? rss
+        : "<rss><channel></channel></rss>",
+      {
+        status: 200,
+        headers: { "content-type": "application/rss+xml" },
+      },
+    ),
+    writeItems: async (_db, payload) => writes.push(payload),
+    now: new Date("2026-07-23T20:30:00.000Z"),
+  });
+  const items = writes.flatMap(({ items: rows }) => rows);
+  assert.equal(items.length, 1);
+  assert.equal(items[0].symbol, null);
+  assert.equal(items[0].topic, "us-semiconductor");
 });
 
 test("Federal Reserve RSS response limit produces an evidence failure trace", async () => {
@@ -341,30 +486,53 @@ test("SEC requests identify TradingWorkbench with the configured contact email",
   );
 });
 
-test("SEC requests use the project contact when no email is configured", async () => {
+test("SEC skips requests without a compliant contact and continues discovery", async () => {
   const { collectNewsForProfile } = await import(newsUrl);
   const requests = [];
-  await collectNewsForProfile({
+  const writes = [];
+  const discovery = `<?xml version="1.0"?><rss><channel><item>
+    <title>Oracle cloud earnings update - Market Desk</title>
+    <link>https://example.com/oracle-cloud-update</link>
+    <pubDate>Thu, 23 Jul 2026 18:00:00 GMT</pubDate>
+    <description>Oracle Cloud reports an earnings update.</description>
+    <source>Market Desk</source>
+  </item></channel></rss>`;
+  const result = await collectNewsForProfile({
     profile: {
       ...monitorSettings().profiles[0],
       targets: [{ symbol: "ORCL" }],
     },
     db: {},
-    env: {},
+    env: {
+      SEC_USER_AGENT:
+        "TradingWorkbench 115156322+gaaiyun@users.noreply.github.com",
+      SEC_CONTACT_EMAIL:
+        "115156322+gaaiyun@users.noreply.github.com",
+    },
     fetcher: async (url, options) => {
       requests.push({ url: String(url), options });
-      return new Response(SEC_SUBMISSIONS, {
+      return new Response(discovery, {
         status: 200,
-        headers: { "content-type": "application/json" },
+        headers: { "content-type": "application/rss+xml" },
       });
     },
-    writeItems: async () => {},
+    writeItems: async (_db, payload) => writes.push(payload),
     now: new Date("2026-07-23T20:30:00.000Z"),
   });
   assert.equal(
-    requests[0].options.headers["user-agent"],
-    "TradingWorkbench 115156322+gaaiyun@users.noreply.github.com",
+    requests.some(({ url }) => new URL(url).hostname === "data.sec.gov"),
+    false,
   );
+  assert.equal(result.status, "degraded");
+  assert.equal(result.written, 1);
+  assert.equal(
+    result.sources.some(({ source, status, reason }) =>
+      source === "sec-edgar-submissions"
+      && status === "failed"
+      && reason === "SEC_USER_AGENT_REQUIRED"),
+    true,
+  );
+  assert.equal(writes.flatMap(({ items }) => items)[0].sourceTier, "discovery");
 });
 
 test("SEC 403 remains a failed source when discovery fallbacks are empty", async () => {
@@ -409,6 +577,7 @@ test("SEC HTTP 200 without a submissions envelope remains a failed source", asyn
       targets: [{ symbol: "GOOGL" }],
     },
     db: {},
+    env: { SEC_USER_AGENT: "Example Research sec-ops@example.com" },
     fetcher: async (url) => (
       new URL(url).hostname === "data.sec.gov"
         ? new Response("{}", {
@@ -448,6 +617,7 @@ test("SEC evidence failure keeps the run degraded when discovery still returns n
       targets: [{ symbol: "ORCL" }],
     },
     db: {},
+    env: { SEC_USER_AGENT: "Example Research sec-ops@example.com" },
     fetcher: async (url) => (
       new URL(url).hostname === "data.sec.gov"
         ? new Response("", { status: 403 })
@@ -463,6 +633,56 @@ test("SEC evidence failure keeps the run degraded when discovery still returns n
   assert.equal(result.written, 1);
   assert.equal(result.status, "degraded");
   assert.equal(result.errorCode, "NEWS_COLLECTION_PARTIAL");
+});
+
+test("old SEC submissions do not short-circuit current discovery", async () => {
+  const { collectNewsForProfile } = await import(newsUrl);
+  const oldSubmissions = JSON.parse(SEC_SUBMISSIONS);
+  oldSubmissions.filings.recent.filingDate[0] = "2020-01-02";
+  oldSubmissions.filings.recent.reportDate[0] = "2020-01-01";
+  oldSubmissions.filings.recent.acceptanceDateTime[0] =
+    "2020-01-02T20:13:46.000Z";
+  const discovery = `<?xml version="1.0"?><rss><channel><item>
+    <title>Oracle cloud earnings accelerate - Market Desk</title>
+    <link>https://example.com/oracle-current-discovery</link>
+    <pubDate>Thu, 23 Jul 2026 18:00:00 GMT</pubDate>
+    <description>Oracle Cloud reports current AI demand and earnings growth.</description>
+    <source>Market Desk</source>
+  </item></channel></rss>`;
+  const calls = [];
+  const writes = [];
+  const result = await collectNewsForProfile({
+    profile: {
+      ...monitorSettings().profiles[0],
+      targets: [{ symbol: "ORCL" }],
+    },
+    db: {},
+    env: { SEC_USER_AGENT: "Example Research sec-ops@example.com" },
+    fetcher: async (url) => {
+      const value = new URL(url);
+      calls.push(value);
+      return value.hostname === "data.sec.gov"
+        ? new Response(JSON.stringify(oldSubmissions), {
+          status: 200,
+          headers: { "content-type": "application/json" },
+        })
+        : new Response(discovery, {
+          status: 200,
+          headers: { "content-type": "application/rss+xml" },
+        });
+    },
+    writeItems: async (_db, payload) => writes.push(payload),
+    now: new Date("2026-07-23T20:30:00.000Z"),
+  });
+  const items = writes.flatMap(({ items: rows }) => rows);
+  assert.equal(result.status, "completed");
+  assert.equal(
+    calls.some(({ hostname }) => hostname === "news.google.com"),
+    true,
+  );
+  assert.equal(items.length, 1);
+  assert.equal(items[0].url, "https://example.com/oracle-current-discovery");
+  assert.equal(items[0].sourceTier, "discovery");
 });
 
 test("Oracle and Alphabet prefer deduplicated SEC submissions evidence before discovery feeds", async () => {
@@ -487,6 +707,7 @@ test("Oracle and Alphabet prefer deduplicated SEC submissions evidence before di
       targets: [{ symbol: "ORCL" }, { symbol: "GOOGL" }],
     },
     db: {},
+    env: { SEC_USER_AGENT: "Example Research sec-ops@example.com" },
     fetcher: async (url) => {
       const value = new URL(url);
       calls.push(value);
@@ -702,6 +923,7 @@ test("news collection falls back to Yahoo feeds for Alphabet and HashKey", async
   const result = await collectNewsForProfile({
     profile,
     db: {},
+    env: { SEC_USER_AGENT: "Example Research sec-ops@example.com" },
     fetcher: async (url) => {
       const value = String(url);
       calls.push(value);

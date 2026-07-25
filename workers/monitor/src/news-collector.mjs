@@ -1,5 +1,6 @@
 const DAY_MS = 24 * 60 * 60 * 1000;
 const RSS_LIMIT_PER_QUERY = 8;
+const RSS_SCAN_LIMIT = 32;
 const SEC_SCAN_LIMIT = 200;
 const DEFAULT_RESPONSE_LIMIT_BYTES = 256 * 1024;
 const SEC_RESPONSE_LIMIT_BYTES = 512 * 1024;
@@ -15,8 +16,6 @@ const MIIT_POLICY_COLUMN_IDS = new Set([
 const HASHKEY_IR_URL = "https://group.hashkey.com/en/news/categories/announcement-1";
 const FEDERAL_RESERVE_RSS_URL =
   "https://www.federalreserve.gov/feeds/press_all.xml";
-const DEFAULT_SEC_CONTACT_EMAIL =
-  "115156322+gaaiyun@users.noreply.github.com";
 const SEC_EDGAR_CIK = {
   ORCL: "0001341439",
   GOOGL: "0001652044",
@@ -28,6 +27,12 @@ const EVIDENCE_PROVIDERS = new Set([
   "sec-edgar-submissions",
   "sec-edgar-8k",
 ]);
+const SHANGHAI_DATE_FORMATTER = new Intl.DateTimeFormat("en-CA", {
+  timeZone: "Asia/Shanghai",
+  year: "numeric",
+  month: "2-digit",
+  day: "2-digit",
+});
 
 const TARGET_ALIASES = {
   "515880.SS": ["通信ETF", "通信 ETF", "光模块", "光通信", "通信设备", "5G", "6G"],
@@ -84,10 +89,12 @@ function tagValue(item, tag) {
   return match?.[1] ?? "";
 }
 
-export function parseGoogleNewsRss(xml) {
+function parseRssItems(xml, maxItems = RSS_LIMIT_PER_QUERY) {
   const items = [];
+  let scanned = 0;
   for (const match of String(xml || "").matchAll(/<item(?:\s[^>]*)?>([\s\S]*?)<\/item>/gi)) {
-    if (items.length >= RSS_LIMIT_PER_QUERY) break;
+    if (items.length >= maxItems || scanned >= RSS_SCAN_LIMIT) break;
+    scanned += 1;
     const body = match[1];
     const title = cleanText(tagValue(body, "title"), 300);
     const url = cleanText(tagValue(body, "link"), 2000);
@@ -104,6 +111,10 @@ export function parseGoogleNewsRss(xml) {
     });
   }
   return items;
+}
+
+export function parseGoogleNewsRss(xml) {
+  return parseRssItems(xml);
 }
 
 export function parseEastmoneySearch(jsonp) {
@@ -145,12 +156,7 @@ export function parseEastmoneySearch(jsonp) {
 }
 
 function shanghaiDate(value) {
-  const parts = new Intl.DateTimeFormat("en-CA", {
-    timeZone: "Asia/Shanghai",
-    year: "numeric",
-    month: "2-digit",
-    day: "2-digit",
-  }).formatToParts(value);
+  const parts = SHANGHAI_DATE_FORMATTER.formatToParts(value);
   const part = (type) => parts.find((entry) => entry.type === type)?.value;
   return `${part("year")}-${part("month")}-${part("day")}`;
 }
@@ -306,6 +312,7 @@ function secSubmissionDate(acceptedAt, filingDate) {
 export function parseSecEdgarSubmissions(
   payload,
   fallbackPublisher = "SEC EDGAR",
+  { since = null, now = null } = {},
 ) {
   let response;
   try {
@@ -345,6 +352,12 @@ export function parseSecEdgarSubmissions(
       filingDate,
     );
     if (!Number.isFinite(published.valueOf())) continue;
+    if (
+      (since && published.valueOf() < since.valueOf())
+      || (now && published.valueOf() > now.valueOf())
+    ) {
+      continue;
+    }
     const description = cleanText(
       recent.primaryDocDescription?.[index],
       180,
@@ -368,7 +381,7 @@ export function parseSecEdgarSubmissions(
 }
 
 export function parseFederalReserveRss(xml) {
-  return parseGoogleNewsRss(xml).flatMap((item) => {
+  return parseRssItems(xml, RSS_SCAN_LIMIT).flatMap((item) => {
     try {
       const url = new URL(item.url);
       if (
@@ -377,6 +390,15 @@ export function parseFederalReserveRss(xml) {
           url.hostname.toLocaleLowerCase(),
         )
         || !url.pathname.startsWith("/newsevents/pressreleases/")
+      ) {
+        return [];
+      }
+      const material = `${item.title} ${item.summary}`;
+      if (
+        /\b(?:enforcement action|civil money penalty|bank capital|banking regulation|supervision and regulation|consent order|finalizes? (?:a )?rule)\b/i
+          .test(material)
+        || !/\b(?:FOMC|Federal Open Market Committee|monetary policy|economic developments?|economic outlook|economic activity|Beige Book|federal funds rate)\b/i
+          .test(material)
       ) {
         return [];
       }
@@ -632,6 +654,7 @@ function providerCandidates(plan, now) {
       url: secEdgarSubmissionsUrl("ORCL"),
       format: "sec-submissions-json",
       publisher: "Oracle Corporation",
+      since: new Date(now.valueOf() - 7 * DAY_MS),
       maxResponseBytes: SEC_RESPONSE_LIMIT_BYTES,
     });
   } else if (plan.topic === "alphabet") {
@@ -640,6 +663,7 @@ function providerCandidates(plan, now) {
       url: secEdgarSubmissionsUrl("GOOGL"),
       format: "sec-submissions-json",
       publisher: "Alphabet Inc.",
+      since: new Date(now.valueOf() - 7 * DAY_MS),
       maxResponseBytes: SEC_RESPONSE_LIMIT_BYTES,
     });
   } else if (plan.topic === "us-semiconductor") {
@@ -647,7 +671,9 @@ function providerCandidates(plan, now) {
       source: "federal-reserve-rss",
       url: FEDERAL_RESERVE_RSS_URL,
       format: "federal-reserve-rss",
-      appliesToAllSymbols: true,
+      supplementalEvidence: true,
+      topicEvidence: true,
+      symbolScope: "theme-etfs",
       maxResponseBytes: FED_RSS_RESPONSE_LIMIT_BYTES,
     });
   }
@@ -719,7 +745,9 @@ function matchedSymbol(item, symbols) {
 }
 
 function matchedSymbols(item, plan) {
-  if (item._allSymbols) return plan.symbols;
+  if (Array.isArray(item._topicSymbols)) {
+    return item._topicSymbols.length ? item._topicSymbols : [null];
+  }
   const direct = matchedSymbol(item, plan.symbols);
   if (plan.topic === "cn-semiconductor") {
     return plan.symbols.filter((symbol) =>
@@ -771,18 +799,18 @@ async function sha256Hex(material) {
     .join("");
 }
 
-async function itemId(profileId, symbol, url) {
+async function itemId(profileId, symbol, url, hashMaterial = sha256Hex) {
   const material = `${profileId}\n${symbol || ""}\n${canonicalUrl(url)}`;
-  return `news-${await sha256Hex(material)}`;
+  return `news-${await hashMaterial(material)}`;
 }
 
-async function itemClusterId(title) {
+async function itemClusterId(title, hashMaterial = sha256Hex) {
   const normalized = cleanText(title, 300)
     .normalize("NFKC")
     .toLocaleLowerCase()
     .replace(/[^\p{L}\p{N}]+/gu, " ")
     .trim();
-  return `cluster-${await sha256Hex(normalized)}`;
+  return `cluster-${await hashMaterial(normalized)}`;
 }
 
 class NewsFetchError extends Error {
@@ -798,9 +826,24 @@ function fetchErrorCode(error) {
     : "NEWS_NETWORK_ERROR";
 }
 
+function validSecContactEmail(value) {
+  const candidate = String(value || "").trim();
+  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(candidate)) return null;
+  const [localPart, domain] = candidate.toLocaleLowerCase().split("@");
+  if (
+    /no-?reply/.test(localPart)
+    || domain === "users.noreply.github.com"
+  ) {
+    return null;
+  }
+  return candidate;
+}
+
 function secUserAgent({ configuredUserAgent, organization, contactEmail } = {}) {
   const configured = String(configuredUserAgent || "").trim();
-  const configuredEmail = configured.match(/[^\s@]+@[^\s@]+\.[^\s@]+/)?.[0];
+  const configuredEmail = validSecContactEmail(
+    configured.match(/[^\s@]+@[^\s@]+\.[^\s@]+/)?.[0],
+  );
   if (
     configured.length <= 200
     && !/[\r\n]/.test(configured)
@@ -809,16 +852,14 @@ function secUserAgent({ configuredUserAgent, organization, contactEmail } = {}) 
   ) {
     return configured;
   }
-  const candidateEmail = String(contactEmail || "").trim();
-  const email = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(candidateEmail)
-    ? candidateEmail
-    : DEFAULT_SEC_CONTACT_EMAIL;
+  const candidateEmail = validSecContactEmail(contactEmail);
+  if (!candidateEmail) return null;
   const candidateOrganization = String(organization || "")
     .replace(/[\r\n]+/g, " ")
     .replace(/\s+/g, " ")
     .trim()
     .slice(0, 80);
-  return `${candidateOrganization || "TradingWorkbench"} ${email}`;
+  return `${candidateOrganization || "TradingWorkbench"} ${candidateEmail}`;
 }
 
 async function boundedResponseText(response, maxBytes) {
@@ -863,6 +904,10 @@ async function fetchContent(candidate, fetcher, requestConfig = {}) {
   const controller = new AbortController();
   const timer = setTimeout(() => controller.abort(), 8_000);
   try {
+    const userAgent = candidate.format === "sec-submissions-json"
+      ? secUserAgent(requestConfig)
+      : "TradingWorkbench/1.0 (+https://github.com/gaaiyun/TradingWorkbench)";
+    if (!userAgent) throw new NewsFetchError("SEC_USER_AGENT_REQUIRED");
     const response = await fetcher(candidate.url, {
       signal: controller.signal,
       headers: {
@@ -875,9 +920,7 @@ async function fetchContent(candidate, fetcher, requestConfig = {}) {
           : candidate.format === "sec-submissions-json"
             ? "application/json,text/plain;q=0.8,*/*;q=0.5"
           : "application/rss+xml,application/xml,text/xml;q=0.9,*/*;q=0.5",
-        "user-agent": candidate.format === "sec-submissions-json"
-          ? secUserAgent(requestConfig)
-          : "TradingWorkbench/1.0 (+https://github.com/gaaiyun/TradingWorkbench)",
+        "user-agent": userAgent,
       },
     });
     if (!response?.ok) {
@@ -979,15 +1022,22 @@ async function fetchPlan(plan, fetcher, cache, requestConfig) {
             now: requestConfig.now,
           })
         : candidate.format === "sec-submissions-json"
-          ? parseSecEdgarSubmissions(content, candidate.publisher)
+          ? parseSecEdgarSubmissions(content, candidate.publisher, {
+            since: candidate.since,
+            now: requestConfig.now,
+          })
         : candidate.format === "federal-reserve-rss"
           ? parseFederalReserveRss(content)
         : parseGoogleNewsRss(content);
       const items = parsed
         .filter((item) =>
-          candidate.appliesToAllSymbols || relevantToPlan(item, plan))
-        .map((item) => candidate.appliesToAllSymbols
-          ? { ...item, _allSymbols: true }
+          candidate.topicEvidence || relevantToPlan(item, plan))
+        .map((item) => candidate.symbolScope === "theme-etfs"
+          ? {
+            ...item,
+            _topicSymbols: plan.symbols.filter((symbol) =>
+              ["SOXX", "SMH"].includes(symbol)),
+          }
           : item)
         .slice(0, RSS_LIMIT_PER_QUERY);
       trail.push({ source: candidate.source, status: "success", reason: null });
@@ -997,10 +1047,15 @@ async function fetchPlan(plan, fetcher, cache, requestConfig) {
           ...item,
           _provider: candidate.source,
         }));
-        if (evidenceCandidate && collectedItems.length === 0) {
+        if (
+          evidenceCandidate
+          && !candidate.supplementalEvidence
+          && collectedItems.length === 0
+        ) {
           return { items: tagged, source: candidate.source, trail };
         }
         collectedItems.push(...tagged);
+        if (candidate.supplementalEvidence) continue;
         if (!evidenceCandidate) discoverySatisfied = true;
         const hasRemainingEvidence = candidates
           .slice(index + 1)
@@ -1117,6 +1172,7 @@ export async function collectNewsForProfile({
   env = {},
   fetcher = globalThis.fetch,
   writeItems = writeNewsItems,
+  hashMaterial = sha256Hex,
   now = new Date(),
 }) {
   const plans = queryPlans(profile);
@@ -1125,7 +1181,6 @@ export async function collectNewsForProfile({
     plans.map((plan) => fetchPlan(plan, fetcher, responseCache, {
       configuredUserAgent: env?.SEC_USER_AGENT,
       organization: env?.SEC_ORGANIZATION,
-      secContactEmail: env?.SEC_CONTACT_EMAIL,
       contactEmail: env?.SEC_CONTACT_EMAIL,
       now,
     })),
@@ -1162,10 +1217,12 @@ export async function collectNewsForProfile({
     }
     for (const item of outcome.value.items) {
       const provider = item._provider || outcome.value.source;
-      for (const symbol of matchedSymbols(item, plan)) {
-        const id = await itemId(profile.id, symbol, item.url);
-        const clusterId = await itemClusterId(item.title);
-        const age = now.valueOf() - Date.parse(item.publishedAt);
+      const symbols = matchedSymbols(item, plan);
+      if (symbols.length === 0) continue;
+      const clusterId = await itemClusterId(item.title, hashMaterial);
+      const age = now.valueOf() - Date.parse(item.publishedAt);
+      for (const symbol of symbols) {
+        const id = await itemId(profile.id, symbol, item.url, hashMaterial);
         const row = {
           id,
           symbol,
