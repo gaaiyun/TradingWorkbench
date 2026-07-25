@@ -20,11 +20,18 @@ test("audit index classifies every successful archived report and the malformed 
   });
 
   assert.equal(audit.version, 1);
-  assert.equal(audit.summary.successfulReports, 33);
+  const allResults = history.flatMap((batch) => batch.results || []);
+  const successful = allResults.filter((result) => !result.error && result.report);
+  assert.equal(audit.summary.successfulReports, successful.length);
   assert.equal(audit.summary.invalidatedReports, 3);
-  assert.equal(audit.summary.legacyUnverifiedReports, 30);
-  assert.equal(audit.summary.invalidRecords, 1);
-  assert.equal(audit.reports.length, 34);
+  assert.equal(
+    audit.summary.verifiedReports
+      + audit.summary.legacyUnverifiedReports
+      + audit.summary.invalidatedReports,
+    audit.summary.successfulReports,
+  );
+  assert.equal(audit.summary.invalidRecords, allResults.length - successful.length);
+  assert.equal(audit.reports.length, allResults.length);
   assert.deepEqual(
     audit.reports.filter((entry) => entry.auditStatus === "invalidated")
       .map((entry) => `${entry.ticker}|${entry.tradeDate}`).sort(),

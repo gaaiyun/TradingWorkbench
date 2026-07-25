@@ -30,7 +30,10 @@ function problemCodesFor({
   verifiedEvidence = false,
 }) {
   const codes = [];
-  if (error || !report) codes.push("INVALID_TICKER_INPUT");
+  if (error || !report) {
+    if (ticker === "ISSUE") codes.push("INVALID_TICKER_INPUT");
+    else codes.push("ANALYSIS_FAILED");
+  }
   if (!report) return codes;
   if (!text) codes.push("REPORT_MISSING");
   if (INVALIDATED_REPORTS.has(keyFor(ticker, tradeDate))) {

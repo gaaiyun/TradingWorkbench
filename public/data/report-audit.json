@@ -1,19 +1,130 @@
 {
   "version": 1,
-  "generatedAt": "2026-07-24T12:09:02.586Z",
+  "generatedAt": "2026-07-25T07:58:54.366Z",
   "summary": {
-    "successfulReports": 33,
+    "successfulReports": 36,
+    "verifiedReports": 0,
     "invalidatedReports": 3,
-    "legacyUnverifiedReports": 30,
-    "invalidRecords": 1
+    "legacyUnverifiedReports": 33,
+    "invalidRecords": 3
   },
   "reports": [
+    {
+      "ticker": "515880.SS",
+      "tradeDate": "2026-07-24",
+      "generatedAt": "2026-07-25T15:22:49+08:00",
+      "provider": "openai_compatible",
+      "rating": null,
+      "analysisStatus": null,
+      "report": null,
+      "auditStatus": "invalid_record",
+      "problemCodes": [
+        "INVALID_TICKER_INPUT"
+      ],
+      "evidence": {
+        "urlCount": 0,
+        "claimCitationCount": 0,
+        "finalProposalMarkers": 0,
+        "priceTargetCount": 0,
+        "valuationMethodCount": 0,
+        "publishedMarkerCount": 0
+      },
+      "supersededBy": null
+    },
+    {
+      "ticker": "512480.SS",
+      "tradeDate": "2026-07-24",
+      "generatedAt": "2026-07-25T15:22:49+08:00",
+      "provider": "openai_compatible",
+      "rating": null,
+      "analysisStatus": null,
+      "report": null,
+      "auditStatus": "invalid_record",
+      "problemCodes": [
+        "INVALID_TICKER_INPUT"
+      ],
+      "evidence": {
+        "urlCount": 0,
+        "claimCitationCount": 0,
+        "finalProposalMarkers": 0,
+        "priceTargetCount": 0,
+        "valuationMethodCount": 0,
+        "publishedMarkerCount": 0
+      },
+      "supersededBy": null
+    },
+    {
+      "ticker": "ORCL",
+      "tradeDate": "2026-07-24",
+      "generatedAt": "2026-07-25T15:22:49+08:00",
+      "provider": "openai_compatible",
+      "rating": "Underweight",
+      "analysisStatus": "rated",
+      "report": "reports/ORCL/2026-07-24/complete_report.md",
+      "auditStatus": "legacy_unverified",
+      "problemCodes": [
+        "MISSING_PUBLICATION_TIME"
+      ],
+      "evidence": {
+        "urlCount": 15,
+        "claimCitationCount": 1,
+        "finalProposalMarkers": 1,
+        "priceTargetCount": 1,
+        "valuationMethodCount": 3,
+        "publishedMarkerCount": 0
+      },
+      "supersededBy": null
+    },
+    {
+      "ticker": "GOOGL",
+      "tradeDate": "2026-07-24",
+      "generatedAt": "2026-07-25T15:22:49+08:00",
+      "provider": "openai_compatible",
+      "rating": "Hold",
+      "analysisStatus": "rated",
+      "report": "reports/GOOGL/2026-07-24/complete_report.md",
+      "auditStatus": "legacy_unverified",
+      "problemCodes": [
+        "MISSING_CLAIM_EVIDENCE",
+        "MISSING_PUBLICATION_TIME"
+      ],
+      "evidence": {
+        "urlCount": 13,
+        "claimCitationCount": 0,
+        "finalProposalMarkers": 1,
+        "priceTargetCount": 0,
+        "valuationMethodCount": 0,
+        "publishedMarkerCount": 0
+      },
+      "supersededBy": null
+    },
+    {
+      "ticker": "3887.HK",
+      "tradeDate": "2026-07-24",
+      "generatedAt": "2026-07-25T15:22:49+08:00",
+      "provider": "openai_compatible",
+      "rating": "Sell",
+      "analysisStatus": "rated",
+      "report": "reports/3887.HK/2026-07-24/complete_report.md",
+      "auditStatus": "legacy_unverified",
+      "problemCodes": [],
+      "evidence": {
+        "urlCount": 6,
+        "claimCitationCount": 1,
+        "finalProposalMarkers": 1,
+        "priceTargetCount": 1,
+        "valuationMethodCount": 76,
+        "publishedMarkerCount": 6
+      },
+      "supersededBy": null
+    },
     {
       "ticker": "515880.SS",
       "tradeDate": "2026-07-24",
       "generatedAt": "2026-07-24T15:21:07+08:00",
       "provider": "openai_compatible",
       "rating": "Sell",
+      "analysisStatus": null,
       "report": "reports/515880.SS/2026-07-24/complete_report.md",
       "auditStatus": "invalidated",
       "problemCodes": [
@@ -38,6 +149,7 @@
       "generatedAt": "2026-07-24T15:21:07+08:00",
       "provider": "openai_compatible",
       "rating": "Sell",
+      "analysisStatus": null,
       "report": "reports/512480.SS/2026-07-24/complete_report.md",
       "auditStatus": "invalidated",
       "problemCodes": [
@@ -62,6 +174,7 @@
       "generatedAt": "2026-07-24T07:53:17+08:00",
       "provider": "openai_compatible",
       "rating": "Underweight",
+      "analysisStatus": null,
       "report": "reports/512480.SS/2026-07-23/complete_report.md",
       "auditStatus": "invalidated",
       "problemCodes": [
@@ -84,6 +197,7 @@
       "generatedAt": "2026-07-23T06:34:48+08:00",
       "provider": "openai_compatible",
       "rating": "Overweight",
+      "analysisStatus": null,
       "report": "reports/NVDA/2026-07-22/complete_report.md",
       "auditStatus": "legacy_unverified",
       "problemCodes": [
@@ -106,6 +220,7 @@
       "generatedAt": "2026-07-23T06:34:48+08:00",
       "provider": "openai_compatible",
       "rating": "Hold",
+      "analysisStatus": null,
       "report": "reports/SPY/2026-07-22/complete_report.md",
       "auditStatus": "legacy_unverified",
       "problemCodes": [
@@ -130,6 +245,7 @@
       "generatedAt": "2026-07-23T06:34:48+08:00",
       "provider": "openai_compatible",
       "rating": "Hold",
+      "analysisStatus": null,
       "report": "reports/600519.SS/2026-07-22/complete_report.md",
       "auditStatus": "legacy_unverified",
       "problemCodes": [
@@ -152,6 +268,7 @@
       "generatedAt": "2026-07-22T06:28:17+08:00",
       "provider": "openai_compatible",
       "rating": "Overweight",
+      "analysisStatus": null,
       "report": "reports/NVDA/2026-07-21/complete_report.md",
       "auditStatus": "legacy_unverified",
       "problemCodes": [
@@ -174,6 +291,7 @@
       "generatedAt": "2026-07-22T06:28:17+08:00",
       "provider": "openai_compatible",
       "rating": "Hold",
+      "analysisStatus": null,
       "report": "reports/SPY/2026-07-21/complete_report.md",
       "auditStatus": "legacy_unverified",
       "problemCodes": [
@@ -197,6 +315,7 @@
       "generatedAt": "2026-07-22T06:28:17+08:00",
       "provider": "openai_compatible",
       "rating": "Overweight",
+      "analysisStatus": null,
       "report": "reports/600519.SS/2026-07-21/complete_report.md",
       "auditStatus": "legacy_unverified",
       "problemCodes": [
@@ -219,6 +338,7 @@
       "generatedAt": "2026-07-21T06:31:39+08:00",
       "provider": "openai_compatible",
       "rating": "Hold",
+      "analysisStatus": null,
       "report": "reports/NVDA/2026-07-20/complete_report.md",
       "auditStatus": "legacy_unverified",
       "problemCodes": [
@@ -241,6 +361,7 @@
       "generatedAt": "2026-07-21T06:31:39+08:00",
       "provider": "openai_compatible",
       "rating": "Hold",
+      "analysisStatus": null,
       "report": "reports/SPY/2026-07-20/complete_report.md",
       "auditStatus": "legacy_unverified",
       "problemCodes": [
@@ -264,6 +385,7 @@
       "generatedAt": "2026-07-21T06:31:39+08:00",
       "provider": "openai_compatible",
       "rating": "Hold",
+      "analysisStatus": null,
       "report": "reports/600519.SS/2026-07-20/complete_report.md",
       "auditStatus": "legacy_unverified",
       "problemCodes": [
@@ -286,6 +408,7 @@
       "generatedAt": "2026-07-17T06:30:32+08:00",
       "provider": "openai_compatible",
       "rating": "Overweight",
+      "analysisStatus": null,
       "report": "reports/NVDA/2026-07-16/complete_report.md",
       "auditStatus": "legacy_unverified",
       "problemCodes": [
@@ -308,6 +431,7 @@
       "generatedAt": "2026-07-17T06:30:32+08:00",
       "provider": "openai_compatible",
       "rating": "Hold",
+      "analysisStatus": null,
       "report": "reports/SPY/2026-07-16/complete_report.md",
       "auditStatus": "legacy_unverified",
       "problemCodes": [
@@ -332,6 +456,7 @@
       "generatedAt": "2026-07-17T06:30:32+08:00",
       "provider": "openai_compatible",
       "rating": "Overweight",
+      "analysisStatus": null,
       "report": "reports/600519.SS/2026-07-16/complete_report.md",
       "auditStatus": "legacy_unverified",
       "problemCodes": [
@@ -355,6 +480,7 @@
       "generatedAt": "2026-07-16T06:31:36+08:00",
       "provider": "openai_compatible",
       "rating": "Hold",
+      "analysisStatus": null,
       "report": "reports/NVDA/2026-07-15/complete_report.md",
       "auditStatus": "legacy_unverified",
       "problemCodes": [
@@ -378,6 +504,7 @@
       "generatedAt": "2026-07-16T06:31:36+08:00",
       "provider": "openai_compatible",
       "rating": "Underweight",
+      "analysisStatus": null,
       "report": "reports/SPY/2026-07-15/complete_report.md",
       "auditStatus": "legacy_unverified",
       "problemCodes": [
@@ -401,6 +528,7 @@
       "generatedAt": "2026-07-16T06:31:36+08:00",
       "provider": "openai_compatible",
       "rating": "Hold",
+      "analysisStatus": null,
       "report": "reports/600519.SS/2026-07-15/complete_report.md",
       "auditStatus": "legacy_unverified",
       "problemCodes": [
@@ -423,6 +551,7 @@
       "generatedAt": "2026-07-15T17:07:07+08:00",
       "provider": "openai_compatible",
       "rating": "Underweight",
+      "analysisStatus": null,
       "report": "reports/ORCL/2026-07-15/complete_report.md",
       "auditStatus": "legacy_unverified",
       "problemCodes": [
@@ -445,6 +574,7 @@
       "generatedAt": "2026-07-15T06:31:56+08:00",
       "provider": "openai_compatible",
       "rating": "Overweight",
+      "analysisStatus": null,
       "report": "reports/NVDA/2026-07-14/complete_report.md",
       "auditStatus": "legacy_unverified",
       "problemCodes": [
@@ -467,6 +597,7 @@
       "generatedAt": "2026-07-15T06:31:56+08:00",
       "provider": "openai_compatible",
       "rating": "Underweight",
+      "analysisStatus": null,
       "report": "reports/SPY/2026-07-14/complete_report.md",
       "auditStatus": "legacy_unverified",
       "problemCodes": [
@@ -491,6 +622,7 @@
       "generatedAt": "2026-07-15T06:31:56+08:00",
       "provider": "openai_compatible",
       "rating": "Underweight",
+      "analysisStatus": null,
       "report": "reports/600519.SS/2026-07-14/complete_report.md",
       "auditStatus": "legacy_unverified",
       "problemCodes": [
@@ -513,6 +645,7 @@
       "generatedAt": "2026-07-14T10:42:43+08:00",
       "provider": "openai_compatible",
       "rating": "Hold",
+      "analysisStatus": null,
       "report": "reports/ORCL/2026-07-14/complete_report.md",
       "auditStatus": "legacy_unverified",
       "problemCodes": [
@@ -535,6 +668,7 @@
       "generatedAt": "2026-07-14T06:29:28+08:00",
       "provider": "openai_compatible",
       "rating": "Overweight",
+      "analysisStatus": null,
       "report": "reports/NVDA/2026-07-13/complete_report.md",
       "auditStatus": "legacy_unverified",
       "problemCodes": [
@@ -557,6 +691,7 @@
       "generatedAt": "2026-07-14T06:29:28+08:00",
       "provider": "openai_compatible",
       "rating": "Underweight",
+      "analysisStatus": null,
       "report": "reports/SPY/2026-07-13/complete_report.md",
       "auditStatus": "legacy_unverified",
       "problemCodes": [
@@ -580,6 +715,7 @@
       "generatedAt": "2026-07-14T06:29:28+08:00",
       "provider": "openai_compatible",
       "rating": "Overweight",
+      "analysisStatus": null,
       "report": "reports/600519.SS/2026-07-13/complete_report.md",
       "auditStatus": "legacy_unverified",
       "problemCodes": [
@@ -602,6 +738,7 @@
       "generatedAt": "2026-07-13T02:13:48+08:00",
       "provider": "openai_compatible",
       "rating": "Underweight",
+      "analysisStatus": null,
       "report": "reports/ORCL/2026-07-10/complete_report.md",
       "auditStatus": "legacy_unverified",
       "problemCodes": [
@@ -624,6 +761,7 @@
       "generatedAt": "2026-07-12T17:40:12+08:00",
       "provider": "openai_compatible",
       "rating": "Sell",
+      "analysisStatus": null,
       "report": "reports/002865.SZ/2026-07-10/complete_report.md",
       "auditStatus": "legacy_unverified",
       "problemCodes": [
@@ -646,6 +784,7 @@
       "generatedAt": "2026-07-12T12:47:13+08:00",
       "provider": "openai_compatible",
       "rating": "Underweight",
+      "analysisStatus": null,
       "report": "reports/000001.SZ/2026-07-10/complete_report.md",
       "auditStatus": "legacy_unverified",
       "problemCodes": [
@@ -669,6 +808,7 @@
       "generatedAt": "2026-07-12T00:13:23+08:00",
       "provider": "openai_compatible",
       "rating": "Underweight",
+      "analysisStatus": null,
       "report": "reports/SPY/2026-07-10/complete_report.md",
       "auditStatus": "legacy_unverified",
       "problemCodes": [
@@ -692,6 +832,7 @@
       "generatedAt": "2026-07-11T23:59:59+08:00",
       "provider": "openai_compatible",
       "rating": "Hold",
+      "analysisStatus": null,
       "report": "reports/600519.SS/2026-07-10/complete_report.md",
       "auditStatus": "legacy_unverified",
       "problemCodes": [
@@ -714,6 +855,7 @@
       "generatedAt": "2026-07-11T19:33:52+08:00",
       "provider": "openai_compatible",
       "rating": "Hold",
+      "analysisStatus": null,
       "report": "reports/510050.SS/2026-07-10/complete_report.md",
       "auditStatus": "legacy_unverified",
       "problemCodes": [
@@ -738,6 +880,7 @@
       "generatedAt": "2026-07-11T19:33:52+08:00",
       "provider": "openai_compatible",
       "rating": null,
+      "analysisStatus": null,
       "report": null,
       "auditStatus": "invalid_record",
       "problemCodes": [
@@ -759,6 +902,7 @@
       "generatedAt": "2026-07-11T19:14:59+08:00",
       "provider": "openai_compatible",
       "rating": "Underweight",
+      "analysisStatus": null,
       "report": "reports/NVDA/2026-07-10/complete_report.md",
       "auditStatus": "legacy_unverified",
       "problemCodes": [
