@@ -1,17 +1,123 @@
 {
   "version": 1,
-  "generatedAt": "2026-07-25T18:22:59.062Z",
+  "generatedAt": "2026-07-26T05:50:32.440Z",
   "summary": {
-    "successfulReports": 47,
+    "successfulReports": 49,
     "verifiedReports": 0,
     "invalidatedReports": 4,
-    "legacyUnverifiedReports": 43,
+    "legacyUnverifiedReports": 45,
     "invalidRecords": 7,
     "evidenceValidationFailures": 4,
     "analysisExecutionFailures": 2,
     "invalidInputs": 1
   },
   "reports": [
+    {
+      "ticker": "515880.SS",
+      "tradeDate": "2026-07-24",
+      "generatedAt": "2026-07-26T13:28:35+08:00",
+      "provider": "openai_compatible",
+      "rating": "Not Rated",
+      "analysisStatus": "insufficient_evidence",
+      "report": "reports/515880.SS/2026-07-24-v4/complete_report.md",
+      "auditStatus": "legacy_unverified",
+      "failureClass": null,
+      "problemCodes": [
+        "ETF_TEMPLATE_MISMATCH",
+        "MISSING_CLAIM_EVIDENCE"
+      ],
+      "evidence": {
+        "urlCount": 9,
+        "claimCitationCount": 0,
+        "finalProposalMarkers": 1,
+        "priceTargetCount": 0,
+        "valuationMethodCount": 44,
+        "publishedMarkerCount": 1
+      },
+      "claimValidation": {
+        "status": "failed",
+        "errorCodes": [
+          "UNCITED_NUMERIC_CLAIM",
+          "UNSUPPORTED_ALLOCATION"
+        ],
+        "citationCount": 33,
+        "unknownEvidenceIds": [],
+        "uncitedNumericParagraphs": 176
+      },
+      "evidencePacket": {
+        "status": "ok",
+        "asOf": "2026-07-24T23:59:59Z",
+        "contentHash": "6c35e4b9ce61b64d03866f955f3f0b47f0985369b7f9fe8702c4baad9e52edcf"
+      },
+      "evidencePublish": {
+        "published": true,
+        "status": 201
+      },
+      "identity": {
+        "scope": "profile",
+        "kind": "manual",
+        "runId": "30189419616",
+        "profileId": "cn-semi-comms",
+        "requestId": null,
+        "slotId": null,
+        "scheduledFor": null
+      },
+      "supersededBy": null
+    },
+    {
+      "ticker": "512480.SS",
+      "tradeDate": "2026-07-24",
+      "generatedAt": "2026-07-26T13:28:35+08:00",
+      "provider": "openai_compatible",
+      "rating": "Not Rated",
+      "analysisStatus": "insufficient_evidence",
+      "report": "reports/512480.SS/2026-07-24-v4/complete_report.md",
+      "auditStatus": "legacy_unverified",
+      "failureClass": null,
+      "problemCodes": [
+        "ETF_TEMPLATE_MISMATCH",
+        "MISSING_CLAIM_EVIDENCE",
+        "MISSING_PUBLICATION_TIME"
+      ],
+      "evidence": {
+        "urlCount": 8,
+        "claimCitationCount": 0,
+        "finalProposalMarkers": 1,
+        "priceTargetCount": 0,
+        "valuationMethodCount": 5,
+        "publishedMarkerCount": 0
+      },
+      "claimValidation": {
+        "status": "failed",
+        "errorCodes": [
+          "UNCITED_NUMERIC_CLAIM",
+          "UNSUPPORTED_PRICE_TARGET",
+          "UNSUPPORTED_ALLOCATION"
+        ],
+        "citationCount": 33,
+        "unknownEvidenceIds": [],
+        "uncitedNumericParagraphs": 125
+      },
+      "evidencePacket": {
+        "status": "ok",
+        "asOf": "2026-07-24T23:59:59Z",
+        "contentHash": "121a47218f11c646239f51c39bc54a2607aebd346a315aa097283426785322eb"
+      },
+      "evidencePublish": {
+        "published": true,
+        "status": 201
+      },
+      "identity": {
+        "scope": "profile",
+        "kind": "manual",
+        "runId": "30189419616",
+        "profileId": "cn-semi-comms",
+        "requestId": null,
+        "slotId": null,
+        "scheduledFor": null
+      },
+      "supersededBy": null
+    },
     {
       "ticker": "MSFT",
       "tradeDate": "2026-07-24",
@@ -38,6 +144,15 @@
       "evidencePublish": {
         "published": true,
         "status": 201
+      },
+      "identity": {
+        "scope": "legacy",
+        "kind": "legacy",
+        "runId": null,
+        "profileId": null,
+        "requestId": null,
+        "slotId": null,
+        "scheduledFor": null
       },
       "supersededBy": null
     },
@@ -77,6 +192,15 @@
       "evidencePublish": {
         "published": false,
         "reason": "network_error"
+      },
+      "identity": {
+        "scope": "legacy",
+        "kind": "legacy",
+        "runId": null,
+        "profileId": null,
+        "requestId": null,
+        "slotId": null,
+        "scheduledFor": null
       },
       "supersededBy": null
     },
@@ -120,6 +244,15 @@
       "evidencePublish": {
         "published": true,
         "status": 201
+      },
+      "identity": {
+        "scope": "legacy",
+        "kind": "legacy",
+        "runId": null,
+        "profileId": null,
+        "requestId": null,
+        "slotId": null,
+        "scheduledFor": null
       },
       "supersededBy": null
     },
@@ -165,6 +298,15 @@
         "published": true,
         "status": 201
       },
+      "identity": {
+        "scope": "legacy",
+        "kind": "legacy",
+        "runId": null,
+        "profileId": null,
+        "requestId": null,
+        "slotId": null,
+        "scheduledFor": null
+      },
       "supersededBy": null
     },
     {
@@ -205,6 +347,15 @@
       "evidencePublish": {
         "published": true,
         "status": 201
+      },
+      "identity": {
+        "scope": "legacy",
+        "kind": "legacy",
+        "runId": null,
+        "profileId": null,
+        "requestId": null,
+        "slotId": null,
+        "scheduledFor": null
       },
       "supersededBy": null
     },
@@ -247,6 +398,15 @@
       "evidencePublish": {
         "published": true,
         "status": 201
+      },
+      "identity": {
+        "scope": "legacy",
+        "kind": "legacy",
+        "runId": null,
+        "profileId": null,
+        "requestId": null,
+        "slotId": null,
+        "scheduledFor": null
       },
       "supersededBy": null
     },
@@ -291,6 +451,15 @@
         "published": true,
         "status": 201
       },
+      "identity": {
+        "scope": "legacy",
+        "kind": "legacy",
+        "runId": null,
+        "profileId": null,
+        "requestId": null,
+        "slotId": null,
+        "scheduledFor": null
+      },
       "supersededBy": null
     },
     {
@@ -319,6 +488,15 @@
       "evidencePublish": {
         "published": true,
         "status": 201
+      },
+      "identity": {
+        "scope": "legacy",
+        "kind": "legacy",
+        "runId": null,
+        "profileId": null,
+        "requestId": null,
+        "slotId": null,
+        "scheduledFor": null
       },
       "supersededBy": null
     },
@@ -366,6 +544,15 @@
         "reason": "http_error",
         "status": 400
       },
+      "identity": {
+        "scope": "legacy",
+        "kind": "legacy",
+        "runId": null,
+        "profileId": null,
+        "requestId": null,
+        "slotId": null,
+        "scheduledFor": null
+      },
       "supersededBy": null
     },
     {
@@ -411,6 +598,15 @@
         "published": false,
         "reason": "http_error",
         "status": 400
+      },
+      "identity": {
+        "scope": "legacy",
+        "kind": "legacy",
+        "runId": null,
+        "profileId": null,
+        "requestId": null,
+        "slotId": null,
+        "scheduledFor": null
       },
       "supersededBy": null
     },
@@ -458,6 +654,15 @@
         "reason": "http_error",
         "status": 400
       },
+      "identity": {
+        "scope": "legacy",
+        "kind": "legacy",
+        "runId": null,
+        "profileId": null,
+        "requestId": null,
+        "slotId": null,
+        "scheduledFor": null
+      },
       "supersededBy": null
     },
     {
@@ -504,6 +709,15 @@
         "reason": "http_error",
         "status": 400
       },
+      "identity": {
+        "scope": "legacy",
+        "kind": "legacy",
+        "runId": null,
+        "profileId": null,
+        "requestId": null,
+        "slotId": null,
+        "scheduledFor": null
+      },
       "supersededBy": null
     },
     {
@@ -533,6 +747,15 @@
         "published": false,
         "reason": "network_error"
       },
+      "identity": {
+        "scope": "legacy",
+        "kind": "legacy",
+        "runId": null,
+        "profileId": null,
+        "requestId": null,
+        "slotId": null,
+        "scheduledFor": null
+      },
       "supersededBy": null
     },
     {
@@ -561,6 +784,15 @@
       "evidencePublish": {
         "published": false,
         "reason": "network_error"
+      },
+      "identity": {
+        "scope": "legacy",
+        "kind": "legacy",
+        "runId": null,
+        "profileId": null,
+        "requestId": null,
+        "slotId": null,
+        "scheduledFor": null
       },
       "supersededBy": null
     },
@@ -607,6 +839,15 @@
         "reason": "http_error",
         "status": 400
       },
+      "identity": {
+        "scope": "legacy",
+        "kind": "legacy",
+        "runId": null,
+        "profileId": null,
+        "requestId": null,
+        "slotId": null,
+        "scheduledFor": null
+      },
       "supersededBy": null
     },
     {
@@ -633,6 +874,15 @@
       "claimValidation": null,
       "evidencePacket": null,
       "evidencePublish": null,
+      "identity": {
+        "scope": "legacy",
+        "kind": "legacy",
+        "runId": null,
+        "profileId": null,
+        "requestId": null,
+        "slotId": null,
+        "scheduledFor": null
+      },
       "supersededBy": null
     },
     {
@@ -659,6 +909,15 @@
       "claimValidation": null,
       "evidencePacket": null,
       "evidencePublish": null,
+      "identity": {
+        "scope": "legacy",
+        "kind": "legacy",
+        "runId": null,
+        "profileId": null,
+        "requestId": null,
+        "slotId": null,
+        "scheduledFor": null
+      },
       "supersededBy": null
     },
     {
@@ -689,6 +948,15 @@
         "contentHash": "ee89666f2f4d9e92ef0cc6da59d83673683e3f016847b9db974e008dcf15fd3f"
       },
       "evidencePublish": null,
+      "identity": {
+        "scope": "legacy",
+        "kind": "legacy",
+        "runId": null,
+        "profileId": null,
+        "requestId": null,
+        "slotId": null,
+        "scheduledFor": null
+      },
       "supersededBy": null
     },
     {
@@ -720,6 +988,15 @@
         "contentHash": "8680481ff0824b665bda6eb2eb53e8db90436a3ef526e87cbe7bbaeec069a989"
       },
       "evidencePublish": null,
+      "identity": {
+        "scope": "legacy",
+        "kind": "legacy",
+        "runId": null,
+        "profileId": null,
+        "requestId": null,
+        "slotId": null,
+        "scheduledFor": null
+      },
       "supersededBy": null
     },
     {
@@ -748,6 +1025,15 @@
         "contentHash": "d0a315e4aeec2f70f48a6a8cf28f3e690e926e2a74a2fa03e47107e6a982f7b5"
       },
       "evidencePublish": null,
+      "identity": {
+        "scope": "legacy",
+        "kind": "legacy",
+        "runId": null,
+        "profileId": null,
+        "requestId": null,
+        "slotId": null,
+        "scheduledFor": null
+      },
       "supersededBy": null
     },
     {
@@ -777,6 +1063,15 @@
       "claimValidation": null,
       "evidencePacket": null,
       "evidencePublish": null,
+      "identity": {
+        "scope": "legacy",
+        "kind": "legacy",
+        "runId": null,
+        "profileId": null,
+        "requestId": null,
+        "slotId": null,
+        "scheduledFor": null
+      },
       "supersededBy": null
     },
     {
@@ -806,6 +1101,15 @@
       "claimValidation": null,
       "evidencePacket": null,
       "evidencePublish": null,
+      "identity": {
+        "scope": "legacy",
+        "kind": "legacy",
+        "runId": null,
+        "profileId": null,
+        "requestId": null,
+        "slotId": null,
+        "scheduledFor": null
+      },
       "supersededBy": null
     },
     {
@@ -833,6 +1137,15 @@
       "claimValidation": null,
       "evidencePacket": null,
       "evidencePublish": null,
+      "identity": {
+        "scope": "legacy",
+        "kind": "legacy",
+        "runId": null,
+        "profileId": null,
+        "requestId": null,
+        "slotId": null,
+        "scheduledFor": null
+      },
       "supersededBy": null
     },
     {
@@ -860,6 +1173,15 @@
       "claimValidation": null,
       "evidencePacket": null,
       "evidencePublish": null,
+      "identity": {
+        "scope": "legacy",
+        "kind": "legacy",
+        "runId": null,
+        "profileId": null,
+        "requestId": null,
+        "slotId": null,
+        "scheduledFor": null
+      },
       "supersededBy": null
     },
     {
@@ -889,6 +1211,15 @@
       "claimValidation": null,
       "evidencePacket": null,
       "evidencePublish": null,
+      "identity": {
+        "scope": "legacy",
+        "kind": "legacy",
+        "runId": null,
+        "profileId": null,
+        "requestId": null,
+        "slotId": null,
+        "scheduledFor": null
+      },
       "supersededBy": null
     },
     {
@@ -916,6 +1247,15 @@
       "claimValidation": null,
       "evidencePacket": null,
       "evidencePublish": null,
+      "identity": {
+        "scope": "legacy",
+        "kind": "legacy",
+        "runId": null,
+        "profileId": null,
+        "requestId": null,
+        "slotId": null,
+        "scheduledFor": null
+      },
       "supersededBy": null
     },
     {
@@ -943,6 +1283,15 @@
       "claimValidation": null,
       "evidencePacket": null,
       "evidencePublish": null,
+      "identity": {
+        "scope": "legacy",
+        "kind": "legacy",
+        "runId": null,
+        "profileId": null,
+        "requestId": null,
+        "slotId": null,
+        "scheduledFor": null
+      },
       "supersededBy": null
     },
     {
@@ -971,6 +1320,15 @@
       "claimValidation": null,
       "evidencePacket": null,
       "evidencePublish": null,
+      "identity": {
+        "scope": "legacy",
+        "kind": "legacy",
+        "runId": null,
+        "profileId": null,
+        "requestId": null,
+        "slotId": null,
+        "scheduledFor": null
+      },
       "supersededBy": null
     },
     {
@@ -998,6 +1356,15 @@
       "claimValidation": null,
       "evidencePacket": null,
       "evidencePublish": null,
+      "identity": {
+        "scope": "legacy",
+        "kind": "legacy",
+        "runId": null,
+        "profileId": null,
+        "requestId": null,
+        "slotId": null,
+        "scheduledFor": null
+      },
       "supersededBy": null
     },
     {
@@ -1025,6 +1392,15 @@
       "claimValidation": null,
       "evidencePacket": null,
       "evidencePublish": null,
+      "identity": {
+        "scope": "legacy",
+        "kind": "legacy",
+        "runId": null,
+        "profileId": null,
+        "requestId": null,
+        "slotId": null,
+        "scheduledFor": null
+      },
       "supersededBy": null
     },
     {
@@ -1053,6 +1429,15 @@
       "claimValidation": null,
       "evidencePacket": null,
       "evidencePublish": null,
+      "identity": {
+        "scope": "legacy",
+        "kind": "legacy",
+        "runId": null,
+        "profileId": null,
+        "requestId": null,
+        "slotId": null,
+        "scheduledFor": null
+      },
       "supersededBy": null
     },
     {
@@ -1080,6 +1465,15 @@
       "claimValidation": null,
       "evidencePacket": null,
       "evidencePublish": null,
+      "identity": {
+        "scope": "legacy",
+        "kind": "legacy",
+        "runId": null,
+        "profileId": null,
+        "requestId": null,
+        "slotId": null,
+        "scheduledFor": null
+      },
       "supersededBy": null
     },
     {
@@ -1107,6 +1501,15 @@
       "claimValidation": null,
       "evidencePacket": null,
       "evidencePublish": null,
+      "identity": {
+        "scope": "legacy",
+        "kind": "legacy",
+        "runId": null,
+        "profileId": null,
+        "requestId": null,
+        "slotId": null,
+        "scheduledFor": null
+      },
       "supersededBy": null
     },
     {
@@ -1136,6 +1539,15 @@
       "claimValidation": null,
       "evidencePacket": null,
       "evidencePublish": null,
+      "identity": {
+        "scope": "legacy",
+        "kind": "legacy",
+        "runId": null,
+        "profileId": null,
+        "requestId": null,
+        "slotId": null,
+        "scheduledFor": null
+      },
       "supersededBy": null
     },
     {
@@ -1164,6 +1576,15 @@
       "claimValidation": null,
       "evidencePacket": null,
       "evidencePublish": null,
+      "identity": {
+        "scope": "legacy",
+        "kind": "legacy",
+        "runId": null,
+        "profileId": null,
+        "requestId": null,
+        "slotId": null,
+        "scheduledFor": null
+      },
       "supersededBy": null
     },
     {
@@ -1192,6 +1613,15 @@
       "claimValidation": null,
       "evidencePacket": null,
       "evidencePublish": null,
+      "identity": {
+        "scope": "legacy",
+        "kind": "legacy",
+        "runId": null,
+        "profileId": null,
+        "requestId": null,
+        "slotId": null,
+        "scheduledFor": null
+      },
       "supersededBy": null
     },
     {
@@ -1220,6 +1650,15 @@
       "claimValidation": null,
       "evidencePacket": null,
       "evidencePublish": null,
+      "identity": {
+        "scope": "legacy",
+        "kind": "legacy",
+        "runId": null,
+        "profileId": null,
+        "requestId": null,
+        "slotId": null,
+        "scheduledFor": null
+      },
       "supersededBy": null
     },
     {
@@ -1247,6 +1686,15 @@
       "claimValidation": null,
       "evidencePacket": null,
       "evidencePublish": null,
+      "identity": {
+        "scope": "legacy",
+        "kind": "legacy",
+        "runId": null,
+        "profileId": null,
+        "requestId": null,
+        "slotId": null,
+        "scheduledFor": null
+      },
       "supersededBy": null
     },
     {
@@ -1274,6 +1722,15 @@
       "claimValidation": null,
       "evidencePacket": null,
       "evidencePublish": null,
+      "identity": {
+        "scope": "legacy",
+        "kind": "legacy",
+        "runId": null,
+        "profileId": null,
+        "requestId": null,
+        "slotId": null,
+        "scheduledFor": null
+      },
       "supersededBy": null
     },
     {
@@ -1301,6 +1758,15 @@
       "claimValidation": null,
       "evidencePacket": null,
       "evidencePublish": null,
+      "identity": {
+        "scope": "legacy",
+        "kind": "legacy",
+        "runId": null,
+        "profileId": null,
+        "requestId": null,
+        "slotId": null,
+        "scheduledFor": null
+      },
       "supersededBy": null
     },
     {
@@ -1330,6 +1796,15 @@
       "claimValidation": null,
       "evidencePacket": null,
       "evidencePublish": null,
+      "identity": {
+        "scope": "legacy",
+        "kind": "legacy",
+        "runId": null,
+        "profileId": null,
+        "requestId": null,
+        "slotId": null,
+        "scheduledFor": null
+      },
       "supersededBy": null
     },
     {
@@ -1357,6 +1832,15 @@
       "claimValidation": null,
       "evidencePacket": null,
       "evidencePublish": null,
+      "identity": {
+        "scope": "legacy",
+        "kind": "legacy",
+        "runId": null,
+        "profileId": null,
+        "requestId": null,
+        "slotId": null,
+        "scheduledFor": null
+      },
       "supersededBy": null
     },
     {
@@ -1384,6 +1868,15 @@
       "claimValidation": null,
       "evidencePacket": null,
       "evidencePublish": null,
+      "identity": {
+        "scope": "legacy",
+        "kind": "legacy",
+        "runId": null,
+        "profileId": null,
+        "requestId": null,
+        "slotId": null,
+        "scheduledFor": null
+      },
       "supersededBy": null
     },
     {
@@ -1411,6 +1904,15 @@
       "claimValidation": null,
       "evidencePacket": null,
       "evidencePublish": null,
+      "identity": {
+        "scope": "legacy",
+        "kind": "legacy",
+        "runId": null,
+        "profileId": null,
+        "requestId": null,
+        "slotId": null,
+        "scheduledFor": null
+      },
       "supersededBy": null
     },
     {
@@ -1439,6 +1941,15 @@
       "claimValidation": null,
       "evidencePacket": null,
       "evidencePublish": null,
+      "identity": {
+        "scope": "legacy",
+        "kind": "legacy",
+        "runId": null,
+        "profileId": null,
+        "requestId": null,
+        "slotId": null,
+        "scheduledFor": null
+      },
       "supersededBy": null
     },
     {
@@ -1466,6 +1977,15 @@
       "claimValidation": null,
       "evidencePacket": null,
       "evidencePublish": null,
+      "identity": {
+        "scope": "legacy",
+        "kind": "legacy",
+        "runId": null,
+        "profileId": null,
+        "requestId": null,
+        "slotId": null,
+        "scheduledFor": null
+      },
       "supersededBy": null
     },
     {
@@ -1493,6 +2013,15 @@
       "claimValidation": null,
       "evidencePacket": null,
       "evidencePublish": null,
+      "identity": {
+        "scope": "legacy",
+        "kind": "legacy",
+        "runId": null,
+        "profileId": null,
+        "requestId": null,
+        "slotId": null,
+        "scheduledFor": null
+      },
       "supersededBy": null
     },
     {
@@ -1520,6 +2049,15 @@
       "claimValidation": null,
       "evidencePacket": null,
       "evidencePublish": null,
+      "identity": {
+        "scope": "legacy",
+        "kind": "legacy",
+        "runId": null,
+        "profileId": null,
+        "requestId": null,
+        "slotId": null,
+        "scheduledFor": null
+      },
       "supersededBy": null
     },
     {
@@ -1548,6 +2086,15 @@
       "claimValidation": null,
       "evidencePacket": null,
       "evidencePublish": null,
+      "identity": {
+        "scope": "legacy",
+        "kind": "legacy",
+        "runId": null,
+        "profileId": null,
+        "requestId": null,
+        "slotId": null,
+        "scheduledFor": null
+      },
       "supersededBy": null
     },
     {
@@ -1576,6 +2123,15 @@
       "claimValidation": null,
       "evidencePacket": null,
       "evidencePublish": null,
+      "identity": {
+        "scope": "legacy",
+        "kind": "legacy",
+        "runId": null,
+        "profileId": null,
+        "requestId": null,
+        "slotId": null,
+        "scheduledFor": null
+      },
       "supersededBy": null
     },
     {
@@ -1603,6 +2159,15 @@
       "claimValidation": null,
       "evidencePacket": null,
       "evidencePublish": null,
+      "identity": {
+        "scope": "legacy",
+        "kind": "legacy",
+        "runId": null,
+        "profileId": null,
+        "requestId": null,
+        "slotId": null,
+        "scheduledFor": null
+      },
       "supersededBy": null
     },
     {
@@ -1632,6 +2197,15 @@
       "claimValidation": null,
       "evidencePacket": null,
       "evidencePublish": null,
+      "identity": {
+        "scope": "legacy",
+        "kind": "legacy",
+        "runId": null,
+        "profileId": null,
+        "requestId": null,
+        "slotId": null,
+        "scheduledFor": null
+      },
       "supersededBy": null
     },
     {
@@ -1658,6 +2232,15 @@
       "claimValidation": null,
       "evidencePacket": null,
       "evidencePublish": null,
+      "identity": {
+        "scope": "legacy",
+        "kind": "legacy",
+        "runId": null,
+        "profileId": null,
+        "requestId": null,
+        "slotId": null,
+        "scheduledFor": null
+      },
       "supersededBy": null
     },
     {
@@ -1685,6 +2268,15 @@
       "claimValidation": null,
       "evidencePacket": null,
       "evidencePublish": null,
+      "identity": {
+        "scope": "legacy",
+        "kind": "legacy",
+        "runId": null,
+        "profileId": null,
+        "requestId": null,
+        "slotId": null,
+        "scheduledFor": null
+      },
       "supersededBy": null
     }
   ]

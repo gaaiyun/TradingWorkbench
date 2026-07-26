@@ -1,144 +1,89 @@
 {
   "version": 1,
   "status": "partial",
-  "generated_at": "2026-07-26T02:22:46+08:00",
+  "generated_at": "2026-07-26T13:28:35+08:00",
   "trade_date": "2026-07-24",
   "global": {
-    "status": "ok",
+    "status": "unavailable",
     "query_type": "global",
     "ticker": null,
     "start_date": "2026-07-17",
     "end_date": "2026-07-24",
-    "fetched_at": "2026-07-25T18:22:47Z",
-    "items": [
-      {
-        "title": "Walmart and the Walmart Foundation Announce $500,000 Commitment to West Virginia Flood Relief",
-        "summary": "",
-        "url": "https://finance.yahoo.com/small-business/articles/walmart-walmart-foundation-announce-500-215400033.html",
-        "source": "Business Wire",
-        "published_at": "2026-07-24T21:54:00Z",
-        "fetched_at": "2026-07-25T18:22:47Z",
-        "ticker": null,
-        "source_tier": "aggregator"
-      },
-      {
-        "title": "Paramount Stock Falls on Warner Bros. Merger Delay",
-        "summary": "",
-        "url": "https://finance.yahoo.com/m/bd8f4811-b7d7-3fd2-82e8-a284a27ac5f2/paramount-stock-falls-on.html",
-        "source": "Barrons.com",
-        "published_at": "2026-07-24T20:38:00Z",
-        "fetched_at": "2026-07-25T18:22:47Z",
-        "ticker": null,
-        "source_tier": "aggregator"
-      },
-      {
-        "title": "2 Quantum Stocks Set for Strong Q2 Earnings, Triple-Digit Price Target",
-        "summary": "",
-        "url": "https://finance.yahoo.com/markets/stocks/articles/2-quantum-stocks-set-strong-190000511.html",
-        "source": "Zacks",
-        "published_at": "2026-07-24T19:00:00Z",
-        "fetched_at": "2026-07-25T18:22:47Z",
-        "ticker": null,
-        "source_tier": "aggregator"
-      },
-      {
-        "title": "Amazon stock slides as Prime Day data reveals shopper shift ahead of earnings",
-        "summary": "",
-        "url": "https://finance.yahoo.com/m/24800a3c-18a4-39a8-89f7-e072b93d88b1/amazon-stock-slides-as-prime.html",
-        "source": "TheStreet",
-        "published_at": "2026-07-24T18:17:00Z",
-        "fetched_at": "2026-07-25T18:22:47Z",
-        "ticker": null,
-        "source_tier": "aggregator"
-      },
-      {
-        "title": "Disney’s Kraft Heinz Partnership Offers a Way Forward for the Stock",
-        "summary": "",
-        "url": "https://finance.yahoo.com/m/71fde92b-18c1-3747-aa30-e29dd63c3c88/disney%E2%80%99s-kraft-heinz.html",
-        "source": "Barrons.com",
-        "published_at": "2026-07-24T17:25:00Z",
-        "fetched_at": "2026-07-25T18:22:47Z",
-        "ticker": null,
-        "source_tier": "aggregator"
-      },
-      {
-        "title": "EBAY Showered Owners With Cash. The Stock Did Not Cooperate",
-        "summary": "",
-        "url": "https://finance.yahoo.com/m/401f1358-d93e-3a61-bc83-f11d392e2f94/ebay-showered-owners-with.html",
-        "source": "Trefis",
-        "published_at": "2026-07-24T17:08:32Z",
-        "fetched_at": "2026-07-25T18:22:47Z",
-        "ticker": null,
-        "source_tier": "aggregator"
-      },
-      {
-        "title": "3 Reasons Disney Stock Can Bounce Back in the Second Half",
-        "summary": "",
-        "url": "https://finance.yahoo.com/m/f4231a1f-0ff0-32aa-a314-df7379c9564a/3-reasons-disney-stock-can.html",
-        "source": "Motley Fool",
-        "published_at": "2026-07-24T15:38:50Z",
-        "fetched_at": "2026-07-25T18:22:47Z",
-        "ticker": null,
-        "source_tier": "aggregator"
-      },
-      {
-        "title": "Hotchkis & Wiley Launches ETF Share Classes for International Value Fund and Opportunities Fund",
-        "summary": "",
-        "url": "https://finance.yahoo.com/markets/stocks/articles/hotchkis-wiley-launches-etf-share-123000089.html",
-        "source": "Business Wire",
-        "published_at": "2026-07-22T12:30:00Z",
-        "fetched_at": "2026-07-25T18:22:47Z",
-        "ticker": null,
-        "source_tier": "aggregator"
-      }
-    ],
+    "fetched_at": "2026-07-26T05:28:36Z",
+    "items": [],
     "source_statuses": [
       {
         "source": "Yahoo Finance",
-        "status": "ok",
-        "item_count": 39
+        "status": "unsupported",
+        "item_count": 0
       },
       {
         "source": "Federal Reserve",
-        "status": "empty",
+        "status": "unsupported",
         "item_count": 0
       }
     ]
   },
   "tickers": {
-    "MSFT": {
+    "515880.SS": {
       "status": "partial",
       "query_type": "ticker",
-      "ticker": "MSFT",
+      "ticker": "515880.SS",
       "start_date": "2026-07-24",
       "end_date": "2026-07-24",
-      "fetched_at": "2026-07-25T18:22:49Z",
+      "fetched_at": "2026-07-26T05:28:36Z",
       "items": [
         {
-          "title": "Microsoft Stock Before Q4 Earnings: Buy Now or Wait for Results?",
-          "summary": "",
-          "url": "https://finance.yahoo.com/markets/stocks/articles/microsoft-stock-q4-earnings-buy-153100124.html",
-          "source": "Zacks",
-          "published_at": "2026-07-24T15:31:00Z",
-          "fetched_at": "2026-07-25T18:22:49Z",
-          "ticker": "MSFT",
+          "title": "通信ETF国泰：7月23日融资买入2.04亿元，融资融券余额14.63亿元",
+          "summary": "通信ETF国泰：7月23日融资买入2.04亿元，融资融券余额14.63亿元 手机网易网",
+          "url": "https://news.google.com/rss/articles/CBMiYkFVX3lxTE5LNThQRnNzc29Sc2JEN0pDLXd3RDNSOHNxM2dmUnYzY1cxTlNYMkZ4VS0xbm1TYmp1cXlDSW9YdTNLVFVFSjJCOG4wZV9US29DOGEwbjBwa3hzQW9SdmRzOXR3?oc=5",
+          "source": "Google News / 手机网易网",
+          "published_at": "2026-07-24T01:37:44Z",
+          "fetched_at": "2026-07-26T05:28:36Z",
+          "ticker": "515880.SS",
           "source_tier": "aggregator"
         }
       ],
       "source_statuses": [
         {
           "source": "Yahoo Finance",
-          "status": "ok",
-          "item_count": 7
+          "status": "unsupported",
+          "item_count": 0
         },
         {
           "source": "Google News RSS",
-          "status": "failed",
+          "status": "ok",
+          "item_count": 1
+        },
+        {
+          "source": "SEC EDGAR",
+          "status": "empty",
+          "item_count": 0
+        }
+      ]
+    },
+    "512480.SS": {
+      "status": "partial_empty",
+      "query_type": "ticker",
+      "ticker": "512480.SS",
+      "start_date": "2026-07-24",
+      "end_date": "2026-07-24",
+      "fetched_at": "2026-07-26T05:28:38Z",
+      "items": [],
+      "source_statuses": [
+        {
+          "source": "Yahoo Finance",
+          "status": "unsupported",
+          "item_count": 0
+        },
+        {
+          "source": "Google News RSS",
+          "status": "empty",
           "item_count": 0
         },
         {
           "source": "SEC EDGAR",
-          "status": "failed",
+          "status": "empty",
           "item_count": 0
         }
       ]
@@ -146,93 +91,13 @@
   },
   "items": [
     {
-      "title": "Walmart and the Walmart Foundation Announce $500,000 Commitment to West Virginia Flood Relief",
-      "summary": "",
-      "url": "https://finance.yahoo.com/small-business/articles/walmart-walmart-foundation-announce-500-215400033.html",
-      "source": "Business Wire",
-      "published_at": "2026-07-24T21:54:00Z",
-      "fetched_at": "2026-07-25T18:22:47Z",
-      "ticker": null,
-      "source_tier": "aggregator"
-    },
-    {
-      "title": "Paramount Stock Falls on Warner Bros. Merger Delay",
-      "summary": "",
-      "url": "https://finance.yahoo.com/m/bd8f4811-b7d7-3fd2-82e8-a284a27ac5f2/paramount-stock-falls-on.html",
-      "source": "Barrons.com",
-      "published_at": "2026-07-24T20:38:00Z",
-      "fetched_at": "2026-07-25T18:22:47Z",
-      "ticker": null,
-      "source_tier": "aggregator"
-    },
-    {
-      "title": "2 Quantum Stocks Set for Strong Q2 Earnings, Triple-Digit Price Target",
-      "summary": "",
-      "url": "https://finance.yahoo.com/markets/stocks/articles/2-quantum-stocks-set-strong-190000511.html",
-      "source": "Zacks",
-      "published_at": "2026-07-24T19:00:00Z",
-      "fetched_at": "2026-07-25T18:22:47Z",
-      "ticker": null,
-      "source_tier": "aggregator"
-    },
-    {
-      "title": "Amazon stock slides as Prime Day data reveals shopper shift ahead of earnings",
-      "summary": "",
-      "url": "https://finance.yahoo.com/m/24800a3c-18a4-39a8-89f7-e072b93d88b1/amazon-stock-slides-as-prime.html",
-      "source": "TheStreet",
-      "published_at": "2026-07-24T18:17:00Z",
-      "fetched_at": "2026-07-25T18:22:47Z",
-      "ticker": null,
-      "source_tier": "aggregator"
-    },
-    {
-      "title": "Disney’s Kraft Heinz Partnership Offers a Way Forward for the Stock",
-      "summary": "",
-      "url": "https://finance.yahoo.com/m/71fde92b-18c1-3747-aa30-e29dd63c3c88/disney%E2%80%99s-kraft-heinz.html",
-      "source": "Barrons.com",
-      "published_at": "2026-07-24T17:25:00Z",
-      "fetched_at": "2026-07-25T18:22:47Z",
-      "ticker": null,
-      "source_tier": "aggregator"
-    },
-    {
-      "title": "EBAY Showered Owners With Cash. The Stock Did Not Cooperate",
-      "summary": "",
-      "url": "https://finance.yahoo.com/m/401f1358-d93e-3a61-bc83-f11d392e2f94/ebay-showered-owners-with.html",
-      "source": "Trefis",
-      "published_at": "2026-07-24T17:08:32Z",
-      "fetched_at": "2026-07-25T18:22:47Z",
-      "ticker": null,
-      "source_tier": "aggregator"
-    },
-    {
-      "title": "3 Reasons Disney Stock Can Bounce Back in the Second Half",
-      "summary": "",
-      "url": "https://finance.yahoo.com/m/f4231a1f-0ff0-32aa-a314-df7379c9564a/3-reasons-disney-stock-can.html",
-      "source": "Motley Fool",
-      "published_at": "2026-07-24T15:38:50Z",
-      "fetched_at": "2026-07-25T18:22:47Z",
-      "ticker": null,
-      "source_tier": "aggregator"
-    },
-    {
-      "title": "Microsoft Stock Before Q4 Earnings: Buy Now or Wait for Results?",
-      "summary": "",
-      "url": "https://finance.yahoo.com/markets/stocks/articles/microsoft-stock-q4-earnings-buy-153100124.html",
-      "source": "Zacks",
-      "published_at": "2026-07-24T15:31:00Z",
-      "fetched_at": "2026-07-25T18:22:49Z",
-      "ticker": "MSFT",
-      "source_tier": "aggregator"
-    },
-    {
-      "title": "Hotchkis & Wiley Launches ETF Share Classes for International Value Fund and Opportunities Fund",
-      "summary": "",
-      "url": "https://finance.yahoo.com/markets/stocks/articles/hotchkis-wiley-launches-etf-share-123000089.html",
-      "source": "Business Wire",
-      "published_at": "2026-07-22T12:30:00Z",
-      "fetched_at": "2026-07-25T18:22:47Z",
-      "ticker": null,
+      "title": "通信ETF国泰：7月23日融资买入2.04亿元，融资融券余额14.63亿元",
+      "summary": "通信ETF国泰：7月23日融资买入2.04亿元，融资融券余额14.63亿元 手机网易网",
+      "url": "https://news.google.com/rss/articles/CBMiYkFVX3lxTE5LNThQRnNzc29Sc2JEN0pDLXd3RDNSOHNxM2dmUnYzY1cxTlNYMkZ4VS0xbm1TYmp1cXlDSW9YdTNLVFVFSjJCOG4wZV9US29DOGEwbjBwa3hzQW9SdmRzOXR3?oc=5",
+      "source": "Google News / 手机网易网",
+      "published_at": "2026-07-24T01:37:44Z",
+      "fetched_at": "2026-07-26T05:28:36Z",
+      "ticker": "515880.SS",
       "source_tier": "aggregator"
     }
   ]

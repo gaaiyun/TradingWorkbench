@@ -1,6 +1,6 @@
 {
-  "status": "failed",
-  "generated_at": "2026-07-26T02:22:46+08:00",
+  "status": "ok",
+  "generated_at": "2026-07-26T13:28:35+08:00",
   "trade_date": "2026-07-24",
   "provider": "openai_compatible",
   "analysts": [
@@ -9,20 +9,29 @@
     "fundamentals"
   ],
   "request": {
-    "requestId": "dbde5e39-322b-436e-bb10-8b3626529372",
+    "requestId": null,
     "analysts": [
       "market",
       "news",
       "fundamentals"
     ],
     "researchDepth": "standard",
-    "kind": "adhoc"
+    "kind": "manual"
   },
   "run": {
-    "id": "30169487987",
+    "id": "30189419616",
     "attempt": "1",
     "workflow": "daily-analysis",
-    "url": "https://github.com/gaaiyun/TradingWorkbench/actions/runs/30169487987"
+    "url": "https://github.com/gaaiyun/TradingWorkbench/actions/runs/30189419616"
+  },
+  "identity": {
+    "scope": "profile",
+    "kind": "manual",
+    "runId": "30189419616",
+    "profileId": "cn-semi-comms",
+    "requestId": null,
+    "slotId": null,
+    "scheduledFor": null
   },
   "rating_tiers": [
     "Sell",
@@ -33,18 +42,71 @@
   ],
   "results": [
     {
-      "ticker": "MSFT",
-      "rating": null,
-      "report": null,
-      "files": {},
-      "decision_excerpt": "",
-      "analysis_status": "data_validation_failed",
-      "audit_status": "invalidated",
+      "ticker": "515880.SS",
+      "rating": "Not Rated",
+      "report": "reports/515880.SS/2026-07-24-v4/complete_report.md",
+      "files": {
+        "fundamentals": "reports/515880.SS/2026-07-24-v4/1_analysts/fundamentals.md",
+        "market": "reports/515880.SS/2026-07-24-v4/1_analysts/market.md",
+        "news": "reports/515880.SS/2026-07-24-v4/1_analysts/news.md",
+        "bear": "reports/515880.SS/2026-07-24-v4/2_research/bear.md",
+        "bull": "reports/515880.SS/2026-07-24-v4/2_research/bull.md",
+        "manager": "reports/515880.SS/2026-07-24-v4/2_research/manager.md",
+        "trader": "reports/515880.SS/2026-07-24-v4/3_trading/trader.md",
+        "aggressive": "reports/515880.SS/2026-07-24-v4/4_risk/aggressive.md",
+        "conservative": "reports/515880.SS/2026-07-24-v4/4_risk/conservative.md",
+        "neutral": "reports/515880.SS/2026-07-24-v4/4_risk/neutral.md",
+        "decision": "reports/515880.SS/2026-07-24-v4/5_portfolio/decision.md",
+        "complete_report": "reports/515880.SS/2026-07-24-v4/complete_report.md"
+      },
+      "decision_excerpt": "**Rating**: Underweight\n\n**Executive Summary**: 515880.SS（国泰中证全指通信设备ETF）当前面临技术面短期下行趋势加速、极端波动率环境下融资盘踩踏风险上升、以及多头核心催化剂数据可靠性严重不足三重压力。空头在数据可靠性、短期技术趋势判断及杠杆资金风险分析上均更具说服力，但长期AI算力与国产替代产业逻辑仍有合理性，且价格已从拆分后高点大幅回落。综合判断，建议大幅降低风险敞口但暂不完全清仓，等待更明确的企稳信号后再考虑回补。\n\n**Investment Thesis**: 综合三位风险分析师的辩论及研究经理与交易员的建议，最终评级为Underweight，核心逻辑如下：\n\n**一、技术面：短期下行趋势仍在加速，但除权因素使部分长期指标失真。**\n当前收盘价0.65低于10日EMA（0.72）达9.7%，且10日EMA自6月底以来持续陡峭下",
+      "analysis_status": "insufficient_evidence",
+      "audit_status": "legacy_unverified",
       "evidence_publish": {
         "published": true,
         "status": 201
       },
-      "error": "evidence validation failed; model run skipped"
+      "marketHistory": {
+        "source": "tencent",
+        "adjustment": "qfq",
+        "barCount": 641,
+        "startAt": "2023-11-29T16:00:00Z",
+        "endAt": "2026-07-23T16:00:00Z"
+      },
+      "error": null
+    },
+    {
+      "ticker": "512480.SS",
+      "rating": "Not Rated",
+      "report": "reports/512480.SS/2026-07-24-v4/complete_report.md",
+      "files": {
+        "fundamentals": "reports/512480.SS/2026-07-24-v4/1_analysts/fundamentals.md",
+        "market": "reports/512480.SS/2026-07-24-v4/1_analysts/market.md",
+        "bear": "reports/512480.SS/2026-07-24-v4/2_research/bear.md",
+        "bull": "reports/512480.SS/2026-07-24-v4/2_research/bull.md",
+        "manager": "reports/512480.SS/2026-07-24-v4/2_research/manager.md",
+        "trader": "reports/512480.SS/2026-07-24-v4/3_trading/trader.md",
+        "aggressive": "reports/512480.SS/2026-07-24-v4/4_risk/aggressive.md",
+        "conservative": "reports/512480.SS/2026-07-24-v4/4_risk/conservative.md",
+        "neutral": "reports/512480.SS/2026-07-24-v4/4_risk/neutral.md",
+        "decision": "reports/512480.SS/2026-07-24-v4/5_portfolio/decision.md",
+        "complete_report": "reports/512480.SS/2026-07-24-v4/complete_report.md"
+      },
+      "decision_excerpt": "**Rating**: Underweight\n\n**Executive Summary**: 512480.SS（国泰中证全指半导体产品与设备ETF）当前面临技术面全面空头排列、极端波动数据未解、短期产业基本面逆风强劲以及高集中度风险叠加的多重压力。综合三位风险分析师的辩论，多数意见支持大幅缩减敞口但保留战略性底仓，而非彻底清仓。建议评级为Underweight——显著降低当前持仓，保留少量敞口以参与半导体国产替代与AI算力的长期周期逻辑，同时等待技术与基本面双重右侧信号确认后再考虑重新加仓。需特别强调，辩论中引用的多项关键数值（如均线偏离率、波幅、成交量等）均未附带经核实的数据源编号，应作为分析师陈述而非已验证事实对待。\n\n**Investment Thesis**: **一、评级依据与辩论综合**\n\n本轮辩论中，激进派、保守派与中立派三方围绕\"减仓力度\"展开激烈交锋，但对\"方向性缩减",
+      "analysis_status": "insufficient_evidence",
+      "audit_status": "legacy_unverified",
+      "evidence_publish": {
+        "published": true,
+        "status": 201
+      },
+      "marketHistory": {
+        "source": "tencent",
+        "adjustment": "qfq",
+        "barCount": 641,
+        "startAt": "2023-11-29T16:00:00Z",
+        "endAt": "2026-07-23T16:00:00Z"
+      },
+      "error": null
     }
   ]
 }
