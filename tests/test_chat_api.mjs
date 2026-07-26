@@ -454,6 +454,21 @@ test("explicit adhoc report requires reportRequestId and exposes its context sco
     fetched.some((url) => url.endsWith("/complete_report.md")),
     false,
   );
+
+  const invalidSelector = await onRequestPost({
+    request: chatRequest({
+      code: "access-code",
+      question: "怎么看？",
+      report: REPORT_PATH,
+      reportRequestId: "not-a-uuid",
+    }),
+    env: BASE_ENV,
+  });
+  assert.equal(invalidSelector.status, 400);
+  assert.equal(
+    (await invalidSelector.json()).code,
+    "invalid_report_request_id",
+  );
 });
 
 test("chat profileId uses the settings profile identifier contract", async (t) => {

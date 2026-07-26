@@ -543,7 +543,14 @@ function contextScopeFor(body) {
 function reportIdentityMatches(manifest, expected) {
   const identity = manifest?.identity;
   if (expected.scope === "legacy") {
-    return !identity || identity.scope === "legacy";
+    return (
+      !identity
+      || (
+        identity.scope === "legacy"
+        && !identity.profileId
+        && !identity.requestId
+      )
+    );
   }
   if (!identity || identity.scope !== expected.scope) return false;
   if (expected.scope === "profile") {

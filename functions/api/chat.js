@@ -29,6 +29,8 @@ import {
   safeUsage,
 } from "./_chat.mjs";
 
+const UUID = /^[0-9a-f]{8}-(?:[0-9a-f]{4}-){3}[0-9a-f]{12}$/i;
+
 function requestId() {
   return globalThis.crypto?.randomUUID?.() || `chat-${Date.now()}-${Math.random().toString(16).slice(2)}`;
 }
@@ -417,10 +419,13 @@ export async function onRequestPost({ request, env, waitUntil }) {
   } catch {
     return errorJson(id, "监控目标 ID 无效", 400, "invalid_profile_id");
   }
-  const reportRequestId = body.reportRequestId === undefined || body.reportRequestId === null
+  const rawReportRequestId = body.reportRequestId === undefined || body.reportRequestId === null
     ? null
-    : normalizeChatId(body.reportRequestId);
-  if ((body.reportRequestId !== undefined && body.reportRequestId !== null) && !reportRequestId) {
+    : String(body.reportRequestId);
+  const reportRequestId = UUID.test(rawReportRequestId || "")
+    ? rawReportRequestId.toLowerCase()
+    : null;
+  if (rawReportRequestId !== null && !reportRequestId) {
     return errorJson(id, "报告请求 ID 无效", 400, "invalid_report_request_id");
   }
   const reportScope = body.reportScope === undefined || body.reportScope === null
