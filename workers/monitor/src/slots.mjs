@@ -217,21 +217,34 @@ export async function finishScheduledSlot(db, input) {
 export async function listRetryableSlots(db, now, limit = 100) {
   const timestamp = asDate(now).toISOString();
   const result = await db.prepare(`
+    WITH ready AS (
+      SELECT id, profile_id, slot_type, scheduled_for, status, attempt_count,
+        profile_revision, payload_json, payload_hash, local_date
+      FROM scheduled_slots
+      WHERE attempt_count < ?
+        AND (
+          (
+            status IN ('pending', 'queued', 'failed')
+            AND next_attempt_at <= ?
+          )
+          OR (
+            status = 'claimed'
+            AND lease_until <= ?
+          )
+        )
+    ),
+    ranked AS (
+      SELECT *,
+        ROW_NUMBER() OVER (
+          PARTITION BY profile_id
+          ORDER BY scheduled_for ASC, id ASC
+        ) AS profile_rank
+      FROM ready
+    )
     SELECT id, profile_id, slot_type, scheduled_for, status, attempt_count,
       profile_revision, payload_json, payload_hash, local_date
-    FROM scheduled_slots
-    WHERE attempt_count < ?
-      AND (
-        (
-          status IN ('pending', 'queued', 'failed')
-          AND next_attempt_at <= ?
-        )
-        OR (
-          status = 'claimed'
-          AND lease_until <= ?
-        )
-      )
-    ORDER BY scheduled_for ASC, profile_id ASC, id ASC
+    FROM ranked
+    ORDER BY profile_rank ASC, scheduled_for ASC, profile_id ASC, id ASC
     LIMIT ?
   `).bind(MAX_ATTEMPTS, timestamp, timestamp, Math.max(1, Number(limit))).all();
   return result?.results ?? [];

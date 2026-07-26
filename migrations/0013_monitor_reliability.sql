@@ -10,6 +10,30 @@ ALTER TABLE scheduled_slots
 ALTER TABLE scheduled_slots
   ADD COLUMN local_date TEXT NOT NULL DEFAULT '';
 
+UPDATE scheduled_slots
+SET profile_revision = 'legacy-cancelled',
+    payload_json = '{"version":1,"migration":"legacy-slot-unavailable"}',
+    payload_hash = 'legacy:' || id,
+    local_date = substr(scheduled_for, 1, 10)
+WHERE profile_revision = ''
+   OR payload_json = ''
+   OR payload_hash = ''
+   OR local_date = '';
+
+UPDATE scheduled_slots
+SET status = 'cancelled',
+    completed_at = COALESCE(
+      completed_at,
+      updated_at,
+      claimed_at,
+      scheduled_for
+    ),
+    last_error_code = 'LEGACY_SLOT_PAYLOAD_UNAVAILABLE',
+    updated_at = COALESCE(updated_at, claimed_at, scheduled_for),
+    lease_until = NULL,
+    next_attempt_at = NULL
+WHERE status IN ('pending', 'queued', 'failed', 'claimed');
+
 CREATE TRIGGER IF NOT EXISTS scheduled_slots_immutable_payload
 BEFORE UPDATE OF profile_revision, payload_json, payload_hash ON scheduled_slots
 WHEN OLD.profile_revision <> NEW.profile_revision

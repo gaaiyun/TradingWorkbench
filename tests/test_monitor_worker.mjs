@@ -339,7 +339,7 @@ test("core scheduled run reads D1 settings, executes due tasks, and is awaitable
   const db = new WorkerD1(monitorSettings());
   const result = await runScheduled(
     Date.parse("2026-07-23T01:30:00.000Z"),
-    { DB: db },
+    { DB: db, DIRECT_EXTERNAL_REQUEST_BUDGET: "999" },
     {
       registryFactory: () => ({
         fetchMarketData: async (request) => ({
@@ -352,6 +352,7 @@ test("core scheduled run reads D1 settings, executes due tasks, and is awaitable
     },
   );
   assert.equal(result.status, "completed");
+  assert.equal(result.externalRequestBudget, 32);
   assert.deepEqual(result.counts, {
     due: 2,
     claimed: 2,
@@ -368,6 +369,60 @@ test("core scheduled run reads D1 settings, executes due tasks, and is awaitable
   );
 });
 
+test("fourteen-target collection shards drain without duplicate target writes or permanent backlog", async () => {
+  const { runScheduled } = await import(workerUrl);
+  const targets = Array.from({ length: 14 }, (_, index) => ({
+    symbol: `${510000 + index}.SS`,
+    name: `ETF ${index}`,
+    market: "CN",
+    role: index === 0 ? "core" : "comparison",
+    analysis: "signal",
+  }));
+  const db = new WorkerD1(monitorSettings({ targets }));
+  const requests = [];
+  const deps = {
+    registryFactory: () => ({
+      fetchMarketData: async (request) => {
+        requests.push(request);
+        return {
+          status: "ok",
+          source: "wire",
+          bars: [barFor(request)],
+          sources: [{ source: "wire", status: "success", reason: null }],
+        };
+      },
+    }),
+  };
+  const scheduledTime = Date.parse("2026-07-23T01:30:00.000Z");
+  const first = await runScheduled(
+    scheduledTime,
+    { DB: db, DIRECT_EXTERNAL_REQUEST_BUDGET: "40" },
+    {
+      ...deps,
+      now: () => new Date("2026-07-23T01:30:00.000Z"),
+    },
+  );
+  assert.equal(first.externalRequestBudget, 32);
+  assert.equal(first.capped, 1);
+  const second = await runScheduled(
+    scheduledTime,
+    { DB: db, DIRECT_EXTERNAL_REQUEST_BUDGET: "40" },
+    {
+      ...deps,
+      now: () => new Date("2026-07-23T01:35:00.000Z"),
+    },
+  );
+  assert.equal(second.capped, 0);
+  assert.equal(requests.length, 14);
+  assert.equal(new Set(requests.map(({ symbol }) => symbol)).size, 14);
+  assert.equal(
+    [...db.slots.values()].filter((row) =>
+      row.slot_type === "intradayCollect" &&
+      ["pending", "queued", "failed", "claimed"].includes(row.status)).length,
+    0,
+  );
+});
+
 test("an empty production database bootstraps CN and US market snapshots outside trading hours", async () => {
   const { runScheduled } = await import(workerUrl);
   const db = new WorkerD1(monitorSettings(), { barCount: 0 });
@@ -376,6 +431,7 @@ test("an empty production database bootstraps CN and US market snapshots outside
     Date.parse("2026-07-23T18:20:00.000Z"),
     { DB: db },
     {
+      now: () => new Date("2026-07-23T18:20:00.000Z"),
       registryFactory: () => ({
         fetchMarketData: async (request) => {
           requests.push(request);
@@ -395,9 +451,15 @@ test("an empty production database bootstraps CN and US market snapshots outside
       }),
     },
   );
-  assert.equal(result.status, "completed");
+  assert.equal(result.status, "degraded");
+  assert.equal(result.errorCode, "DIRECT_FALLBACK_CAPPED");
   assert.equal(result.counts.due, 4);
-  assert.equal(result.counts.completed, 4);
+  assert.equal(result.counts.completed, 3);
+  assert.equal(result.capped, 1);
+  assert.equal(
+    [...db.slots.values()].filter(({ status }) => status === "pending").length,
+    1,
+  );
   assert.deepEqual(
     requests.map(({ symbol, timeframe }) => [symbol, timeframe]),
     [
@@ -409,6 +471,47 @@ test("an empty production database bootstraps CN and US market snapshots outside
     ],
   );
   assert.equal(db.barWrites.length, 5);
+  const followup = await runScheduled(
+    Date.parse("2026-07-23T18:25:00.000Z"),
+    { DB: db },
+    {
+      now: () => new Date("2026-07-23T18:25:00.000Z"),
+      collectNews: async () => ({
+        status: "completed",
+        written: 0,
+        counts: { queries: 0, succeeded: 0, failed: 0, items: 0 },
+        sources: [],
+      }),
+    },
+  );
+  assert.equal(followup.status, "completed");
+  assert.equal(followup.counts.due, 1);
+  assert.equal(followup.counts.completed, 1);
+  assert.equal(followup.backlog, 0);
+});
+
+test("bootstrap discovery advances one of eight profiles per cron tick", async () => {
+  const { runScheduled } = await import(workerUrl);
+  const template = monitorSettings().profiles[0];
+  const settings = {
+    version: 2,
+    profiles: Array.from({ length: 8 }, (_, index) => ({
+      ...structuredClone(template),
+      id: `profile-${index}`,
+    })),
+  };
+  const db = new WorkerD1(settings, { barCount: 0 });
+  const result = await runScheduled(
+    Date.parse("2026-07-23T18:20:00.000Z"),
+    { DB: db, DIRECT_EXTERNAL_REQUEST_BUDGET: "0" },
+    { now: () => new Date("2026-07-23T18:20:00.000Z") },
+  );
+  assert.equal(result.discovered, 4);
+  assert.equal(result.externalRequestBudget, 0);
+  assert.deepEqual(
+    new Set([...db.slots.values()].map(({ profile_id: profileId }) => profileId)),
+    new Set(["profile-0"]),
+  );
 });
 
 test("a 204 dispatch completes the slot and queued workflow time never causes a lease retry", async () => {
@@ -825,7 +928,7 @@ test("monitor wrangler config uses five-minute cron and the same deployed D1 bin
   );
 });
 
-test("dedicated monitor deployment injects the deployed commit and timestamp", () => {
+test("dedicated monitor deployment fails closed and verifies the online commit", () => {
   const workflow = readFileSync(
     new URL("../.github/workflows/deploy-monitor.yml", import.meta.url),
     "utf8",
@@ -835,6 +938,12 @@ test("dedicated monitor deployment injects the deployed commit and timestamp", (
   assert.match(workflow, /WORKER_COMMIT_SHA:"\$GITHUB_SHA"/);
   assert.match(workflow, /WORKER_DEPLOYED_AT:"\$deployed_at"/);
   assert.match(workflow, /date -u \+"\%Y-\%m-\%dT\%H:\%M:\%SZ"/);
+  assert.match(workflow, /Cloudflare deployment credentials are required/);
+  assert.match(workflow, /exit 1/);
+  assert.doesNotMatch(workflow, /monitor deployment was skipped/);
+  assert.match(workflow, /curl[\s\S]+\/health/);
+  assert.match(workflow, /deployment\?\.commitSha/);
+  assert.match(workflow, /GITHUB_SHA/);
   assert.match(workflow, /workers\/monitor\/\*\*/);
   assert.match(workflow, /wrangler\.monitor\.toml/);
 });

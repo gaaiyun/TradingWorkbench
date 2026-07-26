@@ -1,10 +1,17 @@
-function targetsForTask(profile, taskType) {
+function targetsForTask(profile, taskType, targetSymbols = null) {
+  const selected = Array.isArray(targetSymbols)
+    ? new Set(targetSymbols)
+    : null;
+  const eligible = (target) => !selected || selected.has(target.symbol);
   if (taskType === "usCloseSnapshot") {
     return profile.targets.filter((target) =>
-      ["US", "HK"].includes(target.market) && target.role === "driver");
+      eligible(target) &&
+      ["US", "HK"].includes(target.market) &&
+      target.role === "driver");
   }
   if (taskType === "intradayCollect" || taskType === "cnDailySnapshot") {
     return profile.targets.filter((target) =>
+      eligible(target) &&
       target.market === "CN" &&
       (target.role === "core" || target.role === "comparison"));
   }
@@ -18,6 +25,7 @@ function sourceTrail(result) {
 
 export async function collectForTask({
   taskType,
+  task,
   profile,
   registry,
   writeBars,
@@ -27,7 +35,7 @@ export async function collectForTask({
   const timeframe = taskType === "usCloseSnapshot" || taskType === "cnDailySnapshot"
     ? "1d"
     : "5m";
-  const targets = targetsForTask(profile, taskType);
+  const targets = targetsForTask(profile, taskType, task?.targetSymbols);
   if (targets.length === 0) {
     return {
       status: "deferred",

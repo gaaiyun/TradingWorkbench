@@ -10,9 +10,13 @@ import { writeMarketBars } from "./providers/market-bar-writer.mjs";
 import {
   bootstrapRequirementsForProfile,
   dueTasksForProfile,
+  estimateTaskExternalRequests,
   localDateTimeAt,
+  MAX_SCHEDULED_EXTERNAL_REQUESTS,
+  profileRevisionForProfile,
   scheduledPayloadForTask,
   selectFairWorkWithinBudget,
+  splitTaskWithinRequestLimit,
   slotIdForTask,
   taskFromScheduledSlot,
 } from "./scheduler.mjs";
@@ -58,15 +62,21 @@ function parseHolidaySet(value) {
 
 async function readSettings(db) {
   const row = await db.prepare(`
-    SELECT settings_json, updated_at
+    SELECT settings_json
     FROM workbench_settings
     WHERE id = 1
   `).bind().first();
   if (!row) return { errorCode: "WORKBENCH_SETTINGS_MISSING" };
   try {
+    const settings = parseWorkbenchSettings(JSON.parse(row.settings_json));
     return {
-      settings: parseWorkbenchSettings(JSON.parse(row.settings_json)),
-      revision: String(row.updated_at || "unversioned"),
+      settings,
+      revisions: new Map(await Promise.all(
+        settings.profiles.map(async (profile) => [
+          profile.id,
+          await profileRevisionForProfile(profile),
+        ]),
+      )),
     };
   } catch {
     return { errorCode: "WORKBENCH_SETTINGS_INVALID" };
@@ -189,6 +199,10 @@ const MANUAL_COLLECTION_TASKS = new Set([
 
 const HEALTH_QUERY_TIMEOUT_MS = 10;
 const HEALTH_PROVIDER_LIMIT = 32;
+const DIRECT_EXTERNAL_REQUEST_LIMIT = 32;
+const QUEUE_DISCOVERY_LIMIT = 10;
+const QUEUE_CONSUMER_BATCH_LIMIT = 1;
+const BOOTSTRAP_PROFILES_PER_TICK = 1;
 
 function stableNewsErrorCode(reason) {
   const code = String(reason || "");
@@ -422,6 +436,7 @@ async function executeTask({
   }
   const result = await collectForTask({
     taskType: task.type,
+    task,
     profile,
     registry,
     writeBars: deps.writeBars ?? writeMarketBars,
@@ -453,7 +468,7 @@ function emptyBudget() {
 function profileRevisionMap(loaded) {
   return new Map(loaded.settings.profiles.map((profile) => [
     profile.id,
-    { enabled: profile.enabled, revision: loaded.revision },
+    { enabled: profile.enabled, revision: loaded.revisions.get(profile.id) },
   ]));
 }
 
@@ -463,24 +478,46 @@ async function stageDiscoveredSlots({
   deps,
   loaded,
   now,
+  bootstrapRotation,
 }) {
   const holidaySets = {
     cn: parseHolidaySet(deps.cnHolidays ?? env.CN_HOLIDAY_DATES),
     us: parseHolidaySet(deps.usHolidays ?? env.US_HOLIDAY_DATES),
   };
   const completedBootstrap = await readBootstrapIdentities(env.DB);
+  const enabledProfiles = loaded.settings.profiles.filter(({ enabled }) => enabled);
+  const bootstrapProfileIds = new Set(
+    enabledProfiles.length === 0
+      ? []
+      : Array.from(
+          { length: Math.min(BOOTSTRAP_PROFILES_PER_TICK, enabledProfiles.length) },
+          (_, offset) =>
+            enabledProfiles[
+              (Math.abs(Number(bootstrapRotation || 0)) + offset) %
+                enabledProfiles.length
+            ].id,
+        ),
+  );
   const discovered = [];
   for (const profile of loaded.settings.profiles) {
-    const tasks = [
+    const rawTasks = [
       ...dueTasksForProfile(profile, scheduledTime, holidaySets),
-      ...await bootstrapTasks(profile, scheduledTime, completedBootstrap),
+      ...(bootstrapProfileIds.has(profile.id)
+        ? await bootstrapTasks(profile, scheduledTime, completedBootstrap)
+        : []),
     ];
+    const tasks = rawTasks.flatMap((task) =>
+      splitTaskWithinRequestLimit(
+        profile,
+        task,
+        MAX_SCHEDULED_EXTERNAL_REQUESTS,
+      ));
     for (const task of tasks) {
       const id = await slotIdForTask(profile.id, task);
       const snapshot = await scheduledPayloadForTask(
         profile,
         task,
-        loaded.revision,
+        loaded.revisions.get(profile.id),
       );
       const localDate = task.localSlot.startsWith("bootstrap-")
         ? localDateTimeAt(
@@ -519,7 +556,13 @@ function workFromRows(rows) {
   });
 }
 
-async function executeWorkItems(work, env, deps, summary) {
+async function executeWorkItems(
+  work,
+  env,
+  deps,
+  summary,
+  { maxExternalRequests = MAX_SCHEDULED_EXTERNAL_REQUESTS } = {},
+) {
   const clock = deps.now ?? (() => new Date());
   const registryFactory = deps.registryFactory ?? ((options) =>
     createProviderRegistry(options));
@@ -544,21 +587,33 @@ async function executeWorkItems(work, env, deps, summary) {
     summary.counts.claimed += 1;
 
     let result;
-    try {
-      result = await (deps.executeTask ?? executeTask)({
-        task: claim.task,
-        profile: claim.profile,
-        slotId: claim.id,
-        payloadHash: claim.payloadHash,
-        localDate: claim.localDate,
-        env,
-        db: env.DB,
-        registry,
-        deps,
-        now: claimNow,
-      });
-    } catch {
-      result = { status: "failed", errorCode: "TASK_EXECUTION_FAILED" };
+    const estimatedRequests = estimateTaskExternalRequests(
+      claim.profile,
+      claim.task,
+    );
+    if (estimatedRequests > maxExternalRequests) {
+      summary.oversized += 1;
+      result = {
+        status: "deferred",
+        errorCode: "TASK_EXTERNAL_REQUEST_LIMIT",
+      };
+    } else {
+      try {
+        result = await (deps.executeTask ?? executeTask)({
+          task: claim.task,
+          profile: claim.profile,
+          slotId: claim.id,
+          payloadHash: claim.payloadHash,
+          localDate: claim.localDate,
+          env,
+          db: env.DB,
+          registry,
+          deps,
+          now: claimNow,
+        });
+      } catch {
+        result = { status: "failed", errorCode: "TASK_EXECUTION_FAILED" };
+      }
     }
     if (result.budget === "denied") summary.budget.fullDenied += 1;
     if (
@@ -605,7 +660,27 @@ function successfulSummary(mode) {
     estimatedExternalRequests: 0,
     backlog: 0,
     capped: 0,
+    oversized: 0,
   };
+}
+
+function configuredDirectBudget(value) {
+  if (value == null || value === "") return DIRECT_EXTERNAL_REQUEST_LIMIT;
+  const parsed = Number(value);
+  if (!Number.isFinite(parsed)) return DIRECT_EXTERNAL_REQUEST_LIMIT;
+  return Math.min(
+    DIRECT_EXTERNAL_REQUEST_LIMIT,
+    Math.max(0, Math.floor(parsed)),
+  );
+}
+
+function configuredQueueDiscoveryLimit(value) {
+  const parsed = Number(value);
+  if (!Number.isFinite(parsed)) return QUEUE_DISCOVERY_LIMIT;
+  return Math.min(
+    QUEUE_DISCOVERY_LIMIT,
+    Math.max(1, Math.floor(parsed)),
+  );
 }
 
 export async function runScheduled(scheduledTime, env, deps = {}) {
@@ -643,6 +718,17 @@ export async function runScheduled(scheduledTime, env, deps = {}) {
   const clock = deps.now ?? (() => new Date());
   const now = clock();
   const summary = successfulSummary(env.MONITOR_QUEUE ? "queue" : "direct");
+  let rotation;
+  try {
+    rotation = await readRotation(env.DB);
+  } catch {
+    return {
+      ...summary,
+      status: "degraded",
+      errorCode: "SCHEDULER_STATE_READ_FAILED",
+      counts: { ...summary.counts, failed: summary.counts.failed + 1 },
+    };
+  }
   try {
     const cancelled = await cancelStaleScheduledSlots(
       env.DB,
@@ -656,6 +742,7 @@ export async function runScheduled(scheduledTime, env, deps = {}) {
       deps,
       loaded,
       now,
+      bootstrapRotation: rotation,
     });
   } catch {
     return {
@@ -667,12 +754,8 @@ export async function runScheduled(scheduledTime, env, deps = {}) {
   }
 
   let rows;
-  let rotation = 0;
   try {
-    [rows, rotation] = await Promise.all([
-      listRetryableSlots(env.DB, now, 200),
-      readRotation(env.DB),
-    ]);
+    rows = await listRetryableSlots(env.DB, now, 200);
   } catch {
     return {
       ...summary,
@@ -686,20 +769,16 @@ export async function runScheduled(scheduledTime, env, deps = {}) {
 
   if (env.MONITOR_QUEUE?.sendBatch) {
     const fair = selectFairWorkWithinBudget(work, {
-      externalRequestBudget: Number.POSITIVE_INFINITY,
+      externalRequestBudget: 40,
       rotation,
     });
-    const cap = Math.max(1, Number(env.QUEUE_DISCOVERY_CAP || 40));
+    const cap = configuredQueueDiscoveryLimit(env.QUEUE_DISCOVERY_CAP);
     const selected = fair.selected.slice(0, cap);
     summary.capped = Math.max(0, work.length - selected.length);
     summary.queued = selected.length;
     summary.queuedEstimatedExternalRequests = selected.reduce(
       (total, item) =>
-        total + (item.task ? (
-          item.task.type === "newsCollect" ? 12
-            : item.task.type === "closeFullAnalysis" ? 2
-              : item.profile.targets.length
-        ) : 0),
+        total + estimateTaskExternalRequests(item.profile, item.task),
       0,
     );
     if (selected.length > 0) {
@@ -724,13 +803,17 @@ export async function runScheduled(scheduledTime, env, deps = {}) {
     await writeRotation(env.DB, rotation + 1, now).catch(() => {});
   } else {
     const selection = selectFairWorkWithinBudget(work, {
-      externalRequestBudget: Number(env.DIRECT_EXTERNAL_REQUEST_BUDGET || 40),
+      externalRequestBudget: configuredDirectBudget(
+        env.DIRECT_EXTERNAL_REQUEST_BUDGET,
+      ),
       rotation,
     });
     summary.externalRequestBudget = selection.externalRequestBudget;
     summary.estimatedExternalRequests = selection.estimatedExternalRequests;
     summary.capped = selection.deferred.length;
-    await executeWorkItems(selection.selected, env, deps, summary);
+    await executeWorkItems(selection.selected, env, deps, summary, {
+      maxExternalRequests: MAX_SCHEDULED_EXTERNAL_REQUESTS,
+    });
     await writeRotation(env.DB, rotation + 1, now).catch(() => {});
     if (selection.deferred.length > 0) {
       summary.status = "degraded";
@@ -775,20 +858,39 @@ export async function runQueueBatch(messages, env, deps = {}) {
       };
     }
   }
-  const work = messages.flatMap((message) => {
+  const validWork = messages.flatMap((message) => {
     const slotId = message?.body?.slotId;
     const payloadHash = message?.body?.payloadHash;
     return typeof slotId === "string" && typeof payloadHash === "string"
       ? [{ id: slotId, payloadHash, message }]
       : [];
   });
+  const seen = new Set();
+  const duplicates = [];
+  const uniqueWork = [];
+  for (const item of validWork) {
+    const identity = `${item.id}\n${item.payloadHash}`;
+    if (seen.has(identity)) {
+      duplicates.push(item);
+    } else {
+      seen.add(identity);
+      uniqueWork.push(item);
+    }
+  }
+  for (const { message } of duplicates) message.ack?.();
+  const work = uniqueWork.slice(0, QUEUE_CONSUMER_BATCH_LIMIT);
+  const capped = uniqueWork.slice(QUEUE_CONSUMER_BATCH_LIMIT);
+  for (const { message } of capped) message.retry?.();
+  summary.capped = capped.length;
   summary.counts.due = messages.length;
   for (const item of work) {
     const before = {
       claimed: summary.counts.claimed,
       failed: summary.counts.failed,
     };
-    await executeWorkItems([item], env, deps, summary);
+    await executeWorkItems([item], env, deps, summary, {
+      maxExternalRequests: MAX_SCHEDULED_EXTERNAL_REQUESTS,
+    });
     if (
       summary.counts.claimed > before.claimed ||
       summary.counts.failed === before.failed
@@ -799,7 +901,9 @@ export async function runQueueBatch(messages, env, deps = {}) {
     }
   }
   for (const message of messages) {
-    if (!work.some(({ message: valid }) => valid === message)) message.ack?.();
+    if (
+      !validWork.some(({ message: valid }) => valid === message)
+    ) message.ack?.();
   }
   summary.backlog = await countScheduledBacklog(env.DB, clock()).catch(() => -1);
   if (summary.counts.failed > 0 || summary.counts.degraded > 0) {
@@ -849,6 +953,7 @@ export async function runManualCollection(taskType, env, deps = {}) {
       })
       : await collectForTask({
         taskType,
+        task: { type: taskType },
         profile,
         registry,
         writeBars: deps.writeBars ?? writeMarketBars,

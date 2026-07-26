@@ -73,7 +73,7 @@ test("lease migration adds recovery and retry timing columns", () => {
   assert.match(sql, /ADD COLUMN next_attempt_at\b/i);
 });
 
-test("lease migration backfills legacy claimed rows so the next cron can recover them", async () => {
+test("reliability migration cancels legacy retryable slots before payloads become immutable", async () => {
   const sqlite = new DatabaseSync(":memory:");
   sqlite.exec(migration1);
   sqlite.exec(migration2);
@@ -91,12 +91,36 @@ test("lease migration backfills legacy claimed rows so the next cron can recover
   sqlite.exec(readFileSync(migration4Url, "utf8"));
   sqlite.exec(readFileSync(migration13Url, "utf8"));
 
+  const migrated = sqlite.prepare(`
+    SELECT status, last_error_code, profile_revision, payload_json,
+      payload_hash, local_date
+    FROM scheduled_slots
+    WHERE id = 'legacy-claimed'
+  `).get();
+  assert.deepEqual({ ...migrated }, {
+    status: "cancelled",
+    last_error_code: "LEGACY_SLOT_PAYLOAD_UNAVAILABLE",
+    profile_revision: "legacy-cancelled",
+    payload_json: '{"version":1,"migration":"legacy-slot-unavailable"}',
+    payload_hash: "legacy:legacy-claimed",
+    local_date: "2026-07-23",
+  });
   const { listRetryableSlots } = await import(slotUrl);
-  const rows = await listRetryableSlots(
-    d1(sqlite),
-    new Date("2026-07-23T01:35:00.000Z"),
+  assert.deepEqual(
+    await listRetryableSlots(
+      d1(sqlite),
+      new Date("2026-07-23T01:35:00.000Z"),
+    ),
+    [],
   );
-  assert.deepEqual(rows.map((row) => row.id), ["legacy-claimed"]);
+  assert.throws(
+    () => sqlite.prepare(`
+      UPDATE scheduled_slots
+      SET payload_json = '{"changed":true}'
+      WHERE id = 'legacy-claimed'
+    `).run(),
+    /IMMUTABLE_SLOT_PAYLOAD/,
+  );
 });
 
 test("duplicate and concurrent claims execute a new slot only once", async () => {

@@ -32,7 +32,14 @@ function headers(token) {
 }
 
 function expectedRunName(profileId, slotId, scheduledFor) {
-  return `Daily analysis · ${profileId} · ${slotId} · ${scheduledFor}`;
+  return [
+    "Daily analysis",
+    "profile",
+    "monitor",
+    profileId,
+    slotId,
+    scheduledFor,
+  ].join(" · ");
 }
 
 async function readDispatchState(db, slotId, payloadHash) {

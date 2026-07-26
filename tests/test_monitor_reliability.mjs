@@ -265,6 +265,14 @@ test("full analysis reservations enforce a concurrent daily hard cap and retries
 
 test("an accepted dispatch with a thrown client response is reconciled by deterministic run name before another POST", async () => {
   const { dispatchFullAnalysis } = await import(dispatchUrl);
+  const workflow = readFileSync(
+    new URL("../.github/workflows/daily-analysis.yml", import.meta.url),
+    "utf8",
+  );
+  assert.match(
+    workflow,
+    /format\('profile · monitor · \{0\} · \{1\} · \{2\}', inputs\.profileId, inputs\.slotId, inputs\.scheduledFor\)/,
+  );
   const sqlite = reliabilityDatabase();
   const calls = [];
   let accepted = false;
@@ -287,7 +295,7 @@ test("an accepted dispatch with a thrown client response is reconciled by determ
               id: 42,
               html_url: "https://github.com/owner/repo/actions/runs/42",
               display_title:
-                "Daily analysis · etf-main · slot-uncertain · 2026-07-23T07:20:00.000Z",
+                "Daily analysis · profile · monitor · etf-main · slot-uncertain · 2026-07-23T07:20:00.000Z",
             }]
           : [],
       });
@@ -307,6 +315,57 @@ test("an accepted dispatch with a thrown client response is reconciled by determ
       WHERE slot_id = 'slot-uncertain'
     `).get().external_run_id,
     42,
+  );
+});
+
+test("profile revisions hash one profile so editing B does not cancel A", async () => {
+  const {
+    profileRevisionForProfile,
+    scheduledPayloadForTask,
+  } = await import(schedulerUrl);
+  const {
+    cancelStaleScheduledSlots,
+    stageScheduledSlot,
+  } = await import(slotsUrl);
+  const sqlite = reliabilityDatabase();
+  const db = d1(sqlite);
+  const profileA = monitorSettings().profiles[0];
+  const profileB = structuredClone(profileA);
+  profileB.id = "etf-second";
+  const revisionA = await profileRevisionForProfile(profileA);
+  const revisionB = await profileRevisionForProfile(profileB);
+  for (const profile of [profileA, profileB]) {
+    const revision = profile.id === profileA.id ? revisionA : revisionB;
+    const snapshot = await scheduledPayloadForTask(profile, task, revision);
+    await stageScheduledSlot(db, {
+      id: `slot-${profile.id}`,
+      profileId: profile.id,
+      slotType: task.type,
+      scheduledFor: task.scheduledFor,
+      localDate: "2026-07-23",
+      ...snapshot,
+      now: new Date("2026-07-23T07:20:00.000Z"),
+    });
+  }
+  const revisedB = structuredClone(profileB);
+  revisedB.name = "仅修改 B";
+  const result = await cancelStaleScheduledSlots(
+    db,
+    new Map([
+      [profileA.id, { enabled: true, revision: await profileRevisionForProfile(profileA) }],
+      [profileB.id, { enabled: true, revision: await profileRevisionForProfile(revisedB) }],
+    ]),
+    new Date("2026-07-23T07:21:00.000Z"),
+  );
+  assert.equal(result.changed, 1);
+  assert.deepEqual(
+    [...sqlite.prepare(`
+      SELECT profile_id, status FROM scheduled_slots ORDER BY profile_id
+    `).all()].map((row) => ({ ...row })),
+    [
+      { profile_id: "etf-main", status: "pending" },
+      { profile_id: "etf-second", status: "cancelled" },
+    ],
   );
 });
 
@@ -341,10 +400,11 @@ test("bootstrap identity is isolated by profile, symbol, timeframe, schema, and 
     /^bootstrap:[^:]+:[^:]+:[^:]+:v\d+:[a-f0-9]{64}$/.test(identity)));
 });
 
-test("direct fallback selects a fair backlog without exceeding forty estimated external requests", async () => {
+test("direct fallback uses real upper bounds, clamps at forty, and shards fourteen targets", async () => {
   const {
     estimateTaskExternalRequests,
     selectFairWorkWithinBudget,
+    splitTaskWithinRequestLimit,
   } = await import(schedulerUrl);
   const profiles = ["a", "b", "c"].map((id) => ({
     ...structuredClone(monitorSettings().profiles[0]),
@@ -365,10 +425,55 @@ test("direct fallback selects a fair backlog without exceeding forty estimated e
     estimateTaskExternalRequests(backlog[0].profile, backlog[0].task),
     6,
   );
+  const fourteenTargetProfile = structuredClone(profiles[0]);
+  fourteenTargetProfile.targets = Array.from({ length: 14 }, (_, index) => ({
+    symbol: `CN-${index}`,
+    name: `CN ${index}`,
+    market: "CN",
+    role: index === 0 ? "core" : "comparison",
+    analysis: "signal",
+  }));
+  const shards = splitTaskWithinRequestLimit(
+    fourteenTargetProfile,
+    backlog[0].task,
+    32,
+  );
+  assert.equal(shards.length, 2);
+  assert.equal(
+    new Set(shards.flatMap(({ targetSymbols }) => targetSymbols)).size,
+    14,
+  );
+  assert.ok(shards.every((shard) =>
+    estimateTaskExternalRequests(fourteenTargetProfile, shard) <= 32));
+  const { collectForTask } = await import(
+    "../workers/monitor/src/collector.mjs"
+  );
+  const fetchedSymbols = [];
+  const collected = await collectForTask({
+    taskType: shards[0].type,
+    task: shards[0],
+    profile: fourteenTargetProfile,
+    registry: {
+      async fetchMarketData(request) {
+        fetchedSymbols.push(request.symbol);
+        return {
+          status: "ok",
+          bars: [{ symbol: request.symbol }],
+          sources: [],
+        };
+      },
+    },
+    writeBars: async () => {},
+    db: {},
+    now: new Date("2026-07-23T01:30:00.000Z"),
+  });
+  assert.equal(collected.status, "completed");
+  assert.deepEqual(fetchedSymbols, shards[0].targetSymbols);
   const first = selectFairWorkWithinBudget(backlog, {
-    externalRequestBudget: 40,
+    externalRequestBudget: 999,
     rotation: 0,
   });
+  assert.equal(first.externalRequestBudget, 40);
   assert.ok(first.estimatedExternalRequests <= 40);
   assert.ok(first.deferred.length > 0);
   assert.deepEqual(
@@ -382,7 +487,62 @@ test("direct fallback selects a fair backlog without exceeding forty estimated e
   assert.notEqual(first.selected[0].profile.id, second.selected[0].profile.id);
 });
 
-test("queue consumer claims slotId and payload hash through D1 before executing a message", async () => {
+test("backlog SQL admits B before a two-hundred-row A prefix can starve it", async () => {
+  const { listRetryableSlots } = await import(slotsUrl);
+  const sqlite = reliabilityDatabase();
+  const insert = sqlite.prepare(`
+    INSERT INTO scheduled_slots (
+      id, profile_id, slot_type, scheduled_for, status, expires_at,
+      attempt_count, updated_at, next_attempt_at, profile_revision,
+      payload_json, payload_hash, local_date
+    ) VALUES (?, ?, 'intradaySignal', ?, 'pending', ?, 0, ?, ?, 'r1', ?, ?, ?)
+  `);
+  for (let index = 0; index < 205; index += 1) {
+    const scheduledFor = new Date(
+      Date.parse("2026-07-22T00:00:00.000Z") + index * 60_000,
+    ).toISOString();
+    insert.run(
+      `a-${index}`,
+      "profile-a",
+      scheduledFor,
+      "2026-10-01T00:00:00.000Z",
+      scheduledFor,
+      scheduledFor,
+      JSON.stringify({
+        profile: { id: "profile-a" },
+        task: { type: "intradaySignal", scheduledFor },
+      }),
+      `ha-${index}`,
+      "2026-07-22",
+    );
+  }
+  insert.run(
+    "b-0",
+    "profile-b",
+    "2026-07-23T00:00:00.000Z",
+    "2026-10-01T00:00:00.000Z",
+    "2026-07-23T00:00:00.000Z",
+    "2026-07-23T00:00:00.000Z",
+    JSON.stringify({
+      profile: { id: "profile-b" },
+      task: {
+        type: "intradaySignal",
+        scheduledFor: "2026-07-23T00:00:00.000Z",
+      },
+    }),
+    "hb-0",
+    "2026-07-23",
+  );
+  const rows = await listRetryableSlots(
+    d1(sqlite),
+    new Date("2026-07-24T00:00:00.000Z"),
+    200,
+  );
+  assert.equal(rows.length, 200);
+  assert.ok(rows.some(({ profile_id: profileId }) => profileId === "profile-b"));
+});
+
+test("queue consumer deduplicates one identity and retries unique work beyond its batch cap", async () => {
   const { runQueueBatch } = await import(workerUrl);
   const { scheduledPayloadForTask } = await import(schedulerUrl);
   const { stageScheduledSlot } = await import(slotsUrl);
@@ -417,7 +577,22 @@ test("queue consumer claims slotId and payload hash through D1 before executing 
       ack() {},
       retry() { assert.fail("duplicate message should be acknowledged"); },
     },
+    {
+      body: { slotId: "slot-queue-2", payloadHash: snapshot.payloadHash },
+      ack() { assert.fail("unique work beyond the cap should not be acknowledged"); },
+      retry() { retries += 1; },
+    },
   ];
+  await stageScheduledSlot(db, {
+    id: "slot-queue-2",
+    profileId: profile.id,
+    slotType: signalTask.type,
+    scheduledFor: "2026-07-23T01:35:00.000Z",
+    localDate: "2026-07-23",
+    ...snapshot,
+    now: new Date("2026-07-23T01:30:00.000Z"),
+  });
+  let retries = 0;
   const summary = await runQueueBatch(messages, { DB: db }, {
     executeTask: async (input) => {
       executions.push(input);
@@ -430,10 +605,63 @@ test("queue consumer claims slotId and payload hash through D1 before executing 
   assert.equal(executions[0].profile.id, "etf-main");
   assert.equal(summary.mode, "queue");
   assert.equal(summary.counts.claimed, 1);
-  assert.equal(summary.counts.skipped, 1);
+  assert.equal(summary.counts.skipped, 0);
+  assert.equal(summary.capped, 1);
+  assert.equal(retries, 1);
   assert.equal(
     sqlite.prepare("SELECT status FROM scheduled_slots WHERE id = 'slot-queue'")
       .get().status,
     "completed",
   );
+});
+
+test("queue consumer terminally rejects a legacy oversized task with an observable code", async () => {
+  const { runQueueBatch } = await import(workerUrl);
+  const { scheduledPayloadForTask } = await import(schedulerUrl);
+  const { stageScheduledSlot } = await import(slotsUrl);
+  const sqlite = reliabilityDatabase();
+  const db = d1(sqlite);
+  const profile = structuredClone(monitorSettings().profiles[0]);
+  profile.targets = Array.from({ length: 14 }, (_, index) => ({
+    symbol: `CN-${index}`,
+    name: `CN ${index}`,
+    market: "CN",
+    role: index === 0 ? "core" : "comparison",
+    analysis: "signal",
+  }));
+  const oversizedTask = {
+    type: "intradayCollect",
+    schedule: "cnIntraday/collect",
+    localSlot: "2026-07-23T09:30",
+    scheduledFor: "2026-07-23T01:30:00.000Z",
+  };
+  const snapshot = await scheduledPayloadForTask(profile, oversizedTask, "r1");
+  await stageScheduledSlot(db, {
+    id: "slot-oversized",
+    profileId: profile.id,
+    slotType: oversizedTask.type,
+    scheduledFor: oversizedTask.scheduledFor,
+    localDate: "2026-07-23",
+    ...snapshot,
+    now: new Date("2026-07-23T01:30:00.000Z"),
+  });
+  const summary = await runQueueBatch([{
+    body: { slotId: "slot-oversized", payloadHash: snapshot.payloadHash },
+    ack() {},
+    retry() { assert.fail("stable oversized work must not loop"); },
+  }], { DB: db }, {
+    executeTask: async () => assert.fail("oversized work must not execute"),
+    now: () => new Date("2026-07-23T01:30:01.000Z"),
+    skipProfileRevisionCheck: true,
+  });
+  assert.equal(summary.oversized, 1);
+  assert.equal(summary.counts.deferred, 1);
+  assert.deepEqual({ ...sqlite.prepare(`
+    SELECT status, last_error_code
+    FROM scheduled_slots
+    WHERE id = 'slot-oversized'
+  `).get() }, {
+    status: "deferred",
+    last_error_code: "TASK_EXTERNAL_REQUEST_LIMIT",
+  });
 });

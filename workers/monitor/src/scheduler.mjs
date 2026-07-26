@@ -1,5 +1,7 @@
 const LOCAL_FORMATTERS = new Map();
 export const BOOTSTRAP_SCHEMA_VERSION = "v2";
+export const MAX_SCHEDULED_EXTERNAL_REQUESTS = 32;
+export const MAX_SELECTABLE_EXTERNAL_REQUESTS = 40;
 
 function stableValue(value) {
   if (Array.isArray(value)) return value.map(stableValue);
@@ -261,6 +263,10 @@ export async function scheduledPayloadForTask(profile, task, profileRevision) {
   };
 }
 
+export async function profileRevisionForProfile(profile) {
+  return sha256(stableJson(profile));
+}
+
 function bootstrapTargetGroups(profile) {
   const cnTargets = profile.targets.filter((target) =>
     target.market === "CN" &&
@@ -327,29 +333,104 @@ export async function bootstrapRequirementsForProfile(
 }
 
 export function estimateTaskExternalRequests(profile, task) {
+  const targetSymbols = Array.isArray(task?.targetSymbols)
+    ? new Set(task.targetSymbols)
+    : null;
+  const selectedTargets = profile.targets.filter((target) =>
+    !targetSymbols || targetSymbols.has(target.symbol));
   if (task.type === "intradayCollect" || task.type === "cnDailySnapshot") {
-    const targets = profile.targets.filter((target) =>
+    const targets = selectedTargets.filter((target) =>
       target.market === "CN" &&
       (target.role === "core" || target.role === "comparison"));
     return targets.length * 3;
   }
   if (task.type === "usCloseSnapshot") {
-    const targets = profile.targets.filter((target) =>
+    const targets = selectedTargets.filter((target) =>
       ["US", "HK"].includes(target.market) && target.role === "driver");
     return targets.reduce(
       (total, target) => total + (target.market === "US" ? 5 : 1),
       0,
     );
   }
-  if (task.type === "newsCollect") return 12;
+  if (task.type === "newsCollect") return 21;
   if (task.type === "closeFullAnalysis") return 2;
   return 0;
 }
 
+function targetExternalRequestCost(taskType, target) {
+  if (taskType === "intradayCollect" || taskType === "cnDailySnapshot") {
+    return target.market === "CN" &&
+        (target.role === "core" || target.role === "comparison")
+      ? 3
+      : 0;
+  }
+  if (taskType === "usCloseSnapshot") {
+    if (!["US", "HK"].includes(target.market) || target.role !== "driver") {
+      return 0;
+    }
+    return target.market === "US" ? 5 : 1;
+  }
+  return 0;
+}
+
+export function splitTaskWithinRequestLimit(
+  profile,
+  task,
+  requestLimit = MAX_SCHEDULED_EXTERNAL_REQUESTS,
+) {
+  const limit = Math.max(1, Math.min(
+    MAX_SCHEDULED_EXTERNAL_REQUESTS,
+    Math.floor(Number(requestLimit) || MAX_SCHEDULED_EXTERNAL_REQUESTS),
+  ));
+  const targets = profile.targets
+    .map((target) => ({
+      target,
+      cost: targetExternalRequestCost(task.type, target),
+    }))
+    .filter(({ cost }) => cost > 0);
+  if (
+    targets.length === 0 ||
+    targets.reduce((total, { cost }) => total + cost, 0) <= limit
+  ) {
+    return [task];
+  }
+
+  const groups = [];
+  let group = [];
+  let groupCost = 0;
+  for (const entry of targets) {
+    if (group.length > 0 && groupCost + entry.cost > limit) {
+      groups.push(group);
+      group = [];
+      groupCost = 0;
+    }
+    group.push(entry.target.symbol);
+    groupCost += entry.cost;
+  }
+  if (group.length > 0) groups.push(group);
+  return groups.map((targetSymbols, index) => {
+    const allowed = new Set(targetSymbols);
+    const bootstrapRequirements = Array.isArray(task.bootstrapRequirements)
+      ? task.bootstrapRequirements.filter(({ symbol }) => allowed.has(symbol))
+      : undefined;
+    return {
+      ...task,
+      localSlot: `${task.localSlot}#part-${index + 1}-of-${groups.length}`,
+      targetSymbols,
+      ...(bootstrapRequirements
+        ? { bootstrapRequirements }
+        : {}),
+    };
+  });
+}
+
 export function selectFairWorkWithinBudget(work, options = {}) {
-  const budget = Math.max(
-    0,
-    Number(options.externalRequestBudget ?? 40),
+  const budget = Math.min(
+    MAX_SELECTABLE_EXTERNAL_REQUESTS,
+    Math.max(
+      0,
+      Number(options.externalRequestBudget ?? 40),
+    ),
   );
   const groups = new Map();
   for (const item of work) {
