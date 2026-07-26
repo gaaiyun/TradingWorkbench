@@ -2,13 +2,13 @@
 
 更新日期：2026-07-26
 
-实现基线：`f055d23`
+实现基线：`0218a20`
 
 工作分支：`fix/report-evidence-pipeline`
 
 ## 1. 当前结论
 
-本地功能分支已实现多 profile、运行身份隔离、Chat/Evidence owner、调度可靠性、提醒 shadow 账本和 Worker 部署指纹。`origin/main` 仍为 `76cd29c`，实现基线比远端 main 超前 21 个提交。
+本地功能分支已实现多 profile、运行身份隔离、Chat/Evidence owner、调度可靠性、提醒 shadow 账本和 Worker 部署指纹。`origin/main` 仍为 `76cd29c`，实现基线比远端 main 超前 24 个提交。
 
 这些改动尚未部署到生产，也没有完成 2026-07-27 08:25 外审。接手者不能把本地测试或绿色 workflow 写成生产完成。
 
@@ -132,7 +132,7 @@ migration 只向前保留。回退代码时不要删除新表或列。
 
 - 实现分支尚未合入 main。
 - migrations 0013–0015 尚未取得本轮生产应用证据。
-- Worker `/health` 尚未证明运行 `f055d23` 或后续文档提交。
+- Worker `/health` 尚未证明运行 `0218a20` 或后续交接提交。
 - Pages 尚未证明包含本轮 profile、identity 和提醒 UI。
 - 2026-07-27 08:25 外审尚未执行。
 - PushPlus live 尚未开启，也不在本轮默认授权范围内。
@@ -141,17 +141,20 @@ migration 只向前保留。回退代码时不要删除新表或列。
 
 ## 7. 本轮实际验证
 
-以下命令在 2026-07-26、实现基线 `f055d23` 加文档工作树上执行：
+以下命令在 2026-07-26、实现基线 `0218a20` 上执行：
 
 | 命令 | 结果 |
 |---|---|
-| `npm run test:functions` | 313 tests：312 passed、1 skipped、0 failed |
+| `npm run test:functions` | 319 tests：318 passed、1 skipped、0 failed |
 | `npm run test:frontend` | 84 passed、0 failed |
 | `npm run check:workbench` | 通过 |
+| `python -m pytest -q` | 649 passed、2 skipped、0 failed；另有 69 个 subtests passed |
+| `python -m ruff check .` | 通过 |
+| `python tests/e2e_workbench.py` | 通过；403/404 为预期的安全回退用例 |
 
 Functions 的 skip 是显式 opt-in 的在线免费 Provider contract。
 
-本轮文档任务尚未重跑 Python 全量 pytest、Ruff 或 Playwright E2E。旧交接中的测试数字不代表当前 HEAD，不能引用为本轮结果。
+两项 Python skip 分别来自未安装的 `langchain_aws` 和未设置的在线 `DEEPSEEK_API_KEY`。旧交接中的测试数字不代表当前 HEAD，不能引用为本轮结果。
 
 ## 8. 2026-07-27 08:25 外审
 
