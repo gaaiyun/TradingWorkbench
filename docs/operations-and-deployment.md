@@ -4,7 +4,7 @@
 
 代码基线：`main`。精确版本以 `git rev-parse origin/main`、Pages `/api/health` 和 Worker `/health` 三方回读为准，不在文档中维护容易失真的固定 SHA。
 
-2026-07-26 已完成 D1 `0013`–`0015`、Monitor Worker、Workbench Pages 和 VolGuard 生产冒烟。周一 08:25 的官方新闻源真实采集尚待执行；该项与“代码已发布”分开记录。
+2026-07-26 已完成 D1 `0013`–`0015`、Monitor Worker、Workbench Pages 和 VolGuard 生产冒烟。周日 20:00–20:15 的独立资讯任务已在生产真实执行：`cn-semi-comms` 新闻从 146 条增至 162 条，最新 `fetchedAt=2026-07-26T12:15:06.874Z`。HashKey、SEC、东财、Yahoo 和 Fed 成功，Google 超时与工信部部分查询结构异常保留失败轨迹。这证明全天调度与局部降级写入可用；周一 08:25 仍需单独验收 SEC/工信部官方证据质量。
 
 ## 1. 生产对象
 
@@ -176,6 +176,20 @@ if ($workerHealth.deployment.deployedAt -eq "unknown") {
 顶层 `ok=true` 只说明 health handler 可响应。还要检查 `newsProviders.status` 和每个 provider 的成功、失败时间与错误码。
 
 默认 `/health` 的 D1 provider 查询超时为 750ms，可用 `HEALTH_QUERY_TIMEOUT_MS` 在 10–1500ms 内覆盖。它是有界探针，不代表整个 Worker 运行时间；50ms 在生产跨区域 D1 上会产生已有健康记录却返回空数组的假 `unavailable`。
+
+资讯刷新由两层组成：
+
+- 浏览器在页面可见时每 60 秒请求 `/api/news` 和 `/api/events`，负责显示新入库的数据；
+- Monitor Worker 按每个 profile 的 `schedules.newsRefresh` 独立采集上游，默认全天每 15 分钟一次，可改为 30 或 60 分钟。
+
+只看到浏览器请求成功，不等于上游采集成功。生产验收至少要同时核对：
+
+1. `scheduled_slots` 出现新的 `newsCollect` 理论槽；
+2. `news_items.fetched_at` 前进；
+3. `/api/news` 的 `asOf` 与最新条目更新；
+4. `/health.newsProviders` 保留各来源成功或失败轨迹。
+
+`market_events` 是行情、公告和信号事件，不按固定频率伪造。周末没有新 `EVENT` 可以是正常状态，但组合资讯流应继续出现真实的 `NEWS`。
 
 ### 5.2.1 Queue（可选）
 

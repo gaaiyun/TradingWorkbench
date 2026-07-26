@@ -1,6 +1,6 @@
 # Trading Workbench 下一 Agent 交接
 
-更新日期：2026-07-26（第二次核查后修订）
+更新日期：2026-07-26（全天资讯生产验收后修订）
 
 实现基线：`main`。不要依赖本文中的旧提交号；接手时同时执行 `git rev-parse HEAD`、`git rev-parse origin/main`，并读取 Pages 与 Worker health 的 commit SHA。
 
@@ -16,15 +16,17 @@
 
 ## 1. 当前结论
 
-多 profile、运行身份隔离、Chat/Evidence owner、调度可靠性、提醒 shadow 账本、Worker/Pages 部署指纹的**代码**均已合入 `main`（HEAD = `origin/main`，工作树干净，GitHub CI 全绿）。
+多 profile、运行身份隔离、Chat/Evidence owner、调度可靠性、提醒 shadow 账本、Worker/Pages 部署指纹，以及独立的全天资讯采集任务均已合入 `main`。
 
-但**代码合入不等于 GitHub 自动部署链已恢复**。本轮已用本机 Wrangler OAuth 手工发布 Pages 与 Monitor Worker：Pages 当前线上资源已回读 `ce854f3`，静态资源内容哈希为 `5cf14289d323`；Monitor Worker 保持行为代码版本 `f88df97`（前端提交无需再次发布 Worker），部署时间为 `2026-07-26T10:05:38Z`；GitHub Actions 仍会因缺 Cloudflare API token 而在凭据检查处失败，不能把这次手工发布当成 CI 已恢复。
+但**代码合入不等于 GitHub 自动部署链已恢复**。本轮使用本机 Wrangler OAuth 手工发布 Pages 与 Monitor Worker；Worker 已回读行为版本 `40da695`，部署时间为 `2026-07-26T12:08:05Z`。最终文档提交后应再次回读本节记录的 Pages SHA；GitHub Actions 仍会因缺 Cloudflare API token 而在凭据检查处失败，不能把手工发布当成 CI 已恢复。
 
 同日终审又修复了三个用户可见回归：旧版无 identity 的 43 份 `legacy_unverified` 报告恢复只读展示、同一新闻按 cluster/原文聚合关联标的、交易时钟按沪深与纽约时区及周末判断。历史未验证报告仍不能进入问答，4 份 `invalidated` 报告仍只在“历史审计”中显示。
 
 首轮 `cn-semi-comms` 手工监控组研究已由 GitHub Actions 运行 `30189419616` 完成，并生成 `515880.SS`、`512480.SS` 的 profile-scoped 报告及角色分卷。两份 Evidence Packet 均有效，但引用门禁发现未引用数字、无依据仓位或目标价，故均为 `insufficient_evidence / legacy_unverified / Not Rated`，没有进入最新观点或问答。当前审计为 `49` 份成功报告、`0 verified`、`45 legacy_unverified`、`4 invalidated`。
 
-尚未完成的是 2026-07-27 08:25 的真实 SEC/工信部采集验收、补齐 `TRADINGAGENTS_SEC_CONTACT_EMAIL` secret，以及生成首份真正通过当前 Evidence 门禁的报告。周日 Provider `unavailable` 仍符合休市预期；不能把旧报告或本次未通过引用门禁的报告升级为 verified。
+资讯刷新回归已经定位并修复：浏览器原本每 60 秒轮询，但 Worker 的上游采集错误地只挂在交易日 08:25 盘前任务下。现在每个 profile 可独立配置 15/30/60 分钟全天采集，默认 15 分钟；周日 20:00、20:10 与 20:15 的真实批次已让 `cn-semi-comms` 新闻从 146 条增至 162 条，最新 `fetchedAt=2026-07-26T12:15:06.874Z`。来源部分失败会保留成功结果并记录 `NEWS_COLLECTION_PARTIAL`，不会用旧数据伪装全部成功。`market_events` 仍只在真实行情、公告或信号发生时生成，不为周末伪造事件。
+
+尚未完成的是 2026-07-27 08:25 的 SEC/工信部官方证据质量验收、补齐 `TRADINGAGENTS_SEC_CONTACT_EMAIL` secret，以及生成首份真正通过当前 Evidence 门禁的报告。不能把旧报告或本次未通过引用门禁的报告升级为 verified。
 
 本轮接手已完成数字引用判定修复：`_NUMERIC_CLAIM_RE` 不再把日期、时间戳、标的代码、哈希、Markdown 标题序号和 RSI/MACD/均线参数当作研究数字；逐段复测后 `515880.SS` 为 `179→117`、`512480.SS` 为 `128→84`、`3887.HK` 为 `169→108`，剩余段落仍含未带 Evidence ID 的真实数值，因此没有放宽门禁。三份 `-v4` Manifest 与 `public/data/report-audit.json` 已同步更新。
 
@@ -51,13 +53,13 @@
 ### ✅ 已完成：Pages 与 Monitor Worker 已发布到当前 SHA
 
 ```text
-Pages `/api/health` commitSha : `ce854f3`
-Worker `/health` commitSha : `f88df97`（Worker 代码未因前端覆盖率提交而变化）
-Worker deployedAt : `2026-07-26T10:05:38Z`
-Pages immutable deployment : `https://64bd0c4b.tradingagents-board.pages.dev`
+Pages `/api/health` commitSha : 由生产端点实时回读，交接时必须与 `origin/main` 比对
+Worker `/health` commitSha : `40da695085f69e9d705b7dd48aec48a1b30655df`
+Worker deployedAt : `2026-07-26T12:08:05Z`
+Pages immutable deployment : 每次发布都会变化，以 `wrangler pages deploy` 输出和 `/api/health` 为准
 ```
 
-线上回读已确认包含本轮最新观点门禁、卖方策略观察、SEC runtime UA、health 50ms 和缓存哈希改动。
+线上回读已确认 Worker 包含全天资讯调度、任务容量保护、750ms 有界健康查询与 HashKey 1,028,172 字节官方公告页适配。Pages 最终部署后应再核对运行时 SHA 与静态资源哈希。
 
 ### 🟠 P1：GitHub 自动部署凭据仍缺失
 
@@ -75,7 +77,9 @@ Pages immutable deployment : `https://64bd0c4b.tradingagents-board.pages.dev`
 
 ### ⚪ 符合预期，不是故障
 
-- Worker `/health` 的 `newsProviders.status = unavailable`：2026-07-26 是**星期日**，符合文档约定，不要写成采集失败；周一采集后再按 §8 的状态码和失败轨迹协议判断。
+- 周日没有行情/信号事件符合市场时钟，但资讯采集不再受交易日限制。20:00 自动批次与 20:10 重试累计写入 16 条新增记录；组合资讯流会出现新的 `NEWS`，`EVENT` 只在真实行情、公告或信号产生时更新。
+- provider 汇总为 `degraded` 不等于“没有刷新”：成功来源继续入库，失败来源保存状态码与时间，slot 标记 `NEWS_COLLECTION_PARTIAL` 后按幂等键重试。
+- 20:15 `/health` 现场状态：`eastmoney-search`、`federal-reserve-rss`、`hashkey-ir`、`sec-edgar-submissions`、`yahoo-finance-rss` 为 `ok`；`google-news-rss=NEWS_TIMEOUT`；`miit-policy-api` 同批一条查询成功、一条 `NEWS_MALFORMED_RESPONSE`，因此为 `degraded`。HashKey 在 `40da695` 部署后已从响应过大恢复。
 - 报告审计 `49 / 0 verified / 45 legacy_unverified / 4 invalidated`：直接读 `public/data/report-audit.json`（`generatedAt 2026-07-26T05:50:32Z`）核对无误，`complete_report.md` 实际文件数也是 49。
 - GitHub Actions run `30189419616`（cn-semi-comms 首轮）：conclusion **success**，与文档描述一致。
 - 最新提交的 `ci.yml` run `30190646220`：8 个 job 全绿。
@@ -208,9 +212,9 @@ migration 只向前保留。回退代码时不要删除新表或列。
 这一节是 2026-07-26 核查后新增的，与上一版文档的表述不同，以本节为准。详细证据见 §1.5。
 
 - **`CLOUDFLARE_API_TOKEN` secret 与 `MONITOR_WORKER_URL` variable 均不存在**，`deploy-workbench` 最近 3 次失败、`deploy-monitor` 从未成功；
-- **Monitor Worker 生产版本落后 HEAD 6 个提交**；
-- Pages 虽为最新 SHA，但**未经 CI 门禁发布**；
-- **migrations `0013`–`0015` 是否已应用无法从 CI 侧证实**，需用 `wrangler d1 migrations list --remote` 亲自确认；
+- Monitor Worker 已手工发布并由 `/health` 回读到行为版本 `40da695`，但**未经 GitHub 自动部署门禁发布**；
+- Pages 由本机 Wrangler 发布，仍需在最终文档提交后回读最新 SHA；
+- migrations `0013`–`0015` 已通过远程 D1 的 `d1_migrations` 查询确认；
 - 上一版文档记录的"Pages、Worker、D1、动态 API 与 VolGuard 已完成生产冒烟"是在凭据尚存的时间点做的，**不代表当前部署链路可用**。
 
 ### 尚未完成
@@ -227,10 +231,10 @@ migration 只向前保留。回退代码时不要删除新表或列。
 
 | 命令 | 结果 |
 |---|---|
-| `npm run test:functions` | 321 tests：320 passed、1 skipped、0 failed |
-| `npm run test:frontend` | 87 passed、0 failed |
+| `npm run test:functions` | 329 tests：328 passed、1 skipped、0 failed |
+| `npm run test:frontend` | 89 passed、0 failed |
 | `npm run check:workbench` | 通过 |
-| `python -m pytest -q` | 649 passed、2 skipped、0 failed；另有 69 个 subtests passed |
+| `G:\ClaudeCode\TradingAgents\.venv\Scripts\python.exe -m pytest -q` | 651 passed、2 skipped、0 failed；另有 69 个 subtests passed |
 | `python -m ruff check .` | 通过 |
 | `python tests/e2e_workbench.py` | 通过；403/404 为预期的安全回退用例 |
 
@@ -335,7 +339,7 @@ Codex 根 task ID：`019f8943-9db3-7c52-88de-0cb3773977ba`
 |---|---|---|---|
 | 1 | ~~`evidence_packet.json` 写出了非法 JSON `NaN`~~ **已修复，勿重复处理** | `public/reports/MSFT/2026-07-24/evidence_packet.json:12576` | 该文件确实含字面量 `NaN`，Node `JSON.parse` 抛错（.NET 容忍，PowerShell 检查不出来），被判 `invalidated / INVALID_EVIDENCE_PACKET`。**但代码侧的根因已于 2026-07-26 由 `ed6acb7`「fix(证据): 阻断非有限行情并校验报告文件」修复**：`tradingagents/evidence.py:51`、`tradingagents/reporting.py:366/396` 均已加 `allow_nan=False`，上游另有 `evidence.py:79`、`scripts/run_daily.py:402/572` 的 `math.isfinite` 拦截。MSFT 那份报告提交于 2026-07-25（`2e3cd23`），**早于修复**，属修复前的遗留数据产物，不是活跃缺陷。全仓库仅此一处 |
 | 2 | ~~**Queue 消费路径不可达**~~ **已补齐可审计 IaC，默认仍安全走 direct** | `wrangler.monitor.queue.toml` | 新增可选 Queue 配置，显式绑定 `MONITOR_QUEUE`、批大小、重试和 DLQ；默认 `wrangler.monitor.toml` 不会在未确认账户套餐/队列已创建时强行启用，避免基础设施漂移和意外计费 |
-| 3 | ~~**`/health` 新闻 provider 查询超时仅 10ms**~~ **已修复** | `workers/monitor/src/index.mjs` | 默认提升到 50ms，并允许运行时在 10–250ms 内覆盖；仍保持有界查询，减少冷启动/跨区域 D1 造成的假 unavailable |
+| 3 | ~~**`/health` 新闻 provider 查询超时过短**~~ **已修复** | `workers/monitor/src/index.mjs` | 50ms 已在生产证明会把已有的 7 条 D1 健康记录误报为空；默认提升到 750ms，并允许运行时在 10–1500ms 内覆盖。测试仍用 10ms 验证有界超时路径 |
 | 4 | ~~**"最新观点"路径没有第二道门禁**~~ **已修复** | `functions/api/latest.js` | 无 selector 的首页路径并行读取 `latest.json` 与 `report-audit.json`，只放行 `verified + rated + claimValidation=passed`；审计索引不可用时 fail-closed，不把未审报告当最新观点 |
 | 5 | **`report-audit.mjs` 的失效名单是硬编码** | `scripts/report-audit.mjs:7-11` | `INVALIDATED_REPORTS` 是人工维护的 3 条路径黑名单。新出现的同类污染报告若无人手动加入，只能靠动态一致性检查兜底，两种机制覆盖面不重叠 |
 | 6 | **claim validation 的价格目标/仓位检查仍是无条件关键词匹配** | `tradingagents/reporting.py` | `_PRICE_TARGET_RE` / `_ALLOCATION_RE` 仍不检查附近是否真给了方法论或用户约束。报告写"我们不设目标价"同样会被判违规。文档措辞暗示这是有条件判断，实际不是——**想靠"补一段方法论说明"过门禁是行不通的**。数字主张的结构性误报已在本轮修复：日期、时间戳、标的代码、哈希、Markdown 标题序号和指标参数不再被当作研究数字；剩余价格、比例和指标读数仍需 Evidence ID。 |
@@ -443,3 +447,4 @@ gh workflow run deploy-monitor.yml --repo gaaiyun/TradingWorkbench --ref main
 | 2026-07-26 | 收尾部署与数据门禁：最新观点增加 verified-only 二次审计；Worker `/health` 查询默认 50ms；新增可选 Queue/DLQ IaC；Python SEC UA 支持运行时联系邮箱；前端 CSS/JS 改用内容哈希缓存；期权页新增卖方策略观察与缺失指标警告；资讯标题去重增强 | 代码测试、生产 VolGuard `/api/live` 现场核验与远程 D1 migrations list；待 GitHub secret `TRADINGAGENTS_SEC_CONTACT_EMAIL` 与 Cloudflare API token 由仓库主人补齐 |
 | 2026-07-26 | 卖方策略观察补充分位数规则：为每个到期日计算 90% 认怂线与 99% 目标线，前端显示 Put/Call 行权价边界、真实候选和阈值来源；同步更新静态资源内容哈希 | `test_workbench_options.mjs` 5 项通过、前端 89 项通过；仍受 VolGuard 逐合约 Greeks 覆盖限制，不生成裸卖指令 |
 | 2026-07-26 | 手工发布卖方分位数前端并回读 canonical Pages；修正本文件线上 SHA 与 immutable URL | Pages `62562e64ae34` / `9f5b3f07`，Worker `/health` 仍为 `f88df97`；GitHub CI 与自动部署凭据状态分开记录 |
+| 2026-07-26 | 修复资讯“页面轮询但上游不采集”的调度回归：新增可配置全天 15/30/60 分钟采集、跨 profile 容量保护、周末调度测试；提高 health 查询阈值并适配 HashKey 1MB 官方公告页 | 周日 20:00–20:15 生产批次使 `cn-semi-comms` 新闻 146→162，HashKey 恢复 `ok`，最新 `fetchedAt=2026-07-26T12:15:06.874Z` |
