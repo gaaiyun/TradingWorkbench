@@ -189,10 +189,107 @@ export function buildChatHistory(messages, options = {}) {
 export function filterFeedItems(items, filters = {}) {
   const minScore = IMPORTANCE_SCORE[filters.importance] ?? -1;
   return (Array.isArray(items) ? items : []).filter((item) => {
-    if (filters.symbol && filters.symbol !== "all" && item.symbol !== filters.symbol) return false;
+    const symbols = Array.isArray(item.symbols) ? item.symbols : [item.symbol].filter(Boolean);
+    if (filters.symbol && filters.symbol !== "all" && !symbols.includes(filters.symbol)) return false;
     if (filters.source && filters.source !== "all" && item.source !== filters.source) return false;
     return (IMPORTANCE_SCORE[item.importance] ?? 0) >= minScore;
   });
+}
+
+function feedGroupKey(item, index) {
+  const type = String(item?.type || "news");
+  const cluster = String(item?.cluster_id || item?.clusterId || "").trim();
+  if (cluster) return `${type}:cluster:${cluster}`;
+  const url = String(item?.url || "").trim().toLowerCase();
+  if (url) return `${type}:url:${url}`;
+  const title = String(item?.title || "").replace(/\s+/g, " ").trim().toLowerCase();
+  if (title) return `${type}:title:${title}`;
+  return `${type}:row:${String(item?.id || index)}`;
+}
+
+export function groupFeedItems(items) {
+  const groups = new Map();
+  for (const [index, raw] of (Array.isArray(items) ? items : []).entries()) {
+    if (!raw || typeof raw !== "object") continue;
+    const key = feedGroupKey(raw, index);
+    const symbolSet = new Set([
+      ...(Array.isArray(raw.symbols) ? raw.symbols : []),
+      raw.symbol,
+    ].filter(Boolean).map(String));
+    const sourceSet = new Set([
+      ...(Array.isArray(raw.sources) ? raw.sources : []),
+      raw.source,
+    ].filter(Boolean).map(String));
+    const current = groups.get(key);
+    if (!current) {
+      groups.set(key, {
+        ...raw,
+        symbols: [...symbolSet],
+        sources: [...sourceSet],
+        symbol: [...symbolSet][0] || null,
+      });
+      continue;
+    }
+    for (const symbol of symbolSet) current.symbols.push(symbol);
+    current.symbols = [...new Set(current.symbols)];
+    for (const source of sourceSet) current.sources.push(source);
+    current.sources = [...new Set(current.sources)];
+    current.source = current.sources.join(" · ");
+    if ((IMPORTANCE_SCORE[raw.importance] ?? 0) > (IMPORTANCE_SCORE[current.importance] ?? 0)) {
+      current.importance = raw.importance;
+    }
+    if (
+      String(raw.sourceTier || raw.source_tier || "").toLowerCase() === "evidence"
+      && String(current.sourceTier || current.source_tier || "").toLowerCase() !== "evidence"
+    ) {
+      current.url = raw.url || current.url;
+      current.source = raw.source || current.source;
+      current.publisher = raw.publisher || current.publisher;
+      current.title = raw.title || current.title;
+      current.summary = raw.summary || current.summary;
+      current.sourceTier = "evidence";
+      current.source_tier = "evidence";
+    }
+    if (String(raw.summary || "").length > String(current.summary || "").length) {
+      current.summary = raw.summary;
+    }
+    if (String(raw.at || "") > String(current.at || "")) current.at = raw.at;
+    current.deliveries = [...(current.deliveries || []), ...(raw.deliveries || [])];
+  }
+  return [...groups.values()];
+}
+
+function zonedClock(now, timeZone) {
+  const parts = Object.fromEntries(
+    new Intl.DateTimeFormat("en-US", {
+      timeZone,
+      weekday: "short",
+      hour: "2-digit",
+      minute: "2-digit",
+      hourCycle: "h23",
+    }).formatToParts(now).map(({ type, value }) => [type, value]),
+  );
+  return {
+    weekday: parts.weekday,
+    minutes: Number(parts.hour) * 60 + Number(parts.minute),
+  };
+}
+
+function weekdayOpen(clock, windows) {
+  if (clock.weekday === "Sat" || clock.weekday === "Sun") return false;
+  return windows.some(([start, end]) => clock.minutes >= start && clock.minutes < end);
+}
+
+export function marketSessionStates(now = new Date()) {
+  const date = now instanceof Date ? now : new Date(now);
+  const cn = zonedClock(date, "Asia/Shanghai");
+  const hk = zonedClock(date, "Asia/Hong_Kong");
+  const us = zonedClock(date, "America/New_York");
+  return {
+    CN: { open: weekdayOpen(cn, [[570, 690], [780, 900]]), ...cn },
+    HK: { open: weekdayOpen(hk, [[570, 720], [780, 960]]), ...hk },
+    US: { open: weekdayOpen(us, [[570, 960]]), ...us },
+  };
 }
 
 export function notificationDeliveryBadges(deliveries) {

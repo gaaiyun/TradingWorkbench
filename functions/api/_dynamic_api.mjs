@@ -137,7 +137,12 @@ function aggregateStatus(rows, health) {
 
 export function dynamicEnvelope(
   rows,
-  { health = false, cursorColumn = null, cursorForward = false } = {},
+  {
+    health = false,
+    cursorColumn = null,
+    cursorForward = false,
+    statusScope = "all",
+  } = {},
 ) {
   const sources = [];
   const seen = new Set();
@@ -152,7 +157,10 @@ export function dynamicEnvelope(
     const value = row.as_of ?? null;
     return value && (!latest || value > latest) ? value : latest;
   }, null);
-  const envelope = { status: aggregateStatus(rows, health), asOf, data: rows, sources };
+  const statusRows = statusScope === "latest-as-of" && asOf
+    ? rows.filter((row) => row.as_of === asOf)
+    : rows;
+  const envelope = { status: aggregateStatus(statusRows, health), asOf, data: rows, sources };
   if (cursorColumn) {
     const cursorRow = cursorForward ? rows.at(-1) : rows[0];
     const columns = Array.isArray(cursorColumn) ? cursorColumn : [cursorColumn];
@@ -172,7 +180,13 @@ export function unavailableEnvelope(error) {
 
 export async function serveDynamic(
   { request, env },
-  { capabilities, query, health = false, cursorColumn = null },
+  {
+    capabilities,
+    query,
+    health = false,
+    cursorColumn = null,
+    statusScope = "all",
+  },
 ) {
   let filters;
   try {
@@ -196,6 +210,7 @@ export async function serveDynamic(
       health,
       cursorColumn,
       cursorForward: Boolean(filters.after),
+      statusScope,
     }), 200, {
       "cache-control": "no-store",
     });

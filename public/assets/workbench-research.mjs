@@ -141,6 +141,30 @@ function auditMap(auditIndex) {
   );
 }
 
+function isLegacyIdentity(identity) {
+  return !identity || (
+    identity.scope === "legacy"
+    && identity.profileId == null
+    && identity.requestId == null
+  );
+}
+
+export function legacyHistoryEntries(history) {
+  return (Array.isArray(history) ? history : [])
+    .filter((batch) => isLegacyIdentity(batch?.identity));
+}
+
+export function legacyAuditIndex(auditIndex) {
+  if (!auditIndex || typeof auditIndex !== "object" || Array.isArray(auditIndex)) {
+    return { reports: [] };
+  }
+  return {
+    ...auditIndex,
+    reports: (Array.isArray(auditIndex.reports) ? auditIndex.reports : [])
+      .filter((report) => isLegacyIdentity(report?.identity)),
+  };
+}
+
 export function buildArchiveEntries(history, auditIndex = null, { includeInvalidated = false } = {}) {
   if (!Array.isArray(history)) return [];
   const audits = auditMap(auditIndex);
@@ -151,7 +175,12 @@ export function buildArchiveEntries(history, auditIndex = null, { includeInvalid
         const report = String(result.report);
         const identity = batch.identity && typeof batch.identity === "object"
           ? { ...batch.identity }
-          : null;
+          : {
+            scope: "legacy",
+            kind: "legacy",
+            profileId: null,
+            requestId: null,
+          };
         const audit = audits.get(`${report}\u0000${identityKey(identity)}`) || null;
         return {
           ticker: String(result.ticker || ""),
@@ -176,8 +205,11 @@ export function buildArchiveEntries(history, auditIndex = null, { includeInvalid
         includeInvalidated
         || (
           !["invalidated", "invalid_record"].includes(entry.auditStatus)
-          && identityKey(entry.identity) !== "legacy"
           && identityKey(entry.identity) !== "invalid"
+          && (
+            identityKey(entry.identity) !== "legacy"
+            || entry.auditStatus === "legacy_unverified"
+          )
         )
       )))
     .sort((left, right) => String(right.generatedAt || right.tradeDate || "")

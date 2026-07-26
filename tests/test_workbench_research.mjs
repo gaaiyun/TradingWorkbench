@@ -10,6 +10,8 @@ import {
   buildArchiveReportUrl,
   buildPipelineStages,
   filterAuditedResults,
+  legacyAuditIndex,
+  legacyHistoryEntries,
   latestResearchRun,
 } from "../public/assets/workbench-research.mjs";
 
@@ -42,11 +44,10 @@ test("research history becomes a stable newest-first archive index", () => {
   assert.equal(entries[1].tradeDate, "2026-07-21");
 });
 
-test("invalidated and legacy reports stay confined to historical audit", () => {
+test("legacy unverified reports remain readable while invalidated reports stay in historical audit", () => {
   const history = [{
     trade_date: "2026-07-24",
     generated_at: "2026-07-24T15:21:07+08:00",
-    identity: { scope: "legacy", kind: "legacy", profileId: null, requestId: null },
     results: [
       { ticker: "515880.SS", rating: "Sell", report: "reports/515880.SS/2026-07-24/complete_report.md" },
       { ticker: "ORCL", rating: "Hold", report: "reports/ORCL/2026-07-24/complete_report.md" },
@@ -68,7 +69,18 @@ test("invalidated and legacy reports stay confined to historical audit", () => {
       },
     ],
   };
-  assert.deepEqual(buildArchiveEntries(history, audit), []);
+  const readable = buildArchiveEntries(history, audit);
+  assert.deepEqual(readable.map(({ ticker }) => ticker), ["ORCL"]);
+  assert.deepEqual(readable[0].identity, {
+    scope: "legacy",
+    kind: "legacy",
+    profileId: null,
+    requestId: null,
+  });
+  assert.equal(
+    buildArchiveReportUrl(readable[0]),
+    "/api/report?path=reports%2FORCL%2F2026-07-24%2Fcomplete_report.md",
+  );
   assert.deepEqual(buildArchiveEntries(history, audit, { includeInvalidated: true }).map(({ ticker }) => ticker), ["515880.SS", "ORCL"]);
   assert.equal(filterAuditedResults(history[0].results, audit).length, 1);
   assert.equal(
@@ -77,7 +89,33 @@ test("invalidated and legacy reports stay confined to historical audit", () => {
   );
 });
 
-test("legacy reports are confined to historical audit and audit identity cannot cross scopes", () => {
+test("legacy archive sources exclude profile and adhoc runs without discarding old null identities", () => {
+  const legacyBatch = { generated_at: "2026-07-24T10:00:00Z", results: [] };
+  const explicitLegacy = {
+    identity: { scope: "legacy", kind: "legacy", profileId: null, requestId: null },
+    results: [],
+  };
+  const profileBatch = {
+    identity: { scope: "profile", kind: "manual", profileId: "profile-a", requestId: null },
+    results: [],
+  };
+  assert.deepEqual(
+    legacyHistoryEntries([legacyBatch, explicitLegacy, profileBatch]),
+    [legacyBatch, explicitLegacy],
+  );
+
+  const legacyReport = { report: "reports/ORCL/legacy.md", identity: null };
+  const profileReport = {
+    report: "reports/ORCL/profile.md",
+    identity: { scope: "profile", kind: "manual", profileId: "profile-a", requestId: null },
+  };
+  assert.deepEqual(
+    legacyAuditIndex({ version: 1, reports: [legacyReport, profileReport] }).reports,
+    [legacyReport],
+  );
+});
+
+test("unregistered legacy reports stay hidden and audit identity cannot cross scopes", () => {
   const path = "reports/NVDA/2026-07-24/complete_report.md";
   const profileIdentity = {
     scope: "profile", kind: "manual", profileId: "profile-a", requestId: null,
@@ -96,19 +134,27 @@ test("legacy reports are confined to historical audit and audit identity cannot 
     },
   ];
   const audit = {
-    reports: [{
-      report: path,
-      auditStatus: "verified",
-      identity: {
-        scope: "adhoc", kind: "adhoc", profileId: null,
-        requestId: "123e4567-e89b-42d3-a456-426614174006",
+    reports: [
+      {
+        report: path,
+        auditStatus: "verified",
+        identity: {
+          scope: "adhoc", kind: "adhoc", profileId: null,
+          requestId: "123e4567-e89b-42d3-a456-426614174006",
+        },
       },
-    }],
+      {
+        report: "reports/LEGACY/2026-07-24/complete_report.md",
+        auditStatus: "legacy_unverified",
+        identity: legacyIdentity,
+      },
+    ],
   };
 
   const current = buildArchiveEntries(history, audit);
-  assert.deepEqual(current.map(({ ticker }) => ticker), ["NVDA"]);
+  assert.deepEqual(current.map(({ ticker }) => ticker), ["NVDA", "LEGACY"]);
   assert.equal(current[0].auditStatus, "unverified");
+  assert.equal(current[1].auditStatus, "legacy_unverified");
   assert.deepEqual(
     buildArchiveEntries(history, audit, { includeInvalidated: true })
       .map(({ ticker }) => ticker),

@@ -8,6 +8,8 @@ import {
   createLatestRequestGate,
   dailyHistoryLimit,
   filterFeedItems,
+  groupFeedItems,
+  marketSessionStates,
   mergeIncrementalBatch,
   normalizeEnvelope,
   notificationDeliveryBadges,
@@ -61,6 +63,8 @@ import {
   defaultArchiveFileTab,
   filterAuditedResults,
   latestResearchRun,
+  legacyAuditIndex,
+  legacyHistoryEntries,
   researchRunForRequest,
   researchTickerLimit,
 } from "./workbench-research.mjs";
@@ -96,15 +100,18 @@ import {
     quotes: new Map(),
     feeds: [],
     feedEnvelope: normalizeEnvelope(null),
+    feedLastRefreshedAt: null,
     monitor: normalizeEnvelope(null),
     latest: null,
     history: [],
+    legacyHistory: [],
     runs: [],
     pendingResearch: null,
     adhocHistory: [],
     adhocRuns: [],
     adhocReportAudit: null,
     reportAudit: null,
+    legacyReportAudit: null,
     showAuditReports: false,
     archiveEntries: [],
     selectedReportPath: null,
@@ -431,7 +438,11 @@ import {
       const first = bars[0];
       const source = state.market.sources?.[0];
       const degraded = state.market.status === "degraded" || state.market.status === "stale";
-      $("#chart-coverage").textContent = `覆盖 ${formatDate(first.ts)}–${formatDate(bar.ts)} · ${bars.length} 日${degraded ? ` · ${source?.source || "来源"}降级` : ""}`;
+      const marketClosed = !marketSessionStates()[target.market]?.open;
+      const stateLabel = state.market.status === "stale" && marketClosed
+        ? " · 休市，沿用最近收盘"
+        : degraded ? ` · ${source?.source || "来源"}降级` : "";
+      $("#chart-coverage").textContent = `覆盖 ${formatDate(first.ts)}–${formatDate(bar.ts)} · ${bars.length} 日${stateLabel}`;
     } else {
       $("#chart-coverage").textContent = "覆盖 —";
     }
@@ -439,15 +450,20 @@ import {
 
   function updateFreshness(envelope) {
     const source = envelope.sources?.[0] || {};
-    $("#freshness-status").textContent = envelope.status.toUpperCase();
+    const selectedMarket = targets().find(({ symbol }) => symbol === state.selectedSymbol)?.market;
+    const marketClosed = selectedMarket && !marketSessionStates()[selectedMarket]?.open;
+    const closedSnapshot = envelope.status === "stale" && marketClosed;
+    $("#freshness-status").textContent = closedSnapshot ? "CLOSED" : envelope.status.toUpperCase();
     $("#freshness-status").dataset.status = envelope.status;
     $("#freshness-asof").textContent = formatTime(envelope.asOf, true);
     $("#freshness-fetched").textContent = formatTime(source.fetchedAt, true);
     $("#freshness-source").textContent = source.source || "—";
-    $("#freshness-detail").textContent = envelope.error || `freshness ${source.freshness || "unknown"} · quality ${source.quality || "unknown"} · adjustment ${source.adjustment || "—"}`;
+    $("#freshness-detail").textContent = envelope.error || `${closedSnapshot ? "market closed · latest close" : `freshness ${source.freshness || "unknown"}`} · quality ${source.quality || "unknown"} · adjustment ${source.adjustment || "—"}`;
     const dot = $(".status-dot", $("#global-status"));
     dot.className = `status-dot is-${envelope.status}`;
-    $("#global-status span").textContent = envelope.status === "ok" ? "数据正常" : envelope.status === "unavailable" ? "数据不可用" : `数据${envelope.status === "stale" ? "陈旧" : "降级"}`;
+    $("#global-status span").textContent = closedSnapshot
+      ? "休市 · 最近收盘"
+      : envelope.status === "ok" ? "数据正常" : envelope.status === "unavailable" ? "数据不可用" : `数据${envelope.status === "stale" ? "陈旧" : "降级"}`;
   }
 
   async function loadSettings() {
@@ -628,8 +644,12 @@ import {
       if (!profileRequests.isCurrent(request)) return;
       const news = normalizeEnvelope(newsResult.status === "fulfilled" ? newsResult.value : null);
       const events = normalizeEnvelope(eventsResult.status === "fulfilled" ? eventsResult.value : null);
-      state.feeds = [...normalizeFeed(news, "news"), ...normalizeFeed(events, "event")]
+      state.feeds = groupFeedItems([
+        ...normalizeFeed(news, "news"),
+        ...normalizeFeed(events, "event"),
+      ])
         .sort((a, b) => String(b.at || "").localeCompare(String(a.at || "")));
+      state.feedLastRefreshedAt = new Date().toISOString();
       const statuses = [news.status, events.status];
       state.feedEnvelope = {
         status: statuses.every((status) => status === "unavailable") ? "unavailable" : statuses.includes("degraded") || statuses.includes("unavailable") ? "degraded" : statuses.includes("stale") ? "stale" : "ok",
@@ -672,7 +692,7 @@ import {
         .map(({ tone, text }) => `<span class="delivery-badge is-${escapeHtml(tone)}">${escapeHtml(text)}</span>`)
         .join("");
       return `<${tag} class="feed-item"${link}>
-        <div class="feed-item-meta"><i class="importance ${escapeHtml(item.importance)}"></i><span>${escapeHtml(item.type === "event" ? "EVENT" : "NEWS")}</span><span>${escapeHtml(item.symbol || "MARKET")}</span><span>${formatTime(item.at, true)}</span></div>
+        <div class="feed-item-meta"><i class="importance ${escapeHtml(item.importance)}"></i><span>${escapeHtml(item.type === "event" ? "EVENT" : "NEWS")}</span><span>${escapeHtml((item.symbols || [item.symbol]).filter(Boolean).join(" · ") || "MARKET")}</span><span>${formatTime(item.at, true)}</span></div>
         <h3>${escapeHtml(item.title || "未命名事件")}</h3>
         <p>${escapeHtml(item.summary)}</p>
         ${deliveryBadges ? `<div class="delivery-badges">${deliveryBadges}</div>` : ""}
@@ -950,17 +970,15 @@ import {
     const combinedAudit = {
       reports: [
         ...(Array.isArray(state.reportAudit?.reports) ? state.reportAudit.reports : []),
+        ...(Array.isArray(state.legacyReportAudit?.reports) ? state.legacyReportAudit.reports : []),
         ...(Array.isArray(state.adhocReportAudit?.reports) ? state.adhocReportAudit.reports : []),
       ],
     };
     state.archiveEntries = buildArchiveEntries(
-      [...state.history, ...state.adhocHistory],
+      [...state.history, ...state.legacyHistory, ...state.adhocHistory],
       combinedAudit,
       { includeInvalidated: state.showAuditReports },
-    ).filter((entry) => (
-      state.showAuditReports
-      || ["profile", "adhoc"].includes(entry.identity?.scope)
-    ));
+    );
     $("#archive-count").textContent = `${state.archiveEntries.length} 份${state.showAuditReports ? " · 历史审计" : ""}`;
     const auditToggle = $("#archive-show-audit");
     if (auditToggle) {
@@ -971,7 +989,7 @@ import {
       $("#archive-list").className = "panel-empty";
       $("#archive-list").innerHTML = state.showAuditReports
         ? "<b>没有历史审计档案</b><span>审计索引尚未返回可查看的旧报告。</span>"
-        : "<b>没有可用研究档案</b><span>失效报告已隐藏；可切换“历史审计”查看原文。</span>";
+        : "<b>没有可用研究档案</b><span>已失效报告默认隐藏；可切换“历史审计”查看原文。</span>";
       return;
     }
     $("#archive-list").className = "archive-list";
@@ -1118,10 +1136,18 @@ import {
     if (!profileId) return;
     const request = profileRequests.begin("research");
     try {
-      const [historyResult, runsResult, auditResult] = await Promise.allSettled([
+      const [
+        historyResult,
+        runsResult,
+        auditResult,
+        legacyHistoryResult,
+        legacyAuditResult,
+      ] = await Promise.allSettled([
         requestJson(profileRequestUrl("/api/history", profileId), { signal: request.signal }),
         requestJson(profileRequestUrl("/api/runs", profileId), { signal: request.signal }),
         requestJson(profileRequestUrl("/api/report-audit", profileId), { signal: request.signal }),
+        requestJson("/api/history", { signal: request.signal }),
+        requestJson("/api/report-audit", { signal: request.signal }),
       ]);
       if (!profileRequests.isCurrent(request)) return;
       if (historyResult.status === "fulfilled") {
@@ -1140,6 +1166,21 @@ import {
         state.reportAudit = auditResult.value?.data || auditResult.value;
       } else {
         state.reportAudit = null;
+      }
+      if (legacyHistoryResult.status === "fulfilled") {
+        const payload = legacyHistoryResult.value;
+        state.legacyHistory = legacyHistoryEntries(
+          Array.isArray(payload) ? payload : payload?.data || payload?.history || [],
+        );
+      } else {
+        state.legacyHistory = [];
+      }
+      if (legacyAuditResult.status === "fulfilled") {
+        state.legacyReportAudit = legacyAuditIndex(
+          legacyAuditResult.value?.data || legacyAuditResult.value,
+        );
+      } else {
+        state.legacyReportAudit = null;
       }
       if (state.latest) {
         state.latest = {
@@ -1204,7 +1245,7 @@ import {
   }
 
   function renderNewsWorkspace() {
-    $("#news-workspace-asof").textContent = `${state.feeds.length} 条 · ${formatTime(state.feedEnvelope.asOf, true)}`;
+    $("#news-workspace-asof").textContent = `${state.feeds.length} 条 · 内容 ${formatTime(state.feedEnvelope.asOf, true)} · 刷新 ${formatTime(state.feedLastRefreshedAt)}`;
     const rows = state.feeds.slice(0, 200);
     if (!rows.length) {
       $("#news-workspace-list").className = "panel-empty";
@@ -1222,7 +1263,7 @@ import {
         .join(" · ");
       return `<${tag} class="evidence-row"${link}>
         <time>${escapeHtml(formatTime(item.at, true))}</time>
-        <div><span>${escapeHtml(item.symbol || "MARKET")} · ${escapeHtml(tier)}</span><b>${escapeHtml(item.title || "未命名事件")}</b><small>${escapeHtml(item.summary || "没有可验证摘要")}${delivery ? ` · ${escapeHtml(delivery)}` : ""}</small></div>
+        <div><span>${escapeHtml((item.symbols || [item.symbol]).filter(Boolean).join(" · ") || "MARKET")} · ${escapeHtml(tier)}</span><b>${escapeHtml(item.title || "未命名事件")}</b><small>${escapeHtml(item.summary || "没有可验证摘要")}${delivery ? ` · ${escapeHtml(delivery)}` : ""}</small></div>
         <em>${escapeHtml(item.source || "unknown")}</em>
         <strong>${escapeHtml(String(item.importance || "medium").toUpperCase())}</strong>
       </${tag}>`;
@@ -2472,12 +2513,11 @@ import {
   }
 
   function updateClock() {
-    $("#terminal-clock").textContent = new Intl.DateTimeFormat("zh-CN", { hour: "2-digit", minute: "2-digit", second: "2-digit", hour12: false }).format(new Date());
-    const hour = new Date().getHours();
-    const minute = new Date().getMinutes();
-    const minutes = hour * 60 + minute;
-    const cnOpen = (minutes >= 570 && minutes <= 690) || (minutes >= 780 && minutes <= 900);
-    const usOpen = minutes >= 1290 || minutes <= 240;
+    const now = new Date();
+    $("#terminal-clock").textContent = new Intl.DateTimeFormat("zh-CN", { hour: "2-digit", minute: "2-digit", second: "2-digit", hour12: false }).format(now);
+    const sessions = marketSessionStates(now);
+    const cnOpen = sessions.CN.open;
+    const usOpen = sessions.US.open;
     $(".market-session:nth-child(1)", $(".session-strip")).classList.toggle("is-open", cnOpen);
     $(".market-session:nth-child(2)", $(".session-strip")).classList.toggle("is-open", usOpen);
     $("#cn-session").textContent = cnOpen ? "交易中" : "休市";
@@ -2491,7 +2531,13 @@ import {
       { label: "报价", load: () => loadQuoteStrip(), status: () => (state.quotes.size ? "ok" : "unavailable") },
       { label: "资讯", load: () => loadFeeds(), status: () => state.feedEnvelope.status },
       { label: "监控", load: () => loadMonitor(), status: () => state.monitor.status },
-      { label: "研究", load: () => loadLatest(), status: () => (state.latest ? "ok" : "unavailable") },
+      {
+        label: "研究",
+        load: () => loadLatest(),
+        status: () => state.latest?.status === "failed"
+          ? "failed"
+          : state.latest ? "ok" : "empty",
+      },
     ];
     try {
       const results = await Promise.allSettled(refreshes.map(({ load }) => load()));
@@ -2503,15 +2549,34 @@ import {
           : "rejected",
       }));
       const rejected = summary.filter(({ settled }) => settled === "rejected");
-      const unavailable = summary.filter(({ status }) => status === "unavailable");
+      const unavailable = summary.filter(({ status }) => ["unavailable", "failed"].includes(status));
       const degraded = summary.filter(({ status }) => ["degraded", "stale"].includes(status));
       const fulfilled = summary.length - rejected.length;
+      const selectedMarket = targets().find(({ symbol }) => symbol === state.selectedSymbol)?.market;
+      const marketClosed = selectedMarket && !marketSessionStates()[selectedMarket]?.open;
+      const statusLabels = {
+        ok: "正常",
+        degraded: "部分数据源降级",
+        stale: "数据较旧",
+        unavailable: "不可用",
+        failed: "最近任务失败",
+        empty: "当前监控组暂无报告",
+        rejected: "请求失败",
+      };
       const responseStatuses = summary
-        .map(({ label, status }) => `${label} ${status}`)
+        .map(({ label, status }) => {
+          if (label === "行情" && status === "stale" && marketClosed) {
+            return "行情 休市，沿用最近收盘";
+          }
+          return `${label} ${statusLabels[status] || status}`;
+        })
         .join("、");
+      const actionableDegraded = degraded.filter(({ label, status }) => !(
+        label === "行情" && status === "stale" && marketClosed
+      ));
       toast(
         `数据核验：${fulfilled}/${summary.length} 请求完成；响应 ${responseStatuses}`,
-        rejected.length > 0 || unavailable.length > 0 || degraded.length > 0,
+        rejected.length > 0 || unavailable.length > 0 || actionableDegraded.length > 0,
       );
     } finally {
       $("#refresh-all").disabled = false;
@@ -2519,6 +2584,7 @@ import {
   }
 
   async function pollWorkbenchData() {
+    if (document.hidden) return;
     await Promise.allSettled([
       loadMarket({ incremental: true }),
       loadQuoteStrip(),
@@ -2627,6 +2693,9 @@ import {
         renderTaskBoard();
         renderArchiveList();
       }
+    });
+    document.addEventListener("visibilitychange", () => {
+      if (!document.hidden) pollWorkbenchData();
     });
     window.addEventListener("hashchange", applyRoute);
     window.addEventListener("keydown", (event) => {

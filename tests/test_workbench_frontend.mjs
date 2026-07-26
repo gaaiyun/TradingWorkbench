@@ -13,6 +13,8 @@ const {
   createLatestRequestGate,
   dailyHistoryLimit,
   filterFeedItems,
+  groupFeedItems,
+  marketSessionStates,
   mergeIncrementalBatch,
   mergeIncrementalBars,
   normalizeEnvelope,
@@ -266,6 +268,53 @@ test("task timeline never maps source health rows to schedule slots by array pos
   assert.equal(timeline.length, 4);
   assert.equal(timeline.every((item) => item.status === "pending"), true);
   assert.equal(timeline.every((item) => item.detail === "任务结果接口未提供"), true);
+});
+
+test("feed grouping collapses one article across related symbols and retains provenance", () => {
+  const grouped = groupFeedItems([
+    {
+      type: "news",
+      cluster_id: "cluster-same",
+      symbol: "515880.SS",
+      title: "同一篇新闻",
+      url: "https://example.test/article",
+      source: "东方财富",
+      sourceTier: "discovery",
+      importance: "medium",
+      at: "2026-07-26T02:00:00Z",
+    },
+    {
+      type: "news",
+      cluster_id: "cluster-same",
+      symbol: "512480.SS",
+      title: "同一篇新闻",
+      url: "https://example.test/article",
+      source: "东方财富",
+      sourceTier: "evidence",
+      importance: "high",
+      at: "2026-07-26T02:01:00Z",
+    },
+  ]);
+
+  assert.equal(grouped.length, 1);
+  assert.deepEqual(grouped[0].symbols, ["515880.SS", "512480.SS"]);
+  assert.equal(grouped[0].sourceTier, "evidence");
+  assert.equal(grouped[0].importance, "high");
+  assert.equal(grouped[0].at, "2026-07-26T02:01:00Z");
+  assert.deepEqual(
+    filterFeedItems(grouped, { symbol: "512480.SS", source: "all", importance: "medium" }),
+    grouped,
+  );
+});
+
+test("market session clock respects weekends and New York daylight saving time", () => {
+  const sunday = marketSessionStates(new Date("2026-07-26T05:00:00Z"));
+  assert.equal(sunday.CN.open, false);
+  assert.equal(sunday.US.open, false);
+
+  const monday = marketSessionStates(new Date("2026-07-27T14:00:00Z"));
+  assert.equal(monday.CN.open, false);
+  assert.equal(monday.US.open, true);
 });
 
 test("notification badges expose real shadow and failure state without claiming browser delivery", () => {

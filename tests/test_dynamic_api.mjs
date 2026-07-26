@@ -441,6 +441,51 @@ test("news and events APIs support topic and importance filters without interpol
   assert.deepEqual(DB.calls[1].params.slice(0, 3), ["semi", "earnings", "high"]);
 });
 
+test("news envelope freshness follows the newest article instead of the oldest row", async () => {
+  const DB = new FakeD1({
+    rows: {
+      news_items: [
+        {
+          id: "news-new",
+          symbol: "NVDA",
+          profile_id: "semi",
+          title: "Newest",
+          published_at: "2026-07-26T05:00:00Z",
+          source: "wire",
+          as_of: "2026-07-26T05:00:00Z",
+          fetched_at: "2026-07-26T05:01:00Z",
+          freshness: "fresh",
+          adjustment: null,
+          quality: "good",
+        },
+        {
+          id: "news-old",
+          symbol: "NVDA",
+          profile_id: "semi",
+          title: "Old",
+          published_at: "2026-07-20T05:00:00Z",
+          source: "wire",
+          as_of: "2026-07-20T05:00:00Z",
+          fetched_at: "2026-07-26T05:01:00Z",
+          freshness: "stale",
+          adjustment: null,
+          quality: "good",
+        },
+      ],
+    },
+  });
+
+  const response = await newsApi.onRequestGet({
+    request: request("/api/news?profile=semi"),
+    env: { DB },
+  });
+  const payload = await response.json();
+
+  assert.equal(payload.status, "ok");
+  assert.equal(payload.asOf, "2026-07-26T05:00:00Z");
+  assert.equal(payload.data.length, 2);
+});
+
 test("events expose structured provenance, safe delivery state, and an after cursor", async () => {
   const oldEvent = {
     id: "event-old",

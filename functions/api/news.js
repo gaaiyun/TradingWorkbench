@@ -5,5 +5,6 @@ export function onRequestGet(context) {
   return serveDynamic(context, {
     capabilities: { symbol: true, profile: true, topic: true },
     query: queryNewsItems,
+    statusScope: "latest-as-of",
   });
 }
