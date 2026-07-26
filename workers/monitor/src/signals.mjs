@@ -1,3 +1,7 @@
+import { notificationPoliciesForEvent } from "./notifications.mjs";
+
+const SIGNAL_RULE_VERSION = "intraday-signal-v1";
+
 function eligibleTargets(profile) {
   return profile.targets.filter((target) =>
     target.market === "CN" &&
@@ -40,11 +44,73 @@ async function recentBars(db, profileId, symbol, scheduledFor, now) {
      FROM market_bars
      WHERE profile_id = ? AND symbol = ? AND timeframe = '5m'
        AND ts <= ? AND expires_at > ?
-     ORDER BY ts DESC LIMIT 80`,
+     ORDER BY ts DESC, fetched_at DESC, source ASC LIMIT 240`,
   ).bind(profileId, symbol, scheduledFor, now.toISOString()).all();
-  return (result?.results || [])
+  return canonicalBars(result?.results || [])
     .filter((bar) => Number.isFinite(Number(bar.close)))
-    .reverse();
+    .slice(-80);
+}
+
+function provenanceRank(bar) {
+  const freshness = new Map([
+    ["fresh", 4],
+    ["current", 4],
+    ["delayed", 2],
+    ["unknown", 1],
+    ["stale", 0],
+  ]).get(String(bar.freshness || "").toLowerCase()) ?? 1;
+  const quality = new Map([
+    ["verified", 5],
+    ["evidence", 5],
+    ["excellent", 5],
+    ["good", 4],
+    ["unknown", 2],
+    ["partial", 1],
+    ["degraded", 1],
+    ["poor", 0],
+    ["error", 0],
+  ]).get(String(bar.quality || "").toLowerCase()) ?? 2;
+  const fetchedAt = Date.parse(bar.fetched_at);
+  return {
+    freshness,
+    quality,
+    fetchedAt: Number.isFinite(fetchedAt) ? fetchedAt : -Infinity,
+    source: String(bar.source || ""),
+  };
+}
+
+function preferredBar(left, right) {
+  const leftRank = provenanceRank(left);
+  const rightRank = provenanceRank(right);
+  if (leftRank.freshness !== rightRank.freshness) {
+    return leftRank.freshness > rightRank.freshness ? left : right;
+  }
+  if (leftRank.quality !== rightRank.quality) {
+    return leftRank.quality > rightRank.quality ? left : right;
+  }
+  if (leftRank.fetchedAt !== rightRank.fetchedAt) {
+    return leftRank.fetchedAt > rightRank.fetchedAt ? left : right;
+  }
+  return leftRank.source.localeCompare(rightRank.source) <= 0 ? left : right;
+}
+
+function usableProvenance(bar) {
+  const freshness = String(bar.freshness || "").toLowerCase();
+  const quality = String(bar.quality || "").toLowerCase();
+  return !["stale", "unavailable", "error"].includes(freshness)
+    && !["poor", "error", "degraded", "partial"].includes(quality);
+}
+
+export function canonicalBars(rows) {
+  const byTimestamp = new Map();
+  for (const row of rows) {
+    if (!row?.ts) continue;
+    const current = byTimestamp.get(row.ts);
+    byTimestamp.set(row.ts, current ? preferredBar(current, row) : row);
+  }
+  return [...byTimestamp.values()]
+    .filter(usableProvenance)
+    .sort((left, right) => String(left.ts).localeCompare(String(right.ts)));
 }
 
 function priceMove15m(bars) {
@@ -99,13 +165,26 @@ async function insertEvent(db, {
   priceMove,
   volumeZ,
   now,
+  profile,
 }) {
   const expiresAt = new Date(now.valueOf() + 180 * 24 * 60 * 60 * 1000).toISOString();
-  const result = await db.prepare(
+  const title = `${symbol} 15分钟价格异动`;
+  const event = {
+    id,
+    profileId,
+    importance,
+    eventAt: latest.ts,
+    title,
+  };
+  const eventStatement = db.prepare(
     `INSERT INTO market_events (
        id, symbol, profile_id, topic, importance, event_at, title, description,
-       source, as_of, fetched_at, freshness, adjustment, quality, expires_at
-     ) VALUES (?, ?, ?, 'market_move', ?, ?, ?, ?, 'signal-engine', ?, ?, ?, ?, ?, ?)
+       source, as_of, fetched_at, freshness, adjustment, quality, expires_at,
+       provider, provider_as_of, provider_quality, rule_version
+     ) VALUES (
+       ?, ?, ?, 'market_move', ?, ?, ?, ?, 'signal-engine', ?, ?, ?, ?, ?, ?,
+       ?, ?, ?, ?
+     )
      ON CONFLICT(id) DO NOTHING`,
   ).bind(
     id,
@@ -113,7 +192,7 @@ async function insertEvent(db, {
     profileId,
     importance,
     latest.ts,
-    `${symbol} 15分钟价格异动`,
+    title,
     description(priceMove, volumeZ, latest),
     latest.as_of || latest.ts,
     now.toISOString(),
@@ -121,8 +200,39 @@ async function insertEvent(db, {
     latest.adjustment || "none",
     latest.quality || "unknown",
     expiresAt,
-  ).run();
-  return changes(result);
+    latest.source || "unknown",
+    latest.as_of || latest.ts,
+    latest.quality || "unknown",
+    SIGNAL_RULE_VERSION,
+  );
+  const deliveries = notificationPoliciesForEvent({
+    profile,
+    event,
+    mode: "shadow",
+    hasPushPlusToken: false,
+    now,
+  });
+  const deliveryStatements = deliveries.map((delivery) => db.prepare(`
+    INSERT INTO notification_deliveries (
+      id, event_id, profile_id, channel, status, policy_snapshot_json,
+      reason_code, attempt_count, next_attempt_at, sent_at, created_at, updated_at
+    ) VALUES (?, ?, ?, ?, ?, ?, ?, 0, ?, ?, ?, ?)
+    ON CONFLICT(event_id, channel) DO NOTHING
+  `).bind(
+    `delivery:${id}:${delivery.channel}`,
+    id,
+    profileId,
+    delivery.channel,
+    delivery.status,
+    delivery.policySnapshotJson,
+    delivery.reasonCode,
+    delivery.nextAttemptAt,
+    delivery.sentAt,
+    now.toISOString(),
+    now.toISOString(),
+  ));
+  const results = await db.batch([eventStatement, ...deliveryStatements]);
+  return changes(results[0]);
 }
 
 export async function evaluateIntradaySignals({
@@ -182,6 +292,7 @@ export async function evaluateIntradaySignals({
       priceMove,
       volumeZ,
       now,
+      profile,
     });
   }
 

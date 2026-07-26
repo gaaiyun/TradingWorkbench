@@ -31,6 +31,10 @@ const chatEvidenceScopeMigrationUrl = new URL(
   "../migrations/0014_chat_evidence_scope.sql",
   import.meta.url,
 );
+const notificationMigrationUrl = new URL(
+  "../migrations/0015_notification_deliveries.sql",
+  import.meta.url,
+);
 
 test("D1 migration defines every dynamic workbench table and its lookup indexes", () => {
   const sql = readFileSync(migrationUrl, "utf8");
@@ -132,6 +136,83 @@ test("provider health migration adds durable circuit-breaker state without widen
     last_error_code: null,
     last_success_at: null,
   });
+});
+
+test("notification migration keeps structured event provenance and a constrained idempotent ledger", async () => {
+  const sql = readFileSync(notificationMigrationUrl, "utf8");
+  for (const column of [
+    "provider",
+    "provider_as_of",
+    "provider_quality",
+    "rule_version",
+  ]) {
+    assert.match(sql, new RegExp(`ADD COLUMN\\s+${column}\\b`, "i"));
+  }
+  assert.match(sql, /CREATE TABLE IF NOT EXISTS notification_deliveries/i);
+  assert.match(sql, /UNIQUE\s*\(\s*event_id\s*,\s*channel\s*\)/i);
+  for (const status of [
+    "pending",
+    "deferred",
+    "sending",
+    "sent",
+    "failed",
+    "uncertain",
+    "skipped",
+  ]) {
+    assert.match(sql, new RegExp(`'${status}'`, "i"));
+  }
+  for (const column of [
+    "policy_snapshot_json",
+    "reason_code",
+    "attempt_count",
+    "next_attempt_at",
+    "sent_at",
+  ]) {
+    assert.match(sql, new RegExp(`\\b${column}\\b`, "i"));
+  }
+
+  let DatabaseSync;
+  try {
+    ({ DatabaseSync } = await import("node:sqlite"));
+  } catch {
+    return;
+  }
+  const db = new DatabaseSync(":memory:");
+  db.exec(readFileSync(migrationUrl, "utf8"));
+  db.exec(sql);
+  db.prepare(`
+    INSERT INTO market_events (
+      id, importance, event_at, title, source, as_of, fetched_at,
+      freshness, quality, expires_at
+    ) VALUES (
+      'event-1', 'high', '2026-07-24T01:00:00.000Z', 'event',
+      'signal-engine', '2026-07-24T01:00:00.000Z',
+      '2026-07-24T01:00:01.000Z', 'fresh', 'good',
+      '2099-01-01T00:00:00.000Z'
+    )
+  `).run();
+  const insert = db.prepare(`
+    INSERT INTO notification_deliveries (
+      id, event_id, profile_id, channel, status, policy_snapshot_json,
+      attempt_count, created_at, updated_at
+    ) VALUES (?, 'event-1', 'etf-main', 'web', 'sent', '{}', 0, ?, ?)
+  `);
+  insert.run(
+    "delivery-1",
+    "2026-07-24T01:00:01.000Z",
+    "2026-07-24T01:00:01.000Z",
+  );
+  assert.throws(
+    () => insert.run(
+      "delivery-2",
+      "2026-07-24T01:00:02.000Z",
+      "2026-07-24T01:00:02.000Z",
+    ),
+    /UNIQUE constraint failed/i,
+  );
+  assert.throws(() => db.prepare(`
+    UPDATE notification_deliveries SET status = 'mystery' WHERE id = 'delivery-1'
+  `).run(), /CHECK constraint failed/i);
 });
 
 test("news evidence migration stores source tier, publisher, relevance, and duplicate cluster", () => {

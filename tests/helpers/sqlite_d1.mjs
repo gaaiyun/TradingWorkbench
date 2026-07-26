@@ -31,4 +31,17 @@ export class SqliteD1 {
     };
     return wrapper;
   }
+
+  async batch(statements) {
+    this.database.exec("BEGIN");
+    try {
+      const results = [];
+      for (const statement of statements) results.push(await statement.run());
+      this.database.exec("COMMIT");
+      return results;
+    } catch (error) {
+      this.database.exec("ROLLBACK");
+      throw error;
+    }
+  }
 }
