@@ -18,7 +18,7 @@
 
 多 profile、运行身份隔离、Chat/Evidence owner、调度可靠性、提醒 shadow 账本、Worker/Pages 部署指纹，以及独立的全天资讯采集任务均已合入 `main`。
 
-但**代码合入不等于 GitHub 自动部署链已恢复**。本轮使用本机 Wrangler OAuth 手工发布 Pages 与 Monitor Worker；Worker 已回读行为版本 `40da695`，部署时间为 `2026-07-26T12:08:05Z`。最终文档提交后应再次回读本节记录的 Pages SHA；GitHub Actions 仍会因缺 Cloudflare API token 而在凭据检查处失败，不能把手工发布当成 CI 已恢复。
+但**代码合入不等于 GitHub 自动部署链已恢复**。本轮使用本机 Wrangler OAuth 手工发布 Pages 与 Monitor Worker；全天资讯与 HashKey 修复的行为提交为 `40da695`，其后只含文档收口。最终生产 SHA 不在本文写死，必须实时回读 Pages 与 Worker health，并与 `origin/main` 比对。GitHub Actions 仍会因缺 Cloudflare API token 而在凭据检查处失败，不能把手工发布当成 CI 已恢复。
 
 同日终审又修复了三个用户可见回归：旧版无 identity 的 43 份 `legacy_unverified` 报告恢复只读展示、同一新闻按 cluster/原文聚合关联标的、交易时钟按沪深与纽约时区及周末判断。历史未验证报告仍不能进入问答，4 份 `invalidated` 报告仍只在“历史审计”中显示。
 
@@ -54,12 +54,12 @@
 
 ```text
 Pages `/api/health` commitSha : 由生产端点实时回读，交接时必须与 `origin/main` 比对
-Worker `/health` commitSha : `40da695085f69e9d705b7dd48aec48a1b30655df`
-Worker deployedAt : `2026-07-26T12:08:05Z`
+Worker `/health` commitSha : 由生产端点实时回读，交接时必须与 `origin/main` 比对
+Worker deployedAt : 由生产端点实时回读，不能为 `unknown`
 Pages immutable deployment : 每次发布都会变化，以 `wrangler pages deploy` 输出和 `/api/health` 为准
 ```
 
-线上回读已确认 Worker 包含全天资讯调度、任务容量保护、750ms 有界健康查询与 HashKey 1,028,172 字节官方公告页适配。Pages 最终部署后应再核对运行时 SHA 与静态资源哈希。
+2026-07-26 20:20 的线上回读已确认两个运行时与当时的 `origin/main` 一致，并包含全天资讯调度、任务容量保护、750ms 有界健康查询与 HashKey 1,028,172 字节官方公告页适配。任何后续提交都必须重新执行三方 SHA 比对。
 
 ### 🟠 P1：GitHub 自动部署凭据仍缺失
 
