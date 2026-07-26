@@ -67,8 +67,21 @@ export function buildHealthPayload(env, checks, checkedAt = new Date()) {
     analysis_dispatch: Boolean(env.GITHUB_DISPATCH_TOKEN),
     shared_conversations: Boolean(env.DB || env.WORKBENCH_KV),
   };
+  const unhealthyDetailStatuses = new Set([
+    "failed",
+    "error",
+    "unavailable",
+    "data_validation_failed",
+  ]);
+  const healthy = checks.every((item) => (
+    item.ok
+    && !(
+      item.name === "reports"
+      && unhealthyDetailStatuses.has(String(item.detail?.status || "").toLowerCase())
+    )
+  ));
   return {
-    status: checks.every((item) => item.ok) ? "ok" : "degraded",
+    status: healthy ? "ok" : "degraded",
     checked_at: checkedAt.toISOString(),
     deployment,
     configured,

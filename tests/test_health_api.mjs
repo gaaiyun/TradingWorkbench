@@ -111,3 +111,16 @@ test("health reports D1-backed persistent conversations as available", () => {
   );
   assert.equal(payload.configured.shared_conversations, true);
 });
+
+test("health degrades when the latest report request succeeded but the research run failed", () => {
+  const payload = buildHealthPayload(
+    {},
+    [
+      { name: "reports", ok: true, detail: { status: "failed" } },
+      { name: "options_live", ok: true, detail: { status: "market_closed" } },
+    ],
+    new Date("2026-07-22T10:00:00Z"),
+  );
+
+  assert.equal(payload.status, "degraded");
+});
