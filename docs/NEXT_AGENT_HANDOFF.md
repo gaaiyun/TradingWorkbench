@@ -18,7 +18,7 @@
 
 多 profile、运行身份隔离、Chat/Evidence owner、调度可靠性、提醒 shadow 账本、Worker/Pages 部署指纹的**代码**均已合入 `main`（HEAD = `origin/main`，工作树干净，GitHub CI 全绿）。
 
-但**代码合入不等于 GitHub 自动部署链已恢复**。本轮已用本机 Wrangler OAuth 手工发布 Pages 与 Monitor Worker：Pages 当前线上资源已回读 `0bd4809`，Monitor Worker 保持行为代码版本 `f88df97`（前端与文档提交无需再次发布 Worker），部署时间为 `2026-07-26T10:05:38Z`；GitHub Actions 仍会因缺 Cloudflare API token 而在凭据检查处失败，不能把这次手工发布当成 CI 已恢复。
+但**代码合入不等于 GitHub 自动部署链已恢复**。本轮已用本机 Wrangler OAuth 手工发布 Pages 与 Monitor Worker：Pages 当前线上资源已回读 `129688d`，静态资源内容哈希为 `62562e64ae34`；Monitor Worker 保持行为代码版本 `f88df97`（前端提交无需再次发布 Worker），部署时间为 `2026-07-26T10:05:38Z`；GitHub Actions 仍会因缺 Cloudflare API token 而在凭据检查处失败，不能把这次手工发布当成 CI 已恢复。
 
 同日终审又修复了三个用户可见回归：旧版无 identity 的 43 份 `legacy_unverified` 报告恢复只读展示、同一新闻按 cluster/原文聚合关联标的、交易时钟按沪深与纽约时区及周末判断。历史未验证报告仍不能进入问答，4 份 `invalidated` 报告仍只在“历史审计”中显示。
 
@@ -51,10 +51,10 @@
 ### ✅ 已完成：Pages 与 Monitor Worker 已发布到当前 SHA
 
 ```text
-Pages `/api/health` commitSha : `0bd4809`
+Pages `/api/health` commitSha : `129688d`
 Worker `/health` commitSha : `f88df97`（Worker 代码未因前端覆盖率提交而变化）
 Worker deployedAt : `2026-07-26T10:05:38Z`
-Pages immutable deployment : `https://77d79239.tradingagents-board.pages.dev`
+Pages immutable deployment : `https://9f5b3f07.tradingagents-board.pages.dev`
 ```
 
 线上回读已确认包含本轮最新观点门禁、卖方策略观察、SEC runtime UA、health 50ms 和缓存哈希改动。
@@ -442,3 +442,4 @@ gh workflow run deploy-monitor.yml --repo gaaiyun/TradingWorkbench --ref main
 | 2026-07-26 | 修复数字引用判定的结构性误报；对当前三份 `-v4` 报告重新计算 Manifest 与审计索引 | Claude 断线审计会话完整解析 249 条记录；逐段实测：`515880.SS 179→117`、`512480.SS 128→84`、`3887.HK 169→108`；保留剩余真实价格、比例和指标读数的 Evidence 门禁 |
 | 2026-07-26 | 收尾部署与数据门禁：最新观点增加 verified-only 二次审计；Worker `/health` 查询默认 50ms；新增可选 Queue/DLQ IaC；Python SEC UA 支持运行时联系邮箱；前端 CSS/JS 改用内容哈希缓存；期权页新增卖方策略观察与缺失指标警告；资讯标题去重增强 | 代码测试、生产 VolGuard `/api/live` 现场核验与远程 D1 migrations list；待 GitHub secret `TRADINGAGENTS_SEC_CONTACT_EMAIL` 与 Cloudflare API token 由仓库主人补齐 |
 | 2026-07-26 | 卖方策略观察补充分位数规则：按到期日计算 90% 认怂线与 99% 目标线，前端显示目标虚值距离和阈值来源；同步更新静态资源内容哈希 | `test_workbench_options.mjs` 5 项通过、前端 89 项通过；仍受 VolGuard 逐合约 Greeks 覆盖限制，不生成裸卖指令 |
+| 2026-07-26 | 手工发布卖方分位数前端并回读 canonical Pages；修正本文件线上 SHA 与 immutable URL | Pages `62562e64ae34` / `9f5b3f07`，Worker `/health` 仍为 `f88df97`；GitHub CI 与自动部署凭据状态分开记录 |
