@@ -113,6 +113,7 @@ def test_history_keeps_same_ticker_failures_from_two_profile_runs(tmp_path):
 def test_workflow_metadata_builds_strict_profile_manual_monitor_and_adhoc_identity(
     monkeypatch,
 ):
+    monkeypatch.delenv("GITHUB_RUN_ID", raising=False)
     fields = (
         "TRADINGAGENTS_REQUEST_ID",
         "TRADINGAGENTS_REQUEST_KIND",

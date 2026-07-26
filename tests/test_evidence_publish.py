@@ -28,6 +28,7 @@ def packet() -> dict:
 
 def test_publish_evidence_bundle_posts_only_to_configured_endpoint(monkeypatch):
     observed = {}
+    monkeypatch.delenv("GITHUB_RUN_ID", raising=False)
 
     class Response:
         status_code = 201
@@ -115,6 +116,7 @@ def test_run_ticker_publishes_validated_evidence_before_starting_the_model(
     monkeypatch,
     tmp_path,
 ):
+    monkeypatch.delenv("GITHUB_RUN_ID", raising=False)
     calls = []
     runtime_packet = packet()
 
