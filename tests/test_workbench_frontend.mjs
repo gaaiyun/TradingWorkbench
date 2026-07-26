@@ -307,6 +307,15 @@ test("feed grouping collapses one article across related symbols and retains pro
   );
 });
 
+test("feed grouping removes aggregator punctuation variants", () => {
+  const grouped = groupFeedItems([
+    { type: "news", symbol: "515880.SS", title: "芯片 行业：政策更新！", source: "A", at: "2026-07-26T02:00:00Z" },
+    { type: "news", symbol: "512480.SS", title: "芯片行业-政策更新", source: "B", at: "2026-07-26T02:01:00Z" },
+  ]);
+  assert.equal(grouped.length, 1);
+  assert.deepEqual(grouped[0].symbols, ["515880.SS", "512480.SS"]);
+});
+
 test("market session clock respects weekends and New York daylight saving time", () => {
   const sunday = marketSessionStates(new Date("2026-07-26T05:00:00Z"));
   assert.equal(sunday.CN.open, false);

@@ -23,6 +23,7 @@ _ENV_OVERRIDES = {
     "TRADINGAGENTS_NEWS_GLOBAL_SOURCES":  "news_global_sources",
     "TRADINGAGENTS_NEWS_REQUEST_TIMEOUT": "news_request_timeout_seconds",
     "TRADINGAGENTS_NEWS_USER_AGENT":      "news_user_agent",
+    "TRADINGAGENTS_SEC_CONTACT_EMAIL":   "news_sec_contact_email",
     # Provider-specific reasoning/thinking knobs (None = each provider's own
     # default). Settable here for non-interactive runs; the CLI also offers an
     # interactive choice, which is skipped when the matching var is set.
@@ -128,6 +129,8 @@ DEFAULT_CONFIG = _apply_env_overrides({
     "news_request_timeout_seconds": 15,
     "news_future_tolerance_minutes": 5,
     "news_user_agent": "TradingAgents/0.3.1 (https://github.com/gaaiyun/TradingAgents)",
+    # SEC fair-access requires a contact address. Keep it runtime-only.
+    "news_sec_contact_email": "",
     "news_sec_forms": "8-K,10-Q,10-K,6-K,20-F,40-F,S-1,DEF 14A",
     # Search queries used by get_global_news for macro headlines. Extend or
     # replace to broaden geographic / sector coverage.

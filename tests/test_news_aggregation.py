@@ -306,6 +306,45 @@ def test_sec_collector_builds_primary_source_item(monkeypatch):
 
 
 @pytest.mark.unit
+def test_sec_collector_adds_runtime_contact_email_to_fair_access_user_agent(monkeypatch):
+    observed = {}
+
+    def ticker_map(timeout, user_agent):
+        observed["ticker_map_user_agent"] = user_agent
+        return {"AAPL": (320193, "Apple Inc.")}
+
+    def get_json(*args, **kwargs):
+        observed.setdefault("request_user_agents", []).append(kwargs["user_agent"])
+        return {
+            "filings": {
+                "recent": {
+                    "form": [],
+                    "accessionNumber": [],
+                    "filingDate": [],
+                },
+            },
+        }
+
+    monkeypatch.setattr(official, "_sec_ticker_map", ticker_map)
+    monkeypatch.setattr(official, "_get_json", get_json)
+    official.fetch_sec_filings(
+        "AAPL",
+        fetched_at=NOW,
+        limit=10,
+        timeout=5,
+        user_agent="TradingWorkbench/1.0",
+        forms={"8-K"},
+        sec_contact_email="researcher@example.com",
+    )
+
+    assert observed["ticker_map_user_agent"].endswith("researcher@example.com")
+    assert all(
+        value.endswith("researcher@example.com")
+        for value in observed["request_user_agents"]
+    )
+
+
+@pytest.mark.unit
 def test_federal_reserve_rss_collector_is_offline_testable(monkeypatch):
     xml = """<?xml version='1.0'?>
     <rss><channel><item>

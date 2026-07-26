@@ -36,6 +36,70 @@ function normalizeOption(row = {}) {
   };
 }
 
+function sellerDesk({ market, risk, exposure, options }) {
+  const ivHvGap = Number.isFinite(risk.ivAverage) && Number.isFinite(risk.hv30)
+    ? risk.ivAverage - risk.hv30
+    : null;
+  const hasGreeks = options.some((row) =>
+    Number.isFinite(row.delta) &&
+    Number.isFinite(row.iv),
+  );
+  const liquid = (row) =>
+    Number.isFinite(row.openInterest) &&
+    Number.isFinite(row.volume) &&
+    row.openInterest > 0 &&
+    row.volume >= 0;
+  const choose = (type, deltaMin, deltaMax) => options
+    .filter((row) =>
+      row.type === type &&
+      liquid(row) &&
+      row.strike !== null &&
+      (hasGreeks
+        ? Number.isFinite(row.delta) &&
+          Math.abs(row.delta) >= deltaMin &&
+          Math.abs(row.delta) <= deltaMax
+        : true),
+    )
+    .sort((left, right) =>
+      (right.openInterest - left.openInterest) ||
+      (right.volume - left.volume),
+    )[0] || null;
+  const put = choose("put", 0.15, 0.3);
+  const call = choose("call", 0.15, 0.3);
+  const warnings = [];
+  if (!hasGreeks) warnings.push("合约未提供 IV/Greeks，不能给出可执行的 Delta 档位");
+  if (!Number.isFinite(ivHvGap)) warnings.push("IV-HV 差值不可用");
+  if (Number.isFinite(exposure.spreadPct) && exposure.spreadPct > 3) {
+    warnings.push("中位买卖价差偏宽，成交质量不足");
+  }
+  if (Number.isFinite(risk.var95) && risk.var95 >= 4) {
+    warnings.push("VaR 较高，卖方尾部风险需要定义风险");
+  }
+  let status = "insufficient_data";
+  let recommendation = "暂不生成卖方方向建议";
+  if (Number.isFinite(ivHvGap)) {
+    if (ivHvGap >= 3) {
+      status = "premium_positive";
+      recommendation = "卖方优先观察：IV 高于 HV，可评估定义风险的价外策略";
+    } else if (ivHvGap <= -3) {
+      status = "premium_negative";
+      recommendation = "不宜裸卖：IV 低于 HV，波动率补偿不足";
+    } else {
+      status = "neutral";
+      recommendation = "波动率中性：等待 IV-HV 优势或更清晰的方向信号";
+    }
+  }
+  return {
+    status,
+    recommendation,
+    ivHvGap,
+    putCandidate: put,
+    callCandidate: call,
+    warnings,
+    disclaimer: "研究提示，不是自动下单或无保护裸卖指令",
+  };
+}
+
 export function normalizeVolguardPayload(payload, {
   mode = "unavailable",
   fallbackReason = "",
@@ -85,7 +149,7 @@ export function normalizeVolguardPayload(payload, {
       ? (["stale", "degraded", "unavailable"].includes(liveQuality) ? liveQuality : "ok")
     : mode === "snapshot" ? "stale" : "unavailable";
 
-  return {
+  const normalized = {
     schemaVersion: finite(payload?.schema_version),
     status,
     mode,
@@ -136,4 +200,6 @@ export function normalizeVolguardPayload(payload, {
     contractCount: finite(exposure.active_contract_count) ?? options.length,
     options,
   };
+  normalized.sellerDesk = sellerDesk(normalized);
+  return normalized;
 }

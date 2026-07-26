@@ -21,7 +21,7 @@ Trading Workbench 是面向 A 股 ETF 研究的多智能体工作台。它把主
 | 研究任务 | 查看和触发当前监控组任务 | 计划时间、启停、下一次执行、运行阶段和失败原因 |
 | 研究档案 | 阅读历史结论 | 13 个角色分栏、审计状态、报告身份和问答上下文 |
 | 新闻/事件 | 查看证据和提醒状态 | 原文链接、发布时间、证据层级、来源轨迹、Web/PushPlus 状态 |
-| 期权风控 | 查看现货和期权风险 | IV/HV、Greeks、GEX/DEX、PCR、Max Pain、VaR、BSADF、双时钟 |
+| 期权风控 | 查看现货和期权风险 | IV/HV、Greeks、GEX/DEX、PCR、Max Pain、VaR、BSADF、卖方策略观察、双时钟 |
 | 设置 | 管理监控组 | 创建、复制、编辑、启停、删除、时区、计划、预算和提醒阈值 |
 
 页面使用石墨灰研究终端样式。A 股红涨绿跌，美股和港股绿涨红跌；健康状态颜色不复用行情颜色。
@@ -76,6 +76,8 @@ flowchart LR
 
 Worker 不运行 pandas、LangGraph、GARCH、BSADF 或长历史回测。VolGuard 保持独立仓库和故障域。
 
+期权页的“卖方策略观察”是确定性风险提示，不是自动下单：当 IV 相对 HV 有足够溢价时才提示“评估定义风险的价外策略”；IV 低于 HV 时明确提示“不宜裸卖”。如果上游没有逐合约 IV/Greeks，则只显示数据不足和流动性警告，不猜 Delta 档位。行情报价每 30 秒刷新，VaR/BSADF/HV 等慢指标按 5 分钟时钟刷新；页面始终分别显示行情时间与指标时间。
+
 ## 行情和复权
 
 | 资产与周期 | 来源顺序 | 口径 |
@@ -86,6 +88,8 @@ Worker 不运行 pandas、LangGraph、GARCH、BSADF 或长历史回测。VolGuar
 | 港股 1d | Yahoo → 最近已验证快照 | 短上市历史如实显示 |
 
 所有动态记录带 `source`、`asOf`、`fetchedAt`、`freshness`、`quality` 和 `adjustment`。连续失败三次的来源暂停十五分钟。
+
+前端请求使用 `cache: no-store`；资讯和行情在页面可见时每 60 秒轮询，期权快层每 30 秒轮询。`scripts/asset-version.mjs` 用 CSS+JS 内容哈希生成缓存版本，CI 的 `npm run check:asset-version` 会阻止静态资源改动后忘记更新 HTML。
 
 复权口径不能互换：
 
@@ -108,6 +112,8 @@ Worker 不运行 pandas、LangGraph、GARCH、BSADF 或长历史回测。VolGuar
 - 发现层：Google News RSS；Cloudflare 出口不可用时，A 股使用东方财富，美股和港股使用 Yahoo Finance RSS。
 
 官方来源标记为 `evidence`，聚合和搜索结果标记为 `discovery`。发现层成功不会跳过官方查询；官方源失败时，本次采集保持 `degraded` 并保存失败码。HTTP 200 但响应结构错误也按失败处理。
+
+Python TradingAgents 的 SEC 客户端使用运行时 `TRADINGAGENTS_SEC_CONTACT_EMAIL`（GitHub Actions secret）构造 fair-access User-Agent；未配置时保留失败轨迹并降级，不把 Yahoo 发现层冒充 SEC evidence。
 
 D1 只保存标题、短摘要、原始发布者、原文链接、发布时间、采集时间、层级、标的和重复簇，不保存付费全文。
 

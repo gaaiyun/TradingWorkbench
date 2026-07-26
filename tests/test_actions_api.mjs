@@ -615,6 +615,56 @@ test("identity APIs keep raw legacy responses unchanged when no selector is supp
   }
 });
 
+test("unscoped latest applies a verified report audit gate", async () => {
+  const originalFetch = globalThis.fetch;
+  const latest = {
+    status: "ok",
+    trade_date: "2026-07-24",
+    results: [
+      {
+        ticker: "GOOD",
+        report: "reports/GOOD/2026-07-24/complete_report.md",
+      },
+      {
+        ticker: "UNVERIFIED",
+        report: "reports/UNVERIFIED/2026-07-24/complete_report.md",
+      },
+    ],
+  };
+  const audit = {
+    reports: [
+      {
+        report: latest.results[0].report,
+        auditStatus: "verified",
+        analysisStatus: "rated",
+        claimValidation: { status: "passed" },
+      },
+      {
+        report: latest.results[1].report,
+        auditStatus: "legacy_unverified",
+        analysisStatus: "insufficient_evidence",
+        claimValidation: { status: "failed" },
+      },
+    ],
+  };
+  globalThis.fetch = async (url) => {
+    if (String(url).endsWith("/data/latest.json")) return Response.json(latest);
+    if (String(url).endsWith("/data/report-audit.json")) return Response.json(audit);
+    return new Response(null, { status: 404 });
+  };
+  try {
+    const response = await getLatest({
+      request: new Request("https://workbench.test/api/latest"),
+    });
+    assert.equal(response.status, 200);
+    const payload = await response.json();
+    assert.deepEqual(payload.results.map((entry) => entry.ticker), ["GOOD"]);
+    assert.equal(payload.evidenceGate.filteredCount, 1);
+  } finally {
+    globalThis.fetch = originalFetch;
+  }
+});
+
 test("profile-scoped report reads require a matching manifest and keep nested report tabs", async () => {
   const originalFetch = globalThis.fetch;
   const reportPath = "reports/SPY/2026-07-25/1_analysts/market.md";

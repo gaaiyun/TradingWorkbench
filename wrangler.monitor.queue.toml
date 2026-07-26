@@ -1,0 +1,31 @@
+# Optional Queue-backed monitor deployment.
+# Keep wrangler.monitor.toml as the default direct-mode deployment until the
+# two queues are provisioned in the account. This file is intentionally
+# separate so a missing/paid Queue product cannot break the direct fallback.
+name = "tradingagents-monitor"
+main = "workers/monitor/src/index.mjs"
+compatibility_date = "2026-07-23"
+
+[triggers]
+crons = ["*/5 * * * *"]
+
+[vars]
+GITHUB_REPOSITORY = "gaaiyun/TradingWorkbench"
+GITHUB_WORKFLOW_ID = "daily-analysis.yml"
+
+[[d1_databases]]
+binding = "DB"
+database_name = "tradingagents-workbench"
+database_id = "0ac720b0-3779-457c-8bee-4168ae43581f"
+migrations_dir = "migrations"
+
+[[queues.producers]]
+binding = "MONITOR_QUEUE"
+queue = "tradingagents-monitor-tasks"
+
+[[queues.consumers]]
+queue = "tradingagents-monitor-tasks"
+max_batch_size = 1
+max_batch_timeout = 5
+max_retries = 3
+dead_letter_queue = "tradingagents-monitor-dlq"

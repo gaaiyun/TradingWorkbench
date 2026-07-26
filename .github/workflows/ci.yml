@@ -26,6 +26,7 @@ jobs:
           npm run test:functions
           npm run test:frontend
           npm run check:workbench
+          npm run check:asset-version
 
   workbench-e2e:
     name: Workbench browser flows

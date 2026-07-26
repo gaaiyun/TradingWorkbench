@@ -7,11 +7,11 @@
   <meta name="color-scheme" content="dark">
   <meta name="description" content="Trading Workbench 多市场研究与风险工作台">
   <title>Trading Workbench · 交易研究工作台</title>
-  <link rel="stylesheet" href="./assets/workbench.css?v=20260726f">
+  <link rel="stylesheet" href="./assets/workbench.css?v=a7771288b84b">
   <script type="importmap">
     { "imports": { "fancy-canvas": "./vendor/fancy-canvas/index.mjs" } }
   </script>
-  <script type="module" src="./assets/workbench.js?v=20260726f"></script>
+  <script type="module" src="./assets/workbench.js?v=a7771288b84b"></script>
 </head>
 <body data-mobile-view="chart" data-route="monitor">
   <a class="skip-link" href="#market-chart">跳到行情图表</a>
@@ -326,6 +326,13 @@
           <div><span>DEX</span><strong>—</strong><small>等待期权链</small></div>
           <div><span>PCR</span><strong>—</strong><small>等待期权链</small></div>
           <div><span>Max Pain</span><strong>—</strong><small>等待期权链</small></div>
+        </div>
+      </section>
+      <section class="workbench-panel options-seller-panel">
+        <header><div><span>SELLER DESK</span><h2>卖方策略观察</h2></div><span id="options-seller-status">等待数据</span></header>
+        <div class="seller-desk" id="options-seller-desk">
+          <strong>等待 IV、HV 与 Greeks</strong>
+          <span>只有数据新鲜且指标覆盖足够时才给出卖方候选；不会用缺失指标编造建议。</span>
         </div>
       </section>
       <section class="workbench-panel options-chain-panel">

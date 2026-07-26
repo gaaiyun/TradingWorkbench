@@ -758,8 +758,42 @@ import {
     </div>`).join("");
   }
 
+  function renderSellerDesk(view) {
+    const desk = view.sellerDesk || {};
+    const statusLabels = {
+      premium_positive: "IV 溢价",
+      premium_negative: "补偿不足",
+      neutral: "中性",
+      insufficient_data: "数据不足",
+    };
+    $("#options-seller-status").textContent = statusLabels[desk.status] || "数据不足";
+    const node = $("#options-seller-desk");
+    node.className = `seller-desk ${
+      desk.status === "premium_positive"
+        ? "is-positive"
+        : desk.status === "premium_negative"
+          ? "is-caution"
+          : ""
+    }`;
+    const candidate = (label, row) => {
+      if (!row) return `${label}：暂无满足流动性条件的候选`;
+      const greek = Number.isFinite(row.delta) ? `Δ ${row.delta.toFixed(2)}` : "Δ 未提供";
+      return `${label}：${row.name || row.code || "合约"} · ${greek} · OI ${formatVolume(row.openInterest)}`;
+    };
+    const warnings = Array.isArray(desk.warnings) && desk.warnings.length
+      ? desk.warnings.join("；")
+      : "指标覆盖与盘口质量满足当前展示条件";
+    node.innerHTML = `
+      <strong>${escapeHtml(desk.recommendation || "暂不生成卖方方向建议")}</strong>
+      <span>IV-HV ${escapeHtml(optionValue(desk.ivHvGap, { digits: 1, suffix: "pp", signed: true }))} · ${escapeHtml(candidate("认沽观察", desk.putCandidate))}</span>
+      <span>${escapeHtml(candidate("认购观察", desk.callCandidate))}</span>
+      <small>${escapeHtml(warnings)} · ${escapeHtml(desk.disclaimer || "研究提示，不是自动下单指令")}</small>
+    `;
+  }
+
   function renderOptions() {
     const view = state.options;
+    renderSellerDesk(view);
     const statusLabels = {
       ok: view.sourceState === "market_closed"
         ? "市场休市 · 行情源正常"

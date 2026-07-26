@@ -325,6 +325,7 @@ Codex 根 task ID：`019f8943-9db3-7c52-88de-0cb3773977ba`
 - 上交所、深交所、巨潮、基金管理人和中证指数的直接适配器仍需补齐。
 - ETF AUM、持仓、份额、费用、跟踪误差和 iNAV 只有取得带时间戳的可靠来源后才能展示。
 - 免费来源可能拒绝 Cloudflare 出口，必须保留 provider 失败轨迹。
+- VolGuard 工作台已保持快报价 30 秒、慢指标 5 分钟的双时钟；卖方策略观察卡只在 IV/HV 覆盖足够时给出“评估/不宜裸卖/中性”提示，缺失 Greeks 时明确不生成 Delta 档位，不能把周末最近收盘误称为实时。
 - 20/60 日跨市场相关性、隔夜传导统计和 Qlib 离线评估仍是后续工作。
 - 系统不连接券商，也不宣称交易所级实时。
 
@@ -335,15 +336,15 @@ Codex 根 task ID：`019f8943-9db3-7c52-88de-0cb3773977ba`
 | # | 缺陷 | 位置 | 说明 |
 |---|---|---|---|
 | 1 | ~~`evidence_packet.json` 写出了非法 JSON `NaN`~~ **已修复，勿重复处理** | `public/reports/MSFT/2026-07-24/evidence_packet.json:12576` | 该文件确实含字面量 `NaN`，Node `JSON.parse` 抛错（.NET 容忍，PowerShell 检查不出来），被判 `invalidated / INVALID_EVIDENCE_PACKET`。**但代码侧的根因已于 2026-07-26 由 `ed6acb7`「fix(证据): 阻断非有限行情并校验报告文件」修复**：`tradingagents/evidence.py:51`、`tradingagents/reporting.py:366/396` 均已加 `allow_nan=False`，上游另有 `evidence.py:79`、`scripts/run_daily.py:402/572` 的 `math.isfinite` 拦截。MSFT 那份报告提交于 2026-07-25（`2e3cd23`），**早于修复**，属修复前的遗留数据产物，不是活跃缺陷。全仓库仅此一处 |
-| 2 | **Queue 消费路径不可达** | `wrangler.monitor.toml` | `index.mjs` 完整实现了 `worker.queue()` / `runQueueBatch()` / `selectFairWorkWithinBudget`，但配置文件里没有任何 `[[queues.producers]]` / `[[queues.consumers]]` 绑定 `MONITOR_QUEUE`，只有 D1。调度器恒走 direct 模式。若 Queue 是在 Dashboard 手工加的，则属于基础设施配置漂移未落 IaC |
-| 3 | **`/health` 新闻 provider 查询超时仅 10ms** | `workers/monitor/src/index.mjs:214` | `HEALTH_QUERY_TIMEOUT_MS = 10`。对 D1 冷启动/跨区域是极紧的阈值，超时即整体回退成 `unavailable`。如果观察到 `newsProviders.status` 常年 unavailable 但表里数据正常，根因在这里 |
-| 4 | **"最新观点"路径没有第二道门禁** | `functions/api/latest.js`、`history.js` | 只按 identity selector 过滤，完全信任 Python 生成的 `latest.json` 已排除未过审报告；不像 `_chat.mjs:565` 那样复核 `auditStatus`/`claimValidation`。上游若误写脏数据，前端会直接展示 |
+| 2 | ~~**Queue 消费路径不可达**~~ **已补齐可审计 IaC，默认仍安全走 direct** | `wrangler.monitor.queue.toml` | 新增可选 Queue 配置，显式绑定 `MONITOR_QUEUE`、批大小、重试和 DLQ；默认 `wrangler.monitor.toml` 不会在未确认账户套餐/队列已创建时强行启用，避免基础设施漂移和意外计费 |
+| 3 | ~~**`/health` 新闻 provider 查询超时仅 10ms**~~ **已修复** | `workers/monitor/src/index.mjs` | 默认提升到 50ms，并允许运行时在 10–250ms 内覆盖；仍保持有界查询，减少冷启动/跨区域 D1 造成的假 unavailable |
+| 4 | ~~**"最新观点"路径没有第二道门禁**~~ **已修复** | `functions/api/latest.js` | 无 selector 的首页路径并行读取 `latest.json` 与 `report-audit.json`，只放行 `verified + rated + claimValidation=passed`；审计索引不可用时 fail-closed，不把未审报告当最新观点 |
 | 5 | **`report-audit.mjs` 的失效名单是硬编码** | `scripts/report-audit.mjs:7-11` | `INVALIDATED_REPORTS` 是人工维护的 3 条路径黑名单。新出现的同类污染报告若无人手动加入，只能靠动态一致性检查兜底，两种机制覆盖面不重叠 |
 | 6 | **claim validation 的价格目标/仓位检查仍是无条件关键词匹配** | `tradingagents/reporting.py` | `_PRICE_TARGET_RE` / `_ALLOCATION_RE` 仍不检查附近是否真给了方法论或用户约束。报告写"我们不设目标价"同样会被判违规。文档措辞暗示这是有条件判断，实际不是——**想靠"补一段方法论说明"过门禁是行不通的**。数字主张的结构性误报已在本轮修复：日期、时间戳、标的代码、哈希、Markdown 标题序号和指标参数不再被当作研究数字；剩余价格、比例和指标读数仍需 Evidence ID。 |
 | 7 | **CLI 产出物完全在 Evidence 门禁体系之外** | `cli/main.py` | 不传 `evidence_packet`、绕过 `TradingAgentsGraph.propagate()`，产出报告的 `analysisStatus` 恒为 `not_rated`、`auditStatus` 恒为 `legacy_unverified`。想复现"如何让报告变 verified"必须走 `scripts/run_daily.py` |
-| 8 | **Python 侧 SEC 客户端缺 fair-access 联系邮箱** | `tradingagents/dataflows/official_news.py` | User-Agent 默认值不含邮箱，且无 workflow 覆盖 `TRADINGAGENTS_NEWS_USER_AGENT`。SEC.gov 要求 UA 带联系方式，这条源在生产里可能一直静默失效（失败被 `_collect_source` 吞掉降级）。Worker 侧走 `SEC_CONTACT_EMAIL`，不受影响 |
+| 8 | **Python 侧 SEC 客户端需运行时 fair-access 联系邮箱** | `tradingagents/dataflows/official_news.py` | 已加入 `TRADINGAGENTS_SEC_CONTACT_EMAIL` / `news_sec_contact_email`，只在运行时将合规邮箱附加到 SEC UA；仓库不保存个人邮箱。GitHub Actions 仍需用户创建同名 secret，缺失时保持失败并由 discovery 降级，不伪装成 evidence |
 | 9 | **`sec-edgar-8k` 是死代码** | `workers/monitor/src/news-collector.mjs:276-304` | `parseSecEdgarAtom()` 完整实现且在 `EVIDENCE_PROVIDERS` 里声明，但 `providerCandidates()` 从不产出该 source。实际只用 `sec-edgar-submissions`。会让人误以为有两条 SEC 通道 |
-| 10 | **前端缓存靠手工版本号** | `public/index.html` | `?v=20260726f` 是人工字符串不是内容哈希。改了 JS 忘记同步递增会继续伺服旧版本，且没有任何自动化能发现（`check:workbench` 只做 `node --check` 语法检查） |
+| 10 | ~~**前端缓存靠手工版本号**~~ **已修复** | `scripts/asset-version.mjs`、`public/index.html` | 版本号改为 CSS+JS 内容哈希；`npm run check:asset-version` 在 CI 阻止漏更新，`npm run update:asset-version` 负责同步 |
 | 11 | **行情与新闻的 provider 重名** | `providers/adapters.mjs` vs `news-collector.mjs` | `eastmoney`/`yahoo` 在两套体系里各有一份独立实现，健康状态分别记在 `source_health` 和 `monitor_news_provider_health` 两张表。排障时容易把"行情东财挂了"和"新闻东财挂了"搞混 |
 
 ### 12.2 文档陈旧项
@@ -441,3 +442,4 @@ gh workflow run deploy-monitor.yml --repo gaaiyun/TradingWorkbench --ref main
 | 2026-07-26 | 初版交接文档 | Codex 根会话 `019f8943` 收尾 |
 | 2026-07-26 | 第二次核查修订：新增 §0 维护约定、§1.5 生产状态真相、§12.1 代码级缺陷、§12.2 文档陈旧项、§15 接手顺序、§16 本表；修正 §1 与 §6 把"已合入"当"已上线"的表述；§11 改为链接开发史；新建 [PROJECT_HISTORY.md](PROJECT_HISTORY.md) | Claude Code 六路并行独立核查（Cloudflare 代码 / Python 与 CI / 全套文档 / Codex 历史 / Claude 历史 / GitHub 与生产端点），关键结论均已二次人工复核 |
 | 2026-07-26 | 修复数字引用判定的结构性误报；对当前三份 `-v4` 报告重新计算 Manifest 与审计索引 | Claude 断线审计会话完整解析 249 条记录；逐段实测：`515880.SS 179→117`、`512480.SS 128→84`、`3887.HK 169→108`；保留剩余真实价格、比例和指标读数的 Evidence 门禁 |
+| 2026-07-26 | 收尾部署与数据门禁：最新观点增加 verified-only 二次审计；Worker `/health` 查询默认 50ms；新增可选 Queue/DLQ IaC；Python SEC UA 支持运行时联系邮箱；前端 CSS/JS 改用内容哈希缓存；期权页新增卖方策略观察与缺失指标警告；资讯标题去重增强 | 代码测试、生产 VolGuard `/api/live` 现场核验与远程 D1 migrations list；待 GitHub secret `TRADINGAGENTS_SEC_CONTACT_EMAIL` 与 Cloudflare API token 由仓库主人补齐 |

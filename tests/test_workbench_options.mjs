@@ -131,6 +131,9 @@ test("edge live schema merges fast quotes with slow risk metrics", () => {
   assert.equal(view.exposure.maxPain, 3.1);
   assert.equal(view.contractCount, 92);
   assert.equal(view.options[0].type, "call");
+  assert.equal(view.sellerDesk.status, "premium_positive");
+  assert.match(view.sellerDesk.recommendation, /IV 高于 HV/);
+  assert.equal(view.sellerDesk.putCandidate, null);
 });
 
 test("legacy snapshots degrade explicitly without inventing unavailable Greeks", () => {

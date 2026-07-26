@@ -165,7 +165,7 @@ def _collect_source(
     )
 
 
-def _common_settings(config: dict) -> tuple[int, str, int]:
+def _common_settings(config: dict) -> tuple[int, str, int, str]:
     timeout = max(1, int(config.get("news_request_timeout_seconds", 15)))
     user_agent = str(
         config.get(
@@ -174,7 +174,8 @@ def _common_settings(config: dict) -> tuple[int, str, int]:
         )
     ).strip()
     future_minutes = max(0, int(config.get("news_future_tolerance_minutes", 5)))
-    return timeout, user_agent, future_minutes
+    sec_contact_email = str(config.get("news_sec_contact_email", "")).strip()
+    return timeout, user_agent, future_minutes, sec_contact_email
 
 
 def aggregate_ticker_news(
@@ -191,7 +192,7 @@ def aggregate_ticker_news(
     validate_news_window(start_date, end_date, window_timezone)
     fetched_at = ensure_utc(now or utc_now())
     limit = max(0, int(config.get("news_article_limit", 20)))
-    timeout, user_agent, future_minutes = _common_settings(config)
+    timeout, user_agent, future_minutes, sec_contact_email = _common_settings(config)
     sources = _configured_sources(config, "news_ticker_sources", "yfinance,google_news,sec")
     forms = {
         form.strip().upper()
@@ -248,6 +249,7 @@ def aggregate_ticker_news(
                 timeout=timeout,
                 user_agent=user_agent,
                 forms=forms,
+                sec_contact_email=sec_contact_email,
                 start_date=start_date,
                 end_date=end_date,
                 window_timezone=window_timezone,
@@ -325,7 +327,7 @@ def aggregate_global_news(
     start_date = (curr_dt - timedelta(days=look_back_days)).strftime("%Y-%m-%d")
     fetched_at = ensure_utc(now or utc_now())
     window_timezone = "UTC"
-    timeout, user_agent, future_minutes = _common_settings(config)
+    timeout, user_agent, future_minutes, _sec_contact_email = _common_settings(config)
     sources = _configured_sources(
         config,
         "news_global_sources",

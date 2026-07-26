@@ -211,7 +211,10 @@ const MANUAL_COLLECTION_TASKS = new Set([
   "newsCollect",
 ]);
 
-const HEALTH_QUERY_TIMEOUT_MS = 10;
+// Keep /health bounded, but allow a cold D1 read to complete. Ten
+// milliseconds turned normal cross-region reads into false "unavailable"
+// states; the upper bound still keeps the endpoint cheap for probes.
+const HEALTH_QUERY_TIMEOUT_MS = 50;
 const HEALTH_PROVIDER_LIMIT = 32;
 const DIRECT_EXTERNAL_REQUEST_LIMIT = 32;
 const QUEUE_DISCOVERY_LIMIT = 10;
@@ -342,7 +345,7 @@ function deploymentIdentity(env) {
   };
 }
 
-async function readNewsProviderHealth(db) {
+async function readNewsProviderHealth(db, configuredTimeoutMs = HEALTH_QUERY_TIMEOUT_MS) {
   if (!db?.prepare) return unavailableNewsProviders();
   const timedOut = Symbol("health-query-timeout");
   let timer;
@@ -353,12 +356,16 @@ async function readNewsProviderHealth(db) {
       ORDER BY source ASC
       LIMIT ?
     `).bind(HEALTH_PROVIDER_LIMIT).all();
+    const timeoutMs = Math.min(
+      250,
+      Math.max(10, Number(configuredTimeoutMs) || HEALTH_QUERY_TIMEOUT_MS),
+    );
     const result = await Promise.race([
       query,
       new Promise((resolve) => {
         timer = setTimeout(
           () => resolve(timedOut),
-          HEALTH_QUERY_TIMEOUT_MS,
+          timeoutMs,
         );
       }),
     ]);
@@ -1056,7 +1063,10 @@ export async function handleFetch(request, env, deps = {}) {
       ok: true,
       service: "monitor-worker",
       deployment: deploymentIdentity(env),
-      newsProviders: await readNewsProviderHealth(env?.DB),
+      newsProviders: await readNewsProviderHealth(
+        env?.DB,
+        env?.HEALTH_QUERY_TIMEOUT_MS,
+      ),
     });
   }
   if (url.pathname !== "/run-collection" || request.method !== "POST") {

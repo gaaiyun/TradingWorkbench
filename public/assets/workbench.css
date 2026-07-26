@@ -373,6 +373,13 @@ a { color: inherit; }
 .option-status-strip b { color: var(--muted); font: 500 9px "IBM Plex Mono", Consolas, monospace; }
 .options-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px; }
 .options-chain-panel { grid-column: 1 / -1; min-height: 390px; }
+.seller-desk { min-height: 126px; padding: 18px 14px; }
+.seller-desk strong, .seller-desk span, .seller-desk small { display: block; }
+.seller-desk strong { color: var(--text); font-size: 14px; line-height: 1.5; }
+.seller-desk span { margin-top: 8px; color: var(--muted); font-size: 10px; line-height: 1.6; }
+.seller-desk small { margin-top: 10px; color: var(--quiet); font: 8px/1.6 "IBM Plex Mono", Consolas, monospace; }
+.seller-desk.is-caution strong { color: var(--negative); }
+.seller-desk.is-positive strong { color: var(--positive); }
 .metric-row { display: grid; grid-template-columns: repeat(4, 1fr); min-height: 126px; }
 .metric-row > div { padding: 18px 14px; border-right: 1px solid var(--line); }
 .metric-row > div:last-child { border-right: 0; }

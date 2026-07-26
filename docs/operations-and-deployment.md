@@ -58,6 +58,8 @@ Worker vars：
 
 GitHub repository variable `MONITOR_WORKER_URL` 用于部署后 SHA 验证。`deploy-monitor` 缺 Cloudflare 凭据、account ID 或该 URL 时直接失败。
 
+GitHub Actions 的 Python 深度研究另需 secret `TRADINGAGENTS_SEC_CONTACT_EMAIL`。它只用于构造 SEC EDGAR 的合规 User-Agent，不会写入报告、D1 或日志；缺失时 SEC 仍按失败轨迹降级到发现层。
+
 当前 PushPlus 只运行 shadow 策略。即使环境中存在 `PUSHPLUS_TOKEN`，现有信号写入路径也不会 live 发送。
 
 ## 3. 发布前检查
@@ -72,6 +74,7 @@ git rev-parse HEAD
 npm run test:functions
 npm run test:frontend
 npm run check:workbench
+npm run check:asset-version
 
 G:\venvs\tradingworkbench-report-evidence\Scripts\python.exe -m ruff check .
 G:\venvs\tradingworkbench-report-evidence\Scripts\python.exe -m pytest -q
@@ -171,6 +174,22 @@ if ($workerHealth.deployment.deployedAt -eq "unknown") {
 ```
 
 顶层 `ok=true` 只说明 health handler 可响应。还要检查 `newsProviders.status` 和每个 provider 的成功、失败时间与错误码。
+
+默认 `/health` 的 D1 provider 查询超时为 50ms，可用 `HEALTH_QUERY_TIMEOUT_MS` 在 10–250ms 内覆盖。它是有界探针，不代表整个 Worker 运行时间。
+
+### 5.2.1 Queue（可选）
+
+Worker 代码已经支持队列消费、幂等去重、批次重试和 DLQ，但默认部署保持 direct 模式，以免在未确认 Cloudflare Queue 计费/配额前自动创建资源。队列配置已落在 `wrangler.monitor.queue.toml`：
+
+```powershell
+npx --yes wrangler@4.113.0 queues create tradingagents-monitor-tasks
+npx --yes wrangler@4.113.0 queues create tradingagents-monitor-dlq
+npx --yes wrangler@4.113.0 deploy --config wrangler.monitor.queue.toml `
+  --var "WORKER_COMMIT_SHA:$workerCommit" `
+  --var "WORKER_DEPLOYED_AT:$workerDeployedAt"
+```
+
+只有确认账户已开通 Queue 且希望启用异步消费时才使用该配置；否则继续用 `wrangler.monitor.toml`，调度器的 direct fallback、租约和 attempt fencing 不变。
 
 ### 5.3 部署 Workbench Pages
 

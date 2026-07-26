@@ -202,7 +202,13 @@ function feedGroupKey(item, index) {
   if (cluster) return `${type}:cluster:${cluster}`;
   const url = String(item?.url || "").trim().toLowerCase();
   if (url) return `${type}:url:${url}`;
-  const title = String(item?.title || "").replace(/\s+/g, " ").trim().toLowerCase();
+  const title = String(item?.title || "")
+    .replace(/\s+/g, " ")
+    .trim()
+    .toLowerCase()
+    // Aggregators often vary only punctuation/spacing per symbol.  Collapse
+    // that presentation noise so one story remains one evidence row.
+    .replace(/[^\p{L}\p{N}]+/gu, "");
   if (title) return `${type}:title:${title}`;
   return `${type}:row:${String(item?.id || index)}`;
 }

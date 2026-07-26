@@ -1134,6 +1134,13 @@ test("monitor wrangler config uses five-minute cron and the same deployed D1 bin
     /database_name\s*=\s*"([^"]+)"/.exec(monitor)[1],
     /database_name\s*=\s*"([^"]+)"/.exec(pages)[1],
   );
+  const queueConfig = readFileSync(
+    new URL("../wrangler.monitor.queue.toml", import.meta.url),
+    "utf8",
+  );
+  assert.match(queueConfig, /binding\s*=\s*"MONITOR_QUEUE"/);
+  assert.match(queueConfig, /queue\s*=\s*"tradingagents-monitor-tasks"/);
+  assert.match(queueConfig, /dead_letter_queue\s*=\s*"tradingagents-monitor-dlq"/);
 });
 
 test("dedicated monitor deployment fails closed and verifies the online commit", () => {

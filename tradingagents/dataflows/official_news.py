@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import html
+import os
 import re
 from datetime import datetime
 from functools import lru_cache
@@ -29,6 +30,26 @@ _NON_US_SUFFIXES = (
     ".T",
     ".TO",
 )
+
+
+def sec_user_agent(user_agent: str, contact_email: str | None = None) -> str:
+    """Return an EDGAR fair-access User-Agent without exposing the email.
+
+    SEC requires an identifying contact address.  The address is deliberately
+    supplied through runtime configuration (or ``TRADINGAGENTS_SEC_CONTACT_EMAIL``)
+    rather than committed to the repository.
+    """
+    base = str(user_agent or "").strip()
+    email = str(
+        contact_email
+        if contact_email is not None
+        else os.getenv("TRADINGAGENTS_SEC_CONTACT_EMAIL", "")
+    ).strip()
+    if not re.fullmatch(r"[^@\s]+@[^@\s]+\.[^@\s]+", email):
+        return base
+    if email.casefold() in base.casefold():
+        return base
+    return f"{base} {email}".strip()
 
 
 def _get_json(url: str, *, timeout: int, user_agent: str) -> dict:
@@ -88,6 +109,7 @@ def fetch_sec_filings(
     timeout: int,
     user_agent: str,
     forms: set[str],
+    sec_contact_email: str | None = None,
     start_date: str | None = None,
     end_date: str | None = None,
     window_timezone: str = "UTC",
@@ -100,6 +122,7 @@ def fetch_sec_filings(
     sec_symbol = _sec_symbol(ticker)
     if sec_symbol is None:
         return []
+    user_agent = sec_user_agent(user_agent, sec_contact_email)
     mapping = _sec_ticker_map(timeout, user_agent)
     match = mapping.get(sec_symbol)
     if match is None:
