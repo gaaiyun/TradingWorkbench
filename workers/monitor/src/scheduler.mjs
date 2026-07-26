@@ -354,6 +354,15 @@ export function estimateTaskExternalRequests(profile, task) {
   }
   if (task.type === "newsCollect") return 21;
   if (task.type === "closeFullAnalysis") return 2;
+  if (task.type === "intradaySignal") {
+    return Math.max(
+      1,
+      selectedTargets.filter((target) =>
+        target.market === "CN" &&
+        (target.role === "core" || target.role === "comparison")).length,
+    );
+  }
+  if (task.type === "premarketBrief") return 1;
   return 0;
 }
 
@@ -382,7 +391,12 @@ export function splitTaskWithinRequestLimit(
     MAX_SCHEDULED_EXTERNAL_REQUESTS,
     Math.floor(Number(requestLimit) || MAX_SCHEDULED_EXTERNAL_REQUESTS),
   ));
+  const selectedSymbols = Array.isArray(task?.targetSymbols)
+    ? new Set(task.targetSymbols)
+    : null;
   const targets = profile.targets
+    .filter((target) =>
+      !selectedSymbols || selectedSymbols.has(target.symbol))
     .map((target) => ({
       target,
       cost: targetExternalRequestCost(task.type, target),
@@ -446,27 +460,48 @@ export function selectFairWorkWithinBudget(work, options = {}) {
     ...profileIds.slice(rotation),
     ...profileIds.slice(0, rotation),
   ];
-  const selected = [];
-  const deferred = [];
-  let estimatedExternalRequests = 0;
+  const ordered = [];
   let remaining = work.length;
   while (remaining > 0) {
     let progressed = false;
     for (const profileId of orderedIds) {
       const group = groups.get(profileId);
       if (group.length === 0) continue;
-      const item = group.shift();
+      ordered.push(group.shift());
       remaining -= 1;
-      const cost = estimateTaskExternalRequests(item.profile, item.task);
-      if (estimatedExternalRequests + cost <= budget) {
-        selected.push(item);
-        estimatedExternalRequests += cost;
-      } else {
-        deferred.push(item);
-      }
       progressed = true;
     }
     if (!progressed) break;
+  }
+  const candidates = options.preserveOrder ? [...work] : ordered;
+  const maxTasks = Math.min(
+    MAX_SCHEDULED_EXTERNAL_REQUESTS,
+    Math.max(
+      0,
+      Math.floor(Number(
+        options.maxTasks ?? MAX_SCHEDULED_EXTERNAL_REQUESTS,
+      )),
+    ),
+  );
+  const selected = [];
+  const deferred = [];
+  let estimatedExternalRequests = 0;
+  for (let index = 0; index < candidates.length; index += 1) {
+    const item = candidates[index];
+    const cost = estimateTaskExternalRequests(item.profile, item.task);
+    if (
+      selected.length < maxTasks &&
+      estimatedExternalRequests + cost <= budget
+    ) {
+      selected.push(item);
+      estimatedExternalRequests += cost;
+      continue;
+    }
+    deferred.push(item);
+    if (options.stopOnBudgetExhaustion) {
+      deferred.push(...candidates.slice(index + 1));
+      break;
+    }
   }
   return {
     selected,

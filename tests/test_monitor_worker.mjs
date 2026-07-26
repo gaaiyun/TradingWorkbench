@@ -403,7 +403,7 @@ test("fourteen-target collection shards drain without duplicate target writes or
     },
   );
   assert.equal(first.externalRequestBudget, 32);
-  assert.equal(first.capped, 1);
+  assert.equal(first.capped, 2);
   const second = await runScheduled(
     scheduledTime,
     { DB: db, DIRECT_EXTERNAL_REQUEST_BUDGET: "40" },
@@ -419,6 +419,80 @@ test("fourteen-target collection shards drain without duplicate target writes or
     [...db.slots.values()].filter((row) =>
       row.slot_type === "intradayCollect" &&
       ["pending", "queued", "failed", "claimed"].includes(row.status)).length,
+    0,
+  );
+});
+
+test("fourteen-target bootstrap keeps a stable remaining shard across cron ticks", async () => {
+  const { runScheduled } = await import(workerUrl);
+  const targets = Array.from({ length: 14 }, (_, index) => ({
+    symbol: `${510100 + index}.SS`,
+    name: `Bootstrap ETF ${index}`,
+    market: "CN",
+    role: index === 0 ? "core" : "comparison",
+    analysis: "signal",
+  }));
+  const settings = monitorSettings({ targets });
+  const profile = settings.profiles[0];
+  const db = new WorkerD1(settings, { barCount: 0 });
+  const requirements = await bootstrapRequirementsForProfile(
+    profile,
+    new Set(),
+  );
+  db.bootstrapRows.push(...requirements
+    .filter(({ taskType }) => taskType !== "intradayCollect")
+    .map((requirement) => ({
+      profile_id: requirement.profileId,
+      symbol: requirement.symbol,
+      timeframe: requirement.timeframe,
+      schema_version: requirement.schemaVersion,
+      target_hash: requirement.targetHash,
+    })));
+  const requests = [];
+  const deps = {
+    registryFactory: () => ({
+      fetchMarketData: async (request) => {
+        requests.push(request);
+        return {
+          status: "ok",
+          source: "wire",
+          bars: [barFor(request)],
+          sources: [{ source: "wire", status: "success", reason: null }],
+        };
+      },
+    }),
+  };
+  const scheduledTime = Date.parse("2026-07-23T18:20:00.000Z");
+  const first = await runScheduled(
+    scheduledTime,
+    { DB: db },
+    {
+      ...deps,
+      now: () => new Date("2026-07-23T18:20:00.000Z"),
+    },
+  );
+  assert.equal(first.capped, 1);
+  assert.equal(requests.length, 10);
+
+  const second = await runScheduled(
+    scheduledTime,
+    { DB: db },
+    {
+      ...deps,
+      now: () => new Date("2026-07-23T18:25:00.000Z"),
+    },
+  );
+  assert.equal(second.capped, 0);
+  assert.equal(requests.length, 14);
+  assert.equal(new Set(requests.map(({ symbol }) => symbol)).size, 14);
+  assert.equal(
+    [...db.slots.values()].filter(({ slot_type: type }) =>
+      type === "intradayCollect").length,
+    2,
+  );
+  assert.equal(
+    [...db.slots.values()].filter(({ status }) =>
+      ["pending", "queued", "failed", "claimed"].includes(status)).length,
     0,
   );
 });
@@ -866,6 +940,72 @@ test("protected manual collection backfills configured CN daily targets", async 
   ]);
 });
 
+test("protected manual market collection resumes the remaining target shard by cursor", async () => {
+  const { handleFetch } = await import(workerUrl);
+  const targets = Array.from({ length: 14 }, (_, index) => ({
+    symbol: `${512000 + index}.SS`,
+    name: `Manual ETF ${index}`,
+    market: "CN",
+    role: index === 0 ? "core" : "comparison",
+    analysis: "signal",
+  }));
+  const env = {
+    DB: new WorkerD1(monitorSettings({ targets })),
+    MONITOR_RUN_TOKEN: "monitor-secret",
+  };
+  const requests = [];
+  const deps = {
+    registryFactory: () => ({
+      fetchMarketData: async (request) => {
+        requests.push(request);
+        return {
+          status: "ok",
+          source: "wire",
+          bars: [barFor(request)],
+          sources: [{ source: "wire", status: "success", reason: null }],
+        };
+      },
+    }),
+  };
+  const first = await handleFetch(
+    new Request(
+      "https://monitor.example/run-collection?task=cnDailySnapshot&limit=32",
+      {
+        method: "POST",
+        headers: { authorization: "Bearer monitor-secret" },
+      },
+    ),
+    env,
+    deps,
+  );
+  const firstPayload = await first.json();
+  assert.equal(first.status, 200);
+  assert.equal(requests.length, 10);
+  assert.equal(firstPayload.processed, 1);
+  assert.equal(firstPayload.nextCursor, 1);
+  assert.equal(firstPayload.backlog, 1);
+
+  const second = await handleFetch(
+    new Request(
+      `https://monitor.example/run-collection?task=cnDailySnapshot&cursor=${
+        firstPayload.nextCursor
+      }`,
+      {
+        method: "POST",
+        headers: { authorization: "Bearer monitor-secret" },
+      },
+    ),
+    env,
+    deps,
+  );
+  const secondPayload = await second.json();
+  assert.equal(second.status, 200);
+  assert.equal(requests.length, 14);
+  assert.equal(new Set(requests.map(({ symbol }) => symbol)).size, 14);
+  assert.equal(secondPayload.nextCursor, null);
+  assert.equal(secondPayload.backlog, 0);
+});
+
 test("protected manual news collection reports discovery query counts", async () => {
   const { handleFetch } = await import(workerUrl);
   let receivedProfile;
@@ -902,6 +1042,74 @@ test("protected manual news collection reports discovery query counts", async ()
   assert.deepEqual(payload.counts, { targets: 3, succeeded: 3, failed: 0 });
   assert.equal(payload.written, 12);
   assert.equal(payload.status, "degraded");
+});
+
+test("protected manual news collection pages eight profiles within one bounded request", async () => {
+  const { handleFetch } = await import(workerUrl);
+  const template = monitorSettings().profiles[0];
+  const settings = {
+    version: 2,
+    profiles: Array.from({ length: 8 }, (_, index) => ({
+      ...structuredClone(template),
+      id: `profile-${index}`,
+    })),
+  };
+  const env = {
+    DB: new WorkerD1(settings),
+    MONITOR_RUN_TOKEN: "monitor-secret",
+  };
+  const collectedProfiles = [];
+  const deps = {
+    collectNews: async ({ profile }) => {
+      collectedProfiles.push(profile.id);
+      return {
+        status: "completed",
+        written: 0,
+        counts: { queries: 21, succeeded: 21, failed: 0, items: 0 },
+        sources: [],
+      };
+    },
+  };
+  const first = await handleFetch(
+    new Request(
+      "https://monitor.example/run-collection?task=newsCollect&limit=8",
+      {
+        method: "POST",
+        headers: { authorization: "Bearer monitor-secret" },
+      },
+    ),
+    env,
+    deps,
+  );
+  const firstPayload = await first.json();
+  assert.equal(first.status, 200);
+  assert.deepEqual(collectedProfiles, ["profile-0"]);
+  assert.equal(firstPayload.limit, 8);
+  assert.equal(firstPayload.cursor, 0);
+  assert.equal(firstPayload.nextCursor, 1);
+  assert.equal(firstPayload.backlog, 7);
+  assert.equal(firstPayload.processed, 1);
+  assert.equal(firstPayload.estimatedWorkUnits, 21);
+
+  const second = await handleFetch(
+    new Request(
+      `https://monitor.example/run-collection?task=newsCollect&limit=8&cursor=${
+        firstPayload.nextCursor
+      }`,
+      {
+        method: "POST",
+        headers: { authorization: "Bearer monitor-secret" },
+      },
+    ),
+    env,
+    deps,
+  );
+  const secondPayload = await second.json();
+  assert.equal(second.status, 200);
+  assert.deepEqual(collectedProfiles, ["profile-0", "profile-1"]);
+  assert.equal(secondPayload.cursor, 1);
+  assert.equal(secondPayload.nextCursor, 2);
+  assert.equal(secondPayload.backlog, 6);
 });
 
 test("monitor wrangler config uses five-minute cron and the same deployed D1 binding", () => {

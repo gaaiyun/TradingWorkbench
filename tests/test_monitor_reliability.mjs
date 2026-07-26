@@ -487,6 +487,76 @@ test("direct fallback uses real upper bounds, clamps at forty, and shards fourte
   assert.notEqual(first.selected[0].profile.id, second.selected[0].profile.id);
 });
 
+test("selector budgets signal D1 work and caps two hundred zero-fetch tasks fairly", async () => {
+  const {
+    estimateTaskExternalRequests,
+    selectFairWorkWithinBudget,
+  } = await import(schedulerUrl);
+  const template = monitorSettings().profiles[0];
+  const profiles = Array.from({ length: 14 }, (_, profileIndex) => ({
+    ...structuredClone(template),
+    id: `profile-${String(profileIndex).padStart(2, "0")}`,
+    targets: Array.from({ length: 14 }, (_, targetIndex) => ({
+      symbol: `${profileIndex}-${targetIndex}.SS`,
+      name: `Target ${profileIndex}-${targetIndex}`,
+      market: "CN",
+      role: targetIndex === 0 ? "core" : "comparison",
+      analysis: "signal",
+    })),
+  }));
+  const signalWork = Array.from({ length: 200 }, (_, index) => {
+    const profile = profiles[index % profiles.length];
+    return {
+      id: `signal-${index}`,
+      profile,
+      task: {
+        type: "intradaySignal",
+        scheduledFor: new Date(
+          Date.parse("2026-07-23T01:30:00.000Z") + index * 60_000,
+        ).toISOString(),
+      },
+    };
+  });
+  assert.equal(
+    estimateTaskExternalRequests(signalWork[0].profile, signalWork[0].task),
+    14,
+  );
+  assert.equal(
+    estimateTaskExternalRequests(profiles[0], { type: "premarketBrief" }),
+    1,
+  );
+
+  const signals = selectFairWorkWithinBudget(signalWork, {
+    externalRequestBudget: 32,
+  });
+  assert.equal(signals.selected.length, 2);
+  assert.equal(signals.deferred.length, 198);
+  assert.ok(signals.estimatedExternalRequests <= 32);
+  assert.equal(
+    new Set(signals.selected.map(({ profile }) => profile.id)).size,
+    2,
+  );
+  assert.deepEqual(
+    new Set(signals.deferred.map(({ profile }) => profile.id)),
+    new Set(profiles.map(({ id }) => id)),
+  );
+
+  const briefs = selectFairWorkWithinBudget(
+    Array.from({ length: 200 }, (_, index) => ({
+      id: `brief-${index}`,
+      profile: profiles[index % profiles.length],
+      task: { type: "premarketBrief" },
+    })),
+    { externalRequestBudget: 40 },
+  );
+  assert.equal(briefs.selected.length, 32);
+  assert.equal(briefs.deferred.length, 168);
+  assert.equal(
+    new Set(briefs.selected.map(({ profile }) => profile.id)).size,
+    profiles.length,
+  );
+});
+
 test("backlog SQL admits B before a two-hundred-row A prefix can starve it", async () => {
   const { listRetryableSlots } = await import(slotsUrl);
   const sqlite = reliabilityDatabase();

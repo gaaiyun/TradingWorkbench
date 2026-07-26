@@ -128,16 +128,30 @@ async function bootstrapTasks(profile, scheduledTime, completedIdentities) {
   const scheduledFor = new Date(scheduledTime).toISOString();
   const tasks = [];
   for (const [type, group] of grouped) {
-    const hash = await shortHash(
-      group.map(({ identity }) => identity).sort().join("\n"),
-    );
-    tasks.push({
+    const baseTask = {
       type,
       schedule: `bootstrap/${type}`,
-      localSlot: `bootstrap-v2-${type}-${hash}`,
+      localSlot: `bootstrap-v2-${type}`,
       scheduledFor,
+      targetSymbols: [...new Set(group.map(({ symbol }) => symbol))],
       bootstrapRequirements: group,
-    });
+    };
+    for (const shard of splitTaskWithinRequestLimit(
+      profile,
+      baseTask,
+      MAX_SCHEDULED_EXTERNAL_REQUESTS,
+    )) {
+      const hash = await shortHash(
+        shard.bootstrapRequirements
+          .map(({ identity }) => identity)
+          .sort()
+          .join("\n"),
+      );
+      tasks.push({
+        ...shard,
+        localSlot: `bootstrap-v2-${type}-${hash}`,
+      });
+    }
   }
   return tasks;
 }
@@ -203,6 +217,7 @@ const DIRECT_EXTERNAL_REQUEST_LIMIT = 32;
 const QUEUE_DISCOVERY_LIMIT = 10;
 const QUEUE_CONSUMER_BATCH_LIMIT = 1;
 const BOOTSTRAP_PROFILES_PER_TICK = 1;
+const MANUAL_COLLECTION_TASK_LIMIT = 32;
 
 function stableNewsErrorCode(reason) {
   const code = String(reason || "");
@@ -683,6 +698,21 @@ function configuredQueueDiscoveryLimit(value) {
   );
 }
 
+function configuredManualCursor(value, total) {
+  const parsed = Number(value);
+  if (!Number.isFinite(parsed)) return 0;
+  return Math.min(total, Math.max(0, Math.floor(parsed)));
+}
+
+function configuredManualLimit(value) {
+  const parsed = Number(value);
+  if (!Number.isFinite(parsed)) return MANUAL_COLLECTION_TASK_LIMIT;
+  return Math.min(
+    MANUAL_COLLECTION_TASK_LIMIT,
+    Math.max(1, Math.floor(parsed)),
+  );
+}
+
 export async function runScheduled(scheduledTime, env, deps = {}) {
   const counts = emptyCounts();
   const sources = [];
@@ -912,7 +942,12 @@ export async function runQueueBatch(messages, env, deps = {}) {
   return summary;
 }
 
-export async function runManualCollection(taskType, env, deps = {}) {
+export async function runManualCollection(
+  taskType,
+  env,
+  deps = {},
+  page = {},
+) {
   if (!MANUAL_COLLECTION_TASKS.has(taskType)) {
     return { status: "unavailable", errorCode: "INVALID_COLLECTION_TASK" };
   }
@@ -940,7 +975,30 @@ export async function runManualCollection(taskType, env, deps = {}) {
   let degradedProfiles = 0;
   let written = 0;
   const sources = [];
-  for (const profile of loaded.settings.profiles.filter(({ enabled }) => enabled)) {
+  const scheduledFor = clock().toISOString();
+  const work = loaded.settings.profiles
+    .filter(({ enabled }) => enabled)
+    .sort((left, right) => left.id.localeCompare(right.id))
+    .flatMap((profile) =>
+      splitTaskWithinRequestLimit(
+        profile,
+        {
+          type: taskType,
+          schedule: `manual/${taskType}`,
+          localSlot: `manual-${taskType}`,
+          scheduledFor,
+        },
+        MAX_SCHEDULED_EXTERNAL_REQUESTS,
+      ).map((task) => ({ profile, task })));
+  const cursor = configuredManualCursor(page.cursor, work.length);
+  const limit = configuredManualLimit(page.limit);
+  const selection = selectFairWorkWithinBudget(work.slice(cursor), {
+    externalRequestBudget: MAX_SCHEDULED_EXTERNAL_REQUESTS,
+    maxTasks: limit,
+    preserveOrder: true,
+    stopOnBudgetExhaustion: true,
+  });
+  for (const { profile, task } of selection.selected) {
     const result = taskType === "newsCollect"
       ? await collectNewsWithHealth({
         collectNews: deps.collectNews ?? collectNewsForProfile,
@@ -953,7 +1011,7 @@ export async function runManualCollection(taskType, env, deps = {}) {
       })
       : await collectForTask({
         taskType,
-        task: { type: taskType },
+        task,
         profile,
         registry,
         writeBars: deps.writeBars ?? writeMarketBars,
@@ -967,15 +1025,27 @@ export async function runManualCollection(taskType, env, deps = {}) {
     if (result.status === "degraded") degradedProfiles += 1;
     if (Array.isArray(result.sources)) sources.push(...result.sources);
   }
-  const status = totals.succeeded === 0
-    ? "failed"
-    : totals.failed > 0 || degradedProfiles > 0 ? "degraded" : "completed";
+  const processed = selection.selected.length;
+  const nextOffset = cursor + processed;
+  const backlog = Math.max(0, work.length - nextOffset);
+  const status = processed === 0 && backlog === 0
+    ? "completed"
+    : totals.succeeded === 0
+      ? "failed"
+      : totals.failed > 0 || degradedProfiles > 0 ? "degraded" : "completed";
   return {
     status,
     ...(status === "failed" ? { errorCode: "COLLECTION_UNAVAILABLE" } : {}),
     counts: totals,
     written,
     sources,
+    cursor,
+    limit,
+    nextCursor: backlog > 0 ? nextOffset : null,
+    backlog,
+    processed,
+    workUnitBudget: MAX_SCHEDULED_EXTERNAL_REQUESTS,
+    estimatedWorkUnits: selection.estimatedExternalRequests,
   };
 }
 
@@ -1005,7 +1075,15 @@ export async function handleFetch(request, env, deps = {}) {
       { status: 401 },
     );
   }
-  const result = await runManualCollection(url.searchParams.get("task"), env, deps);
+  const result = await runManualCollection(
+    url.searchParams.get("task"),
+    env,
+    deps,
+    {
+      cursor: url.searchParams.get("cursor"),
+      limit: url.searchParams.get("limit"),
+    },
+  );
   return Response.json(result, {
     status: ["completed", "degraded"].includes(result.status) ? 200 : 503,
   });
