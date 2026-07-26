@@ -51,10 +51,10 @@
 ### ✅ 已完成：Pages 与 Monitor Worker 已发布到当前 SHA
 
 ```text
-Pages `/api/health` commitSha : `f88df97`
-Worker `/health` commitSha : `f88df97`
+Pages `/api/health` commitSha : `0bd4809`
+Worker `/health` commitSha : `f88df97`（Worker 代码未因前端覆盖率提交而变化）
 Worker deployedAt : `2026-07-26T10:05:38Z`
-Pages immutable deployment : `https://2eb2fdfe.tradingagents-board.pages.dev`
+Pages immutable deployment : `https://77d79239.tradingagents-board.pages.dev`
 ```
 
 线上回读已确认包含本轮最新观点门禁、卖方策略观察、SEC runtime UA、health 50ms 和缓存哈希改动。
