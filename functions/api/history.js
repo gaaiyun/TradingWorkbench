@@ -8,7 +8,7 @@ import {
 export async function onRequestGet({ request } = {}) {
   let selectors;
   try {
-    selectors = parseRunSelectors(request, { requestId: true });
+    selectors = parseRunSelectors(request);
   } catch (error) {
     return json({ error: error.message }, 400);
   }

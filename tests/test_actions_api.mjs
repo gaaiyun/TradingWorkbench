@@ -506,6 +506,89 @@ test("history, latest, and report audit selectors never mix profiles or adhoc re
   }
 });
 
+test("latest, report audit, and report honor adhoc requestId selectors", async () => {
+  const requestId = "11111111-2222-4333-8444-555555555555";
+  const otherRequestId = "aaaaaaaa-bbbb-4ccc-8ddd-eeeeeeeeeeee";
+  const historyPayload = [
+    {
+      generated_at: "2026-07-26T03:00:00Z",
+      identity: {
+        scope: "adhoc",
+        kind: "adhoc",
+        requestId,
+        profileId: null,
+        slotId: null,
+        scheduledFor: null,
+      },
+      results: [{ report: "reports/MSFT/2026-07-26/complete_report.md" }],
+    },
+    {
+      generated_at: "2026-07-26T04:00:00Z",
+      identity: {
+        scope: "adhoc",
+        kind: "adhoc",
+        requestId: otherRequestId,
+        profileId: null,
+        slotId: null,
+        scheduledFor: null,
+      },
+      results: [{ report: "reports/NVDA/2026-07-26/complete_report.md" }],
+    },
+  ];
+  const auditPayload = {
+    reports: historyPayload.map((entry) => ({
+      report: entry.results[0].report,
+      identity: entry.identity,
+      auditStatus: "verified",
+    })),
+  };
+  const manifestPayload = {
+    identity: historyPayload[0].identity,
+  };
+  const originalFetch = globalThis.fetch;
+  globalThis.fetch = async (url) => {
+    const path = String(url);
+    if (path.endsWith("/data/history.json")) {
+      return Response.json(historyPayload);
+    }
+    if (path.endsWith("/data/report-audit.json")) {
+      return Response.json(auditPayload);
+    }
+    if (path.endsWith("/reports/MSFT/2026-07-26/report_manifest.json")) {
+      return Response.json(manifestPayload);
+    }
+    if (path.endsWith("/reports/MSFT/2026-07-26/complete_report.md")) {
+      return new Response("# MSFT");
+    }
+    return new Response("not found", { status: 404 });
+  };
+  try {
+    const latest = await getLatest({
+      request: new Request(`https://example.test/api/latest?requestId=${requestId}`),
+    });
+    assert.equal(latest.status, 200);
+    assert.equal((await latest.json()).identity.requestId, requestId);
+
+    const audit = await getReportAudit({
+      request: new Request(`https://example.test/api/report-audit?requestId=${requestId}`),
+    });
+    assert.equal(audit.status, 200);
+    assert.deepEqual((await audit.json()).reports.map((entry) => entry.report), [
+      "reports/MSFT/2026-07-26/complete_report.md",
+    ]);
+
+    const report = await getReport({
+      request: new Request(
+        `https://example.test/api/report?requestId=${requestId}&path=reports%2FMSFT%2F2026-07-26%2Fcomplete_report.md`,
+      ),
+    });
+    assert.equal(report.status, 200);
+    assert.equal(await report.text(), "# MSFT");
+  } finally {
+    globalThis.fetch = originalFetch;
+  }
+});
+
 test("identity APIs keep raw legacy responses unchanged when no selector is supplied", async () => {
   const originalFetch = globalThis.fetch;
   const fixtures = {

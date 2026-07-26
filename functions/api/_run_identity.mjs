@@ -152,14 +152,14 @@ export function runIdentityFromTitle(title) {
   return legacyRunIdentity();
 }
 
-export function parseRunSelectors(request, { requestId = false } = {}) {
+export function parseRunSelectors(request) {
   const params = new URL(request?.url || "https://workbench.invalid/").searchParams;
   const hasProfile = params.has("profile");
   const profile = hasProfile ? params.get("profile") : null;
   if (hasProfile && !PROFILE_ID.test(profile || "")) {
     throw new Error("无效的 profile 参数");
   }
-  const hasRequestId = requestId && params.has("requestId");
+  const hasRequestId = params.has("requestId");
   const selectedRequestId = hasRequestId ? params.get("requestId") : null;
   if (hasRequestId && !UUID.test(selectedRequestId || "")) {
     throw new Error("无效的 requestId 参数");

@@ -11,7 +11,7 @@ const WORKFLOWS = ["daily-analysis.yml", "analysis-request.yml"];
 export async function onRequestGet({ request, env }) {
   let selectors;
   try {
-    selectors = parseRunSelectors(request, { requestId: true });
+    selectors = parseRunSelectors(request);
   } catch (error) {
     return json({ error: error.message }, 400);
   }
