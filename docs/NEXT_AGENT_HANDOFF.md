@@ -18,7 +18,7 @@
 
 多 profile、运行身份隔离、Chat/Evidence owner、调度可靠性、提醒 shadow 账本、Worker/Pages 部署指纹的**代码**均已合入 `main`（HEAD = `origin/main`，工作树干净，GitHub CI 全绿）。
 
-但**代码合入不等于 GitHub 自动部署链已恢复**。本轮已用本机 Wrangler OAuth 手工发布 Pages 与 Monitor Worker：Pages 当前线上资源已回读 `129688d`，静态资源内容哈希为 `62562e64ae34`；Monitor Worker 保持行为代码版本 `f88df97`（前端提交无需再次发布 Worker），部署时间为 `2026-07-26T10:05:38Z`；GitHub Actions 仍会因缺 Cloudflare API token 而在凭据检查处失败，不能把这次手工发布当成 CI 已恢复。
+但**代码合入不等于 GitHub 自动部署链已恢复**。本轮已用本机 Wrangler OAuth 手工发布 Pages 与 Monitor Worker：Pages 当前线上资源已回读 `ce854f3`，静态资源内容哈希为 `5cf14289d323`；Monitor Worker 保持行为代码版本 `f88df97`（前端提交无需再次发布 Worker），部署时间为 `2026-07-26T10:05:38Z`；GitHub Actions 仍会因缺 Cloudflare API token 而在凭据检查处失败，不能把这次手工发布当成 CI 已恢复。
 
 同日终审又修复了三个用户可见回归：旧版无 identity 的 43 份 `legacy_unverified` 报告恢复只读展示、同一新闻按 cluster/原文聚合关联标的、交易时钟按沪深与纽约时区及周末判断。历史未验证报告仍不能进入问答，4 份 `invalidated` 报告仍只在“历史审计”中显示。
 
@@ -51,10 +51,10 @@
 ### ✅ 已完成：Pages 与 Monitor Worker 已发布到当前 SHA
 
 ```text
-Pages `/api/health` commitSha : `129688d`
+Pages `/api/health` commitSha : `ce854f3`
 Worker `/health` commitSha : `f88df97`（Worker 代码未因前端覆盖率提交而变化）
 Worker deployedAt : `2026-07-26T10:05:38Z`
-Pages immutable deployment : `https://9f5b3f07.tradingagents-board.pages.dev`
+Pages immutable deployment : `https://64bd0c4b.tradingagents-board.pages.dev`
 ```
 
 线上回读已确认包含本轮最新观点门禁、卖方策略观察、SEC runtime UA、health 50ms 和缓存哈希改动。
