@@ -1,122 +1,119 @@
 # Trading Workbench
 
-面向 A 股 ETF 投资研究的多智能体工作台。它把主题监控、跨市场行情、新闻证据、TradingAgents 深度研究、研究档案、问答和上证 50 ETF 期权风控放在一个产品壳里，同时保留原 TradingAgents 的 Python 内核、CLI 和 LangGraph 协作流程。
+Trading Workbench 是面向 A 股 ETF 研究的多智能体工作台。它把主题监控、跨市场行情、官方证据、TradingAgents 深度研究、研究档案、问答和上证 50 ETF 期权风控放在一个产品壳中，同时保留原 TradingAgents 的 Python 包、CLI 和 LangGraph 流程。
 
 - 生产工作台：[tradingagents-board.pages.dev](https://tradingagents-board.pages.dev/)
 - 期权数据站：[sh50-volguard.pages.dev](https://sh50-volguard.pages.dev/)
 - 主仓库：[gaaiyun/TradingWorkbench](https://github.com/gaaiyun/TradingWorkbench)
-- 上游研究框架：[TauricResearch/TradingAgents](https://github.com/TauricResearch/TradingAgents)
-- 当前产品版本：2026-07-26
+- 上游框架：[TauricResearch/TradingAgents](https://github.com/TauricResearch/TradingAgents)
+- 当前代码版本：2026-07-26
 
-> 本项目只做研究、解释和提醒，不连接券商，不自动交易。“实时”指有来源和时间戳的近实时数据，不代表交易所逐笔行情。
+> 本项目只做研究、解释和提醒，不连接券商，也不自动交易。“实时”表示数据带来源和时间戳，不代表交易所逐笔行情。
 
-## 现在有什么
+## 产品入口
 
-工作台有七个稳定的一级入口。ETF 监控不再覆盖原产品，而是其中一个工作区。
+工作台保留七个一级入口：
 
-| 工作区 | 解决的问题 | 当前实现 |
+| 工作区 | 用途 | 当前实现 |
 |---|---|---|
-| 市场监控 | 主题标的现在发生了什么 | 自选、5m/15m/1h/1d、K 线、成交量、MA20/60、MACD、RSI、事件和跨市场驱动 |
-| Agent 研究 | 临时想到一只股票时如何研究 | 独立临时表单、标准/深度模式、精确请求状态、完整 TradingAgents 链路 |
-| 研究任务 | 今天会跑什么 | 网页编辑标的角色、任务时间、启停、下一次执行、立即运行 |
-| 研究档案 | 以前得出过什么结论 | 13 个角色分栏、审计状态、标的和日期、问答上下文 |
-| 新闻/事件 | 结论依据是什么 | 来源、数据时间、标的、重要性、原文链接和证据流 |
-| 期权风控 | 现货与期权风险如何变化 | 认购/认沽链、IV/HV、Greeks、GEX/DEX、PCR、Max Pain、VaR、BSADF、双刷新时钟 |
-| 设置 | 监控目标如何调整 | `WorkbenchSettingsV2`、标的角色、分析深度、时区、任务频率和提醒阈值 |
+| 市场监控 | 查看主题标的和跨市场驱动 | 多监控组、自选、5m/15m/1h/1d、K 线、成交量、MA、MACD、RSI、事件 |
+| Agent 研究 | 临时研究未纳入监控的标的 | 标准/深度模式、独立请求身份、完整 TradingAgents |
+| 研究任务 | 查看和触发当前监控组任务 | 计划时间、启停、下一次执行、运行阶段和失败原因 |
+| 研究档案 | 阅读历史结论 | 13 个角色分栏、审计状态、报告身份和问答上下文 |
+| 新闻/事件 | 查看证据和提醒状态 | 原文链接、发布时间、证据层级、来源轨迹、Web/PushPlus 状态 |
+| 期权风控 | 查看现货和期权风险 | IV/HV、Greeks、GEX/DEX、PCR、Max Pain、VaR、BSADF、双时钟 |
+| 设置 | 管理监控组 | 创建、复制、编辑、启停、删除、时区、计划、预算和提醒阈值 |
 
-页面采用统一的石墨灰研究终端样式：普通文字使用产品字体，只有价格和指标使用等宽数字；A 股红涨绿跌，美股和港股绿涨红跌，系统健康色与行情色分离。
+页面使用石墨灰研究终端样式。A 股红涨绿跌，美股和港股绿涨红跌；健康状态颜色不复用行情颜色。
 
-## 默认研究目标
+## 多监控组
 
-> 持续监控 A 股通信与半导体 ETF，识别美股半导体隔夜行情、行业新闻和政策变化对 A 股 ETF 的传导影响。
+`WorkbenchSettingsV2` 保存在 D1。仓库中的 `public/data/workbench-settings.json` 只用于空库初始化和只读灾备。
+
+- 最多 8 个 profile。
+- 每个 profile 最多 14 个用户标的，另有最多 12 个系统基准。
+- profile ID 创建后不可修改；至少保留一个 profile。
+- 复制出的 profile 默认停用，确认内容后再启用。
+- 页面把当前 profile ID 存入本地存储。切换后会取消旧请求并重置行情、新闻、任务、档案、报告和问答上下文。
+- 临时研究和 VolGuard 不属于 profile，切换监控组不会改变它们。
+- profile 写操作使用 D1 revision 做 CAS。缺少 revision 返回 428，revision 冲突返回 409。
+
+默认 profile 为 `cn-semi-comms`：
 
 | 角色 | 标的 | 分析方式 |
 |---|---|---|
-| 核心 | `515880.SS` 通信 ETF、`512480.SS` 半导体 ETF | 每日完整 TradingAgents |
-| 比较 | `159995.SZ` 芯片 ETF | 轻量信号 |
-| 全球科技驱动 | `SOXX`、`SMH`、`NVDA`、`TSM`、`AVGO`、`AMD`、`ASML`、`ORCL`、`GOOGL`、`3887.HK` | 日线、隔夜驱动和事件 |
-| 系统基准 | 沪深 300、纳指 100、美元人民币 | 不占用户自选位置 |
+| 核心 | `515880.SS`、`512480.SS` | 每日完整 TradingAgents |
+| 比较 | `159995.SZ` | 轻量信号 |
+| 驱动 | `SOXX`、`SMH`、`NVDA`、`TSM`、`AVGO`、`AMD`、`ASML`、`ORCL`、`GOOGL`、`3887.HK` | 日线、隔夜驱动和事件 |
+| 系统基准 | 沪深 300、纳指 100、美元人民币 | 不占用户标的位置 |
 
-`ORCL` 和 `GOOGL` 用来观察云基础设施、广告、数据库与 AI 资本开支；`3887.HK`
-是 HashKey Holdings，用来观察港股持牌数字资产基础设施及其监管风险。该身份已经由
-[港交所发行人披露](https://www1.hkexnews.hk/search/titlesearch.xhtml?category=0&lang=EN&market=SEHK&stockId=1000284737)
-和 [HashKey 投资者关系页](https://group.hashkey.com/en/investor-relations)交叉确认。
-`GOOG` 会归一为 Alphabet 同公司别名，
-`03887`、`3887` 和 `03887.HK` 会归一为 `3887.HK`。网页可以增删标的并修改角色，
-D1 保存后即时生效；仓库内 JSON 只是空库种子和灾备。
+`GOOG` 归一为 `GOOGL`；`03887`、`3887` 和 `03887.HK` 归一为 `3887.HK`。`3887.HK` 对应 HashKey Holdings，身份由港交所发行人资料和公司投资者关系页交叉确认。`SMH` 只有在完整基金名称或明确代码语境中才关联，避免普通缩写误命中。
 
-## 系统结构
+## 运行结构
 
 ```mermaid
 flowchart LR
-    U["浏览器工作台"] --> P["Cloudflare Pages"]
-    U --> F["Pages Functions API"]
-    F <--> D[("D1：设置、行情、事件、会话")]
-    W["Monitor Worker<br/>每 5 分钟"] <--> D
-    W --> R["行情 Provider Registry"]
-    W --> G["GitHub Actions<br/>完整 TradingAgents"]
-    G --> A["Python / LangGraph 多智能体"]
-    G --> O["研究报告与历史档案"]
-    O --> P
+    B["浏览器"] --> P["Cloudflare Pages"]
+    B --> F["Pages Functions"]
+    F <--> D[("D1")]
+    W["Monitor Worker<br/>Cron */5"] <--> D
+    W --> R["行情与新闻 Provider"]
+    W --> O["Dispatch Outbox"]
+    O --> G["GitHub Actions"]
+    G --> T["TradingAgents / LangGraph"]
+    T --> E["Evidence Packet + Manifest"]
+    T --> A["报告与档案"]
+    E --> F
+    A --> P
     F --> V["VolGuard /api/live"]
-    V --> Q["Sina 现货与期权报价"]
-    V --> S["慢速风险快照"]
 ```
 
-运行时分为三层：
+三个运行层分工如下：
 
-1. Cloudflare Worker 做轻量采集、来源降级、15 分钟规则信号和幂等调度。
-2. GitHub Actions 运行完整 TradingAgents、ETF 深度研究和报告生成。
-3. Pages Functions + D1 提供设置、查询、问答、会话恢复和证据接口。
+- Pages Functions + D1 负责页面、设置、查询、问答、会话、证据和报告读取。
+- Monitor Worker 负责轻量采集、确定性调度、规则信号、提醒 shadow 账本和 GitHub dispatch。
+- GitHub Actions + Python 负责依赖安装、LLM、多 Agent 研究、报告生成和审计。
 
-这样不会把 pandas、模型推理或多 Agent 辩论塞进五分钟边缘任务，也不会因为一个免费数据源失效让整页变空。
+Worker 不运行 pandas、LangGraph、GARCH、BSADF 或长历史回测。VolGuard 保持独立仓库和故障域。
 
-## 行情与来源
+## 行情和复权
 
-所有动态接口统一返回：
+| 资产与周期 | 来源顺序 | 口径 |
+|---|---|---|
+| A 股 5m | 腾讯 → 东方财富 → Yahoo | 近实时，不宣称逐笔 |
+| A 股 1d | 东方财富 → 腾讯 → Yahoo | 前两个来源要求 `qfq` |
+| 美股 1d | Yahoo → 东方财富 → 腾讯 → Alpha Vantage → Stooq | 目标约五年 |
+| 港股 1d | Yahoo → 最近已验证快照 | 短上市历史如实显示 |
 
-```json
-{
-  "status": "ok",
-  "asOf": "2026-07-23T07:00:00.000Z",
-  "data": {},
-  "sources": []
-}
-```
+所有动态记录带 `source`、`asOf`、`fetchedAt`、`freshness`、`quality` 和 `adjustment`。连续失败三次的来源暂停十五分钟。
 
-`status` 只允许 `ok`、`degraded`、`stale`、`unavailable`。数据记录保留 `source`、`asOf`、`fetchedAt`、`freshness`、`adjustment` 和质量状态。
+复权口径不能互换：
 
-```mermaid
-flowchart TD
-    C5["A 股 5 分钟请求"] --> CT["腾讯"]
-    CT -->|失败/熔断| CE["东方财富"]
-    CE -->|失败/熔断| CY["Yahoo"]
+- A 股 D1 主路径使用 `qfq`，即前复权。
+- Yahoo `auto_adjust=True` 记录为 `split-and-dividend-adjusted`。
+- 报告的 Market history 同时披露来源、复权口径、起止日期和样本数。
+- 代码不会把 Yahoo 序列标成 qfq，也不会把不同 adjustment 的历史拼成一条序列。
+- 页面、Evidence Packet、指标和 Agent 使用同一截止时间与同一历史口径。
 
-    C1["A 股日线请求"] --> CD["东方财富前复权"]
-    CD -->|失败/熔断| CQ["腾讯前复权"]
-    CQ -->|失败/熔断| CY
+`512480.SS` 在 2026-07-03 附近发生份额拆分。回归测试要求前复权序列保持连续，不能把拆分写成约 50% 单日暴跌。
 
-    U["美股日线请求"] --> UY["Yahoo 5 年"]
-    UY -->|失败/熔断| UE["东方财富美股"]
-    UE -->|失败/熔断| UT["腾讯美股"]
-    UT -->|配置密钥| UA["Alpha Vantage"]
-    UA -->|最后降级| US["Stooq"]
+## 新闻和证据
 
-    H["港股日线请求"] --> HY["Yahoo"]
-    HY -->|失败| HC["保留最近已验证快照并明确降级"]
-```
+08:25 盘前任务按 profile 采集主题新闻和官方材料：
 
-- 连续失败三次的来源暂停 15 分钟，恢复成功后清零。
-- 5 分钟行情保留 90 天，日线保留 5 年。
-- A 股日线每个交易日 15:20 回填，目标 1500 根；`512480.SS` 等发生份额拆分的 ETF 使用前复权序列，避免把拆分误判成单日暴跌。
-- A 股 ETF 与美股日线图均支持 6 个月、1 年、3 年、5 年区间，目标上限 1260 根交易日；实际覆盖受上市日期和生产来源限制。
-- 来源只能提供短历史时，页面显示实际起止日期、根数和降级原因。
-- 过期数据不会被标成正常，也不会用示例价格填补生产空白。
-- ETF 溢折价、iNAV、跟踪误差等字段只有在来源可靠且带时间戳时才展示。
+- Oracle、Alphabet：SEC EDGAR Submissions 中的 `8-K/8-K/A`。
+- A 股通信与半导体：工信部“文件发布”API，固定 `cateid=58`、通信/芯片查询、上海日历 30 天窗口。
+- HashKey：公司投资者关系公告。
+- 宏观：Federal Reserve 官方 RSS 中与 FOMC、货币政策和经济活动有关的条目。
+- 发现层：Google News RSS；Cloudflare 出口不可用时，A 股使用东方财富，美股和港股使用 Yahoo Finance RSS。
 
-## 调度与幂等
+官方来源标记为 `evidence`，聚合和搜索结果标记为 `discovery`。发现层成功不会跳过官方查询；官方源失败时，本次采集保持 `degraded` 并保存失败码。HTTP 200 但响应结构错误也按失败处理。
 
-默认时区为 `Asia/Shanghai`。
+D1 只保存标题、短摘要、原始发布者、原文链接、发布时间、采集时间、层级、标的和重复簇，不保存付费全文。
+
+## 调度、预算和幂等
+
+默认时区为 `Asia/Shanghai`：
 
 ```mermaid
 gantt
@@ -126,206 +123,102 @@ gantt
     section 美股
     收盘驱动快照 :milestone, us, 05:35, 0m
     section A股盘前
-    新闻采集与轻量盘前简报 :milestone, pre, 08:25, 0m
+    新闻采集与盘前上下文 :milestone, pre, 08:25, 0m
     section A股盘中
-    上午采集与信号 :active, am, 09:30, 120m
-    下午采集与信号 :active, pm, 13:00, 120m
+    采集与规则信号 :active, cn, 09:30, 330m
     section 收盘
-    A 股日线回填与深度研究 :milestone, close, 15:20, 0m
+    日线回填与深度研究 :milestone, close, 15:20, 0m
 ```
 
-Worker 每五分钟读取 D1 设置，按“任务 + 理论计划时间槽”生成幂等键。时间槽采用原子领取、租约、最多三次重试和 attempt fencing；重复 Cron、夏令时重叠或晚到的旧任务都不能重复写入或重复触发模型。
+Worker 为每个理论任务生成稳定 `slotId`，并在首次入库时冻结 profile revision、配置快照、payload hash 和本地日期。profile 被删除、停用或修改后，Worker 取消尚未执行的旧 slot，不用新配置重放旧任务。
 
-盘中每五分钟采集，每十五分钟计算价格异动和成交量 z-score。只有高等级事件进入 PushPlus；完整多智能体分析默认每天一次，避免把所有驱动标的都扩成高成本辩论。
+调度器还提供：
 
-新闻发现任务在 08:25 执行，按通信、A 股半导体、美股半导体、Oracle、Alphabet、
-HashKey 和工信部政策主题采集。Oracle 与 Alphabet 优先读取 SEC EDGAR 8-K，
-HashKey 优先读取公司投资者关系公告；A 股通信与芯片主题始终查询工信部官方
-“文件发布”政策库，同时使用 Google News RSS 做发现。Google 从 Cloudflare 出口
-不可用时，A 股发现层降级到东方财富资讯搜索；美股半导体、Oracle、Alphabet 与
-HashKey 主题降级到对应的 Yahoo Finance RSS。东方财富仅属于发现层，
-工信部政策原文才属于证据层。工信部查询固定 `cateid=58`、通信/芯片主题、上海日历
-30 天窗口和最多 8 条结果，并在本地再次拒绝未来、窗口外、领导活动及非政策栏目。
-SEC 请求使用符合 fair-access 要求的组织名与联系邮箱；官方源失败时，即使发现层有结果，
-整次采集仍明确标为 `degraded`。D1 只保存
-标题、短摘要、原始发布者、发布时间、采集时间、来源等级和原文链接；聚合结果标记为
-`discovery`，SEC 8-K、工信部和 HashKey 公司公告标记为 `evidence`。`SMH` 只有匹配
-`VanEck Semiconductor ETF` 等完整
-实体名称时才关联到标的。
+- 原子租约、attempt fencing、最多三次重试。
+- `profile + localDate` 的完整分析预算；`fullAnalysesPerDay=0` 时不 dispatch。
+- profile 公平轮转、单 tick 工作量上限和外部请求预算。
+- `profile + symbol + timeframe + schema + targetHash` 的 bootstrap 收据。
+- GitHub dispatch outbox、receipt 和 reconcile，避免网络不确定或写回失败造成重复研究。
 
-## 报告质量与证据门禁
+## 运行身份
 
-旧报告保留原文，但不会继续无条件参与最新观点、问答和推送。系统为报告分别记录分析
-状态与审计状态：
+每次研究使用以下一种身份：
 
-- 分析状态：`rated`、`not_rated`、`insufficient_evidence`、
-  `data_validation_failed`。
-- 审计状态：`verified`、`legacy_unverified`、`invalidated`。
+| scope / kind | 必需字段 | 用途 |
+|---|---|---|
+| `legacy / legacy` | 无 | 兼容旧运行 |
+| `profile / manual` | `profileId` | 网页手工运行当前监控组 |
+| `profile / monitor` | `profileId + slotId + scheduledFor` | Worker 定时运行 |
+| `adhoc / adhoc` | UUID `requestId` | 临时研究 |
+
+`profileId` 与临时 `requestId` 互斥。监控运行的三个字段必须同时存在。workflow 标题、history、Manifest、Evidence 和报告 API 都保存或校验身份；同 ticker、同日期的不同运行不会靠目录序号猜归属。
+
+临时研究标准模式最多 6 个标的，深度模式最多 3 个。它不写设置，也不改变定时任务。
+
+## Evidence 和报告门禁
+
+`EvidencePacketV1` 保存标的身份、市场、币种、资产类型、截止时间、OHLCV、复权口径、公司行动、指标、点时新闻、来源轨迹、Evidence ID 和内容哈希。
 
 ```mermaid
 flowchart LR
-    S["行情、公司行动、公告、财报、新闻"] --> V["确定性数据校验"]
+    S["行情、公告、新闻"] --> V["确定性校验"]
     V -->|"通过"| E["EvidencePacketV1"]
-    V -->|"失败"| N["Not Rated / Validation Failed"]
-    E --> UI["工作台"]
-    E --> A["TradingAgents"]
-    E --> Q["研究问答"]
-    A --> C["数字、引用与目标价校验"]
-    C -->|"通过"| R["正式报告 + Manifest"]
+    V -->|"失败"| N["Validation Failed / Not Rated"]
+    E --> T["TradingAgents"]
+    T --> C["引用与数字校验"]
+    C -->|"通过"| R["报告 + Manifest"]
     C -->|"失败"| N
 ```
 
-`EvidencePacketV1` 统一保存标的身份、市场、币种、资产类型、数据截止时间、复权
-OHLCV、公司行动、指标样本数、新闻原文链接、来源降级过程、内容哈希和 Evidence ID。
-数据连续性检查失败时不会调用模型生成 Buy/Sell；目标价只有在方法、输入、区间和情景
-概率齐全时才展示。历史分析按 `asOf` 截断新闻与事实，避免把后来发布的信息带回过去。
-Agent 只接收证据包中最后八根行情、指标、公司行动、新闻和来源组成的紧凑账本。报告
-落盘前还会再次检查引用：未知 Evidence ID、无引用数字、无方法目标价或在缺少用户
-持仓约束时给出具体仓位比例，都会把结果降为 `insufficient_evidence / Not Rated`，
-不能标记为 `verified`。
-每份新报告先显示一段由程序直接生成的 Evidence Snapshot，包括最近行情、指标、公司
-行动、时点新闻、来源和完整性警告；它与 Agent 草稿分开，便于先核对事实再阅读推断。
-证据包本身仍保留完整历史：已监控标的优先读取工作台已落库的日线；临时标的按需请求
-约五年并限制为 1260 根。Yahoo `auto_adjust` 明确记录为
-`split-and-dividend-adjusted`，不再冒充 A 股 `qfq`；两种复权口径会在 Packet 中披露。
-技术快照包含 MA20/60/200、MACD、RSI14、ATR14 和 20 日实现波动率，避免临时研究只能
-看到六个月、无法计算 MA200。
-行情进入模型前还要通过有限数和 OHLC 区间校验。Yahoo 若在目标日返回只有成交量、
-OHLC 为 `NaN` 的未完成日线，该行会被丢弃并阻断当日评级；合法休市没有目标日记录时
-不会误判。证据 JSON、报告写盘和发布均禁止 `NaN`/`Infinity`。新报告 Manifest 保存
-证据文件 SHA-256，档案审计按实际文件重算，不一致即失效。
-GitHub 深度任务生成证据包后，用独立写入密钥提交到 `/api/v1/evidence`；Pages Function
-校验 Schema、哈希、标的、时间和 Manifest 后才参数化写入 D1。网页、问答和后续 Agent
-读取同一份只读快照；旧 `/api/evidence` 保留为兼容入口。写入失败只标记发布降级，
-不会把未保存的包伪装成可追溯证据。
+报告落盘前检查未知 Evidence ID、无引用数字、无方法目标价和缺少用户约束时的具体仓位比例。失败草稿保留供审计，但不能进入首页最新观点、问答或推送。
 
-档案阅读器保留 13 个角色分栏，并支持 GFM 表格、引用、自动链接、分隔线、有序/无序
-列表和代码块。表格在窄屏横向滚动，外链使用安全协议白名单，原始 HTML 始终转义。
+Evidence GET 必须选择一个范围：
 
-档案页默认隐藏 `invalidated` 报告，可在“历史审计”中查看原文和失效原因。当前全量审计
-结果见 [报告质量审计](docs/REPORT_QUALITY_AUDIT.md)，网页读取的同源索引位于
-[`public/data/report-audit.json`](public/data/report-audit.json)。
-同一交易日重跑不会覆盖旧目录，而是写入 `-v2`、`-v3` 版本并在审计索引中建立替代关系。
-首页“最新观点”只读取 `verified` 报告；`legacy_unverified` 和 Not Rated 草稿仍可在
-研究档案中查看，但不会伪装成当前投资结论。
-审计索引还把未产出报告的运行拆成 `evidence_validation`、`analysis_execution` 和
-`invalid_input`，避免把数据门禁、模型/流程故障和错误代码输入混成一种“分析失败”。
+- `?profile=<profileId>`
+- `?requestId=<uuid>`
+- `?scope=global`
+- 无范围参数只读取 legacy 数据
 
-## TradingAgents 研究链
-
-原 TradingAgents 内核没有被替换。
-
-```mermaid
-flowchart LR
-    I["研究目标与证据"] --> AN["市场 / 新闻 / 基本面分析师"]
-    AN --> DB["多空研究员辩论"]
-    DB --> TR["交易员建议"]
-    TR --> RM["风险团队审查"]
-    RM --> PM["组合经理结论"]
-    PM --> RC["报告 + Run card + 档案"]
-```
-
-Python 包、CLI、LangGraph、检查点恢复、历史决策和多模型 Provider 仍可单独使用。工作台只是为它增加网页任务编排、监控上下文、阶段状态和报告入口。
-
-### 临时研究与持续监控的边界
-
-```mermaid
-flowchart LR
-    U["临时研究表单"] -->|"UUID requestId"| API["POST /api/analyze"]
-    API --> G["串行 GitHub Workflow"]
-    G --> P["Evidence + TradingAgents"]
-    P --> H["档案与 13 个分栏"]
-
-    S["WorkbenchSettingsV2"] --> W["五分钟 Monitor Worker"]
-    W --> K["幂等计划槽"]
-    K --> G
-
-    U -. "不写设置、不改计划" .-> S
-```
-
-临时研究默认使用市场、新闻和基本面分析师。标准模式最多 6 个标的，深度模式最多 3 个；
-上限只约束临时请求，监控组合仍保留原有最多 10 个标的和 240 分钟运行契约。网页只跟踪
-本次 `requestId`，GitHub 尚未创建运行记录时显示“已受理，等待进入队列”，不会把其他
-定时任务误认为当前请求。Sentiment 目前不开放：Reddit 可用但 StockTwits 在实际出口
-返回 403，来源健康尚未进入 Manifest，不能把占位文本当成可信情绪分卷。
-
-报告分栏固定为：技术/市场、基本面、市场情绪、新闻、多方、空方、研究经理、交易方案、
-激进风险、中性风险、保守风险、组合决策、完整报告。不存在的分卷直接隐藏，默认打开
-组合决策；路径必须与完整报告位于同一版本目录。问答先验证完整报告 Manifest，再读取
-选中分卷；分卷缺失只回退同一份完整报告，不会回退到其他标的。
-
-Agent 对 ETF 不应套用普通公司的财务模板。主题报告应优先检查跟踪指数、持仓与权重、规模、流动性、费用、跟踪偏离、份额变化和公司行动，并按以下结构输出：
-
-1. 发生了什么。
-2. 证据及时间。
-3. 对 A 股 ETF 的可能传导。
-4. 置信度和假设。
-5. 反证或替代解释。
-6. 下一观察点。
-
-## 期权风控
-
-VolGuard 保持独立运行和独立故障域，但在工作台中是一等入口，而不是一个失效外链。
-
-```mermaid
-flowchart TD
-    L["/api/live"] --> F["快速层：20–30 秒"]
-    L --> S["慢速层：5–15 分钟"]
-    F --> F1["现货、合约报价、PCR、Max Pain"]
-    F --> F2["可由当前链计算的 IV / Greeks / GEX / DEX"]
-    S --> S1["HV、GARCH VaR、BSADF"]
-    S --> S2["历史模型与风险状态"]
-    F1 --> UI["期权工作区"]
-    F2 --> UI
-    S1 --> UI
-    S2 --> UI
-```
-
-页面分别显示“行情时间”和“模型时间”。休市、快照、过期和不可用是四种不同状态；缺失指标显示 `—`，不显示成 `0`。VolGuard 的 Python 主程序仍保留四窗格、BSADF、GARCH VaR、HV/IV、GEX/DEX、Max Pain、Greeks 和期权雷达。
+提交 bundle、Packet 和 Manifest 的 identity 必须一致。`/api/v1/evidence` 是权威入口，旧 `/api/evidence` 只做兼容。
 
 ## 研究问答
 
-问答使用 SSE，但不是一次性聊天：
+问答使用持久化 SSE：
 
-- 每次请求带稳定 `requestId` 和 `sessionId`。
-- D1 原子领取请求；重复请求回放已保存答案，不重复计费。
-- 浏览器断线后，服务端继续完成上游响应并写入 D1。
-- 当前行情、指标、新闻、事件、主题报告和历史报告进入上下文。
-- 问题里出现 profile 内的代码或标的名称时，该标的覆盖当前图表选择；例如在
-  `515880.SS` 图表上询问 `512480`，服务端仍读取 `512480.SS` 的证据。
-- 证据编号保留来源和时间；上下文保存 SHA-256 哈希。
-- 没有足够证据时必须回答“无法归因”，不能编造涨跌原因。
-- 访问码只放请求头，不进入前端代码、D1 或日志。
+- 请求带稳定 `requestId` 和 `sessionId`，D1 原子领取并支持重放。
+- 浏览器断线后，服务端继续完成响应并保存结果。
+- 每个 session 绑定创建时的 profile；跨 profile 复用返回 409。
+- 当前行情、指标、新闻、事件、Evidence Packet 和通过门禁的报告进入上下文。
+- 报告上下文只允许当前 `profileId`、临时 `reportRequestId` 或显式 `reportScope=global` 三种范围之一。
+- 证据不足时回答“无法可靠归因”。
+- 访问码只进请求头，不写前端、D1 或日志。
 
-## Agent 只读工具
+## 提醒状态
 
-本地 stdio MCP 提供五个只读工具：监控目标、监控快照、行情、新闻和研究运行。所有
-上游请求固定为 GET，不能修改网页设置、写入 D1、触发 GitHub Actions 或执行交易。
+migration `0015_notification_deliveries.sql` 建立 `eventId + channel` 唯一的投递账本。事件还记录 provider、provider 时间、质量和规则版本。
 
-```powershell
-npm run mcp:readonly
-```
+当前生产能力边界：
 
-默认连接生产工作台；本地调试可用 `TRADING_WORKBENCH_URL` 改写基地址。客户端配置、
-输入上限和安全边界见 [只读 MCP](docs/mcp-readonly.md)。
+- Web 渠道的 `sent` 表示事件已写入 D1，可在网页看到。
+- PushPlus 固定为 `shadow`，只记录策略判定和 `SHADOW_MODE`，尚未开启 live 发送。
+- 阈值、静默时段、critical 例外和缺 token 的状态机已实现并有测试，但切换 live 前仍需 canary 和生产对账。
 
-## 本地运行
+页面会显示 `SHADOW`、延期、失败、结果不确定或已发送等状态。当前看到 `PushPlus · SHADOW` 不代表手机已收到消息。
 
-### Python / CLI
+## 本地运行和验证
 
 ```powershell
 python -m venv .venv
 .\.venv\Scripts\Activate.ps1
 python -m pip install -e ".[dev]"
-tradingagents
-```
 
-### 工作台
-
-```powershell
 npm run test:functions
 npm run test:frontend
-npx wrangler pages dev public
+npm run check:workbench
+python -m pytest -q
+
+$env:PLAYWRIGHT_BROWSERS_PATH = "G:\ClaudeData\ms-playwright"
+python tests/e2e_workbench.py
 ```
 
 本地 D1：
@@ -334,70 +227,39 @@ npx wrangler pages dev public
 npx --yes wrangler@4.113.0 d1 migrations apply tradingagents-workbench --local --config wrangler.monitor.toml
 ```
 
-不要把真实密钥写进仓库。可配置项见 [.env.example](.env.example) 和 [部署与运维](docs/operations-and-deployment.md)。
-
-## 验证
-
-提交前至少运行：
+本地只读 MCP：
 
 ```powershell
-npm run test:functions
-npm run test:frontend
-npm run check:workbench
-python -m pytest -q --ignore=tests/e2e_workbench.py
-$env:PLAYWRIGHT_BROWSERS_PATH = "G:\ClaudeData\ms-playwright"
-python tests/e2e_workbench.py
+npm run mcp:readonly
 ```
 
-Python 核心测试应使用已经安装完整项目依赖的虚拟环境。浏览器测试和完整 Python 测试在资源有限的 Windows 机器上应串行执行。
-
-当前验收覆盖：
-
-- 网页设置保存后立即生效，下一运行时间正确。
-- 七个一级入口可以真实进入，不只检查按钮文字。
-- Agent 任务触发、阶段状态、报告归档和 run card。
-- K 线增量更新、行情请求竞态、美股五年区间和中美颜色规则。
-- 新闻筛选、期权双时钟、自动刷新、无数据和降级状态。
-- SSE、请求幂等、断线恢复、持久会话、错误访问码和证据引用。
-- 报告审计隔离、拆分连续性、历史时点过滤、Evidence ID 和无证据不评级。
-- `GOOGL`/`GOOG` 实体归一、`03887`/`3887.HK` 港股归一和短历史保护。
-- 五个 MCP 查询工具保持 GET-only，未知写工具会被拒绝。
-- TradingAgents 核心、CLI、报告和 workflow 仍存在。
+MCP 只提供设置、监控、行情、新闻和研究历史查询，不接收访问码或写入 token。
 
 ## 部署
 
-生产由两个仓库协作：
+部署顺序为 D1 migration → Monitor Worker → Workbench Pages → VolGuard → 生产验收。
 
-- 本仓库保存工作台、Pages Functions、D1 migration、Monitor Worker 和 TradingAgents。
-- VolGuard 仓库保存期权引擎，并用 Pages 权限定时部署两个网页项目；监控 Worker
-  当前由本机 Wrangler OAuth 发布。补齐 Workers Scripts Edit 和 D1 Edit 后，手动
-  workflow 才会按显式开关部署 Worker 或应用 migration。
+`deploy-monitor` 缺少 Cloudflare 凭据或 `MONITOR_WORKER_URL` 时直接失败。部署后 workflow 请求 Worker `/health`，并要求 `deployment.commitSha` 等于本次 GitHub SHA。绿色 workflow 仍需核对 migration、deploy 和 SHA 验证步骤都执行成功。
 
-部署顺序：
+本轮发布依赖 migrations `0013_monitor_reliability.sql`、`0014_chat_evidence_scope.sql` 和 `0015_notification_deliveries.sql`。
 
-1. 运行全部测试。
-2. 应用 D1 migration。
-3. 部署 `tradingagents-monitor` Worker 和五分钟 Cron。
-4. 部署 `tradingagents-board` Pages。
-5. 部署或刷新 `sh50-volguard`。
-6. 检查 `/api/health`、`/api/monitor-status`、`/api/market`、`/api/volguard`。
-7. 用真实访问码做问答冒烟，问题为“今天 512480 为什么涨跌”。
+当前功能分支代码尚未经过生产发布和 2026-07-27 08:25 外审，不能把本地 HEAD 当成生产状态。完整命令、周一验证协议和回退流程见 [部署与运维](docs/operations-and-deployment.md)。
 
-详细命令、密钥名、回退和故障排查见 [docs/operations-and-deployment.md](docs/operations-and-deployment.md)。
+## 架构取舍
+
+项目保留 TradingAgents 的角色协作与报告链，使用 Lightweight Charts 渲染行情，并参考 OpenBB 的统一数据契约、Qlib 的离线评估边界和 FinGPT 的金融语料思路。当前没有引入它们的整套运行时：
+
+- Cloudflare 免费 Worker 的 CPU 和子请求限制不适合 Python、LLM 辩论或重型回测。
+- 免费行情和新闻源授权、稳定性不同，系统保存来源与降级轨迹，不把聚合结果包装成官方数据。
+- VolGuard 继续独立部署，避免期权模型故障拖垮研究工作台。
+
+详细取舍见 [参考项目与架构决策](docs/etf-monitoring-reference-and-decisions.md)。
 
 ## 文档
 
 - [架构、接口与数据流](docs/architecture-and-data-flows.md)
-- [报告质量审计与历史报告状态](docs/REPORT_QUALITY_AUDIT.md)
-- [参考项目、数据源与取舍](docs/etf-monitoring-reference-and-decisions.md)
-- [部署、密钥、验收与回退](docs/operations-and-deployment.md)
-- [本地只读 MCP 工具](docs/mcp-readonly.md)
-- [产品回归、迁移与防复发约束](docs/regression-and-migration.md)
+- [部署、验收与回退](docs/operations-and-deployment.md)
+- [产品回归与迁移](docs/regression-and-migration.md)
+- [报告质量审计](docs/REPORT_QUALITY_AUDIT.md)
 - [下一 Agent 交接](docs/NEXT_AGENT_HANDOFF.md)
-- [统一工作台设计记录](docs/superpowers/plans/2026-07-24-workbench-unification-design.md)
-
-## 参考与许可证
-
-本 fork 源自 [TauricResearch/TradingAgents](https://github.com/TauricResearch/TradingAgents)，保留其研究框架与开源许可证。产品设计还参考了 Vibe-Trading、OpenBB、Qlib、FinGPT、AI Hedge Fund、Ashare、adata、AKShare、QuantStats、awesome-systematic-trading、TradingView Lightweight Charts、iVIX 和 options_monitor。采用了什么、拒绝了什么以及原因，统一记录在[参考项目与架构决策](docs/etf-monitoring-reference-and-decisions.md)。
-
-本项目的分析可能因数据延迟、免费来源变更、模型随机性和配置差异而变化，不构成投资建议。
+- [只读 MCP](docs/mcp-readonly.md)

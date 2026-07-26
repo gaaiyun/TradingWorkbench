@@ -1,223 +1,266 @@
 # 架构、接口与数据流
 
-更新日期：2026-07-25
+更新日期：2026-07-26
 
-本文描述当前代码实际运行的结构。页面原型、未来设想和已经下线的旧入口不算“已实现”。
+代码基线：`f055d23`
 
-## 1. 产品与运行边界
+本文只描述当前代码。生产是否已更新，要用部署记录和运行时 SHA 证明。
 
-Trading Workbench 由三个可独立失败、独立回退的运行单元组成：
+## 1. 运行单元
 
 | 单元 | 技术 | 职责 |
 |---|---|---|
-| 研究工作台 | Cloudflare Pages + Functions | 页面、动态 API、设置、问答、报告和 VolGuard 代理 |
-| 监控调度器 | Cloudflare Worker + Cron | 五分钟采集、十五分钟信号、计划时间槽和 GitHub 深度分析触发 |
-| 深度研究 | GitHub Actions + Python/LangGraph | TradingAgents 多智能体研究、报告落盘、历史归档和提醒 |
-
-VolGuard 在第二个仓库中维护期权计算和独立 Pages 项目。研究工作台通过 `/api/volguard` 使用它的实时接口，失败时再读取静态快照。
+| 研究工作台 | Cloudflare Pages + Functions | 页面、profile API、动态查询、问答、报告、Evidence、VolGuard 代理 |
+| 监控调度器 | Cloudflare Worker + Cron | 轻量采集、slot、预算、outbox、规则信号、提醒 shadow |
+| 深度研究 | GitHub Actions + Python/LangGraph | TradingAgents、多模型调用、Evidence、报告、索引和审计 |
+| 期权服务 | VolGuard 独立仓库与 Pages | 期权快行情和慢风险模型 |
 
 ```mermaid
 flowchart TB
-    subgraph Edge["Cloudflare 边缘层"]
-        UI["Pages 静态工作台"]
+    subgraph Edge["Cloudflare"]
+        UI["Pages UI"]
         API["Pages Functions"]
-        CRON["Monitor Worker / Cron"]
-        D1[("D1")]
+        W["Monitor Worker"]
+        D[("D1")]
     end
 
-    subgraph Research["GitHub / Python 深度层"]
-        WF["daily-analysis workflow"]
+    subgraph Research["GitHub / Python"]
+        GH["daily-analysis"]
         TA["TradingAgentsGraph"]
-        REP["public/data 报告与索引"]
-        EV["Evidence Packet + Manifest"]
+        EV["Evidence Packet"]
+        MF["Manifest + Reports"]
     end
 
     subgraph Options["VolGuard"]
-        LIVE["/api/live"]
-        FAST["Sina 快速行情"]
-        SLOW["风险模型快照"]
+        VL["/api/live"]
+        FAST["快速行情"]
+        SLOW["慢速模型"]
     end
 
     UI --> API
-    API <--> D1
-    CRON <--> D1
-    CRON --> WF
-    WF --> TA --> REP --> UI
-    TA --> EV --> API
-    API --> LIVE
-    LIVE --> FAST
-    LIVE --> SLOW
+    API <--> D
+    W <--> D
+    W --> GH
+    GH --> TA
+    TA --> EV
+    TA --> MF
+    EV --> API
+    MF --> UI
+    API --> VL
+    VL --> FAST
+    VL --> SLOW
 ```
 
-## 2. 页面状态
+Cloudflare 负责有界 I/O 和状态机。Python、LangGraph、LLM 辩论、GARCH、BSADF 和长历史回测留在 GitHub Actions 或 VolGuard。
 
-`public/index.html` 只提供结构；行为按职责拆分：
+## 2. 浏览器状态
 
-- `workbench-router.mjs`：七个一级路由、hash 规范化和标题。
-- `workbench-data.mjs`：动态响应、K 线批次、筛选和运行时间计算。
-- `workbench-research.mjs`：研究历史、运行阶段和报告状态。
-- `workbench-options.mjs`：VolGuard 新旧 payload 归一化、双时钟和风险字段。
-- `workbench.js`：页面状态、请求、图表、设置、问答和交互编排。
-- `workbench.css`：唯一的视觉 token、桌面布局和移动端布局。
+页面模块按职责拆分：
+
+- `workbench-router.mjs`：七个一级路由。
+- `workbench-profiles.mjs`：profile 选择、恢复、请求世代和切换重置计划。
+- `workbench-data.mjs`：动态响应、筛选、下一次运行和提醒徽标。
+- `workbench-research.mjs`：运行身份、阶段、档案和报告状态。
+- `workbench-options.mjs`：VolGuard schema 归一化和双时钟。
+- `workbench-markdown.mjs`：安全报告渲染。
+- `workbench.js`：网络请求、图表、设置、研究和问答编排。
 
 ```mermaid
-stateDiagram-v2
-    [*] --> monitor
-    monitor --> agents
-    monitor --> tasks
-    monitor --> archive
-    monitor --> news
-    monitor --> options
-    monitor --> settings
-    agents --> archive: 打开报告
-    tasks --> agents: 立即运行
-    settings --> tasks: 保存并重算计划
-    news --> agents: 作为研究证据
-    options --> agents: 作为风险上下文
+flowchart LR
+    S["selectedProfileId"] --> P["currentProfile()"]
+    P --> M["market"]
+    P --> N["news / events"]
+    P --> T["tasks / runs"]
+    P --> A["archive / report"]
+    P --> C["chat sessions"]
+    X["切换 profile"] --> R["取消旧请求并重置上述上下文"]
+    X -. "保持" .-> AD["临时研究"]
+    X -. "保持" .-> V["VolGuard"]
 ```
 
-路由只改变当前工作区，不销毁行情轮询、任务状态或问答会话。移动端用同一份状态和 API，不维护另一套数据。
+普通 hash 路由切换不会销毁状态。profile 切换会提高请求 generation，旧 profile 的异步响应即使晚到也不能覆盖当前页面。
 
-## 3. 设置模型
+## 3. 设置模型和 profile API
 
-`WorkbenchSettingsV2` 的真值在 D1。`public/data/workbench-settings.json` 只用于：
+`WorkbenchSettingsV2` 的在线真值在 D1：
 
-- 空数据库首次初始化；
-- D1 不可用时的只读灾备；
-- GitHub Actions 在无法读取 D1 时的兼容清单。
+- 最多 8 个 profile；
+- 每组最多 14 个 targets、12 个 system benchmarks；
+- profile ID 符合 `[A-Za-z0-9_-]{1,64}`，创建后不可修改；
+- 至少保留一个 profile；
+- 设置 JSON 最多 50 KiB；
+- D1 不可用时，profile 写接口返回 503，不回退到 GitHub 异步写入。
 
-一次设置写入会校验：
-
-- schema 版本；
-- profile ID 唯一；
-- 标的、市场、角色和分析深度；
-- IANA 时区；
-- 时间、交易窗口和间隔；
-- 安静时段；
-- Agent 每日预算；
-- 客户端最后读取的 `updatedAt`。
-
-`expectedUpdatedAt` 不匹配时返回冲突，防止两台设备互相覆盖。
-
-## 4. 调度状态机
-
-Worker 的 Cron 每五分钟触发一次，但业务任务不等于 Cron 次数。
-
-```mermaid
-flowchart TD
-    T["scheduledTime"] --> S["计算跨过的理论时间槽"]
-    S --> H{"交易日、交易窗口、任务启用？"}
-    H -->|否| SKIP["跳过"]
-    H -->|是| CLAIM["D1 原子领取 slotId"]
-    CLAIM -->|已完成/仍有租约| DUP["幂等跳过"]
-    CLAIM -->|领取成功| RUN["采集 / 信号 / dispatch"]
-    RUN -->|成功| DONE["completed"]
-    RUN -->|部分来源可用| DEG["degraded"]
-    RUN -->|可重试失败| RETRY["记录 nextRetryAt"]
-    RETRY -->|最多三次| CLAIM
-    RUN -->|缺少外部凭据| DEF["deferred"]
-```
-
-时间槽字段包含计划时间、尝试次数、租约和 attempt token。旧执行即使在超时后返回，也不能覆盖新租约的结果。
-
-常规 Cron 只执行到期任务。运维人员需要立即修复历史覆盖时，可以调用受
-`MONITOR_RUN_TOKEN` 保护的 `/run-collection`；入口复用同一 Provider Registry、
-校验和 D1 幂等写入，不另建一套临时数据逻辑。
-
-任务语义：
-
-| 任务 | 标的 | 周期 | 输出 |
-|---|---|---|---|
-| 美股收盘快照 | `role=driver` 且 `market=US/HK` | 1d | 全球科技驱动日线 |
-| 新闻发现 | 当前 profile 的主题与实体别名 | 每交易日 08:25 | D1 新闻证据流 |
-| 盘前简报 | 当前 profile | 轻量 | 盘前上下文 |
-| A 股盘中采集 | `core/comparison` 且 `market=CN` | 5m | D1 行情 |
-| A 股盘中信号 | 同上 | 15m | 价格/成交量事件 |
-| A 股日线回填 | `core/comparison` 且 `market=CN` | 每交易日 15:20 | 最多 1500 根前复权日线 |
-| 收盘深度分析 | `analysis=full` | 完整 Agent | GitHub run 和报告 |
-
-新闻实体表把 `03887`、`3887`、`03887.HK` 统一到 `3887.HK / HashKey Holdings`。
-该映射来自港交所发行人资料，不能与美股 `BTDR / Bitdeer` 混用。ORCL 与 GOOGL
-优先读取 SEC EDGAR 8-K，官方源不可达后才进入 Google/Yahoo 发现链；3887.HK
-优先使用 HashKey 投资者关系公告，
-官方页不可达时才降级到 Google/Yahoo。失败轨迹与降级来源一并写入 run card。
-
-## 5. Provider Registry
-
-适配器必须先完成 symbol 映射、HTTP 状态、内容类型、字段和时间校验，再把 OHLCV 交给业务层。
+GET 同时返回 `revision` 和兼容字段 `updatedAt`。写操作使用 revision 做 CAS：
 
 ```mermaid
 sequenceDiagram
-    participant C as Collector
-    participant H as Provider Health
-    participant P1 as 主来源
-    participant P2 as 备选来源
+    participant B as Browser
+    participant F as Settings Function
     participant D as D1
 
-    C->>H: 读取熔断状态
-    alt 主来源可调用
-        C->>P1: 请求并校验
-        alt 成功
-            P1-->>C: 标准 OHLCV
-            C->>H: 清零失败计数
-        else 失败
-            C->>H: 记录稳定错误码
-            C->>P2: 降级请求
-            P2-->>C: 标准 OHLCV
-        end
-    else 主来源熔断
-        C->>P2: 直接降级
+    B->>F: GET /api/settings
+    F->>D: 读取 settings + updated_at
+    D-->>B: settings + revision
+    B->>F: PATCH profile + revision
+    F->>D: 原子比较并更新
+    alt revision 一致
+        D-->>B: 新 settings + 新 revision
+    else revision 已变化
+        D-->>B: 409 + 远端最新 settings
     end
-    C->>D: profile 作用域幂等 UPSERT
 ```
 
-同一 profile、symbol、timeframe、timestamp、source 只保存一条。API 读取时保留多源记录用于审计，再按时间戳选用最新采集结果。15m、30m、1h 和 4h 由服务端从 5m 原始条目聚合。
+| 路径 | 方法 | 用途 |
+|---|---|---|
+| `/api/settings` | GET / PUT | 读取或完整保存 V2 设置 |
+| `/api/settings/profiles` | POST | 创建 profile |
+| `/api/settings/profiles/:id` | PATCH / DELETE | 局部更新或删除 profile |
+| `/api/settings/profiles/:id/copy` | POST | 复制 profile，副本默认 disabled |
 
-## 6. 动态 API
+已有设置的完整 PUT 和所有 profile 写操作都要求 revision。缺失返回 428，冲突返回 409。写请求只从 header 读取访问码。
 
-| 路径 | 方法 | 用途 | 写保护 |
-|---|---|---|---|
-| `/api/settings` | GET / PUT | 读取和保存 V2 设置 | PUT 需要访问码 |
-| `/api/market` | GET | OHLCV、指标、覆盖范围和来源 | 只读 |
-| `/api/news` | GET | 新闻查询 | 只读 |
-| `/api/events` | GET | 行情、公告和信号事件 | 只读 |
-| `/api/monitor-status` | GET | 市场状态、来源健康、下一任务 | 只读 |
-| `/api/analyze` | POST | 触发 GitHub 深度分析 | 访问码 |
-| `/api/runs` | GET | GitHub 运行状态 | 只读 |
-| `/api/history` | GET | 研究档案索引 | 只读 |
-| `/api/report` | GET | 报告正文 | 只读 |
-| `/api/report-audit` | GET | 历史报告审计状态 | 只读 |
-| `/api/v1/evidence` | GET / POST | 读取或发布 EvidencePacketV1 | 标准 Bearer；读写 token 均 fail-closed |
-| `/api/evidence` | GET / POST | EvidencePacketV1 兼容入口 | 与 v1 共用校验和存储 |
-| `/api/chat` | POST | 非流式或 SSE 问答 | 访问码 |
-| `/api/chat-sessions` | GET | 持久会话与恢复 | 访问码 |
-| `/api/volguard` | GET | 实时期权代理与快照降级 | 只读 |
-| `/api/health` | GET | 能力布尔值和上游状态 | 只读 |
+## 4. 调度状态机
 
-查询参数均经过 allow-list 和参数化 SQL。错误响应只返回稳定错误码，不回显上游响应、SQL、token 或 key。
+Cron 每五分钟运行。业务任务按 profile 时区和理论时间槽计算，不以 Cron 触发次数计数。
 
-## 7. 指标
+```mermaid
+flowchart TD
+    C["Cron */5"] --> DUE["计算到期任务"]
+    DUE --> SNAP["冻结 profile revision、task、payload hash"]
+    SNAP --> STAGE["D1 stage slot"]
+    STAGE --> FAIR["profile 公平轮转 + 预算选择"]
+    FAIR --> CLAIM["租约领取 + attempt token"]
+    CLAIM --> EXEC["采集 / 信号 / dispatch"]
+    EXEC --> DONE["completed / degraded / deferred"]
+    EXEC --> RETRY["failed + nextAttemptAt"]
+    RETRY -->|"最多 3 次"| CLAIM
+```
 
-动态行情 API 使用同一套服务端实现：
+### 4.1 不可变 slot
 
-- MA20 / MA60；
-- MACD 12/26/9；
-- RSI14；
-- ATR14；
-- 20 期实现波动率。
+`scheduled_slots` 保存：
 
-指标结果同时返回版本和数据充分性。历史不够、输入异常或数据过期时，不返回看似精确的值。拆分复权元数据只来自来源，指标引擎不会自行声称已复权。
+- `profile_revision`
+- `payload_json`
+- `payload_hash`
+- `local_date`
+- 计划时间、状态、尝试次数、租约和错误码
 
-盘中信号使用：
+D1 trigger 禁止修改 slot payload。profile 被删除、停用或 revision 变化后，Worker 用 `PROFILE_DELETED`、`PROFILE_DISABLED` 或 `PROFILE_REVISED` 取消未执行旧 slot。migration 0013 会把无法恢复快照的旧活动 slot 标为 `LEGACY_SLOT_PAYLOAD_UNAVAILABLE`。
 
-- 15 分钟绝对涨跌达到 1%：中等；
-- 15 分钟绝对涨跌达到 2%：高；
-- 成交量 z-score 达到 2：中等；
-- 成交量 z-score 达到 3：高。
+### 4.2 Bootstrap
 
-信号 ID 与时间槽绑定，重复运行不会重复产生同一事件。
+`monitor_bootstrap_targets` 的主键包含 profile、symbol、timeframe、schema 和 target hash。新建 profile、增加标的或改变目标定义后会产生新的 bootstrap 需求。每个 tick 只处理有限 profile，避免空库回填占满一次 Cron。
 
-## 8. 问答、证据和恢复
+### 4.3 公平与负载
+
+- 计划任务外部请求上限：32。
+- 可选择预算硬上限：40；direct fallback 默认使用 32。
+- Queue 每次发现最多 10 个任务，consumer 每批只执行 1 个。
+- profile 采用轮转顺序，避免第一个 profile 长期占满预算。
+- `/run-collection` 返回 cursor 和 backlog，调用方可继续补跑；一次请求不会扫描无限工作量。
+
+超出预算的任务留在 backlog，并在摘要中记录 `capped`、`backlog` 和稳定错误码。
+
+### 4.4 完整分析预算和 dispatch
+
+`full_analysis_reservations` 按 `profileId + localDate` 原子预留。`fullAnalysesPerDay=0` 不 dispatch。
+
+```mermaid
+sequenceDiagram
+    participant W as Worker
+    participant D as D1
+    participant G as GitHub
+
+    W->>D: reserve daily budget(slotId)
+    W->>D: create outbox(payloadHash)
+    W->>G: workflow_dispatch
+    alt 明确 204
+        W->>D: write receipt
+    else 网络或响应不确定
+        W->>G: 按稳定 run title 查询
+        G-->>W: 已存在 / 未找到
+        W->>D: receipt 或 unknown
+    end
+```
+
+`github_dispatch_outbox` 和 `github_dispatch_receipts` 以 slot 为键。Worker 先 reconcile 再重试 POST，避免 GitHub 已接收但客户端未确认时重复触发。
+
+## 5. 默认任务
+
+| 任务 | 目标 | 默认时间 |
+|---|---|---|
+| 美股收盘快照 | US/HK driver | 05:35 |
+| 新闻采集 | profile 主题与实体 | 08:25 |
+| 盘前上下文 | 当前 profile | 08:25 |
+| A 股盘中采集 | CN core/comparison | 09:30–11:30、13:00–15:00，每 5 分钟 |
+| A 股规则信号 | CN core/comparison | 盘中每 15 分钟 |
+| A 股日线回填 | CN core/comparison | 15:20 |
+| 收盘深度分析 | `analysis=full` | 15:20 |
+
+## 6. Provider 和行情写入
+
+Provider Registry 保存 transport、authority、freshness、授权用途和失败轨迹。适配器先校验 HTTP、内容类型、字段、时间和 OHLC 区间，再把标准记录交给写入层。
+
+同一 `profile + symbol + timeframe + timestamp + source` 只保存一条。15m、30m、1h 和 4h 从 5m 原始记录聚合。
+
+行情历史的 `adjustment` 保留来源语义：
+
+- A 股 D1 主路径：`qfq`；
+- Yahoo `auto_adjust=True`：`split-and-dividend-adjusted`；
+- 多种或缺失口径：报告写为 `mixed` 或 `unknown`，不猜测。
+
+报告 Market history 披露 `source`、`adjustment`、`start`、`end` 和 `sampleCount`。指标与报告使用同一批历史。
+
+## 7. 新闻证据流
+
+```mermaid
+flowchart LR
+    Q["profile 主题"] --> SEC["SEC Submissions"]
+    Q --> MIIT["工信部文件发布 API"]
+    Q --> IR["HashKey IR"]
+    Q --> FED["Federal Reserve RSS"]
+    Q --> DISC["Google / 东方财富 / Yahoo"]
+    SEC --> E["evidence"]
+    MIIT --> E
+    IR --> E
+    FED --> E
+    DISC --> D["discovery"]
+    E --> DB[("D1 news")]
+    D --> DB
+```
+
+SEC 只接受 `8-K/8-K/A` 和 `sec.gov/Archives` 链接。请求必须提供符合 fair-access 的组织和联系邮箱。
+
+工信部请求固定 `cateid=58`，分别查询通信和芯片，使用上海日历 30 天窗口。解析器拒绝未来、窗口外、领导活动和非政策栏目；每个查询最多保留 8 条。
+
+发现层成功不会中断 SEC 或工信部查询。官方源 403、结构错误或超限时，本次结果保持 degraded，即使 discovery 返回了新闻。
+
+## 8. 运行身份和报告选择
+
+```mermaid
+flowchart TD
+    R["研究运行"] --> L["legacy / legacy"]
+    R --> PM["profile / manual<br/>profileId"]
+    R --> PS["profile / monitor<br/>profileId + slotId + scheduledFor"]
+    R --> AD["adhoc / adhoc<br/>requestId"]
+```
+
+规则：
+
+- profile 和 adhoc 身份互斥；
+- monitor 三个字段缺一即拒绝；
+- workflow run name 编码 identity；
+- Python 把 identity 写入 history、Manifest 和 Evidence；
+- `/api/history`、`/api/latest`、`/api/runs`、`/api/report-audit` 和 `/api/report` 使用 `profile` 或 `requestId` 过滤；
+- 报告正文请求带 selector 时，服务端读取相邻 Manifest 并校验 identity。
+
+旧报告可以继续阅读，但服务端不会为缺失 identity 的历史数据猜 profile。
+
+## 9. Chat 和 Evidence scope
+
+### 9.1 Chat
 
 ```mermaid
 sequenceDiagram
@@ -226,124 +269,145 @@ sequenceDiagram
     participant D as D1
     participant L as LLM
 
-    B->>C: requestId + sessionId + 问题
-    C->>D: 原子 claim
-    alt 已有完成结果
-        D-->>C: replay
-        C-->>B: 已保存答案
-    else 新请求
-        C->>D: 读取当前行情/新闻/事件/报告
-        C->>L: 带证据编号的上下文
-        L-->>C: SSE
-        C-->>B: meta / delta / done
-        C->>D: 保存完整回答与上下文哈希
-    end
+    B->>C: requestId + sessionId + profileId
+    C->>D: 校验 session owner 并 claim
+    C->>D: 读取同 profile 的行情、事件和 Evidence
+    C->>L: 带编号上下文
+    L-->>C: SSE
+    C->>D: 保存回答和 context hash
+    C-->>B: meta / delta / done
 ```
 
-浏览器断线不会取消已经计费的上游调用。服务端继续消费并保存；客户端用原
-`requestId` 恢复。同一个 `requestId` 被用于不同问题时返回冲突。
+`chat_sessions.profile_id` 绑定会话所有者。跨 profile 使用同一 session 返回 409。GET 和 DELETE 都要求匹配 profile。
 
-Chat Function 会读取当前 profile 的标的清单。问题里出现精确代码或配置名称时，
-它优先使用问题目标，不沿用图表里另一个标的；匹配范围只限当前 profile，避免把
-普通英文缩写误当美股代码。
+报告上下文只能选一种：
 
-证据读取遵循实际落库周期：A 股先读 Worker 保存的 5m 原始线，再兼容旧 15m 记录；
-ORCL、SOXX 等美股读 1d。指标使用同一套服务端计算函数，不从页面显示值反推。
+- profile 报告：`profileId`
+- 临时报告：`reportRequestId`
+- 全局报告：`reportScope=global`
 
-证据标签：
+服务端拒绝混合范围。Manifest 必须满足 identity、路径、评级、审计、引用校验和 Evidence 哈希门禁。
 
-- `[M#]`：行情；
-- `[I#]`：服务端指标快照；
-- `[N#]`：新闻；
-- `[E#]`：事件；
-- 报告和 VolGuard 作为具名上下文源。
+### 9.2 Evidence
 
-证据编号不是因果证明。系统提示会要求模型区分“数据事实”“可能传导”和“证据不足”。
+migration 0014 为 `evidence_packets` 和 `report_manifests` 增加：
 
-深度报告还有独立的落盘门禁。模型上下文只暴露有编号的紧凑账本；写文件前按段落检查
-数字和 Evidence ID，并拒绝未知编号、无方法目标价和无持仓约束的具体配置比例。门禁
-失败仍保留草稿用于审计，但把评级改成 `Not Rated`，Manifest 写入
-`insufficient_evidence / legacy_unverified`。审计索引只有在报告、Manifest 和
-`evidence_packet.json` 的标的、日期、状态与内容哈希全部一致时才显示“已验证”。
-合并报告先渲染确定性的 Evidence Snapshot，再附上各 Agent 的分析过程；前者只转录
-Packet 中已有的行情、指标、公司行动、时点新闻和来源，后者仍需通过 claim validation。
-分析师不再生成最终交易提案，只有组合经理拥有最终评级出口。
+- `scope`
+- `profile_id`
+- `request_id`
+- `slot_id`
+- `run_id`
 
-未形成报告的运行不会再统一写成“分析失败”。审计索引按 `failureClass` 区分：
+GET selector：
 
-- `evidence_validation`：确定性数据预检未通过，模型未运行；
-- `analysis_execution`：模型、工具或工作流运行失败；
-- `invalid_input`：输入根本不是合法研究标的。
+| 参数 | scope |
+|---|---|
+| `profile=<id>` | `profile` |
+| `requestId=<uuid>` | `adhoc` |
+| `scope=global` | `global` |
+| 无 selector | `legacy` |
 
-### Evidence Packet 发布闭环
+selector 互斥。POST 会校验提交 identity 与 Manifest identity 完全一致。D1 在线保留 180 天；报告目录中的 Packet 和 Manifest 作为长期审计副本。
 
-```mermaid
-sequenceDiagram
-    participant A as GitHub Action
-    participant P as Python 预检
-    participant F as Evidence Function
-    participant D as D1
-    participant Q as 网页 / 问答 / Agent
+## 10. 提醒 shadow 账本
 
-    A->>P: 标的 + asOf
-    P->>API: A 股读取工作台前复权日线
-    API->>D: 读取已去重 qfq OHLCV
-    D-->>P: 同网页口径的行情与来源
-    P->>P: 复权、公司行动、未来信息和连续性校验
-    alt 校验失败
-        P->>F: data_validation_failed Packet
-        P-->>A: 跳过模型评级
-    else 校验通过
-        P->>F: 先持久化已验证 Packet
-        P->>A: 运行 TradingAgents 并生成 Manifest
-        A->>F: 再提交 Packet + Manifest + 报告路径
-    end
-    F->>F: 校验 Schema、哈希、标的、时间、状态和路径
-    F->>D: 参数化幂等 UPSERT
-    Q->>F: GET symbol + asOf + depth
-    F->>D: 读取不晚于 asOf 的最近有效包
+migration 0015 扩展 `market_events` 的 provider provenance，并创建 `notification_deliveries`：
+
+- `event_id + channel` 唯一；
+- channel 为 `web` 或 `pushPlus`；
+- 保存 policy snapshot、reason code、attempt、下一次尝试和发送时间；
+- API 按 profile 返回安全状态，不返回 token 或上游正文。
+
+当前信号写入固定调用：
+
+```text
+mode = shadow
+hasPushPlusToken = false
 ```
 
-POST 请求体上限为 1 MiB。权威入口是 `/api/v1/evidence`，只接受标准 Bearer header；
-旧 `/api/evidence` 保留给已部署客户端迁移。写入口在没有 `EVIDENCE_WRITE_TOKEN` 时返回 503，在 token
-不匹配时返回 401；服务端不接受客户端指定过期时间。D1 为每个包设置 180 天在线读取
-期，报告目录中的 `evidence_packet.json` 和 `report_manifest.json` 继续作为长期审计
-副本。网络或 D1 写入失败不会改变报告结论，但运行结果会记录 `evidence_publish` 降级，
-运维人员必须补发后才能把该报告标为在线可追溯。
+Web 满足阈值时记录 `sent / WEB_EVENT_PERSISTED`，含义是网页可见。PushPlus 记录 `skipped / SHADOW_MODE`，不会发往手机。live 状态机已覆盖阈值、静默时段、critical 例外和缺 token，但当前执行路径没有启用 live。
 
-A 股深度任务不会再单独用 Yahoo 决定技术结论。Python 预检先调用工作台
-`/api/market?timeframe=1d`，使用 D1 中与网页一致的去重前复权序列；接口故障时才回退
-Yahoo，并继续执行跳变门禁。这样 `512480.SS` 的份额拆分不会因两条运行链口径不同而
-再次被写成暴跌。
+## 11. 动态 API
 
-## 9. 本地只读 MCP
+| 路径 | 方法 | 选择范围 |
+|---|---|---|
+| `/api/settings` | GET / PUT | 全部设置 |
+| `/api/settings/profiles...` | POST / PATCH / DELETE | profile + revision |
+| `/api/market` | GET | `profile + symbol + timeframe` |
+| `/api/news`、`/api/events` | GET | profile |
+| `/api/monitor-status` | GET | profile，返回来源健康和提醒状态 |
+| `/api/analyze` | POST | profile manual 或 adhoc |
+| `/api/runs`、`/api/history`、`/api/latest` | GET | profile 或 requestId |
+| `/api/report`、`/api/report-audit` | GET | profile 或 requestId |
+| `/api/v1/evidence` | GET / POST | profile、requestId、global 或 legacy |
+| `/api/chat` | POST | profile + session |
+| `/api/chat-sessions` | GET / DELETE | profile owner |
+| `/api/health` | GET | Pages 功能状态 |
+| Worker `/health` | GET | Worker SHA、部署时间、新闻 provider health |
+| `/api/volguard` | GET | VolGuard 实时代理和 snapshot 降级 |
 
-stdio MCP 只映射五个 GET 查询：设置、监控状态、行情、新闻和研究历史。客户端输入不能
-改变上游主机之外的路径，标的、周期、条数和日期均有白名单；协议进程不接收访问码或
-写入 token。详细契约见 [mcp-readonly.md](mcp-readonly.md)。
+查询参数使用 allow-list 和参数化 SQL。错误响应只包含稳定错误码。
 
-## 10. 期权双时钟
+## 12. Migration
 
-VolGuard `/api/live` schema v2 包含：
+| 文件 | 用途 |
+|---|---|
+| `0013_monitor_reliability.sql` | 不可变 slot、预算、outbox/receipt、bootstrap、公平轮转、新闻健康 |
+| `0014_chat_evidence_scope.sql` | Chat/Evidence/Manifest 的 scope 与 owner |
+| `0015_notification_deliveries.sql` | 事件来源字段和提醒 shadow 账本 |
 
-- `underlying`：标的报价和行情时间；
-- `quick_metrics`：当前链可快速计算的指标；
-- `contracts`：合约表；
-- `slow_metrics`：历史模型和风险快照；
-- `source_status`、`source_asof`：来源状态。
+migration 只向前追加。代码回退时保留新增列和表。
 
-研究工作台也兼容旧静态 snapshot，但会标记为 `snapshot/stale`。快速层每 30 秒轮询，慢速层沿用其独立计算时间。休市时行情源可以是健康的 `market_closed`，不能显示成“数据故障”。
+## 13. 部署身份
 
-## 11. 保留的原 TradingAgents 契约
+`deploy-monitor.yml` 在部署时注入：
 
-以下内容受回归测试保护：
+- `WORKER_COMMIT_SHA=$GITHUB_SHA`
+- `WORKER_DEPLOYED_AT=<UTC ISO time>`
 
-- `TradingAgentsGraph` 和各职责 Agent；
-- CLI；
-- 检查点恢复和决策记忆；
-- Python 数据 Provider 与模型 Provider；
-- `daily-analysis.yml` 和 `analysis-request.yml`；
-- 报告生成、索引和历史读取；
-- 网页触发 workflow 的 API。
+workflow 缺少 Cloudflare 凭据、account ID 或 `MONITOR_WORKER_URL` 时直接失败。部署完成后，它请求线上 `/health` 并要求运行时 SHA 等于 `GITHUB_SHA`。
 
-ETF 工作台是产品编排层，不是原框架的替代实现。
+Worker `/health` 返回：
+
+```json
+{
+  "ok": true,
+  "service": "monitor-worker",
+  "deployment": {
+    "commitSha": "...",
+    "deployedAt": "..."
+  },
+  "newsProviders": {
+    "status": "ok",
+    "providers": []
+  }
+}
+```
+
+`ok=true` 只表示 health handler 可响应。验收人员还要检查 commit SHA、部署时间和 `newsProviders.status`。
+
+## 14. 保留的契约
+
+回归测试保护以下能力：
+
+- 七个一级入口和移动端导航；
+- `TradingAgentsGraph`、CLI、检查点和模型 Provider；
+- 临时研究、监控研究和 13 个报告分栏；
+- 持久问答、Evidence 门禁和报告审计；
+- VolGuard 双时钟、期权链和慢指标；
+- 五个 GET-only MCP 工具。
+
+ETF 工作台是编排层，不替代原 TradingAgents 内核。
+
+## 15. 参考项目与取舍
+
+| 项目 | 借鉴内容 | 当前取舍 |
+|---|---|---|
+| TradingAgents | 角色分工、辩论、风险审查和组合经理出口 | 保留原 Python/LangGraph 内核，工作台只增加编排和证据门禁 |
+| OpenBB | 统一数据接口、来源元数据和可替换 Provider | 使用轻量 Provider Registry，不引入完整平台运行时 |
+| Qlib | 离线因子评价、回测和实验可复现 | 保留为离线扩展，不放进五分钟 Worker |
+| FinGPT | 金融语料、领域模型和证据敏感提示 | 当前使用多模型 Provider，未绑定单一金融模型 |
+| Lightweight Charts | 高性能时间序列与增量更新 | vendored 前端依赖，只负责展示，不计算数据真值 |
+| VolGuard | 期权快行情和慢模型分层 | 保持独立仓库与部署，工作台通过 API 接入 |
+
+免费来源的授权和稳定性不同。系统保存来源、时间、质量和降级轨迹，不把可访问等同于官方授权，也不把 discovery 升级为 evidence。更多项目评估见 [参考项目与架构决策](etf-monitoring-reference-and-decisions.md)。

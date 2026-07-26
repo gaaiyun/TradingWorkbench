@@ -1,150 +1,186 @@
 # 产品回归、迁移与防复发约束
 
-更新日期：2026-07-24
+更新日期：2026-07-26
 
-## 1. 发生过什么
+代码基线：`f055d23`
 
-旧工作台已经有总览、研究任务、研究档案、新闻、期权和设置。ETF 主题监控开发初期把整个页面替换成单页 ETF 终端，导致：
+## 1. 保留的产品边界
 
-- TradingAgents 仍在仓库里，但网页看不到完整研究流程；
-- 任务和档案被压缩成按钮或局部信息；
-- 期权入口指向简化快照，用户看不到原 VolGuard 的完整风险能力；
-- 自动测试只验证文字、按钮或文件存在，没有验证真实导航和操作；
-- 视觉样式从成熟工作台变成卡片墙，再变成调试终端，产品语言不一致。
+ETF 监控是 Trading Workbench 的一个工作区。任何首页或设置改动都要保留：
 
-这次回归的根因是信息架构替换，不是某个 CSS 错误，也不是原代码被删除。
+- 七个一级入口；
+- TradingAgents Python、CLI、LangGraph、模型 Provider 和报告链；
+- 临时研究、研究任务、13 个报告分栏和持久问答；
+- VolGuard 期权链、快慢双时钟和独立故障域；
+- GET-only MCP。
 
-## 2. 恢复策略
+Cloudflare、GitHub Actions 和 VolGuard 不合并成一个运行时。Worker 只处理有界 I/O 和状态机。
 
-采用“旧产品壳 + ETF 新工作区”的方式：
+## 2. 多 profile 防串线
 
-```mermaid
-flowchart LR
-    OLD["旧工作台能力"] --> SHELL["统一产品壳"]
-    ETF["ETF 行情与调度"] --> SHELL
-    TA["TradingAgents 内核"] --> SHELL
-    VG["VolGuard 期权"] --> SHELL
-    SHELL --> NAV["七个一级入口"]
-```
+以下契约由设置、前端和 E2E 测试保护：
 
-没有把 TradingAgents 和 VolGuard 强行合成一个运行时。两者数据和部署隔离，导航、状态和视觉统一。
+- 最多 8 个 profile，每组最多 14 个 targets；
+- profile ID 不可修改，至少保留一组；
+- 复制出的 profile 默认停用；
+- profile 写操作使用 revision CAS；
+- 缺 revision 为 428，冲突为 409；
+- 切换 profile 后取消旧异步请求；
+- 行情、新闻、事件、任务、档案、报告和聊天只读当前 profile；
+- 临时研究和 VolGuard 不跟随 profile 重置。
 
-## 3. 本次恢复与增强
+回归用例应覆盖两个 profile 使用同一 symbol 和同一理论时间槽。两组的行情、失败状态、slot 和报告必须分开。
 
-### 产品结构
+## 3. Run identity
 
-- 恢复 Agent 研究、研究任务、研究档案、新闻/事件、期权风控和设置。
-- ETF 行情作为“市场监控”工作区保留。
-- 所有入口使用稳定 hash route，桌面侧栏和移动底栏共用同一路由契约。
-- Agent 运行、档案、报告、任务、设置和新闻绑定现有 API，不使用空壳页面。
+系统只接受四类身份：
 
-### 期权
+| scope / kind | 字段 |
+|---|---|
+| `legacy / legacy` | 无 |
+| `profile / manual` | `profileId` |
+| `profile / monitor` | `profileId + slotId + scheduledFor` |
+| `adhoc / adhoc` | `requestId` |
 
-- 工作台内展示 VolGuard 实时 schema v2。
-- 兼容旧 snapshot，但明确标记降级。
-- 合并快层报价与慢层 GARCH VaR、BSADF、HV、GEX/DEX 等结果。
-- 分开显示行情时间和模型时间。
-- 合约链、认购/认沽方向和缺失指标显示正确。
-- 修复测试收集问题：在线手工检查不再伪装成单元测试，并增加确定性清洗测试。
+防复发规则：
 
-### 行情
+- profile 与 adhoc 互斥；
+- monitor 三字段成组出现；
+- workflow title、history、Manifest、Evidence 和 API 返回同一 identity；
+- profile selector 不读取 adhoc 报告；
+- requestId selector 不继承浏览器当前 profile；
+- 报告正文必须通过相邻 Manifest identity 校验；
+- 旧无身份报告继续可读，但服务端不猜 profile。
 
-- A 股红涨绿跌，美股绿涨红跌。
-- 美股日线目标覆盖五年；Yahoo 请求 5 年，备选来源接收实际 limit，不再固定 320 根。
-- API 上限提高到 2000；网页支持 6m、1y、3y、5y。
-- 只支持日线的美股标的会禁用盘中周期，不再重复请求不可用数据。
-- 页面显示覆盖起止日期、K 线数量和降级原因。
+## 4. Chat 和 Evidence owner
 
-### 生产数据完整性
+migration 0014 增加 scope 与 owner 后，以下行为必须保持：
 
-第一次生产浏览器验收发现，美股自选出现数百至上千个百分点的涨幅。颜色组件没有算错，
-根因是 D1 中只存在一根 2026 年行情和一根 2011 年腾讯旧种子，前端把两根不连续日线
-当成相邻交易日。后续回填又发现，同一交易日可能同时存在 Yahoo 的美东收盘时间和腾讯
-的本地日期时间；若只按完整时间戳去重，会重复计算一天。
+- chat session 绑定 profile；
+- 跨 profile session 返回 409；
+- session GET/DELETE 都校验 owner；
+- 报告上下文在 `profileId`、`reportRequestId`、`reportScope=global` 中只选一种；
+- Evidence GET 的 profile、requestId、global、legacy 范围互斥；
+- Packet、Manifest 和提交 bundle identity 完全一致；
+- identity 不匹配时返回不可见或冲突，不降级到其他报告。
 
-修复包括：
+## 5. 调度可靠性
 
-- 日线遇到超过 45 天的异常断口时只保留最新连续段，避免误删春节等合法休市；
-- 同一交易日有多个来源时，优先保留最近成功采集的一条；
-- Cloudflare Worker 为 Yahoo、东方财富和腾讯发送来源所需的请求头；
-- 受访问令牌保护的人工回填可以越过旧熔断状态重新探测，正常五分钟任务仍遵守熔断；
-- 生产回填和页面验收必须检查唯一交易日数、最近两个交易日、覆盖起止和涨跌幅范围。
+migration 0013 建立的约束：
 
-2026-07-24 的生产回填写入 10,032 根 Yahoo 日线。SOXX、SMH、NVDA、TSM、
-AVGO、AMD、ASML 和 ORCL 各返回 1,254 个唯一交易日，覆盖
-2021-07-26 至 2026-07-23，重复交易日为零。该数字是一次验收记录，不是写死在代码里的
-成功条件；以后仍以 API 返回的来源和时间为准。
+- slot 保存不可变 profile revision、payload JSON、payload hash 和 local date；
+- D1 trigger 拒绝修改 payload；
+- profile 删除、停用或 revision 变化会取消旧 slot；
+- attempt fencing 阻止旧租约覆盖新结果；
+- 最多三次重试；
+- bootstrap 按 profile、symbol、timeframe、schema 和 target hash；
+- 完整分析预算按 profile 和本地日期原子预留；
+- `fullAnalysesPerDay=0` 不 dispatch；
+- profile 公平轮转，任务和外部请求有硬上限；
+- outbox/receipt/reconcile 阻止重复 GitHub dispatch；
+- Queue 和 direct fallback 都报告 capped 与 backlog。
 
-### 真实 Agent 冒烟
+测试必须注入网络超时、GitHub 已接收但客户端未知、D1 写回失败、profile revision 变化和多 profile 竞争。
 
-同日从 GitHub Actions 实际运行 `512480.SS` 深度研究：
+## 6. 提醒 shadow
 
-- 安装、行情/新闻/基本面 Agent、辩论、风险决策和报告持久化全部成功；
-- 模型阶段约十分钟，使用仓库保存的 OpenAI-compatible 配置；
-- 生成 28,928 字符的完整报告并写入
-  `reports/512480.SS/2026-07-23/complete_report.md`；
-- `latest.json` 和 `history.json` 已更新，生产 `/api/latest` 与报告 URL 可读取。
+migration 0015 建立事件 provenance 和 `notification_deliveries`。
 
-第一次 run 的最终状态曾显示失败，但失败发生在报告写回之后：工作流无条件调用
-`actions/configure-pages`，而新仓库没有启用 GitHub Pages。正式站点实际使用
-Cloudflare Pages，因此后续把 GitHub Pages 三个步骤置于
-`ENABLE_GITHUB_PAGES=true` 条件下。未启用的可选发布目标不再把成功的 Agent 研究标成
-失败。
+当前契约：
 
-### 视觉
+- `eventId + channel` 唯一；
+- Web `sent / WEB_EVENT_PERSISTED` 只表示网页可见；
+- PushPlus `skipped / SHADOW_MODE` 表示没有外发；
+- 阈值、静默时段、critical 例外和缺 token 有确定性策略结果；
+- API 不返回 token、策略秘密或上游正文；
+- 页面区分 SHADOW、延期、失败、结果不确定和已发送。
 
-- 取消彩色左边卡片和卡片墙。
-- 使用一个石墨灰 token 系统；语义色只用于行情和状态。
-- 普通界面不使用整页等宽字体。
-- 顶栏和浮层保留克制的层次，不用大面积渐变、发光和装饰动效。
-- 动效控制在 160–220ms，并尊重 `prefers-reduced-motion`。
+live PushPlus 尚未启用。只有完成生产 canary、重复事件对账和结果不确定处理后，才能修改这一声明。
 
-## 4. 防复发测试
+## 7. 行情与复权
 
-以后改首页，必须同时通过：
+曾出现的生产问题包括旧种子与新行情相隔多年、同交易日多来源重复、ETF 拆分被写成暴跌。防复发约束：
+
+- 日线按交易日去重；
+- 超过 45 天的异常旧种子断口不参与相邻涨跌；
+- A 股主路径使用 qfq；
+- Yahoo auto-adjust 标记 `split-and-dividend-adjusted`；
+- 报告 Market history 披露 source、adjustment、起止日期和样本数；
+- mixed 或 unknown 不改写成 qfq；
+- `512480.SS` 2026-07-03 附近保持拆分连续；
+- 页面、Packet、指标和报告使用同一截止时间与历史口径；
+- 短上市历史不补造 MA200 或五年趋势。
+
+## 8. 新闻证据
+
+当前已实现：
+
+- SEC EDGAR Submissions：ORCL、GOOGL 的 `8-K/8-K/A`；
+- 工信部文件发布 API：通信和芯片政策；
+- HashKey 公司投资者关系公告；
+- Federal Reserve 官方 RSS：有界宏观证据；
+- Google、东方财富和 Yahoo 的 discovery 降级链。
+
+官方失败不能由 discovery 成功掩盖。HTTP 200 但结构错误也要 degraded。
+
+仍未完整接入：
+
+- 上交所、深交所基金公告；
+- 巨潮和基金管理人公告；
+- 中证指数成分与公司行动；
+- 更多公司 IR 和 HKEXnews 发行人原文。
+
+页面对缺失字段显示“暂无可靠数据”，不构造估计值。
+
+## 9. 部署门禁
+
+`deploy-monitor` 必须：
+
+1. 缺 Cloudflare 凭据或 `MONITOR_WORKER_URL` 时失败；
+2. 运行 monitor contract tests；
+3. 应用 migration；
+4. 注入 commit SHA 和部署时间；
+5. 部署后请求 `/health`；
+6. 要求运行时 SHA 等于 GitHub SHA。
+
+绿色 workflow 只有在 migration、deploy 和 SHA verify 都成功时才算 Worker 发布证据。Pages 也要检查 deploy step 和生产路由，不能只看 workflow 总结。
+
+功能分支上的测试通过不代表生产已部署。交接文档要分开记录代码 SHA、main SHA、Pages deployment、Worker SHA、migration 列表和生产冒烟时间。
+
+## 10. 回归矩阵
 
 ```mermaid
 flowchart TD
-    U["UI 改动"] --> C["静态契约"]
-    U --> B["浏览器真实操作"]
-    U --> A["API / D1 集成"]
-    U --> P["Python 原内核"]
-    U --> O["VolGuard 双时钟"]
-    C --> G["发布门禁"]
+    U["产品改动"] --> N["Node API / Worker"]
+    U --> B["浏览器 E2E"]
+    U --> P["Python / Ruff"]
+    U --> M["Migration 本地应用"]
+    N --> G["发布门禁"]
     B --> G
-    A --> G
     P --> G
-    O --> G
+    M --> G
+    G --> S["生产冒烟"]
+    S --> A["08:25 外审"]
 ```
 
-强制契约：
+提交前至少覆盖：
 
-- 七个一级入口各有一个可见工作区。
-- 从任务页可以运行，从运行页可以进入报告，从报告可以进入问答上下文。
-- 期权不是只有外链；工作台中必须有报价、风险指标、合约链和刷新状态。
-- 原 `TradingAgentsGraph`、CLI、workflow 和报告接口存在且可测试。
-- 页面不可用状态不得显示 fixture、旧缓存或 `0` 代替缺失指标。
-- 路由、颜色、行情竞态、移动端和历史区间由浏览器测试验证。
+- Functions、Worker、frontend Node tests；
+- `node --check`；
+- Python 全量 pytest 与 Ruff；
+- Playwright 七入口、双 profile、报告身份和聊天恢复；
+- migration 0013–0015 本地应用；
+- `git diff --check` 和链接检查。
 
-## 5. Git 与发布收敛
+报告测试数字时必须注明命令、HEAD 和时间。不要复制旧交接中的数字。
 
-- 产品主仓库迁移到 `gaaiyun/TradingWorkbench`；原 `gaaiyun/TradingAgents` 暂时只作为可回退源。
-- Python 包继续叫 `tradingagents`，以兼容上游 API、CLI、测试和现有脚本；仓库名与包名不要求一致。
-- `main` 是唯一日常发布主线。
-- 功能分支通过测试后快进合并，合并完成再删除远程功能分支。
-- 分支和仓库名称不含 `codex/`。
-- 安全点使用 tag，不长期保留已合并的开发分支。
-- 不 force push，不用 `--no-verify` 绕过 hooks。
-- 文档和生产行为必须在同一提交系列中更新。
+## 11. Git 和回退
 
-## 6. 尚未假装完成的内容
+- `main` 是发布主线；
+- 功能分支通过测试后使用普通 merge 或 fast-forward；
+- 报告任务写入 main 时先 fetch，再处理新增版本目录；
+- 不 force push，不用 `--no-verify`；
+- migration 向前保留，代码回退不删除表或列；
+- 文档和行为在同一提交系列中更新。
 
-下面是后续增强，不应在当前页面标成已经可用：
-
-- 交易所、巨潮、SEC、公司 IR 等官方证据层的直接采集，以及跨发布者重复簇；
-- ETF 持仓、规模、跟踪误差和份额变化的统一 adapter；
-- 20/60 日跨市场相关性和隔夜传导统计；
-- Qlib 离线因子评价和组合回测；
-- 有可靠来源后的 ETF iNAV 和溢折价。
-
-页面遇到这些字段时应显示“暂无可靠数据”，而不是构造估计值。
+回退后重新验证 profile 隔离、Worker SHA、行情复权、新闻证据、Evidence scope、聊天 owner、提醒 shadow 和 VolGuard。
