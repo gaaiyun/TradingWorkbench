@@ -18,19 +18,19 @@
 
 多 profile、运行身份隔离、Chat/Evidence owner、调度可靠性、提醒 shadow 账本、Worker/Pages 部署指纹的**代码**均已合入 `main`（HEAD = `origin/main`，工作树干净，GitHub CI 全绿）。
 
-但**代码合入不等于已发布**。2026-07-26 的独立核查证实：Pages 生产版本确实是最新 SHA，却不是经由 CI 门禁发布的；Monitor Worker 生产版本落后 6 个提交；两条部署流水线当前都因缺 Cloudflare 凭据而失败。详见 §1.5。接手者不要把本节的"已合入"读成"已上线"。
+但**代码合入不等于 GitHub 自动部署链已恢复**。本轮已用本机 Wrangler OAuth 手工发布 Pages 与 Monitor Worker，线上两端现已回读 `e83ca5f`；GitHub Actions 仍会因缺 Cloudflare API token 而在凭据检查处失败，不能把这次手工发布当成 CI 已恢复。
 
 同日终审又修复了三个用户可见回归：旧版无 identity 的 43 份 `legacy_unverified` 报告恢复只读展示、同一新闻按 cluster/原文聚合关联标的、交易时钟按沪深与纽约时区及周末判断。历史未验证报告仍不能进入问答，4 份 `invalidated` 报告仍只在“历史审计”中显示。
 
 首轮 `cn-semi-comms` 手工监控组研究已由 GitHub Actions 运行 `30189419616` 完成，并生成 `515880.SS`、`512480.SS` 的 profile-scoped 报告及角色分卷。两份 Evidence Packet 均有效，但引用门禁发现未引用数字、无依据仓位或目标价，故均为 `insufficient_evidence / legacy_unverified / Not Rated`，没有进入最新观点或问答。当前审计为 `49` 份成功报告、`0 verified`、`45 legacy_unverified`、`4 invalidated`。
 
-尚未完成的是 2026-07-27 08:25 的真实 SEC/工信部采集验收，以及生成首份真正通过当前 Evidence 门禁的报告。接手者不能把周日 Provider `unavailable` 写成采集失败，也不能把旧报告或本次未通过引用门禁的报告升级为 verified。
+尚未完成的是 2026-07-27 08:25 的真实 SEC/工信部采集验收、补齐 `TRADINGAGENTS_SEC_CONTACT_EMAIL` secret，以及生成首份真正通过当前 Evidence 门禁的报告。周日 Provider `unavailable` 仍符合休市预期；不能把旧报告或本次未通过引用门禁的报告升级为 verified。
 
 本轮接手已完成数字引用判定修复：`_NUMERIC_CLAIM_RE` 不再把日期、时间戳、标的代码、哈希、Markdown 标题序号和 RSI/MACD/均线参数当作研究数字；逐段复测后 `515880.SS` 为 `179→117`、`512480.SS` 为 `128→84`、`3887.HK` 为 `169→108`，剩余段落仍含未带 Evidence ID 的真实数值，因此没有放宽门禁。三份 `-v4` Manifest 与 `public/data/report-audit.json` 已同步更新。
 
 ## 1.5 生产状态真相（2026-07-26 独立核查）
 
-以下每条都由实际执行的命令或 HTTP 请求得出，不是从上一轮文档抄来的。**这是接手后要处理的第一优先级。**
+以下每条都由实际执行的命令或 HTTP 请求得出，不是从上一轮文档抄来的。已完成项也保留，便于下一个 agent 区分“代码未做”与“生产依赖未满足”。
 
 ### 🔴 P0：部署凭据缺失，两条部署流水线已失效
 
@@ -48,26 +48,24 @@
 
 `CLOUDFLARE_API_TOKEN` 是在 2026-07-25T18:20 之后、2026-07-26T04:47 之前从仓库消失或失效的。**恢复它是接手后的第一件事**，否则 §6 描述的六道部署门禁全部形同虚设。
 
-### 🔴 P0：Monitor Worker 生产版本落后 6 个提交
+### ✅ 已完成：Pages 与 Monitor Worker 已发布到当前 SHA
 
 ```text
-worker /health commitSha : 208edf3c4afa84fc9f5d00bdadad5b83df3a0d50
-worker deployedAt        : 2026-07-26T04:52:40Z
-本地 HEAD / origin/main  : 691a4aecabf9fd7a5f2fdb81ff3873d715fec320
-git rev-list --count 208edf3..HEAD → 6
+Pages `/api/health` commitSha : `e83ca5f`
+Worker `/health` commitSha : `e83ca5f`
+Worker deployedAt : `2026-07-26T10:02:39Z`
+Pages immutable deployment : `https://8e98184f.tradingagents-board.pages.dev`
 ```
 
-线上 Worker **不包含**这 6 个提交：`6186f17` 恢复历史档案并聚合资讯、`819f30e` 增加 Pages 版本回读门禁、`0f889fb` 校正生产状态、`d302afe` 识别研究运行失败、`aeda615` 更新分析报告、`691a4ae` 兼容跨平台证据哈希。
+线上回读已确认包含本轮最新观点门禁、卖方策略观察、SEC runtime UA、health 50ms 和缓存哈希改动。
 
-### 🟠 P1：Pages 虽是最新 SHA，但未经门禁发布
+### 🟠 P1：GitHub 自动部署凭据仍缺失
 
-`GET /api/health` 的 `deployment.commitSha` = `691a4aec…` = `origin/main` = 本地 HEAD，三者一致。
+`CLOUDFLARE_API_TOKEN` 与 `MONITOR_WORKER_URL` 仍未配置，因此自动部署 workflow 仍 fail-closed；本轮未把 token 写入仓库，也未伪造 secret。
 
-但 HEAD 这次提交**没有触发过任何 `deploy-workbench` run**。也就是说生产 Pages 内容确实是最新代码，却是仓库外手动 `wrangler pages deploy` 发布的，凭据检查、契约测试、migration、部署后 SHA 回读这些门禁在这次发布中**全部没有生效**。
+### ✅ 已完成：远程 D1 migrations 核验
 
-### 🟠 P1：migrations 0013–0015 是否已应用无法从 CI 侧证实
-
-能对 D1 执行 migration 的两条流水线在这三个 migration 存在之后的所有运行都失败在凭据检查这一步。若它们真的已生效，必然是仓库外手动 `wrangler d1 migrations apply` 的结果。**接手后必须用 `wrangler d1 migrations list --remote` 亲自确认**，不要假定已应用。
+`d1_migrations` 只读查询已返回 `0013_monitor_reliability.sql`、`0014_chat_evidence_scope.sql`、`0015_notification_deliveries.sql`，三项均已在远程 D1。
 
 ### 🟡 P2：main 是直接 push 的，无 PR 留痕
 
@@ -77,7 +75,7 @@ git rev-list --count 208edf3..HEAD → 6
 
 ### ⚪ 符合预期，不是故障
 
-- Worker `/health` 的 `newsProviders.status = unavailable`：2026-07-26 是**星期日**，符合文档约定，不要写成采集失败。
+- Worker `/health` 的 `newsProviders.status = unavailable`：2026-07-26 是**星期日**，符合文档约定，不要写成采集失败；周一采集后再按 §8 的状态码和失败轨迹协议判断。
 - 报告审计 `49 / 0 verified / 45 legacy_unverified / 4 invalidated`：直接读 `public/data/report-audit.json`（`generatedAt 2026-07-26T05:50:32Z`）核对无误，`complete_report.md` 实际文件数也是 49。
 - GitHub Actions run `30189419616`（cn-semi-comms 首轮）：conclusion **success**，与文档描述一致。
 - 最新提交的 `ci.yml` run `30190646220`：8 个 job 全绿。
