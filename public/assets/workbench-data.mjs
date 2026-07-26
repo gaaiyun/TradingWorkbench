@@ -195,6 +195,43 @@ export function filterFeedItems(items, filters = {}) {
   });
 }
 
+export function notificationDeliveryBadges(deliveries) {
+  return (Array.isArray(deliveries) ? deliveries : []).flatMap((delivery) => {
+    const channel = delivery?.channel;
+    const status = delivery?.status;
+    const reason = delivery?.reasonCode;
+    if (channel === "web" && status === "sent" && reason === "WEB_EVENT_PERSISTED") {
+      return [{ tone: "ok", text: "网页可见" }];
+    }
+    if (channel !== "pushPlus") return [];
+    if (status === "skipped" && reason === "SHADOW_MODE") {
+      return [{ tone: "muted", text: "PushPlus · SHADOW" }];
+    }
+    if (status === "deferred") {
+      return [{ tone: "muted", text: "PushPlus · 静默延期" }];
+    }
+    if (status === "failed") {
+      return [{ tone: "negative", text: "PushPlus · 失败" }];
+    }
+    if (status === "uncertain") {
+      return [{ tone: "warning", text: "PushPlus · 结果不确定" }];
+    }
+    if (status === "sent") {
+      return [{ tone: "ok", text: "PushPlus · 已发送" }];
+    }
+    if (status === "pending" || status === "sending") {
+      return [{ tone: "warning", text: "PushPlus · 待处理" }];
+    }
+    if (status === "skipped" && reason === "PUSHPLUS_TOKEN_MISSING") {
+      return [{ tone: "negative", text: "PushPlus · 缺少密钥" }];
+    }
+    if (status === "skipped") {
+      return [{ tone: "muted", text: "PushPlus · 未投递" }];
+    }
+    return [];
+  });
+}
+
 export function buildTaskTimeline(profile) {
   if (profile?.enabled === false) return [];
   const schedules = profile?.schedules || {};

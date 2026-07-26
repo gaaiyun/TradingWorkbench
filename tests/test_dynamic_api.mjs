@@ -372,6 +372,75 @@ test("news and events APIs support topic and importance filters without interpol
   assert.deepEqual(DB.calls[1].params.slice(0, 3), ["semi", "earnings", "high"]);
 });
 
+test("events expose structured provenance, safe delivery state, and an after cursor", async () => {
+  const oldEvent = {
+    id: "event-old",
+    symbol: "515880.SS",
+    profile_id: "semi",
+    topic: "market_move",
+    importance: "high",
+    event_at: "2026-07-24T08:45:00Z",
+    title: "Old",
+    source: "signal-engine",
+    as_of: "2026-07-24T08:45:00Z",
+    fetched_at: "2026-07-24T08:45:05Z",
+    freshness: "fresh",
+    adjustment: "none",
+    quality: "good",
+    provider: "tencent",
+    provider_as_of: "2026-07-24T08:45:00Z",
+    provider_quality: "good",
+    rule_version: "intraday-signal-v1",
+  };
+  const event = {
+    ...oldEvent,
+    id: "event-new",
+    event_at: "2026-07-24T09:00:00Z",
+    title: "New",
+    as_of: "2026-07-24T09:00:00Z",
+    provider_as_of: "2026-07-24T09:00:00Z",
+  };
+  const DB = new FakeD1({ rows: {
+    market_events: [oldEvent, event],
+    notification_deliveries: [{
+      event_id: "event-new",
+      profile_id: "semi",
+      channel: "pushPlus",
+      status: "skipped",
+      policy_snapshot_json: '{"secret":"must-not-leak"}',
+      reason_code: "SHADOW_MODE",
+      attempt_count: 0,
+      next_attempt_at: null,
+      last_attempt_at: null,
+      sent_at: null,
+      updated_at: "2026-07-24T09:00:05Z",
+    }],
+  } });
+  const response = await eventsApi.onRequestGet({
+    request: request("/api/events?profile=semi&after=2026-07-24T08:50:00Z"),
+    env: { DB },
+  });
+  const payload = await response.json();
+
+  assert.equal(payload.status, "ok");
+  assert.equal(payload.cursor, "2026-07-24T09:00:00Z");
+  assert.deepEqual(payload.data.map(({ id }) => id), ["event-new"]);
+  assert.equal(payload.data[0].provider, "tencent");
+  assert.equal(payload.data[0].provider_as_of, "2026-07-24T09:00:00Z");
+  assert.deepEqual(payload.data[0].deliveries, [{
+    channel: "pushPlus",
+    status: "skipped",
+    reasonCode: "SHADOW_MODE",
+    attemptCount: 0,
+    nextAttemptAt: null,
+    lastAttemptAt: null,
+    sentAt: null,
+    updatedAt: "2026-07-24T09:00:05Z",
+  }]);
+  assert.doesNotMatch(JSON.stringify(payload), /must-not-leak|policy_snapshot/i);
+  assert.match(DB.calls[0].sql, /event_at\s*>\s*\?/i);
+});
+
 test("monitor status returns source health in the same envelope", async () => {
   const DB = new FakeD1({ rows: { source_health: [{
     source: "wire",
@@ -395,6 +464,61 @@ test("monitor status returns source health in the same envelope", async () => {
   assert.equal(DB.calls[0].params[0], "wire");
   assert.equal(typeof DB.calls[0].params[1], "string");
   assert.equal(DB.calls[0].params[2], 10);
+});
+
+test("monitor status adds profile-scoped safe notification state and cursor", async () => {
+  const DB = new FakeD1({ rows: {
+    source_health: [{
+      source: "wire",
+      status: "ok",
+      as_of: "2026-07-24T09:00:00Z",
+      fetched_at: "2026-07-24T09:00:05Z",
+      freshness: "fresh",
+      adjustment: null,
+      quality: "good",
+    }],
+    notification_deliveries: [
+      {
+        event_id: "event-other",
+        profile_id: "other",
+        channel: "pushPlus",
+        status: "failed",
+        reason_code: "PUSHPLUS_HTTP_500",
+        attempt_count: 1,
+        updated_at: "2026-07-24T09:02:00Z",
+      },
+      {
+        event_id: "event-1",
+        profile_id: "semi",
+        channel: "pushPlus",
+        status: "uncertain",
+        reason_code: "PUSHPLUS_TIMEOUT",
+        attempt_count: 1,
+        updated_at: "2026-07-24T09:03:00Z",
+        policy_snapshot_json: '{"private":"hidden"}',
+      },
+    ],
+  } });
+  const response = await monitorApi.onRequestGet({
+    request: request("/api/monitor-status?profile=semi&after=2026-07-24T09:01:00Z"),
+    env: { DB },
+  });
+  const payload = await response.json();
+
+  assert.equal(payload.status, "ok");
+  assert.equal(payload.cursor, "2026-07-24T09:03:00Z");
+  assert.deepEqual(payload.notifications, [{
+    eventId: "event-1",
+    channel: "pushPlus",
+    status: "uncertain",
+    reasonCode: "PUSHPLUS_TIMEOUT",
+    attemptCount: 1,
+    nextAttemptAt: null,
+    lastAttemptAt: null,
+    sentAt: null,
+    updatedAt: "2026-07-24T09:03:00Z",
+  }]);
+  assert.doesNotMatch(JSON.stringify(payload), /private|policy_snapshot/i);
 });
 
 test("dynamic queries exclude expired rows before ordering and limiting", async () => {

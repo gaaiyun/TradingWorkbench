@@ -5,10 +5,23 @@ from scripts.run_daily import (
     _load_workbench_news,
     _workflow_metadata,
     backfill_history_report_files,
+    build_push_message,
     main,
     report_save_directory,
     update_history,
 )
+
+
+def test_pushplus_message_is_explicitly_a_daily_report_not_an_intraday_alert():
+    title, content = build_push_message(
+        "2026-07-24",
+        [{"ticker": "SPY", "rating": "Hold", "error": None}],
+        "ark",
+    )
+
+    assert "日报" in title
+    assert "日报 PushPlus" in content
+    assert "盘中事件" not in content
 
 
 def test_report_save_directory_never_overwrites_an_archived_report(tmp_path):

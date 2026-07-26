@@ -69,7 +69,10 @@ export async function mutateSettingsInD1(
   return { settings, updatedAt };
 }
 
-async function queryRows(db, { table, columns, filters, timeColumn, from, to, limit }) {
+async function queryRows(
+  db,
+  { table, columns, filters, timeColumn, from, to, after, limit },
+) {
   const clauses = [];
   const values = [];
   for (const [column, value] of filters) {
@@ -84,6 +87,10 @@ async function queryRows(db, { table, columns, filters, timeColumn, from, to, li
   if (to) {
     clauses.push(`${timeColumn} <= ?`);
     values.push(to);
+  }
+  if (after) {
+    clauses.push(`${timeColumn} > ?`);
+    values.push(after);
   }
   clauses.push("(expires_at IS NULL OR expires_at > ?)");
   values.push(new Date().toISOString());
@@ -132,11 +139,42 @@ export function queryNewsItems(db, query) {
   });
 }
 
-export function queryMarketEvents(db, query) {
-  return queryRows(db, {
+function safeDelivery(row) {
+  return {
+    eventId: row.event_id,
+    channel: row.channel,
+    status: row.status,
+    reasonCode: row.reason_code ?? null,
+    attemptCount: Number(row.attempt_count || 0),
+    nextAttemptAt: row.next_attempt_at ?? null,
+    lastAttemptAt: row.last_attempt_at ?? null,
+    sentAt: row.sent_at ?? null,
+    updatedAt: row.updated_at ?? null,
+  };
+}
+
+async function queryDeliveriesForEvents(db, eventIds) {
+  if (eventIds.length === 0) return [];
+  const placeholders = eventIds.map(() => "?").join(", ");
+  const result = await db.prepare(`
+    SELECT event_id, channel, status, reason_code, attempt_count,
+           next_attempt_at, last_attempt_at, sent_at, updated_at
+    FROM notification_deliveries
+    WHERE event_id IN (${placeholders})
+    ORDER BY updated_at DESC
+  `).bind(...eventIds).all();
+  const allowed = new Set(eventIds);
+  return (result?.results || [])
+    .filter(({ event_id: eventId }) => allowed.has(eventId))
+    .map(safeDelivery);
+}
+
+export async function queryMarketEvents(db, query) {
+  const rows = await queryRows(db, {
     table: "market_events",
     columns: [
       "id", "symbol", "profile_id", "topic", "importance", "event_at", "title", "description",
+      "provider", "provider_as_of", "provider_quality", "rule_version",
       ...SOURCE_COLUMNS,
     ],
     filters: [
@@ -148,6 +186,20 @@ export function queryMarketEvents(db, query) {
     timeColumn: "event_at",
     ...query,
   });
+  const deliveries = await queryDeliveriesForEvents(
+    db,
+    rows.map(({ id }) => id),
+  );
+  const byEvent = new Map();
+  for (const delivery of deliveries) {
+    if (!byEvent.has(delivery.eventId)) byEvent.set(delivery.eventId, []);
+    const { eventId: _eventId, ...safe } = delivery;
+    byEvent.get(delivery.eventId).push(safe);
+  }
+  return rows.map((row) => ({
+    ...row,
+    deliveries: byEvent.get(row.id) || [],
+  }));
 }
 
 export function querySourceHealth(db, query) {
@@ -157,7 +209,32 @@ export function querySourceHealth(db, query) {
     filters: [["source", query.source]],
     timeColumn: "as_of",
     ...query,
+    after: null,
   });
+}
+
+export async function queryNotificationStatus(db, query) {
+  const clauses = [];
+  const values = [];
+  if (query.profile) {
+    clauses.push("profile_id = ?");
+    values.push(query.profile);
+  }
+  if (query.after) {
+    clauses.push("updated_at > ?");
+    values.push(query.after);
+  }
+  values.push(query.limit);
+  const where = clauses.length ? `WHERE ${clauses.join(" AND ")}` : "";
+  const result = await db.prepare(`
+    SELECT event_id, channel, status, reason_code, attempt_count,
+           next_attempt_at, last_attempt_at, sent_at, updated_at
+    FROM notification_deliveries
+    ${where}
+    ORDER BY updated_at DESC
+    LIMIT ?
+  `).bind(...values).all();
+  return (result?.results || []).map(safeDelivery);
 }
 
 export async function queryEvidencePacket(db, {

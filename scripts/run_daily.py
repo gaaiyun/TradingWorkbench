@@ -882,7 +882,7 @@ def resolve_llm_key_status() -> tuple[bool, str]:
 
 
 def push_wechat(title: str, content: str) -> dict:
-    """PushPlus 微信推送；无 token 时静默跳过。"""
+    """PushPlus 日报推送；与盘中事件提醒链路相互独立。无 token 时跳过。"""
     token = os.environ.get("PUSHPLUS_TOKEN", "")
     if not token:
         return {"sent": False, "reason": "no_token"}
@@ -1037,7 +1037,7 @@ def build_push_message(trade_date: str, results: list[dict], provider: str) -> t
     ok = [r for r in results if not r.get("error")]
     bad = [r for r in results if r.get("error")]
     tags = " ".join(f"{r['ticker']}:{r['rating']}" for r in ok) or "全部失败"
-    title = f"TradingAgents {trade_date} | {tags}"
+    title = f"TradingAgents 日报 {trade_date} | {tags}"
 
     lines = [f"## TradingAgents 每日决策 ({trade_date})", ""]
     for r in ok:
@@ -1048,7 +1048,7 @@ def build_push_message(trade_date: str, results: list[dict], provider: str) -> t
     site = os.environ.get("PAGES_URL", "")
     if site:
         lines += ["", f"[查看完整多智能体报告]({site})"]
-    lines += ["", f"---\n*provider: {provider} · TradingAgents 自动推送*"]
+    lines += ["", f"---\n*provider: {provider} · TradingAgents 日报 PushPlus*"]
     return title, "\n".join(lines)
 
 
@@ -1132,7 +1132,7 @@ def main(argv: list[str] | None = None) -> int:
     if not args.no_push:
         title, content = build_push_message(trade_date, results, provider)
         outcome = push_wechat(title, content)
-        print(f"[PUSH] sent={outcome.get('sent')} detail={outcome.get('msg') or outcome.get('reason', '')}")
+        print(f"[DAILY_PUSHPLUS] sent={outcome.get('sent')} detail={outcome.get('msg') or outcome.get('reason', '')}")
 
     return 0 if ok_count else 1
 

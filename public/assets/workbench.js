@@ -10,6 +10,7 @@ import {
   filterFeedItems,
   mergeIncrementalBatch,
   normalizeEnvelope,
+  notificationDeliveryBadges,
   selectConclusion,
 } from "./workbench-data.mjs";
 import { renderMarkdown } from "./workbench-markdown.mjs";
@@ -667,10 +668,14 @@ import {
       const href = safeUrl(item.url);
       const tag = href ? "a" : "article";
       const link = href ? ` href="${escapeHtml(href)}" target="_blank" rel="noopener noreferrer"` : "";
+      const deliveryBadges = notificationDeliveryBadges(item.deliveries)
+        .map(({ tone, text }) => `<span class="delivery-badge is-${escapeHtml(tone)}">${escapeHtml(text)}</span>`)
+        .join("");
       return `<${tag} class="feed-item"${link}>
         <div class="feed-item-meta"><i class="importance ${escapeHtml(item.importance)}"></i><span>${escapeHtml(item.type === "event" ? "EVENT" : "NEWS")}</span><span>${escapeHtml(item.symbol || "MARKET")}</span><span>${formatTime(item.at, true)}</span></div>
         <h3>${escapeHtml(item.title || "未命名事件")}</h3>
         <p>${escapeHtml(item.summary)}</p>
+        ${deliveryBadges ? `<div class="delivery-badges">${deliveryBadges}</div>` : ""}
         <div class="feed-item-foot"><span>${escapeHtml(item.source)}</span><span>${escapeHtml(item.importance.toUpperCase())}</span></div>
       </${tag}>`;
     }).join("");
@@ -1212,9 +1217,12 @@ import {
       const tag = href ? "a" : "article";
       const link = href ? ` href="${escapeHtml(href)}" target="_blank" rel="noopener noreferrer"` : "";
       const tier = item.sourceTier || item.source_tier || (item.type === "event" ? "evidence" : "discovery");
+      const delivery = notificationDeliveryBadges(item.deliveries)
+        .map(({ text }) => text)
+        .join(" · ");
       return `<${tag} class="evidence-row"${link}>
         <time>${escapeHtml(formatTime(item.at, true))}</time>
-        <div><span>${escapeHtml(item.symbol || "MARKET")} · ${escapeHtml(tier)}</span><b>${escapeHtml(item.title || "未命名事件")}</b><small>${escapeHtml(item.summary || "没有可验证摘要")}</small></div>
+        <div><span>${escapeHtml(item.symbol || "MARKET")} · ${escapeHtml(tier)}</span><b>${escapeHtml(item.title || "未命名事件")}</b><small>${escapeHtml(item.summary || "没有可验证摘要")}${delivery ? ` · ${escapeHtml(delivery)}` : ""}</small></div>
         <em>${escapeHtml(item.source || "unknown")}</em>
         <strong>${escapeHtml(String(item.importance || "medium").toUpperCase())}</strong>
       </${tag}>`;

@@ -552,6 +552,11 @@ a { color: inherit; }
 .importance.high, .importance.critical { background: var(--warning); }
 .feed-item h3 { margin: 5px 0 4px; font-size: 11px; font-weight: 580; line-height: 1.45; }
 .feed-item p { display: -webkit-box; margin: 0; overflow: hidden; color: var(--muted); font-size: 10px; line-height: 1.45; -webkit-box-orient: vertical; -webkit-line-clamp: 2; }
+.delivery-badges { display: flex; flex-wrap: wrap; gap: 4px; margin-top: 7px; }
+.delivery-badge { padding: 2px 5px; border: 1px solid var(--line-strong); color: var(--quiet); font: 7px "IBM Plex Mono", Consolas, monospace; }
+.delivery-badge.is-ok { border-color: rgba(56, 183, 136, .45); color: var(--positive); }
+.delivery-badge.is-warning { border-color: rgba(213, 169, 79, .45); color: var(--warning); }
+.delivery-badge.is-negative { border-color: rgba(224, 95, 104, .45); color: var(--negative); }
 .feed-item-foot { display: flex; justify-content: space-between; margin-top: 7px; color: var(--quiet); font-size: 8px; }
 .unavailable-block { display: grid; min-height: 180px; place-content: center; padding: 20px; color: var(--muted); text-align: center; }
 .unavailable-block span { margin-top: 5px; color: var(--quiet); font-size: 10px; }

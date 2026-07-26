@@ -56,7 +56,11 @@ export class FakeD1 {
         for (const match of sql.matchAll(/\b([a-z_]+)\s*=\s*\?/gi)) {
           predicates.push({ index: match.index, column: match[1], operator: "=" });
         }
-        for (const match of sql.matchAll(/\b([a-z_]+)\s*(>=|<=)\s*\?/gi)) {
+        for (const match of sql.matchAll(/\b([a-z_]+)\s*(>=|<=|>)\s*\?/gi)) {
+          if (
+            match[1].toLowerCase() === "expires_at"
+            && /expires_at\s+IS\s+NULL\s+OR\s+expires_at\s*>\s*\?/i.test(sql)
+          ) continue;
           predicates.push({ index: match.index, column: match[1], operator: match[2] });
         }
         const expiry = /expires_at\s+IS\s+NULL\s+OR\s+expires_at\s*>\s*\?/i.exec(sql);
@@ -68,6 +72,7 @@ export class FakeD1 {
             if (predicate.operator === "=") return row[predicate.column] === value;
             if (predicate.operator === ">=") return row[predicate.column] >= value;
             if (predicate.operator === "<=") return row[predicate.column] <= value;
+            if (predicate.operator === ">") return row[predicate.column] > value;
             return row.expires_at == null || row.expires_at > value;
           });
         });

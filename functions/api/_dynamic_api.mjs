@@ -56,6 +56,7 @@ export function parseDynamicQuery(request, capabilities = {}) {
     timeframe: null,
     from: optionalDate(params, "from"),
     to: optionalDate(params, "to"),
+    after: capabilities.after ? optionalDate(params, "after") : null,
     importance: null,
     topic: capabilities.topic ? optionalText(params, "topic") : null,
     source: capabilities.source ? optionalPattern(params, "source", SOURCE) : null,
@@ -105,7 +106,7 @@ function aggregateStatus(rows, health) {
   return "ok";
 }
 
-export function dynamicEnvelope(rows, { health = false } = {}) {
+export function dynamicEnvelope(rows, { health = false, cursorColumn = null } = {}) {
   const sources = [];
   const seen = new Set();
   for (const row of rows) {
@@ -119,7 +120,9 @@ export function dynamicEnvelope(rows, { health = false } = {}) {
     const value = row.as_of ?? null;
     return value && (!latest || value > latest) ? value : latest;
   }, null);
-  return { status: aggregateStatus(rows, health), asOf, data: rows, sources };
+  const envelope = { status: aggregateStatus(rows, health), asOf, data: rows, sources };
+  if (cursorColumn) envelope.cursor = rows[0]?.[cursorColumn] ?? null;
+  return envelope;
 }
 
 export function unavailableEnvelope(error) {
@@ -128,23 +131,35 @@ export function unavailableEnvelope(error) {
   return envelope;
 }
 
-export async function serveDynamic({ request, env }, { capabilities, query, health = false }) {
+export async function serveDynamic(
+  { request, env },
+  { capabilities, query, health = false, cursorColumn = null },
+) {
   let filters;
   try {
     filters = parseDynamicQuery(request, capabilities);
   } catch (error) {
     if (error instanceof DynamicQueryError) {
-      return json(unavailableEnvelope(error.message), 400, { "cache-control": "no-store" });
+      return json({
+        ...unavailableEnvelope(error.message),
+        ...(cursorColumn ? { cursor: null } : {}),
+      }, 400, { "cache-control": "no-store" });
     }
     throw error;
   }
   const db = d1Binding(env);
-  if (!db) return json(unavailableEnvelope(), 200, { "cache-control": "no-store" });
+  if (!db) return json({
+    ...unavailableEnvelope(),
+    ...(cursorColumn ? { cursor: null } : {}),
+  }, 200, { "cache-control": "no-store" });
   try {
-    return json(dynamicEnvelope(await query(db, filters), { health }), 200, {
+    return json(dynamicEnvelope(await query(db, filters), { health, cursorColumn }), 200, {
       "cache-control": "no-store",
     });
   } catch {
-    return json(unavailableEnvelope(), 200, { "cache-control": "no-store" });
+    return json({
+      ...unavailableEnvelope(),
+      ...(cursorColumn ? { cursor: null } : {}),
+    }, 200, { "cache-control": "no-store" });
   }
 }

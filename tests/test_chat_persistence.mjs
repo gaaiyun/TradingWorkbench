@@ -28,6 +28,7 @@ const migrations = [
   "../migrations/0010_news_evidence_metadata.sql",
   "../migrations/0011_evidence_packets.sql",
   "../migrations/0014_chat_evidence_scope.sql",
+  "../migrations/0015_notification_deliveries.sql",
 ];
 
 async function createD1(t) {

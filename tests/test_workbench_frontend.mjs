@@ -16,6 +16,7 @@ const {
   mergeIncrementalBatch,
   mergeIncrementalBars,
   normalizeEnvelope,
+  notificationDeliveryBadges,
 } = workbenchData;
 
 const html = readFileSync(new URL("../public/index.html", import.meta.url), "utf8");
@@ -265,6 +266,29 @@ test("task timeline never maps source health rows to schedule slots by array pos
   assert.equal(timeline.length, 4);
   assert.equal(timeline.every((item) => item.status === "pending"), true);
   assert.equal(timeline.every((item) => item.detail === "任务结果接口未提供"), true);
+});
+
+test("notification badges expose real shadow and failure state without claiming browser delivery", () => {
+  assert.deepEqual(notificationDeliveryBadges([
+    { channel: "web", status: "sent", reasonCode: "WEB_EVENT_PERSISTED" },
+    { channel: "pushPlus", status: "skipped", reasonCode: "SHADOW_MODE" },
+    { channel: "pushPlus", status: "deferred", reasonCode: "QUIET_HOURS" },
+    { channel: "pushPlus", status: "failed", reasonCode: "PUSHPLUS_HTTP_500" },
+    { channel: "pushPlus", status: "uncertain", reasonCode: "PUSHPLUS_TIMEOUT" },
+  ]), [
+    { tone: "ok", text: "网页可见" },
+    { tone: "muted", text: "PushPlus · SHADOW" },
+    { tone: "muted", text: "PushPlus · 静默延期" },
+    { tone: "negative", text: "PushPlus · 失败" },
+    { tone: "warning", text: "PushPlus · 结果不确定" },
+  ]);
+  assert.doesNotMatch(
+    notificationDeliveryBadges([
+      { channel: "web", status: "sent", reasonCode: "WEB_EVENT_PERSISTED" },
+    ])[0].text,
+    /系统通知|浏览器通知|已推送/,
+  );
+  assert.match(script, /notificationDeliveryBadges\(item\.deliveries\)/);
 });
 
 test("disabled profiles expose no pending scheduled work", () => {
