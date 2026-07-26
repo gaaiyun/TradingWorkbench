@@ -23,6 +23,36 @@ _EVIDENCE_CITATION_RE = re.compile(r"\[((?:M|I|CA|N|S)\d+)\]", re.IGNORECASE)
 _NUMERIC_CLAIM_RE = re.compile(
     r"(?<![A-Za-z])(?:[$¥£€]\s*)?[-+]?\d+(?:,\d{3})*(?:\.\d+)?%?"
 )
+_NON_CLAIM_NUMERIC_CONTEXT = (
+    # ISO/Chinese dates and timestamps are metadata, not numeric assertions.
+    re.compile(
+        r"(?<!\d)(?:19|20)\d{2}-\d{1,2}-\d{1,2}"
+        r"(?:T\d{2}:\d{2}:\d{2}(?:\.\d+)?(?:Z|[+-]\d{2}:\d{2})?)?",
+    ),
+    re.compile(r"(?<!\d)(?:19|20)\d{2}/\d{1,2}/\d{1,2}"),
+    re.compile(
+        r"(?<!\d)(?:19|20)\d{2}年\s*\d{1,2}月(?:\s*\d{1,2}日)?",
+    ),
+    re.compile(r"(?<!\d)\d{1,2}月\s*\d{1,2}日"),
+    # Hashes and supported instrument identifiers are structural metadata.
+    re.compile(r"(?i)(?<![A-Za-z0-9])[0-9a-f]{32,}(?![A-Za-z0-9])"),
+    re.compile(
+        r"(?i)(?<![A-Za-z0-9])(?:\d{6}\.(?:SS|SZ)|\d{1,5}\.HK)"
+        r"(?![A-Za-z0-9])",
+    ),
+    # Markdown heading/list ordinals are not research values.
+    re.compile(r"^\s*(?:#{1,6}\s+)?\d+(?:\.\d+)*[.)、．]?"),
+    # Indicator look-back periods and canonical parameter tuples.
+    re.compile(
+        r"(?i)(?<!\d)\d+\s*(?:日|天|周|月)?\s*"
+        r"(?=(?:均线|EMA|SMA|MA|ATR|RSI|MACD|KDJ|布林|"
+        r"移动平均线|指数移动平均线|简单移动平均线))",
+    ),
+    re.compile(r"(?i)(?<!\d)\d+\s*(?:EMA|SMA|MA|ATR)\b"),
+    re.compile(r"(?i)\b(?:RSI|ATR)\s*\(\s*\d+\s*\)"),
+    re.compile(r"(?i)\bMACD\s*\d+\s*[-/]\s*\d+(?:\s*[-/]\s*\d+)?"),
+    re.compile(r"(?i)\b(?:RSI|ATR|ADX|KDJ)\d+\b"),
+)
 _PRICE_TARGET_RE = re.compile(
     r"(?:price\s*target|target\s*price|目标价|目标价格)",
     re.IGNORECASE,
@@ -41,6 +71,22 @@ def _packet_evidence_ids(packet: dict) -> set[str]:
             if isinstance(row, dict) and row.get("evidenceId"):
                 ids.add(str(row["evidenceId"]).upper())
     return ids
+
+
+def _mask_non_claim_numeric_context(text: str) -> str:
+    """Mask structural numbers before searching for uncited numeric claims.
+
+    The report validator must still catch an uncited price or ratio in a
+    dated paragraph, so only the date/identifier/heading/indicator-parameter
+    spans themselves are removed.  The surrounding prose and all remaining
+    numbers stay visible to ``_NUMERIC_CLAIM_RE``.
+    """
+    chars = list(str(text or ""))
+    for pattern in _NON_CLAIM_NUMERIC_CONTEXT:
+        for match in pattern.finditer(str(text or "")):
+            start, end = match.span()
+            chars[start:end] = [" "] * (end - start)
+    return "".join(chars)
 
 
 def _market_history_metadata(packet: dict) -> dict:
@@ -83,7 +129,9 @@ def validate_report_claims(text: str, packet: dict) -> dict:
     for paragraph in re.split(r"\n\s*\n", str(text or "")):
         without_urls = re.sub(r"https?://\S+", "", paragraph)
         without_citations = _EVIDENCE_CITATION_RE.sub("", without_urls)
-        if _NUMERIC_CLAIM_RE.search(without_citations):
+        if _NUMERIC_CLAIM_RE.search(
+            _mask_non_claim_numeric_context(without_citations),
+        ):
             paragraph_ids = {
                 match.upper() for match in _EVIDENCE_CITATION_RE.findall(paragraph)
             }

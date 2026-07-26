@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "generatedAt": "2026-07-26T05:50:32.440Z",
+  "generatedAt": "2026-07-26T09:29:58.873Z",
   "summary": {
     "successfulReports": 49,
     "verifiedReports": 0,
@@ -42,7 +42,7 @@
         ],
         "citationCount": 33,
         "unknownEvidenceIds": [],
-        "uncitedNumericParagraphs": 176
+        "uncitedNumericParagraphs": 117
       },
       "evidencePacket": {
         "status": "ok",
@@ -96,7 +96,7 @@
         ],
         "citationCount": 33,
         "unknownEvidenceIds": [],
-        "uncitedNumericParagraphs": 125
+        "uncitedNumericParagraphs": 84
       },
       "evidencePacket": {
         "status": "ok",
@@ -440,7 +440,7 @@
         ],
         "citationCount": 33,
         "unknownEvidenceIds": [],
-        "uncitedNumericParagraphs": 166
+        "uncitedNumericParagraphs": 108
       },
       "evidencePacket": {
         "status": "ok",

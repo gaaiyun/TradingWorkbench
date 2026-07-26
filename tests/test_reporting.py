@@ -8,7 +8,7 @@ import pytest
 
 from tradingagents.evidence import build_evidence_packet
 from tradingagents.graph.trading_graph import TradingAgentsGraph
-from tradingagents.reporting import write_report_tree
+from tradingagents.reporting import validate_report_claims, write_report_tree
 
 
 def _state():
@@ -111,6 +111,31 @@ def test_uncited_numeric_claims_are_saved_as_not_rated(tmp_path):
     assert "UNCITED_NUMERIC_CLAIM" in manifest["claimValidation"]["errorCodes"]
     assert state["analysis_status"] == "insufficient_evidence"
     assert "Evidence claim validation: `failed`" in out.read_text()
+
+
+@pytest.mark.unit
+def test_numeric_validation_ignores_structural_dates_and_indicator_parameters():
+    packet = build_evidence_packet(
+        ticker="GOOGL",
+        asset_type="us_equity",
+        as_of="2026-07-23T08:00:00Z",
+        bars=[{"ts": "2026-07-23T07:00:00Z", "close": 180}],
+        sources=[{"source": "sec", "sourceTier": "evidence"}],
+        generated_at="2026-07-23T08:05:00Z",
+    )
+    text = (
+        "# 1. GOOGL 2026-07-23\n\n"
+        "Generated: 2026-07-26T05:39:49.782261+00:00\n\n"
+        "RSI(14)、MACD 12-26-9 和 50日指数移动平均线是指标参数。\n\n"
+        "The close was 180 without a citation.\n\n"
+        "The verified close was 180 [M1]."
+    )
+
+    result = validate_report_claims(text, packet)
+
+    assert result["citationCount"] == 1
+    assert result["uncitedNumericParagraphs"] == 1
+    assert result["errorCodes"] == ["UNCITED_NUMERIC_CLAIM"]
 
 
 @pytest.mark.unit

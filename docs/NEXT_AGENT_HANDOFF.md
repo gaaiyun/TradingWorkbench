@@ -26,6 +26,8 @@
 
 尚未完成的是 2026-07-27 08:25 的真实 SEC/工信部采集验收，以及生成首份真正通过当前 Evidence 门禁的报告。接手者不能把周日 Provider `unavailable` 写成采集失败，也不能把旧报告或本次未通过引用门禁的报告升级为 verified。
 
+本轮接手已完成数字引用判定修复：`_NUMERIC_CLAIM_RE` 不再把日期、时间戳、标的代码、哈希、Markdown 标题序号和 RSI/MACD/均线参数当作研究数字；逐段复测后 `515880.SS` 为 `179→117`、`512480.SS` 为 `128→84`、`3887.HK` 为 `169→108`，剩余段落仍含未带 Evidence ID 的真实数值，因此没有放宽门禁。三份 `-v4` Manifest 与 `public/data/report-audit.json` 已同步更新。
+
 ## 1.5 生产状态真相（2026-07-26 独立核查）
 
 以下每条都由实际执行的命令或 HTTP 请求得出，不是从上一轮文档抄来的。**这是接手后要处理的第一优先级。**
@@ -307,6 +309,7 @@ git log --oneline --decorate --graph --max-count=30 --all
 |---|---|
 | Codex 根会话（v3 主线） | `G:\codex-home\sessions\2026\07\22\rollout-2026-07-22T17-59-01-019f8943-9db3-7c52-88de-0cb3773977ba.jsonl` |
 | Codex 索引 | `G:\codex-home\session_index.jsonl` |
+| Claude 断线审计会话（2026-07-26 14:45–15:38） | `C:\Users\gaaiy\.claude\projects\G--ClaudeCode\37ac3441-129f-42f1-b85f-9dedff671e97.jsonl` |
 | Claude 主线会话（v1→v2 + 监理） | `G:\ClaudeCode\_sessions-store\635a569f-582b-4469-8bcc-4f83c8f7bd0a.jsonl` |
 | Claude 可读归档 | `G:\ClaudeCode\readable\_INDEX.md`、`G:\ClaudeCode\archive\` |
 
@@ -331,12 +334,12 @@ Codex 根 task ID：`019f8943-9db3-7c52-88de-0cb3773977ba`
 
 | # | 缺陷 | 位置 | 说明 |
 |---|---|---|---|
-| 1 | **`evidence_packet.json` 写出了非法 JSON `NaN`** | `public/reports/MSFT/2026-07-24/evidence_packet.json:12576` | 最后一根 bar 的 `open/high/low/close` 是字面量 `NaN`。Node `JSON.parse` 直接抛错（.NET 容忍，所以 PowerShell 检查不出来），导致 `report-audit.mjs` 把它判成 `invalidated / INVALID_EVIDENCE_PACKET`。全仓库仅此一处。根因大概率是 Python 侧某根缺 OHLC 的 bar 被 `json.dumps` 成 `float('nan')` 而非 `null` |
+| 1 | ~~`evidence_packet.json` 写出了非法 JSON `NaN`~~ **已修复，勿重复处理** | `public/reports/MSFT/2026-07-24/evidence_packet.json:12576` | 该文件确实含字面量 `NaN`，Node `JSON.parse` 抛错（.NET 容忍，PowerShell 检查不出来），被判 `invalidated / INVALID_EVIDENCE_PACKET`。**但代码侧的根因已于 2026-07-26 由 `ed6acb7`「fix(证据): 阻断非有限行情并校验报告文件」修复**：`tradingagents/evidence.py:51`、`tradingagents/reporting.py:366/396` 均已加 `allow_nan=False`，上游另有 `evidence.py:79`、`scripts/run_daily.py:402/572` 的 `math.isfinite` 拦截。MSFT 那份报告提交于 2026-07-25（`2e3cd23`），**早于修复**，属修复前的遗留数据产物，不是活跃缺陷。全仓库仅此一处 |
 | 2 | **Queue 消费路径不可达** | `wrangler.monitor.toml` | `index.mjs` 完整实现了 `worker.queue()` / `runQueueBatch()` / `selectFairWorkWithinBudget`，但配置文件里没有任何 `[[queues.producers]]` / `[[queues.consumers]]` 绑定 `MONITOR_QUEUE`，只有 D1。调度器恒走 direct 模式。若 Queue 是在 Dashboard 手工加的，则属于基础设施配置漂移未落 IaC |
 | 3 | **`/health` 新闻 provider 查询超时仅 10ms** | `workers/monitor/src/index.mjs:214` | `HEALTH_QUERY_TIMEOUT_MS = 10`。对 D1 冷启动/跨区域是极紧的阈值，超时即整体回退成 `unavailable`。如果观察到 `newsProviders.status` 常年 unavailable 但表里数据正常，根因在这里 |
 | 4 | **"最新观点"路径没有第二道门禁** | `functions/api/latest.js`、`history.js` | 只按 identity selector 过滤，完全信任 Python 生成的 `latest.json` 已排除未过审报告；不像 `_chat.mjs:565` 那样复核 `auditStatus`/`claimValidation`。上游若误写脏数据，前端会直接展示 |
 | 5 | **`report-audit.mjs` 的失效名单是硬编码** | `scripts/report-audit.mjs:7-11` | `INVALIDATED_REPORTS` 是人工维护的 3 条路径黑名单。新出现的同类污染报告若无人手动加入，只能靠动态一致性检查兜底，两种机制覆盖面不重叠 |
-| 6 | **claim validation 是无条件关键词正则** | `tradingagents/reporting.py` | `_PRICE_TARGET_RE` / `_ALLOCATION_RE` 纯关键词匹配，不检查附近是否真给了方法论或用户约束。报告写"我们不设目标价"同样会被判违规。文档措辞暗示这是有条件判断，实际不是——**想靠"补一段方法论说明"过门禁是行不通的** |
+| 6 | **claim validation 的价格目标/仓位检查仍是无条件关键词匹配** | `tradingagents/reporting.py` | `_PRICE_TARGET_RE` / `_ALLOCATION_RE` 仍不检查附近是否真给了方法论或用户约束。报告写"我们不设目标价"同样会被判违规。文档措辞暗示这是有条件判断，实际不是——**想靠"补一段方法论说明"过门禁是行不通的**。数字主张的结构性误报已在本轮修复：日期、时间戳、标的代码、哈希、Markdown 标题序号和指标参数不再被当作研究数字；剩余价格、比例和指标读数仍需 Evidence ID。 |
 | 7 | **CLI 产出物完全在 Evidence 门禁体系之外** | `cli/main.py` | 不传 `evidence_packet`、绕过 `TradingAgentsGraph.propagate()`，产出报告的 `analysisStatus` 恒为 `not_rated`、`auditStatus` 恒为 `legacy_unverified`。想复现"如何让报告变 verified"必须走 `scripts/run_daily.py` |
 | 8 | **Python 侧 SEC 客户端缺 fair-access 联系邮箱** | `tradingagents/dataflows/official_news.py` | User-Agent 默认值不含邮箱，且无 workflow 覆盖 `TRADINGAGENTS_NEWS_USER_AGENT`。SEC.gov 要求 UA 带联系方式，这条源在生产里可能一直静默失效（失败被 `_collect_source` 吞掉降级）。Worker 侧走 `SEC_CONTACT_EMAIL`，不受影响 |
 | 9 | **`sec-edgar-8k` 是死代码** | `workers/monitor/src/news-collector.mjs:276-304` | `parseSecEdgarAtom()` 完整实现且在 `EVIDENCE_PROVIDERS` 里声明，但 `providerCandidates()` 从不产出该 source。实际只用 `sec-edgar-submissions`。会让人误以为有两条 SEC 通道 |
@@ -376,11 +379,60 @@ Codex 根 task ID：`019f8943-9db3-7c52-88de-0cb3773977ba`
 
 1. 跑 §10 的接手命令，确认工作树和分支状态。
 2. 读 §1.5，逐条复核生产状态——不要相信本文写的，自己再跑一遍。
-3. **恢复 `CLOUDFLARE_API_TOKEN` secret 与 `MONITOR_WORKER_URL` variable**，这是所有部署门禁的前提。
+3. **恢复部署凭据**（见 §15.1）。这是所有部署门禁的前提，不做这一步后面全部无从谈起。
 4. 用 `wrangler d1 migrations list --remote` 确认 0013–0015 是否真的已应用。
 5. 重新部署 Monitor Worker 到当前 HEAD，用 `/health` 回读 SHA 验证。
 6. 执行 §8 的 2026-07-27 08:25 外审协议。
 7. 之后才轮到功能开发：消除 `UNCITED_NUMERIC_CLAIM` / `UNSUPPORTED_ALLOCATION`，争取第一份 `verified` 报告。
+
+### 15.1 恢复部署凭据（需要仓库主人本人操作）
+
+**Agent 不能代劳这一步**——创建 API token、填写 secret 属于凭据操作，必须由用户在 Cloudflare 和 GitHub 的界面里自己完成。以下是精确到选项的说明，照做即可。
+
+缺失项与它们各自卡住了什么：
+
+| 缺失项 | 类型 | 缺了会怎样 |
+|---|---|---|
+| `CLOUDFLARE_API_TOKEN` | GitHub Actions **secret** | `deploy-workbench` 与 `deploy-monitor` 都在第一步 `Check deployment credentials` 直接失败 |
+| `MONITOR_WORKER_URL` | GitHub Actions **variable** | 仅 `deploy-monitor` 失败（部署后无法回读 `/health` 校验 SHA） |
+
+已存在、不用动的：`CLOUDFLARE_ACCOUNT_ID`（variable）、`CLOUDFLARE_PAGES_PROJECT`（variable，值 `tradingagents-board`）。
+
+**第一步：在 Cloudflare 创建 API token**
+
+Cloudflare Dashboard → 右上角头像 → **My Profile** → **API Tokens** → **Create Token** → **Create Custom Token**。
+
+权限按下表勾（三条都要，缺一条对应的 step 就会失败）：
+
+| 权限 | 作用域 | 对应的 workflow step |
+|---|---|---|
+| **Workers Scripts** → Edit | Account | `deploy-monitor` 的 `wrangler deploy`（部署 Monitor Worker） |
+| **D1** → Edit | Account | 两个 workflow 的 `wrangler d1 migrations apply --remote` |
+| **Cloudflare Pages** → Edit | Account | `deploy-workbench` 的 `wrangler pages deploy` |
+
+Account Resources 限定到本项目所在的那个账号即可，不要给 All accounts。若创建后 wrangler 报账号解析失败，再补一条 **Account Settings → Read**。
+
+**第二步：把 token 存进 GitHub**
+
+在仓库 Settings → Secrets and variables → Actions 里操作，或用 CLI（**下面第一条命令会提示你粘贴 token，token 不要写进命令行，也不要贴进任何会话或文件**）：
+
+```bash
+gh secret set CLOUDFLARE_API_TOKEN --repo gaaiyun/TradingWorkbench
+```
+
+```bash
+gh variable set MONITOR_WORKER_URL --repo gaaiyun/TradingWorkbench --body "https://tradingagents-monitor.gaaiyun-risk-selfcheck.workers.dev"
+```
+
+**第三步：验证**
+
+```bash
+gh workflow run deploy-monitor.yml --repo gaaiyun/TradingWorkbench --ref main
+```
+
+然后 `gh run watch`，**逐个打开 step 确认 migration、deploy、SHA verify 三步都真的执行了、没有 skipped**。跑完再请求一次 Worker `/health`，确认 `deployment.commitSha` 已等于当前 `origin/main`。
+
+**安全提醒**：token 只存在 GitHub secret 里。不要回填进仓库文件、`.env`、D1、日志或任何会话记录。若怀疑泄漏，去 Cloudflare 立即 Roll 掉重建。
 
 ## 16. 更新日志
 
@@ -388,3 +440,4 @@ Codex 根 task ID：`019f8943-9db3-7c52-88de-0cb3773977ba`
 |---|---|---|
 | 2026-07-26 | 初版交接文档 | Codex 根会话 `019f8943` 收尾 |
 | 2026-07-26 | 第二次核查修订：新增 §0 维护约定、§1.5 生产状态真相、§12.1 代码级缺陷、§12.2 文档陈旧项、§15 接手顺序、§16 本表；修正 §1 与 §6 把"已合入"当"已上线"的表述；§11 改为链接开发史；新建 [PROJECT_HISTORY.md](PROJECT_HISTORY.md) | Claude Code 六路并行独立核查（Cloudflare 代码 / Python 与 CI / 全套文档 / Codex 历史 / Claude 历史 / GitHub 与生产端点），关键结论均已二次人工复核 |
+| 2026-07-26 | 修复数字引用判定的结构性误报；对当前三份 `-v4` 报告重新计算 Manifest 与审计索引 | Claude 断线审计会话完整解析 249 条记录；逐段实测：`515880.SS 179→117`、`512480.SS 128→84`、`3887.HK 169→108`；保留剩余真实价格、比例和指标读数的 Evidence 门禁 |
