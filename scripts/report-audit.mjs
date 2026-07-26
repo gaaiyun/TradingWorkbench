@@ -2,6 +2,7 @@ import fs from "node:fs/promises";
 import path from "node:path";
 import { createHash } from "node:crypto";
 import { fileURLToPath } from "node:url";
+import { normalizeStoredRunIdentity } from "../functions/api/_run_identity.mjs";
 
 export const INVALIDATED_REPORTS = new Set([
   "reports/515880.SS/2026-07-24/complete_report.md",
@@ -270,6 +271,7 @@ export async function buildReportAudit({ history, reportsRoot }) {
             }
           : null,
         evidencePublish: result?.evidence_publish || null,
+        identity: normalizeStoredRunIdentity(batch?.identity),
         supersededBy: null,
       });
     }

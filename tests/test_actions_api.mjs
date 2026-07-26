@@ -3,8 +3,13 @@ import { readFileSync } from "node:fs";
 import test from "node:test";
 
 import { onRequestPost as analyze } from "../functions/api/analyze.js";
+import { onRequestGet as getHistory } from "../functions/api/history.js";
+import { onRequestGet as getLatest } from "../functions/api/latest.js";
+import { onRequestGet as getReport } from "../functions/api/report.js";
+import { onRequestGet as getReportAudit } from "../functions/api/report-audit.js";
 import { onRequestGet as listRuns } from "../functions/api/runs.js";
 import { onRequestPost as saveSettings } from "../functions/api/settings.js";
+import { FakeD1 } from "./helpers/fake_d1.mjs";
 
 const env = {
   ACCESS_CODE: "correct-code",
@@ -26,6 +31,14 @@ function post(body, code = "correct-code") {
     },
     body,
   });
+}
+
+function settingsRow(settings = defaultSettings()) {
+  return {
+    version: settings.version,
+    settings_json: JSON.stringify(settings),
+    updated_at: "2026-07-25T00:00:00.000Z",
+  };
 }
 
 test("manual analysis normalizes the same ticker contract used by saved tasks", async () => {
@@ -85,6 +98,76 @@ test("manual analysis forwards a caller UUID, analyst subset, and deep research 
   } finally {
     globalThis.fetch = originalFetch;
   }
+});
+
+test("profile manual analysis validates D1 ownership and dispatches profile identity", async () => {
+  const originalFetch = globalThis.fetch;
+  let dispatch;
+  globalThis.fetch = async (_url, init) => {
+    dispatch = JSON.parse(init.body);
+    return new Response(null, { status: 204 });
+  };
+  try {
+    const profileId = defaultSettings().profiles[0].id;
+    const response = await analyze({
+      request: post(JSON.stringify({
+        tickers: ["515880.SS"],
+        profileId,
+      })),
+      env: { ...env, DB: new FakeD1({ settings: settingsRow() }) },
+    });
+    const payload = await response.json();
+    assert.equal(response.status, 202);
+    assert.equal(payload.identity.scope, "profile");
+    assert.equal(payload.identity.kind, "manual");
+    assert.equal(payload.identity.profileId, profileId);
+    assert.equal(payload.identity.requestId, null);
+    assert.equal(dispatch.inputs.profileId, profileId);
+    assert.equal(dispatch.inputs.requestId, "");
+  } finally {
+    globalThis.fetch = originalFetch;
+  }
+});
+
+test("analysis rejects a profile and caller request UUID before D1 or GitHub access", async () => {
+  const originalFetch = globalThis.fetch;
+  globalThis.fetch = async () => assert.fail("ambiguous identity must not access upstream");
+  try {
+    const response = await analyze({
+      request: post(JSON.stringify({
+        tickers: ["SPY"],
+        profileId: "profile-a",
+        requestId: "123e4567-e89b-42d3-a456-426614174000",
+      })),
+      env: { ...env, DB: new FakeD1({ fail: true }) },
+    });
+    assert.equal(response.status, 400);
+    assert.equal((await response.json()).error_code, "ambiguous_run_identity");
+  } finally {
+    globalThis.fetch = originalFetch;
+  }
+});
+
+test("profile manual analysis fails closed for unknown or unavailable D1 settings", async () => {
+  const unknown = await analyze({
+    request: post(JSON.stringify({
+      tickers: ["SPY"],
+      profileId: "missing-profile",
+    })),
+    env: { ...env, DB: new FakeD1({ settings: settingsRow() }) },
+  });
+  assert.equal(unknown.status, 404);
+  assert.equal((await unknown.json()).error_code, "profile_not_found");
+
+  const unavailable = await analyze({
+    request: post(JSON.stringify({
+      tickers: ["SPY"],
+      profileId: defaultSettings().profiles[0].id,
+    })),
+    env: { ...env, DB: new FakeD1({ fail: true }) },
+  });
+  assert.equal(unavailable.status, 503);
+  assert.equal((await unavailable.json()).error_code, "settings_unavailable");
 });
 
 test("manual analysis rejects invalid research controls with stable 400 codes", async () => {
@@ -254,6 +337,251 @@ test("analysis runs expose request and scheduled slot identities from stable run
         scheduledFor: "2026-07-25T09:30:00.000Z",
       },
     );
+  } finally {
+    globalThis.fetch = originalFetch;
+  }
+});
+
+test("runs fetch enough candidates then isolate profile manual, monitor, and adhoc identities", async () => {
+  const originalFetch = globalThis.fetch;
+  const seenUrls = [];
+  globalThis.fetch = async (url) => {
+    seenUrls.push(String(url));
+    if (String(url).includes("daily-analysis.yml")) {
+      return Response.json({
+        workflow_runs: [
+          {
+            id: 11,
+            display_title: "Daily analysis · profile · manual · profile-a",
+            status: "completed",
+            conclusion: "success",
+            created_at: "2026-07-25T11:00:00Z",
+            html_url: "https://github.test/runs/11",
+          },
+          {
+            id: 12,
+            display_title: "Daily analysis · profile · monitor · profile-b · slot-b · 2026-07-25T10:00:00.000Z",
+            status: "completed",
+            conclusion: "failure",
+            created_at: "2026-07-25T10:00:00Z",
+            html_url: "https://github.test/runs/12",
+          },
+          {
+            id: 13,
+            display_title: "Daily analysis · adhoc · 123e4567-e89b-42d3-a456-426614174000",
+            status: "queued",
+            conclusion: null,
+            created_at: "2026-07-25T09:00:00Z",
+            html_url: "https://github.test/runs/13",
+          },
+        ],
+      });
+    }
+    return Response.json({ workflow_runs: [] });
+  };
+  try {
+    const profileResponse = await listRuns({
+      request: new Request("https://workbench.test/api/runs?profile=profile-b"),
+      env,
+    });
+    const profileRuns = (await profileResponse.json()).runs;
+    assert.deepEqual(profileRuns.map((run) => run.id), [12]);
+    assert.deepEqual(profileRuns[0].identity, {
+      scope: "profile",
+      kind: "monitor",
+      runId: "12",
+      profileId: "profile-b",
+      requestId: null,
+      slotId: "slot-b",
+      scheduledFor: "2026-07-25T10:00:00.000Z",
+    });
+
+    const adhocResponse = await listRuns({
+      request: new Request(
+        "https://workbench.test/api/runs?requestId=123e4567-e89b-42d3-a456-426614174000",
+      ),
+      env,
+    });
+    const adhocRuns = (await adhocResponse.json()).runs;
+    assert.deepEqual(adhocRuns.map((run) => run.id), [13]);
+    assert.equal(adhocRuns[0].identity.scope, "adhoc");
+    assert.ok(seenUrls.every((url) => url.includes("per_page=100")));
+  } finally {
+    globalThis.fetch = originalFetch;
+  }
+});
+
+test("history, latest, and report audit selectors never mix profiles or adhoc requests", async () => {
+  const originalFetch = globalThis.fetch;
+  const requestId = "123e4567-e89b-42d3-a456-426614174000";
+  const batches = [
+    {
+      trade_date: "2026-07-25",
+      generated_at: "2026-07-25T12:00:00Z",
+      identity: {
+        scope: "profile",
+        kind: "manual",
+        profileId: "profile-a",
+        requestId: null,
+        slotId: null,
+        scheduledFor: null,
+      },
+      results: [{ ticker: "SPY", report: "reports/SPY/2026-07-25/complete_report.md" }],
+    },
+    {
+      trade_date: "2026-07-25",
+      generated_at: "2026-07-25T13:00:00Z",
+      identity: {
+        scope: "profile",
+        kind: "monitor",
+        profileId: "profile-b",
+        requestId: null,
+        slotId: "slot-b",
+        scheduledFor: "2026-07-25T12:30:00.000Z",
+      },
+      results: [{ ticker: "SPY", report: "reports/SPY/2026-07-25-v2/complete_report.md" }],
+    },
+    {
+      trade_date: "2026-07-25",
+      generated_at: "2026-07-25T14:00:00Z",
+      identity: {
+        scope: "adhoc",
+        kind: "adhoc",
+        profileId: null,
+        requestId,
+        slotId: null,
+        scheduledFor: null,
+      },
+      results: [{ ticker: "SPY", report: "reports/SPY/2026-07-25-v3/complete_report.md" }],
+    },
+    {
+      trade_date: "2026-07-24",
+      generated_at: "2026-07-24T12:00:00Z",
+      results: [{ ticker: "SPY", report: "reports/SPY/2026-07-24/complete_report.md" }],
+    },
+  ];
+  const audit = {
+    version: 1,
+    generatedAt: "2026-07-25T15:00:00Z",
+    summary: {},
+    reports: batches.map((batch) => ({
+      ticker: "SPY",
+      report: batch.results[0].report,
+      auditStatus: "verified",
+      failureClass: null,
+      identity: batch.identity,
+    })),
+  };
+  globalThis.fetch = async (url) => {
+    if (String(url).endsWith("/data/history.json")) return Response.json(batches);
+    if (String(url).endsWith("/data/report-audit.json")) return Response.json(audit);
+    return Response.json({ unexpected: String(url) }, { status: 500 });
+  };
+  try {
+    const historyA = await getHistory({
+      request: new Request("https://workbench.test/api/history?profile=profile-a"),
+    });
+    assert.deepEqual((await historyA.json()).map((entry) => entry.identity.profileId), ["profile-a"]);
+
+    const historyAdhoc = await getHistory({
+      request: new Request(
+        `https://workbench.test/api/history?requestId=${requestId}&profile=profile-a`,
+      ),
+    });
+    assert.deepEqual((await historyAdhoc.json()).map((entry) => entry.identity.requestId), [requestId]);
+
+    const latestB = await getLatest({
+      request: new Request("https://workbench.test/api/latest?profile=profile-b"),
+    });
+    assert.equal((await latestB.json()).identity.profileId, "profile-b");
+
+    const auditA = await getReportAudit({
+      request: new Request("https://workbench.test/api/report-audit?profile=profile-a"),
+    });
+    const auditBody = await auditA.json();
+    assert.deepEqual(auditBody.reports.map((entry) => entry.identity.profileId), ["profile-a"]);
+    assert.equal(auditBody.summary.verifiedReports, 1);
+  } finally {
+    globalThis.fetch = originalFetch;
+  }
+});
+
+test("identity APIs keep raw legacy responses unchanged when no selector is supplied", async () => {
+  const originalFetch = globalThis.fetch;
+  const fixtures = {
+    "history.json": [{ trade_date: "2026-07-24", results: [] }],
+    "latest.json": { trade_date: "2026-07-24", results: [] },
+    "report-audit.json": { version: 1, summary: { successfulReports: 0 }, reports: [] },
+  };
+  globalThis.fetch = async (url) => {
+    const name = Object.keys(fixtures).find((candidate) => String(url).endsWith(candidate));
+    return Response.json(fixtures[name]);
+  };
+  try {
+    assert.deepEqual(await (await getHistory({
+      request: new Request("https://workbench.test/api/history"),
+    })).json(), fixtures["history.json"]);
+    assert.deepEqual(await (await getLatest({
+      request: new Request("https://workbench.test/api/latest"),
+    })).json(), fixtures["latest.json"]);
+    assert.deepEqual(await (await getReportAudit({
+      request: new Request("https://workbench.test/api/report-audit"),
+    })).json(), fixtures["report-audit.json"]);
+  } finally {
+    globalThis.fetch = originalFetch;
+  }
+});
+
+test("profile-scoped report reads require a matching manifest and keep nested report tabs", async () => {
+  const originalFetch = globalThis.fetch;
+  const reportPath = "reports/SPY/2026-07-25/1_analysts/market.md";
+  const fetched = [];
+  globalThis.fetch = async (url) => {
+    fetched.push(String(url));
+    if (String(url).endsWith("/reports/SPY/2026-07-25/report_manifest.json")) {
+      return Response.json({
+        ticker: "SPY",
+        tradeDate: "2026-07-25",
+        identity: {
+          scope: "profile",
+          kind: "manual",
+          profileId: "profile-b",
+          requestId: null,
+          slotId: null,
+          scheduledFor: null,
+        },
+      });
+    }
+    if (String(url).endsWith(`/${reportPath}`)) {
+      return new Response("market report", { status: 200 });
+    }
+    return new Response(null, { status: 404 });
+  };
+  try {
+    const denied = await getReport({
+      request: new Request(
+        `https://workbench.test/api/report?path=${encodeURIComponent(reportPath)}&profile=profile-a`,
+      ),
+    });
+    assert.equal(denied.status, 404);
+    assert.equal(fetched.some((url) => url.endsWith(`/${reportPath}`)), false);
+
+    const allowed = await getReport({
+      request: new Request(
+        `https://workbench.test/api/report?path=${encodeURIComponent(reportPath)}&profile=profile-b`,
+      ),
+    });
+    assert.equal(allowed.status, 200);
+    assert.equal(await allowed.text(), "market report");
+
+    fetched.length = 0;
+    const legacy = await getReport({
+      request: new Request(
+        `https://workbench.test/api/report?path=${encodeURIComponent(reportPath)}`,
+      ),
+    });
+    assert.equal(legacy.status, 200);
+    assert.equal(fetched.some((url) => url.endsWith("report_manifest.json")), false);
   } finally {
     globalThis.fetch = originalFetch;
   }

@@ -9,7 +9,12 @@ import {
 import {
   WorkbenchSettingsError,
   normalizeWorkbenchTickers,
+  parseWorkbenchSettings,
 } from "./_workbench_settings.mjs";
+import {
+  d1Binding,
+  readSettingsFromD1,
+} from "./_d1_repository.mjs";
 import {
   AnalysisRequestError,
   enforceAnalysisWorkload,
@@ -17,6 +22,12 @@ import {
   normalizeRequestId,
   normalizeResearchDepth,
 } from "./_analysis_request.mjs";
+import {
+  adhocRunIdentity,
+  isValidProfileId,
+  legacyRunIdentity,
+  profileManualIdentity,
+} from "./_run_identity.mjs";
 
 // POST /api/analyze {code, tickers, requestId?, analysts?, researchDepth?}
 // → 触发 GitHub Actions daily-analysis 工作流
@@ -44,6 +55,22 @@ export async function onRequestPost({ request, env }) {
   let researchDepth;
   const hasCallerRequestId =
     typeof body.requestId === "string" && body.requestId.trim() !== "";
+  const hasProfileId = body.profileId !== undefined && body.profileId !== null;
+  const profileId = typeof body.profileId === "string"
+    ? body.profileId.trim()
+    : "";
+  if (hasProfileId && hasCallerRequestId) {
+    return json({
+      error: "profileId 与 requestId 不能同时提供",
+      error_code: "ambiguous_run_identity",
+    }, 400);
+  }
+  if (hasProfileId && !isValidProfileId(profileId)) {
+    return json({
+      error: "profileId 无效",
+      error_code: "invalid_profile_id",
+    }, 400);
+  }
   try {
     tickerList = normalizeWorkbenchTickers(body.tickers);
     requestId = normalizeRequestId(body.requestId);
@@ -66,6 +93,44 @@ export async function onRequestPost({ request, env }) {
     }
     throw error;
   }
+  if (hasProfileId) {
+    const db = d1Binding(env);
+    if (!db) {
+      return json({
+        error: "无法验证监控组设置",
+        error_code: "settings_unavailable",
+      }, 503);
+    }
+    let stored;
+    try {
+      stored = await readSettingsFromD1(db);
+      if (!stored) throw new Error("settings missing");
+      const settings = parseWorkbenchSettings(stored.settings);
+      if (!settings.profiles.some((profile) => profile.id === profileId)) {
+        return json({
+          error: "监控组不存在",
+          error_code: "profile_not_found",
+        }, 404);
+      }
+    } catch (error) {
+      if (error instanceof WorkbenchSettingsError) {
+        return json({
+          error: "无法验证监控组设置",
+          error_code: "settings_unavailable",
+        }, 503);
+      }
+      if (error?.message === "settings missing") {
+        return json({
+          error: "无法验证监控组设置",
+          error_code: "settings_unavailable",
+        }, 503);
+      }
+      return json({
+        error: "无法验证监控组设置",
+        error_code: "settings_unavailable",
+      }, 503);
+    }
+  }
   const tickers = tickerList.join(",");
   if (!env.GITHUB_DISPATCH_TOKEN) return json({ error: "服务端未配置 GITHUB_DISPATCH_TOKEN" }, 500);
 
@@ -81,6 +146,7 @@ export async function onRequestPost({ request, env }) {
           requestId: hasCallerRequestId ? requestId : "",
           analysts: analysts.join(","),
           researchDepth,
+          ...(hasProfileId ? { profileId } : {}),
         },
       }),
     },
@@ -92,6 +158,11 @@ export async function onRequestPost({ request, env }) {
   return json({
     ok: true,
     requestId,
+    identity: hasProfileId
+      ? profileManualIdentity(profileId)
+      : hasCallerRequestId
+        ? adhocRunIdentity(requestId)
+        : legacyRunIdentity(),
     tickers: tickerList,
     analysts,
     researchDepth,

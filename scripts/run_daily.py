@@ -257,9 +257,17 @@ def _load_workbench_daily(symbol: str, trade_date: str) -> dict[str, Any] | None
     if not base.startswith("https://"):
         return None
     try:
+        params: dict[str, Any] = {
+            "symbol": symbol,
+            "timeframe": "1d",
+            "limit": 1260,
+        }
+        identity = _workflow_identity()
+        if identity["scope"] == "profile":
+            params["profile"] = identity["profileId"]
         response = requests.get(
             base,
-            params={"symbol": symbol, "timeframe": "1d", "limit": 1260},
+            params=params,
             timeout=30,
         )
         if response.status_code != 200:
@@ -328,9 +336,13 @@ def _load_workbench_news(symbol: str, trade_date: str) -> dict[str, Any]:
     if not base.startswith("https://"):
         return empty
     try:
+        params: dict[str, Any] = {"symbol": symbol, "limit": 50}
+        identity = _workflow_identity()
+        if identity["scope"] == "profile":
+            params["profile"] = identity["profileId"]
         response = requests.get(
             base,
-            params={"symbol": symbol, "limit": 50},
+            params=params,
             timeout=20,
         )
         if response.status_code != 200:
@@ -682,6 +694,12 @@ def update_history(data_dir: Path, payload: dict, cap: int = HISTORY_CAP) -> int
         payload.get("trade_date"),
         tuple(sorted(r["ticker"] for r in payload.get("results", []))),
         tuple(sorted(str(r.get("report") or "") for r in payload.get("results", []))),
+        (
+            payload.get("identity", {}).get("runId")
+            or payload.get("run", {}).get("id")
+        ),
+        payload.get("identity", {}).get("requestId"),
+        payload.get("identity", {}).get("slotId"),
     )
     history = [
         h for h in history
@@ -689,6 +707,9 @@ def update_history(data_dir: Path, payload: dict, cap: int = HISTORY_CAP) -> int
             h.get("trade_date"),
             tuple(sorted(r.get("ticker", "") for r in h.get("results", []))),
             tuple(sorted(str(r.get("report") or "") for r in h.get("results", []))),
+            h.get("identity", {}).get("runId") or h.get("run", {}).get("id"),
+            h.get("identity", {}).get("requestId"),
+            h.get("identity", {}).get("slotId"),
         ) != key
     ]
     entry = {
@@ -712,6 +733,7 @@ def update_history(data_dir: Path, payload: dict, cap: int = HISTORY_CAP) -> int
     for field in ("request", "run"):
         if field in payload:
             entry[field] = payload[field]
+    entry["identity"] = payload.get("identity") or _legacy_identity()
     history.insert(0, entry)
     history = history[:cap]
     hist_path.write_text(json.dumps(history, ensure_ascii=False, indent=2), encoding="utf-8")
@@ -739,25 +761,89 @@ def last_us_trading_day(now_utc: datetime | None = None) -> str:
     return d.isoformat()
 
 
-def _workflow_metadata(analysts: list[str]) -> tuple[dict[str, Any], dict[str, Any]]:
-    """Project trusted workflow identity fields into the public run manifest."""
+def _legacy_identity() -> dict[str, Any]:
+    return {
+        "scope": "legacy",
+        "kind": "legacy",
+        "runId": os.environ.get("GITHUB_RUN_ID", "").strip() or None,
+        "profileId": None,
+        "requestId": None,
+        "slotId": None,
+        "scheduledFor": None,
+    }
+
+
+def _workflow_identity() -> dict[str, Any]:
     request_id = os.environ.get("TRADINGAGENTS_REQUEST_ID", "").strip() or None
-    kind = os.environ.get("TRADINGAGENTS_REQUEST_KIND", "").strip()
-    if not kind:
-        kind = (
-            "adhoc" if request_id
-            else "monitor"
-            if os.environ.get("TRADINGAGENTS_PROFILE_ID", "").strip()
-            else "manual"
+    profile_id = os.environ.get("TRADINGAGENTS_PROFILE_ID", "").strip() or None
+    slot_id = os.environ.get("TRADINGAGENTS_SLOT_ID", "").strip() or None
+    scheduled_for = (
+        os.environ.get("TRADINGAGENTS_SCHEDULED_FOR", "").strip() or None
+    )
+    run_id = os.environ.get("GITHUB_RUN_ID", "").strip() or None
+    if request_id and profile_id:
+        raise ValueError("profileId 与 requestId 不能同时提供")
+    slot_values = (profile_id, slot_id, scheduled_for)
+    if any(slot_values) and (slot_id or scheduled_for) and not all(slot_values):
+        raise ValueError(
+            "monitor 运行必须完整提供 profileId/slotId/scheduledFor"
+        )
+    if all(slot_values):
+        return {
+            "scope": "profile",
+            "kind": "monitor",
+            "runId": run_id,
+            "profileId": profile_id,
+            "requestId": None,
+            "slotId": slot_id,
+            "scheduledFor": scheduled_for,
+        }
+    if profile_id:
+        return {
+            "scope": "profile",
+            "kind": "manual",
+            "runId": run_id,
+            "profileId": profile_id,
+            "requestId": None,
+            "slotId": None,
+            "scheduledFor": None,
+        }
+    if request_id:
+        return {
+            "scope": "adhoc",
+            "kind": "adhoc",
+            "runId": run_id,
+            "profileId": None,
+            "requestId": request_id,
+            "slotId": None,
+            "scheduledFor": None,
+        }
+    return _legacy_identity()
+
+
+def _workflow_metadata(
+    analysts: list[str],
+) -> tuple[dict[str, Any], dict[str, Any], dict[str, Any]]:
+    """Project trusted workflow identity fields into the public run manifest."""
+    identity = _workflow_identity()
+    requested_kind = os.environ.get("TRADINGAGENTS_REQUEST_KIND", "").strip()
+    compatible_kind = (
+        requested_kind == identity["kind"]
+        or requested_kind == ""
+        or (identity["scope"] == "legacy" and requested_kind == "manual")
+    )
+    if not compatible_kind:
+        raise ValueError(
+            "TRADINGAGENTS_REQUEST_KIND 与运行身份不一致"
         )
     request = {
-        "requestId": request_id,
+        "requestId": identity["requestId"],
         "analysts": list(analysts),
         "researchDepth": (
             os.environ.get("TRADINGAGENTS_RESEARCH_DEPTH", "").strip()
             or "standard"
         ),
-        "kind": kind,
+        "kind": identity["kind"],
     }
 
     run_id = os.environ.get("GITHUB_RUN_ID", "").strip()
@@ -773,7 +859,7 @@ def _workflow_metadata(analysts: list[str]) -> tuple[dict[str, Any], dict[str, A
             else None
         ),
     }
-    return request, run
+    return request, run, identity
 
 
 def resolve_llm_key_status() -> tuple[bool, str]:
@@ -825,7 +911,10 @@ def publish_evidence_bundle(
 
     import requests
 
-    payload: dict = {"packet": packet}
+    payload: dict = {
+        "packet": packet,
+        "identity": _workflow_identity(),
+    }
     if manifest is not None and report is not None:
         payload.update({"manifest": manifest, "report": report})
     try:
@@ -903,7 +992,13 @@ def run_ticker(ticker: str, trade_date: str, analysts: list[str], reports_dir: P
 
     save_dir = report_save_directory(reports_dir, symbol, trade_date)
     ta.save_reports(final_state, symbol, save_path=save_dir, evidence_packet=evidence_packet)
-    manifest = json.loads((save_dir / "report_manifest.json").read_text(encoding="utf-8"))
+    manifest_path = save_dir / "report_manifest.json"
+    manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
+    manifest["identity"] = _workflow_identity()
+    manifest_path.write_text(
+        json.dumps(manifest, ensure_ascii=False, indent=2),
+        encoding="utf-8",
+    )
     if manifest.get("analysisStatus") != "rated":
         rating = "Not Rated"
 
@@ -969,7 +1064,7 @@ def main(argv: list[str] | None = None) -> int:
     tickers = [normalize_ticker(t) for t in args.tickers.split(",") if t.strip()]
     tickers = list(dict.fromkeys(t for t in tickers if t))
     analysts = [a.strip().lower() for a in args.analysts.split(",") if a.strip()]
-    request_metadata, run_metadata = _workflow_metadata(analysts)
+    request_metadata, run_metadata, identity = _workflow_metadata(analysts)
     generated_at = datetime.now(CST).isoformat(timespec="seconds")
     news_payload = write_news_export(
         data_dir,
@@ -988,6 +1083,7 @@ def main(argv: list[str] | None = None) -> int:
             "provider": provider,
             "request": request_metadata,
             "run": run_metadata,
+            "identity": identity,
             "hint": (f"未检测到 {provider} 的 API key。请在仓库 Settings → Secrets 配置对应密钥"
                      "（如 DEEPSEEK_API_KEY / OPENAI_COMPATIBLE_API_KEY），并可用仓库变量"
                      " TRADINGAGENTS_LLM_PROVIDER / TRADINGAGENTS_LLM_BACKEND_URL 切换后端。"),
@@ -1019,6 +1115,7 @@ def main(argv: list[str] | None = None) -> int:
         "analysts": analysts,
         "request": request_metadata,
         "run": run_metadata,
+        "identity": identity,
         "rating_tiers": RATING_TIERS,
         "results": results,
     }

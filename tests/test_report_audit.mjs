@@ -86,6 +86,53 @@ test("audit separates evidence validation failures from model or workflow failur
   assert.deepEqual(audit.reports[1].problemCodes, ["ANALYSIS_EXECUTION_FAILED"]);
 });
 
+test("audit entries preserve explicit run identity without guessing legacy profiles", async () => {
+  const profileIdentity = {
+    scope: "profile",
+    kind: "manual",
+    runId: null,
+    profileId: "profile-a",
+    requestId: null,
+    slotId: null,
+    scheduledFor: null,
+  };
+  const audit = await buildReportAudit({
+    history: [
+      {
+        trade_date: "2026-07-24",
+        generated_at: "2026-07-25T08:00:00Z",
+        identity: profileIdentity,
+        results: [{
+          ticker: "ORCL",
+          report: null,
+          error: true,
+        }],
+      },
+      {
+        trade_date: "2026-07-23",
+        generated_at: "2026-07-24T08:00:00Z",
+        results: [{
+          ticker: "ORCL",
+          report: null,
+          error: true,
+        }],
+      },
+    ],
+    reportsRoot: path.join(repoRoot, "public", "reports"),
+  });
+
+  assert.deepEqual(audit.reports[0].identity, profileIdentity);
+  assert.deepEqual(audit.reports[1].identity, {
+    scope: "legacy",
+    kind: "legacy",
+    runId: null,
+    profileId: null,
+    requestId: null,
+    slotId: null,
+    scheduledFor: null,
+  });
+});
+
 test("a repaired versioned report is not invalidated only because it shares the legacy trade date", async (t) => {
   const root = await fs.mkdtemp(path.join(os.tmpdir(), "tradingworkbench-audit-versioned-"));
   t.after(() => fs.rm(root, { recursive: true, force: true }));

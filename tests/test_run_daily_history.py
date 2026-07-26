@@ -1,6 +1,9 @@
 import json
 
 from scripts.run_daily import (
+    _load_workbench_daily,
+    _load_workbench_news,
+    _workflow_metadata,
     backfill_history_report_files,
     main,
     report_save_directory,
@@ -56,6 +59,175 @@ def test_history_keeps_a_superseding_report_with_a_distinct_path(tmp_path):
         "reports/GOOGL/2026-07-24/complete_report.md",
     ]
     assert history[0]["results"][0]["analysis_status"] == "insufficient_evidence"
+
+
+def test_history_keeps_same_ticker_failures_from_two_profile_runs(tmp_path):
+    data = tmp_path / "data"
+    data.mkdir()
+
+    def failed_payload(profile_id, run_id):
+        return {
+            "trade_date": "2026-07-25",
+            "generated_at": f"2026-07-25T{run_id}:00:00Z",
+            "provider": "ark",
+            "identity": {
+                "scope": "profile",
+                "kind": "manual",
+                "profileId": profile_id,
+                "requestId": None,
+                "slotId": None,
+                "scheduledFor": None,
+            },
+            "run": {"id": run_id},
+            "results": [{
+                "ticker": "SPY",
+                "rating": None,
+                "report": None,
+                "error": "provider failed",
+            }],
+        }
+
+    assert update_history(data, failed_payload("profile-a", "10")) == 1
+    assert update_history(data, failed_payload("profile-b", "11")) == 2
+
+    history = json.loads((data / "history.json").read_text())
+    assert [entry["identity"]["profileId"] for entry in history] == [
+        "profile-b",
+        "profile-a",
+    ]
+
+
+def test_workflow_metadata_builds_strict_profile_manual_monitor_and_adhoc_identity(
+    monkeypatch,
+):
+    fields = (
+        "TRADINGAGENTS_REQUEST_ID",
+        "TRADINGAGENTS_REQUEST_KIND",
+        "TRADINGAGENTS_PROFILE_ID",
+        "TRADINGAGENTS_SLOT_ID",
+        "TRADINGAGENTS_SCHEDULED_FOR",
+    )
+    for field in fields:
+        monkeypatch.delenv(field, raising=False)
+
+    monkeypatch.setenv("TRADINGAGENTS_PROFILE_ID", "profile-a")
+    request, _, identity = _workflow_metadata(["market"])
+    assert identity == {
+        "scope": "profile",
+        "kind": "manual",
+        "runId": None,
+        "profileId": "profile-a",
+        "requestId": None,
+        "slotId": None,
+        "scheduledFor": None,
+    }
+    assert request["kind"] == "manual"
+
+    monkeypatch.setenv("TRADINGAGENTS_SLOT_ID", "slot-a")
+    monkeypatch.setenv("TRADINGAGENTS_SCHEDULED_FOR", "2026-07-25T09:30:00.000Z")
+    request, _, identity = _workflow_metadata(["market"])
+    assert identity["kind"] == "monitor"
+    assert identity["slotId"] == "slot-a"
+    assert request["kind"] == "monitor"
+
+    for field in fields:
+        monkeypatch.delenv(field, raising=False)
+    monkeypatch.setenv(
+        "TRADINGAGENTS_REQUEST_ID",
+        "123e4567-e89b-42d3-a456-426614174000",
+    )
+    request, _, identity = _workflow_metadata(["news"])
+    assert identity["scope"] == "adhoc"
+    assert identity["profileId"] is None
+    assert identity["requestId"] == "123e4567-e89b-42d3-a456-426614174000"
+    assert request["kind"] == "adhoc"
+
+
+def test_workflow_metadata_rejects_ambiguous_or_incomplete_identity(monkeypatch):
+    fields = (
+        "TRADINGAGENTS_REQUEST_ID",
+        "TRADINGAGENTS_REQUEST_KIND",
+        "TRADINGAGENTS_PROFILE_ID",
+        "TRADINGAGENTS_SLOT_ID",
+        "TRADINGAGENTS_SCHEDULED_FOR",
+    )
+    for field in fields:
+        monkeypatch.delenv(field, raising=False)
+
+    monkeypatch.setenv("TRADINGAGENTS_PROFILE_ID", "profile-a")
+    monkeypatch.setenv(
+        "TRADINGAGENTS_REQUEST_ID",
+        "123e4567-e89b-42d3-a456-426614174000",
+    )
+    try:
+        _workflow_metadata(["market"])
+    except ValueError as error:
+        assert "profileId" in str(error)
+        assert "requestId" in str(error)
+    else:
+        raise AssertionError("ambiguous identity must be rejected")
+
+    monkeypatch.delenv("TRADINGAGENTS_REQUEST_ID")
+    monkeypatch.setenv("TRADINGAGENTS_SLOT_ID", "slot-a")
+    try:
+        _workflow_metadata(["market"])
+    except ValueError as error:
+        assert "profileId/slotId/scheduledFor" in str(error)
+    else:
+        raise AssertionError("incomplete monitor identity must be rejected")
+
+
+def test_profile_runner_scopes_market_and_news_queries_but_adhoc_does_not(
+    monkeypatch,
+):
+    observed = []
+
+    class Response:
+        status_code = 200
+
+        def __init__(self, payload):
+            self._payload = payload
+
+        def json(self):
+            return self._payload
+
+    def get(url, *, params, timeout):
+        observed.append((url, params.copy(), timeout))
+        if url.endswith("/api/market"):
+            return Response({
+                "status": "ok",
+                "data": [{
+                    "ts": "2026-07-24T20:00:00Z",
+                    "open": 1,
+                    "high": 1,
+                    "low": 1,
+                    "close": 1,
+                    "volume": 1,
+                    "source": "fixture",
+                }],
+                "sources": [],
+            })
+        return Response({"status": "ok", "data": [], "sources": []})
+
+    monkeypatch.setenv("PAGES_URL", "https://workbench.example")
+    monkeypatch.setattr("requests.get", get)
+    monkeypatch.setenv("TRADINGAGENTS_PROFILE_ID", "profile-a")
+    _load_workbench_daily("SPY", "2026-07-24")
+    _load_workbench_news("SPY", "2026-07-24")
+    assert [params["profile"] for _, params, _ in observed] == [
+        "profile-a",
+        "profile-a",
+    ]
+
+    observed.clear()
+    monkeypatch.delenv("TRADINGAGENTS_PROFILE_ID")
+    monkeypatch.setenv(
+        "TRADINGAGENTS_REQUEST_ID",
+        "123e4567-e89b-42d3-a456-426614174000",
+    )
+    _load_workbench_daily("SPY", "2026-07-24")
+    _load_workbench_news("SPY", "2026-07-24")
+    assert all("profile" not in params for _, params, _ in observed)
 
 
 def test_history_preserves_report_tabs_and_request_run_metadata(tmp_path):
@@ -194,7 +366,18 @@ def test_main_persists_allowlisted_workflow_request_and_run_metadata(
         "workflow": "daily-analysis",
         "url": "https://github.example/owner/repository/actions/runs/987654321",
     }
+    expected_identity = {
+        "scope": "adhoc",
+        "kind": "adhoc",
+        "runId": "987654321",
+        "profileId": None,
+        "requestId": "123e4567-e89b-42d3-a456-426614174000",
+        "slotId": None,
+        "scheduledFor": None,
+    }
     assert latest["request"] == expected_request
     assert latest["run"] == expected_run
+    assert latest["identity"] == expected_identity
     assert archived["request"] == expected_request
     assert archived["run"] == expected_run
+    assert archived["identity"] == expected_identity

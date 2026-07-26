@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import json
 import math
 
 import requests
@@ -45,6 +46,15 @@ def test_publish_evidence_bundle_posts_only_to_configured_endpoint(monkeypatch):
     assert observed["url"] == "https://board.example/api/evidence"
     assert observed["headers"]["authorization"] == "Bearer write-secret"
     assert observed["json"]["packet"]["instrument"]["symbol"] == "GOOGL"
+    assert observed["json"]["identity"] == {
+        "scope": "legacy",
+        "kind": "legacy",
+        "runId": None,
+        "profileId": None,
+        "requestId": None,
+        "slotId": None,
+        "scheduledFor": None,
+    }
     assert "write-secret" not in str(result)
 
 
@@ -109,6 +119,16 @@ def test_run_ticker_publishes_validated_evidence_before_starting_the_model(
     runtime_packet = packet()
 
     def publish(packet_payload, *, manifest=None, report=None):
+        if manifest is not None:
+            assert manifest["identity"] == {
+                "scope": "legacy",
+                "kind": "legacy",
+                "runId": None,
+                "profileId": None,
+                "requestId": None,
+                "slotId": None,
+                "scheduledFor": None,
+            }
         calls.append(("publish", manifest, report))
         return {"published": True, "status": 201}
 
@@ -151,12 +171,22 @@ def test_run_ticker_publishes_validated_evidence_before_starting_the_model(
     )
 
     assert result["analysis_status"] == "rated"
+    saved_manifest = json.loads(
+        (
+            tmp_path
+            / "reports"
+            / "GOOGL"
+            / "2026-07-24"
+            / "report_manifest.json"
+        ).read_text(encoding="utf-8")
+    )
+    assert saved_manifest["identity"]["scope"] == "legacy"
     assert calls == [
         ("publish", None, None),
         ("model", None, None),
         (
             "publish",
-            {"analysisStatus": "rated", "auditStatus": "verified"},
+            saved_manifest,
             "reports/GOOGL/2026-07-24/complete_report.md",
         ),
     ]

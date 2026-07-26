@@ -1,7 +1,7 @@
 name: daily-analysis
 
 run-name: >-
-  Daily analysis · ${{ inputs.profileId || 'manual' }} · ${{ inputs.slotId || inputs.requestId || github.run_id }}${{ inputs.scheduledFor && format(' · {0}', inputs.scheduledFor) || '' }}
+  Daily analysis · ${{ inputs.requestId && format('adhoc · {0}', inputs.requestId) || inputs.scheduledFor && format('profile · monitor · {0} · {1} · {2}', inputs.profileId, inputs.slotId, inputs.scheduledFor) || inputs.profileId && format('profile · manual · {0}', inputs.profileId) || format('legacy · {0}', github.run_id) }}
 
 on:
   workflow_dispatch:
@@ -98,6 +98,21 @@ jobs:
           } from "./functions/api/_workbench_settings.mjs";
 
           const manual = process.env.MANUAL_TICKERS.trim();
+          const requestInput = process.env.REQUEST_ID.trim();
+          const profileId = process.env.MONITOR_PROFILE_ID.trim();
+          const slotId = process.env.MONITOR_SLOT_ID.trim();
+          const scheduledFor = process.env.MONITOR_SCHEDULED_FOR.trim();
+          if (profileId && requestInput) {
+            throw new Error("profileId and requestId are mutually exclusive");
+          }
+          if ((slotId || scheduledFor) && !(profileId && slotId && scheduledFor)) {
+            throw new Error(
+              "monitor runs require profileId, slotId, and scheduledFor together",
+            );
+          }
+          if (profileId && !manual) {
+            throw new Error("profile runs require an explicit ticker snapshot");
+          }
           let tickers;
           if (manual) {
             tickers = normalizeWorkbenchTickers(manual);
@@ -108,7 +123,7 @@ jobs:
             console.log("using saved workbench ticker list");
           }
           const requestId = normalizeRequestId(
-            process.env.REQUEST_ID,
+            requestInput,
             { generate: false },
           );
           const analysts = normalizeAnalysts(process.env.REQUESTED_ANALYSTS, {
@@ -129,7 +144,13 @@ jobs:
               `TRADINGAGENTS_MAX_RISK_ROUNDS=${rounds}`,
               `TRADINGAGENTS_REQUEST_ID=${requestId}`,
               `TRADINGAGENTS_REQUEST_KIND=${
-                requestId ? "adhoc" : process.env.MONITOR_PROFILE_ID ? "monitor" : "manual"
+                requestId
+                  ? "adhoc"
+                  : scheduledFor
+                    ? "monitor"
+                    : profileId
+                      ? "manual"
+                      : "legacy"
               }`,
               `TRADINGAGENTS_RESEARCH_DEPTH=${researchDepth}`,
               "",
