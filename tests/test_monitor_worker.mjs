@@ -875,6 +875,7 @@ test("health stays 200 and marks providers unavailable when the bounded D1 query
       },
       WORKER_COMMIT_SHA: "def5678",
       WORKER_DEPLOYED_AT: "2026-07-26T04:00:00.000Z",
+      HEALTH_QUERY_TIMEOUT_MS: "10",
     },
   );
   assert.ok(performance.now() - startedAt < 100);

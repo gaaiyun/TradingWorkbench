@@ -214,7 +214,7 @@ const MANUAL_COLLECTION_TASKS = new Set([
 // Keep /health bounded, but allow a cold D1 read to complete. Ten
 // milliseconds turned normal cross-region reads into false "unavailable"
 // states; the upper bound still keeps the endpoint cheap for probes.
-const HEALTH_QUERY_TIMEOUT_MS = 50;
+const HEALTH_QUERY_TIMEOUT_MS = 750;
 const HEALTH_PROVIDER_LIMIT = 32;
 const DIRECT_EXTERNAL_REQUEST_LIMIT = 32;
 const QUEUE_DISCOVERY_LIMIT = 10;
@@ -357,7 +357,7 @@ async function readNewsProviderHealth(db, configuredTimeoutMs = HEALTH_QUERY_TIM
       LIMIT ?
     `).bind(HEALTH_PROVIDER_LIMIT).all();
     const timeoutMs = Math.min(
-      250,
+      1500,
       Math.max(10, Number(configuredTimeoutMs) || HEALTH_QUERY_TIMEOUT_MS),
     );
     const result = await Promise.race([

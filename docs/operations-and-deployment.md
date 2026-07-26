@@ -175,7 +175,7 @@ if ($workerHealth.deployment.deployedAt -eq "unknown") {
 
 顶层 `ok=true` 只说明 health handler 可响应。还要检查 `newsProviders.status` 和每个 provider 的成功、失败时间与错误码。
 
-默认 `/health` 的 D1 provider 查询超时为 50ms，可用 `HEALTH_QUERY_TIMEOUT_MS` 在 10–250ms 内覆盖。它是有界探针，不代表整个 Worker 运行时间。
+默认 `/health` 的 D1 provider 查询超时为 750ms，可用 `HEALTH_QUERY_TIMEOUT_MS` 在 10–1500ms 内覆盖。它是有界探针，不代表整个 Worker 运行时间；50ms 在生产跨区域 D1 上会产生已有健康记录却返回空数组的假 `unavailable`。
 
 ### 5.2.1 Queue（可选）
 
