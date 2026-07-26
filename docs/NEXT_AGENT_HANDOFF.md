@@ -18,7 +18,7 @@
 
 多 profile、运行身份隔离、Chat/Evidence owner、调度可靠性、提醒 shadow 账本、Worker/Pages 部署指纹的**代码**均已合入 `main`（HEAD = `origin/main`，工作树干净，GitHub CI 全绿）。
 
-但**代码合入不等于 GitHub 自动部署链已恢复**。本轮已用本机 Wrangler OAuth 手工发布 Pages 与 Monitor Worker，线上两端现已回读 `e83ca5f`；GitHub Actions 仍会因缺 Cloudflare API token 而在凭据检查处失败，不能把这次手工发布当成 CI 已恢复。
+但**代码合入不等于 GitHub 自动部署链已恢复**。本轮已用本机 Wrangler OAuth 手工发布 Pages 与 Monitor Worker：Pages 当前线上资源已回读 `0bd4809`，Monitor Worker 保持行为代码版本 `f88df97`（前端与文档提交无需再次发布 Worker），部署时间为 `2026-07-26T10:05:38Z`；GitHub Actions 仍会因缺 Cloudflare API token 而在凭据检查处失败，不能把这次手工发布当成 CI 已恢复。
 
 同日终审又修复了三个用户可见回归：旧版无 identity 的 43 份 `legacy_unverified` 报告恢复只读展示、同一新闻按 cluster/原文聚合关联标的、交易时钟按沪深与纽约时区及周末判断。历史未验证报告仍不能进入问答，4 份 `invalidated` 报告仍只在“历史审计”中显示。
 
