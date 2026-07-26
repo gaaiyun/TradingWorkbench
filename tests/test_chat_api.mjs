@@ -10,6 +10,7 @@ import {
   resolveChatConfig,
 } from "../functions/api/_chat.mjs";
 import { onRequestGet, onRequestPost } from "../functions/api/chat.js";
+import { archiveChatContext } from "../public/assets/workbench-research.mjs";
 
 const BASE_ENV = Object.freeze({
   ACCESS_CODE: "access-code",
@@ -403,12 +404,22 @@ test("explicit adhoc report requires reportRequestId and exposes its context sco
     });
   });
 
+  const frontendReportContext = archiveChatContext({
+    auditStatus: "verified",
+    identity: {
+      scope: "adhoc",
+      kind: "adhoc",
+      profileId: null,
+      requestId: reportRequestId,
+    },
+  });
+  assert.deepEqual(frontendReportContext, { reportRequestId });
   const response = await onRequestPost({
     request: chatRequest({
       code: "access-code",
       question: "怎么看？",
       report: REPORT_PATH,
-      reportRequestId,
+      ...frontendReportContext,
     }),
     env: BASE_ENV,
   });

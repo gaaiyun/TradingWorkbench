@@ -297,7 +297,7 @@ test("chat keeps persistent local threads and streams SSE with history context",
   assert.match(script, /sessionId:\s*thread\.id/);
   assert.match(script, /profileId:\s*profile\?\.id/);
   assert.match(script, /reportRequestId/);
-  assert.match(script, /reportScope/);
+  assert.doesNotMatch(script, /reportScope/);
   assert.match(script, /symbol:\s*state\.selectedSymbol/);
   assert.match(script, /x-request-id/);
   assert.match(script, /function recoverThread/);
@@ -571,6 +571,16 @@ test("report loading never bypasses identity-aware API errors", () => {
   const reportLoader = /async function fetchReportText[\s\S]*?\n  \}/.exec(script)?.[0] || "";
   assert.match(reportLoader, /buildArchiveReportUrl/);
   assert.doesNotMatch(reportLoader, /path\.replace|fetch\(\s*`\/\$\{/);
+});
+
+test("latest report and chat resolve archives by path plus identity selector", () => {
+  assert.match(script, /latestReportIdentity/);
+  assert.match(script, /archiveEntriesMatch/);
+  assert.doesNotMatch(
+    script,
+    /state\.archiveEntries\.find\(\(\{\s*report\s*\}\)\s*=>\s*report\s*===\s*state\.latestReport\)/,
+  );
+  assert.doesNotMatch(script, /state\.latestReport\s*=\s*entry\.report/);
 });
 
 test("refresh-all reports settled and response statuses instead of unconditional success", () => {

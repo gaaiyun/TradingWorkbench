@@ -48,6 +48,7 @@ import {
 } from "./workbench-options.mjs";
 import {
   archiveChatContext,
+  archiveEntriesMatch,
   archivedResearchAfterRun,
   archivedResearchForRequest,
   buildArchiveEntries,
@@ -115,6 +116,7 @@ import {
     indicators: { volume: true, ma20: true, ma60: true },
     chatBusy: false,
     latestReport: null,
+    latestReportIdentity: null,
     threads: [],
     threadId: null,
     threadStorageWarningShown: false,
@@ -975,7 +977,7 @@ import {
       invalid_record: "记录无效",
       unverified: "未登记",
     };
-    $("#archive-list").innerHTML = state.archiveEntries.map((entry, index) => `<button type="button" data-archive-index="${index}" class="${entry.report === state.selectedReportPath ? "is-active" : ""} is-audit-${escapeHtml(entry.auditStatus)}">
+    $("#archive-list").innerHTML = state.archiveEntries.map((entry, index) => `<button type="button" data-archive-index="${index}" data-report-scope="${escapeHtml(entry.identity?.scope || "invalid")}" data-report-profile="${escapeHtml(entry.identity?.profileId || "")}" data-report-request-id="${escapeHtml(entry.identity?.requestId || "")}" class="${archiveEntriesMatch(entry, state.selectedReportEntry) ? "is-active" : ""} is-audit-${escapeHtml(entry.auditStatus)}">
       <span><b>${escapeHtml(entry.ticker)}</b><em>${escapeHtml(entry.rating || "—")}</em></span>
       <small>${escapeHtml(entry.tradeDate || formatTime(entry.generatedAt, true))} · ${escapeHtml(entry.provider || "unknown")} · <strong class="audit-badge audit-${escapeHtml(entry.auditStatus)}">${escapeHtml(auditLabels[entry.auditStatus] || "未登记")}</strong></small>
     </button>`).join("");
@@ -1089,10 +1091,7 @@ import {
     }
   }
 
-  async function loadArchiveReport(entryOrPath) {
-    const entry = typeof entryOrPath === "string"
-      ? state.archiveEntries.find(({ report }) => report === entryOrPath)
-      : entryOrPath;
+  async function loadArchiveReport(entry) {
     if (!entry?.report) {
       toast("找不到带运行身份的研究档案", true);
       return;
@@ -1100,7 +1099,6 @@ import {
     const tabs = buildArchiveFileTabs(entry);
     const initialTab = defaultArchiveFileTab(tabs);
     state.selectedReportPath = entry.report;
-    state.latestReport = entry.report;
     state.selectedReportEntry = entry;
     state.selectedReportSection = initialTab?.id || null;
     $("#archive-report-title").textContent = `${entry.ticker} · ${entry.tradeDate || "研究报告"}`;
@@ -1288,9 +1286,13 @@ import {
       $("#conclusion-asof").textContent = "尚无可验证研究结果";
       $("#conclusion-body").innerHTML = '<div class="conclusion-rating neutral">待研究</div><p>最新研究接口与静态归档均未返回可用结论。</p>';
       state.latestReport = null;
+      state.latestReportIdentity = null;
       return;
     }
     state.latestReport = result.report;
+    state.latestReportIdentity = state.latest?.identity
+      ? { ...state.latest.identity }
+      : null;
     const rating = String(result.rating || "neutral").toLowerCase();
     const tone = ["buy", "overweight"].includes(rating) ? "market-up" : ["sell", "underweight"].includes(rating) ? "market-down" : "neutral";
     $("#conclusion-asof").textContent = `${result.ticker} · ${state.latest.trade_date || formatTime(state.latest.generated_at, true)}`;
@@ -1559,6 +1561,7 @@ import {
     profileRequests.activate(state.selectedProfileId);
     Object.assign(state, resetProfileContext(state, currentProfile()));
     state.selectedReportEntry = null;
+    state.latestReportIdentity = null;
     const selectedTarget = targets().find(({ symbol }) => symbol === state.selectedSymbol);
     if (selectedTarget?.market !== "CN") state.timeframe = "1d";
     renderClearedProfileContext();
@@ -2382,9 +2385,10 @@ import {
     const profile = currentProfile();
     const reportEntry = state.selectedReportEntry
       || state.archiveEntries.find((entry) => (
-        entry.report === state.latestReport
-        && entry.identity?.scope === "profile"
-        && entry.identity?.profileId === profile?.id
+        archiveEntriesMatch(entry, {
+          report: state.latestReport,
+          identity: state.latestReportIdentity,
+        })
       ))
       || null;
     const reportContext = archiveChatContext(reportEntry);
@@ -2417,7 +2421,6 @@ import {
           sessionId: thread.id,
           profileId: chatReportIdentity.profileId,
           reportRequestId: chatReportIdentity.reportRequestId,
-          reportScope: chatReportIdentity.reportScope,
           symbol: state.selectedSymbol,
           question,
           history: historyMessages,
@@ -2448,8 +2451,16 @@ import {
 
   async function openLatestReport() {
     if (!state.latestReport) { toast("当前没有可打开的研究档案", true); return; }
+    const entry = state.archiveEntries.find((candidate) => archiveEntriesMatch(candidate, {
+      report: state.latestReport,
+      identity: state.latestReportIdentity,
+    }));
+    if (!entry) {
+      toast("当前最新报告尚未进入对应身份的档案索引", true);
+      return;
+    }
     navigateRoute("archive");
-    await loadArchiveReport(state.latestReport);
+    await loadArchiveReport(entry);
   }
 
   function updateClock() {

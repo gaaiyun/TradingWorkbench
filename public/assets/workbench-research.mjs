@@ -225,6 +225,26 @@ export function buildArchiveReportUrl(entry, path = entry?.report) {
   return `/api/report?${params.toString()}`;
 }
 
+export function archiveEntriesMatch(left, right) {
+  if (!left?.report || String(left.report) !== String(right?.report || "")) {
+    return false;
+  }
+  try {
+    const leftSelector = archiveReportSelector(left);
+    const rightSelector = archiveReportSelector(right);
+    if (leftSelector.scope !== rightSelector.scope) return false;
+    if (leftSelector.scope === "profile") {
+      return leftSelector.profileId === rightSelector.profileId;
+    }
+    if (leftSelector.scope === "adhoc") {
+      return leftSelector.requestId === rightSelector.requestId;
+    }
+    return leftSelector.scope === "legacy";
+  } catch {
+    return false;
+  }
+}
+
 export function archiveChatContext(entry) {
   if (entry?.auditStatus !== "verified") return null;
   let selector;
@@ -237,7 +257,6 @@ export function archiveChatContext(entry) {
   if (selector.scope === "adhoc") {
     return {
       reportRequestId: selector.requestId,
-      reportScope: "adhoc",
     };
   }
   return null;

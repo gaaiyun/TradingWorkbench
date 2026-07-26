@@ -324,7 +324,7 @@ def route_api(route):
         profile = query.get("profile", [None])[0]
         RESEARCH_IDENTITY_REQUESTS.append((path, profile, request_id))
         if request_id:
-            fulfill_json(route, [research_batch(adhoc_identity(), "NVDA", "2026-07-24")])
+            fulfill_json(route, [research_batch(adhoc_identity(), "515880.SS", "2026-07-22")])
         else:
             identity = PROFILE_B_IDENTITY if profile == "profile-b" else PROFILE_A_IDENTITY
             trade_date = "2026-07-21" if profile == "profile-b" else "2026-07-22"
@@ -350,8 +350,8 @@ def route_api(route):
         identity = adhoc_identity() if request_id else (
             PROFILE_B_IDENTITY if profile == "profile-b" else PROFILE_A_IDENTITY
         )
-        ticker = "NVDA" if request_id else "515880.SS"
-        trade_date = "2026-07-24" if request_id else (
+        ticker = "515880.SS"
+        trade_date = "2026-07-22" if request_id else (
             "2026-07-21" if profile == "profile-b" else "2026-07-22"
         )
         fulfill_json(route, {
@@ -683,9 +683,21 @@ def run_browser():
         ]
         assert ANALYZE_REQUESTS[-1]["profileId"] == "cn-semi-comms"
         page.click("#settings-close")
-        page.locator('[data-route-link="archive"]').first.click()
+        page.locator('[data-route-link="monitor"]').first.click()
+        page.click("#refresh-all")
+        page.wait_for_function(
+            "!document.querySelector('#refresh-all').disabled"
+            " && document.querySelector('#conclusion-asof').textContent.includes('515880.SS')"
+        )
+        page.click("#open-latest-report")
         page.wait_for_function("document.body.dataset.route === 'archive'")
-        page.locator("#archive-list [data-archive-index]").first.click()
+        page.wait_for_selector('#archive-report-tabs [data-report-section="decision"].is-active')
+        assert REPORT_REQUESTS[-1]["profile"] == "cn-semi-comms"
+        assert REPORT_REQUESTS[-1]["requestId"] is None
+        shared_report_path = REPORT_REQUESTS[-1]["path"]
+        page.locator(
+            '#archive-list [data-report-scope="adhoc"]'
+        ).click()
         page.wait_for_selector('#archive-report-tabs [data-report-section="decision"].is-active')
         assert page.locator("#archive-report-tabs [data-report-section]").evaluate_all(
             "nodes => nodes.map(node => node.dataset.reportSection)",
@@ -696,6 +708,7 @@ def run_browser():
         ]
         assert REPORT_REQUESTS[-1]["requestId"] == temporary_request["requestId"]
         assert REPORT_REQUESTS[-1]["profile"] is None
+        assert REPORT_REQUESTS[-1]["path"] == shared_report_path
         assert page.locator("#archive-report-warning").is_hidden()
         page.click('#archive-report-tabs [data-report-section="market"]')
         page.wait_for_selector('#archive-report-tabs [data-report-section="market"].is-active')
@@ -731,8 +744,8 @@ def run_browser():
         page.unroute("**/api/report?*", deny_report_404)
 
         profile_report_button = page.locator(
-            "#archive-list [data-archive-index]"
-        ).filter(has_text="515880.SS").first
+            '#archive-list [data-report-scope="profile"][data-report-profile="cn-semi-comms"]'
+        )
         profile_report_button.click()
         page.wait_for_selector('#archive-report-tabs [data-report-section="decision"].is-active')
         assert REPORT_REQUESTS[-1]["profile"] == "cn-semi-comms"
@@ -941,7 +954,7 @@ def run_browser():
         assert "reportScope" not in CHAT_REQUESTS[-1]
         assert page.evaluate("JSON.parse(localStorage.getItem('ta.workbench.threads.v1')).length") >= 1
         page.click("#assistant-close")
-        page.locator("#archive-list [data-archive-index]").filter(has_text="NVDA").first.click()
+        page.locator('#archive-list [data-report-scope="adhoc"]').click()
         page.wait_for_selector('#archive-report-tabs [data-report-section="decision"].is-active')
         page.click("#archive-ask")
         page.wait_for_selector("#assistant.is-open")
@@ -951,7 +964,7 @@ def run_browser():
             "document.querySelectorAll('#chat-log .chat-message.user').length === 3"
         )
         assert CHAT_REQUESTS[-1]["reportRequestId"] == temporary_request["requestId"]
-        assert CHAT_REQUESTS[-1]["reportScope"] == "adhoc"
+        assert "reportScope" not in CHAT_REQUESTS[-1]
         assert "profileId" not in CHAT_REQUESTS[-1]
         page.evaluate("""
           let index = 0;

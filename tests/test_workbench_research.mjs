@@ -4,6 +4,7 @@ import test from "node:test";
 import * as research from "../public/assets/workbench-research.mjs";
 import {
   archiveChatContext,
+  archiveEntriesMatch,
   archivedResearchAfterRun,
   buildArchiveEntries,
   buildArchiveReportUrl,
@@ -379,7 +380,6 @@ test("chat report context follows the selected report instead of the active prof
     },
   }), {
     reportRequestId: "123e4567-e89b-42d3-a456-426614174006",
-    reportScope: "adhoc",
   });
   for (const auditStatus of ["legacy_unverified", "unverified", "invalidated"]) {
     assert.equal(archiveChatContext({
@@ -392,6 +392,33 @@ test("chat report context follows the selected report instead of the active prof
       },
     }), null);
   }
+});
+
+test("archive entry matching includes the report selector when paths collide", () => {
+  const report = "reports/NVDA/2026-07-24/complete_report.md";
+  const profile = {
+    report,
+    identity: {
+      scope: "profile", kind: "manual", profileId: "profile-a", requestId: null,
+    },
+  };
+  const sameProfile = {
+    report,
+    identity: {
+      scope: "profile", kind: "monitor", profileId: "profile-a", requestId: null,
+    },
+  };
+  const adhoc = {
+    report,
+    identity: {
+      scope: "adhoc", kind: "adhoc", profileId: null,
+      requestId: "123e4567-e89b-42d3-a456-426614174006",
+    },
+  };
+
+  assert.equal(archiveEntriesMatch(profile, sameProfile), true);
+  assert.equal(archiveEntriesMatch(profile, adhoc), false);
+  assert.equal(archiveEntriesMatch(profile, { report, identity: null }), false);
 });
 
 test("archive opens decision by default and falls back in canonical order when it is absent", () => {
