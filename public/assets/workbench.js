@@ -863,7 +863,16 @@ import {
     ]);
 
     const rows = view.options.slice(0, 80);
-    $("#options-chain-coverage").textContent = `${view.contractCount || rows.length} 条合约`;
+    const totalContracts = view.contractCount || rows.length;
+    const ivCount = view.options.filter((row) => Number.isFinite(row.iv)).length;
+    const greekCount = view.options.filter((row) =>
+      Number.isFinite(row.delta) &&
+      Number.isFinite(row.gamma) &&
+      Number.isFinite(row.vega) &&
+      Number.isFinite(row.theta),
+    ).length;
+    $("#options-chain-coverage").textContent =
+      `${totalContracts} 条合约 · IV ${ivCount}/${totalContracts} · Greeks ${greekCount}/${totalContracts}`;
     if (!rows.length) {
       $("#options-chain").className = "table-empty";
       $("#options-chain").innerHTML = `<b>${view.status === "unavailable" ? "期权数据暂不可用" : "当前没有可展示合约"}</b><span>${view.fallbackReason ? `实时源失败：${escapeHtml(view.fallbackReason)}` : "不会用模拟期权链替代真实数据。"}</span>`;
