@@ -68,7 +68,32 @@ function offsetMillisecondsAt(value, timeZone) {
   return localAsUtc - Math.floor(value.valueOf() / 1000) * 1000;
 }
 
-function localTimeToUtc(parts, timeZone) {
+function addLocalMinutes(parts, minutes) {
+  const value = new Date(Date.UTC(
+    parts.year,
+    parts.month - 1,
+    parts.day,
+    parts.hour,
+    parts.minute + minutes,
+  ));
+  return {
+    year: value.getUTCFullYear(),
+    month: value.getUTCMonth() + 1,
+    day: value.getUTCDate(),
+    hour: value.getUTCHours(),
+    minute: value.getUTCMinutes(),
+  };
+}
+
+function sameLocalMinute(left, right) {
+  return left.year === right.year
+    && left.month === right.month
+    && left.day === right.day
+    && left.hour === right.hour
+    && left.minute === right.minute;
+}
+
+function utcInstantsForLocalMinute(parts, timeZone) {
   const localAsUtc = Date.UTC(
     parts.year,
     parts.month - 1,
@@ -77,13 +102,24 @@ function localTimeToUtc(parts, timeZone) {
     parts.minute,
     0,
   );
-  let candidate = localAsUtc;
-  for (let attempt = 0; attempt < 4; attempt += 1) {
-    const next = localAsUtc - offsetMillisecondsAt(new Date(candidate), timeZone);
-    if (next === candidate) break;
-    candidate = next;
+  const offsets = new Set();
+  for (let hours = -36; hours <= 36; hours += 6) {
+    offsets.add(offsetMillisecondsAt(new Date(localAsUtc + hours * 60 * 60_000), timeZone));
   }
-  return new Date(candidate);
+  return [...offsets]
+    .map((offset) => new Date(localAsUtc - offset))
+    .filter((candidate) => sameLocalMinute(localParts(candidate, timeZone), parts))
+    .sort((left, right) => left.valueOf() - right.valueOf());
+}
+
+function localTimeToUtc(parts, timeZone, after) {
+  for (let minute = 0; minute <= 3 * 24 * 60; minute += 1) {
+    const local = addLocalMinutes(parts, minute);
+    const candidate = utcInstantsForLocalMinute(local, timeZone)
+      .find((value) => value.valueOf() > after.valueOf());
+    if (candidate) return candidate;
+  }
+  return null;
 }
 
 function quietState(profile, now) {
@@ -106,7 +142,8 @@ function quietState(profile, now) {
     ...targetDate,
     hour: Math.floor(end / 60),
     minute: end % 60,
-  }, timeZone);
+  }, timeZone, now);
+  if (!release) return { quiet: true, nextAttemptAt: null };
   return { quiet: true, nextAttemptAt: release.toISOString() };
 }
 

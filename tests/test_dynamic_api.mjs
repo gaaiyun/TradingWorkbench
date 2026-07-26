@@ -1,4 +1,5 @@
 import assert from "node:assert/strict";
+import { readFileSync } from "node:fs";
 import test from "node:test";
 
 import * as eventsApi from "../functions/api/events.js";
@@ -6,6 +7,7 @@ import * as marketApi from "../functions/api/market.js";
 import * as monitorApi from "../functions/api/monitor-status.js";
 import * as newsApi from "../functions/api/news.js";
 import { FakeD1 } from "./helpers/fake_d1.mjs";
+import { SqliteD1 } from "./helpers/sqlite_d1.mjs";
 
 const SOURCE_KEYS = ["source", "asOf", "fetchedAt", "freshness", "adjustment", "quality"];
 const VALID_STATUSES = new Set(["ok", "degraded", "stale", "unavailable"]);
@@ -20,6 +22,73 @@ function assertEnvelope(payload) {
   assert.equal(Array.isArray(payload.data), true);
   assert.equal(Array.isArray(payload.sources), true);
   for (const source of payload.sources) assert.deepEqual(Object.keys(source), SOURCE_KEYS);
+}
+
+async function sqliteEventsFixture(t, { maxBindings = Infinity } = {}) {
+  let DatabaseSync;
+  try {
+    ({ DatabaseSync } = await import("node:sqlite"));
+  } catch {
+    t.skip("node:sqlite is unavailable on this Node version");
+    return null;
+  }
+  const sqlite = new DatabaseSync(":memory:");
+  sqlite.exec(readFileSync(
+    new URL("../migrations/0001_workbench_dynamic.sql", import.meta.url),
+    "utf8",
+  ));
+  sqlite.exec(readFileSync(
+    new URL("../migrations/0015_notification_deliveries.sql", import.meta.url),
+    "utf8",
+  ));
+  const insertEvent = sqlite.prepare(`
+    INSERT INTO market_events (
+      id, symbol, profile_id, topic, importance, event_at, title, description,
+      source, as_of, fetched_at, freshness, adjustment, quality, expires_at,
+      provider, provider_as_of, provider_quality, rule_version
+    ) VALUES (
+      ?, '515880.SS', 'semi', 'market_move', 'high', ?, ?, 'move',
+      'signal-engine', ?, ?, 'fresh', 'none', 'good',
+      '2099-01-01T00:00:00.000Z', 'tencent', ?, 'good', 'intraday-signal-v1'
+    )
+  `);
+  const insertDelivery = sqlite.prepare(`
+    INSERT INTO notification_deliveries (
+      id, event_id, profile_id, channel, status, policy_snapshot_json,
+      reason_code, attempt_count, created_at, updated_at
+    ) VALUES (?, ?, 'semi', 'web', 'sent', '{}',
+      'WEB_EVENT_PERSISTED', 0, ?, ?)
+  `);
+  const oldTimestamp = "2026-07-24T08:00:00.000Z";
+  insertEvent.run(
+    "event-old",
+    oldTimestamp,
+    "old",
+    oldTimestamp,
+    oldTimestamp,
+    oldTimestamp,
+  );
+  const timestamp = "2026-07-24T09:00:00.000Z";
+  for (let index = 1; index <= 125; index += 1) {
+    const id = `event-${String(index).padStart(3, "0")}`;
+    insertEvent.run(id, timestamp, id, timestamp, timestamp, timestamp);
+    insertDelivery.run(`delivery-${id}`, id, timestamp, timestamp);
+  }
+  const inner = new SqliteD1(sqlite);
+  const db = {
+    prepare(sql) {
+      const statement = inner.prepare(sql);
+      return {
+        bind(...params) {
+          if (params.length > maxBindings) {
+            throw new Error(`too many bound parameters: ${params.length}`);
+          }
+          return statement.bind(...params);
+        },
+      };
+    },
+  };
+  return { sqlite, db, oldTimestamp };
 }
 
 test("market API builds parameterized symbol/profile/timeframe/date filters and source metadata", async () => {
@@ -423,7 +492,10 @@ test("events expose structured provenance, safe delivery state, and an after cur
   const payload = await response.json();
 
   assert.equal(payload.status, "ok");
-  assert.equal(payload.cursor, "2026-07-24T09:00:00Z");
+  assert.equal(
+    payload.cursor,
+    '["2026-07-24T09:00:00Z","event-new"]',
+  );
   assert.deepEqual(payload.data.map(({ id }) => id), ["event-new"]);
   assert.equal(payload.data[0].provider, "tencent");
   assert.equal(payload.data[0].provider_as_of, "2026-07-24T09:00:00Z");
@@ -439,6 +511,55 @@ test("events expose structured provenance, safe delivery state, and an after cur
   }]);
   assert.doesNotMatch(JSON.stringify(payload), /must-not-leak|policy_snapshot/i);
   assert.match(DB.calls[0].sql, /event_at\s*>\s*\?/i);
+});
+
+test("events use a composite cursor to page every equal-timestamp row in real SQLite", async (t) => {
+  const value = await sqliteEventsFixture(t, { maxBindings: 100 });
+  if (!value) return;
+  const seen = [];
+  let after = value.oldTimestamp;
+
+  for (let page = 0; page < 4; page += 1) {
+    const response = await eventsApi.onRequestGet({
+      request: request(
+        `/api/events?profile=semi&limit=40&after=${encodeURIComponent(after)}`,
+      ),
+      env: { DB: value.db },
+    });
+    const payload = await response.json();
+    assert.equal(payload.status, "ok");
+    seen.push(...payload.data.map(({ id }) => id));
+    after = payload.cursor;
+    if (payload.data.length < 40) break;
+  }
+
+  assert.equal(new Set(seen).size, 125);
+  assert.deepEqual(
+    seen,
+    Array.from({ length: 125 }, (_, index) =>
+      `event-${String(index + 1).padStart(3, "0")}`),
+  );
+  assert.deepEqual(JSON.parse(after), [
+    "2026-07-24T09:00:00.000Z",
+    "event-125",
+  ]);
+});
+
+test("events enrich pages above one hundred rows without exceeding D1 bind limits", async (t) => {
+  const value = await sqliteEventsFixture(t, { maxBindings: 100 });
+  if (!value) return;
+  const response = await eventsApi.onRequestGet({
+    request: request("/api/events?profile=semi&limit=125"),
+    env: { DB: value.db },
+  });
+  const payload = await response.json();
+
+  assert.equal(payload.status, "ok");
+  assert.equal(payload.data.length, 125);
+  assert.equal(
+    payload.data.every(({ deliveries }) => deliveries.length === 1),
+    true,
+  );
 });
 
 test("monitor status returns source health in the same envelope", async () => {
@@ -506,7 +627,10 @@ test("monitor status adds profile-scoped safe notification state and cursor", as
   const payload = await response.json();
 
   assert.equal(payload.status, "ok");
-  assert.equal(payload.cursor, "2026-07-24T09:03:00Z");
+  assert.equal(
+    payload.cursor,
+    '["2026-07-24T09:03:00Z","event-1:pushPlus"]',
+  );
   assert.deepEqual(payload.notifications, [{
     eventId: "event-1",
     channel: "pushPlus",

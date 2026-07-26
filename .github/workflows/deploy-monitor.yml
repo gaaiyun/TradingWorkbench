@@ -17,8 +17,8 @@ permissions:
   contents: read
 
 concurrency:
-  group: cloudflare-monitor
-  cancel-in-progress: true
+  group: cloudflare-workbench
+  cancel-in-progress: false
 
 jobs:
   deploy:

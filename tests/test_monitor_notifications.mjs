@@ -144,3 +144,47 @@ test("quiet-hour release respects profile timezone DST transitions", () => {
   assert.equal(decision.status, "deferred");
   assert.equal(decision.nextAttemptAt, "2026-03-08T11:00:00.000Z"); // 07:00 EDT
 });
+
+test("nonexistent DST quiet end advances to the next real local minute", () => {
+  const now = new Date("2026-03-08T06:30:00.000Z"); // 01:30 EST
+  const decision = notificationDecision({
+    profile: profile({
+      timezone: "America/New_York",
+      alerts: {
+        quietHours: { start: "22:00", end: "02:30" },
+      },
+    }),
+    event: highEvent,
+    channel: "pushPlus",
+    mode: "live",
+    hasPushPlusToken: true,
+    now,
+  });
+
+  assert.equal(decision.status, "deferred");
+  assert.equal(decision.nextAttemptAt, "2026-03-08T07:00:00.000Z"); // 03:00 EDT
+  assert.equal(Date.parse(decision.nextAttemptAt) > now.valueOf(), true);
+});
+
+test("ambiguous DST quiet end chooses the first matching instant after now", () => {
+  const alerts = { quietHours: { start: "22:00", end: "01:30" } };
+  const first = notificationDecision({
+    profile: profile({ timezone: "America/New_York", alerts }),
+    event: highEvent,
+    channel: "pushPlus",
+    mode: "live",
+    hasPushPlusToken: true,
+    now: new Date("2026-11-01T05:15:00.000Z"), // first 01:15 EDT
+  });
+  const second = notificationDecision({
+    profile: profile({ timezone: "America/New_York", alerts }),
+    event: highEvent,
+    channel: "pushPlus",
+    mode: "live",
+    hasPushPlusToken: true,
+    now: new Date("2026-11-01T06:15:00.000Z"), // second 01:15 EST
+  });
+
+  assert.equal(first.nextAttemptAt, "2026-11-01T05:30:00.000Z");
+  assert.equal(second.nextAttemptAt, "2026-11-01T06:30:00.000Z");
+});

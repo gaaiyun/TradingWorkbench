@@ -71,7 +71,7 @@ export async function mutateSettingsInD1(
 
 async function queryRows(
   db,
-  { table, columns, filters, timeColumn, from, to, after, limit },
+  { table, columns, filters, timeColumn, keyColumn = null, from, to, after, limit },
 ) {
   const clauses = [];
   const values = [];
@@ -89,15 +89,26 @@ async function queryRows(
     values.push(to);
   }
   if (after) {
-    clauses.push(`${timeColumn} > ?`);
-    values.push(after);
+    if (keyColumn && after.key) {
+      clauses.push(
+        `(${timeColumn} > ? OR (${timeColumn} = ? AND ${keyColumn} > ?))`,
+      );
+      values.push(after.timestamp, after.timestamp, after.key);
+    } else {
+      clauses.push(`${timeColumn} > ?`);
+      values.push(after.timestamp);
+    }
   }
   clauses.push("(expires_at IS NULL OR expires_at > ?)");
   values.push(new Date().toISOString());
   values.push(limit);
   const where = clauses.length ? ` WHERE ${clauses.join(" AND ")}` : "";
+  const direction = after ? "ASC" : "DESC";
+  const order = keyColumn
+    ? `${timeColumn} ${direction}, ${keyColumn} ${direction}`
+    : `${timeColumn} ${direction}`;
   const result = await db.prepare(
-    `SELECT ${columns.join(", ")} FROM ${table}${where} ORDER BY ${timeColumn} DESC LIMIT ?`,
+    `SELECT ${columns.join(", ")} FROM ${table}${where} ORDER BY ${order} LIMIT ?`,
   ).bind(...values).all();
   return Array.isArray(result?.results) ? result.results : [];
 }
@@ -155,16 +166,21 @@ function safeDelivery(row) {
 
 async function queryDeliveriesForEvents(db, eventIds) {
   if (eventIds.length === 0) return [];
-  const placeholders = eventIds.map(() => "?").join(", ");
-  const result = await db.prepare(`
-    SELECT event_id, channel, status, reason_code, attempt_count,
-           next_attempt_at, last_attempt_at, sent_at, updated_at
-    FROM notification_deliveries
-    WHERE event_id IN (${placeholders})
-    ORDER BY updated_at DESC
-  `).bind(...eventIds).all();
   const allowed = new Set(eventIds);
-  return (result?.results || [])
+  const deliveries = [];
+  for (let index = 0; index < eventIds.length; index += 80) {
+    const chunk = eventIds.slice(index, index + 80);
+    const placeholders = chunk.map(() => "?").join(", ");
+    const result = await db.prepare(`
+      SELECT event_id, channel, status, reason_code, attempt_count,
+             next_attempt_at, last_attempt_at, sent_at, updated_at
+      FROM notification_deliveries
+      WHERE event_id IN (${placeholders})
+      ORDER BY updated_at DESC
+    `).bind(...chunk).all();
+    deliveries.push(...(result?.results || []));
+  }
+  return deliveries
     .filter(({ event_id: eventId }) => allowed.has(eventId))
     .map(safeDelivery);
 }
@@ -184,6 +200,7 @@ export async function queryMarketEvents(db, query) {
       ["importance", query.importance],
     ],
     timeColumn: "event_at",
+    keyColumn: "id",
     ...query,
   });
   const deliveries = await queryDeliveriesForEvents(
@@ -221,17 +238,26 @@ export async function queryNotificationStatus(db, query) {
     values.push(query.profile);
   }
   if (query.after) {
-    clauses.push("updated_at > ?");
-    values.push(query.after);
+    if (query.after.key) {
+      clauses.push(`(
+        updated_at > ?
+        OR (updated_at = ? AND (event_id || ':' || channel) > ?)
+      )`);
+      values.push(query.after.timestamp, query.after.timestamp, query.after.key);
+    } else {
+      clauses.push("updated_at > ?");
+      values.push(query.after.timestamp);
+    }
   }
   values.push(query.limit);
   const where = clauses.length ? `WHERE ${clauses.join(" AND ")}` : "";
+  const direction = query.after ? "ASC" : "DESC";
   const result = await db.prepare(`
     SELECT event_id, channel, status, reason_code, attempt_count,
            next_attempt_at, last_attempt_at, sent_at, updated_at
     FROM notification_deliveries
     ${where}
-    ORDER BY updated_at DESC
+    ORDER BY updated_at ${direction}, (event_id || ':' || channel) ${direction}
     LIMIT ?
   `).bind(...values).all();
   return (result?.results || []).map(safeDelivery);

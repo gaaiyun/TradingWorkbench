@@ -118,10 +118,13 @@ function priceMove15m(bars) {
   if (!latest || bars.length < 4) return null;
   const targetTime = Date.parse(latest.ts) - 15 * 60_000;
   let baseline = null;
-  for (let index = bars.length - 2; index >= 0; index -= 1) {
-    if (Date.parse(bars[index].ts) <= targetTime) {
-      baseline = bars[index];
-      break;
+  let closestDistance = Infinity;
+  for (const candidate of bars.slice(0, -1)) {
+    const timestamp = Date.parse(candidate.ts);
+    const distance = Math.abs(timestamp - targetTime);
+    if (distance <= 5 * 60_000 && distance < closestDistance) {
+      baseline = candidate;
+      closestDistance = distance;
     }
   }
   const before = Number(baseline?.close);
@@ -138,6 +141,19 @@ function volumeAnomaly(bars) {
     .map(({ volume }) => Number(volume))
     .filter(Number.isFinite);
   return zScore(current, history);
+}
+
+function continuousTail(bars) {
+  if (bars.length === 0) return [];
+  let start = bars.length - 1;
+  for (let index = bars.length - 1; index > 0; index -= 1) {
+    const newer = Date.parse(bars[index].ts);
+    const older = Date.parse(bars[index - 1].ts);
+    const gap = newer - older;
+    if (!Number.isFinite(gap) || gap <= 0 || gap > 10 * 60_000) break;
+    start = index - 1;
+  }
+  return bars.slice(start);
 }
 
 function importanceFor(priceMove, volumeZ) {
@@ -263,8 +279,9 @@ export async function evaluateIntradaySignals({
     }
     const latest = bars.at(-1);
     const latestTime = Date.parse(latest?.ts);
+    const signalBars = continuousTail(bars);
     if (
-      bars.length < 4 ||
+      signalBars.length < 4 ||
       !Number.isFinite(latestTime) ||
       now.valueOf() - latestTime > 10 * 60_000
     ) {
@@ -272,8 +289,8 @@ export async function evaluateIntradaySignals({
       continue;
     }
     counts.evaluated += 1;
-    const priceMove = priceMove15m(bars);
-    const volumeZ = volumeAnomaly(bars);
+    const priceMove = priceMove15m(signalBars);
+    const volumeZ = volumeAnomaly(signalBars);
     const importance = importanceFor(priceMove, volumeZ);
     sources.push({
       source: latest.source,

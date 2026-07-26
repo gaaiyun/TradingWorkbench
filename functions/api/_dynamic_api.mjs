@@ -31,6 +31,35 @@ function optionalDate(params, name) {
   return date.toISOString();
 }
 
+function optionalCursor(params, name) {
+  const raw = params.get(name);
+  if (raw === null) return null;
+  const value = raw.trim();
+  const legacy = new Date(value);
+  if (value && !Number.isNaN(legacy.valueOf())) {
+    return { timestamp: legacy.toISOString(), key: null };
+  }
+  try {
+    const decoded = JSON.parse(value);
+    if (
+      Array.isArray(decoded)
+      && decoded.length === 2
+      && typeof decoded[0] === "string"
+      && typeof decoded[1] === "string"
+      && decoded[1].length > 0
+      && decoded[1].length <= 256
+    ) {
+      const timestamp = new Date(decoded[0]);
+      if (!Number.isNaN(timestamp.valueOf())) {
+        return { timestamp: timestamp.toISOString(), key: decoded[1] };
+      }
+    }
+  } catch {
+    // Invalid cursors share the stable query validation error below.
+  }
+  fail(`无效的 ${name} 参数`);
+}
+
 function optionalText(params, name) {
   const raw = params.get(name);
   if (raw === null) return null;
@@ -56,7 +85,7 @@ export function parseDynamicQuery(request, capabilities = {}) {
     timeframe: null,
     from: optionalDate(params, "from"),
     to: optionalDate(params, "to"),
-    after: capabilities.after ? optionalDate(params, "after") : null,
+    after: capabilities.after ? optionalCursor(params, "after") : null,
     importance: null,
     topic: capabilities.topic ? optionalText(params, "topic") : null,
     source: capabilities.source ? optionalPattern(params, "source", SOURCE) : null,
@@ -106,7 +135,10 @@ function aggregateStatus(rows, health) {
   return "ok";
 }
 
-export function dynamicEnvelope(rows, { health = false, cursorColumn = null } = {}) {
+export function dynamicEnvelope(
+  rows,
+  { health = false, cursorColumn = null, cursorForward = false } = {},
+) {
   const sources = [];
   const seen = new Set();
   for (const row of rows) {
@@ -121,7 +153,14 @@ export function dynamicEnvelope(rows, { health = false, cursorColumn = null } = 
     return value && (!latest || value > latest) ? value : latest;
   }, null);
   const envelope = { status: aggregateStatus(rows, health), asOf, data: rows, sources };
-  if (cursorColumn) envelope.cursor = rows[0]?.[cursorColumn] ?? null;
+  if (cursorColumn) {
+    const cursorRow = cursorForward ? rows.at(-1) : rows[0];
+    const columns = Array.isArray(cursorColumn) ? cursorColumn : [cursorColumn];
+    const values = columns.map((column) => cursorRow?.[column] ?? null);
+    envelope.cursor = values.some((value) => value === null)
+      ? null
+      : columns.length === 1 ? values[0] : JSON.stringify(values);
+  }
   return envelope;
 }
 
@@ -153,7 +192,11 @@ export async function serveDynamic(
     ...(cursorColumn ? { cursor: null } : {}),
   }, 200, { "cache-control": "no-store" });
   try {
-    return json(dynamicEnvelope(await query(db, filters), { health, cursorColumn }), 200, {
+    return json(dynamicEnvelope(await query(db, filters), {
+      health,
+      cursorColumn,
+      cursorForward: Boolean(filters.after),
+    }), 200, {
       "cache-control": "no-store",
     });
   } catch {

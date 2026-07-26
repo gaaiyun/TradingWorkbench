@@ -143,7 +143,7 @@ test("production workflows scope secrets and deploy the latest main under one lo
   );
   assert.match(
     deploy,
-    /concurrency:\r?\n  group: cloudflare-workbench\r?\n  cancel-in-progress: true/,
+    /concurrency:\r?\n  group: cloudflare-workbench\r?\n  cancel-in-progress: false/,
   );
 
   assert.match(

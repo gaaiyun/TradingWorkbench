@@ -11,6 +11,6 @@ export function onRequestGet(context) {
       after: true,
     },
     query: queryMarketEvents,
-    cursorColumn: "event_at",
+    cursorColumn: ["event_at", "id"],
   });
 }

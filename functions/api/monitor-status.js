@@ -42,10 +42,16 @@ export async function onRequestGet({ request, env }) {
       querySourceHealth(db, query),
       queryNotificationStatus(db, query),
     ]);
+    const cursorRow = query.after ? notifications.at(-1) : notifications[0];
     return json({
       ...dynamicEnvelope(health, { health: true }),
       notifications,
-      cursor: notifications[0]?.updatedAt ?? null,
+      cursor: cursorRow
+        ? JSON.stringify([
+          cursorRow.updatedAt,
+          `${cursorRow.eventId}:${cursorRow.channel}`,
+        ])
+        : null,
     }, 200, { "cache-control": "no-store" });
   } catch {
     return json({

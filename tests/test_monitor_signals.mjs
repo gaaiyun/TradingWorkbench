@@ -30,6 +30,7 @@ function insertBars(sqlite, {
   symbol = "515880.SS",
   closes = [1, 1, 1, 1.025],
   volumes = [100, 100, 100, 100],
+  timestamps = null,
 }) {
   const insert = sqlite.prepare(`
     INSERT INTO market_bars (
@@ -40,7 +41,8 @@ function insertBars(sqlite, {
   `);
   const start = Date.parse("2026-07-24T01:30:00.000Z");
   closes.forEach((close, index) => {
-    const ts = new Date(start + index * 5 * 60_000).toISOString();
+    const ts = timestamps?.[index]
+      || new Date(start + index * 5 * 60_000).toISOString();
     insert.run(
       symbol,
       ts,
@@ -215,6 +217,40 @@ test("fresh timestamps with stale or poor provenance do not propagate into event
   assert.equal(result.errorCode, "SIGNAL_INPUT_UNAVAILABLE");
   assert.equal(
     value.sqlite.prepare("SELECT count(*) AS count FROM market_events").get().count,
+    0,
+  );
+});
+
+test("a cross-session gap is insufficient and creates neither event nor delivery ledger", async (t) => {
+  const value = await fixture(t);
+  if (!value) return;
+  insertBars(value.sqlite, {
+    closes: [1, 1, 1, 1.025],
+    volumes: [100, 100, 100, 100],
+    timestamps: [
+      "2026-07-23T06:45:00.000Z",
+      "2026-07-23T06:50:00.000Z",
+      "2026-07-23T06:55:00.000Z",
+      "2026-07-24T01:45:00.000Z",
+    ],
+  });
+
+  const result = await evaluateIntradaySignals({
+    db: value.db,
+    profile: monitorSettings().profiles[0],
+    scheduledFor: "2026-07-24T01:45:00.000Z",
+    now: new Date("2026-07-24T01:45:10.000Z"),
+  });
+
+  assert.equal(result.status, "deferred");
+  assert.equal(result.errorCode, "SIGNAL_INPUT_UNAVAILABLE");
+  assert.equal(result.counts.evaluated, 0);
+  assert.equal(
+    value.sqlite.prepare("SELECT count(*) AS count FROM market_events").get().count,
+    0,
+  );
+  assert.equal(
+    value.sqlite.prepare("SELECT count(*) AS count FROM notification_deliveries").get().count,
     0,
   );
 });

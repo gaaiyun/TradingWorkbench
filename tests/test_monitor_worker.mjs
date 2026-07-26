@@ -1156,6 +1156,37 @@ test("dedicated monitor deployment fails closed and verifies the online commit",
   assert.match(workflow, /wrangler\.monitor\.toml/);
 });
 
+test("Pages and monitor deployments serialize migrations before publishing runtime code", () => {
+  const pages = readFileSync(
+    new URL("../.github/workflows/deploy-workbench.yml", import.meta.url),
+    "utf8",
+  );
+  const monitor = readFileSync(
+    new URL("../.github/workflows/deploy-monitor.yml", import.meta.url),
+    "utf8",
+  );
+
+  for (const workflow of [pages, monitor]) {
+    assert.match(
+      workflow,
+      /concurrency:\r?\n  group: cloudflare-workbench\r?\n  cancel-in-progress: false/,
+    );
+  }
+  assert.match(pages, /Cloudflare deployment credentials are required/);
+  assert.match(pages, /exit 1/);
+  assert.doesNotMatch(pages, /available=(?:true|false)|steps\.cloudflare\.outputs\.available/);
+  assert.match(pages, /migrations\/\*\*/);
+  const migration = pages.indexOf("d1 migrations apply");
+  const deployment = pages.indexOf("pages deploy public");
+  assert.notEqual(migration, -1);
+  assert.notEqual(deployment, -1);
+  assert.equal(migration < deployment, true);
+  assert.match(
+    pages,
+    /d1 migrations apply\s+tradingagents-workbench\s+--remote\s+--config wrangler\.toml/,
+  );
+});
+
 test("daily workflow accepts monitor dispatch metadata and keeps legacy manual input", () => {
   const workflow = readFileSync(
     new URL("../.github/workflows/daily-analysis.yml", import.meta.url),
