@@ -91,6 +91,10 @@ function matchesInterval(clock, window, interval) {
   return value >= start && value <= end && (value - start) % interval === 0;
 }
 
+function matchesClockInterval(clock, interval) {
+  return minutes(clock) % interval === 0;
+}
+
 function dueTasksAtMinute(profile, scheduledTime, holidaySets) {
   if (!profile?.enabled) return [];
   const local = localDateTimeAt(
@@ -123,12 +127,6 @@ function dueTasksAtMinute(profile, scheduledTime, holidaySets) {
     schedules.preMarketBrief.enabled &&
     local.time === schedules.preMarketBrief.time
   ) {
-    tasks.push(scheduledTask(
-      "newsCollect",
-      "preMarketBrief/news",
-      local,
-      scheduledTime,
-    ));
     tasks.push(scheduledTask(
       "premarketBrief",
       "preMarketBrief",
@@ -186,6 +184,25 @@ function dueTasksAtMinute(profile, scheduledTime, holidaySets) {
       scheduledTime,
     ));
   }
+
+  // News uses only the budget left after market snapshots and signals at the
+  // same slot. The settings domain caps aggregate profile frequency.
+  const newsEnabled = schedules.newsRefresh?.enabled !== false;
+  const intervalNewsDue = matchesClockInterval(
+    local.time,
+    schedules.newsRefresh?.intervalMinutes || 15,
+  );
+  const premarketNewsDue = cnTradingDay &&
+    schedules.preMarketBrief.enabled &&
+    local.time === schedules.preMarketBrief.time;
+  if (newsEnabled && (intervalNewsDue || premarketNewsDue)) {
+    tasks.push(scheduledTask(
+      "newsCollect",
+      "newsRefresh",
+      local,
+      scheduledTime,
+    ));
+  }
   return tasks;
 }
 
@@ -205,7 +222,7 @@ export function dueTasksForProfile(profile, scheduledTime, holidaySets = {}) {
 const SCHEDULE_BY_TYPE = {
   usCloseSnapshot: "usCloseSnapshot",
   cnDailySnapshot: "closeDeepAnalysis/cn-daily",
-  newsCollect: "preMarketBrief/news",
+  newsCollect: "newsRefresh",
   premarketBrief: "preMarketBrief",
   intradayCollect: "cnIntraday/collect",
   intradaySignal: "cnIntraday/signal",

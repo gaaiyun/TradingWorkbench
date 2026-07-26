@@ -222,6 +222,9 @@ test("scheduled refresh updates selected bars, watch quotes, feeds, and monitor 
   assert.match(script, /loadFeeds\(\)/);
   assert.match(script, /loadMonitor\(\)/);
   assert.doesNotMatch(script, /location\.reload/);
+  assert.match(html, /id="enable-news-refresh"/);
+  assert.match(html, /id="news-refresh-interval"/);
+  assert.match(script, /profile\.schedules\.newsRefresh\.intervalMinutes/);
 });
 
 test("US and Hong Kong drivers use daily data and switch to the available daily chart", () => {
@@ -265,7 +268,7 @@ test("task timeline never maps source health rows to schedule slots by array pos
   const timeline = workbenchData.buildTaskTimeline(profile, [
     { source: "yahoo", status: "ok", detail: "healthy" },
   ]);
-  assert.equal(timeline.length, 4);
+  assert.equal(timeline.length, 5);
   assert.equal(timeline.every((item) => item.status === "pending"), true);
   assert.equal(timeline.every((item) => item.detail === "任务结果接口未提供"), true);
 });

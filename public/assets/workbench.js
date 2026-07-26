@@ -344,6 +344,8 @@ import {
     $("#schedule-us-close").value = profile.schedules?.usCloseSnapshot?.time || "05:35";
     $("#enable-premarket").checked = profile.schedules?.preMarketBrief?.enabled !== false;
     $("#schedule-premarket").value = profile.schedules?.preMarketBrief?.time || "08:25";
+    $("#enable-news-refresh").checked = profile.schedules?.newsRefresh?.enabled !== false;
+    $("#news-refresh-interval").value = String(profile.schedules?.newsRefresh?.intervalMinutes || 15);
     $("#enable-close-analysis").checked = profile.schedules?.closeDeepAnalysis?.enabled !== false;
     $("#schedule-close").value = profile.schedules?.closeDeepAnalysis?.time || "15:20";
     $("#enable-intraday").checked = profile.schedules?.cnIntraday?.enabled !== false;
@@ -1863,6 +1865,9 @@ import {
     profile.schedules.usCloseSnapshot.time = $("#schedule-us-close").value;
     profile.schedules.preMarketBrief.enabled = $("#enable-premarket").checked;
     profile.schedules.preMarketBrief.time = $("#schedule-premarket").value;
+    profile.schedules.newsRefresh ||= { enabled: true, intervalMinutes: 15 };
+    profile.schedules.newsRefresh.enabled = $("#enable-news-refresh").checked;
+    profile.schedules.newsRefresh.intervalMinutes = Number($("#news-refresh-interval").value);
     profile.schedules.closeDeepAnalysis.enabled = $("#enable-close-analysis").checked;
     profile.schedules.closeDeepAnalysis.time = $("#schedule-close").value;
     profile.schedules.cnIntraday.enabled = $("#enable-intraday").checked;

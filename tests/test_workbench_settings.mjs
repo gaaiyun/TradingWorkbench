@@ -192,6 +192,7 @@ test("ships semantic schedules, high-severity web and PushPlus alerts, and bound
   assert.deepEqual(profile.schedules, {
     usCloseSnapshot: { enabled: true, time: "05:35" },
     preMarketBrief: { enabled: true, time: "08:25" },
+    newsRefresh: { enabled: true, intervalMinutes: 15 },
     cnIntraday: {
       enabled: true,
       windows: [
@@ -250,6 +251,12 @@ test("rejects malformed schedule times, windows, and intervals", () => {
   incompatibleSignalInterval.profiles[0].schedules.cnIntraday.signalIntervalMinutes = 12;
   assertSettingsError("INVALID_SCHEDULE_INTERVAL", () =>
     buildWorkbenchSettings(incompatibleSignalInterval),
+  );
+
+  const invalidNewsInterval = defaultSettingsInput();
+  invalidNewsInterval.profiles[0].schedules.newsRefresh.intervalMinutes = 7;
+  assertSettingsError("INVALID_NEWS_REFRESH_INTERVAL", () =>
+    buildWorkbenchSettings(invalidNewsInterval),
   );
 });
 
@@ -318,6 +325,50 @@ test("rejects duplicate profile ids", () => {
   assertSettingsError("DUPLICATE_PROFILE_ID", () => buildWorkbenchSettings(input));
 });
 
+test("migrates legacy schedules without creating an unsafe multi-profile news burst", () => {
+  const single = defaultSettingsInput();
+  delete single.profiles[0].schedules.newsRefresh;
+  assert.deepEqual(
+    buildWorkbenchSettings(single).profiles[0].schedules.newsRefresh,
+    { enabled: true, intervalMinutes: 15 },
+  );
+
+  const multi = defaultSettingsInput();
+  const second = structuredClone(multi.profiles[0]);
+  second.id = "legacy-second";
+  delete multi.profiles[0].schedules.newsRefresh;
+  delete second.schedules.newsRefresh;
+  multi.profiles.push(second);
+  assert.deepEqual(
+    buildWorkbenchSettings(multi).profiles.map((profile) =>
+      profile.schedules.newsRefresh),
+    [
+      { enabled: false, intervalMinutes: 60 },
+      { enabled: false, intervalMinutes: 60 },
+    ],
+  );
+});
+
+test("caps aggregate news refresh work so multiple profiles cannot starve market tasks", () => {
+  const input = defaultSettingsInput();
+  const source = input.profiles[0];
+  input.profiles = [0, 1, 2].map((index) => ({
+    ...structuredClone(source),
+    id: `news-capacity-${index}`,
+    schedules: {
+      ...structuredClone(source.schedules),
+      newsRefresh: { enabled: true, intervalMinutes: 15 },
+    },
+  }));
+  assertSettingsError("NEWS_REFRESH_CAPACITY_EXCEEDED", () =>
+    buildWorkbenchSettings(input),
+  );
+
+  input.profiles[1].schedules.newsRefresh.intervalMinutes = 30;
+  input.profiles[2].schedules.newsRefresh.intervalMinutes = 30;
+  assert.equal(buildWorkbenchSettings(input).profiles.length, 3);
+});
+
 test("accepts only immutable profile ids matching the public 1-64 character contract", () => {
   for (const invalidId of [" profile", "profile ", "profile.name", "中文", "", "x".repeat(65)]) {
     const input = defaultSettingsInput();
@@ -344,6 +395,10 @@ test("accepts at most eight profiles", () => {
   input.profiles = Array.from({ length: 8 }, (_, index) => ({
     ...structuredClone(input.profiles[0]),
     id: `profile-${index + 1}`,
+    schedules: {
+      ...structuredClone(input.profiles[0].schedules),
+      newsRefresh: { enabled: true, intervalMinutes: 60 },
+    },
   }));
   assert.equal(buildWorkbenchSettings(input).profiles.length, 8);
 

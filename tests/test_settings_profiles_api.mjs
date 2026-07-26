@@ -82,6 +82,7 @@ function denseSettings({ profileCount = 8, objectiveBytes = 512 } = {}) {
       })),
       schedules: {
         ...structuredClone(template.schedules),
+        newsRefresh: { enabled: true, intervalMinutes: 60 },
         cnIntraday: {
           ...structuredClone(template.schedules.cnIntraday),
           windows,

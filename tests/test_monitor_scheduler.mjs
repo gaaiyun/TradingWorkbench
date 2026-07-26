@@ -10,7 +10,18 @@ const schedulerUrl = new URL(
 
 async function dueAt(iso, profileOverrides = {}, holidaySets = {}) {
   const { dueTasksForProfile } = await import(schedulerUrl);
-  const profile = monitorSettings(profileOverrides).profiles[0];
+  const baseSchedules = monitorSettings().profiles[0].schedules;
+  const profile = monitorSettings({
+    ...profileOverrides,
+    schedules: {
+      ...baseSchedules,
+      ...profileOverrides.schedules,
+      newsRefresh: profileOverrides.schedules?.newsRefresh ?? {
+        enabled: true,
+        intervalMinutes: 15,
+      },
+    },
+  }).profiles[0];
   return dueTasksForProfile(profile, Date.parse(iso), holidaySets);
 }
 
@@ -21,7 +32,7 @@ test("maps configured one-off schedule times from the planned event", async () =
   );
   assert.deepEqual(
     (await dueAt("2026-07-23T00:25:00.000Z")).map((task) => task.type),
-    ["newsCollect", "premarketBrief"],
+    ["premarketBrief", "newsCollect"],
   );
   assert.deepEqual(
     (await dueAt("2026-07-23T07:20:00.000Z")).map((task) => task.type),
@@ -32,7 +43,7 @@ test("maps configured one-off schedule times from the planned event", async () =
 test("collects every five minutes and signals every fifteen minutes in CN sessions", async () => {
   assert.deepEqual(
     (await dueAt("2026-07-23T01:30:00.000Z")).map((task) => task.type),
-    ["intradayCollect", "intradaySignal"],
+    ["intradayCollect", "intradaySignal", "newsCollect"],
   );
   assert.deepEqual(
     (await dueAt("2026-07-23T01:35:00.000Z")).map((task) => task.type),
@@ -40,15 +51,15 @@ test("collects every five minutes and signals every fifteen minutes in CN sessio
   );
   assert.deepEqual(
     (await dueAt("2026-07-23T03:30:00.000Z")).map((task) => task.type),
-    ["intradayCollect", "intradaySignal"],
+    ["intradayCollect", "intradaySignal", "newsCollect"],
   );
   assert.deepEqual(
     (await dueAt("2026-07-23T04:00:00.000Z")).map((task) => task.type),
-    [],
+    ["newsCollect"],
   );
   assert.deepEqual(
     (await dueAt("2026-07-23T07:00:00.000Z")).map((task) => task.type),
-    ["intradayCollect", "intradaySignal"],
+    ["intradayCollect", "intradaySignal", "newsCollect"],
   );
   assert.deepEqual(
     (await dueAt("2026-07-23T07:05:00.000Z")).map((task) => task.type),
@@ -56,23 +67,62 @@ test("collects every five minutes and signals every fifteen minutes in CN sessio
   );
 });
 
-test("skips local weekends and the applicable CN or US holiday set", async () => {
-  assert.deepEqual(await dueAt("2026-07-25T01:30:00.000Z"), []);
+test("keeps news refreshing on weekends while skipping market-bound work", async () => {
   assert.deepEqual(
-    await dueAt(
+    (await dueAt("2026-07-25T01:30:00.000Z")).map((task) => task.type),
+    ["newsCollect"],
+  );
+});
+
+test("skips market-bound work on the applicable CN or US holiday set", async () => {
+  assert.deepEqual(
+    (await dueAt(
       "2026-07-23T01:30:00.000Z",
       {},
       { cn: new Set(["2026-07-23"]) },
-    ),
-    [],
+    )).map((task) => task.type),
+    ["newsCollect"],
   );
   assert.deepEqual(
-    await dueAt(
+    (await dueAt(
       "2026-07-23T21:35:00.000Z",
       {},
       { us: new Set(["2026-07-23"]) },
-    ),
+    )).map((task) => task.type),
     [],
+  );
+});
+
+test("news refresh is independently configurable and uses deterministic interval slots", async () => {
+  const enabled = await dueAt("2026-07-26T11:30:00.000Z");
+  assert.deepEqual(
+    enabled.filter(({ type }) => type === "newsCollect").map((task) => ({
+      schedule: task.schedule,
+      localSlot: task.localSlot,
+    })),
+    [{ schedule: "newsRefresh", localSlot: "2026-07-26T19:30" }],
+  );
+
+  const disabled = await dueAt("2026-07-26T11:30:00.000Z", {
+    schedules: {
+      ...monitorSettings().profiles[0].schedules,
+      newsRefresh: { enabled: false, intervalMinutes: 15 },
+    },
+  });
+  assert.deepEqual(disabled, []);
+});
+
+test("premarket refresh and interval overlap produce one news slot", async () => {
+  const tasks = await dueAt("2026-07-23T00:30:00.000Z", {
+    schedules: {
+      ...monitorSettings().profiles[0].schedules,
+      preMarketBrief: { enabled: true, time: "08:30" },
+      newsRefresh: { enabled: true, intervalMinutes: 15 },
+    },
+  });
+  assert.equal(
+    tasks.filter(({ type }) => type === "newsCollect").length,
+    1,
   );
 });
 

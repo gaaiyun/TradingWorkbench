@@ -39,6 +39,7 @@ export function monitorSettings(overrides = {}) {
     schedules: {
       usCloseSnapshot: { enabled: true, time: "05:35" },
       preMarketBrief: { enabled: true, time: "08:25" },
+      newsRefresh: { enabled: true, intervalMinutes: 60 },
       cnIntraday: {
         enabled: true,
         windows: [

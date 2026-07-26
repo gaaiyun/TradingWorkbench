@@ -103,7 +103,7 @@ Worker 不运行 pandas、LangGraph、GARCH、BSADF 或长历史回测。VolGuar
 
 ## 新闻和证据
 
-08:25 盘前任务按 profile 采集主题新闻和官方材料：
+独立资讯任务按 profile 全天运行，默认每 15 分钟采集一次；交易日 08:25 盘前还会确保生成同一套幂等新闻槽，为盘前简报提供不超过一个刷新周期的上下文：
 
 - Oracle、Alphabet：SEC EDGAR Submissions 中的 `8-K/8-K/A`。
 - A 股通信与半导体：工信部“文件发布”API，固定 `cateid=58`、通信/芯片查询、上海日历 30 天窗口。
@@ -128,8 +128,10 @@ gantt
     axisFormat %H:%M
     section 美股
     收盘驱动快照 :milestone, us, 05:35, 0m
+    section 全天资讯
+    独立新闻采集 :active, news, 00:00, 24h
     section A股盘前
-    新闻采集与盘前上下文 :milestone, pre, 08:25, 0m
+    盘前上下文与幂等刷新 :milestone, pre, 08:25, 0m
     section A股盘中
     采集与规则信号 :active, cn, 09:30, 330m
     section 收盘
@@ -143,6 +145,7 @@ Worker 为每个理论任务生成稳定 `slotId`，并在首次入库时冻结 
 - 原子租约、attempt fencing、最多三次重试。
 - `profile + localDate` 的完整分析预算；`fullAnalysesPerDay=0` 时不 dispatch。
 - profile 公平轮转、单 tick 工作量上限和外部请求预算。
+- 新闻任务排在同一时间槽的行情与规则信号之后，只使用剩余预算；所有启用 profile 的资讯总频率最多相当于每小时 8 次，避免多监控组造成无界积压。
 - `profile + symbol + timeframe + schema + targetHash` 的 bootstrap 收据。
 - GitHub dispatch outbox、receipt 和 reconcile，避免网络不确定或写回失败造成重复研究。
 

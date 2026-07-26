@@ -7,11 +7,11 @@
   <meta name="color-scheme" content="dark">
   <meta name="description" content="Trading Workbench 多市场研究与风险工作台">
   <title>Trading Workbench · 交易研究工作台</title>
-  <link rel="stylesheet" href="./assets/workbench.css?v=5cf14289d323">
+  <link rel="stylesheet" href="./assets/workbench.css?v=dd5fda622aef">
   <script type="importmap">
     { "imports": { "fancy-canvas": "./vendor/fancy-canvas/index.mjs" } }
   </script>
-  <script type="module" src="./assets/workbench.js?v=5cf14289d323"></script>
+  <script type="module" src="./assets/workbench.js?v=dd5fda622aef"></script>
 </head>
 <body data-mobile-view="chart" data-route="monitor">
   <a class="skip-link" href="#market-chart">跳到行情图表</a>
@@ -407,6 +407,7 @@
         <div class="schedule-grid">
           <label><span><input id="enable-us-close" type="checkbox"> 美股收盘快照</span><input id="schedule-us-close" type="time"></label>
           <label><span><input id="enable-premarket" type="checkbox"> 盘前简报</span><input id="schedule-premarket" type="time"></label>
+          <label><span><input id="enable-news-refresh" type="checkbox"> 全天资讯采集</span><select id="news-refresh-interval"><option value="15">15 分钟</option><option value="30">30 分钟</option><option value="60">60 分钟</option></select></label>
           <label><span><input id="enable-close-analysis" type="checkbox"> 收盘深度分析</span><input id="schedule-close" type="time"></label>
           <label><span><input id="enable-intraday" type="checkbox"> 上午采集窗口</span><span class="time-range"><input id="window-am-start" type="time"><input id="window-am-end" type="time"></span></label>
           <label><span>下午采集窗口</span><span class="time-range"><input id="window-pm-start" type="time"><input id="window-pm-end" type="time"></span></label>

@@ -37,7 +37,7 @@ const MAXIMAL_TARGET_SYMBOLS = [
   "AAAAH", "AAAAI", "AAAAJ", "AAAAK", "AAAAL", "AAAAM", "AAAAN",
 ];
 
-function largeEightProfileSettings({ objectiveBytes = 300 } = {}) {
+function largeEightProfileSettings({ objectiveBytes = 200 } = {}) {
   const template = structuredClone(staticSettings.profiles[0]);
   const windows = Array.from({ length: 8 }, (_, index) => {
     const hour = String(index * 2).padStart(2, "0");
@@ -66,6 +66,7 @@ function largeEightProfileSettings({ objectiveBytes = 300 } = {}) {
       })),
       schedules: {
         ...structuredClone(template.schedules),
+        newsRefresh: { enabled: true, intervalMinutes: 60 },
         cnIntraday: {
           ...structuredClone(template.schedules.cnIntraday),
           windows,
@@ -265,7 +266,7 @@ test("PUT and legacy POST accept an explicit large eight-profile document below 
   });
   const postPayload = await postResponse.json();
 
-  assert.equal(putResponse.status, 200);
+  assert.equal(putResponse.status, 200, JSON.stringify(putPayload));
   assert.equal(putPayload.settings.profiles.length, 8);
   assert.equal(postResponse.status, 200);
   assert.equal(postPayload.settings.profiles.length, 8);

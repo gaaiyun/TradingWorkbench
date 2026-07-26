@@ -340,6 +340,11 @@ export function buildTaskTimeline(profile) {
   const schedules = profile?.schedules || {};
   return [
     {
+      time: `每 ${schedules.newsRefresh?.intervalMinutes || 15} 分`,
+      label: "全天资讯采集",
+      enabled: schedules.newsRefresh?.enabled !== false,
+    },
+    {
       time: schedules.usCloseSnapshot?.time || "05:35",
       label: "美股收盘快照",
       enabled: schedules.usCloseSnapshot?.enabled,

@@ -693,7 +693,12 @@ test("missing and invalid D1 settings fail safely with stable summaries", async 
 
 test("scheduled handler uses scheduledTime and waitUntil while health reveals no secret", async () => {
   const { default: worker } = await import(workerUrl);
-  const db = new WorkerD1(monitorSettings());
+  const settings = monitorSettings();
+  settings.profiles[0].schedules.newsRefresh = {
+    enabled: true,
+    intervalMinutes: 15,
+  };
+  const db = new WorkerD1(settings);
   let promise;
   const originalFetch = globalThis.fetch;
   globalThis.fetch = async () => new Response(
@@ -702,7 +707,7 @@ test("scheduled handler uses scheduledTime and waitUntil while health reveals no
   );
   try {
     worker.scheduled(
-      { scheduledTime: Date.parse("2026-07-23T00:25:00.000Z") },
+      { scheduledTime: Date.parse("2026-07-23T00:30:00.000Z") },
       { DB: db, GITHUB_DISPATCH_TOKEN: "secret-value" },
       { waitUntil(value) { promise = value; } },
     );
@@ -714,7 +719,7 @@ test("scheduled handler uses scheduledTime and waitUntil while health reveals no
       1,
       "官方证据源返回非目标格式时，发现层空结果不能掩盖降级状态",
     );
-    assert.equal(summary.counts.deferred, 1);
+    assert.equal(summary.counts.deferred, 0);
     assert.equal(JSON.stringify(summary).includes("secret-value"), false);
   } finally {
     globalThis.fetch = originalFetch;
@@ -735,6 +740,48 @@ test("scheduled handler uses scheduledTime and waitUntil while health reveals no
     },
   });
   assert.equal((await worker.fetch(new Request("https://monitor.example/anything"))).status, 404);
+});
+
+test("weekend scheduler refreshes news without invoking market providers", async () => {
+  const { runScheduled } = await import(workerUrl);
+  const settings = monitorSettings();
+  settings.profiles[0].schedules.newsRefresh = {
+    enabled: true,
+    intervalMinutes: 15,
+  };
+  const db = new WorkerD1(settings);
+  let newsCalls = 0;
+  const result = await runScheduled(
+    Date.parse("2026-07-25T01:30:00.000Z"),
+    { DB: db },
+    {
+      collectNews: async () => {
+        newsCalls += 1;
+        return {
+          status: "ok",
+          written: 1,
+          counts: { queries: 1, succeeded: 1, failed: 0, items: 1 },
+          sources: [{ source: "fixture-news", status: "success", reason: null }],
+        };
+      },
+      registryFactory: () => ({
+        fetchMarketData: async () =>
+          assert.fail("weekend news refresh must not invoke market providers"),
+      }),
+      now: () => new Date("2026-07-25T01:30:00.000Z"),
+    },
+  );
+  assert.equal(result.status, "completed");
+  assert.equal(newsCalls, 1);
+  assert.deepEqual(result.counts, {
+    due: 1,
+    claimed: 1,
+    completed: 1,
+    degraded: 0,
+    deferred: 0,
+    failed: 0,
+    skipped: 0,
+  });
 });
 
 test("health exposes deployment identity and bounded news provider outcomes without secrets", async () => {

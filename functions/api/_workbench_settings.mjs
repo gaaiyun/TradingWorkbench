@@ -338,6 +338,21 @@ function normalizeSchedules(value) {
   ) {
     fail("INVALID_SCHEDULE_INTERVAL", "盘中 interval 必须为正整数，且信号间隔应是采集间隔的整数倍");
   }
+  const newsRefresh = schedules.newsRefresh ?? {
+    enabled: false,
+    intervalMinutes: 60,
+  };
+  const normalizedNewsRefresh = objectValue(
+    newsRefresh,
+    "schedules.newsRefresh",
+    "INVALID_SCHEDULES",
+  );
+  if (![15, 30, 60].includes(normalizedNewsRefresh.intervalMinutes)) {
+    fail(
+      "INVALID_NEWS_REFRESH_INTERVAL",
+      "资讯刷新间隔仅支持 15、30 或 60 分钟",
+    );
+  }
 
   return {
     usCloseSnapshot: normalizeTimedSchedule(
@@ -348,6 +363,14 @@ function normalizeSchedules(value) {
       schedules.preMarketBrief,
       "schedules.preMarketBrief",
     ),
+    newsRefresh: {
+      enabled: booleanValue(
+        normalizedNewsRefresh.enabled,
+        "schedules.newsRefresh.enabled",
+        "INVALID_SCHEDULES",
+      ),
+      intervalMinutes: normalizedNewsRefresh.intervalMinutes,
+    },
     cnIntraday: {
       enabled: booleanValue(
         intraday.enabled,
@@ -491,6 +514,7 @@ function defaultSchedules() {
   return {
     usCloseSnapshot: { enabled: true, time: "05:35" },
     preMarketBrief: { enabled: true, time: "08:25" },
+    newsRefresh: { enabled: true, intervalMinutes: 15 },
     cnIntraday: {
       enabled: true,
       windows: [
@@ -562,7 +586,40 @@ export function buildWorkbenchSettings(input) {
   if (input.profiles.length > MAX_WORKBENCH_PROFILES) {
     fail("TOO_MANY_PROFILES", `最多允许 ${MAX_WORKBENCH_PROFILES} 个 profile`);
   }
-  const profiles = input.profiles.map(normalizeProfile);
+  const profiles = input.profiles.map((profile) => {
+    if (
+      plainObject(profile) &&
+      plainObject(profile.schedules) &&
+      profile.schedules.newsRefresh === undefined
+    ) {
+      const singleProfile = input.profiles.length === 1;
+      return {
+        ...profile,
+        schedules: {
+          ...profile.schedules,
+          newsRefresh: {
+            enabled: singleProfile,
+            intervalMinutes: singleProfile ? 15 : 60,
+          },
+        },
+      };
+    }
+    return profile;
+  }).map(normalizeProfile);
+  const enabledNewsRefreshesPerHour = profiles
+    .filter((profile) =>
+      profile.enabled && profile.schedules.newsRefresh.enabled)
+    .reduce(
+      (total, profile) =>
+        total + 60 / profile.schedules.newsRefresh.intervalMinutes,
+      0,
+    );
+  if (enabledNewsRefreshesPerHour > 8) {
+    fail(
+      "NEWS_REFRESH_CAPACITY_EXCEEDED",
+      "启用的资讯采集总频率过高；最多相当于每小时 8 次，请调低部分监控组频率",
+    );
+  }
   const profileIds = new Set();
   for (const profile of profiles) {
     if (profileIds.has(profile.id)) {
