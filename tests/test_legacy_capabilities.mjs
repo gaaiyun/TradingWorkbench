@@ -119,21 +119,9 @@ test("production workflows scope secrets and deploy the latest main under one lo
     /name:\s*Fail when analysis failed[\s\S]*?steps\.analysis\.outcome == 'failure'/,
   );
 
-  const dailyCloudflare = daily.match(
-    /^  deploy-cloudflare:[\s\S]*$/m,
-  )?.[0] || "";
-  assert.match(
-    dailyCloudflare,
-    /concurrency:\r?\n      group: cloudflare-workbench\r?\n      cancel-in-progress: true/,
-  );
-  assert.match(
-    dailyCloudflare,
-    /uses: actions\/checkout@v4\r?\n        with:\r?\n          ref: main/,
-  );
-  assert.doesNotMatch(
-    dailyCloudflare.slice(0, dailyCloudflare.indexOf("    steps:")),
-    /\$\{\{\s*secrets\./,
-  );
+  assert.doesNotMatch(daily, /^  deploy-cloudflare:/m);
+  assert.doesNotMatch(daily, /wrangler@[\d.]+ pages deploy/);
+  assert.doesNotMatch(daily, /persist_reports\.sh[^\r\n]*\[skip ci\]/);
 
   const deployHeader = deploy.slice(0, deploy.indexOf("    steps:"));
   assert.doesNotMatch(deployHeader, /\$\{\{\s*secrets\./);
@@ -165,21 +153,13 @@ test("production workflows scope secrets and deploy the latest main under one lo
     /\$\{\{\s*secrets\./,
   );
   const requestedGitHubPages = requested.match(
-    /^  deploy-github-pages:[\s\S]*?(?=^  deploy-cloudflare:)/m,
+    /^  deploy-github-pages:[\s\S]*$/m,
   )?.[0] || "";
   assert.match(
     requestedGitHubPages,
     /permissions:\r?\n      contents: read\r?\n      pages: write\r?\n      id-token: write/,
   );
-  const requestedCloudflare = requested.match(
-    /^  deploy-cloudflare:[\s\S]*$/m,
-  )?.[0] || "";
-  assert.match(
-    requestedCloudflare,
-    /concurrency:\r?\n      group: cloudflare-workbench\r?\n      cancel-in-progress: true/,
-  );
-  assert.match(
-    requestedCloudflare,
-    /uses: actions\/checkout@v4\r?\n        with:\r?\n          ref: main/,
-  );
+  assert.doesNotMatch(requested, /^  deploy-cloudflare:/m);
+  assert.doesNotMatch(requested, /wrangler@[\d.]+ pages deploy/);
+  assert.doesNotMatch(requested, /persist_reports\.sh[^\r\n]*\[skip ci\]/);
 });

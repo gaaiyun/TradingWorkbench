@@ -200,7 +200,7 @@ jobs:
       - name: Persist reports to main
         if: ${{ always() }}
         run: |
-          bash scripts/persist_reports.sh "chore(data): 更新分析报告 $(date -u +%F) [skip ci]"
+          bash scripts/persist_reports.sh "chore(data): 更新分析报告 $(date -u +%F)"
 
       - name: Fail when analysis failed
         if: ${{ steps.analysis.outcome == 'failure' }}
@@ -234,47 +234,3 @@ jobs:
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
-
-  deploy-cloudflare:
-    needs: analyze-and-persist
-    runs-on: ubuntu-latest
-    timeout-minutes: 15
-    permissions:
-      contents: read
-    concurrency:
-      group: cloudflare-workbench
-      cancel-in-progress: true
-    env:
-      CLOUDFLARE_PAGES_PROJECT: ${{ vars.CLOUDFLARE_PAGES_PROJECT || 'tradingagents-board' }}
-    steps:
-      # 持久化完成后重新读取 main，部署内容与 Git 中的权威状态一致。
-      - uses: actions/checkout@v4
-        with:
-          ref: main
-
-      - uses: actions/setup-node@v4
-        with:
-          node-version: "22"
-
-      - name: Check deployment credentials
-        id: cloudflare
-        env:
-          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
-          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID || vars.CLOUDFLARE_ACCOUNT_ID }}
-        run: |
-          if [ -n "$CLOUDFLARE_API_TOKEN" ] && [ -n "$CLOUDFLARE_ACCOUNT_ID" ]; then
-            echo "available=true" >> "$GITHUB_OUTPUT"
-          else
-            echo "available=false" >> "$GITHUB_OUTPUT"
-            echo "::notice::Cloudflare credentials are not configured; production deployment is skipped."
-          fi
-
-      - name: Test Pages Functions contracts
-        run: npm run test:functions
-
-      - name: Deploy CN mirror to Cloudflare Pages
-        if: ${{ steps.cloudflare.outputs.available == 'true' }}
-        env:
-          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
-          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID || vars.CLOUDFLARE_ACCOUNT_ID }}
-        run: npx --yes wrangler@4.113.0 pages deploy public --project-name "$CLOUDFLARE_PAGES_PROJECT" --branch main
