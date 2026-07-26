@@ -43,6 +43,35 @@ def _packet_evidence_ids(packet: dict) -> set[str]:
     return ids
 
 
+def _market_history_metadata(packet: dict) -> dict:
+    """Summarize market-history provenance without changing adjustment semantics."""
+    bars = list(packet.get("bars") or [])
+    sources = list(packet.get("sources") or [])
+    adjustments = {
+        str(row.get("adjustment"))
+        for row in bars
+        if isinstance(row, dict) and row.get("adjustment")
+    }
+    adjustment = (
+        next(iter(adjustments))
+        if len(adjustments) == 1
+        else "mixed"
+        if len(adjustments) > 1
+        else "unknown"
+    )
+    return {
+        "source": (
+            str(sources[0].get("source") or "unknown")
+            if sources and isinstance(sources[0], dict)
+            else "unknown"
+        ),
+        "adjustment": adjustment,
+        "barCount": len(bars),
+        "startAt": bars[0].get("ts") if bars else None,
+        "endAt": bars[-1].get("ts") if bars else None,
+    }
+
+
 def validate_report_claims(text: str, packet: dict) -> dict:
     """Validate that a rated narrative remains tied to packet evidence."""
     known_ids = _packet_evidence_ids(packet)
@@ -111,6 +140,7 @@ def _render_evidence_snapshot(packet: dict) -> str:
         or (sources[0].get("evidenceId") if sources else None)
         or "—"
     )
+    market_history = _market_history_metadata(packet)
     lines = [
         "## Evidence Snapshot",
         "",
@@ -119,6 +149,13 @@ def _render_evidence_snapshot(packet: dict) -> str:
             f"as of `{packet.get('asOf', 'unknown')}`; "
             f"instrument `{packet.get('instrument', {}).get('symbol', 'unknown')}` "
             f"[{anchor}]"
+        ),
+        (
+            f"- Market history: source `{market_history['source']}`; "
+            f"adjustment `{market_history['adjustment']}`; "
+            f"{market_history['barCount']} bars from "
+            f"`{market_history['startAt'] or 'unavailable'}` to "
+            f"`{market_history['endAt'] or 'unavailable'}`"
         ),
     ]
     if bars:
@@ -350,6 +387,7 @@ def write_report_tree(
                 "contentHash": packet.get("contentHash"),
                 "packetFileHash": packet_file_hash,
                 "status": packet.get("status"),
+                "marketHistory": _market_history_metadata(packet),
             }
             if packet else None
         ),

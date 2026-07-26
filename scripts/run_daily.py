@@ -726,6 +726,11 @@ def update_history(data_dir: Path, payload: dict, cap: int = HISTORY_CAP) -> int
                 "analysis_status": r.get("analysis_status"),
                 "audit_status": r.get("audit_status"),
                 "evidence_publish": r.get("evidence_publish"),
+                **(
+                    {"marketHistory": r["marketHistory"]}
+                    if isinstance(r.get("marketHistory"), dict)
+                    else {}
+                ),
             }
             for r in payload.get("results", [])
         ],
@@ -1023,6 +1028,7 @@ def run_ticker(ticker: str, trade_date: str, analysts: list[str], reports_dir: P
         "analysis_status": manifest.get("analysisStatus", "not_rated"),
         "audit_status": manifest.get("auditStatus", "legacy_unverified"),
         "evidence_publish": evidence_publish,
+        "marketHistory": (manifest.get("evidence") or {}).get("marketHistory"),
         "error": None,
     }
 

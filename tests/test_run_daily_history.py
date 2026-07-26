@@ -269,6 +269,38 @@ def test_history_preserves_report_tabs_and_request_run_metadata(tmp_path):
     assert entry["results"][0]["files"] == payload["results"][0]["files"]
 
 
+def test_history_preserves_market_history_metadata_for_successful_report(tmp_path):
+    data = tmp_path / "data"
+    data.mkdir()
+    market_history = {
+        "source": "yahoo-finance",
+        "adjustment": "split-and-dividend-adjusted",
+        "barCount": 1260,
+        "startAt": "2021-07-26T04:00:00Z",
+        "endAt": "2026-07-24T04:00:00Z",
+    }
+    payload = {
+        "trade_date": "2026-07-24",
+        "generated_at": "2026-07-25T08:00:00Z",
+        "provider": "ark",
+        "results": [{
+            "ticker": "MSFT",
+            "rating": "Hold",
+            "report": "reports/MSFT/2026-07-24/complete_report.md",
+            "files": {},
+            "marketHistory": market_history,
+            "analysis_status": "rated",
+            "audit_status": "verified",
+            "error": None,
+        }],
+    }
+
+    assert update_history(data, payload) == 1
+
+    [entry] = json.loads((data / "history.json").read_text())
+    assert entry["results"][0]["marketHistory"] == market_history
+
+
 def test_history_backfill_scans_real_report_files_without_changing_report_text(
     tmp_path,
 ):
