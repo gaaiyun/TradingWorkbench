@@ -2,15 +2,17 @@
 
 更新日期：2026-07-26
 
-实现基线：`0218a20`
+实现基线：`main`。不要依赖本文中的旧提交号；接手时同时执行 `git rev-parse HEAD`、`git rev-parse origin/main`，并读取 Pages 与 Worker health 的 commit SHA。
 
 工作分支：`fix/report-evidence-pipeline`
 
 ## 1. 当前结论
 
-本地功能分支已实现多 profile、运行身份隔离、Chat/Evidence owner、调度可靠性、提醒 shadow 账本和 Worker 部署指纹。`origin/main` 仍为 `76cd29c`，实现基线比远端 main 超前 24 个提交。
+多 profile、运行身份隔离、Chat/Evidence owner、调度可靠性、提醒 shadow 账本、Worker/Pages 部署指纹均已合入 `main` 并于 2026-07-26 发布。生产冒烟已覆盖 Pages、行情、新闻、事件、Monitor health 与 VolGuard；GitHub CI 已通过。
 
-这些改动尚未部署到生产，也没有完成 2026-07-27 08:25 外审。接手者不能把本地测试或绿色 workflow 写成生产完成。
+同日终审又修复了三个用户可见回归：旧版无 identity 的 43 份 `legacy_unverified` 报告恢复只读展示、同一新闻按 cluster/原文聚合关联标的、交易时钟按沪深与纽约时区及周末判断。历史未验证报告仍不能进入问答，4 份 `invalidated` 报告仍只在“历史审计”中显示。
+
+尚未完成的是 2026-07-27 08:25 的真实 SEC/工信部采集验收，以及生成首份通过当前 Evidence 门禁的 profile-scoped 新报告。接手者不能把周日 Provider `unavailable` 写成采集失败，也不能把 43 份旧报告升级为 verified。
 
 ## 2. 不可破坏的产品边界
 
@@ -128,25 +130,30 @@ migration 只向前保留。回退代码时不要删除新表或列。
 5. 部署后请求 `/health`；
 6. 要求运行时 SHA 等于 GitHub SHA。
 
+### 已完成
+
+- `main` 已同步，migrations `0013`–`0015` 已应用；
+- Worker `/health` 已回读运行时 SHA 和部署时间；
+- Pages `/api/health` 已增加 commit SHA、branch 和不可变 deployment URL；
+- Pages、Worker、D1、动态 API 与 VolGuard 已完成生产冒烟；
+- 部署 workflow 均为缺凭据失败，发布后必须回读目标 SHA。
+
 ### 尚未完成
 
-- 实现分支尚未合入 main。
-- migrations 0013–0015 尚未取得本轮生产应用证据。
-- Worker `/health` 尚未证明运行 `0218a20` 或后续交接提交。
-- Pages 尚未证明包含本轮 profile、identity 和提醒 UI。
-- 2026-07-27 08:25 外审尚未执行。
+- 2026-07-27 08:25 外审尚未执行；
+- 当前生产审计仍为 `verified=0`，需要生成首份通过当前 Evidence 门禁的 profile 报告；
 - PushPlus live 尚未开启，也不在本轮默认授权范围内。
 
-即使 workflow 为绿色，也要打开步骤确认 migration、deploy 和 SHA verify 都执行。Pages workflow 仍可能测试成功后跳过部署。
+即使 workflow 为绿色，也要打开步骤确认 migration、deploy 和 SHA verify 都执行。
 
 ## 7. 本轮实际验证
 
-以下命令在 2026-07-26、实现基线 `0218a20` 上执行：
+以下命令在 2026-07-26 的当前交付候选上执行：
 
 | 命令 | 结果 |
 |---|---|
-| `npm run test:functions` | 319 tests：318 passed、1 skipped、0 failed |
-| `npm run test:frontend` | 84 passed、0 failed |
+| `npm run test:functions` | 321 tests：320 passed、1 skipped、0 failed |
+| `npm run test:frontend` | 87 passed、0 failed |
 | `npm run check:workbench` | 通过 |
 | `python -m pytest -q` | 649 passed、2 skipped、0 failed；另有 69 个 subtests passed |
 | `python -m ruff check .` | 通过 |

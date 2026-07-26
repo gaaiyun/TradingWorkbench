@@ -243,7 +243,7 @@ MCP 只提供设置、监控、行情、新闻和研究历史查询，不接收�
 
 本轮发布依赖 migrations `0013_monitor_reliability.sql`、`0014_chat_evidence_scope.sql` 和 `0015_notification_deliveries.sql`。
 
-当前功能分支代码尚未经过生产发布和 2026-07-27 08:25 外审，不能把本地 HEAD 当成生产状态。完整命令、周一验证协议和回退流程见 [部署与运维](docs/operations-and-deployment.md)。
+2026-07-26 已完成 D1 `0013`–`0015`、Monitor Worker 和 Workbench Pages 的生产发布与冒烟。Pages `/api/health` 和 Worker `/health` 都返回运行时 commit SHA；发布 workflow 必须在生产域名回读到目标 SHA 才算成功。2026-07-27 08:25 的真实 SEC/工信部采集仍是独立验收项，不能用周日的 `unavailable` 代替结果。完整记录、验证协议和回退流程见 [部署与运维](docs/operations-and-deployment.md)。
 
 ## 架构取舍
 

@@ -2,9 +2,9 @@
 
 更新日期：2026-07-26
 
-代码基线：`f055d23`
+代码基线：`main`。精确版本以 `git rev-parse origin/main`、Pages `/api/health` 和 Worker `/health` 三方回读为准，不在文档中维护容易失真的固定 SHA。
 
-当前功能分支尚未部署到生产。本文中的命令是发布协议，不是生产完成记录。
+2026-07-26 已完成 D1 `0013`–`0015`、Monitor Worker、Workbench Pages 和 VolGuard 生产冒烟。周一 08:25 的官方新闻源真实采集尚待执行；该项与“代码已发布”分开记录。
 
 ## 1. 生产对象
 
@@ -175,12 +175,23 @@ if ($workerHealth.deployment.deployedAt -eq "unknown") {
 ### 5.3 部署 Workbench Pages
 
 ```powershell
+$pagesCommit = git rev-parse HEAD
+
 npx --yes wrangler@4.113.0 pages deploy public `
   --project-name tradingagents-board `
-  --branch main
+  --branch main `
+  --commit-hash $pagesCommit `
+  --commit-dirty=false
+
+$pagesHealth = Invoke-RestMethod `
+  "https://tradingagents-board.pages.dev/api/health?ts=$([DateTimeOffset]::UtcNow.ToUnixTimeMilliseconds())"
+
+if ($pagesHealth.deployment.commitSha -ne $pagesCommit) {
+  throw "Pages SHA 不匹配"
+}
 ```
 
-`deploy-workbench` 仍可能因仓库未配置 Cloudflare 凭据而跳过部署。绿色 workflow 不等于 Pages 已更新；应查看 deploy step，并访问生产路由。
+`deploy-workbench` 缺 Cloudflare 凭据时直接失败，不再跳过。发布后 workflow 最多等待约两分钟，直到生产域名 `/api/health` 回读到目标 SHA；超时或不一致都视为发布失败。`CF_PAGES_URL` 同时保留本次不可变 deployment URL，便于核对生产 alias 的传播。
 
 ### 5.4 VolGuard
 

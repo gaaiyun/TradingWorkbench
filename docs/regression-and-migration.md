@@ -2,7 +2,7 @@
 
 更新日期：2026-07-26
 
-代码基线：`f055d23`
+代码基线：`main`；测试对象使用当前 `HEAD`，生产对象必须另行回读 Pages 与 Worker 的运行时 SHA。
 
 ## 1. 保留的产品边界
 
@@ -131,6 +131,10 @@ live PushPlus 尚未启用。只有完成生产 canary、重复事件对账和�
 - 更多公司 IR 和 HKEXnews 发行人原文。
 
 页面对缺失字段显示“暂无可靠数据”，不构造估计值。
+
+资讯表按 symbol 保留关联行，前端必须按 duplicate cluster 或原文 URL 聚合，不能把同一文章重复展示为多条新闻。新闻整体 freshness 只看最新文章组，不得因列表中包含旧文章就把刚完成的采集标成 stale。
+
+identity 迁移不回填旧报告为当前 profile。无 identity 的历史批次规范为 `legacy`：`legacy_unverified` 保留只读入口和醒目警告，`invalidated` 默认隐藏，任何 legacy 报告都不得绕过 verified 门禁进入问答。
 
 ## 9. 部署门禁
 
