@@ -118,7 +118,12 @@ export async function loadWorkbenchEvidence(db, {
     ))),
     queryNewsItems(db, { ...query, topic: null, limit: 8 }),
     queryMarketEvents(db, { ...query, topic: null, importance: null, limit: 8 }),
-    queryEvidencePacket(db, { symbol, asOf: now.toISOString() }),
+    queryEvidencePacket(db, {
+      symbol,
+      asOf: now.toISOString(),
+      scope: "profile",
+      profileId,
+    }),
   ]);
   const packet = parsePacket(packetRow);
   const selectedIndex = barGroups.findIndex((rows) => rows.length);

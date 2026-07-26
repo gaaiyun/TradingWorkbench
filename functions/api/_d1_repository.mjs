@@ -160,16 +160,36 @@ export function querySourceHealth(db, query) {
   });
 }
 
-export async function queryEvidencePacket(db, { symbol, asOf = null }) {
+export async function queryEvidencePacket(db, {
+  symbol,
+  asOf = null,
+  scope = "legacy",
+  profileId = null,
+  requestId = null,
+}) {
   const cutoff = asOf || new Date().toISOString();
   const row = await db.prepare(`
     SELECT id, symbol, as_of, generated_at, status, packet_json, content_hash,
-           expires_at
+           expires_at, scope, profile_id, request_id, slot_id, run_id
     FROM evidence_packets
-    WHERE symbol = ? AND as_of <= ? AND expires_at > ?
+    WHERE symbol = ?
+      AND scope = ?
+      AND ((profile_id = ?) OR (profile_id IS NULL AND ? IS NULL))
+      AND ((request_id = ?) OR (request_id IS NULL AND ? IS NULL))
+      AND as_of <= ?
+      AND expires_at > ?
     ORDER BY as_of DESC
     LIMIT 1
-  `).bind(symbol, cutoff, new Date().toISOString()).first();
+  `).bind(
+    symbol,
+    scope,
+    profileId,
+    profileId,
+    requestId,
+    requestId,
+    cutoff,
+    new Date().toISOString(),
+  ).first();
   return row || null;
 }
 
@@ -177,15 +197,25 @@ export async function upsertEvidenceBundle(db, {
   packet,
   report = null,
   manifest = null,
+  identity = null,
   expiresAt,
 }) {
   const symbol = packet.instrument.symbol;
-  const packetId = `evidence:${symbol}:${packet.asOf}:${packet.contentHash}`;
+  const scope = identity?.scope || "legacy";
+  const profileId = identity?.profileId || null;
+  const requestId = identity?.requestId || null;
+  const slotId = identity?.slotId || null;
+  const runId = identity?.runId || null;
+  const groupId = [scope, profileId, requestId, slotId, runId]
+    .map((value) => encodeURIComponent(value || "_"))
+    .join(":");
+  const packetId = `evidence:${groupId}:${symbol}:${packet.asOf}:${packet.contentHash}`;
   const statements = [
     db.prepare(`
       INSERT INTO evidence_packets (
-        id, symbol, as_of, generated_at, status, packet_json, content_hash, expires_at
-      ) VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+        id, symbol, scope, profile_id, request_id, slot_id, run_id,
+        as_of, generated_at, status, packet_json, content_hash, expires_at
+      ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
       ON CONFLICT(id) DO UPDATE SET
         generated_at = excluded.generated_at,
         status = excluded.status,
@@ -195,6 +225,11 @@ export async function upsertEvidenceBundle(db, {
     `).bind(
       packetId,
       symbol,
+      scope,
+      profileId,
+      requestId,
+      slotId,
+      runId,
       packet.asOf,
       packet.generatedAt,
       packet.status,
@@ -207,8 +242,9 @@ export async function upsertEvidenceBundle(db, {
     statements.push(db.prepare(`
       INSERT INTO report_manifests (
         report, symbol, trade_date, analysis_status, audit_status,
-        evidence_hash, manifest_json, created_at
-      ) VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+        evidence_hash, manifest_json, created_at, scope, profile_id,
+        request_id, slot_id, run_id
+      ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
       ON CONFLICT(report) DO UPDATE SET
         symbol = excluded.symbol,
         trade_date = excluded.trade_date,
@@ -217,6 +253,11 @@ export async function upsertEvidenceBundle(db, {
         evidence_hash = excluded.evidence_hash,
         manifest_json = excluded.manifest_json,
         created_at = excluded.created_at
+      WHERE report_manifests.scope = excluded.scope
+        AND COALESCE(report_manifests.profile_id, '') = COALESCE(excluded.profile_id, '')
+        AND COALESCE(report_manifests.request_id, '') = COALESCE(excluded.request_id, '')
+        AND COALESCE(report_manifests.slot_id, '') = COALESCE(excluded.slot_id, '')
+        AND COALESCE(report_manifests.run_id, '') = COALESCE(excluded.run_id, '')
     `).bind(
       report,
       symbol,
@@ -226,6 +267,11 @@ export async function upsertEvidenceBundle(db, {
       packet.contentHash,
       JSON.stringify(manifest),
       manifest.generatedAt,
+      scope,
+      profileId,
+      requestId,
+      slotId,
+      runId,
     ));
   }
   return db.batch(statements);

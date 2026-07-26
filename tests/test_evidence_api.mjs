@@ -1,7 +1,13 @@
 import assert from "node:assert/strict";
+import { readFileSync } from "node:fs";
 import test from "node:test";
 
+import {
+  queryEvidencePacket,
+  upsertEvidenceBundle,
+} from "../functions/api/_d1_repository.mjs";
 import { onRequestGet, onRequestPost } from "../functions/api/evidence.js";
+import { SqliteD1 } from "./helpers/sqlite_d1.mjs";
 
 function request(url, headers = {}) {
   return new Request(`https://example.test${url}`, { headers });
@@ -58,6 +64,26 @@ function validPacket(symbol = "GOOGL") {
     canRate: true,
     contentHash: "a".repeat(64),
   };
+}
+
+async function evidenceD1(t) {
+  let DatabaseSync;
+  try {
+    ({ DatabaseSync } = await import("node:sqlite"));
+  } catch {
+    t.skip("node:sqlite is unavailable on this Node version");
+    return null;
+  }
+  const sqlite = new DatabaseSync(":memory:");
+  for (const migration of [
+    "../migrations/0011_evidence_packets.sql",
+    "../migrations/0014_chat_evidence_scope.sql",
+  ]) {
+    sqlite.exec(readFileSync(new URL(migration, import.meta.url), "utf8"));
+  }
+  const DB = new SqliteD1(sqlite);
+  DB.batch = (statements) => Promise.all(statements.map((statement) => statement.run()));
+  return { sqlite, DB };
 }
 
 test("evidence API returns a point-in-time packet and supports HK normalization", async () => {
@@ -148,6 +174,255 @@ test("evidence API accepts only authenticated validated bundles and upserts pack
   assert.match(calls[1].sql, /INSERT INTO report_manifests/i);
   assert.equal(calls[0].params[1], "3887.HK");
   assert.equal(calls[1].params[0], "reports/3887.HK/2026-07-24-v2/complete_report.md");
+});
+
+test("evidence packets with the same symbol are isolated by exact profile scope", async (t) => {
+  const fixture = await evidenceD1(t);
+  if (!fixture) return;
+  const packetA = validPacket("GOOGL");
+  const packetB = {
+    ...validPacket("GOOGL"),
+    generatedAt: "2026-07-24T20:06:00Z",
+    contentHash: "b".repeat(64),
+  };
+  const legacyPacket = {
+    ...validPacket("GOOGL"),
+    generatedAt: "2026-07-24T20:07:00Z",
+    contentHash: "c".repeat(64),
+  };
+  const expiresAt = "2099-01-01T00:00:00.000Z";
+
+  await upsertEvidenceBundle(fixture.DB, {
+    packet: packetA,
+    identity: {
+      scope: "profile",
+      profileId: "profile-a",
+      requestId: null,
+      slotId: "slot-a",
+      runId: "run-a",
+    },
+    expiresAt,
+  });
+  await upsertEvidenceBundle(fixture.DB, {
+    packet: packetB,
+    identity: {
+      scope: "profile",
+      profileId: "profile-b",
+      requestId: null,
+      slotId: "slot-b",
+      runId: "run-b",
+    },
+    expiresAt,
+  });
+  await upsertEvidenceBundle(fixture.DB, {
+    packet: legacyPacket,
+    identity: {
+      scope: "legacy",
+      profileId: null,
+      requestId: null,
+      slotId: null,
+      runId: null,
+    },
+    expiresAt,
+  });
+
+  const rowA = await queryEvidencePacket(fixture.DB, {
+    symbol: "GOOGL",
+    scope: "profile",
+    profileId: "profile-a",
+    asOf: "2026-07-25T00:00:00.000Z",
+  });
+  const rowB = await queryEvidencePacket(fixture.DB, {
+    symbol: "GOOGL",
+    scope: "profile",
+    profileId: "profile-b",
+    asOf: "2026-07-25T00:00:00.000Z",
+  });
+  const missing = await queryEvidencePacket(fixture.DB, {
+    symbol: "GOOGL",
+    scope: "profile",
+    profileId: "profile-c",
+    asOf: "2026-07-25T00:00:00.000Z",
+  });
+  assert.equal(rowA.content_hash, packetA.contentHash);
+  assert.equal(rowB.content_hash, packetB.contentHash);
+  assert.equal(missing, null);
+  assert.notEqual(rowA.id, rowB.id);
+});
+
+test("profile evidence API does not fall back to another profile or legacy rows", async (t) => {
+  const fixture = await evidenceD1(t);
+  if (!fixture) return;
+  const packet = validPacket("GOOGL");
+  await upsertEvidenceBundle(fixture.DB, {
+    packet,
+    identity: {
+      scope: "profile",
+      profileId: "profile-b",
+      requestId: null,
+      slotId: null,
+      runId: "run-b",
+    },
+    expiresAt: "2099-01-01T00:00:00.000Z",
+  });
+  await upsertEvidenceBundle(fixture.DB, {
+    packet: { ...packet, contentHash: "d".repeat(64) },
+    identity: {
+      scope: "legacy",
+      profileId: null,
+      requestId: null,
+      slotId: null,
+      runId: null,
+    },
+    expiresAt: "2099-01-01T00:00:00.000Z",
+  });
+
+  const response = await onRequestGet({
+    request: request("/api/evidence?symbol=GOOGL&profile=profile-a", {
+      authorization: "Bearer read-token",
+    }),
+    env: { EVIDENCE_READ_TOKEN: "read-token", DB: fixture.DB },
+  });
+  const body = await response.json();
+  assert.equal(body.status, "unavailable");
+  assert.equal(body.data, null);
+});
+
+test("legacy, adhoc, and global evidence reads require their explicit selectors", async (t) => {
+  const fixture = await evidenceD1(t);
+  if (!fixture) return;
+  const requestId = "123e4567-e89b-42d3-a456-426614174000";
+  const expiresAt = "2099-01-01T00:00:00.000Z";
+  for (const [identity, contentHash] of [
+    [{
+      scope: "legacy",
+      profileId: null,
+      requestId: null,
+      slotId: null,
+      runId: null,
+    }, "1".repeat(64)],
+    [{
+      scope: "adhoc",
+      profileId: null,
+      requestId,
+      slotId: null,
+      runId: "run-adhoc",
+    }, "2".repeat(64)],
+    [{
+      scope: "global",
+      profileId: null,
+      requestId: null,
+      slotId: null,
+      runId: "run-global",
+    }, "3".repeat(64)],
+  ]) {
+    await upsertEvidenceBundle(fixture.DB, {
+      packet: { ...validPacket("GOOGL"), contentHash },
+      identity,
+      expiresAt,
+    });
+  }
+
+  const env = { EVIDENCE_READ_TOKEN: "read-token", DB: fixture.DB };
+  for (const [selector, expectedHash] of [
+    ["", "1".repeat(64)],
+    [`&requestId=${requestId}`, "2".repeat(64)],
+    ["&scope=global", "3".repeat(64)],
+  ]) {
+    const response = await onRequestGet({
+      request: request(`/api/evidence?symbol=GOOGL&depth=full${selector}`, {
+        authorization: "Bearer read-token",
+      }),
+      env,
+    });
+    assert.equal(response.status, 200);
+    assert.equal((await response.json()).data.contentHash, expectedHash);
+  }
+});
+
+test("adhoc and global evidence scopes remain explicit and reject profile absorption", async () => {
+  const packet = validPacket();
+  for (const identity of [
+    {
+      scope: "adhoc",
+      profileId: "profile-a",
+      requestId: "123e4567-e89b-42d3-a456-426614174000",
+      slotId: null,
+    },
+    {
+      scope: "global",
+      profileId: "profile-a",
+      requestId: null,
+      slotId: null,
+    },
+  ]) {
+    const response = await onRequestPost({
+      request: new Request("https://example.test/api/evidence", {
+        method: "POST",
+        headers: { authorization: "Bearer write-token" },
+        body: JSON.stringify({ packet, identity }),
+      }),
+      env: {
+        EVIDENCE_WRITE_TOKEN: "write-token",
+        DB: fakeWriterDb([]),
+      },
+    });
+    assert.equal(response.status, 400);
+  }
+
+  const ambiguousRead = await onRequestGet({
+    request: request(
+      "/api/evidence?symbol=GOOGL&profile=profile-a&requestId=123e4567-e89b-42d3-a456-426614174000",
+      { authorization: "Bearer read-token" },
+    ),
+    env: {
+      EVIDENCE_READ_TOKEN: "read-token",
+      DB: fakeDb(null, "GOOGL"),
+    },
+  });
+  assert.equal(ambiguousRead.status, 400);
+});
+
+test("report and evidence identities must describe the same owner", async () => {
+  const packet = validPacket();
+  const response = await onRequestPost({
+    request: new Request("https://example.test/api/evidence", {
+      method: "POST",
+      headers: { authorization: "Bearer write-token" },
+      body: JSON.stringify({
+        packet,
+        report: "reports/GOOGL/2026-07-24/complete_report.md",
+        manifest: {
+          schemaVersion: 1,
+          ticker: "GOOGL",
+          tradeDate: "2026-07-24",
+          generatedAt: packet.generatedAt,
+          analysisStatus: "rated",
+          auditStatus: "verified",
+          evidence: { contentHash: packet.contentHash },
+          identity: {
+            scope: "profile",
+            profileId: "profile-b",
+            requestId: null,
+            slotId: null,
+            runId: "run-b",
+          },
+        },
+        identity: {
+          scope: "profile",
+          profileId: "profile-a",
+          requestId: null,
+          slotId: null,
+          runId: "run-a",
+        },
+      }),
+    }),
+    env: {
+      EVIDENCE_WRITE_TOKEN: "write-token",
+      DB: fakeWriterDb([]),
+    },
+  });
+  assert.equal(response.status, 400);
 });
 
 test("evidence API write path fails closed and rejects malformed or oversized packets", async () => {

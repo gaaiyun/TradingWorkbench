@@ -2,6 +2,15 @@ const CHAT_ID = /^[A-Za-z0-9][A-Za-z0-9_-]{7,95}$/;
 const DEFAULT_SESSION_DAYS = 90;
 const DEFAULT_REQUEST_DAYS = 30;
 
+export class ChatSessionProfileConflictError extends Error {
+  constructor(sessionId) {
+    super(`chat session profile conflict: ${sessionId}`);
+    this.name = "ChatSessionProfileConflictError";
+    this.code = "session_profile_conflict";
+    this.sessionId = sessionId;
+  }
+}
+
 function iso(date) {
   return (date instanceof Date ? date : new Date(date)).toISOString();
 }
@@ -112,15 +121,7 @@ async function ensureSession(db, {
   await db.prepare(
     `INSERT INTO chat_sessions (id, profile_id, title, created_at, updated_at, expires_at)
      VALUES (?, ?, ?, ?, ?, ?)
-     ON CONFLICT(id) DO UPDATE SET
-       profile_id = excluded.profile_id,
-       title = CASE
-         WHEN chat_sessions.title IS NULL OR chat_sessions.title = '' OR chat_sessions.title = '新研究会话'
-         THEN excluded.title
-         ELSE chat_sessions.title
-       END,
-       updated_at = excluded.updated_at,
-       expires_at = excluded.expires_at`,
+     ON CONFLICT(id) DO NOTHING`,
   ).bind(
     sessionId,
     profileId || null,
@@ -128,6 +129,30 @@ async function ensureSession(db, {
     at,
     at,
     addDays(now, sessionDays),
+  ).run();
+  const owner = await db.prepare(
+    "SELECT profile_id FROM chat_sessions WHERE id = ?",
+  ).bind(sessionId).first();
+  if (!owner || (owner.profile_id || null) !== (profileId || null)) {
+    throw new ChatSessionProfileConflictError(sessionId);
+  }
+  await db.prepare(
+    `UPDATE chat_sessions
+     SET title = CASE
+       WHEN title IS NULL OR title = '' OR title = '新研究会话' THEN ?
+       ELSE title
+     END,
+     updated_at = ?,
+     expires_at = ?
+     WHERE id = ?
+       AND ((profile_id = ?) OR (profile_id IS NULL AND ? IS NULL))`,
+  ).bind(
+    String(title || "新研究会话").slice(0, 120),
+    at,
+    addDays(now, sessionDays),
+    sessionId,
+    profileId || null,
+    profileId || null,
   ).run();
 }
 
@@ -197,20 +222,56 @@ export async function failChatRequest(db, {
   return changes(result) === 1;
 }
 
-export async function getChatSession(db, sessionId, now = new Date(), limit = 80) {
+function sessionReadOptions(options, fallbackLimit) {
+  if (options instanceof Date) {
+    return { profileId: null, now: options, limit: fallbackLimit };
+  }
+  return {
+    profileId: options?.profileId || null,
+    now: options?.now || new Date(),
+    limit: options?.limit ?? fallbackLimit,
+  };
+}
+
+async function hasLiveSession(db, sessionId, at) {
+  const row = await db.prepare(
+    "SELECT id FROM chat_sessions WHERE id = ? AND expires_at > ?",
+  ).bind(sessionId, at).first();
+  return Boolean(row);
+}
+
+export async function getChatSession(db, sessionId, options = {}, fallbackLimit = 80) {
+  const { profileId, now, limit } = sessionReadOptions(options, fallbackLimit);
   const at = iso(now);
   const session = await db.prepare(
     `SELECT id, profile_id, title, created_at, updated_at, expires_at
      FROM chat_sessions
-     WHERE id = ? AND expires_at > ?`,
-  ).bind(sessionId, at).first();
-  if (!session) return null;
+     WHERE id = ? AND expires_at > ?
+       AND ((profile_id = ?) OR (profile_id IS NULL AND ? IS NULL))`,
+  ).bind(sessionId, at, profileId, profileId).first();
+  if (!session) {
+    if (await hasLiveSession(db, sessionId, at)) {
+      throw new ChatSessionProfileConflictError(sessionId);
+    }
+    return null;
+  }
   const result = await db.prepare(
     `SELECT id, role, content, created_at
      FROM chat_messages
      WHERE session_id = ? AND expires_at > ?
+       AND EXISTS (
+         SELECT 1 FROM chat_sessions
+         WHERE id = chat_messages.session_id
+           AND ((profile_id = ?) OR (profile_id IS NULL AND ? IS NULL))
+       )
      ORDER BY created_at ASC LIMIT ?`,
-  ).bind(sessionId, at, Math.max(1, Math.min(200, Math.trunc(limit)))).all();
+  ).bind(
+    sessionId,
+    at,
+    profileId,
+    profileId,
+    Math.max(1, Math.min(200, Math.trunc(limit))),
+  ).all();
   return {
     id: session.id,
     profileId: session.profile_id || null,
@@ -226,9 +287,57 @@ export async function getChatSession(db, sessionId, now = new Date(), limit = 80
   };
 }
 
-export async function deleteChatSession(db, sessionId) {
-  await db.prepare("DELETE FROM chat_messages WHERE session_id = ?").bind(sessionId).run();
-  await db.prepare("DELETE FROM chat_requests WHERE session_id = ?").bind(sessionId).run();
-  const result = await db.prepare("DELETE FROM chat_sessions WHERE id = ?").bind(sessionId).run();
+export async function listChatSessions(db, {
+  profileId = null,
+  now = new Date(),
+  limit = 50,
+} = {}) {
+  const result = await db.prepare(
+    `SELECT id, profile_id, title, created_at, updated_at, expires_at
+     FROM chat_sessions
+     WHERE expires_at > ?
+       AND ((profile_id = ?) OR (profile_id IS NULL AND ? IS NULL))
+     ORDER BY updated_at DESC
+     LIMIT ?`,
+  ).bind(
+    iso(now),
+    profileId,
+    profileId,
+    Math.max(1, Math.min(100, Math.trunc(limit))),
+  ).all();
+  return (result?.results || []).map((session) => ({
+    id: session.id,
+    profileId: session.profile_id || null,
+    title: session.title || "新研究会话",
+    createdAt: session.created_at,
+    updatedAt: session.updated_at,
+  }));
+}
+
+export async function deleteChatSession(db, sessionId, profileId = null) {
+  const at = iso(new Date());
+  const owner = await db.prepare(
+    `SELECT id FROM chat_sessions
+     WHERE id = ? AND expires_at > ?
+       AND ((profile_id = ?) OR (profile_id IS NULL AND ? IS NULL))`,
+  ).bind(sessionId, at, profileId, profileId).first();
+  if (!owner) {
+    if (await hasLiveSession(db, sessionId, at)) {
+      throw new ChatSessionProfileConflictError(sessionId);
+    }
+    return false;
+  }
+  const ownerClause = `session_id IN (
+    SELECT id FROM chat_sessions
+    WHERE id = ? AND ((profile_id = ?) OR (profile_id IS NULL AND ? IS NULL))
+  )`;
+  await db.prepare(`DELETE FROM chat_messages WHERE ${ownerClause}`)
+    .bind(sessionId, profileId, profileId).run();
+  await db.prepare(`DELETE FROM chat_requests WHERE ${ownerClause}`)
+    .bind(sessionId, profileId, profileId).run();
+  const result = await db.prepare(
+    `DELETE FROM chat_sessions
+     WHERE id = ? AND ((profile_id = ?) OR (profile_id IS NULL AND ? IS NULL))`,
+  ).bind(sessionId, profileId, profileId).run();
   return changes(result) > 0;
 }

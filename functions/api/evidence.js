@@ -8,12 +8,16 @@ import {
   readJsonBody,
   RequestBodyTooLargeError,
 } from "./_util.js";
-import { normalizeWorkbenchTicker } from "./_workbench_settings.mjs";
+import {
+  normalizeWorkbenchProfileId,
+  normalizeWorkbenchTicker,
+} from "./_workbench_settings.mjs";
 
 const PACKET_STATUSES = new Set(["ok", "degraded", "unavailable", "data_validation_failed"]);
 const ANALYSIS_STATUSES = new Set(["rated", "not_rated", "insufficient_evidence", "data_validation_failed"]);
 const AUDIT_STATUSES = new Set(["verified", "legacy_unverified", "invalidated"]);
 const MAX_EVIDENCE_BYTES = 1024 * 1024;
+const UUID = /^[0-9a-f]{8}-(?:[0-9a-f]{4}-){3}[0-9a-f]{12}$/i;
 
 function readAuthorized(request, env) {
   const expected = String(env?.EVIDENCE_READ_TOKEN || "");
@@ -66,6 +70,76 @@ function validateMarketBars(bars, asOf) {
       throw new Error("Evidence Packet bar OHLC 区间无效");
     }
   }
+}
+
+function optionalIdentityValue(value, field) {
+  if (value === null || value === undefined || value === "") return null;
+  if (typeof value !== "string" || !value.trim()) {
+    throw new Error(`Evidence identity ${field} 无效`);
+  }
+  return value.trim();
+}
+
+function validateIdentity(value) {
+  if (value === null || value === undefined) {
+    return {
+      scope: "legacy",
+      profileId: null,
+      requestId: null,
+      slotId: null,
+      runId: null,
+    };
+  }
+  if (!value || typeof value !== "object" || Array.isArray(value)) {
+    throw new Error("Evidence identity 无效");
+  }
+  const scope = value.scope;
+  const requestId = optionalIdentityValue(value.requestId, "requestId");
+  const slotId = optionalIdentityValue(value.slotId, "slotId");
+  const runId = optionalIdentityValue(value.runId, "runId");
+  let profileId = null;
+  if (value.profileId !== null && value.profileId !== undefined && value.profileId !== "") {
+    try {
+      profileId = normalizeWorkbenchProfileId(value.profileId);
+    } catch {
+      throw new Error("Evidence identity profileId 无效");
+    }
+  }
+
+  if (scope === "legacy" && !profileId && !requestId && !slotId) {
+    return { scope, profileId: null, requestId: null, slotId: null, runId };
+  }
+  if (scope === "profile" && profileId && !requestId) {
+    return { scope, profileId, requestId: null, slotId, runId };
+  }
+  if (
+    scope === "adhoc"
+    && !profileId
+    && UUID.test(requestId || "")
+    && !slotId
+  ) {
+    return {
+      scope,
+      profileId: null,
+      requestId: requestId.toLowerCase(),
+      slotId: null,
+      runId,
+    };
+  }
+  if (scope === "global" && !profileId && !requestId && !slotId) {
+    return { scope, profileId: null, requestId: null, slotId: null, runId };
+  }
+  throw new Error("Evidence identity 范围与选择器冲突");
+}
+
+function sameIdentity(left, right) {
+  return (
+    left.scope === right.scope
+    && left.profileId === right.profileId
+    && left.requestId === right.requestId
+    && left.slotId === right.slotId
+    && left.runId === right.runId
+  );
 }
 
 function validateBundle(body) {
@@ -141,7 +215,14 @@ function validateBundle(body) {
       throw new Error("报告路径无效");
     }
   }
-  return { packet, manifest, report };
+  const identity = validateIdentity(body.identity);
+  if (manifest) {
+    const manifestIdentity = validateIdentity(manifest.identity);
+    if (!sameIdentity(identity, manifestIdentity)) {
+      throw new Error("Report Manifest identity 与 Evidence identity 不一致");
+    }
+  }
+  return { packet, manifest, report, identity };
 }
 
 function parseQuery(request) {
@@ -157,7 +238,62 @@ function parseQuery(request) {
   if (asOf && Number.isNaN(asOf.valueOf())) throw new Error("无效的 asOf 参数");
   const depth = (params.get("depth") || "summary").toLowerCase();
   if (!["summary", "full"].includes(depth)) throw new Error("无效的 depth 参数");
-  return { symbol, asOf: asOf?.toISOString() || null, depth };
+
+  const hasProfile = params.has("profile");
+  const hasRequestId = params.has("requestId");
+  const hasScope = params.has("scope");
+  if (
+    Number(hasProfile) + Number(hasRequestId) + Number(hasScope) > 1
+  ) {
+    throw new Error("Evidence 查询范围冲突");
+  }
+  if (hasProfile) {
+    let profileId;
+    try {
+      profileId = normalizeWorkbenchProfileId(params.get("profile"));
+    } catch {
+      throw new Error("无效的 profile 参数");
+    }
+    return {
+      symbol,
+      asOf: asOf?.toISOString() || null,
+      depth,
+      scope: "profile",
+      profileId,
+      requestId: null,
+    };
+  }
+  if (hasRequestId) {
+    const requestId = params.get("requestId");
+    if (!UUID.test(requestId || "")) throw new Error("无效的 requestId 参数");
+    return {
+      symbol,
+      asOf: asOf?.toISOString() || null,
+      depth,
+      scope: "adhoc",
+      profileId: null,
+      requestId: requestId.toLowerCase(),
+    };
+  }
+  if (hasScope) {
+    if (params.get("scope") !== "global") throw new Error("无效的 scope 参数");
+    return {
+      symbol,
+      asOf: asOf?.toISOString() || null,
+      depth,
+      scope: "global",
+      profileId: null,
+      requestId: null,
+    };
+  }
+  return {
+    symbol,
+    asOf: asOf?.toISOString() || null,
+    depth,
+    scope: "legacy",
+    profileId: null,
+    requestId: null,
+  };
 }
 
 export async function onRequestGet({ request, env }) {

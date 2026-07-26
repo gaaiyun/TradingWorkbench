@@ -5,12 +5,14 @@ import {
 } from "./_chat_context.mjs";
 import { d1Binding, readSettingsFromD1 } from "./_d1_repository.mjs";
 import {
+  ChatSessionProfileConflictError,
   claimChatRequest,
   completeChatRequest,
   failChatRequest,
   hashChatValue,
   normalizeChatId,
 } from "./_chat_repository.mjs";
+import { normalizeWorkbenchProfileId } from "./_workbench_settings.mjs";
 import {
   chatCapabilities,
   createSseParser,
@@ -93,6 +95,11 @@ function upstreamError(id, status) {
   return errorJson(id, normalized.error, normalized.status, normalized.code, {
     upstreamStatus: status,
   });
+}
+
+function optionalProfileId(value) {
+  if (value === undefined || value === null) return null;
+  return normalizeWorkbenchProfileId(value);
 }
 
 async function jsonChatResponse({
@@ -404,10 +411,32 @@ export async function onRequestPost({ request, env, waitUntil }) {
     ? `session-${id}`
     : normalizeChatId(body.sessionId);
   if (!sessionId) return errorJson(id, "会话 ID 无效", 400, "invalid_session_id");
-  const profileId = typeof body.profileId === "string" && /^[A-Za-z0-9][A-Za-z0-9_-]{0,63}$/.test(body.profileId)
-    ? body.profileId
-    : null;
-  if (body.profileId && !profileId) return errorJson(id, "监控目标 ID 无效", 400, "invalid_profile_id");
+  let profileId;
+  try {
+    profileId = optionalProfileId(body.profileId);
+  } catch {
+    return errorJson(id, "监控目标 ID 无效", 400, "invalid_profile_id");
+  }
+  const reportRequestId = body.reportRequestId === undefined || body.reportRequestId === null
+    ? null
+    : normalizeChatId(body.reportRequestId);
+  if ((body.reportRequestId !== undefined && body.reportRequestId !== null) && !reportRequestId) {
+    return errorJson(id, "报告请求 ID 无效", 400, "invalid_report_request_id");
+  }
+  const reportScope = body.reportScope === undefined || body.reportScope === null
+    ? null
+    : String(body.reportScope);
+  if (reportScope !== null && reportScope !== "global") {
+    return errorJson(id, "报告上下文范围无效", 400, "invalid_report_scope");
+  }
+  if (
+    (reportRequestId && profileId)
+    || (reportScope === "global" && profileId)
+    || (reportRequestId && reportScope)
+    || ((reportRequestId || reportScope) && typeof body.report !== "string")
+  ) {
+    return errorJson(id, "报告上下文身份冲突", 400, "ambiguous_context_scope");
+  }
   const symbol = typeof body.symbol === "string" && /^[A-Z0-9][A-Z0-9.^_-]{0,31}$/.test(body.symbol.toUpperCase())
     ? body.symbol.toUpperCase()
     : null;
@@ -433,6 +462,8 @@ export async function onRequestPost({ request, env, waitUntil }) {
     symbol: resolvedSymbol,
     question: normalizedQuestion.value,
     report: typeof body.report === "string" ? body.report : null,
+    reportRequestId,
+    reportScope,
     volguard: body.volguard === true,
     history: Array.isArray(body.history) ? body.history : [],
   });
@@ -482,7 +513,10 @@ export async function onRequestPost({ request, env, waitUntil }) {
           { replayed: true },
         );
       }
-    } catch {
+    } catch (error) {
+      if (error instanceof ChatSessionProfileConflictError) {
+        return errorJson(id, "会话属于其他监控目标", 409, "session_profile_conflict");
+      }
       persistence = "degraded";
     }
   }
@@ -499,7 +533,12 @@ export async function onRequestPost({ request, env, waitUntil }) {
     }
   }
   const archiveContext = await loadResearchContext({
-    body,
+    body: {
+      ...body,
+      profileId,
+      reportRequestId,
+      reportScope,
+    },
     fetchImpl: fetch,
     rawBase: RAW_BASE,
     contextLimit: config.limits.contextChars,
@@ -541,6 +580,7 @@ export async function onRequestPost({ request, env, waitUntil }) {
     asOf: workbenchContext?.asOf || null,
     evidence: workbenchContext?.evidence || [],
     contextHash,
+    contextScope: archiveContext.contextScope,
     persistence,
   };
   const complete = async (payload, answer) => {

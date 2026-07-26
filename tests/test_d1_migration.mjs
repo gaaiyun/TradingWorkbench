@@ -27,6 +27,10 @@ const hashKeyMigrationUrl = new URL(
   "../migrations/0012_fix_hashkey_identity.sql",
   import.meta.url,
 );
+const chatEvidenceScopeMigrationUrl = new URL(
+  "../migrations/0014_chat_evidence_scope.sql",
+  import.meta.url,
+);
 
 test("D1 migration defines every dynamic workbench table and its lookup indexes", () => {
   const sql = readFileSync(migrationUrl, "utf8");
@@ -239,4 +243,65 @@ test("HashKey identity migration corrects only the 3887.HK display name", async 
     },
   );
   assert.equal(after.profiles[0].targets.find(({ symbol }) => symbol === "ORCL").name, "Oracle");
+});
+
+test("chat and evidence scope migration backfills legacy ownership and adds exact lookup indexes", async (t) => {
+  const sql = readFileSync(chatEvidenceScopeMigrationUrl, "utf8");
+  for (const table of ["evidence_packets", "report_manifests"]) {
+    for (const column of ["scope", "profile_id", "request_id", "slot_id", "run_id"]) {
+      assert.match(
+        sql,
+        new RegExp(`ALTER TABLE\\s+${table}\\s+ADD COLUMN\\s+${column}\\b`, "i"),
+      );
+    }
+  }
+  assert.match(sql, /scope\s+TEXT\s+NOT\s+NULL\s+DEFAULT\s+'legacy'/i);
+  assert.match(sql, /idx_evidence_packets_scope_profile_symbol_as_of/i);
+  assert.match(sql, /idx_evidence_packets_scope_request_symbol_as_of/i);
+  assert.match(sql, /idx_report_manifests_scope_profile_report/i);
+
+  let DatabaseSync;
+  try {
+    ({ DatabaseSync } = await import("node:sqlite"));
+  } catch {
+    t.skip("node:sqlite is unavailable on this Node version");
+    return;
+  }
+  const db = new DatabaseSync(":memory:");
+  db.exec(readFileSync(new URL("../migrations/0011_evidence_packets.sql", import.meta.url), "utf8"));
+  db.prepare(`
+    INSERT INTO evidence_packets (
+      id, symbol, as_of, generated_at, status, packet_json, content_hash, expires_at
+    ) VALUES ('old-packet', 'SPY', '2026-07-24T00:00:00Z',
+      '2026-07-24T00:01:00Z', 'ok', '{}', ?, '2099-01-01T00:00:00Z')
+  `).run("a".repeat(64));
+  db.prepare(`
+    INSERT INTO report_manifests (
+      report, symbol, trade_date, analysis_status, audit_status,
+      evidence_hash, manifest_json, created_at
+    ) VALUES ('reports/SPY/2026-07-24/complete_report.md', 'SPY', '2026-07-24',
+      'rated', 'verified', ?, '{}', '2026-07-24T00:01:00Z')
+  `).run("a".repeat(64));
+
+  db.exec(sql);
+  assert.deepEqual(
+    { ...db.prepare(`
+      SELECT scope, profile_id, request_id, slot_id, run_id
+      FROM evidence_packets WHERE id = 'old-packet'
+    `).get() },
+    {
+      scope: "legacy",
+      profile_id: null,
+      request_id: null,
+      slot_id: null,
+      run_id: null,
+    },
+  );
+  assert.equal(
+    db.prepare(`
+      SELECT scope FROM report_manifests
+      WHERE report = 'reports/SPY/2026-07-24/complete_report.md'
+    `).get().scope,
+    "legacy",
+  );
 });

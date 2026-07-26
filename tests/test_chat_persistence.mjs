@@ -3,13 +3,19 @@ import { readFileSync } from "node:fs";
 import test from "node:test";
 
 import {
+  ChatSessionProfileConflictError,
   claimChatRequest,
   completeChatRequest,
+  deleteChatSession,
   getChatSession,
   hashChatValue,
+  listChatSessions,
 } from "../functions/api/_chat_repository.mjs";
 import { loadWorkbenchEvidence } from "../functions/api/_chat_context.mjs";
-import { onRequestGet as getChatSessionApi } from "../functions/api/chat-sessions.js";
+import {
+  onRequestDelete as deleteChatSessionApi,
+  onRequestGet as getChatSessionApi,
+} from "../functions/api/chat-sessions.js";
 import { onRequestPost as postChat } from "../functions/api/chat.js";
 import { SqliteD1 } from "./helpers/sqlite_d1.mjs";
 
@@ -21,6 +27,7 @@ const migrations = [
   "../migrations/0005_chat_persistence.sql",
   "../migrations/0010_news_evidence_metadata.sql",
   "../migrations/0011_evidence_packets.sql",
+  "../migrations/0014_chat_evidence_scope.sql",
 ];
 
 async function createD1(t) {
@@ -123,9 +130,145 @@ test("request claim is atomic, replays completed answers, and rejects key reuse"
   });
   assert.equal(conflict.state, "conflict");
 
-  const session = await getChatSession(fixture.DB, "session-12345678", now);
+  const session = await getChatSession(fixture.DB, "session-12345678", {
+    profileId: "etf-semiconductor",
+    now,
+  });
   assert.equal(session.messages.length, 2);
   assert.deepEqual(session.messages.map(({ role }) => role), ["user", "assistant"]);
+});
+
+test("chat session owner is immutable and every repository operation is profile-scoped", async (t) => {
+  const fixture = await createD1(t);
+  if (!fixture) return;
+  const now = new Date("2026-07-24T00:00:00.000Z");
+  const firstHash = await hashChatValue("profile-a");
+  await claimChatRequest(fixture.DB, {
+    requestId: "request-owner-a",
+    sessionId: "session-owner-shared",
+    profileId: "profile-a",
+    requestHash: firstHash,
+    now,
+  });
+
+  await assert.rejects(
+    claimChatRequest(fixture.DB, {
+      requestId: "request-owner-b",
+      sessionId: "session-owner-shared",
+      profileId: "profile-b",
+      requestHash: await hashChatValue("profile-b"),
+      now,
+    }),
+    ChatSessionProfileConflictError,
+  );
+  assert.equal(
+    fixture.sqlite.prepare(
+      "SELECT profile_id FROM chat_sessions WHERE id = 'session-owner-shared'",
+    ).get().profile_id,
+    "profile-a",
+  );
+  await assert.rejects(
+    getChatSession(fixture.DB, "session-owner-shared", {
+      profileId: "profile-b",
+      now,
+    }),
+    ChatSessionProfileConflictError,
+  );
+  await assert.rejects(
+    deleteChatSession(fixture.DB, "session-owner-shared", "profile-b"),
+    ChatSessionProfileConflictError,
+  );
+  assert.ok(await getChatSession(fixture.DB, "session-owner-shared", {
+    profileId: "profile-a",
+    now,
+  }));
+
+  const listedForA = await listChatSessions(fixture.DB, {
+    profileId: "profile-a",
+    now,
+  });
+  const listedForB = await listChatSessions(fixture.DB, {
+    profileId: "profile-b",
+    now,
+  });
+  assert.deepEqual(listedForA.map(({ id }) => id), ["session-owner-shared"]);
+  assert.deepEqual(listedForB, []);
+});
+
+test("chat session API rejects cross-profile reads and deletes with a stable conflict", async (t) => {
+  const fixture = await createD1(t);
+  if (!fixture) return;
+  await claimChatRequest(fixture.DB, {
+    requestId: "request-api-owner-a",
+    sessionId: "session-api-owner",
+    profileId: "profile-a",
+    requestHash: await hashChatValue("owner-a"),
+  });
+  const env = { DB: fixture.DB, ACCESS_CODE: "access-code" };
+
+  const deniedRead = await getChatSessionApi({
+    request: new Request(
+      "https://example.test/api/chat-sessions?sessionId=session-api-owner&profile=profile-b",
+      { headers: { "x-access-code": "access-code" } },
+    ),
+    env,
+  });
+  assert.equal(deniedRead.status, 409);
+  assert.equal((await deniedRead.json()).code, "session_profile_conflict");
+
+  const deniedDelete = await deleteChatSessionApi({
+    request: new Request("https://example.test/api/chat-sessions", {
+      method: "DELETE",
+      headers: {
+        "content-type": "application/json",
+        "x-access-code": "access-code",
+      },
+      body: JSON.stringify({
+        sessionId: "session-api-owner",
+        profileId: "profile-b",
+      }),
+    }),
+    env,
+  });
+  assert.equal(deniedDelete.status, 409);
+  assert.equal((await deniedDelete.json()).code, "session_profile_conflict");
+  assert.equal(
+    fixture.sqlite.prepare(
+      "SELECT profile_id FROM chat_sessions WHERE id = 'session-api-owner'",
+    ).get().profile_id,
+    "profile-a",
+  );
+});
+
+test("chat POST cannot continue a session owned by another profile", async (t) => {
+  const fixture = await createD1(t);
+  if (!fixture) return;
+  await claimChatRequest(fixture.DB, {
+    requestId: "request-post-owner-a",
+    sessionId: "session-post-owner",
+    profileId: "profile-a",
+    requestHash: await hashChatValue("owner-a"),
+  });
+  const fetchMock = t.mock.method(globalThis, "fetch", async () => {
+    throw new Error("cross-profile request must not reach report or LLM upstream");
+  });
+  const response = await postChat({
+    request: chatRequest({
+      requestId: "request-post-owner-b",
+      sessionId: "session-post-owner",
+      profileId: "profile-b",
+      symbol: "SPY",
+      question: "继续上一问",
+    }),
+    env: {
+      DB: fixture.DB,
+      ACCESS_CODE: "access-code",
+      OPENAI_COMPATIBLE_API_KEY: "api-secret",
+    },
+  });
+  assert.equal(response.status, 409);
+  assert.equal((await response.json()).code, "session_profile_conflict");
+  assert.equal(fetchMock.mock.callCount(), 0);
 });
 
 test("workbench evidence labels current bars, news, and events with source timestamps", async (t) => {
@@ -300,11 +443,13 @@ test("chat evidence includes the exact published EvidencePacket and validation s
   };
   fixture.sqlite.prepare(`
     INSERT INTO evidence_packets (
-      id, symbol, as_of, generated_at, status, packet_json, content_hash, expires_at
-    ) VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+      id, symbol, scope, profile_id, as_of, generated_at, status,
+      packet_json, content_hash, expires_at
+    ) VALUES (?, ?, 'profile', ?, ?, ?, ?, ?, ?, ?)
   `).run(
     "evidence:512480",
     "512480.SS",
+    "etf-semiconductor",
     packet.asOf,
     packet.generatedAt,
     packet.status,
@@ -474,8 +619,10 @@ test("duplicate chat POST replays the stored answer without another model call",
 
   const recovery = await getChatSessionApi({
     request: new Request(
-      "https://example.test/api/chat-sessions?sessionId=session-replay-1234",
-      { headers: { "x-access-code": "access-code" } },
+      "https://example.test/api/chat-sessions?sessionId=session-replay-1234&profile=etf-semiconductor",
+      {
+        headers: { "x-access-code": "access-code" },
+      },
     ),
     env,
   });
@@ -533,6 +680,8 @@ test("a disconnected SSE is completed in the background and recoverable from D1"
   assert.ok(backgroundCompletion instanceof Promise);
   await backgroundCompletion;
 
-  const session = await getChatSession(fixture.DB, "session-disconnect-1");
+  const session = await getChatSession(fixture.DB, "session-disconnect-1", {
+    profileId: "etf-semiconductor",
+  });
   assert.equal(session.messages.at(-1).content, "断线后仍完成");
 });

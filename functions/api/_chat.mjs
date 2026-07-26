@@ -519,11 +519,47 @@ function reportContextCandidates(reportPath, reportSection, rawBase) {
   return candidates;
 }
 
-function verifiedReportManifest(text, reportPath) {
+function contextScopeFor(body) {
+  if (body.reportRequestId) {
+    return {
+      scope: "adhoc",
+      profileId: null,
+      requestId: String(body.reportRequestId),
+    };
+  }
+  if (body.reportScope === "global") {
+    return { scope: "global", profileId: null, requestId: null };
+  }
+  if (body.profileId) {
+    return {
+      scope: "profile",
+      profileId: String(body.profileId),
+      requestId: null,
+    };
+  }
+  return { scope: "legacy", profileId: null, requestId: null };
+}
+
+function reportIdentityMatches(manifest, expected) {
+  const identity = manifest?.identity;
+  if (expected.scope === "legacy") {
+    return !identity || identity.scope === "legacy";
+  }
+  if (!identity || identity.scope !== expected.scope) return false;
+  if (expected.scope === "profile") {
+    return identity.profileId === expected.profileId && !identity.requestId;
+  }
+  if (expected.scope === "adhoc") {
+    return identity.requestId === expected.requestId && !identity.profileId;
+  }
+  return !identity.profileId && !identity.requestId;
+}
+
+function inspectReportManifest(text, reportPath, expectedIdentity) {
   try {
     const manifest = JSON.parse(text);
     const [, ticker, directory] = reportPath.split("/");
-    return (
+    const verified = (
       manifest?.ticker === ticker
       && manifest?.tradeDate === directory.slice(0, 10)
       && manifest?.analysisStatus === "rated"
@@ -532,8 +568,13 @@ function verifiedReportManifest(text, reportPath) {
       && manifest?.evidence?.status === "ok"
       && /^[a-f0-9]{64}$/i.test(String(manifest?.evidence?.contentHash || ""))
     );
+    if (!verified) return { ok: false, error: "report_not_verified" };
+    if (!reportIdentityMatches(manifest, expectedIdentity)) {
+      return { ok: false, error: "report_identity_mismatch" };
+    }
+    return { ok: true, manifest };
   } catch {
-    return false;
+    return { ok: false, error: "report_not_verified" };
   }
 }
 
@@ -626,6 +667,7 @@ export async function loadResearchContext({
   const deadline = now() + timeoutMs;
   const attempts = [];
   const candidates = [];
+  const contextScope = contextScopeFor(body);
   if (body.volguard === true) {
     candidates.push({
       url: volguardUrl,
@@ -640,12 +682,14 @@ export async function loadResearchContext({
     ...reportContextCandidates(reportPath, body.reportSection, rawBase),
   );
 
-  candidates.push({
-    url: `${rawBase}/data/latest.json`,
-    label: "latest.json",
-    type: "latest",
-    cf: { cacheTtl: 60, cacheEverything: true },
-  });
+  if (contextScope.scope === "legacy") {
+    candidates.push({
+      url: `${rawBase}/data/latest.json`,
+      label: "latest.json",
+      type: "latest",
+      cf: { cacheTtl: 60, cacheEverything: true },
+    });
+  }
 
   for (const candidate of candidates) {
     if (signal?.aborted) break;
@@ -663,15 +707,15 @@ export async function loadResearchContext({
         timeoutMs: remainingMs,
         parentSignal: signal,
       });
-      if (
-        !manifest.ok
-        || !verifiedReportManifest(manifest.context, candidate.reportPath)
-      ) {
+      const inspection = manifest.ok
+        ? inspectReportManifest(manifest.context, candidate.reportPath, contextScope)
+        : null;
+      if (!manifest.ok || !inspection?.ok) {
         attempts.push({
           ...manifest,
           ok: false,
           type: "report-manifest",
-          error: manifest.ok ? "report_not_verified" : manifest.error,
+          error: manifest.ok ? inspection.error : manifest.error,
           context: undefined,
           contextLabel: undefined,
         });
@@ -687,7 +731,9 @@ export async function loadResearchContext({
       timeoutMs: contextRemainingMs,
       parentSignal: signal,
     });
-    if (result.ok && result.context) return { ...result, attempts };
+    if (result.ok && result.context) {
+      return { ...result, attempts, contextScope };
+    }
     attempts.push(result);
   }
 
@@ -701,6 +747,7 @@ export async function loadResearchContext({
       truncated: false,
     },
     attempts,
+    contextScope,
   };
 }
 

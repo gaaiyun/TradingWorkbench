@@ -324,6 +324,167 @@ test("未验证或失效报告不能进入问答上下文", async () => {
   );
 });
 
+test("profile chat never falls back to global latest or another profile report", async () => {
+  const calls = [];
+  const result = await loadResearchContext({
+    body: { profileId: "profile-a", report: REPORT_PATH },
+    rawBase: "https://raw.example/public",
+    contextLimit: 100,
+    timeoutMs: 1000,
+    fetchImpl: async (url) => {
+      calls.push(String(url));
+      if (String(url).endsWith("report_manifest.json")) {
+        return jsonResponse({
+          ...VERIFIED_MANIFEST,
+          identity: {
+            scope: "profile",
+            kind: "manual",
+            profileId: "profile-b",
+            requestId: null,
+            slotId: null,
+            scheduledFor: null,
+          },
+        });
+      }
+      throw new Error("foreign report body and global latest must not be fetched");
+    },
+  });
+
+  assert.equal(result.source.type, "none");
+  assert.equal(result.context, "");
+  assert.equal(calls.some((url) => url.endsWith("/complete_report.md")), false);
+  assert.equal(calls.some((url) => url.endsWith("/data/latest.json")), false);
+  assert.equal(
+    result.attempts.some(({ error }) => error === "report_identity_mismatch"),
+    true,
+  );
+});
+
+test("profile chat without an explicit report does not request global latest", async () => {
+  let calls = 0;
+  const result = await loadResearchContext({
+    body: { profileId: "profile-a" },
+    rawBase: "https://raw.example/public",
+    contextLimit: 100,
+    timeoutMs: 1000,
+    fetchImpl: async () => {
+      calls += 1;
+      throw new Error("profile chat must not request global latest");
+    },
+  });
+  assert.equal(calls, 0);
+  assert.equal(result.source.type, "none");
+});
+
+test("explicit adhoc report requires reportRequestId and exposes its context scope", async (t) => {
+  const reportRequestId = "123e4567-e89b-42d3-a456-426614174000";
+  const fetched = [];
+  t.mock.method(globalThis, "fetch", async (url) => {
+    fetched.push(String(url));
+    if (String(url).endsWith("report_manifest.json")) {
+      return jsonResponse({
+        ...VERIFIED_MANIFEST,
+        identity: {
+          scope: "adhoc",
+          kind: "adhoc",
+          profileId: null,
+          requestId: reportRequestId,
+          slotId: null,
+          scheduledFor: null,
+        },
+        run: { id: "run-adhoc-1" },
+      });
+    }
+    if (String(url).endsWith("/complete_report.md")) {
+      return new Response("adhoc verified report");
+    }
+    return jsonResponse({
+      choices: [{ message: { content: "adhoc answer" } }],
+    });
+  });
+
+  const response = await onRequestPost({
+    request: chatRequest({
+      code: "access-code",
+      question: "怎么看？",
+      report: REPORT_PATH,
+      reportRequestId,
+    }),
+    env: BASE_ENV,
+  });
+  const body = await response.json();
+  assert.equal(response.status, 200);
+  assert.deepEqual(body.contextScope, {
+    scope: "adhoc",
+    profileId: null,
+    requestId: reportRequestId,
+  });
+  assert.equal(
+    fetched.some((url) => url.endsWith("/data/latest.json")),
+    false,
+  );
+
+  fetched.length = 0;
+  const missingSelector = await loadResearchContext({
+    body: { report: REPORT_PATH },
+    rawBase: "https://raw.example/public",
+    contextLimit: 100,
+    timeoutMs: 1000,
+    fetchImpl: async (url) => {
+      fetched.push(String(url));
+      if (String(url).endsWith("report_manifest.json")) {
+        return jsonResponse({
+          ...VERIFIED_MANIFEST,
+          identity: {
+            scope: "adhoc",
+            kind: "adhoc",
+            profileId: null,
+            requestId: reportRequestId,
+            slotId: null,
+            scheduledFor: null,
+          },
+        });
+      }
+      if (String(url).endsWith("/data/latest.json")) return new Response("legacy latest");
+      throw new Error("adhoc body must not be fetched without reportRequestId");
+    },
+  });
+  assert.equal(missingSelector.context, "legacy latest");
+  assert.equal(
+    fetched.some((url) => url.endsWith("/complete_report.md")),
+    false,
+  );
+});
+
+test("chat profileId uses the settings profile identifier contract", async (t) => {
+  t.mock.method(globalThis, "fetch", async (url) => {
+    if (String(url).includes("raw.githubusercontent.com")) {
+      throw new Error("profile chat must not request global latest");
+    }
+    return jsonResponse({ choices: [{ message: { content: "ok" } }] });
+  });
+  const accepted = await onRequestPost({
+    request: chatRequest({
+      code: "access-code",
+      profileId: "-desk",
+      question: "问题",
+    }),
+    env: BASE_ENV,
+  });
+  assert.equal(accepted.status, 200);
+
+  const rejected = await onRequestPost({
+    request: chatRequest({
+      code: "access-code",
+      profileId: "bad.profile",
+      question: "问题",
+    }),
+    env: BASE_ENV,
+  });
+  assert.equal(rejected.status, 400);
+  assert.equal((await rejected.json()).code, "invalid_profile_id");
+});
+
 test("header 访问码先于 body 解析，legacy body code 仍兼容且 body 有硬上限", async () => {
   const oversized = {
     code: "access-code",
