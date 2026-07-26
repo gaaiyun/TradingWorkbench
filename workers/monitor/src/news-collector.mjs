@@ -5,6 +5,7 @@ const SEC_SCAN_LIMIT = 200;
 const DEFAULT_RESPONSE_LIMIT_BYTES = 256 * 1024;
 const SEC_RESPONSE_LIMIT_BYTES = 512 * 1024;
 const FED_RSS_RESPONSE_LIMIT_BYTES = 128 * 1024;
+const HASHKEY_RESPONSE_LIMIT_BYTES = 1100 * 1024;
 const MIIT_POLICY_SEARCH_URL =
   "https://www.miit.gov.cn/search-front-server/api/search/info";
 const MIIT_POLICY_COLUMN_IDS = new Set([
@@ -646,7 +647,7 @@ function providerCandidates(plan, now) {
       source: "hashkey-ir",
       url: HASHKEY_IR_URL,
       format: "hashkey-feed",
-      maxResponseBytes: DEFAULT_RESPONSE_LIMIT_BYTES,
+      maxResponseBytes: HASHKEY_RESPONSE_LIMIT_BYTES,
     });
   } else if (plan.topic === "oracle") {
     candidates.unshift({

@@ -893,7 +893,10 @@ test("HashKey news prefers the official investor feed before discovery providers
       calls.push(String(url));
       return new Response(officialHtml, {
         status: 200,
-        headers: { "content-type": "text/html; charset=UTF-8" },
+        headers: {
+          "content-type": "text/html; charset=UTF-8",
+          "content-length": "1028172",
+        },
       });
     },
     writeItems: async (_db, payload) => writes.push(payload),
