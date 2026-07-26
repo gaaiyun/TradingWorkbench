@@ -176,6 +176,8 @@ test("seller desk derives 90% caution and 99% target distances by expiry", () =>
   assert.equal(quantiles.frontExpiry, "2026-08-26");
   assert.ok(quantiles.expiries[0].cautionPct > 0);
   assert.ok(quantiles.expiries[0].targetPct > quantiles.expiries[0].cautionPct);
+  assert.ok(quantiles.expiries[0].putTargetStrike < quantiles.expiries[0].putCautionStrike);
+  assert.ok(quantiles.expiries[0].callTargetStrike > quantiles.expiries[0].callCautionStrike);
   assert.equal(quantiles.putCaution.strike, 2.9);
   assert.equal(quantiles.callCaution.strike, 4.1);
   assert.equal(quantiles.putTarget.strike, 2.2);

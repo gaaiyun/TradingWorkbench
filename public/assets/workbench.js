@@ -789,6 +789,17 @@ import {
       return `${label}：${row.name || row.code || "合约"} · 虚值 ${distance}（99% 阈值 ${threshold}）`;
     };
     const frontExpiry = Array.isArray(quantiles.expiries) ? quantiles.expiries[0] : null;
+    const quantileRows = (Array.isArray(quantiles.expiries) ? quantiles.expiries : [])
+      .slice(0, 8)
+      .map((expiry) => `<tr>
+        <td>${escapeHtml(expiry.expiry)}</td>
+        <td>${escapeHtml(String(expiry.tradingDays))}</td>
+        <td>${escapeHtml(`${optionValue(expiry.putCautionStrike, { digits: 3 })} / ${optionValue(expiry.callCautionStrike, { digits: 3 })}`)}</td>
+        <td>${escapeHtml(`${optionValue(expiry.putTargetStrike, { digits: 3 })} / ${optionValue(expiry.callTargetStrike, { digits: 3 })}`)}</td>
+        <td>${escapeHtml(expiry.putTarget?.name || "无 99% 合约")}</td>
+        <td>${escapeHtml(expiry.callTarget?.name || "无 99% 合约")}</td>
+      </tr>`)
+      .join("");
     const caution = (label, row) => {
       if (!row) return `${label}：90% 以上暂无满足流动性的合约`;
       const distance = Number.isFinite(row.otmPct) ? `${row.otmPct.toFixed(1)}%` : "—";
@@ -809,6 +820,10 @@ import {
       <span>${escapeHtml(caution("认购 90% 边界", quantiles.callCaution))}</span>
       <span>${escapeHtml(target("认沽 99% 观察", desk.putTarget, frontExpiry))}</span>
       <span>${escapeHtml(target("认购 99% 观察", desk.callTarget, frontExpiry))}</span>
+      ${quantileRows ? `<div class="seller-quantile-table-wrap"><table class="seller-quantile-table">
+        <thead><tr><th>到期日</th><th>工作日</th><th>90% Put / Call 线</th><th>99% Put / Call 线</th><th>Put 99% 候选</th><th>Call 99% 候选</th></tr></thead>
+        <tbody>${quantileRows}</tbody>
+      </table></div>` : ""}
       <small>阈值来源：${escapeHtml(quantiles.source || "暂无")} · ${escapeHtml(warnings)} · ${escapeHtml(desk.disclaimer || "研究提示，不是自动下单指令")}</small>
     `;
   }
