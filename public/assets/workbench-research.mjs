@@ -3,6 +3,7 @@ const DEFAULT_ANALYSTS = Object.freeze(["market", "news", "fundamentals"]);
 const VERIFIED_ANALYSTS = new Set(DEFAULT_ANALYSTS);
 const RESEARCH_TICKER_LIMITS = Object.freeze({ standard: 6, deep: 3 });
 const REQUEST_UUID = /^[0-9a-f]{8}-(?:[0-9a-f]{4}-){3}[0-9a-f]{12}$/i;
+const PROFILE_ID = /^[A-Za-z0-9_-]{1,64}$/;
 const ARCHIVE_FILE_COLUMNS = Object.freeze([
   Object.freeze({ id: "market", label: "技术 / 市场", relative: "1_analysts/market.md" }),
   Object.freeze({ id: "fundamentals", label: "基本面", relative: "1_analysts/fundamentals.md" }),
@@ -110,11 +111,33 @@ export function defaultArchiveFileTab(tabs) {
   return tabs.find(({ id }) => id === "decision") || tabs[0];
 }
 
+function identityKey(identity) {
+  if (
+    identity?.scope === "profile"
+    && PROFILE_ID.test(identity.profileId || "")
+    && identity.requestId == null
+  ) return `profile:${identity.profileId}`;
+  if (
+    identity?.scope === "adhoc"
+    && identity.profileId == null
+    && REQUEST_UUID.test(identity.requestId || "")
+  ) return `adhoc:${String(identity.requestId).toLowerCase()}`;
+  if (
+    (!identity || identity.scope === "legacy")
+    && identity?.profileId == null
+    && identity?.requestId == null
+  ) return "legacy";
+  return "invalid";
+}
+
 function auditMap(auditIndex) {
   return new Map(
     (Array.isArray(auditIndex?.reports) ? auditIndex.reports : [])
       .filter((entry) => entry?.report)
-      .map((entry) => [String(entry.report), entry]),
+      .map((entry) => [
+        `${String(entry.report)}\u0000${identityKey(entry.identity)}`,
+        entry,
+      ]),
   );
 }
 
@@ -126,7 +149,10 @@ export function buildArchiveEntries(history, auditIndex = null, { includeInvalid
       .filter((result) => result && result.error !== true && result.report)
       .map((result) => {
         const report = String(result.report);
-        const audit = audits.get(report) || null;
+        const identity = batch.identity && typeof batch.identity === "object"
+          ? { ...batch.identity }
+          : null;
+        const audit = audits.get(`${report}\u0000${identityKey(identity)}`) || null;
         return {
           ticker: String(result.ticker || ""),
           rating: String(result.rating || ""),
@@ -135,24 +161,107 @@ export function buildArchiveEntries(history, auditIndex = null, { includeInvalid
           tradeDate: batch.trade_date || null,
           generatedAt: batch.generated_at || null,
           provider: batch.provider || null,
+          identity,
+          request: batch.request && typeof batch.request === "object"
+            ? { ...batch.request }
+            : null,
+          run: batch.run && typeof batch.run === "object"
+            ? { ...batch.run }
+            : null,
           auditStatus: audit?.auditStatus || "unverified",
           problemCodes: Array.isArray(audit?.problemCodes) ? audit.problemCodes : [],
         };
       })
-      .filter((entry) => includeInvalidated || !["invalidated", "invalid_record"].includes(entry.auditStatus)))
+      .filter((entry) => (
+        includeInvalidated
+        || (
+          !["invalidated", "invalid_record"].includes(entry.auditStatus)
+          && identityKey(entry.identity) !== "legacy"
+          && identityKey(entry.identity) !== "invalid"
+        )
+      )))
     .sort((left, right) => String(right.generatedAt || right.tradeDate || "")
       .localeCompare(String(left.generatedAt || left.tradeDate || "")));
+}
+
+function archiveReportSelector(entry) {
+  const identity = entry?.identity;
+  if (!identity || typeof identity !== "object" || Array.isArray(identity)) {
+    throw new Error("报告身份缺失");
+  }
+  if (
+    identity.scope === "profile"
+    && PROFILE_ID.test(identity.profileId || "")
+    && identity.requestId == null
+  ) {
+    return { scope: "profile", profileId: identity.profileId };
+  }
+  if (
+    identity.scope === "adhoc"
+    && identity.profileId == null
+    && REQUEST_UUID.test(identity.requestId || "")
+  ) {
+    return {
+      scope: "adhoc",
+      requestId: String(identity.requestId).toLowerCase(),
+    };
+  }
+  if (
+    identity.scope === "legacy"
+    && identity.profileId == null
+    && identity.requestId == null
+  ) {
+    return { scope: "legacy" };
+  }
+  throw new Error("报告身份无效");
+}
+
+export function buildArchiveReportUrl(entry, path = entry?.report) {
+  if (!path) throw new Error("报告路径缺失");
+  const selector = archiveReportSelector(entry);
+  const params = new URLSearchParams({ path: String(path) });
+  if (selector.scope === "profile") params.set("profile", selector.profileId);
+  if (selector.scope === "adhoc") params.set("requestId", selector.requestId);
+  return `/api/report?${params.toString()}`;
+}
+
+export function archiveChatContext(entry) {
+  if (entry?.auditStatus !== "verified") return null;
+  let selector;
+  try {
+    selector = archiveReportSelector(entry);
+  } catch {
+    return null;
+  }
+  if (selector.scope === "profile") return { profileId: selector.profileId };
+  if (selector.scope === "adhoc") {
+    return {
+      reportRequestId: selector.requestId,
+      reportScope: "adhoc",
+    };
+  }
+  return null;
 }
 
 export function filterAuditedResults(
   results,
   auditIndex,
-  { includeInvalidated = false, verifiedOnly = false } = {},
+  { includeInvalidated = false, verifiedOnly = false, identity = null } = {},
 ) {
   const audits = auditMap(auditIndex);
+  const auditRows = Array.isArray(auditIndex?.reports) ? auditIndex.reports : [];
   return (Array.isArray(results) ? results : [])
     .filter((result) => result && result.error !== true && result.report)
-    .map((result) => ({ ...result, audit: audits.get(String(result.report)) || null }))
+    .map((result) => {
+      const resultIdentity = result.identity || identity;
+      const audit = resultIdentity
+        ? audits.get(`${String(result.report)}\u0000${identityKey(resultIdentity)}`) || null
+        : auditRows.find((entry) => String(entry?.report) === String(result.report)) || null;
+      return {
+        ...result,
+        audit,
+      };
+    })
     .filter(({ audit }) => (
       verifiedOnly
         ? audit?.auditStatus === "verified"

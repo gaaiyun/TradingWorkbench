@@ -47,10 +47,12 @@ import {
   normalizeVolguardPayload,
 } from "./workbench-options.mjs";
 import {
+  archiveChatContext,
   archivedResearchAfterRun,
   archivedResearchForRequest,
   buildArchiveEntries,
   buildArchiveFileTabs,
+  buildArchiveReportUrl,
   buildPipelineStages,
   buildTemporaryResearchRequest,
   createTemporaryResearchRequestId,
@@ -97,12 +99,16 @@ import {
     history: [],
     runs: [],
     pendingResearch: null,
+    adhocHistory: [],
+    adhocRuns: [],
+    adhocReportAudit: null,
     reportAudit: null,
     showAuditReports: false,
     archiveEntries: [],
     selectedReportPath: null,
     selectedReportSection: null,
     selectedReportContent: "",
+    selectedReportEntry: null,
     accessCode: "",
     rememberCode: false,
     chart: { bars: [], api: null, series: null, symbol: null, timeframe: null, hydrated: false },
@@ -869,10 +875,10 @@ import {
 
     const pending = state.pendingResearch;
     const archivedBatch = pending
-      ? archivedResearchForRequest(state.history, pending.requestId)
+      ? archivedResearchForRequest(state.adhocHistory, pending.requestId)
       : null;
     const run = pending
-      ? researchRunForRequest(state.runs, pending.requestId)
+      ? researchRunForRequest(state.adhocRuns, pending.requestId)
       : latestResearchRun(state.runs);
     const archivedAfterRun = pending
       ? Boolean(archivedBatch)
@@ -915,7 +921,10 @@ import {
       <div><span>运行状态</span><b>${escapeHtml(runStatus)}</b><small>${escapeHtml(runConclusion)}</small></div>
       <div><span>研究日期</span><b>${escapeHtml(activeResult?.trade_date || "—")}</b><small>${escapeHtml(formatTime(activeResult?.generated_at || run?.created_at, true))}</small></div>
       <div><span>模型 / Provider</span><b>${escapeHtml(activeResult?.provider || "—")}</b><small>${escapeHtml((activeResult?.analysts || activeResult?.request?.analysts || []).join(" · ") || "未提供分析师清单")}</small></div>
-      <div><span>研究结果</span><b>${resultCount}</b><small>${escapeHtml(run?.workflow || "归档结果")}</small></div>`;
+      <div><span>研究结果</span><b>${resultCount}</b><small>${escapeHtml(run?.workflow || "归档结果")}</small>
+        ${pending && archivedBatch ? '<button class="text-button" id="agent-open-adhoc-report" type="button">查看临时研究报告</button>' : ""}
+      </div>`;
+    $("#agent-open-adhoc-report")?.addEventListener("click", openAdhocReport);
   }
 
   function renderTaskBoard() {
@@ -931,9 +940,20 @@ import {
   }
 
   function renderArchiveList() {
-    state.archiveEntries = buildArchiveEntries(state.history, state.reportAudit, {
-      includeInvalidated: state.showAuditReports,
-    });
+    const combinedAudit = {
+      reports: [
+        ...(Array.isArray(state.reportAudit?.reports) ? state.reportAudit.reports : []),
+        ...(Array.isArray(state.adhocReportAudit?.reports) ? state.adhocReportAudit.reports : []),
+      ],
+    };
+    state.archiveEntries = buildArchiveEntries(
+      [...state.history, ...state.adhocHistory],
+      combinedAudit,
+      { includeInvalidated: state.showAuditReports },
+    ).filter((entry) => (
+      state.showAuditReports
+      || ["profile", "adhoc"].includes(entry.identity?.scope)
+    ));
     $("#archive-count").textContent = `${state.archiveEntries.length} 份${state.showAuditReports ? " · 历史审计" : ""}`;
     const auditToggle = $("#archive-show-audit");
     if (auditToggle) {
@@ -964,18 +984,21 @@ import {
     }));
   }
 
-  async function fetchReportText(path, profileId, signal) {
-    let response = await fetch(
-      profileRequestUrl("/api/report", profileId, { path }),
+  async function fetchReportText(entry, path, signal) {
+    const response = await fetch(
+      buildArchiveReportUrl(entry, path),
       { cache: "no-store", signal },
     );
     if (!response.ok) {
-      response = await fetch(
-        `/${path.replace(/^\/+/, "")}`,
-        { cache: "no-store", signal },
-      );
+      let detail = "";
+      try {
+        const payload = await response.json();
+        detail = payload?.error ? `：${payload.error}` : "";
+      } catch {
+        // Non-JSON errors still retain the real HTTP response status.
+      }
+      throw new Error(`报告读取失败 (${response.status})${detail}`);
     }
-    if (!response.ok) throw new Error(`报告读取失败 (${response.status})`);
     return response.text();
   }
 
@@ -994,7 +1017,8 @@ import {
 
   function renderArchiveWarning(entry) {
     const warning = $("#archive-report-warning");
-    const notice = archiveAuditNotice(entry);
+    const notice = archiveAuditNotice(entry)
+      || (archiveChatContext(entry) ? "" : "这份报告的运行身份无法验证，不能进入问答上下文。");
     warning.hidden = !notice;
     warning.className = `report-warning audit-${escapeHtml(entry.auditStatus || "unverified")}`;
     warning.textContent = notice;
@@ -1030,16 +1054,24 @@ import {
 
   async function loadArchiveFile(tab, tabs) {
     if (!tab?.path) return;
-    const profileId = currentProfile()?.id;
-    if (!profileId) return;
-    const request = profileRequests.begin("report", tab.path);
+    const entry = state.selectedReportEntry;
+    if (!entry) return;
+    let reportUrl;
+    try {
+      reportUrl = buildArchiveReportUrl(entry, tab.path);
+    } catch (error) {
+      $("#archive-report-body").className = "panel-empty";
+      $("#archive-report-body").innerHTML = `<b>报告暂不可用</b><span>${escapeHtml(error.message)}</span>`;
+      return;
+    }
+    const request = profileRequests.begin("report", reportUrl);
     state.selectedReportSection = tab.id;
     state.selectedReportContent = "";
     renderArchiveTabs(tabs);
     $("#archive-report-body").className = "panel-empty";
     $("#archive-report-body").innerHTML = `<b>正在读取${escapeHtml(tab.label)}</b><span>${escapeHtml(tab.path)}</span>`;
     try {
-      const content = await fetchReportText(tab.path, profileId, request.signal);
+      const content = await fetchReportText(entry, tab.path, request.signal);
       if (!profileRequests.isCurrent(request)) return;
       state.selectedReportContent = content;
       $("#archive-report-body").className = "archive-markdown";
@@ -1060,17 +1092,21 @@ import {
   async function loadArchiveReport(entryOrPath) {
     const entry = typeof entryOrPath === "string"
       ? state.archiveEntries.find(({ report }) => report === entryOrPath)
-        || { report: entryOrPath, ticker: entryOrPath.split("/")[1] || "报告", rating: "", files: {} }
       : entryOrPath;
-    if (!entry?.report) return;
+    if (!entry?.report) {
+      toast("找不到带运行身份的研究档案", true);
+      return;
+    }
     const tabs = buildArchiveFileTabs(entry);
     const initialTab = defaultArchiveFileTab(tabs);
     state.selectedReportPath = entry.report;
     state.latestReport = entry.report;
+    state.selectedReportEntry = entry;
     state.selectedReportSection = initialTab?.id || null;
     $("#archive-report-title").textContent = `${entry.ticker} · ${entry.tradeDate || "研究报告"}`;
     renderArchiveWarning(entry);
     renderArchiveList();
+    $("#archive-ask").disabled = !archiveChatContext(entry);
     if (initialTab) await loadArchiveFile(initialTab, tabs);
   }
 
@@ -1108,7 +1144,7 @@ import {
           results: filterAuditedResults(
             state.latest.results,
             state.reportAudit,
-            { verifiedOnly: true },
+            { verifiedOnly: true, identity: state.latest.identity },
           ),
         };
       }
@@ -1118,6 +1154,50 @@ import {
     } finally {
       profileRequests.finish(request);
     }
+  }
+
+  async function loadPendingResearchWorkspace() {
+    if (!state.pendingResearch?.requestId) return;
+    const requestId = state.pendingResearch.requestId;
+    const [historyResult, runsResult, auditResult] = await Promise.allSettled([
+      requestJson(profileRequestUrl("/api/history", null, { requestId })),
+      requestJson(profileRequestUrl("/api/runs", null, { requestId })),
+      requestJson(profileRequestUrl("/api/report-audit", null, { requestId })),
+    ]);
+    if (state.pendingResearch?.requestId !== requestId) return;
+    if (historyResult.status === "fulfilled") {
+      const payload = historyResult.value;
+      state.adhocHistory = Array.isArray(payload)
+        ? payload
+        : payload?.data || payload?.history || [];
+    }
+    if (runsResult.status === "fulfilled") {
+      const payload = runsResult.value;
+      state.adhocRuns = payload?.runs || payload?.data || [];
+    }
+    if (auditResult.status === "fulfilled") {
+      state.adhocReportAudit = auditResult.value?.data || auditResult.value;
+    }
+    renderAgentWorkspace();
+    renderArchiveList();
+  }
+
+  async function openAdhocReport() {
+    const requestId = state.pendingResearch?.requestId;
+    const batch = archivedResearchForRequest(state.adhocHistory, requestId);
+    if (!batch) {
+      toast("临时研究尚未生成可查看报告", true);
+      return;
+    }
+    const [entry] = buildArchiveEntries([batch], state.adhocReportAudit, {
+      includeInvalidated: true,
+    });
+    if (!entry) {
+      toast("临时研究没有可查看的报告", true);
+      return;
+    }
+    navigateRoute("archive");
+    await loadArchiveReport(entry);
   }
 
   function renderNewsWorkspace() {
@@ -1193,7 +1273,7 @@ import {
         results: filterAuditedResults(
           state.latest.results,
           state.reportAudit,
-          { verifiedOnly: true },
+          { verifiedOnly: true, identity: state.latest.identity },
         ),
       };
     }
@@ -1443,6 +1523,7 @@ import {
     $("#archive-report-title").textContent = "选择一份报告";
     $("#archive-report-warning").hidden = true;
     $("#archive-report-tabs").hidden = true;
+    $("#archive-ask").disabled = true;
     $("#archive-report-body").className = "panel-empty";
     $("#archive-report-body").innerHTML = "<b>尚未选择研究报告</b><span>报告原文、证据与运行记录将在此显示。</span>";
     $("#chat-context").textContent = "基于当前监控组的已归档研究资料回答；缺失信息会明确说明。";
@@ -1456,6 +1537,7 @@ import {
       loadMonitor(),
       loadLatest(),
       loadResearchWorkspace(),
+      loadPendingResearchWorkspace(),
     ]);
   }
 
@@ -1476,6 +1558,7 @@ import {
 
     profileRequests.activate(state.selectedProfileId);
     Object.assign(state, resetProfileContext(state, currentProfile()));
+    state.selectedReportEntry = null;
     const selectedTarget = targets().find(({ symbol }) => symbol === state.selectedSymbol);
     if (selectedTarget?.market !== "CN") state.timeframe = "1d";
     renderClearedProfileContext();
@@ -1917,6 +2000,9 @@ import {
         tickers: body.tickers,
         submittedAt: new Date().toISOString(),
       };
+      state.adhocHistory = [];
+      state.adhocRuns = [];
+      state.adhocReportAudit = null;
       localStorage.setItem(
         STORAGE.pendingResearch,
         JSON.stringify(state.pendingResearch),
@@ -1924,7 +2010,7 @@ import {
       notice.textContent = payload?.message || "临时研究已受理";
       renderAgentWorkspace();
       toast(`临时研究已受理：${body.tickers.join("、")}`);
-      setTimeout(loadMonitor, 2500);
+      setTimeout(loadPendingResearchWorkspace, 2500);
     } catch (error) {
       const errorCode = error.payload?.error_code || error.payload?.code;
       notice.className = "is-error";
@@ -2294,6 +2380,19 @@ import {
     const thread = currentThread() || createThread();
     const historyMessages = buildChatHistory(thread.messages);
     const profile = currentProfile();
+    const reportEntry = state.selectedReportEntry
+      || state.archiveEntries.find((entry) => (
+        entry.report === state.latestReport
+        && entry.identity?.scope === "profile"
+        && entry.identity?.profileId === profile?.id
+      ))
+      || null;
+    const reportContext = archiveChatContext(reportEntry);
+    if (state.selectedReportPath && !reportContext) {
+      toast("当前报告未通过身份与证据验证，不能用于问答", true);
+      return;
+    }
+    const chatReportIdentity = reportContext || { profileId: profile?.id };
     const chatRequestId = threadId();
     state.chatBusy = true;
     $("#chat-send").disabled = true;
@@ -2316,11 +2415,13 @@ import {
         body: JSON.stringify({
           requestId: chatRequestId,
           sessionId: thread.id,
-          profileId: profile?.id,
+          profileId: chatReportIdentity.profileId,
+          reportRequestId: chatReportIdentity.reportRequestId,
+          reportScope: chatReportIdentity.reportScope,
           symbol: state.selectedSymbol,
           question,
           history: historyMessages,
-          report: state.latestReport,
+          report: reportEntry?.report || state.latestReport,
           reportSection: state.selectedReportSection,
           stream: true,
         }),
@@ -2366,9 +2467,36 @@ import {
 
   async function refreshAll() {
     $("#refresh-all").disabled = true;
-    await Promise.allSettled([loadMarket(), loadQuoteStrip(), loadFeeds(), loadMonitor(), loadLatest()]);
-    $("#refresh-all").disabled = false;
-    toast("数据核验完成");
+    const refreshes = [
+      { label: "行情", load: () => loadMarket(), status: () => state.market.status },
+      { label: "报价", load: () => loadQuoteStrip(), status: () => (state.quotes.size ? "ok" : "unavailable") },
+      { label: "资讯", load: () => loadFeeds(), status: () => state.feedEnvelope.status },
+      { label: "监控", load: () => loadMonitor(), status: () => state.monitor.status },
+      { label: "研究", load: () => loadLatest(), status: () => (state.latest ? "ok" : "unavailable") },
+    ];
+    try {
+      const results = await Promise.allSettled(refreshes.map(({ load }) => load()));
+      const summary = results.map((result, index) => ({
+        label: refreshes[index].label,
+        settled: result.status,
+        status: result.status === "fulfilled"
+          ? refreshes[index].status()
+          : "rejected",
+      }));
+      const rejected = summary.filter(({ settled }) => settled === "rejected");
+      const unavailable = summary.filter(({ status }) => status === "unavailable");
+      const degraded = summary.filter(({ status }) => ["degraded", "stale"].includes(status));
+      const fulfilled = summary.length - rejected.length;
+      const responseStatuses = summary
+        .map(({ label, status }) => `${label} ${status}`)
+        .join("、");
+      toast(
+        `数据核验：${fulfilled}/${summary.length} 请求完成；响应 ${responseStatuses}`,
+        rejected.length > 0 || unavailable.length > 0 || degraded.length > 0,
+      );
+    } finally {
+      $("#refresh-all").disabled = false;
+    }
   }
 
   async function pollWorkbenchData() {
@@ -2377,6 +2505,7 @@ import {
       loadQuoteStrip(),
       loadFeeds(),
       loadMonitor(),
+      loadPendingResearchWorkspace(),
     ]);
   }
 
@@ -2460,6 +2589,10 @@ import {
     $("#archive-ask").addEventListener("click", () => {
       if (!state.selectedReportPath) {
         toast("请先选择一份研究报告", true);
+        return;
+      }
+      if (!archiveChatContext(state.selectedReportEntry)) {
+        toast("当前报告未通过身份与证据验证，不能用于问答", true);
         return;
       }
       $("#chat-context").textContent = `${state.selectedReportPath} · ${state.selectedReportSection || "完整报告"}`;

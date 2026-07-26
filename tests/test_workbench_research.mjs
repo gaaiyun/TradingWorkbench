@@ -3,8 +3,10 @@ import test from "node:test";
 
 import * as research from "../public/assets/workbench-research.mjs";
 import {
+  archiveChatContext,
   archivedResearchAfterRun,
   buildArchiveEntries,
+  buildArchiveReportUrl,
   buildPipelineStages,
   filterAuditedResults,
   latestResearchRun,
@@ -16,6 +18,7 @@ test("research history becomes a stable newest-first archive index", () => {
       trade_date: "2026-07-22",
       generated_at: "2026-07-23T06:34:48+08:00",
       provider: "openai_compatible",
+      identity: { scope: "profile", kind: "manual", profileId: "profile-a", requestId: null },
       results: [
         { ticker: "NVDA", rating: "Overweight", report: "reports/NVDA/2026-07-22/complete_report.md" },
         { ticker: "SPY", rating: "Hold", report: "reports/SPY/2026-07-22/complete_report.md", error: true },
@@ -25,6 +28,7 @@ test("research history becomes a stable newest-first archive index", () => {
       trade_date: "2026-07-21",
       generated_at: "2026-07-22T06:28:17+08:00",
       provider: "openai_compatible",
+      identity: { scope: "profile", kind: "manual", profileId: "profile-a", requestId: null },
       results: [
         { ticker: "NVDA", rating: "Hold", report: "reports/NVDA/2026-07-21/complete_report.md" },
       ],
@@ -37,10 +41,11 @@ test("research history becomes a stable newest-first archive index", () => {
   assert.equal(entries[1].tradeDate, "2026-07-21");
 });
 
-test("invalidated reports stay available to audit but are hidden from the default archive", () => {
+test("invalidated and legacy reports stay confined to historical audit", () => {
   const history = [{
     trade_date: "2026-07-24",
     generated_at: "2026-07-24T15:21:07+08:00",
+    identity: { scope: "legacy", kind: "legacy", profileId: null, requestId: null },
     results: [
       { ticker: "515880.SS", rating: "Sell", report: "reports/515880.SS/2026-07-24/complete_report.md" },
       { ticker: "ORCL", rating: "Hold", report: "reports/ORCL/2026-07-24/complete_report.md" },
@@ -48,16 +53,65 @@ test("invalidated reports stay available to audit but are hidden from the defaul
   }];
   const audit = {
     reports: [
-      { report: "reports/515880.SS/2026-07-24/complete_report.md", auditStatus: "invalidated", problemCodes: ["CORPORATE_ACTION_CONTAMINATION"] },
-      { report: "reports/ORCL/2026-07-24/complete_report.md", auditStatus: "legacy_unverified", problemCodes: [] },
+      {
+        report: "reports/515880.SS/2026-07-24/complete_report.md",
+        auditStatus: "invalidated",
+        problemCodes: ["CORPORATE_ACTION_CONTAMINATION"],
+        identity: { scope: "legacy", kind: "legacy", profileId: null, requestId: null },
+      },
+      {
+        report: "reports/ORCL/2026-07-24/complete_report.md",
+        auditStatus: "legacy_unverified",
+        problemCodes: [],
+        identity: { scope: "legacy", kind: "legacy", profileId: null, requestId: null },
+      },
     ],
   };
-  assert.deepEqual(buildArchiveEntries(history, audit).map(({ ticker }) => ticker), ["ORCL"]);
+  assert.deepEqual(buildArchiveEntries(history, audit), []);
   assert.deepEqual(buildArchiveEntries(history, audit, { includeInvalidated: true }).map(({ ticker }) => ticker), ["515880.SS", "ORCL"]);
   assert.equal(filterAuditedResults(history[0].results, audit).length, 1);
   assert.equal(
     filterAuditedResults(history[0].results, audit, { verifiedOnly: true }).length,
     0,
+  );
+});
+
+test("legacy reports are confined to historical audit and audit identity cannot cross scopes", () => {
+  const path = "reports/NVDA/2026-07-24/complete_report.md";
+  const profileIdentity = {
+    scope: "profile", kind: "manual", profileId: "profile-a", requestId: null,
+  };
+  const legacyIdentity = {
+    scope: "legacy", kind: "legacy", profileId: null, requestId: null,
+  };
+  const history = [
+    {
+      identity: profileIdentity,
+      results: [{ ticker: "NVDA", report: path }],
+    },
+    {
+      identity: legacyIdentity,
+      results: [{ ticker: "LEGACY", report: "reports/LEGACY/2026-07-24/complete_report.md" }],
+    },
+  ];
+  const audit = {
+    reports: [{
+      report: path,
+      auditStatus: "verified",
+      identity: {
+        scope: "adhoc", kind: "adhoc", profileId: null,
+        requestId: "123e4567-e89b-42d3-a456-426614174006",
+      },
+    }],
+  };
+
+  const current = buildArchiveEntries(history, audit);
+  assert.deepEqual(current.map(({ ticker }) => ticker), ["NVDA"]);
+  assert.equal(current[0].auditStatus, "unverified");
+  assert.deepEqual(
+    buildArchiveEntries(history, audit, { includeInvalidated: true })
+      .map(({ ticker }) => ticker),
+    ["NVDA", "LEGACY"],
   );
 });
 
@@ -197,6 +251,25 @@ test("temporary research creates UUID request ids and rejects controls the API w
 test("archive entries retain report files and expose ordered available columns", () => {
   const [entry] = buildArchiveEntries([{
     trade_date: "2026-07-24",
+    identity: {
+      scope: "adhoc",
+      kind: "adhoc",
+      profileId: null,
+      requestId: "123e4567-e89b-42d3-a456-426614174006",
+      runId: "7788",
+      slotId: null,
+      scheduledFor: null,
+    },
+    request: {
+      requestId: "123e4567-e89b-42d3-a456-426614174006",
+      analysts: ["market", "news"],
+      researchDepth: "standard",
+      kind: "adhoc",
+    },
+    run: {
+      id: "7788",
+      workflow: "analysis-request",
+    },
     results: [{
       ticker: "NVDA",
       rating: "Buy",
@@ -220,10 +293,105 @@ test("archive entries retain report files and expose ordered available columns",
     fundamentals: "reports/NVDA/2026-07-24/1_analysts/fundamentals.md",
     bull: "reports/NVDA/2026-07-24/2_research/bull.md",
   });
+  assert.equal(entry.identity.scope, "adhoc");
+  assert.equal(entry.identity.requestId, "123e4567-e89b-42d3-a456-426614174006");
+  assert.deepEqual(entry.request.analysts, ["market", "news"]);
+  assert.equal(entry.run.id, "7788");
   assert.deepEqual(
     research.buildArchiveFileTabs(entry).map(({ id }) => id),
     ["market", "fundamentals", "bull", "conservative", "decision", "complete_report"],
   );
+});
+
+test("report URLs select exactly one verified run identity", () => {
+  const path = "reports/NVDA/2026-07-24/5_portfolio/decision.md";
+  const profileEntry = {
+    report: path,
+    identity: {
+      scope: "profile",
+      kind: "manual",
+      profileId: "profile-a",
+      requestId: null,
+    },
+  };
+  const adhocEntry = {
+    report: path,
+    identity: {
+      scope: "adhoc",
+      kind: "adhoc",
+      profileId: null,
+      requestId: "123e4567-e89b-42d3-a456-426614174006",
+    },
+  };
+  const legacyEntry = {
+    report: path,
+    identity: {
+      scope: "legacy",
+      kind: "legacy",
+      profileId: null,
+      requestId: null,
+    },
+  };
+
+  assert.equal(
+    buildArchiveReportUrl(profileEntry, path),
+    `/api/report?path=${encodeURIComponent(path)}&profile=profile-a`,
+  );
+  assert.equal(
+    buildArchiveReportUrl(adhocEntry, path),
+    `/api/report?path=${encodeURIComponent(path)}&requestId=123e4567-e89b-42d3-a456-426614174006`,
+  );
+  assert.equal(
+    buildArchiveReportUrl(legacyEntry, path),
+    `/api/report?path=${encodeURIComponent(path)}`,
+  );
+  assert.throws(
+    () => buildArchiveReportUrl({
+      ...adhocEntry,
+      identity: {
+        ...adhocEntry.identity,
+        profileId: "profile-a",
+      },
+    }, path),
+    /报告身份/,
+  );
+});
+
+test("chat report context follows the selected report instead of the active profile", () => {
+  assert.deepEqual(archiveChatContext({
+    auditStatus: "verified",
+    identity: {
+      scope: "profile",
+      kind: "manual",
+      profileId: "profile-a",
+      requestId: null,
+    },
+  }), {
+    profileId: "profile-a",
+  });
+  assert.deepEqual(archiveChatContext({
+    auditStatus: "verified",
+    identity: {
+      scope: "adhoc",
+      kind: "adhoc",
+      profileId: null,
+      requestId: "123e4567-e89b-42d3-a456-426614174006",
+    },
+  }), {
+    reportRequestId: "123e4567-e89b-42d3-a456-426614174006",
+    reportScope: "adhoc",
+  });
+  for (const auditStatus of ["legacy_unverified", "unverified", "invalidated"]) {
+    assert.equal(archiveChatContext({
+      auditStatus,
+      identity: {
+        scope: "legacy",
+        kind: "legacy",
+        profileId: null,
+        requestId: null,
+      },
+    }), null);
+  }
 });
 
 test("archive opens decision by default and falls back in canonical order when it is absent", () => {

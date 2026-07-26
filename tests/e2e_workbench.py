@@ -43,8 +43,73 @@ ANALYZE_REQUESTS = []
 SETTINGS_REQUESTS = []
 PROFILE_REQUESTS = []
 CHAT_REQUESTS = []
+RESEARCH_IDENTITY_REQUESTS = []
+REPORT_REQUESTS = []
 API_COUNTS = {}
 BROWSER_DIAGNOSTICS = []
+
+ADHOC_REQUEST_ID = [None]
+PROFILE_A_IDENTITY = {
+    "scope": "profile", "kind": "manual", "runId": "1001",
+    "profileId": "cn-semi-comms", "requestId": None,
+    "slotId": None, "scheduledFor": None,
+}
+PROFILE_B_IDENTITY = {
+    "scope": "profile", "kind": "manual", "runId": "1002",
+    "profileId": "profile-b", "requestId": None,
+    "slotId": None, "scheduledFor": None,
+}
+
+
+def adhoc_identity():
+    return {
+        "scope": "adhoc", "kind": "adhoc", "runId": "2001",
+        "profileId": None, "requestId": ADHOC_REQUEST_ID[0],
+        "slotId": None, "scheduledFor": None,
+    }
+
+
+def report_files(ticker, trade_date):
+    base = f"reports/{ticker}/{trade_date}"
+    return {
+        "market": f"{base}/1_analysts/market.md",
+        "fundamentals": f"{base}/1_analysts/fundamentals.md",
+        "sentiment": f"{base}/1_analysts/sentiment.md",
+        "news": f"{base}/1_analysts/news.md",
+        "bull": f"{base}/2_research/bull.md",
+        "bear": f"{base}/2_research/bear.md",
+        "manager": f"{base}/2_research/manager.md",
+        "trader": f"{base}/3_trading/trader.md",
+        "aggressive": f"{base}/4_risk/aggressive.md",
+        "neutral": f"{base}/4_risk/neutral.md",
+        "conservative": f"{base}/4_risk/conservative.md",
+        "decision": f"{base}/5_portfolio/decision.md",
+        "complete_report": f"{base}/complete_report.md",
+    }
+
+
+def research_batch(identity, ticker, trade_date):
+    files = report_files(ticker, trade_date)
+    return {
+        "trade_date": trade_date,
+        "generated_at": f"{trade_date}T15:34:48+08:00",
+        "provider": "openai_compatible",
+        "identity": deepcopy(identity),
+        "request": {
+            "requestId": identity["requestId"],
+            "analysts": ["market", "news", "fundamentals"],
+            "researchDepth": "standard",
+            "kind": identity["kind"],
+        },
+        "run": {"id": identity["runId"], "workflow": "analysis-request"},
+        "results": [{
+            "ticker": ticker, "rating": "Overweight",
+            "report": files["complete_report"],
+            "files": files,
+            "decision_excerpt": "成交确认仍是最重要的跟踪条件。",
+            "error": False,
+        }],
+    }
 
 
 def capture_browser_diagnostics(page, label):
@@ -244,39 +309,65 @@ def route_api(route):
             {"source": "pre-market", "status": "ok", "as_of": "2026-07-23T00:25:00.000Z", "detail": "简报已归档", "fetched_at": "2026-07-23T00:25:10.000Z"},
         ]))
     elif path == "/api/latest":
+        profile = query.get("profile", ["cn-semi-comms"])[0]
+        identity = PROFILE_B_IDENTITY if profile == "profile-b" else PROFILE_A_IDENTITY
+        trade_date = "2026-07-21" if profile == "profile-b" else "2026-07-22"
+        payload = research_batch(identity, "515880.SS", trade_date)
+        payload["status"] = "ok"
+        payload["results"][0]["decision_excerpt"] = (
+            "**Executive Summary**: 美股半导体驱动偏强，但 A 股成交确认仍是加仓前提。"
+            "观察通信设备与光模块链的量价共振，若开盘后相关性衰减则保持中性仓位。"
+        )
+        fulfill_json(route, payload)
+    elif path == "/api/history":
+        request_id = query.get("requestId", [None])[0]
+        profile = query.get("profile", [None])[0]
+        RESEARCH_IDENTITY_REQUESTS.append((path, profile, request_id))
+        if request_id:
+            fulfill_json(route, [research_batch(adhoc_identity(), "NVDA", "2026-07-24")])
+        else:
+            identity = PROFILE_B_IDENTITY if profile == "profile-b" else PROFILE_A_IDENTITY
+            trade_date = "2026-07-21" if profile == "profile-b" else "2026-07-22"
+            fulfill_json(route, [research_batch(identity, "515880.SS", trade_date)])
+    elif path == "/api/runs":
+        request_id = query.get("requestId", [None])[0]
+        profile = query.get("profile", [None])[0]
+        RESEARCH_IDENTITY_REQUESTS.append((path, profile, request_id))
+        identity = adhoc_identity() if request_id else (
+            PROFILE_B_IDENTITY if profile == "profile-b" else PROFILE_A_IDENTITY
+        )
+        fulfill_json(route, {"runs": [{
+            "id": identity["runId"], "workflow": "analysis-request",
+            "title": "identity fixture", "identity": deepcopy(identity),
+            "requestId": identity["requestId"], "profileId": identity["profileId"],
+            "status": "completed", "conclusion": "success",
+            "created_at": "2026-07-24T06:34:48+08:00",
+            "url": "https://github.com/gaaiyun/TradingWorkbench/actions/runs/2001",
+        }]})
+    elif path == "/api/report-audit":
+        request_id = query.get("requestId", [None])[0]
+        profile = query.get("profile", [None])[0]
+        identity = adhoc_identity() if request_id else (
+            PROFILE_B_IDENTITY if profile == "profile-b" else PROFILE_A_IDENTITY
+        )
+        ticker = "NVDA" if request_id else "515880.SS"
+        trade_date = "2026-07-24" if request_id else (
+            "2026-07-21" if profile == "profile-b" else "2026-07-22"
+        )
         fulfill_json(route, {
-            "status": "ok", "generated_at": "2026-07-23T06:34:48+08:00", "trade_date": "2026-07-22",
-            "provider": "openai_compatible", "analysts": ["market", "news", "fundamentals"],
-            "results": [{
-                "ticker": "515880.SS", "rating": "Overweight",
-                "report": "reports/515880.SS/2026-07-22/complete_report.md",
-                "decision_excerpt": "**Executive Summary**: 美股半导体驱动偏强，但 A 股成交确认仍是加仓前提。观察通信设备与光模块链的量价共振，若开盘后相关性衰减则保持中性仓位。",
+            "reports": [{
+                "report": report_files(ticker, trade_date)["complete_report"],
+                "auditStatus": "verified",
+                "problemCodes": [],
+                "identity": deepcopy(identity),
             }],
         })
-    elif path == "/api/history":
-        fulfill_json(route, [{
-            "trade_date": "2026-07-22",
-            "generated_at": "2026-07-23T06:34:48+08:00",
-            "provider": "openai_compatible",
-            "results": [{
-                "ticker": "515880.SS", "rating": "Overweight",
-                "report": "reports/515880.SS/2026-07-22/complete_report.md",
-                "files": {
-                    "market": "reports/515880.SS/2026-07-22/1_analysts/market.md",
-                    "decision": "reports/515880.SS/2026-07-22/5_portfolio/decision.md",
-                    "complete_report": "reports/515880.SS/2026-07-22/complete_report.md",
-                },
-                "error": False,
-            }],
-        }])
-    elif path == "/api/runs":
-        fulfill_json(route, {"runs": [{
-            "id": 1001, "workflow": "analysis-request", "title": "515880.SS",
-            "status": "completed", "conclusion": "success",
-            "created_at": "2026-07-23T06:34:48+08:00",
-            "url": "https://github.com/gaaiyun/TradingWorkbench/actions/runs/1001",
-        }]})
     elif path == "/api/report":
+        REPORT_REQUESTS.append({
+            "path": query.get("path", [None])[0],
+            "profile": query.get("profile", [None])[0],
+            "requestId": query.get("requestId", [None])[0],
+        })
         route.fulfill(
             status=200,
             content_type="text/plain; charset=utf-8",
@@ -334,7 +425,14 @@ def route_api(route):
         )
     elif path == "/api/analyze":
         ANALYZE_REQUESTS.append(route.request.post_data_json)
-        fulfill_json(route, {"ok": True, "message": "已受理，分析会在后台顺序执行", "tickers": route.request.post_data_json["tickers"]}, 202)
+        if route.request.post_data_json.get("requestId"):
+            ADHOC_REQUEST_ID[0] = route.request.post_data_json["requestId"]
+        fulfill_json(route, {
+            "ok": True,
+            "message": "已受理，分析会在后台顺序执行",
+            "tickers": route.request.post_data_json["tickers"],
+            "requestId": route.request.post_data_json.get("requestId"),
+        }, 202)
     elif path == "/api/chat":
         CHAT_REQUESTS.append(route.request.post_data_json)
         route.fulfill(
@@ -496,7 +594,32 @@ def run_browser():
         assert temporary_request["analysts"] == ["market", "news", "fundamentals"]
         assert temporary_request["researchDepth"] == "standard"
         assert temporary_request["requestId"]
+        assert "profileId" not in temporary_request
         assert len(SETTINGS_REQUESTS) == settings_count
+        page.select_option("#profile-selector", "profile-b")
+        page.wait_for_function(
+            "document.querySelector('#profile-selector').value === 'profile-b'"
+        )
+        page.wait_for_selector("#agent-open-adhoc-report")
+        assert any(
+            path == "/api/history" and profile is None
+            and request_id == temporary_request["requestId"]
+            for path, profile, request_id in RESEARCH_IDENTITY_REQUESTS
+        )
+        assert any(
+            path == "/api/runs" and profile is None
+            and request_id == temporary_request["requestId"]
+            for path, profile, request_id in RESEARCH_IDENTITY_REQUESTS
+        )
+        page.reload(wait_until="domcontentloaded")
+        page.wait_for_function(
+            "document.querySelector('#profile-selector').value === 'profile-b'"
+        )
+        page.wait_for_selector("#agent-open-adhoc-report")
+        assert page.evaluate(
+            "JSON.parse(localStorage.getItem('ta.workbench.pending-research.v1')).requestId"
+        ) == temporary_request["requestId"]
+        page.select_option("#profile-selector", "cn-semi-comms")
 
         page.locator('[data-route-link="settings"]').first.click()
         page.wait_for_function("document.body.dataset.route === 'settings'")
@@ -566,15 +689,56 @@ def run_browser():
         page.wait_for_selector('#archive-report-tabs [data-report-section="decision"].is-active')
         assert page.locator("#archive-report-tabs [data-report-section]").evaluate_all(
             "nodes => nodes.map(node => node.dataset.reportSection)",
-        ) == ["market", "decision", "complete_report"]
-        assert page.locator("#archive-report-warning").is_visible()
+        ) == [
+            "market", "fundamentals", "sentiment", "news", "bull", "bear",
+            "manager", "trader", "aggressive", "neutral", "conservative",
+            "decision", "complete_report",
+        ]
+        assert REPORT_REQUESTS[-1]["requestId"] == temporary_request["requestId"]
+        assert REPORT_REQUESTS[-1]["profile"] is None
+        assert page.locator("#archive-report-warning").is_hidden()
         page.click('#archive-report-tabs [data-report-section="market"]')
         page.wait_for_selector('#archive-report-tabs [data-report-section="market"].is-active')
-        assert page.locator("#archive-report-warning").is_visible()
         page.wait_for_selector("#archive-report-body blockquote")
         page.wait_for_selector("#archive-report-body .markdown-table-wrap table")
         assert page.locator("#archive-report-body a").get_attribute("href") == "https://example.com/filing"
         assert page.locator("#archive-report-body hr").is_visible()
+
+        static_report_requests = []
+        page.on("request", lambda request: static_report_requests.append(request.url)
+                if urlparse(request.url).path.startswith("/reports/") else None)
+
+        def deny_report_403(route):
+            fulfill_json(route, {"error": "无权读取该报告"}, 403)
+
+        page.route("**/api/report?*", deny_report_403)
+        page.click('#archive-report-tabs [data-report-section="news"]')
+        page.wait_for_function(
+            "document.querySelector('#archive-report-body').textContent.includes('(403)')"
+        )
+        assert static_report_requests == []
+        page.unroute("**/api/report?*", deny_report_403)
+
+        def deny_report_404(route):
+            fulfill_json(route, {"error": "报告不存在"}, 404)
+
+        page.route("**/api/report?*", deny_report_404)
+        page.click('#archive-report-tabs [data-report-section="bull"]')
+        page.wait_for_function(
+            "document.querySelector('#archive-report-body').textContent.includes('(404)')"
+        )
+        assert static_report_requests == []
+        page.unroute("**/api/report?*", deny_report_404)
+
+        profile_report_button = page.locator(
+            "#archive-list [data-archive-index]"
+        ).filter(has_text="515880.SS").first
+        profile_report_button.click()
+        page.wait_for_selector('#archive-report-tabs [data-report-section="decision"].is-active')
+        assert REPORT_REQUESTS[-1]["profile"] == "cn-semi-comms"
+        assert REPORT_REQUESTS[-1]["requestId"] is None
+        page.click('#archive-report-tabs [data-report-section="market"]')
+        page.wait_for_selector('#archive-report-tabs [data-report-section="market"].is-active')
 
         mobile = browser.new_page(viewport={"width": 390, "height": 844}, device_scale_factor=1)
         capture_browser_diagnostics(mobile, "mobile")
@@ -772,7 +936,23 @@ def run_browser():
         assert CHAT_REQUESTS[-1]["stream"] is True
         assert len(CHAT_REQUESTS[-1]["history"]) >= 2
         assert CHAT_REQUESTS[-1]["reportSection"] == "market"
+        assert CHAT_REQUESTS[-1]["profileId"] == "cn-semi-comms"
+        assert "reportRequestId" not in CHAT_REQUESTS[-1]
+        assert "reportScope" not in CHAT_REQUESTS[-1]
         assert page.evaluate("JSON.parse(localStorage.getItem('ta.workbench.threads.v1')).length") >= 1
+        page.click("#assistant-close")
+        page.locator("#archive-list [data-archive-index]").filter(has_text="NVDA").first.click()
+        page.wait_for_selector('#archive-report-tabs [data-report-section="decision"].is-active')
+        page.click("#archive-ask")
+        page.wait_for_selector("#assistant.is-open")
+        page.fill("#chat-question", "临时研究结论")
+        page.click("#chat-send")
+        page.wait_for_function(
+            "document.querySelectorAll('#chat-log .chat-message.user').length === 3"
+        )
+        assert CHAT_REQUESTS[-1]["reportRequestId"] == temporary_request["requestId"]
+        assert CHAT_REQUESTS[-1]["reportScope"] == "adhoc"
+        assert "profileId" not in CHAT_REQUESTS[-1]
         page.evaluate("""
           let index = 0;
           let chunkSize = 250000;
@@ -786,8 +966,8 @@ def run_browser():
         """)
         page.fill("#chat-question", "配额失败后仍应发送")
         page.click("#chat-send")
-        page.wait_for_function("document.querySelectorAll('#chat-log .chat-message.user').length === 3")
-        page.wait_for_function("document.querySelectorAll('#chat-log .chat-message.assistant').length === 3")
+        page.wait_for_function("document.querySelectorAll('#chat-log .chat-message.user').length === 4")
+        page.wait_for_function("document.querySelectorAll('#chat-log .chat-message.assistant').length === 4")
         assert "本地会话无法继续持久化" in page.locator("#toast-region").inner_text()
 
         page.click("#assistant-close")

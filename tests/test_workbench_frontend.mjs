@@ -296,6 +296,8 @@ test("chat keeps persistent local threads and streams SSE with history context",
   assert.match(script, /requestId:\s*chatRequestId/);
   assert.match(script, /sessionId:\s*thread\.id/);
   assert.match(script, /profileId:\s*profile\?\.id/);
+  assert.match(script, /reportRequestId/);
+  assert.match(script, /reportScope/);
   assert.match(script, /symbol:\s*state\.selectedSymbol/);
   assert.match(script, /x-request-id/);
   assert.match(script, /function recoverThread/);
@@ -547,6 +549,37 @@ test("profile switches reset scoped state without rebuilding VolGuard or tempora
   assert.doesNotMatch(script, /agent-research-form"\)\.reset/);
   assert.doesNotMatch(profilesScript, /options:\s*null/);
   assert.doesNotMatch(profilesScript, /pendingResearch:\s*null/);
+  assert.match(script, /const requestId = state\.pendingResearch\.requestId/);
+  assert.match(script, /\/api\/history/);
+  assert.match(script, /\/api\/runs/);
+});
+
+test("temporary research owns independent history and run state", () => {
+  assert.match(script, /adhocHistory:\s*\[\]/);
+  assert.match(script, /adhocRuns:\s*\[\]/);
+  assert.match(script, /function loadPendingResearchWorkspace/);
+  assert.match(script, /profileRequestUrl\("\/api\/history",\s*null,\s*\{\s*requestId/);
+  assert.match(script, /profileRequestUrl\("\/api\/runs",\s*null,\s*\{\s*requestId/);
+  const agentRenderer = /function renderAgentWorkspace\(\)[\s\S]*?\n  \}/.exec(script)?.[0] || "";
+  assert.match(agentRenderer, /state\.adhocHistory/);
+  assert.match(agentRenderer, /state\.adhocRuns/);
+  assert.doesNotMatch(agentRenderer, /archivedResearchForRequest\(state\.history/);
+  assert.doesNotMatch(agentRenderer, /researchRunForRequest\(state\.runs/);
+});
+
+test("report loading never bypasses identity-aware API errors", () => {
+  const reportLoader = /async function fetchReportText[\s\S]*?\n  \}/.exec(script)?.[0] || "";
+  assert.match(reportLoader, /buildArchiveReportUrl/);
+  assert.doesNotMatch(reportLoader, /path\.replace|fetch\(\s*`\/\$\{/);
+});
+
+test("refresh-all reports settled and response statuses instead of unconditional success", () => {
+  const refresher = /async function refreshAll\(\)[\s\S]*?\n  \}/.exec(script)?.[0] || "";
+  assert.match(refresher, /Promise\.allSettled/);
+  assert.match(refresher, /fulfilled/);
+  assert.match(refresher, /rejected/);
+  assert.match(refresher, /status/);
+  assert.doesNotMatch(refresher, /toast\("数据核验完成"\)/);
 });
 
 test("threads load only after settings restore the selected profile", () => {
