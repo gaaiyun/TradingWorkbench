@@ -20,6 +20,10 @@ const migration4Url = new URL(
   "../migrations/0004_monitor_slot_leases.sql",
   import.meta.url,
 );
+const migration13Url = new URL(
+  "../migrations/0013_monitor_reliability.sql",
+  import.meta.url,
+);
 
 function d1(sqlite) {
   return {
@@ -44,6 +48,7 @@ function freshDatabase() {
   sqlite.exec(migration2);
   sqlite.exec(readFileSync(migration3Url, "utf8"));
   sqlite.exec(readFileSync(migration4Url, "utf8"));
+  sqlite.exec(readFileSync(migration13Url, "utf8"));
   return sqlite;
 }
 
@@ -84,6 +89,7 @@ test("lease migration backfills legacy claimed rows so the next cron can recover
     )
   `).run();
   sqlite.exec(readFileSync(migration4Url, "utf8"));
+  sqlite.exec(readFileSync(migration13Url, "utf8"));
 
   const { listRetryableSlots } = await import(slotUrl);
   const rows = await listRetryableSlots(

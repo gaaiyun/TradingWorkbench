@@ -8,14 +8,23 @@ import {
 import { createProviderRegistry } from "./providers/registry.mjs";
 import { writeMarketBars } from "./providers/market-bar-writer.mjs";
 import {
+  bootstrapRequirementsForProfile,
   dueTasksForProfile,
+  localDateTimeAt,
+  scheduledPayloadForTask,
+  selectFairWorkWithinBudget,
   slotIdForTask,
   taskFromScheduledSlot,
 } from "./scheduler.mjs";
 import {
+  cancelStaleScheduledSlots,
   claimScheduledSlot,
+  countScheduledBacklog,
   finishScheduledSlot,
   listRetryableSlots,
+  markScheduledSlotsQueued,
+  reserveFullAnalysisBudget,
+  stageScheduledSlots,
 } from "./slots.mjs";
 import { evaluateIntradaySignals } from "./signals.mjs";
 
@@ -49,59 +58,122 @@ function parseHolidaySet(value) {
 
 async function readSettings(db) {
   const row = await db.prepare(`
-    SELECT settings_json
+    SELECT settings_json, updated_at
     FROM workbench_settings
     WHERE id = 1
   `).bind().first();
   if (!row) return { errorCode: "WORKBENCH_SETTINGS_MISSING" };
   try {
-    return { settings: parseWorkbenchSettings(JSON.parse(row.settings_json)) };
+    return {
+      settings: parseWorkbenchSettings(JSON.parse(row.settings_json)),
+      revision: String(row.updated_at || "unversioned"),
+    };
   } catch {
     return { errorCode: "WORKBENCH_SETTINGS_INVALID" };
   }
 }
 
-async function needsMarketBootstrap(db) {
-  try {
-    const row = await db.prepare(`
-      SELECT COUNT(*) AS count
-      FROM market_bars
-    `).bind().first();
-    return Number(row?.count ?? 0) === 0;
-  } catch {
-    return false;
-  }
+function bootstrapIdentity(row) {
+  return [
+    "bootstrap",
+    row.profile_id,
+    row.symbol,
+    row.timeframe,
+    row.schema_version,
+    row.target_hash,
+  ].join(":");
 }
 
-function bootstrapTasks(profile, scheduledTime) {
-  if (!profile.enabled) return [];
+async function readBootstrapIdentities(db) {
+  const result = await db.prepare(`
+    SELECT profile_id, symbol, timeframe, schema_version, target_hash
+    FROM monitor_bootstrap_targets
+  `).bind().all();
+  return new Set((result?.results ?? []).map(bootstrapIdentity));
+}
+
+async function shortHash(value) {
+  const digest = await crypto.subtle.digest(
+    "SHA-256",
+    new TextEncoder().encode(value),
+  );
+  return [...new Uint8Array(digest)]
+    .slice(0, 12)
+    .map((byte) => byte.toString(16).padStart(2, "0"))
+    .join("");
+}
+
+async function bootstrapTasks(profile, scheduledTime, completedIdentities) {
+  const requirements = await bootstrapRequirementsForProfile(
+    profile,
+    completedIdentities,
+  );
+  const grouped = new Map();
+  for (const requirement of requirements) {
+    if (!grouped.has(requirement.taskType)) {
+      grouped.set(requirement.taskType, []);
+    }
+    grouped.get(requirement.taskType).push(requirement);
+  }
   const scheduledFor = new Date(scheduledTime).toISOString();
-  return [
-    {
-      type: "intradayCollect",
-      schedule: "bootstrap/cn-market",
-      localSlot: "bootstrap-v1-cn-market",
+  const tasks = [];
+  for (const [type, group] of grouped) {
+    const hash = await shortHash(
+      group.map(({ identity }) => identity).sort().join("\n"),
+    );
+    tasks.push({
+      type,
+      schedule: `bootstrap/${type}`,
+      localSlot: `bootstrap-v2-${type}-${hash}`,
       scheduledFor,
-    },
-    {
-      type: "cnDailySnapshot",
-      schedule: "bootstrap/cn-daily",
-      localSlot: "bootstrap-v1-cn-daily",
-      scheduledFor,
-    },
-    {
-      type: "usCloseSnapshot",
-      schedule: "bootstrap/us-market",
-      localSlot: "bootstrap-v1-us-market",
-      scheduledFor,
-    },
-    {
-      type: "newsCollect",
-      schedule: "bootstrap/news",
-      localSlot: "bootstrap-v1-news",
-      scheduledFor,
-    },
-  ];
+      bootstrapRequirements: group,
+    });
+  }
+  return tasks;
+}
+
+async function recordBootstrapRequirements(db, requirements, now) {
+  if (!Array.isArray(requirements) || requirements.length === 0) return;
+  const timestamp = now.toISOString();
+  const statements = requirements.map((requirement) =>
+    db.prepare(`
+      INSERT INTO monitor_bootstrap_targets (
+        profile_id, symbol, timeframe, schema_version, target_hash, completed_at
+      )
+      VALUES (?, ?, ?, ?, ?, ?)
+      ON CONFLICT DO NOTHING
+    `).bind(
+      requirement.profileId,
+      requirement.symbol,
+      requirement.timeframe,
+      requirement.schemaVersion,
+      requirement.targetHash,
+      timestamp,
+    ));
+  if (typeof db.batch === "function") {
+    await db.batch(statements);
+    return;
+  }
+  for (const statement of statements) await statement.run();
+}
+
+async function readRotation(db) {
+  const row = await db.prepare(`
+    SELECT rotation
+    FROM monitor_scheduler_state
+    WHERE id = 1
+  `).bind().first();
+  return Number(row?.rotation ?? 0);
+}
+
+async function writeRotation(db, rotation, now) {
+  await db.prepare(`
+    INSERT INTO monitor_scheduler_state (id, rotation, updated_at)
+    VALUES (1, ?, ?)
+    ON CONFLICT(id) DO UPDATE SET
+      rotation = excluded.rotation,
+      updated_at = excluded.updated_at
+  `).bind(rotation, now.toISOString()).run();
 }
 
 function deferredHook() {
@@ -115,10 +187,184 @@ const MANUAL_COLLECTION_TASKS = new Set([
   "newsCollect",
 ]);
 
+const HEALTH_QUERY_TIMEOUT_MS = 10;
+const HEALTH_PROVIDER_LIMIT = 32;
+
+function stableNewsErrorCode(reason) {
+  const code = String(reason || "");
+  return /^[A-Z][A-Z0-9_]{0,99}$/.test(code)
+    ? code
+    : "NEWS_PROVIDER_FAILED";
+}
+
+function newsProviderOutcomes(sources) {
+  const outcomes = new Map();
+  for (const entry of Array.isArray(sources) ? sources : []) {
+    const source = String(entry?.source || "");
+    if (
+      !/^[a-z0-9][a-z0-9.-]{0,63}$/i.test(source) ||
+      !["success", "failed"].includes(entry?.status)
+    ) continue;
+    const outcome = outcomes.get(source) ?? {
+      source,
+      succeeded: false,
+      failed: false,
+      errorCode: null,
+    };
+    if (entry.status === "success") {
+      outcome.succeeded = true;
+    } else {
+      outcome.failed = true;
+      outcome.errorCode = stableNewsErrorCode(entry.reason);
+    }
+    outcomes.set(source, outcome);
+  }
+  return [...outcomes.values()];
+}
+
+async function recordNewsProviderHealth(db, sources, now) {
+  if (!db?.prepare) return;
+  const timestamp = now.toISOString();
+  const statements = newsProviderOutcomes(sources).map((outcome) => {
+    const status = outcome.succeeded
+      ? outcome.failed ? "degraded" : "ok"
+      : "unavailable";
+    return db.prepare(`
+      INSERT INTO monitor_news_provider_health (
+        source, status, last_success_at, last_failure_at, last_error_code,
+        updated_at
+      )
+      VALUES (?, ?, ?, ?, ?, ?)
+      ON CONFLICT(source) DO UPDATE SET
+        status = excluded.status,
+        last_success_at = COALESCE(
+          excluded.last_success_at,
+          monitor_news_provider_health.last_success_at
+        ),
+        last_failure_at = COALESCE(
+          excluded.last_failure_at,
+          monitor_news_provider_health.last_failure_at
+        ),
+        last_error_code = excluded.last_error_code,
+        updated_at = excluded.updated_at
+    `).bind(
+      outcome.source,
+      status,
+      outcome.succeeded ? timestamp : null,
+      outcome.failed ? timestamp : null,
+      outcome.failed ? outcome.errorCode : null,
+      timestamp,
+    );
+  });
+  if (statements.length === 0) return;
+  if (typeof db.batch === "function") {
+    await db.batch(statements);
+    return;
+  }
+  for (const statement of statements) await statement.run();
+}
+
+async function collectNewsWithHealth({
+  collectNews,
+  profile,
+  db,
+  env,
+  fetcher,
+  writeItems,
+  now,
+}) {
+  let result;
+  try {
+    result = await collectNews({
+      profile,
+      db,
+      env,
+      fetcher,
+      writeItems,
+      now,
+    });
+  } catch (error) {
+    await recordNewsProviderHealth(db, [{
+      source: "news-collector",
+      status: "failed",
+      reason: "NEWS_COLLECTION_ERROR",
+    }], now).catch(() => {});
+    throw error;
+  }
+  await recordNewsProviderHealth(db, result?.sources, now).catch(() => {});
+  return result;
+}
+
+function unavailableNewsProviders() {
+  return { status: "unavailable", providers: [] };
+}
+
+function deploymentIdentity(env) {
+  const commitSha = String(env?.WORKER_COMMIT_SHA || "").trim();
+  const deployedAt = String(env?.WORKER_DEPLOYED_AT || "").trim();
+  return {
+    commitSha: /^[0-9a-f]{7,64}$/i.test(commitSha) ? commitSha : "unknown",
+    deployedAt: (
+        /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(?:\.\d{3})?Z$/.test(deployedAt) &&
+        Number.isFinite(Date.parse(deployedAt))
+      )
+      ? deployedAt
+      : "unknown",
+  };
+}
+
+async function readNewsProviderHealth(db) {
+  if (!db?.prepare) return unavailableNewsProviders();
+  const timedOut = Symbol("health-query-timeout");
+  let timer;
+  try {
+    const query = db.prepare(`
+      SELECT source, status, last_success_at, last_failure_at, last_error_code
+      FROM monitor_news_provider_health
+      ORDER BY source ASC
+      LIMIT ?
+    `).bind(HEALTH_PROVIDER_LIMIT).all();
+    const result = await Promise.race([
+      query,
+      new Promise((resolve) => {
+        timer = setTimeout(
+          () => resolve(timedOut),
+          HEALTH_QUERY_TIMEOUT_MS,
+        );
+      }),
+    ]);
+    if (result === timedOut) return unavailableNewsProviders();
+    const providers = (result?.results ?? []).map((row) => ({
+      source: row.source,
+      status: row.status,
+      lastSuccessAt: row.last_success_at ?? null,
+      lastFailureAt: row.last_failure_at ?? null,
+      lastErrorCode: row.last_error_code ?? null,
+    }));
+    if (providers.length === 0) return unavailableNewsProviders();
+    const unavailable = providers.filter(
+      ({ status }) => status === "unavailable",
+    ).length;
+    const degraded = providers.some(({ status }) => status === "degraded");
+    return {
+      status: unavailable === providers.length
+        ? "unavailable"
+        : unavailable > 0 || degraded ? "degraded" : "ok",
+      providers,
+    };
+  } catch {
+    return unavailableNewsProviders();
+  } finally {
+    clearTimeout(timer);
+  }
+}
+
 async function executeTask({
   task,
   profile,
   slotId,
+  payloadHash,
+  localDate,
   env,
   db,
   registry,
@@ -127,7 +373,8 @@ async function executeTask({
 }) {
   if (task.type === "newsCollect") {
     const collectNews = deps.collectNews ?? collectNewsForProfile;
-    return collectNews({
+    return collectNewsWithHealth({
+      collectNews,
       profile,
       db,
       env,
@@ -148,15 +395,32 @@ async function executeTask({
     });
   }
   if (task.type === "closeFullAnalysis") {
+    const reservation = await reserveFullAnalysisBudget(db, {
+      slotId,
+      profileId: profile.id,
+      localDate,
+      limit: profile.agentBudget.fullAnalysesPerDay,
+      now,
+    });
+    if (!reservation.reserved) {
+      return {
+        status: "deferred",
+        errorCode: "FULL_ANALYSIS_DAILY_LIMIT",
+        budget: "denied",
+      };
+    }
     return dispatchFullAnalysis({
       env,
+      db,
       fetcher: deps.fetcher,
       profile,
       slotId,
+      payloadHash,
       scheduledFor: task.scheduledFor,
+      now,
     });
   }
-  return collectForTask({
+  const result = await collectForTask({
     taskType: task.type,
     profile,
     registry,
@@ -164,6 +428,184 @@ async function executeTask({
     db,
     now,
   });
+  if (result.status === "completed" && task.bootstrapRequirements?.length) {
+    try {
+      await recordBootstrapRequirements(
+        db,
+        task.bootstrapRequirements,
+        now,
+      );
+    } catch {
+      return {
+        ...result,
+        status: "failed",
+        errorCode: "BOOTSTRAP_RECEIPT_WRITE_FAILED",
+      };
+    }
+  }
+  return result;
+}
+
+function emptyBudget() {
+  return { fullReserved: 0, fullDenied: 0, lightConsumed: 0 };
+}
+
+function profileRevisionMap(loaded) {
+  return new Map(loaded.settings.profiles.map((profile) => [
+    profile.id,
+    { enabled: profile.enabled, revision: loaded.revision },
+  ]));
+}
+
+async function stageDiscoveredSlots({
+  scheduledTime,
+  env,
+  deps,
+  loaded,
+  now,
+}) {
+  const holidaySets = {
+    cn: parseHolidaySet(deps.cnHolidays ?? env.CN_HOLIDAY_DATES),
+    us: parseHolidaySet(deps.usHolidays ?? env.US_HOLIDAY_DATES),
+  };
+  const completedBootstrap = await readBootstrapIdentities(env.DB);
+  const discovered = [];
+  for (const profile of loaded.settings.profiles) {
+    const tasks = [
+      ...dueTasksForProfile(profile, scheduledTime, holidaySets),
+      ...await bootstrapTasks(profile, scheduledTime, completedBootstrap),
+    ];
+    for (const task of tasks) {
+      const id = await slotIdForTask(profile.id, task);
+      const snapshot = await scheduledPayloadForTask(
+        profile,
+        task,
+        loaded.revision,
+      );
+      const localDate = task.localSlot.startsWith("bootstrap-")
+        ? localDateTimeAt(
+            Date.parse(task.scheduledFor),
+            profile.timezone || "Asia/Shanghai",
+          ).date
+        : task.localSlot.slice(0, 10);
+      discovered.push({
+        id,
+        profileId: profile.id,
+        slotType: task.type,
+        scheduledFor: task.scheduledFor,
+        localDate,
+        ...snapshot,
+        now,
+      });
+    }
+  }
+  await stageScheduledSlots(env.DB, discovered);
+  return discovered.length;
+}
+
+function workFromRows(rows) {
+  return rows.flatMap((row) => {
+    const snapshot = taskFromScheduledSlot(row);
+    return snapshot
+      ? [{
+          id: row.id,
+          profile: snapshot.profile,
+          task: snapshot.task,
+          profileRevision: snapshot.profileRevision,
+          payloadHash: snapshot.payloadHash,
+          localDate: row.local_date,
+        }]
+      : [];
+  });
+}
+
+async function executeWorkItems(work, env, deps, summary) {
+  const clock = deps.now ?? (() => new Date());
+  const registryFactory = deps.registryFactory ?? ((options) =>
+    createProviderRegistry(options));
+  const registry = registryFactory({ db: env.DB, env, now: clock });
+  for (const item of work) {
+    const claimNow = clock();
+    let claim;
+    try {
+      claim = await claimScheduledSlot(env.DB, {
+        id: item.id,
+        payloadHash: item.payloadHash,
+        now: claimNow,
+      });
+    } catch {
+      summary.counts.failed += 1;
+      continue;
+    }
+    if (!claim) {
+      summary.counts.skipped += 1;
+      continue;
+    }
+    summary.counts.claimed += 1;
+
+    let result;
+    try {
+      result = await (deps.executeTask ?? executeTask)({
+        task: claim.task,
+        profile: claim.profile,
+        slotId: claim.id,
+        payloadHash: claim.payloadHash,
+        localDate: claim.localDate,
+        env,
+        db: env.DB,
+        registry,
+        deps,
+        now: claimNow,
+      });
+    } catch {
+      result = { status: "failed", errorCode: "TASK_EXECUTION_FAILED" };
+    }
+    if (result.budget === "denied") summary.budget.fullDenied += 1;
+    if (
+      claim.task.type === "closeFullAnalysis" &&
+      result.budget !== "denied"
+    ) {
+      summary.budget.fullReserved += 1;
+    }
+    if (Array.isArray(result.sources)) summary.sources.push(...result.sources);
+    const terminalStatus = result.status === "deferred"
+      ? "deferred"
+      : result.status === "failed" || result.status === "degraded"
+        ? "failed"
+        : "completed";
+    try {
+      const finishResult = await finishScheduledSlot(env.DB, {
+        id: claim.id,
+        attemptCount: claim.attemptCount,
+        status: terminalStatus,
+        errorCode: result.errorCode,
+        now: clock(),
+      });
+      if (finishResult.changed === 0) {
+        summary.counts.skipped += 1;
+      } else {
+        summary.counts[
+          result.status === "degraded" ? "degraded" : terminalStatus
+        ] += 1;
+      }
+    } catch {
+      summary.counts.failed += 1;
+    }
+  }
+}
+
+function successfulSummary(mode) {
+  return {
+    status: "completed",
+    mode,
+    counts: emptyCounts(),
+    sources: [],
+    budget: emptyBudget(),
+    externalRequestBudget: 40,
+    estimatedExternalRequests: 0,
+    backlog: 0,
+    capped: 0,
+  };
 }
 
 export async function runScheduled(scheduledTime, env, deps = {}) {
@@ -198,109 +640,172 @@ export async function runScheduled(scheduledTime, env, deps = {}) {
     };
   }
 
-  const holidaySets = {
-    cn: parseHolidaySet(deps.cnHolidays ?? env.CN_HOLIDAY_DATES),
-    us: parseHolidaySet(deps.usHolidays ?? env.US_HOLIDAY_DATES),
-  };
-  const due = [];
-  const profilesById = new Map();
-  const bootstrap = await needsMarketBootstrap(env.DB);
-  for (const profile of loaded.settings.profiles) {
-    profilesById.set(profile.id, profile);
-    for (const task of dueTasksForProfile(profile, scheduledTime, holidaySets)) {
-      due.push({ profile, task });
-    }
-    if (bootstrap) {
-      for (const task of bootstrapTasks(profile, scheduledTime)) {
-        due.push({ profile, task });
-      }
-    }
-  }
   const clock = deps.now ?? (() => new Date());
-  const retryNow = clock();
-  let retryable = [];
+  const now = clock();
+  const summary = successfulSummary(env.MONITOR_QUEUE ? "queue" : "direct");
   try {
-    const rows = await listRetryableSlots(env.DB, retryNow);
-    retryable = rows.flatMap((row) => {
-      const profile = profilesById.get(row.profile_id);
-      const task = profile ? taskFromScheduledSlot(profile, row) : null;
-      return profile && task ? [{ profile, task, slotId: row.id }] : [];
+    const cancelled = await cancelStaleScheduledSlots(
+      env.DB,
+      profileRevisionMap(loaded),
+      now,
+    );
+    summary.cancelled = cancelled.changed;
+    summary.discovered = await stageDiscoveredSlots({
+      scheduledTime,
+      env,
+      deps,
+      loaded,
+      now,
     });
   } catch {
-    counts.failed += 1;
+    return {
+      ...summary,
+      status: "degraded",
+      errorCode: "SCHEDULER_DISCOVERY_FAILED",
+      counts: { ...summary.counts, failed: summary.counts.failed + 1 },
+    };
   }
-  const work = [...retryable, ...due];
-  counts.due = work.length;
-  const registryFactory = deps.registryFactory ?? ((options) =>
-    createProviderRegistry(options));
-  const registry = registryFactory({ db: env.DB, env, now: clock });
 
-  for (const { profile, task, slotId: retrySlotId } of work) {
-    const slotId = retrySlotId ?? await slotIdForTask(profile.id, task);
-    const claimNow = clock();
-    let claim;
-    try {
-      claim = await claimScheduledSlot(env.DB, {
-        id: slotId,
-        profileId: profile.id,
-        slotType: task.type,
-        scheduledFor: task.scheduledFor,
-        now: claimNow,
-      });
-    } catch {
-      counts.failed += 1;
-      continue;
-    }
-    if (!claim) {
-      counts.skipped += 1;
-      continue;
-    }
-    counts.claimed += 1;
+  let rows;
+  let rotation = 0;
+  try {
+    [rows, rotation] = await Promise.all([
+      listRetryableSlots(env.DB, now, 200),
+      readRotation(env.DB),
+    ]);
+  } catch {
+    return {
+      ...summary,
+      status: "degraded",
+      errorCode: "SCHEDULER_BACKLOG_READ_FAILED",
+      counts: { ...summary.counts, failed: summary.counts.failed + 1 },
+    };
+  }
+  const work = workFromRows(rows);
+  summary.counts.due = work.length;
 
-    let result;
-    try {
-      result = await executeTask({
-        task,
-        profile,
-        slotId,
-        env,
-        db: env.DB,
-        registry,
-        deps,
-        now: claimNow,
-      });
-    } catch {
-      result = { status: "failed", errorCode: "TASK_EXECUTION_FAILED" };
-    }
-    if (Array.isArray(result.sources)) sources.push(...result.sources);
-    const terminalStatus = result.status === "deferred"
-      ? "deferred"
-      : result.status === "failed" || result.status === "degraded"
-        ? "failed"
-        : "completed";
-    try {
-      const finishResult = await finishScheduledSlot(env.DB, {
-        id: slotId,
-        attemptCount: claim.attemptCount,
-        status: terminalStatus,
-        errorCode: result.errorCode,
-        now: clock(),
-      });
-      if (finishResult.changed === 0) {
-        counts.skipped += 1;
-      } else {
-        counts[result.status === "degraded" ? "degraded" : terminalStatus] += 1;
+  if (env.MONITOR_QUEUE?.sendBatch) {
+    const fair = selectFairWorkWithinBudget(work, {
+      externalRequestBudget: Number.POSITIVE_INFINITY,
+      rotation,
+    });
+    const cap = Math.max(1, Number(env.QUEUE_DISCOVERY_CAP || 40));
+    const selected = fair.selected.slice(0, cap);
+    summary.capped = Math.max(0, work.length - selected.length);
+    summary.queued = selected.length;
+    summary.queuedEstimatedExternalRequests = selected.reduce(
+      (total, item) =>
+        total + (item.task ? (
+          item.task.type === "newsCollect" ? 12
+            : item.task.type === "closeFullAnalysis" ? 2
+              : item.profile.targets.length
+        ) : 0),
+      0,
+    );
+    if (selected.length > 0) {
+      try {
+        await env.MONITOR_QUEUE.sendBatch(selected.map((item) => ({
+          body: { slotId: item.id, payloadHash: item.payloadHash },
+        })));
+        await markScheduledSlotsQueued(
+          env.DB,
+          selected.map((item) => ({
+            id: item.id,
+            payload_hash: item.payloadHash,
+          })),
+          now,
+        );
+      } catch {
+        summary.status = "degraded";
+        summary.errorCode = "QUEUE_ENQUEUE_FAILED";
+        summary.counts.failed += 1;
       }
-    } catch {
-      counts.failed += 1;
+    }
+    await writeRotation(env.DB, rotation + 1, now).catch(() => {});
+  } else {
+    const selection = selectFairWorkWithinBudget(work, {
+      externalRequestBudget: Number(env.DIRECT_EXTERNAL_REQUEST_BUDGET || 40),
+      rotation,
+    });
+    summary.externalRequestBudget = selection.externalRequestBudget;
+    summary.estimatedExternalRequests = selection.estimatedExternalRequests;
+    summary.capped = selection.deferred.length;
+    await executeWorkItems(selection.selected, env, deps, summary);
+    await writeRotation(env.DB, rotation + 1, now).catch(() => {});
+    if (selection.deferred.length > 0) {
+      summary.status = "degraded";
+      summary.errorCode = "DIRECT_FALLBACK_CAPPED";
     }
   }
+  summary.backlog = await countScheduledBacklog(env.DB, clock()).catch(() => -1);
+  if (summary.counts.failed > 0 || summary.counts.degraded > 0) {
+    summary.status = "degraded";
+  }
+  return summary;
+}
 
-  return {
-    status: counts.failed > 0 || counts.degraded > 0 ? "degraded" : "completed",
-    counts,
-    sources,
-  };
+export async function runQueueBatch(messages, env, deps = {}) {
+  const summary = successfulSummary("queue");
+  const clock = deps.now ?? (() => new Date());
+  if (!env?.DB || typeof env.DB.prepare !== "function") {
+    return {
+      ...summary,
+      status: "unavailable",
+      errorCode: "D1_NOT_CONFIGURED",
+    };
+  }
+  if (!deps.skipProfileRevisionCheck) {
+    let loaded;
+    try {
+      loaded = await readSettings(env.DB);
+      if (loaded.errorCode) throw new Error(loaded.errorCode);
+      summary.cancelled = (
+        await cancelStaleScheduledSlots(
+          env.DB,
+          profileRevisionMap(loaded),
+          clock(),
+        )
+      ).changed;
+    } catch {
+      for (const message of messages) message.retry?.();
+      return {
+        ...summary,
+        status: "degraded",
+        errorCode: "QUEUE_PROFILE_CHECK_FAILED",
+      };
+    }
+  }
+  const work = messages.flatMap((message) => {
+    const slotId = message?.body?.slotId;
+    const payloadHash = message?.body?.payloadHash;
+    return typeof slotId === "string" && typeof payloadHash === "string"
+      ? [{ id: slotId, payloadHash, message }]
+      : [];
+  });
+  summary.counts.due = messages.length;
+  for (const item of work) {
+    const before = {
+      claimed: summary.counts.claimed,
+      failed: summary.counts.failed,
+    };
+    await executeWorkItems([item], env, deps, summary);
+    if (
+      summary.counts.claimed > before.claimed ||
+      summary.counts.failed === before.failed
+    ) {
+      item.message.ack?.();
+    } else {
+      item.message.retry?.();
+    }
+  }
+  for (const message of messages) {
+    if (!work.some(({ message: valid }) => valid === message)) message.ack?.();
+  }
+  summary.backlog = await countScheduledBacklog(env.DB, clock()).catch(() => -1);
+  if (summary.counts.failed > 0 || summary.counts.degraded > 0) {
+    summary.status = "degraded";
+  }
+  return summary;
 }
 
 export async function runManualCollection(taskType, env, deps = {}) {
@@ -333,7 +838,8 @@ export async function runManualCollection(taskType, env, deps = {}) {
   const sources = [];
   for (const profile of loaded.settings.profiles.filter(({ enabled }) => enabled)) {
     const result = taskType === "newsCollect"
-      ? await (deps.collectNews ?? collectNewsForProfile)({
+      ? await collectNewsWithHealth({
+        collectNews: deps.collectNews ?? collectNewsForProfile,
         profile,
         db: env.DB,
         env,
@@ -371,7 +877,12 @@ export async function runManualCollection(taskType, env, deps = {}) {
 export async function handleFetch(request, env, deps = {}) {
   const url = new URL(request.url);
   if (url.pathname === "/health" && request.method === "GET") {
-    return Response.json({ ok: true, service: "monitor-worker" });
+    return Response.json({
+      ok: true,
+      service: "monitor-worker",
+      deployment: deploymentIdentity(env),
+      newsProviders: await readNewsProviderHealth(env?.DB),
+    });
   }
   if (url.pathname !== "/run-collection" || request.method !== "POST") {
     return new Response("Not found", { status: 404 });
@@ -402,6 +913,11 @@ const worker = {
       return summary;
     });
     ctx.waitUntil(run);
+  },
+
+  async queue(batch, env) {
+    const summary = await runQueueBatch(batch.messages, env);
+    console.log(JSON.stringify({ event: "monitor_queue", ...summary }));
   },
 
   fetch(request, env) {

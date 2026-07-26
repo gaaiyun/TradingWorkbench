@@ -1,4 +1,31 @@
 const LOCAL_FORMATTERS = new Map();
+export const BOOTSTRAP_SCHEMA_VERSION = "v2";
+
+function stableValue(value) {
+  if (Array.isArray(value)) return value.map(stableValue);
+  if (value && typeof value === "object") {
+    return Object.fromEntries(
+      Object.keys(value)
+        .sort()
+        .map((key) => [key, stableValue(value[key])]),
+    );
+  }
+  return value;
+}
+
+function stableJson(value) {
+  return JSON.stringify(stableValue(value));
+}
+
+async function sha256(value) {
+  const digest = await crypto.subtle.digest(
+    "SHA-256",
+    new TextEncoder().encode(value),
+  );
+  return [...new Uint8Array(digest)]
+    .map((byte) => byte.toString(16).padStart(2, "0"))
+    .join("");
+}
 
 function formatterFor(timeZone) {
   let formatter = LOCAL_FORMATTERS.get(timeZone);
@@ -183,7 +210,24 @@ const SCHEDULE_BY_TYPE = {
   closeFullAnalysis: "closeDeepAnalysis",
 };
 
-export function taskFromScheduledSlot(profile, row) {
+export function taskFromScheduledSlot(profileOrRow, possibleRow) {
+  const row = possibleRow ?? profileOrRow;
+  if (typeof row?.payload_json === "string" && row.payload_json) {
+    try {
+      const payload = JSON.parse(row.payload_json);
+      if (!payload?.profile || !payload?.task) return null;
+      return {
+        profile: payload.profile,
+        task: payload.task,
+        profileRevision: row.profile_revision,
+        payloadHash: row.payload_hash,
+      };
+    } catch {
+      return null;
+    }
+  }
+  const profile = possibleRow ? profileOrRow : null;
+  if (!profile) return null;
   const schedule = SCHEDULE_BY_TYPE[row.slot_type];
   if (!schedule) return null;
   const scheduledTime = Date.parse(row.scheduled_for);
@@ -201,12 +245,152 @@ export function taskFromScheduledSlot(profile, row) {
 
 export async function slotIdForTask(profileId, task) {
   const material = `${profileId}\n${task.schedule}\n${task.localSlot}`;
-  const digest = await crypto.subtle.digest(
-    "SHA-256",
-    new TextEncoder().encode(material),
+  return `slot-${await sha256(material)}`;
+}
+
+export async function scheduledPayloadForTask(profile, task, profileRevision) {
+  const payloadJson = stableJson({
+    version: 1,
+    profile,
+    task,
+  });
+  return {
+    profileRevision: String(profileRevision || ""),
+    payloadJson,
+    payloadHash: await sha256(payloadJson),
+  };
+}
+
+function bootstrapTargetGroups(profile) {
+  const cnTargets = profile.targets.filter((target) =>
+    target.market === "CN" &&
+    (target.role === "core" || target.role === "comparison"));
+  const usTargets = profile.targets.filter((target) =>
+    ["US", "HK"].includes(target.market) && target.role === "driver");
+  return [
+    ...cnTargets.flatMap((target) => [
+      { taskType: "intradayCollect", target, timeframe: "5m" },
+      { taskType: "cnDailySnapshot", target, timeframe: "1d" },
+    ]),
+    ...usTargets.map((target) => ({
+      taskType: "usCloseSnapshot",
+      target,
+      timeframe: "1d",
+    })),
+    {
+      taskType: "newsCollect",
+      target: {
+        symbol: "__news__",
+        market: "NEWS",
+        role: "discovery",
+        analysis: "signal",
+      },
+      timeframe: "news",
+    },
+  ];
+}
+
+export async function bootstrapRequirementsForProfile(
+  profile,
+  completedIdentities = new Set(),
+) {
+  if (!profile?.enabled) return [];
+  const requirements = [];
+  for (const { taskType, target, timeframe } of bootstrapTargetGroups(profile)) {
+    const targetHash = await sha256(stableJson({
+      schemaVersion: BOOTSTRAP_SCHEMA_VERSION,
+      taskType,
+      timeframe,
+      target,
+    }));
+    const identity = [
+      "bootstrap",
+      profile.id,
+      target.symbol,
+      timeframe,
+      BOOTSTRAP_SCHEMA_VERSION,
+      targetHash,
+    ].join(":");
+    if (!completedIdentities.has(identity)) {
+      requirements.push({
+        identity,
+        profileId: profile.id,
+        symbol: target.symbol,
+        timeframe,
+        schemaVersion: BOOTSTRAP_SCHEMA_VERSION,
+        targetHash,
+        taskType,
+      });
+    }
+  }
+  return requirements;
+}
+
+export function estimateTaskExternalRequests(profile, task) {
+  if (task.type === "intradayCollect" || task.type === "cnDailySnapshot") {
+    const targets = profile.targets.filter((target) =>
+      target.market === "CN" &&
+      (target.role === "core" || target.role === "comparison"));
+    return targets.length * 3;
+  }
+  if (task.type === "usCloseSnapshot") {
+    const targets = profile.targets.filter((target) =>
+      ["US", "HK"].includes(target.market) && target.role === "driver");
+    return targets.reduce(
+      (total, target) => total + (target.market === "US" ? 5 : 1),
+      0,
+    );
+  }
+  if (task.type === "newsCollect") return 12;
+  if (task.type === "closeFullAnalysis") return 2;
+  return 0;
+}
+
+export function selectFairWorkWithinBudget(work, options = {}) {
+  const budget = Math.max(
+    0,
+    Number(options.externalRequestBudget ?? 40),
   );
-  const hex = [...new Uint8Array(digest)]
-    .map((byte) => byte.toString(16).padStart(2, "0"))
-    .join("");
-  return `slot-${hex}`;
+  const groups = new Map();
+  for (const item of work) {
+    const profileId = item.profile?.id ?? item.profileId ?? "";
+    if (!groups.has(profileId)) groups.set(profileId, []);
+    groups.get(profileId).push(item);
+  }
+  const profileIds = [...groups.keys()].sort();
+  const rotation = profileIds.length === 0
+    ? 0
+    : Math.abs(Number(options.rotation ?? 0)) % profileIds.length;
+  const orderedIds = [
+    ...profileIds.slice(rotation),
+    ...profileIds.slice(0, rotation),
+  ];
+  const selected = [];
+  const deferred = [];
+  let estimatedExternalRequests = 0;
+  let remaining = work.length;
+  while (remaining > 0) {
+    let progressed = false;
+    for (const profileId of orderedIds) {
+      const group = groups.get(profileId);
+      if (group.length === 0) continue;
+      const item = group.shift();
+      remaining -= 1;
+      const cost = estimateTaskExternalRequests(item.profile, item.task);
+      if (estimatedExternalRequests + cost <= budget) {
+        selected.push(item);
+        estimatedExternalRequests += cost;
+      } else {
+        deferred.push(item);
+      }
+      progressed = true;
+    }
+    if (!progressed) break;
+  }
+  return {
+    selected,
+    deferred,
+    estimatedExternalRequests,
+    externalRequestBudget: budget,
+  };
 }

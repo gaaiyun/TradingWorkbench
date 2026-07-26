@@ -4,6 +4,7 @@ import test from "node:test";
 import { DatabaseSync } from "node:sqlite";
 
 import { monitorSettings } from "./helpers/monitor_settings.mjs";
+import { bootstrapRequirementsForProfile } from "../workers/monitor/src/scheduler.mjs";
 
 const workerUrl = new URL("../workers/monitor/src/index.mjs", import.meta.url);
 
@@ -15,6 +16,7 @@ function sqliteWorkerD1(settings, { failNextFinish = false } = {}) {
     "0003_monitor_scheduled_slots.sql",
     "0004_monitor_slot_leases.sql",
     "0010_news_evidence_metadata.sql",
+    "0013_monitor_reliability.sql",
   ]) {
     sqlite.exec(readFileSync(new URL(`../migrations/${migration}`, import.meta.url), "utf8"));
   }
@@ -49,12 +51,39 @@ function sqliteWorkerD1(settings, { failNextFinish = false } = {}) {
   };
 }
 
+async function markBootstrapComplete(db, settings) {
+  const completedAt = "2026-07-23T00:00:00.000Z";
+  for (const profile of settings.profiles) {
+    const requirements = await bootstrapRequirementsForProfile(
+      profile,
+      new Set(),
+    );
+    for (const requirement of requirements) {
+      db.sqlite.prepare(`
+        INSERT INTO monitor_bootstrap_targets (
+          profile_id, symbol, timeframe, schema_version, target_hash,
+          completed_at
+        )
+        VALUES (?, ?, ?, ?, ?, ?)
+      `).run(
+        requirement.profileId,
+        requirement.symbol,
+        requirement.timeframe,
+        requirement.schemaVersion,
+        requirement.targetHash,
+        completedAt,
+      );
+    }
+  }
+}
+
 class WorkerD1 {
   constructor(settings, { barCount = 1 } = {}) {
     this.settings = settings;
     this.slots = new Map();
     this.barWrites = [];
     this.barCount = barCount;
+    this.bootstrapRows = [];
   }
 
   prepare(sql) {
@@ -66,7 +95,10 @@ class WorkerD1 {
             if (/FROM\s+workbench_settings/i.test(sql)) {
               return db.settings == null
                 ? null
-                : { settings_json: JSON.stringify(db.settings) };
+                : {
+                    settings_json: JSON.stringify(db.settings),
+                    updated_at: "2026-07-23T00:00:00.000Z",
+                  };
             }
             if (/COUNT\(\*\)[\s\S]+FROM\s+market_bars/i.test(sql)) {
               return { count: db.barCount + db.barWrites.length };
@@ -77,10 +109,13 @@ class WorkerD1 {
                 profileId,
                 slotType,
                 scheduledFor,
-                claimedAt,
                 expiresAt,
                 updatedAt,
-                leaseUntil,
+                nextAttemptAt,
+                profileRevision,
+                payloadJson,
+                payloadHash,
+                localDate,
               ] =
                 params;
               const row = db.slots.get(id);
@@ -90,26 +125,50 @@ class WorkerD1 {
                   profile_id: profileId,
                   slot_type: slotType,
                   scheduled_for: scheduledFor,
-                  status: "claimed",
-                  attempt_count: 1,
-                  claimed_at: claimedAt,
+                  status: "pending",
+                  attempt_count: 0,
+                  claimed_at: null,
                   expires_at: expiresAt,
                   updated_at: updatedAt,
-                  lease_until: leaseUntil,
-                  next_attempt_at: null,
+                  lease_until: null,
+                  next_attempt_at: nextAttemptAt,
+                  profile_revision: profileRevision,
+                  payload_json: payloadJson,
+                  payload_hash: payloadHash,
+                  local_date: localDate,
                 };
                 db.slots.set(id, claim);
                 return claim;
               }
+              return null;
+            }
+            if (/UPDATE\s+scheduled_slots[\s\S]+RETURNING/i.test(sql)) {
+              const [
+                claimedAt,
+                updatedAt,
+                leaseUntil,
+                id,
+                payloadHash,
+                maxAttempts,
+                failedAt,
+                leaseAt,
+              ] = params;
+              const row = db.slots.get(id);
               if (
-                row.attempt_count < 3 &&
+                row &&
+                row.payload_hash === payloadHash &&
+                row.attempt_count < maxAttempts &&
                 (
-                  (row.status === "failed" && row.next_attempt_at <= claimedAt) ||
-                  (row.status === "claimed" && row.lease_until <= claimedAt)
+                  row.status === "pending" ||
+                  row.status === "queued" ||
+                  (row.status === "failed" && row.next_attempt_at <= failedAt) ||
+                  (row.status === "claimed" && row.lease_until <= leaseAt)
                 )
               ) {
                 row.status = "claimed";
                 row.attempt_count += 1;
+                row.claimed_at = claimedAt;
+                row.updated_at = updatedAt;
                 row.lease_until = leaseUntil;
                 row.next_attempt_at = null;
                 return row;
@@ -119,21 +178,100 @@ class WorkerD1 {
             return null;
           },
           async all() {
-            if (/FROM\s+scheduled_slots/i.test(sql)) {
-              const [, failedAt, leaseAt] = params;
+            if (/FROM\s+monitor_bootstrap_targets/i.test(sql)) {
+              if (db.barCount > 0 && db.bootstrapRows.length === 0 && db.settings) {
+                for (const profile of db.settings.profiles) {
+                  const requirements = await bootstrapRequirementsForProfile(
+                    profile,
+                    new Set(),
+                  );
+                  db.bootstrapRows.push(...requirements.map((requirement) => ({
+                    profile_id: requirement.profileId,
+                    symbol: requirement.symbol,
+                    timeframe: requirement.timeframe,
+                    schema_version: requirement.schemaVersion,
+                    target_hash: requirement.targetHash,
+                  })));
+                }
+              }
+              return { results: structuredClone(db.bootstrapRows) };
+            }
+            if (/SELECT\s+id,\s*profile_id,\s*profile_revision/i.test(sql)) {
+              const [leaseAt] = params;
               return {
                 results: [...db.slots.values()].filter((row) =>
-                  row.attempt_count < 3 &&
+                  ["pending", "queued", "failed"].includes(row.status) ||
+                  (row.status === "claimed" && row.lease_until <= leaseAt)),
+              };
+            }
+            if (/FROM\s+scheduled_slots/i.test(sql)) {
+              const [maxAttempts, failedAt, leaseAt, limit] = params;
+              return {
+                results: [...db.slots.values()].filter((row) =>
+                  row.attempt_count < maxAttempts &&
                   (
-                    (row.status === "failed" && row.next_attempt_at <= failedAt) ||
+                    (
+                      ["pending", "queued", "failed"].includes(row.status) &&
+                      row.next_attempt_at <= failedAt
+                    ) ||
                     (row.status === "claimed" && row.lease_until <= leaseAt)
-                  )),
+                  )).slice(0, limit),
               };
             }
             return { results: [] };
           },
           async run() {
+            if (/INSERT\s+INTO\s+monitor_bootstrap_targets/i.test(sql)) {
+              const [
+                profileId,
+                symbol,
+                timeframe,
+                schemaVersion,
+                targetHash,
+              ] = params;
+              if (!db.bootstrapRows.some((row) =>
+                row.profile_id === profileId &&
+                row.symbol === symbol &&
+                row.timeframe === timeframe &&
+                row.schema_version === schemaVersion &&
+                row.target_hash === targetHash)) {
+                db.bootstrapRows.push({
+                  profile_id: profileId,
+                  symbol,
+                  timeframe,
+                  schema_version: schemaVersion,
+                  target_hash: targetHash,
+                });
+                return { meta: { changes: 1 } };
+              }
+              return { meta: { changes: 0 } };
+            }
             if (/UPDATE\s+scheduled_slots/i.test(sql)) {
+              if (/status = 'cancelled'/i.test(sql)) {
+                const [completedAt, errorCode, updatedAt, id] = params;
+                const row = db.slots.get(id);
+                if (!row) return { meta: { changes: 0 } };
+                Object.assign(row, {
+                  status: "cancelled",
+                  completed_at: completedAt,
+                  last_error_code: errorCode,
+                  updated_at: updatedAt,
+                  lease_until: null,
+                  next_attempt_at: null,
+                });
+                return { meta: { changes: 1 } };
+              }
+              if (/status = 'queued'/i.test(sql)) {
+                const [updatedAt, nextAttemptAt, id, payloadHash] = params;
+                const row = db.slots.get(id);
+                if (!row || row.payload_hash !== payloadHash) {
+                  return { meta: { changes: 0 } };
+                }
+                row.status = "queued";
+                row.updated_at = updatedAt;
+                row.next_attempt_at = nextAttemptAt;
+                return { meta: { changes: 1 } };
+              }
               const [
                 status,
                 completedAt,
@@ -165,6 +303,9 @@ class WorkerD1 {
             if (/INSERT\s+INTO\s+market_bars/i.test(sql)) {
               db.barWrites.push(...JSON.parse(params[0]));
               return { meta: { changes: db.barWrites.length } };
+            }
+            if (/monitor_scheduler_state/i.test(sql)) {
+              return { meta: { changes: 1 } };
             }
             return { meta: { changes: 0 } };
           },
@@ -272,7 +413,9 @@ test("an empty production database bootstraps CN and US market snapshots outside
 
 test("a 204 dispatch completes the slot and queued workflow time never causes a lease retry", async () => {
   const { runScheduled } = await import(workerUrl);
-  const db = new WorkerD1(monitorSettings());
+  const settings = monitorSettings();
+  const db = sqliteWorkerD1(settings);
+  await markBootstrapComplete(db, settings);
   const requests = [];
   const marketRequests = [];
   const result = await runScheduled(
@@ -312,7 +455,11 @@ test("a 204 dispatch completes the slot and queued workflow time never causes a 
   assert.equal(payload.inputs.tickers, "515880.SS,QQQ");
   assert.equal(JSON.stringify(result).includes("worker-secret"), false);
 
-  const slot = [...db.slots.values()].find(({ slot_type: type }) => type === "closeFullAnalysis");
+  const slot = db.sqlite.prepare(`
+    SELECT status, attempt_count, lease_until
+    FROM scheduled_slots
+    WHERE slot_type = 'closeFullAnalysis'
+  `).get();
   assert.equal(slot.status, "completed");
   assert.equal(slot.attempt_count, 1);
   assert.equal(slot.lease_until, null);
@@ -335,7 +482,11 @@ test("a 204 dispatch completes the slot and queued workflow time never causes a 
   );
   assert.equal(later.counts.due, 0);
   assert.equal(requests.length, 1);
-  assert.equal(slot.attempt_count, 1);
+  assert.equal(db.sqlite.prepare(`
+    SELECT attempt_count
+    FROM scheduled_slots
+    WHERE slot_type = 'closeFullAnalysis'
+  `).get().attempt_count, 1);
 });
 
 test("missing and invalid D1 settings fail safely with stable summaries", async () => {
@@ -394,8 +545,125 @@ test("scheduled handler uses scheduledTime and waitUntil while health reveals no
 
   const response = await worker.fetch(new Request("https://monitor.example/health"));
   assert.equal(response.status, 200);
-  assert.deepEqual(await response.json(), { ok: true, service: "monitor-worker" });
+  assert.deepEqual(await response.json(), {
+    ok: true,
+    service: "monitor-worker",
+    deployment: {
+      commitSha: "unknown",
+      deployedAt: "unknown",
+    },
+    newsProviders: {
+      status: "unavailable",
+      providers: [],
+    },
+  });
   assert.equal((await worker.fetch(new Request("https://monitor.example/anything"))).status, 404);
+});
+
+test("health exposes deployment identity and bounded news provider outcomes without secrets", async () => {
+  const { handleFetch, runManualCollection } = await import(workerUrl);
+  const settings = monitorSettings();
+  const db = sqliteWorkerD1(settings);
+  const env = {
+    DB: db,
+    WORKER_COMMIT_SHA: "abc1234",
+    WORKER_DEPLOYED_AT: "2026-07-26T03:00:00.000Z",
+    GITHUB_DISPATCH_TOKEN: "github-secret",
+    SEC_CONTACT_EMAIL: "private@example.com",
+  };
+  const runAt = new Date("2026-07-26T03:05:00.000Z");
+  const bodyMarker = "SEC response body must not escape";
+  await runManualCollection("newsCollect", env, {
+    now: () => runAt,
+    collectNews: async () => ({
+      status: "degraded",
+      written: 0,
+      counts: { queries: 2, succeeded: 1, failed: 1, items: 0 },
+      sources: [
+        {
+          source: "sec-edgar-submissions",
+          status: "failed",
+          reason: "NEWS_HTTP_403",
+          body: bodyMarker,
+        },
+        {
+          source: "miit-policy-api",
+          status: "success",
+          reason: null,
+        },
+      ],
+    }),
+  });
+
+  const response = await handleFetch(
+    new Request("https://monitor.example/health"),
+    env,
+  );
+  assert.equal(response.status, 200);
+  const payload = await response.json();
+  assert.deepEqual(payload.deployment, {
+    commitSha: "abc1234",
+    deployedAt: "2026-07-26T03:00:00.000Z",
+  });
+  assert.deepEqual(payload.newsProviders, {
+    status: "degraded",
+    providers: [
+      {
+        source: "miit-policy-api",
+        status: "ok",
+        lastSuccessAt: runAt.toISOString(),
+        lastFailureAt: null,
+        lastErrorCode: null,
+      },
+      {
+        source: "sec-edgar-submissions",
+        status: "unavailable",
+        lastSuccessAt: null,
+        lastFailureAt: runAt.toISOString(),
+        lastErrorCode: "NEWS_HTTP_403",
+      },
+    ],
+  });
+  const serialized = JSON.stringify(payload);
+  assert.equal(serialized.includes("github-secret"), false);
+  assert.equal(serialized.includes("private@example.com"), false);
+  assert.equal(serialized.includes(bodyMarker), false);
+});
+
+test("health stays 200 and marks providers unavailable when the bounded D1 query times out", async () => {
+  const { handleFetch } = await import(workerUrl);
+  const startedAt = performance.now();
+  const response = await handleFetch(
+    new Request("https://monitor.example/health"),
+    {
+      DB: {
+        prepare() {
+          return {
+            bind() {
+              return {
+                async all() {
+                  return new Promise(() => {});
+                },
+              };
+            },
+          };
+        },
+      },
+      WORKER_COMMIT_SHA: "def5678",
+      WORKER_DEPLOYED_AT: "2026-07-26T04:00:00.000Z",
+    },
+  );
+  assert.ok(performance.now() - startedAt < 100);
+  assert.equal(response.status, 200);
+  const payload = await response.json();
+  assert.deepEqual(payload.deployment, {
+    commitSha: "def5678",
+    deployedAt: "2026-07-26T04:00:00.000Z",
+  });
+  assert.deepEqual(payload.newsProviders, {
+    status: "unavailable",
+    providers: [],
+  });
 });
 
 test("protected manual collection backfills the configured US daily targets", async () => {
@@ -557,6 +825,20 @@ test("monitor wrangler config uses five-minute cron and the same deployed D1 bin
   );
 });
 
+test("dedicated monitor deployment injects the deployed commit and timestamp", () => {
+  const workflow = readFileSync(
+    new URL("../.github/workflows/deploy-monitor.yml", import.meta.url),
+    "utf8",
+  );
+  assert.match(workflow, /wrangler@4\.113\.0 deploy/);
+  assert.match(workflow, /--config wrangler\.monitor\.toml/);
+  assert.match(workflow, /WORKER_COMMIT_SHA:"\$GITHUB_SHA"/);
+  assert.match(workflow, /WORKER_DEPLOYED_AT:"\$deployed_at"/);
+  assert.match(workflow, /date -u \+"\%Y-\%m-\%dT\%H:\%M:\%SZ"/);
+  assert.match(workflow, /workers\/monitor\/\*\*/);
+  assert.match(workflow, /wrangler\.monitor\.toml/);
+});
+
 test("daily workflow accepts monitor dispatch metadata and keeps legacy manual input", () => {
   const workflow = readFileSync(
     new URL("../.github/workflows/daily-analysis.yml", import.meta.url),
@@ -650,7 +932,9 @@ test("expired claim lease recovers on the next cron after a terminal write crash
 
 test("partial collection retries without losing bars and completes after recovery", async () => {
   const { runScheduled } = await import(workerUrl);
-  const db = sqliteWorkerD1(monitorSettings());
+  const settings = monitorSettings();
+  const db = sqliteWorkerD1(settings);
+  await markBootstrapComplete(db, settings);
   let comparisonCalls = 0;
   const registryFactory = () => ({
     fetchMarketData: async (request) => {
