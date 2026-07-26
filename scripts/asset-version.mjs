@@ -11,7 +11,12 @@ const assetPaths = [
 ];
 
 const digest = createHash("sha256");
-for (const path of assetPaths) digest.update(await readFile(path));
+for (const path of assetPaths) {
+  // Git checks out LF on CI and may leave CRLF in the Windows worktree. The
+  // cache key must represent the bytes served by the static host, not the
+  // platform newline convention.
+  digest.update((await readFile(path, "utf8")).replace(/\r\n/g, "\n"));
+}
 const version = digest.digest("hex").slice(0, 12);
 const source = await readFile(indexPath, "utf8");
 const updated = source
