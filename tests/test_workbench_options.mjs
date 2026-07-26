@@ -4,6 +4,7 @@ import test from "node:test";
 import {
   OPTIONS_FAST_REFRESH_MS,
   OPTIONS_SLOW_REFRESH_MS,
+  deriveSellerQuantiles,
   normalizeVolguardPayload,
 } from "../public/assets/workbench-options.mjs";
 
@@ -156,4 +157,29 @@ test("legacy snapshots degrade explicitly without inventing unavailable Greeks",
 test("options refresh clocks preserve fast quotes and slower model work", () => {
   assert.equal(OPTIONS_FAST_REFRESH_MS, 30_000);
   assert.equal(OPTIONS_SLOW_REFRESH_MS, 5 * 60_000);
+});
+
+test("seller desk derives 90% caution and 99% target distances by expiry", () => {
+  const quantiles = deriveSellerQuantiles({
+    market: { spot: 3.12 },
+    risk: { var95: 1.8, var99: 2.5 },
+    asOf: "2026-07-24T15:00:00+08:00",
+    options: [
+      { type: "put", expiry: "2026-08-26", strike: 2.2, openInterest: 1200, volume: 800 },
+      { type: "put", expiry: "2026-08-26", strike: 2.9, openInterest: 20000, volume: 10000 },
+      { type: "call", expiry: "2026-08-26", strike: 4.1, openInterest: 900, volume: 600 },
+      { type: "call", expiry: "2026-08-26", strike: 3.2, openInterest: 30000, volume: 12000 },
+    ],
+  });
+
+  assert.equal(quantiles.status, "ok");
+  assert.equal(quantiles.frontExpiry, "2026-08-26");
+  assert.ok(quantiles.expiries[0].cautionPct > 0);
+  assert.ok(quantiles.expiries[0].targetPct > quantiles.expiries[0].cautionPct);
+  assert.equal(quantiles.putCaution.strike, 2.9);
+  assert.equal(quantiles.callCaution.strike, 4.1);
+  assert.equal(quantiles.putTarget.strike, 2.2);
+  assert.equal(quantiles.callTarget.strike, 4.1);
+  assert.ok(quantiles.putTarget.otmPct >= quantiles.expiries[0].targetPct);
+  assert.ok(quantiles.callTarget.otmPct >= quantiles.expiries[0].targetPct);
 });

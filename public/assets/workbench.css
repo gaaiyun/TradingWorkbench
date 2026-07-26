@@ -380,6 +380,15 @@ a { color: inherit; }
 .seller-desk small { margin-top: 10px; color: var(--quiet); font: 8px/1.6 "IBM Plex Mono", Consolas, monospace; }
 .seller-desk.is-caution strong { color: var(--negative); }
 .seller-desk.is-positive strong { color: var(--positive); }
+.seller-quantile-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; margin-top: 12px; }
+.seller-quantile-grid > div { border: 1px solid var(--line); background: rgba(255,255,255,.02); padding: 8px 10px; }
+.seller-quantile-grid b, .seller-quantile-grid strong, .seller-quantile-grid small { display: block; }
+.seller-quantile-grid b { color: var(--muted); font-size: 9px; font-weight: 500; }
+.seller-quantile-grid strong { margin-top: 3px; color: var(--text); font: 600 14px/1.2 "IBM Plex Mono", Consolas, monospace; }
+.seller-quantile-grid small { margin-top: 4px; color: var(--quiet); font-size: 8px; }
+@media (max-width: 700px) {
+  .seller-quantile-grid { grid-template-columns: 1fr; }
+}
 .metric-row { display: grid; grid-template-columns: repeat(4, 1fr); min-height: 126px; }
 .metric-row > div { padding: 18px 14px; border-right: 1px solid var(--line); }
 .metric-row > div:last-child { border-right: 0; }

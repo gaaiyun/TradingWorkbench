@@ -778,7 +778,21 @@ import {
     const candidate = (label, row) => {
       if (!row) return `${label}：暂无满足流动性条件的候选`;
       const greek = Number.isFinite(row.delta) ? `Δ ${row.delta.toFixed(2)}` : "Δ 未提供";
-      return `${label}：${row.name || row.code || "合约"} · ${greek} · OI ${formatVolume(row.openInterest)}`;
+      const otm = Number.isFinite(row.otmPct) ? ` · 虚值 ${row.otmPct.toFixed(1)}%` : "";
+      return `${label}：${row.name || row.code || "合约"}${otm} · ${greek} · OI ${formatVolume(row.openInterest)}`;
+    };
+    const quantiles = desk.quantiles || {};
+    const target = (label, row, expiry) => {
+      if (!row) return `${label}：该到期日没有达到 99% 阈值且满足流动性的合约`;
+      const distance = Number.isFinite(row.otmPct) ? `${row.otmPct.toFixed(1)}%` : "—";
+      const threshold = Number.isFinite(expiry?.targetPct) ? `${expiry.targetPct.toFixed(1)}%` : "—";
+      return `${label}：${row.name || row.code || "合约"} · 虚值 ${distance}（99% 阈值 ${threshold}）`;
+    };
+    const frontExpiry = Array.isArray(quantiles.expiries) ? quantiles.expiries[0] : null;
+    const caution = (label, row) => {
+      if (!row) return `${label}：90% 以上暂无满足流动性的合约`;
+      const distance = Number.isFinite(row.otmPct) ? `${row.otmPct.toFixed(1)}%` : "—";
+      return `${label}：${row.name || row.code || "合约"} · 虚值 ${distance}（仅作认怂线参考）`;
     };
     const warnings = Array.isArray(desk.warnings) && desk.warnings.length
       ? desk.warnings.join("；")
@@ -787,7 +801,15 @@ import {
       <strong>${escapeHtml(desk.recommendation || "暂不生成卖方方向建议")}</strong>
       <span>IV-HV ${escapeHtml(optionValue(desk.ivHvGap, { digits: 1, suffix: "pp", signed: true }))} · ${escapeHtml(candidate("认沽观察", desk.putCandidate))}</span>
       <span>${escapeHtml(candidate("认购观察", desk.callCandidate))}</span>
-      <small>${escapeHtml(warnings)} · ${escapeHtml(desk.disclaimer || "研究提示，不是自动下单指令")}</small>
+      <div class="seller-quantile-grid">
+        <div><b>90% 认怂线</b><strong>${escapeHtml(optionValue(frontExpiry?.cautionPct, { digits: 1, suffix: "%" }))}</strong><small>低于该虚值距离不观察</small></div>
+        <div><b>99% 目标线</b><strong>${escapeHtml(optionValue(frontExpiry?.targetPct, { digits: 1, suffix: "%" }))}</strong><small>${escapeHtml(frontExpiry ? `${frontExpiry.expiry} · ${frontExpiry.tradingDays} 个工作日近似` : "暂无到期日模型")}</small></div>
+      </div>
+      <span>${escapeHtml(caution("认沽 90% 边界", quantiles.putCaution))}</span>
+      <span>${escapeHtml(caution("认购 90% 边界", quantiles.callCaution))}</span>
+      <span>${escapeHtml(target("认沽 99% 观察", desk.putTarget, frontExpiry))}</span>
+      <span>${escapeHtml(target("认购 99% 观察", desk.callTarget, frontExpiry))}</span>
+      <small>阈值来源：${escapeHtml(quantiles.source || "暂无")} · ${escapeHtml(warnings)} · ${escapeHtml(desk.disclaimer || "研究提示，不是自动下单指令")}</small>
     `;
   }
 
