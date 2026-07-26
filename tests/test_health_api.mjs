@@ -59,6 +59,9 @@ test("buildHealthPayload exposes booleans only and marks partial failure degrade
       ACCESS_CODE: "do-not-return",
       OPENAI_COMPATIBLE_API_KEY: "do-not-return",
       GITHUB_DISPATCH_TOKEN: "do-not-return",
+      CF_PAGES_COMMIT_SHA: "208edf3c4afa84fc9f5d00bdadad5b83df3a0d50",
+      CF_PAGES_BRANCH: "main",
+      CF_PAGES_URL: "https://d359044c.tradingagents-board.pages.dev",
     },
     [{ name: "reports", ok: true }, { name: "options_live", ok: false }],
     new Date("2026-07-22T10:00:00Z"),
@@ -72,7 +75,32 @@ test("buildHealthPayload exposes booleans only and marks partial failure degrade
     analysis_dispatch: true,
     shared_conversations: false,
   });
+  assert.deepEqual(payload.deployment, {
+    service: "pages-functions",
+    commitSha: "208edf3c4afa84fc9f5d00bdadad5b83df3a0d50",
+    branch: "main",
+    url: "https://d359044c.tradingagents-board.pages.dev/",
+  });
   assert.equal(JSON.stringify(payload).includes("do-not-return"), false);
+});
+
+test("buildHealthPayload fails closed when Pages deployment metadata is malformed", () => {
+  const payload = buildHealthPayload(
+    {
+      CF_PAGES_COMMIT_SHA: "not-a-sha",
+      CF_PAGES_BRANCH: "<script>",
+      CF_PAGES_URL: "javascript:alert(1)",
+    },
+    [{ name: "reports", ok: true }],
+    new Date("2026-07-22T10:00:00Z"),
+  );
+
+  assert.deepEqual(payload.deployment, {
+    service: "pages-functions",
+    commitSha: "unknown",
+    branch: "unknown",
+    url: null,
+  });
 });
 
 test("health reports D1-backed persistent conversations as available", () => {

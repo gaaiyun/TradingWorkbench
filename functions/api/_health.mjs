@@ -46,6 +46,21 @@ export async function checkJson(
 }
 
 export function buildHealthPayload(env, checks, checkedAt = new Date()) {
+  const rawCommitSha = String(env.CF_PAGES_COMMIT_SHA || "").trim().toLowerCase();
+  const rawBranch = String(env.CF_PAGES_BRANCH || "").trim();
+  let deploymentUrl = null;
+  try {
+    const parsed = new URL(String(env.CF_PAGES_URL || ""));
+    if (parsed.protocol === "https:") deploymentUrl = parsed.href;
+  } catch {
+    deploymentUrl = null;
+  }
+  const deployment = {
+    service: "pages-functions",
+    commitSha: /^[0-9a-f]{7,64}$/.test(rawCommitSha) ? rawCommitSha : "unknown",
+    branch: /^[A-Za-z0-9._/-]{1,128}$/.test(rawBranch) ? rawBranch : "unknown",
+    url: deploymentUrl,
+  };
   const configured = {
     access_gate: Boolean(env.ACCESS_CODE),
     chat: Boolean(env.OPENAI_COMPATIBLE_API_KEY),
@@ -55,6 +70,7 @@ export function buildHealthPayload(env, checks, checkedAt = new Date()) {
   return {
     status: checks.every((item) => item.ok) ? "ok" : "degraded",
     checked_at: checkedAt.toISOString(),
+    deployment,
     configured,
     checks,
   };
