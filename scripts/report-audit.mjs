@@ -112,7 +112,7 @@ async function readReportBundle(reportsRoot, report) {
       text: "",
       manifest: null,
       packet: null,
-      packetFileHash: null,
+      packetFileHashes: new Set(),
     };
   }
   const reportPath = path.join(reportsRoot, ...relative);
@@ -137,16 +137,19 @@ async function readReportBundle(reportsRoot, report) {
       text,
       manifest: await readJson(path.join(directory, "report_manifest.json")),
       packet,
-      packetFileHash: packetText
-        ? createHash("sha256").update(packetText).digest("hex")
-        : null,
+      packetFileHashes: packetText
+        ? new Set([
+          createHash("sha256").update(packetText).digest("hex"),
+          createHash("sha256").update(packetText.replace(/\r\n/g, "\n")).digest("hex"),
+        ])
+        : new Set(),
     };
   } catch {
     return {
       text: "",
       manifest: null,
       packet: null,
-      packetFileHash: null,
+      packetFileHashes: new Set(),
     };
   }
 }
@@ -154,7 +157,7 @@ async function readReportBundle(reportsRoot, report) {
 function hasConsistentEvidencePacket({
   manifest,
   packet,
-  packetFileHash,
+  packetFileHashes,
   ticker,
   tradeDate,
 }) {
@@ -185,7 +188,7 @@ function hasConsistentEvidencePacket({
       || (
         typeof declaredFileHash === "string"
         && /^[a-f0-9]{64}$/i.test(declaredFileHash)
-        && declaredFileHash === packetFileHash
+        && packetFileHashes.has(declaredFileHash)
       )
     )
   );
@@ -202,7 +205,7 @@ function hasVerifiedBundle(bundle) {
     && /^[a-f0-9]{64}$/i.test(
       String(bundle.manifest?.evidence?.packetFileHash || ""),
     )
-    && bundle.manifest.evidence.packetFileHash === bundle.packetFileHash
+    && bundle.packetFileHashes.has(bundle.manifest.evidence.packetFileHash)
   );
 }
 

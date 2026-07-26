@@ -12,7 +12,9 @@
 
 同日终审又修复了三个用户可见回归：旧版无 identity 的 43 份 `legacy_unverified` 报告恢复只读展示、同一新闻按 cluster/原文聚合关联标的、交易时钟按沪深与纽约时区及周末判断。历史未验证报告仍不能进入问答，4 份 `invalidated` 报告仍只在“历史审计”中显示。
 
-尚未完成的是 2026-07-27 08:25 的真实 SEC/工信部采集验收，以及生成首份通过当前 Evidence 门禁的 profile-scoped 新报告。接手者不能把周日 Provider `unavailable` 写成采集失败，也不能把 43 份旧报告升级为 verified。
+首轮 `cn-semi-comms` 手工监控组研究已由 GitHub Actions 运行 `30189419616` 完成，并生成 `515880.SS`、`512480.SS` 的 profile-scoped 报告及角色分卷。两份 Evidence Packet 均有效，但引用门禁发现未引用数字、无依据仓位或目标价，故均为 `insufficient_evidence / legacy_unverified / Not Rated`，没有进入最新观点或问答。当前审计为 `49` 份成功报告、`0 verified`、`45 legacy_unverified`、`4 invalidated`。
+
+尚未完成的是 2026-07-27 08:25 的真实 SEC/工信部采集验收，以及生成首份真正通过当前 Evidence 门禁的报告。接手者不能把周日 Provider `unavailable` 写成采集失败，也不能把旧报告或本次未通过引用门禁的报告升级为 verified。
 
 ## 2. 不可破坏的产品边界
 
@@ -141,7 +143,7 @@ migration 只向前保留。回退代码时不要删除新表或列。
 ### 尚未完成
 
 - 2026-07-27 08:25 外审尚未执行；
-- 当前生产审计仍为 `verified=0`，需要生成首份通过当前 Evidence 门禁的 profile 报告；
+- 当前生产审计仍为 `verified=0`；首轮 profile 报告已生成但被引用门禁降为 `Not Rated`，下一轮应先消除 `UNCITED_NUMERIC_CLAIM`、`UNSUPPORTED_ALLOCATION` 和无依据目标价；
 - PushPlus live 尚未开启，也不在本轮默认授权范围内。
 
 即使 workflow 为绿色，也要打开步骤确认 migration、deploy 和 SHA verify 都执行。
