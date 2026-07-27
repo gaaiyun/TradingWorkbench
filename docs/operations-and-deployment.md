@@ -404,17 +404,20 @@ slot 应进入 completed、degraded 或带明确原因的 deferred/failed。检�
 
 对 A 股通信和芯片主题分别检查：
 
-- source trail 包含 `gov-policy-library`，目标 ETF 还包含 `sse-fund-announcements`；
+- Worker source trail 包含 `gov-policy-library`；上交所不在 Worker source trail 中，单独检查 `official-news` workflow；
 - 政策查询固定 `t=zhengcelibrary`、`timetype=timeqb`、`sort=pubtime`、`searchfield=title`、`p=1`、`n=20`；
 - 查询词分别为“通信”和“集成电路”；
 - 响应仍由客户端按上海日历执行 30 天窗口，拒绝未来和窗口外结果；
 - 每个查询最多保留 8 条；
 - 部门文件、国务院公文、公报为 evidence，政策解读为 discovery；
 - 政策原文只接受 `www.gov.cn/zhengce/` 或 `/gongbao/`；
-- 上交所只接受与代码精确相等且位于 `www.sse.com.cn/disclosure/fund/announcement/` 的公告；
+- 手工或定时运行 `.github/workflows/official-news.yml`，确认凭据检查、上交所请求和 D1 写入三步均成功；
+- 上交所只接受与代码精确相等且位于 `www.sse.com.cn/disclosure/fund/announcement/` 的 PDF 公告；
 - `512480` 与 `515880` 的季度报告、拆分公告等官方结果标记 `sourceTier=evidence`；
 - 东方财富或 Google 结果保持 `discovery`；
-- 计划内任一官方源失败时，即使东方财富成功，本次采集仍为 degraded。
+- Monitor 内计划官方源失败时，即使东方财富成功，本次采集仍为 degraded；上交所失败则对应 `official-news` run 为 failure，不污染 Worker 健康状态。
+
+生产核对必须使用 `profile=cn-semi-comms&limit=200`，否则 `512480.SS` 的高频 discovery 可能把较早的拆分公告挤出较小的时间窗口。2026-07-28 首轮生产 run `30290500176` 写入 7 行：`515880.SS=4`、`512480.SS=3`。
 
 ### 12.6 API 和页面检查
 
