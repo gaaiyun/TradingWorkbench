@@ -53,7 +53,7 @@ Worker deployedAt : 由生产端点实时回读，不能为 `unknown`
 Pages immutable deployment : 每次发布都会变化，以 `wrangler pages deploy` 输出和 `/api/health` 为准
 ```
 
-2026-07-28 01:46（Asia/Singapore）线上回读：GitHub `main`、Pages 与 Worker 均为 `fbe6c4d5a3a2c133c098041b46f13c5b193173d9`；Pages `deployedAt=2026-07-27T17:44:06.382Z`，Worker `deployedAt=2026-07-27T17:43:28Z`。任何后续提交都必须重新执行三方 SHA 比对。
+2026-07-28 01:46（Asia/Singapore）功能发布回读：Pages 与 Worker 均为 `fbe6c4d5a3a2c133c098041b46f13c5b193173d9`；Pages `deployedAt=2026-07-27T17:44:06.382Z`，Worker `deployedAt=2026-07-27T17:43:28Z`。随后仅修改 `README.md` 与 `docs/**` 的提交受 deploy workflow 的 paths 过滤，不会重发运行时，所以 `origin/main` 可以只因文档提交领先该 SHA；接手时先检查差异是否触及 `public/functions/workers/migrations/package.json`，有运行时代码变化才要求三方 SHA 再次一致。
 
 对应成功 run：CI `30290486752`、Monitor `30290487359`、Pages `30290488517`、official-news `30290500176`。
 
