@@ -540,6 +540,38 @@ a { color: inherit; }
   flex-direction: column; justify-content: space-between; color: #51595e; font: 8px "IBM Plex Mono", Consolas, monospace;
   pointer-events: none;
 }
+.fund-flow-panel { position: relative; border-bottom: 1px solid var(--line); background: rgba(17, 20, 22, .4); }
+.fund-flow-panel > header {
+  display: flex; min-height: 43px; align-items: center; justify-content: space-between; gap: 12px;
+  padding: 0 14px; border-bottom: 1px solid var(--line);
+}
+.fund-flow-panel > header > div { display: flex; align-items: baseline; gap: 8px; }
+.fund-flow-panel h2 { margin: 0; font-size: 12px; }
+.fund-flow-panel header span { color: var(--quiet); font-size: 9px; }
+.fund-flow-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); }
+.fund-flow-metric { min-width: 0; padding: 12px 14px; border-right: 1px solid var(--line); }
+.fund-flow-metric:last-child { border-right: 0; }
+.fund-flow-metric-head { position: relative; display: flex; align-items: center; justify-content: space-between; gap: 8px; }
+.fund-flow-metric-head > span:first-child { color: var(--quiet); font-size: 9px; }
+.fund-flow-help {
+  display: grid; width: 22px; height: 22px; min-height: 22px; place-items: center; padding: 0;
+  border: 1px solid var(--line); border-radius: 50%; background: transparent; color: var(--quiet);
+  font: 8px "IBM Plex Mono", Consolas, monospace;
+}
+.fund-flow-help:hover, .fund-flow-help:focus-visible { border-color: var(--line-strong); color: var(--text); outline: none; }
+.fund-flow-metric > strong { display: block; margin-top: 7px; font: 600 17px "IBM Plex Mono", Consolas, monospace; }
+.fund-flow-metric > small { display: flex; align-items: center; gap: 7px; margin-top: 5px; color: var(--quiet); font-size: 8px; }
+.fund-flow-percentile {
+  display: inline-flex; min-height: 18px; align-items: center; padding: 0 5px; border: 1px solid var(--line-strong);
+  color: var(--muted); font: 8px "IBM Plex Mono", Consolas, monospace;
+}
+.fund-flow-percentile.is-extreme { border-color: color-mix(in srgb, var(--warning) 55%, var(--line)); color: var(--warning); }
+.fund-flow-tooltip {
+  position: absolute; z-index: 8; top: 27px; right: 0; width: min(320px, 80vw); padding: 9px 10px;
+  border: 1px solid var(--line-strong); background: #15191b; color: var(--muted);
+  box-shadow: 0 10px 28px rgba(0, 0, 0, .34); font: 9px/1.55 "IBM Plex Mono", Consolas, monospace;
+}
+.fund-flow-tooltip[hidden] { display: none; }
 .research-conclusion { min-height: 142px; padding: 0 14px 14px; }
 .research-conclusion > header { display: flex; min-height: 43px; align-items: center; justify-content: space-between; border-bottom: 1px solid var(--line); }
 .research-conclusion h2 { display: inline; margin: 0; font-size: 12px; }
@@ -776,6 +808,12 @@ a { color: inherit; }
   .chart-host { height: 410px; }
   .pane-labels { top: 77px; }
   .research-conclusion { padding-inline: 10px; }
+  .fund-flow-panel > header { padding-inline: 10px; }
+  .fund-flow-grid { grid-template-columns: 1fr; }
+  .fund-flow-metric { border-right: 0; border-bottom: 1px solid var(--line); }
+  .fund-flow-metric:last-child { border-bottom: 0; }
+  .fund-flow-help { width: 44px; min-width: 44px; height: 44px; min-height: 44px; }
+  .fund-flow-tooltip { top: 47px; }
   .conclusion-body { grid-template-columns: 64px 1fr; }
   .feed-filters { grid-template-columns: 1fr 1fr 80px; }
   .feed-filters label:last-child { grid-column: auto; }

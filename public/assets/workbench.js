@@ -17,6 +17,13 @@ import {
 } from "./workbench-data.mjs";
 import { renderMarkdown } from "./workbench-markdown.mjs";
 import {
+  FUND_FLOW_START_DATE,
+  buildFundFlowView,
+  fundFlowTradingDate,
+  fundFlowRequestTypes,
+  isFundFlowUiEnabled,
+} from "./workbench-fundflow.mjs";
+import {
   CandlestickSeries,
   ColorType,
   CrosshairMode,
@@ -97,6 +104,7 @@ import {
     timeframe: "15m",
     historyRange: "5y",
     market: normalizeEnvelope(null),
+    fundFlow: buildFundFlowView(null, null),
     quotes: new Map(),
     feeds: [],
     feedEnvelope: normalizeEnvelope(null),
@@ -500,8 +508,142 @@ import {
     renderSettingsSummary();
   }
 
+  function bindFundFlowTooltips() {
+    $$('[data-fund-flow-help]', $("#fund-flow-panel")).forEach((trigger) => {
+      const tooltip = document.getElementById(trigger.getAttribute("aria-describedby"));
+      if (!tooltip) return;
+      const setOpen = (open) => {
+        tooltip.hidden = !open;
+        trigger.setAttribute("aria-expanded", String(open));
+      };
+      trigger.addEventListener("pointerenter", (event) => {
+        if (event.pointerType !== "touch") setOpen(true);
+      });
+      trigger.addEventListener("pointerleave", (event) => {
+        if (event.pointerType !== "touch" && trigger.dataset.pinned !== "true" && !trigger.matches(":focus")) {
+          setOpen(false);
+        }
+      });
+      trigger.addEventListener("focus", () => setOpen(true));
+      trigger.addEventListener("blur", () => {
+        if (trigger.dataset.pinned !== "true") setOpen(false);
+      });
+      trigger.addEventListener("click", (event) => {
+        event.preventDefault();
+        const pinned = trigger.dataset.pinned === "true";
+        trigger.dataset.pinned = String(!pinned);
+        setOpen(!pinned);
+      });
+      trigger.addEventListener("keydown", (event) => {
+        if (event.key !== "Escape") return;
+        trigger.dataset.pinned = "false";
+        setOpen(false);
+      });
+    });
+  }
+
+  function renderFundFlow() {
+    const panel = $("#fund-flow-panel");
+    const view = state.fundFlow;
+    if (!view?.enabled) {
+      panel.hidden = true;
+      $("#fund-flow-grid").innerHTML = "";
+      return;
+    }
+    panel.hidden = false;
+    const statusLabel = view.status === "stale"
+      ? "数据较旧"
+      : view.status === "degraded" ? "部分数据降级" : view.status === "ok" ? "数据可用" : "暂无数据";
+    $("#fund-flow-asof").textContent = `${fundFlowTradingDate(view.asOf) || "—"} · ${statusLabel}`;
+    $("#fund-flow-grid").innerHTML = view.metrics.map((metric) => {
+      const tooltipId = `fund-flow-tooltip-${metric.id}`;
+      const valueTone = metric.signed && metric.value !== null
+        ? marketTone(metric.value, "CN")
+        : "neutral";
+      return `<article class="fund-flow-metric" data-fund-flow-metric="${escapeHtml(metric.id)}">
+        <div class="fund-flow-metric-head">
+          <span>${escapeHtml(metric.label)}</span>
+          <button type="button" class="fund-flow-help" data-fund-flow-help aria-label="查看${escapeHtml(metric.label)}口径" aria-describedby="${tooltipId}" aria-expanded="false">i</button>
+          <span class="fund-flow-tooltip" id="${tooltipId}" role="tooltip" hidden>${escapeHtml(metric.tooltip)}</span>
+        </div>
+        <strong class="${valueTone}">${escapeHtml(metric.displayValue)}</strong>
+        <small><span class="fund-flow-percentile ${escapeHtml(metric.percentile.tone)}">${escapeHtml(metric.percentile.label)}</span><span>截至 ${escapeHtml(metric.tradingDate || "—")}</span></small>
+      </article>`;
+    }).join("");
+    bindFundFlowTooltips();
+  }
+
   function marketUrl(symbol, timeframe, profileId, limit = 240) {
     return profileRequestUrl("/api/market", profileId, { symbol, timeframe, limit });
+  }
+
+  function fundFlowUrl(symbol, profileId, type) {
+    return profileRequestUrl("/api/flows", profileId, {
+      symbol,
+      type,
+      period: "1d",
+      from: FUND_FLOW_START_DATE,
+      limit: 2000,
+    });
+  }
+
+  function mergeFundFlowEnvelopes(envelopes) {
+    const capabilities = envelopes[0]?.capabilities || {};
+    const statuses = envelopes.map(({ status }) => status || "unavailable");
+    const status = statuses.every((value) => value === "unavailable")
+      ? "unavailable"
+      : statuses.some((value) => ["unavailable", "degraded"].includes(value))
+        ? "degraded"
+        : statuses.some((value) => value === "stale") ? "stale" : "ok";
+    const asOf = envelopes.map(({ asOf }) => asOf).filter(Boolean).sort().at(-1) || null;
+    const sources = [];
+    const seenSources = new Set();
+    for (const source of envelopes.flatMap(({ sources: items }) => items || [])) {
+      const key = JSON.stringify(source);
+      if (seenSources.has(key)) continue;
+      seenSources.add(key);
+      sources.push(source);
+    }
+    return {
+      status,
+      asOf,
+      capabilities,
+      data: envelopes.flatMap(({ data }) => data || []),
+      sources,
+    };
+  }
+
+  async function loadFundFlow() {
+    state.fundFlow = buildFundFlowView(null, state.selectedSymbol);
+    renderFundFlow();
+    if (!isFundFlowUiEnabled(document.body.dataset.fundFlowEnabled)) return;
+    const symbol = state.selectedSymbol;
+    const profileId = currentProfile()?.id;
+    const requestTypes = fundFlowRequestTypes(symbol);
+    if (!profileId || requestTypes.length === 0) return;
+    const request = profileRequests.begin("fundflow", symbol);
+    try {
+      const envelopes = await Promise.all(requestTypes.map((type) =>
+        requestJson(fundFlowUrl(symbol, profileId, type), { signal: request.signal })));
+      if (!profileRequests.isCurrent(request) || state.selectedSymbol !== symbol) return;
+      state.fundFlow = buildFundFlowView(mergeFundFlowEnvelopes(envelopes), symbol);
+    } catch {
+      if (request.signal.aborted || !profileRequests.isCurrent(request)) return;
+      state.fundFlow = buildFundFlowView({
+        status: "unavailable",
+        asOf: null,
+        data: [],
+        capabilities: {
+          marketFlowV1: true,
+          marginDaily: true,
+          etfSharesDaily: true,
+          historicalPercentile: true,
+        },
+      }, symbol);
+    } finally {
+      profileRequests.finish(request);
+    }
+    renderFundFlow();
   }
 
   function sortBars(rows) {
@@ -1640,12 +1782,14 @@ import {
     renderWatchlist();
     renderConclusion();
     state.chart.bars = [];
-    await loadMarket();
+    await Promise.allSettled([loadMarket(), loadFundFlow()]);
   }
 
   function renderClearedProfileContext() {
+    state.fundFlow = buildFundFlowView(null, state.selectedSymbol);
     renderSettingsSummary();
     renderInstrument();
+    renderFundFlow();
     renderConclusion();
     renderFeed();
     renderNewsWorkspace();
@@ -1665,6 +1809,7 @@ import {
   async function loadProfileContext() {
     await Promise.allSettled([
       loadMarket(),
+      loadFundFlow(),
       loadQuoteStrip(),
       loadFeeds(),
       loadMonitor(),
@@ -2624,6 +2769,16 @@ import {
           : state.latest ? "ok" : "empty",
       },
     ];
+    if (
+      isFundFlowUiEnabled(document.body.dataset.fundFlowEnabled)
+      && fundFlowRequestTypes(state.selectedSymbol).length > 0
+    ) {
+      refreshes.splice(2, 0, {
+        label: "资金面",
+        load: () => loadFundFlow(),
+        status: () => state.fundFlow.status,
+      });
+    }
     try {
       const results = await Promise.allSettled(refreshes.map(({ load }) => load()));
       const summary = results.map((result, index) => ({

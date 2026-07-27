@@ -7,13 +7,13 @@
   <meta name="color-scheme" content="dark">
   <meta name="description" content="Trading Workbench 多市场研究与风险工作台">
   <title>Trading Workbench · 交易研究工作台</title>
-  <link rel="stylesheet" href="./assets/workbench.css?v=dd5fda622aef">
+  <link rel="stylesheet" href="./assets/workbench.css?v=e2a71f8cdd5c">
   <script type="importmap">
     { "imports": { "fancy-canvas": "./vendor/fancy-canvas/index.mjs" } }
   </script>
-  <script type="module" src="./assets/workbench.js?v=dd5fda622aef"></script>
+  <script type="module" src="./assets/workbench.js?v=e2a71f8cdd5c"></script>
 </head>
-<body data-mobile-view="chart" data-route="monitor">
+<body data-mobile-view="chart" data-route="monitor" data-fund-flow-enabled="false">
   <a class="skip-link" href="#market-chart">跳到行情图表</a>
 
   <aside class="product-sidebar" aria-label="Trading Workbench 主导航">
@@ -148,6 +148,14 @@
             <div class="crosshair-readout" id="crosshair-readout" hidden></div>
           </div>
           <div class="pane-labels" aria-hidden="true"><span>PRICE / VOL</span><span>MACD 12·26·9</span><span>RSI 14</span></div>
+        </section>
+
+        <section class="fund-flow-panel" id="fund-flow-panel" aria-labelledby="fund-flow-title" hidden>
+          <header>
+            <div><h2 id="fund-flow-title">资金面</h2><span>日频 · 历史位置</span></div>
+            <span id="fund-flow-asof">等待日频数据</span>
+          </header>
+          <div class="fund-flow-grid" id="fund-flow-grid"></div>
         </section>
 
         <section class="research-conclusion" aria-labelledby="conclusion-title">
