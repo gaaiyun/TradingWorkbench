@@ -2,6 +2,7 @@ import { parseWorkbenchSettings } from "../../../functions/api/_workbench_settin
 import { collectForTask } from "./collector.mjs";
 import { dispatchFullAnalysis } from "./github-dispatch.mjs";
 import {
+  ACTIVE_NEWS_PROVIDERS,
   collectNewsForProfile,
   writeNewsItems,
 } from "./news-collector.mjs";
@@ -358,11 +359,12 @@ async function readNewsProviderHealth(db, configuredTimeoutMs = HEALTH_QUERY_TIM
     let timer;
     try {
       const query = db.prepare(`
-        SELECT source, status, last_success_at, last_failure_at, last_error_code
-        FROM monitor_news_provider_health
-        ORDER BY source ASC
-        LIMIT ?
-      `).bind(HEALTH_PROVIDER_LIMIT).all();
+      SELECT source, status, last_success_at, last_failure_at, last_error_code
+      FROM monitor_news_provider_health
+      WHERE source IN (${ACTIVE_NEWS_PROVIDERS.map(() => "?").join(", ")})
+      ORDER BY source ASC
+      LIMIT ?
+      `).bind(...ACTIVE_NEWS_PROVIDERS, HEALTH_PROVIDER_LIMIT).all();
       return await Promise.race([
         query,
         new Promise((resolve) => {

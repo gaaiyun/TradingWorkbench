@@ -816,6 +816,11 @@ test("health exposes deployment identity and bounded news provider outcomes with
           status: "success",
           reason: null,
         },
+        {
+          source: "miit-policy-api",
+          status: "success",
+          reason: null,
+        },
       ],
     }),
   });
@@ -854,6 +859,7 @@ test("health exposes deployment identity and bounded news provider outcomes with
   assert.equal(serialized.includes("github-secret"), false);
   assert.equal(serialized.includes("private@example.com"), false);
   assert.equal(serialized.includes(bodyMarker), false);
+  assert.equal(serialized.includes("miit-policy-api"), false);
 });
 
 test("health stays 200 and marks providers unavailable when the bounded D1 query times out", async () => {

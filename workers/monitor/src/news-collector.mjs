@@ -29,6 +29,16 @@ const EVIDENCE_PROVIDERS = new Set([
   "sec-edgar-submissions",
   "sec-edgar-8k",
 ]);
+export const ACTIVE_NEWS_PROVIDERS = Object.freeze([
+  "eastmoney-search",
+  "federal-reserve-rss",
+  "google-news-rss",
+  "gov-policy-library",
+  "hashkey-ir",
+  "sec-edgar-submissions",
+  "sse-fund-announcements",
+  "yahoo-finance-rss",
+]);
 const SHANGHAI_DATE_FORMATTER = new Intl.DateTimeFormat("en-CA", {
   timeZone: "Asia/Shanghai",
   year: "numeric",
