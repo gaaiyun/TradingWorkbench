@@ -215,8 +215,8 @@ test("the 2024 cutoff follows the Shanghai trading day", () => {
   assert.match(view.metrics[0].tooltip, /数据日 2024-01-01/);
 });
 
-test("fund-flow panel stays inside monitor after the chart and remains disabled by default", () => {
-  assert.match(html, /<body[^>]*data-fund-flow-enabled="false"/);
+test("fund-flow panel stays inside monitor after the chart and is enabled after closed-state smoke", () => {
+  assert.match(html, /<body[^>]*data-fund-flow-enabled="true"/);
   assert.match(html, /id="market-chart"[\s\S]*id="fund-flow-panel"[\s\S]*id="conclusion-title"/);
   const panel = /<section[^>]+id="fund-flow-panel"[\s\S]*?<\/section>/.exec(html)?.[0] || "";
   assert.match(panel, /hidden/);

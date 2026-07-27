@@ -45,9 +45,9 @@ test("fund-flow endpoint module exists", () => {
   assert.ok(flowsApi);
 });
 
-test("Pages deploys the fund-flow capability disabled for the first migration smoke", () => {
+test("Pages enables the fund-flow capability after migration and production smoke", () => {
   const config = readFileSync(new URL("../wrangler.toml", import.meta.url), "utf8");
-  assert.match(config, /\[vars\][\s\S]*FUND_FLOW_ENABLED\s*=\s*"false"/);
+  assert.match(config, /\[vars\][\s\S]*FUND_FLOW_ENABLED\s*=\s*"true"/);
 });
 
 test("disabled fund-flow feature returns an explicit unavailable envelope without D1 access", async () => {

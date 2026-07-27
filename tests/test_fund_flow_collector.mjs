@@ -298,13 +298,13 @@ test("non-retryable HTTP 4xx fails once while 503 remains bounded", async () => 
   assert.equal(calls, 3);
 });
 
-test("fund-flow workflow is manual-only until migration and production smoke finish", async () => {
+test("fund-flow workflow schedules a daily collection only after production smoke", async () => {
   const workflow = await readFile(".github/workflows/fund-flow.yml", "utf8");
   assert.match(workflow, /workflow_dispatch:/);
-  assert.doesNotMatch(workflow, /schedule:/);
+  assert.match(workflow, /schedule:\s*\r?\n\s+- cron:\s*"17 12 \* \* 1-5"/);
   assert.match(workflow, /timeout-minutes:\s*15/);
   assert.match(workflow, /permissions:\s*\r?\n\s+contents:\s*read/);
   assert.match(workflow, /concurrency:\s*\r?\n\s+group:\s*fund-flow/);
-  assert.match(workflow, /collect-fund-flows\.mjs --mode=/);
+  assert.match(workflow, /github\.event_name == 'schedule' && 'daily' \|\| inputs\.mode/);
   assert.doesNotMatch(workflow, /EVIDENCE|report_manifests|VolGuard/i);
 });
