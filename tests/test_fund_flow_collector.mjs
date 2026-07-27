@@ -173,9 +173,10 @@ test("collector fans out only to enabled profiles and parameterizes monotonic D1
       });
     }
     if (url.hostname === "push2delay.eastmoney.com") {
+      const code = url.searchParams.get("secid").split(".")[1];
       return Response.json({
         rc: 0,
-        data: { f57: "159995", f43: 1000, f84: 5_000_000, f116: 5_000_000 },
+        data: { f57: code, f43: 1000, f84: 5_000_000, f116: 5_000_000 },
       });
     }
     throw new Error(`unexpected URL ${url}`);
@@ -191,7 +192,9 @@ test("collector fans out only to enabled profiles and parameterizes monotonic D1
     randomImpl: () => 0,
   });
 
-  assert.equal(result.written, 14);
+  assert.equal(result.written, 16);
+  assert.equal(result.status, "completed");
+  assert.deepEqual(result.failures, []);
   assert.deepEqual(result.profiles, ["enabled"]);
   const writeCalls = d1Calls.filter(({ body }) => /INSERT INTO fund_flows/.test(body.sql));
   assert.equal(writeCalls.length, 1);
@@ -223,6 +226,48 @@ test("blocked sources fail immediately and errors never expose response bodies",
   assert.equal(calls, 1);
   assert.equal(error.message, "UPSTREAM_BLOCKED");
   assert.equal(error.message.includes(API_TOKEN), false);
+});
+
+test("blocked SSE history degrades to a current share snapshot without losing margin rows", async () => {
+  const settings = { version: 2, profiles: [profile("enabled", true, ["515880.SS"])] };
+  const writes = [];
+  const fetchImpl = async (input, init = {}) => {
+    const url = new URL(String(input));
+    if (url.hostname === "api.cloudflare.com") {
+      const body = JSON.parse(init.body);
+      if (/SELECT settings_json/.test(body.sql)) {
+        return Response.json({ success: true, result: [{ results: [{ settings_json: JSON.stringify(settings) }] }] });
+      }
+      writes.push(...JSON.parse(body.params[0]));
+      return Response.json({ success: true, result: [{ success: true }] });
+    }
+    if (url.hostname === "datacenter-web.eastmoney.com") return Response.json(marginPayload("515880"));
+    if (url.hostname === "query.sse.com.cn") return new Response("blocked", { status: 403 });
+    if (url.hostname === "push2delay.eastmoney.com") {
+      return Response.json({ rc: 0, data: { f57: "515880", f43: 2000, f84: 5_000_000, f116: 10_000_000 } });
+    }
+    throw new Error(`unexpected URL ${url}`);
+  };
+
+  const result = await collectFundFlows({
+    apiToken: API_TOKEN,
+    accountId: ACCOUNT_ID,
+    mode: "daily",
+    now: NOW,
+    fetchImpl,
+    delayImpl: async () => {},
+    randomImpl: () => 0,
+  });
+
+  assert.equal(result.status, "degraded");
+  assert.deepEqual(result.failures, [{
+    symbol: "515880.SS",
+    source: "sse-fund-scale-daily",
+    reason: "UPSTREAM_BLOCKED",
+  }]);
+  assert.equal(writes.some(({ flowType }) => flowType === "margin_net_buy"), true);
+  assert.equal(writes.some(({ flowType }) => flowType === "shares_outstanding_snapshot"), true);
+  assert.equal(writes.some(({ flowType }) => flowType === "shares_outstanding_derived"), false);
 });
 
 test("SSE scale requests mirror the public page request shape", async () => {

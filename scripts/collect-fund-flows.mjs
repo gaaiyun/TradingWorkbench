@@ -439,6 +439,7 @@ export async function collectFundFlows({
   const expiresAt = new Date(now.valueOf() + TEN_YEARS_MS).toISOString();
   const requestOptions = { randomImpl };
   const rawBySymbol = new Map();
+  const failures = [];
   for (const target of FUND_FLOW_TARGETS) {
     if ((profilesBySymbol.get(target.symbol) || []).length === 0) continue;
     const margin = await collectMarginHistory(target, {
@@ -450,18 +451,29 @@ export async function collectFundFlows({
     rawBySymbol.set(target.symbol, { margin, scale: [], closes: new Map(), snapshot: null });
     if (target.sseHistory) {
       await delayImpl(1000);
-      const scale = await collectSseScaleHistory(target, {
-        fetchImpl,
-        mode,
-        now,
-        requestOptions,
-        delayImpl,
-      });
-      rawBySymbol.get(target.symbol).scale = scale;
-      rawBySymbol.get(target.symbol).closes = new Map(margin.flatMap(({ date, close }) =>
-        close !== null && close > 0 ? [[date, close]] : []));
-    } else if (mode === "daily") {
-      await delayImpl(1000);
+      try {
+        const scale = await collectSseScaleHistory(target, {
+          fetchImpl,
+          mode,
+          now,
+          requestOptions,
+          delayImpl,
+        });
+        rawBySymbol.get(target.symbol).scale = scale;
+        rawBySymbol.get(target.symbol).closes = new Map(margin.flatMap(({ date, close }) =>
+          close !== null && close > 0 ? [[date, close]] : []));
+      } catch (error) {
+        failures.push({
+          symbol: target.symbol,
+          source: "sse-fund-scale-daily",
+          reason: String(error?.message || "").startsWith("UPSTREAM_")
+            ? error.message
+            : "UPSTREAM_NETWORK",
+        });
+      }
+    }
+    await delayImpl(1000);
+    try {
       const snapshotPayload = await fetchBoundedJson(fetchImpl, shareSnapshotUrl(target.secid), {
         ...requestOptions,
         delayImpl,
@@ -472,6 +484,14 @@ export async function collectFundFlows({
         now,
         rawBySymbol.get(target.symbol).margin[0]?.date || shanghaiDate(now),
       );
+    } catch (error) {
+      failures.push({
+        symbol: target.symbol,
+        source: "eastmoney-share-snapshot",
+        reason: String(error?.message || "").startsWith("UPSTREAM_")
+          ? error.message
+          : "UPSTREAM_NETWORK",
+      });
     }
   }
   const rows = [];
@@ -558,12 +578,13 @@ export async function collectFundFlows({
     counts[key] = (counts[key] || 0) + 1;
   }
   return {
-    status: "completed",
+    status: failures.length ? "degraded" : "completed",
     mode,
     fetchedAt,
     profiles: [...new Set(rows.map(({ profileId }) => profileId))],
     written: rows.length,
     counts,
+    failures,
   };
 }
 
