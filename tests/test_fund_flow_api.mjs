@@ -171,21 +171,28 @@ test("fund-flow endpoint rejects unsupported, unknown, and inconsistent paramete
   assert.equal(DB.calls.length, 0);
 });
 
-test("fund-flow type applicability returns no rows for the wrong exchange share method", async () => {
+test("fund-flow type applicability permits snapshot fallback but rejects unavailable derived history", async () => {
   if (!flowsApi) return;
-  const cases = [
-    ["515880.SS", "shares_outstanding_snapshot"],
-    ["159995.SZ", "shares_outstanding_derived"],
-  ];
-  for (const [symbol, type] of cases) {
-    const DB = new FakeD1({ rows: { fund_flows: [flow({ symbol, flow_type: type })] } });
-    const response = await flowsApi.onRequestGet({
-      request: request(`/api/flows?symbol=${symbol}&type=${type}`),
-      env: { DB, FUND_FLOW_ENABLED: "true" },
-    });
-    assert.deepEqual((await response.json()).data, []);
-    assert.equal(DB.calls.length, 0);
-  }
+  const fallbackDB = new FakeD1({ rows: { fund_flows: [flow({
+    symbol: "515880.SS",
+    flow_type: "shares_outstanding_snapshot",
+  })] } });
+  const fallbackResponse = await flowsApi.onRequestGet({
+    request: request("/api/flows?symbol=515880.SS&type=shares_outstanding_snapshot"),
+    env: { DB: fallbackDB, FUND_FLOW_ENABLED: "true" },
+  });
+  assert.equal((await fallbackResponse.json()).data.length, 1);
+
+  const rejectedDB = new FakeD1({ rows: { fund_flows: [flow({
+    symbol: "159995.SZ",
+    flow_type: "shares_outstanding_derived",
+  })] } });
+  const rejectedResponse = await flowsApi.onRequestGet({
+    request: request("/api/flows?symbol=159995.SZ&type=shares_outstanding_derived"),
+    env: { DB: rejectedDB, FUND_FLOW_ENABLED: "true" },
+  });
+  assert.deepEqual((await rejectedResponse.json()).data, []);
+  assert.equal(rejectedDB.calls.length, 0);
 });
 
 test("fund-flow endpoint pages equal timestamps with a composite [ts,id] cursor", async (t) => {
