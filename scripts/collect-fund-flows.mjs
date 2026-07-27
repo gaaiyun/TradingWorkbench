@@ -60,7 +60,12 @@ function providerHeaders(url) {
     "user-agent": "TradingWorkbench/1.0 (+https://github.com/gaaiyun/TradingWorkbench)",
   };
   if (parsed.hostname.endsWith("sse.com.cn")) {
-    headers.referer = "https://etf.sse.com.cn/fundlist/scalelist/";
+    // commonQuery rejects the repository-identifying bot user agent from
+    // GitHub-hosted runners even though the same request succeeds locally.
+    // Match the public ETF scale page request shape without adding cookies.
+    headers.accept = "application/json, text/javascript, */*; q=0.01";
+    headers.referer = "https://etf.sse.com.cn/fundlist/scalelist/index.shtml";
+    headers["user-agent"] = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 Chrome/138.0 Safari/537.36";
   } else if (parsed.hostname.endsWith("eastmoney.com")) {
     headers.referer = "https://quote.eastmoney.com/";
   }

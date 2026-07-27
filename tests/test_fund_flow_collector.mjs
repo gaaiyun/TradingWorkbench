@@ -223,6 +223,18 @@ test("blocked sources fail immediately and errors never expose response bodies",
   assert.equal(error.message.includes(API_TOKEN), false);
 });
 
+test("SSE scale requests mirror the public page request shape", async () => {
+  let captured;
+  await fetchBoundedJson(async (_input, init) => {
+    captured = init;
+    return Response.json(scalePayload("515880"));
+  }, sseScaleUrl("515880", 1), { delayImpl: async () => {} });
+
+  assert.equal(captured.headers.accept, "application/json, text/javascript, */*; q=0.01");
+  assert.equal(captured.headers.referer, "https://etf.sse.com.cn/fundlist/scalelist/index.shtml");
+  assert.match(captured.headers["user-agent"], /^Mozilla\/5\.0/);
+});
+
 test("non-retryable HTTP 4xx fails once while 503 remains bounded", async () => {
   let calls = 0;
   await assert.rejects(fetchBoundedJson(async () => {
