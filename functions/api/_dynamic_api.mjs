@@ -68,6 +68,21 @@ function optionalText(params, name) {
   return value;
 }
 
+function optionalEnum(params, name, allowed) {
+  const raw = params.get(name);
+  if (raw === null) return null;
+  if (!allowed.has(raw)) fail(`无效的 ${name} 参数`);
+  return raw;
+}
+
+function validateStrictParams(params, allowed) {
+  for (const name of params.keys()) {
+    if (!allowed.has(name) || params.getAll(name).length !== 1) {
+      fail(`无效的 ${name} 参数`);
+    }
+  }
+}
+
 function limitValue(params) {
   const raw = params.get("limit");
   if (raw === null) return 100;
@@ -79,6 +94,15 @@ function limitValue(params) {
 
 export function parseDynamicQuery(request, capabilities = {}) {
   const params = new URL(request.url).searchParams;
+  if (capabilities.strict) {
+    const allowed = new Set(["from", "to", "limit"]);
+    for (const name of [
+      "symbol", "profile", "timeframe", "after", "importance", "topic", "source", "type", "period",
+    ]) {
+      if (capabilities[name]) allowed.add(name);
+    }
+    validateStrictParams(params, allowed);
+  }
   const query = {
     symbol: capabilities.symbol ? optionalPattern(params, "symbol", SYMBOL, { upper: true }) : null,
     profile: capabilities.profile ? optionalPattern(params, "profile", PROFILE) : null,
@@ -91,6 +115,8 @@ export function parseDynamicQuery(request, capabilities = {}) {
     source: capabilities.source ? optionalPattern(params, "source", SOURCE) : null,
     limit: limitValue(params),
   };
+  if (capabilities.type) query.type = optionalEnum(params, "type", capabilities.type);
+  if (capabilities.period) query.period = optionalEnum(params, "period", capabilities.period);
   if (capabilities.timeframe) {
     query.timeframe = params.get("timeframe");
     if (query.timeframe !== null && !TIMEFRAMES.has(query.timeframe)) {
@@ -186,6 +212,7 @@ export async function serveDynamic(
     health = false,
     cursorColumn = null,
     statusScope = "all",
+    envelopeExtras = {},
   },
 ) {
   let filters;
@@ -195,6 +222,7 @@ export async function serveDynamic(
     if (error instanceof DynamicQueryError) {
       return json({
         ...unavailableEnvelope(error.message),
+        ...envelopeExtras,
         ...(cursorColumn ? { cursor: null } : {}),
       }, 400, { "cache-control": "no-store" });
     }
@@ -203,20 +231,25 @@ export async function serveDynamic(
   const db = d1Binding(env);
   if (!db) return json({
     ...unavailableEnvelope(),
+    ...envelopeExtras,
     ...(cursorColumn ? { cursor: null } : {}),
   }, 200, { "cache-control": "no-store" });
   try {
-    return json(dynamicEnvelope(await query(db, filters), {
-      health,
-      cursorColumn,
-      cursorForward: Boolean(filters.after),
-      statusScope,
-    }), 200, {
+    return json({
+      ...dynamicEnvelope(await query(db, filters), {
+        health,
+        cursorColumn,
+        cursorForward: Boolean(filters.after),
+        statusScope,
+      }),
+      ...envelopeExtras,
+    }, 200, {
       "cache-control": "no-store",
     });
   } catch {
     return json({
       ...unavailableEnvelope(),
+      ...envelopeExtras,
       ...(cursorColumn ? { cursor: null } : {}),
     }, 200, { "cache-control": "no-store" });
   }

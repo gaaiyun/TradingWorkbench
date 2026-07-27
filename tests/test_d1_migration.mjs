@@ -35,6 +35,10 @@ const notificationMigrationUrl = new URL(
   "../migrations/0015_notification_deliveries.sql",
   import.meta.url,
 );
+const fundFlowMigrationUrl = new URL(
+  "../migrations/0016_fund_flows.sql",
+  import.meta.url,
+);
 
 test("D1 migration defines every dynamic workbench table and its lookup indexes", () => {
   const sql = readFileSync(migrationUrl, "utf8");
@@ -385,4 +389,53 @@ test("chat and evidence scope migration backfills legacy ownership and adds exac
     `).get().scope,
     "legacy",
   );
+});
+
+test("fund-flow migration is additive, idempotent, indexed, and profile-scoped", async (t) => {
+  const sql = readFileSync(fundFlowMigrationUrl, "utf8");
+  assert.match(sql, /CREATE TABLE IF NOT EXISTS fund_flows\b/i);
+  assert.doesNotMatch(sql, /\b(?:ALTER|UPDATE|DELETE|DROP)\b/i);
+  assert.match(sql, /id\s+TEXT\s+PRIMARY\s+KEY/i);
+  assert.match(sql, /period\s+TEXT\s+NOT\s+NULL\s+DEFAULT\s+'1d'/i);
+  assert.match(sql, /method\s+TEXT\s+NOT\s+NULL\s+DEFAULT\s+'reported'/i);
+  assert.match(sql, /currency\s+TEXT(?!\s+NOT\s+NULL)/i);
+  assert.match(sql, /adjustment\s+TEXT\s+NOT\s+NULL\s+DEFAULT\s+'none'/i);
+  assert.match(
+    sql,
+    /UNIQUE\s*\(\s*profile_id\s*,\s*symbol\s*,\s*flow_type\s*,\s*period\s*,\s*ts\s*,\s*source\s*,\s*adjustment\s*\)/i,
+  );
+  assert.match(sql, /CREATE INDEX[^;]+fund_flows[^;]+symbol[^;]+flow_type[^;]+period[^;]+ts/i);
+  assert.match(sql, /CREATE INDEX[^;]+fund_flows[^;]+profile_id[^;]+ts/i);
+  assert.match(sql, /CREATE INDEX[^;]+fund_flows[^;]+expires_at/i);
+
+  let DatabaseSync;
+  try {
+    ({ DatabaseSync } = await import("node:sqlite"));
+  } catch {
+    t.skip("node:sqlite is unavailable on this Node version");
+    return;
+  }
+  const db = new DatabaseSync(":memory:");
+  db.exec("CREATE TABLE legacy_rows (id TEXT PRIMARY KEY, value TEXT NOT NULL);");
+  db.prepare("INSERT INTO legacy_rows (id, value) VALUES ('old', 'preserved')").run();
+  db.exec(sql);
+  db.exec(sql);
+  assert.deepEqual({ ...db.prepare("SELECT * FROM legacy_rows").get() }, {
+    id: "old",
+    value: "preserved",
+  });
+
+  const insert = db.prepare(`
+    INSERT INTO fund_flows (
+      id, profile_id, symbol, flow_type, ts, value, unit, source,
+      as_of, fetched_at, freshness, quality, expires_at
+    ) VALUES (?, ?, '515880.SS', 'margin_balance',
+      '2026-07-27T00:00:00.000Z', 123, 'CNY', 'exchange',
+      '2026-07-27T00:00:00.000Z', '2026-07-27T01:00:00.000Z',
+      'fresh', 'good', '2099-01-01T00:00:00.000Z')
+  `);
+  insert.run("flow-a", "profile-a");
+  insert.run("flow-b", "profile-b");
+  assert.equal(db.prepare("SELECT count(*) AS count FROM fund_flows").get().count, 2);
+  assert.throws(() => insert.run("flow-c", "profile-a"), /UNIQUE constraint failed/i);
 });

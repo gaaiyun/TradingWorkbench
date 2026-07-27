@@ -327,6 +327,26 @@ export function querySourceHealth(db, query) {
   });
 }
 
+export function queryFundFlows(db, query) {
+  return queryRows(db, {
+    table: "fund_flows",
+    columns: [
+      "id", "profile_id", "symbol", "flow_type", "period", "ts", "value", "unit",
+      "currency", "source", "method", ...SOURCE_COLUMNS,
+    ],
+    filters: [
+      ["symbol", query.symbol],
+      ["profile_id", query.profile],
+      ["flow_type", query.type],
+      ["period", query.period],
+      ["source", query.source],
+    ],
+    timeColumn: "ts",
+    keyColumn: "id",
+    ...query,
+  });
+}
+
 export async function queryNotificationStatus(db, query) {
   const clauses = [];
   const values = [];
