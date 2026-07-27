@@ -700,6 +700,7 @@ test("monitor status exposes bounded D1 capacity only when explicitly requested"
     report_manifests: 58,
     chat_messages: 17,
     notification_deliveries: 4,
+    fund_flows: 19636,
   };
   const DB = {
     prepare(sql) {
@@ -740,6 +741,11 @@ test("monitor status exposes bounded D1 capacity only when explicitly requested"
     name: "market_bars",
     rowCount: 100001,
     atLeast: true,
+  });
+  assert.deepEqual(payload.capacity.tables.find(({ name }) => name === "fund_flows"), {
+    name: "fund_flows",
+    rowCount: 19636,
+    atLeast: false,
   });
   assert.match(calls.find((sql) => /^SELECT\s+\(SELECT COUNT/i.test(sql.trim())), /LIMIT 100001/i);
 

@@ -11,6 +11,7 @@ const CAPACITY_TABLES = Object.freeze([
   "report_manifests",
   "chat_messages",
   "notification_deliveries",
+  "fund_flows",
 ]);
 
 function unavailableCapacity(reason) {
