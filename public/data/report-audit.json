@@ -1,17 +1,124 @@
 {
   "version": 1,
-  "generatedAt": "2026-07-26T09:29:58.873Z",
+  "generatedAt": "2026-07-27T08:11:55.762Z",
   "summary": {
-    "successfulReports": 49,
+    "successfulReports": 51,
     "verifiedReports": 0,
     "invalidatedReports": 4,
-    "legacyUnverifiedReports": 45,
+    "legacyUnverifiedReports": 47,
     "invalidRecords": 7,
     "evidenceValidationFailures": 4,
     "analysisExecutionFailures": 2,
     "invalidInputs": 1
   },
   "reports": [
+    {
+      "ticker": "515880.SS",
+      "tradeDate": "2026-07-27",
+      "generatedAt": "2026-07-27T15:36:46+08:00",
+      "provider": "openai_compatible",
+      "rating": "Not Rated",
+      "analysisStatus": "insufficient_evidence",
+      "report": "reports/515880.SS/2026-07-27/complete_report.md",
+      "auditStatus": "legacy_unverified",
+      "failureClass": null,
+      "problemCodes": [
+        "ETF_TEMPLATE_MISMATCH",
+        "MISSING_CLAIM_EVIDENCE",
+        "MISSING_PUBLICATION_TIME"
+      ],
+      "evidence": {
+        "urlCount": 23,
+        "claimCitationCount": 0,
+        "finalProposalMarkers": 1,
+        "priceTargetCount": 0,
+        "valuationMethodCount": 61,
+        "publishedMarkerCount": 0
+      },
+      "claimValidation": {
+        "status": "failed",
+        "errorCodes": [
+          "UNCITED_NUMERIC_CLAIM",
+          "UNSUPPORTED_ALLOCATION"
+        ],
+        "citationCount": 33,
+        "unknownEvidenceIds": [],
+        "uncitedNumericParagraphs": 140
+      },
+      "evidencePacket": {
+        "status": "ok",
+        "asOf": "2026-07-27T23:59:59Z",
+        "contentHash": "2523a081963a020bec30aacab9cf129e68a90ba207f7131620bda37085790e48"
+      },
+      "evidencePublish": {
+        "published": false,
+        "reason": "http_error",
+        "status": 400
+      },
+      "identity": {
+        "scope": "profile",
+        "kind": "monitor",
+        "runId": "30246732813",
+        "profileId": "cn-semi-comms",
+        "requestId": null,
+        "slotId": "slot-5675dae6a82be9abbadb878b167daeda880e96dddac8aa4bcb533d7a0fb7c94f",
+        "scheduledFor": "2026-07-27T07:20:00.000Z"
+      },
+      "supersededBy": null
+    },
+    {
+      "ticker": "512480.SS",
+      "tradeDate": "2026-07-27",
+      "generatedAt": "2026-07-27T15:36:46+08:00",
+      "provider": "openai_compatible",
+      "rating": "Not Rated",
+      "analysisStatus": "insufficient_evidence",
+      "report": "reports/512480.SS/2026-07-27/complete_report.md",
+      "auditStatus": "legacy_unverified",
+      "failureClass": null,
+      "problemCodes": [
+        "ETF_TEMPLATE_MISMATCH",
+        "MISSING_CLAIM_EVIDENCE"
+      ],
+      "evidence": {
+        "urlCount": 21,
+        "claimCitationCount": 0,
+        "finalProposalMarkers": 1,
+        "priceTargetCount": 0,
+        "valuationMethodCount": 34,
+        "publishedMarkerCount": 11
+      },
+      "claimValidation": {
+        "status": "failed",
+        "errorCodes": [
+          "UNCITED_NUMERIC_CLAIM",
+          "UNSUPPORTED_ALLOCATION"
+        ],
+        "citationCount": 33,
+        "unknownEvidenceIds": [],
+        "uncitedNumericParagraphs": 106
+      },
+      "evidencePacket": {
+        "status": "ok",
+        "asOf": "2026-07-27T23:59:59Z",
+        "contentHash": "a2dc400fdfc73ca95561b0b93eca7269b82a7d0989d2de53990de96e756b14f6"
+      },
+      "evidencePublish": {
+        "published": false,
+        "reason": "http_error",
+        "status": 400
+      },
+      "identity": {
+        "scope": "profile",
+        "kind": "monitor",
+        "runId": "30246732813",
+        "profileId": "cn-semi-comms",
+        "requestId": null,
+        "slotId": "slot-5675dae6a82be9abbadb878b167daeda880e96dddac8aa4bcb533d7a0fb7c94f",
+        "scheduledFor": "2026-07-27T07:20:00.000Z"
+      },
+      "supersededBy": null
+    },
     {
       "ticker": "515880.SS",
       "tradeDate": "2026-07-24",

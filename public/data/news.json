@@ -1,59 +1,149 @@
 {
   "version": 1,
-  "status": "partial",
-  "generated_at": "2026-07-26T13:28:35+08:00",
-  "trade_date": "2026-07-24",
+  "status": "ok",
+  "generated_at": "2026-07-27T15:36:46+08:00",
+  "trade_date": "2026-07-27",
   "global": {
-    "status": "unavailable",
+    "status": "ok",
     "query_type": "global",
     "ticker": null,
-    "start_date": "2026-07-17",
-    "end_date": "2026-07-24",
-    "fetched_at": "2026-07-26T05:28:36Z",
-    "items": [],
+    "start_date": "2026-07-20",
+    "end_date": "2026-07-27",
+    "fetched_at": "2026-07-27T07:36:47Z",
+    "items": [
+      {
+        "title": "Earnings To Watch: Expand Energy (EXE) Reports Q2 Results Tomorrow",
+        "summary": "",
+        "url": "https://finance.yahoo.com/energy/articles/earnings-watch-expand-energy-exe-064502582.html",
+        "source": "StockStory",
+        "published_at": "2026-07-27T06:45:02Z",
+        "fetched_at": "2026-07-27T07:36:47Z",
+        "ticker": null,
+        "source_tier": "aggregator"
+      },
+      {
+        "title": "Why Premium Grocers Skew CMBS Delinquency Rankings",
+        "summary": "",
+        "url": "https://finance.yahoo.com/m/9ccc3361-fc36-3808-8c77-5e96b1c9dddc/why-premium-grocers-skew-cmbs.html",
+        "source": "CRE Daily",
+        "published_at": "2026-07-27T06:43:40Z",
+        "fetched_at": "2026-07-27T07:36:47Z",
+        "ticker": null,
+        "source_tier": "aggregator"
+      },
+      {
+        "title": "Oil prices dip over 6% after US, Iran pause fighting over weekend",
+        "summary": "",
+        "url": "https://finance.yahoo.com/energy/articles/oil-slips-more-5-us-221044741.html",
+        "source": "Reuters",
+        "published_at": "2026-07-27T06:34:59Z",
+        "fetched_at": "2026-07-27T07:36:47Z",
+        "ticker": null,
+        "source_tier": "aggregator"
+      },
+      {
+        "title": "Long-Term Treasury Yields Hit Highest Levels Since 2007",
+        "summary": "",
+        "url": "https://finance.yahoo.com/m/5730785f-0822-36d9-8e43-1573a8337d4c/long-term-treasury-yields-hit.html",
+        "source": "CRE Daily",
+        "published_at": "2026-07-27T06:30:19Z",
+        "fetched_at": "2026-07-27T07:36:47Z",
+        "ticker": null,
+        "source_tier": "aggregator"
+      },
+      {
+        "title": "Eurozone Bond Yields Open Lower, Track Direction of U.S. Treasury Yields, Oil",
+        "summary": "",
+        "url": "https://finance.yahoo.com/m/6e0d64c7-7676-3c85-8141-da6dcea1f6fa/eurozone-bond-yields-open.html",
+        "source": "The Wall Street Journal",
+        "published_at": "2026-07-27T06:29:00Z",
+        "fetched_at": "2026-07-27T07:36:47Z",
+        "ticker": null,
+        "source_tier": "aggregator"
+      },
+      {
+        "title": "Oil prices sink 4% while Asian shares gain as Chinese chipmaker CXMT soars in Shanghai trading debut",
+        "summary": "",
+        "url": "https://finance.yahoo.com/markets/articles/oil-prices-sink-4-while-053506103.html",
+        "source": "Associated Press",
+        "published_at": "2026-07-27T05:35:06Z",
+        "fetched_at": "2026-07-27T07:36:47Z",
+        "ticker": null,
+        "source_tier": "aggregator"
+      },
+      {
+        "title": "Oil prices plunge as US and Iran pause strikes over Strait of Hormuz",
+        "summary": "",
+        "url": "https://finance.yahoo.com/m/bdb3b73f-174d-3515-a44c-578169b8053e/oil-prices-plunge-as-us-and.html",
+        "source": "Euronews",
+        "published_at": "2026-07-27T05:26:13Z",
+        "fetched_at": "2026-07-27T07:36:47Z",
+        "ticker": null,
+        "source_tier": "aggregator"
+      },
+      {
+        "title": "Warren Buffett's Favorite Stock Market Indicator Is Sounding the Alarm. History Suggests Investors Are \"Playing With Fire.\"",
+        "summary": "",
+        "url": "https://finance.yahoo.com/m/a8cc4282-2de6-34b1-90d0-5692cd85ff01/warren-buffett%27s-favorite.html",
+        "source": "Motley Fool",
+        "published_at": "2026-07-27T05:20:00Z",
+        "fetched_at": "2026-07-27T07:36:47Z",
+        "ticker": null,
+        "source_tier": "aggregator"
+      },
+      {
+        "title": "Dow Jones Futures Rise, Oil Prices Dive On Iran Hopes; Apple Leads Earnings Wave, Fed Meeting Ahead",
+        "summary": "",
+        "url": "https://finance.yahoo.com/m/56d0a8cb-a014-3c28-a929-8720c9c346e7/dow-jones-futures-rise%2C-oil.html",
+        "source": "Investor's Business Daily",
+        "published_at": "2026-07-27T05:00:30Z",
+        "fetched_at": "2026-07-27T07:36:47Z",
+        "ticker": null,
+        "source_tier": "aggregator"
+      },
+      {
+        "title": "Singapore Central Bank Tightens Again in Surprise Move",
+        "summary": "",
+        "url": "https://finance.yahoo.com/m/7cba8e69-7c48-3096-b5f5-7987c1163df6/singapore-central-bank.html",
+        "source": "The Wall Street Journal",
+        "published_at": "2026-07-27T03:26:00Z",
+        "fetched_at": "2026-07-27T07:36:47Z",
+        "ticker": null,
+        "source_tier": "aggregator"
+      }
+    ],
     "source_statuses": [
       {
         "source": "Yahoo Finance",
-        "status": "unsupported",
-        "item_count": 0
+        "status": "ok",
+        "item_count": 39
       },
       {
         "source": "Federal Reserve",
-        "status": "unsupported",
+        "status": "empty",
         "item_count": 0
       }
     ]
   },
   "tickers": {
     "515880.SS": {
-      "status": "partial",
+      "status": "empty",
       "query_type": "ticker",
       "ticker": "515880.SS",
-      "start_date": "2026-07-24",
-      "end_date": "2026-07-24",
-      "fetched_at": "2026-07-26T05:28:36Z",
-      "items": [
-        {
-          "title": "通信ETF国泰：7月23日融资买入2.04亿元，融资融券余额14.63亿元",
-          "summary": "通信ETF国泰：7月23日融资买入2.04亿元，融资融券余额14.63亿元 手机网易网",
-          "url": "https://news.google.com/rss/articles/CBMiYkFVX3lxTE5LNThQRnNzc29Sc2JEN0pDLXd3RDNSOHNxM2dmUnYzY1cxTlNYMkZ4VS0xbm1TYmp1cXlDSW9YdTNLVFVFSjJCOG4wZV9US29DOGEwbjBwa3hzQW9SdmRzOXR3?oc=5",
-          "source": "Google News / 手机网易网",
-          "published_at": "2026-07-24T01:37:44Z",
-          "fetched_at": "2026-07-26T05:28:36Z",
-          "ticker": "515880.SS",
-          "source_tier": "aggregator"
-        }
-      ],
+      "start_date": "2026-07-27",
+      "end_date": "2026-07-27",
+      "fetched_at": "2026-07-27T07:36:48Z",
+      "items": [],
       "source_statuses": [
         {
           "source": "Yahoo Finance",
-          "status": "unsupported",
+          "status": "empty",
           "item_count": 0
         },
         {
           "source": "Google News RSS",
-          "status": "ok",
-          "item_count": 1
+          "status": "empty",
+          "item_count": 0
         },
         {
           "source": "SEC EDGAR",
@@ -63,17 +153,17 @@
       ]
     },
     "512480.SS": {
-      "status": "partial_empty",
+      "status": "empty",
       "query_type": "ticker",
       "ticker": "512480.SS",
-      "start_date": "2026-07-24",
-      "end_date": "2026-07-24",
-      "fetched_at": "2026-07-26T05:28:38Z",
+      "start_date": "2026-07-27",
+      "end_date": "2026-07-27",
+      "fetched_at": "2026-07-27T07:36:50Z",
       "items": [],
       "source_statuses": [
         {
           "source": "Yahoo Finance",
-          "status": "unsupported",
+          "status": "empty",
           "item_count": 0
         },
         {
@@ -91,13 +181,103 @@
   },
   "items": [
     {
-      "title": "通信ETF国泰：7月23日融资买入2.04亿元，融资融券余额14.63亿元",
-      "summary": "通信ETF国泰：7月23日融资买入2.04亿元，融资融券余额14.63亿元 手机网易网",
-      "url": "https://news.google.com/rss/articles/CBMiYkFVX3lxTE5LNThQRnNzc29Sc2JEN0pDLXd3RDNSOHNxM2dmUnYzY1cxTlNYMkZ4VS0xbm1TYmp1cXlDSW9YdTNLVFVFSjJCOG4wZV9US29DOGEwbjBwa3hzQW9SdmRzOXR3?oc=5",
-      "source": "Google News / 手机网易网",
-      "published_at": "2026-07-24T01:37:44Z",
-      "fetched_at": "2026-07-26T05:28:36Z",
-      "ticker": "515880.SS",
+      "title": "Earnings To Watch: Expand Energy (EXE) Reports Q2 Results Tomorrow",
+      "summary": "",
+      "url": "https://finance.yahoo.com/energy/articles/earnings-watch-expand-energy-exe-064502582.html",
+      "source": "StockStory",
+      "published_at": "2026-07-27T06:45:02Z",
+      "fetched_at": "2026-07-27T07:36:47Z",
+      "ticker": null,
+      "source_tier": "aggregator"
+    },
+    {
+      "title": "Why Premium Grocers Skew CMBS Delinquency Rankings",
+      "summary": "",
+      "url": "https://finance.yahoo.com/m/9ccc3361-fc36-3808-8c77-5e96b1c9dddc/why-premium-grocers-skew-cmbs.html",
+      "source": "CRE Daily",
+      "published_at": "2026-07-27T06:43:40Z",
+      "fetched_at": "2026-07-27T07:36:47Z",
+      "ticker": null,
+      "source_tier": "aggregator"
+    },
+    {
+      "title": "Oil prices dip over 6% after US, Iran pause fighting over weekend",
+      "summary": "",
+      "url": "https://finance.yahoo.com/energy/articles/oil-slips-more-5-us-221044741.html",
+      "source": "Reuters",
+      "published_at": "2026-07-27T06:34:59Z",
+      "fetched_at": "2026-07-27T07:36:47Z",
+      "ticker": null,
+      "source_tier": "aggregator"
+    },
+    {
+      "title": "Long-Term Treasury Yields Hit Highest Levels Since 2007",
+      "summary": "",
+      "url": "https://finance.yahoo.com/m/5730785f-0822-36d9-8e43-1573a8337d4c/long-term-treasury-yields-hit.html",
+      "source": "CRE Daily",
+      "published_at": "2026-07-27T06:30:19Z",
+      "fetched_at": "2026-07-27T07:36:47Z",
+      "ticker": null,
+      "source_tier": "aggregator"
+    },
+    {
+      "title": "Eurozone Bond Yields Open Lower, Track Direction of U.S. Treasury Yields, Oil",
+      "summary": "",
+      "url": "https://finance.yahoo.com/m/6e0d64c7-7676-3c85-8141-da6dcea1f6fa/eurozone-bond-yields-open.html",
+      "source": "The Wall Street Journal",
+      "published_at": "2026-07-27T06:29:00Z",
+      "fetched_at": "2026-07-27T07:36:47Z",
+      "ticker": null,
+      "source_tier": "aggregator"
+    },
+    {
+      "title": "Oil prices sink 4% while Asian shares gain as Chinese chipmaker CXMT soars in Shanghai trading debut",
+      "summary": "",
+      "url": "https://finance.yahoo.com/markets/articles/oil-prices-sink-4-while-053506103.html",
+      "source": "Associated Press",
+      "published_at": "2026-07-27T05:35:06Z",
+      "fetched_at": "2026-07-27T07:36:47Z",
+      "ticker": null,
+      "source_tier": "aggregator"
+    },
+    {
+      "title": "Oil prices plunge as US and Iran pause strikes over Strait of Hormuz",
+      "summary": "",
+      "url": "https://finance.yahoo.com/m/bdb3b73f-174d-3515-a44c-578169b8053e/oil-prices-plunge-as-us-and.html",
+      "source": "Euronews",
+      "published_at": "2026-07-27T05:26:13Z",
+      "fetched_at": "2026-07-27T07:36:47Z",
+      "ticker": null,
+      "source_tier": "aggregator"
+    },
+    {
+      "title": "Warren Buffett's Favorite Stock Market Indicator Is Sounding the Alarm. History Suggests Investors Are \"Playing With Fire.\"",
+      "summary": "",
+      "url": "https://finance.yahoo.com/m/a8cc4282-2de6-34b1-90d0-5692cd85ff01/warren-buffett%27s-favorite.html",
+      "source": "Motley Fool",
+      "published_at": "2026-07-27T05:20:00Z",
+      "fetched_at": "2026-07-27T07:36:47Z",
+      "ticker": null,
+      "source_tier": "aggregator"
+    },
+    {
+      "title": "Dow Jones Futures Rise, Oil Prices Dive On Iran Hopes; Apple Leads Earnings Wave, Fed Meeting Ahead",
+      "summary": "",
+      "url": "https://finance.yahoo.com/m/56d0a8cb-a014-3c28-a929-8720c9c346e7/dow-jones-futures-rise%2C-oil.html",
+      "source": "Investor's Business Daily",
+      "published_at": "2026-07-27T05:00:30Z",
+      "fetched_at": "2026-07-27T07:36:47Z",
+      "ticker": null,
+      "source_tier": "aggregator"
+    },
+    {
+      "title": "Singapore Central Bank Tightens Again in Surprise Move",
+      "summary": "",
+      "url": "https://finance.yahoo.com/m/7cba8e69-7c48-3096-b5f5-7987c1163df6/singapore-central-bank.html",
+      "source": "The Wall Street Journal",
+      "published_at": "2026-07-27T03:26:00Z",
+      "fetched_at": "2026-07-27T07:36:47Z",
+      "ticker": null,
       "source_tier": "aggregator"
     }
   ]

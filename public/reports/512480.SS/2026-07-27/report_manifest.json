@@ -1,0 +1,41 @@
+{
+  "schemaVersion": 1,
+  "ticker": "512480.SS",
+  "tradeDate": "2026-07-27",
+  "generatedAt": "2026-07-27T08:11:53.517982+00:00",
+  "analysisStatus": "insufficient_evidence",
+  "auditStatus": "legacy_unverified",
+  "claimValidation": {
+    "status": "failed",
+    "errorCodes": [
+      "UNCITED_NUMERIC_CLAIM",
+      "UNSUPPORTED_ALLOCATION"
+    ],
+    "citationCount": 33,
+    "unknownEvidenceIds": [],
+    "uncitedNumericParagraphs": 106
+  },
+  "evidence": {
+    "schemaVersion": "EvidencePacketV1",
+    "asOf": "2026-07-27T23:59:59Z",
+    "contentHash": "a2dc400fdfc73ca95561b0b93eca7269b82a7d0989d2de53990de96e756b14f6",
+    "packetFileHash": "d94c713d1c3ef15a10dc3a789d9584a527741004e9a229d1b12e3512cf4e0883",
+    "status": "ok",
+    "marketHistory": {
+      "source": "tencent",
+      "adjustment": "qfq",
+      "barCount": 641,
+      "startAt": "2023-11-29T16:00:00Z",
+      "endAt": "2026-07-23T16:00:00Z"
+    }
+  },
+  "identity": {
+    "scope": "profile",
+    "kind": "monitor",
+    "runId": "30246732813",
+    "profileId": "cn-semi-comms",
+    "requestId": null,
+    "slotId": "slot-5675dae6a82be9abbadb878b167daeda880e96dddac8aa4bcb533d7a0fb7c94f",
+    "scheduledFor": "2026-07-27T07:20:00.000Z"
+  }
+}
