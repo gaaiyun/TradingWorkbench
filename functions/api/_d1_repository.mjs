@@ -2,6 +2,103 @@ export function d1Binding(env) {
   return env?.DB && typeof env.DB.prepare === "function" ? env.DB : null;
 }
 
+const CAPACITY_ROW_LIMIT = 100_001;
+const CAPACITY_TABLES = Object.freeze([
+  "market_bars",
+  "news_items",
+  "market_events",
+  "evidence_packets",
+  "report_manifests",
+  "chat_messages",
+  "notification_deliveries",
+]);
+
+function unavailableCapacity(reason) {
+  return {
+    status: "unavailable",
+    reason,
+    measuredAt: null,
+    storage: null,
+    tables: [],
+  };
+}
+
+function safeInteger(value) {
+  const number = Number(value);
+  return Number.isSafeInteger(number) && number >= 0 ? number : null;
+}
+
+export async function queryD1Capacity(
+  db,
+  configuredTimeoutMs = 1500,
+  measuredAt = new Date(),
+) {
+  if (!db?.prepare) return unavailableCapacity("no_binding");
+  const timeoutMs = Math.min(
+    3000,
+    Math.max(25, Number(configuredTimeoutMs) || 1500),
+  );
+  const timedOut = Symbol("capacity-query-timeout");
+  let timer;
+  const aliases = CAPACITY_TABLES.map((table) => (
+    `(SELECT COUNT(*) FROM (SELECT 1 FROM ${table} LIMIT ${CAPACITY_ROW_LIMIT})) AS ${table}`
+  ));
+  try {
+    const query = (async () => {
+      const counts = await db.prepare(`SELECT ${aliases.join(", ")}`).first();
+      const tables = CAPACITY_TABLES.map((name) => {
+        const boundedCount = safeInteger(counts?.[name]);
+        if (boundedCount === null) throw new Error("capacity count unavailable");
+        return {
+          name,
+          rowCount: boundedCount,
+          atLeast: boundedCount >= CAPACITY_ROW_LIMIT,
+        };
+      });
+
+      let storage = { status: "unsupported" };
+      try {
+        const [pageCountRow, pageSizeRow] = await Promise.all([
+          db.prepare("PRAGMA page_count").first(),
+          db.prepare("PRAGMA page_size").first(),
+        ]);
+        const pageCount = safeInteger(pageCountRow?.page_count);
+        const pageSize = safeInteger(pageSizeRow?.page_size);
+        if (pageCount !== null && pageSize !== null) {
+          storage = {
+            status: "ok",
+            pageCount,
+            pageSize,
+            estimatedBytes: pageCount * pageSize,
+          };
+        }
+      } catch {
+        // Some D1/SQLite-compatible bindings do not expose PRAGMA metadata.
+      }
+      return {
+        status: "ok",
+        reason: null,
+        measuredAt: measuredAt.toISOString(),
+        storage,
+        tables,
+      };
+    })();
+    const result = await Promise.race([
+      query,
+      new Promise((resolve) => {
+        timer = setTimeout(() => resolve(timedOut), timeoutMs);
+      }),
+    ]);
+    return result === timedOut
+      ? unavailableCapacity("query_timeout")
+      : result;
+  } catch {
+    return unavailableCapacity("query_error");
+  } finally {
+    clearTimeout(timer);
+  }
+}
+
 export class SettingsConflictError extends Error {
   constructor(latest = null) {
     super("settings revision conflict");

@@ -32,10 +32,16 @@ export const PROVIDER_METADATA = Object.freeze({
     usageScope: "market-data-by-api-key",
   }),
   stooq: providerMetadata(),
-  "miit-policy-api": providerMetadata({
+  "gov-policy-library": providerMetadata({
     authorityTier: "evidence",
     transportTier: "official-json",
-    usageScope: "cn-policy-notices",
+    usageScope: "cn-government-policy-library",
+    limits: { maxResponseBytes: 262_144, maxItems: 8 },
+  }),
+  "sse-fund-announcements": providerMetadata({
+    authorityTier: "evidence",
+    transportTier: "official-jsonp",
+    usageScope: "cn-etf-announcements",
     limits: { maxResponseBytes: 262_144, maxItems: 8 },
   }),
   "hashkey-ir": providerMetadata({

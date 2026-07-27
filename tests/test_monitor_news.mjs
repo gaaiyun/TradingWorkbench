@@ -118,6 +118,45 @@ test("Eastmoney JSONP parser normalizes publisher, source time and article URL",
   }]);
 });
 
+test("SSE fund announcement parser keeps exact ETF filings and official PDF links", async () => {
+  const { parseSseFundAnnouncements } = await import(newsUrl);
+  const payload = `TradingWorkbenchSse(${JSON.stringify({
+    result: [
+      {
+        SSEDATE: "2026-07-21",
+        TITLE: "国联安中证全指半导体产品与设备ETF 2026年第2季度报告",
+        SECURITY_CODE: "512480",
+        BULLETIN_TYPE: "季报",
+        URL: "/disclosure/fund/announcement/c/new/2026-07-21/512480_report.pdf",
+      },
+      {
+        SSEDATE: "2026-07-03",
+        TITLE: "国联安半导体ETF基金份额拆分结果公告",
+        SECURITY_CODE: "512480",
+        BULLETIN_TYPE: "其它",
+        URL: "/disclosure/fund/announcement/c/new/2026-07-03/512480_split.pdf",
+      },
+      {
+        SSEDATE: "2026-07-22",
+        TITLE: "其他基金公告",
+        SECURITY_CODE: "515880",
+        URL: "/disclosure/fund/announcement/c/new/2026-07-22/other.pdf",
+      },
+    ],
+  })})`;
+  const items = parseSseFundAnnouncements(payload, "512480", {
+    begin: "2026-06-23",
+    end: "2026-07-23",
+    now: new Date("2026-07-23T01:30:00.000Z"),
+    targetSymbol: "512480.SS",
+  });
+  assert.equal(items.length, 2);
+  assert.equal(items.every(({ url }) =>
+    url.startsWith("https://www.sse.com.cn/disclosure/fund/announcement/")), true);
+  assert.equal(items.every(({ publisher }) => publisher === "上海证券交易所"), true);
+  assert.deepEqual(items[0]._topicSymbols, ["512480.SS"]);
+});
+
 test("SEC EDGAR Atom parser keeps the official filing URL and source timestamp", async () => {
   const { parseSecEdgarAtom } = await import(newsUrl);
   assert.deepEqual(parseSecEdgarAtom(SEC_ATOM), [{
@@ -801,12 +840,19 @@ test("news collection writes relevant discovery items and rejects bare SMH false
           headers: { "content-type": "application/atom+xml" },
         });
       }
-      if (String(url).includes("search-front-server/api/search/info")) {
+      if (String(url).includes("/search-gov/data")) {
         return new Response(JSON.stringify({
-          data: { searchResult: { dataResults: [] } },
+          code: "200",
+          searchVO: { catMap: null },
         }), {
           status: 200,
           headers: { "content-type": "application/json" },
+        });
+      }
+      if (String(url).includes("query.sse.com.cn")) {
+        return new Response('TradingWorkbenchSse({"result":[]})', {
+          status: 200,
+          headers: { "content-type": "application/javascript" },
         });
       }
       return new Response(RSS, {
@@ -971,26 +1017,32 @@ test("news collection falls back to Yahoo feeds for Alphabet and HashKey", async
   );
 });
 
-test("news collection uses bounded current MIIT policy queries when Google is blocked", async () => {
+test("news collection uses bounded current government policy queries when Google is blocked", async () => {
   const { collectNewsForProfile } = await import(newsUrl);
   const calls = [];
   const writes = [];
-  const miitPayload = {
-    data: {
-      searchResult: {
-        dataResults: [{
-          groupData: [{
-            data: {
+  const policyPayload = {
+    code: "200",
+    searchVO: {
+      catMap: {
+        bumenfile: {
+          listVO: [
+            {
               title: "工业和信息化部关于通信设备产业高质量发展的通知",
-              url: "/zwgk/zcwj/wjfb/tz/art/2026/art_communications.html",
-              deploytime: String(Date.parse("2026-07-22T01:00:00.000Z")),
-              infocontent: "工业和信息化部发布通信设备产业政策通知。",
-              columnname: "通知",
-              columnid: "3e3ad1a3bec74939890a0d3e54815141",
-              publishgroupname: "信息通信发展司",
+              url: "https://www.gov.cn/zhengce/zhengceku/202607/content_communication.htm",
+              pubtimeStr: "2026.07.22",
+              summary: "工业和信息化部发布通信设备产业政策通知。",
+              puborg: "工业和信息化部",
             },
-          }],
-        }],
+            {
+              title: "工业和信息化部关于集成电路产业高质量发展的通知",
+              url: "https://www.gov.cn/zhengce/zhengceku/202607/content_integrated_circuit.htm",
+              pubtimeStr: "2026.07.21",
+              summary: "工业和信息化部发布集成电路产业政策通知。",
+              puborg: "工业和信息化部",
+            },
+          ],
+        },
       },
     },
   };
@@ -1005,7 +1057,7 @@ test("news collection uses bounded current MIIT policy queries when Google is bl
       if (String(url).includes("search-api-web.eastmoney.com")) {
         return new Response("", { status: 503 });
       }
-      return new Response(JSON.stringify(miitPayload), {
+      return new Response(JSON.stringify(policyPayload), {
         status: 200,
         headers: { "content-type": "application/json" },
       });
@@ -1017,30 +1069,24 @@ test("news collection uses bounded current MIIT policy queries when Google is bl
   assert.equal(result.status, "completed");
   assert.equal(
     calls.filter((url) =>
-      new URL(url).pathname === "/search-front-server/api/search/info").length,
+      new URL(url).pathname === "/search-gov/data").length,
     2,
     "通信与芯片主题各使用一个有界政策检索，policy 计划复用缓存",
   );
-  const miitUrls = calls
+  const policyUrls = calls
     .map((url) => new URL(url))
-    .filter(({ pathname }) => pathname === "/search-front-server/api/search/info");
+    .filter(({ pathname }) => pathname === "/search-gov/data");
   assert.deepEqual(
-    miitUrls.map((url) => url.searchParams.get("q")).sort(),
-    ["芯片", "通信"],
+    policyUrls.map((url) => url.searchParams.get("q")).sort(),
+    ["通信", "集成电路"],
   );
-  assert.equal(miitUrls.every((url) => url.searchParams.get("cateid") === "58"), true);
-  assert.equal(miitUrls.every((url) => url.searchParams.get("pg") === "10"), true);
-  assert.equal(miitUrls.every((url) => url.searchParams.get("p") === "1"), true);
+  assert.equal(policyUrls.every((url) => url.searchParams.get("timetype") === "timeqb"), true);
+  assert.equal(policyUrls.every((url) => url.searchParams.get("sort") === "pubtime"), true);
+  assert.equal(policyUrls.every((url) => url.searchParams.get("searchfield") === "title"), true);
+  assert.equal(policyUrls.every((url) => url.searchParams.get("p") === "1"), true);
+  assert.equal(policyUrls.every((url) => url.searchParams.get("n") === "20"), true);
   assert.equal(
-    miitUrls.every((url) => url.searchParams.get("begin") === "2026-06-23"),
-    true,
-  );
-  assert.equal(
-    miitUrls.every((url) => url.searchParams.get("end") === "2026-07-23"),
-    true,
-  );
-  assert.equal(
-    items.some(({ source }) => source === "工业和信息化部政策文件库"),
+    items.some(({ source }) => source === "中国政府网政策文件库"),
     true,
   );
   assert.equal(
@@ -1052,60 +1098,53 @@ test("news collection uses bounded current MIIT policy queries when Google is bl
   );
   assert.equal(
     result.sources.some(({ source, status }) =>
-      source === "miit-policy-api" && status === "success"),
+      source === "gov-policy-library" && status === "success"),
     true,
   );
 });
 
-test("MIIT policy API bounds parsed items and excludes leadership activity noise", async () => {
+test("government policy library bounds, dates and authority tiers", async () => {
   const { collectNewsForProfile } = await import(newsUrl);
   const calls = [];
   const writes = [];
-  const miitResult = ({ title, path, publishedAt, columnname, columnid }) => ({
-    groupData: [{
-      data: {
-        title,
-        url: path,
-        deploytime: String(publishedAt),
-        infocontent: "工业和信息化部发布半导体与集成电路政策通知。",
-        columnname,
-        columnid,
-        publishgroupname: "电子信息司",
-      },
-    }],
+  const policyResult = ({ title, path, publishedAt, publisher = "工业和信息化部" }) => ({
+    title,
+    url: path,
+    pubtimeStr: publishedAt,
+    summary: "工业和信息化部发布半导体与集成电路政策通知。",
+    puborg: publisher,
   });
-  const leadership = miitResult({
+  const foreignHost = policyResult({
     title: "部长调研半导体与集成电路产业",
-    path: "/xwfb/bldhd/art/2026/art_leadership.html",
-    publishedAt: Date.parse("2026-07-25T01:00:00.000Z"),
-    columnname: "部领导活动",
-    columnid: "d3e2bede1bc045e2875fc7161c01db7d",
+    path: "https://example.com/not-official",
+    publishedAt: "2026.07.24",
   });
-  const futurePolicy = miitResult({
+  const futurePolicy = policyResult({
     title: "未来发布时间不应进入证据包",
-    path: "/zwgk/zcwj/wjfb/art/2026/art_future.html",
-    publishedAt: Date.parse("2026-07-25T10:00:00.000Z"),
-    columnname: "通知",
-    columnid: "3e3ad1a3bec74939890a0d3e54815141",
+    path: "https://www.gov.cn/zhengce/zhengceku/202607/content_future.htm",
+    publishedAt: "2026.07.26",
   });
-  const expiredPolicy = miitResult({
+  const expiredPolicy = policyResult({
     title: "窗口外旧政策不应进入证据包",
-    path: "/zwgk/zcwj/wjfb/art/2026/art_expired.html",
-    publishedAt: Date.parse("2026-06-20T01:00:00.000Z"),
-    columnname: "通知",
-    columnid: "3e3ad1a3bec74939890a0d3e54815141",
+    path: "https://www.gov.cn/zhengce/zhengceku/202606/content_expired.htm",
+    publishedAt: "2026.06.20",
   });
-  const policies = Array.from({ length: 12 }, (_value, index) => miitResult({
+  const policies = Array.from({ length: 12 }, (_value, index) => policyResult({
     title: `工业和信息化部关于半导体与集成电路产业的政策通知 ${index + 1}`,
-    path: `/zwgk/zcwj/wjfb/art/2026/art_policy_${index + 1}.html`,
-    publishedAt: Date.parse(`2026-07-${String(24 - index).padStart(2, "0")}T01:00:00.000Z`),
-    columnname: "通知",
-    columnid: "3e3ad1a3bec74939890a0d3e54815141",
+    path: `https://www.gov.cn/zhengce/zhengceku/202607/content_policy_${index + 1}.htm`,
+    publishedAt: `2026.07.${String(24 - index).padStart(2, "0")}`,
   }));
-  const miitPayload = {
-    data: {
-      searchResult: {
-        dataResults: [leadership, futurePolicy, expiredPolicy, ...policies],
+  const policyPayload = {
+    code: "200",
+    searchVO: {
+      catMap: {
+        bumenfile: { listVO: [foreignHost, futurePolicy, expiredPolicy, ...policies] },
+        otherfile: { listVO: [policyResult({
+          title: "集成电路政策解读",
+          path: "https://www.gov.cn/zhengce/202607/content_explanation.htm",
+          publishedAt: "2026.07.23",
+          publisher: "中国政府网",
+        })] },
       },
     },
   };
@@ -1118,8 +1157,8 @@ test("MIIT policy API bounds parsed items and excludes leadership activity noise
     fetcher: async (url) => {
       calls.push(String(url));
       const pathname = new URL(url).pathname;
-      if (pathname === "/search-front-server/api/search/info") {
-        return new Response(JSON.stringify(miitPayload), {
+      if (pathname === "/search-gov/data") {
+        return new Response(JSON.stringify(policyPayload), {
           status: 200,
           headers: { "content-type": "application/json" },
         });
@@ -1132,22 +1171,28 @@ test("MIIT policy API bounds parsed items and excludes leadership activity noise
   const items = writes.flatMap(({ items: rows }) => rows);
   assert.equal(result.status, "completed");
   assert.equal(items.length, 8);
-  assert.equal(items.every(({ url }) => url.includes("/zwgk/zcwj/")), true);
-  assert.equal(items.some(({ url }) => url.includes("/bldhd/")), false);
+  assert.equal(items.every(({ url }) => url.includes("www.gov.cn/")), true);
+  assert.equal(items.some(({ url }) => url.includes("example.com")), false);
   assert.equal(items.some(({ url }) => url.includes("future")), false);
   assert.equal(items.some(({ url }) => url.includes("expired")), false);
-  assert.equal(items.every(({ sourceTier }) => sourceTier === "evidence"), true);
-  assert.equal(items[0].publishedAt, "2026-07-24T01:00:00.000Z");
+  assert.equal(items.filter(({ sourceTier }) => sourceTier === "discovery").length, 1);
+  assert.equal(
+    items.find(({ sourceTier }) => sourceTier === "discovery")?.source,
+    "中国政府网政策解读",
+  );
+  assert.equal(items.filter(({ sourceTier }) => sourceTier === "evidence").length, 7);
+  assert.equal(items[0].publishedAt, "2026-07-23T16:00:00.000Z");
   assert.equal(
     calls.filter((url) =>
-      new URL(url).pathname === "/search-front-server/api/search/info").length,
+      new URL(url).pathname === "/search-gov/data").length,
     1,
   );
 });
 
-test("MIIT search window follows the Shanghai calendar across the UTC date boundary", async () => {
+test("government policy window follows the Shanghai calendar across the UTC date boundary", async () => {
   const { collectNewsForProfile } = await import(newsUrl);
   const calls = [];
+  const writes = [];
   await collectNewsForProfile({
     profile: {
       ...monitorSettings().profiles[0],
@@ -1157,20 +1202,38 @@ test("MIIT search window follows the Shanghai calendar across the UTC date bound
     fetcher: async (url) => {
       calls.push(String(url));
       return new Response(JSON.stringify({
-        data: { searchResult: { dataResults: [] } },
+        code: "200",
+        searchVO: { catMap: { bumenfile: { listVO: [
+          {
+            title: "工业和信息化部集成电路窗口内政策",
+            url: "https://www.gov.cn/zhengce/zhengceku/202606/content_in_window.htm",
+            pubtimeStr: "2026.06.25",
+            summary: "集成电路产业政策",
+            puborg: "工业和信息化部",
+          },
+          {
+            title: "工业和信息化部集成电路窗口外政策",
+            url: "https://www.gov.cn/zhengce/zhengceku/202606/content_outside_window.htm",
+            pubtimeStr: "2026.06.24",
+            summary: "集成电路产业政策",
+            puborg: "工业和信息化部",
+          },
+        ] } } },
       }), {
         status: 200,
         headers: { "content-type": "application/json" },
       });
     },
-    writeItems: async () => {},
+    writeItems: async (_db, payload) => writes.push(payload),
     now: new Date("2026-07-24T16:30:00.000Z"),
   });
-  const miit = calls.map((url) => new URL(url)).find(
-    ({ pathname }) => pathname === "/search-front-server/api/search/info",
+  const policy = calls.map((url) => new URL(url)).find(
+    ({ pathname }) => pathname === "/search-gov/data",
   );
-  assert.equal(miit.searchParams.get("begin"), "2026-06-25");
-  assert.equal(miit.searchParams.get("end"), "2026-07-25");
+  assert.equal(policy.searchParams.get("q"), "集成电路");
+  const items = writes.flatMap(({ items: rows }) => rows);
+  assert.equal(items.some(({ url }) => url.includes("in_window")), true);
+  assert.equal(items.some(({ url }) => url.includes("outside_window")), false);
 });
 
 test("news writer uses idempotent upserts without storing article bodies", async () => {
@@ -1225,24 +1288,15 @@ test("A-share ETF news falls back to Eastmoney when Google News is blocked at th
   const { collectNewsForProfile } = await import(newsUrl);
   const calls = [];
   const writes = [];
-  const miitPayload = {
-    data: {
-      searchResult: {
-        dataResults: [{
-          groupData: [{
-            data: {
-              title: "工业和信息化部关于芯片产业高质量发展的通知",
-              url: "/zwgk/zcwj/wjfb/tz/art/2026/art_chip_policy.html",
-              deploytime: String(Date.parse("2026-07-24T01:00:00.000Z")),
-              infocontent: "工业和信息化部发布芯片产业政策通知。",
-              columnname: "通知",
-              columnid: "3e3ad1a3bec74939890a0d3e54815141",
-              publishgroupname: "电子信息司",
-            },
-          }],
-        }],
-      },
-    },
+  const policyPayload = {
+    code: "200",
+    searchVO: { catMap: { bumenfile: { listVO: [{
+      title: "工业和信息化部关于集成电路产业高质量发展的通知",
+      url: "https://www.gov.cn/zhengce/zhengceku/202607/content_chip_policy.htm",
+      pubtimeStr: "2026.07.24",
+      summary: "工业和信息化部发布集成电路产业政策通知。",
+      puborg: "工业和信息化部电子信息司",
+    }] } } },
   };
   const result = await collectNewsForProfile({
     profile: {
@@ -1261,10 +1315,16 @@ test("A-share ETF news falls back to Eastmoney when Google News is blocked at th
           headers: { "content-type": "text/javascript; charset=UTF-8" },
         });
       }
-      if (String(url).includes("search-front-server/api/search/info")) {
-        return new Response(JSON.stringify(miitPayload), {
+      if (String(url).includes("/search-gov/data")) {
+        return new Response(JSON.stringify(policyPayload), {
           status: 200,
           headers: { "content-type": "application/json" },
+        });
+      }
+      if (String(url).includes("query.sse.com.cn")) {
+        return new Response('TradingWorkbenchSse({"result":[]})', {
+          status: 200,
+          headers: { "content-type": "application/javascript" },
         });
       }
       return new Response("", {
@@ -1285,14 +1345,14 @@ test("A-share ETF news falls back to Eastmoney when Google News is blocked at th
   assert.equal(discovery.publisher, "每日经济新闻");
   assert.equal(discovery.freshness, "fresh");
   assert.equal(evidence.symbol, "512480.SS");
-  assert.equal(evidence.source, "工业和信息化部政策文件库");
-  assert.equal(evidence.publisher, "电子信息司");
+  assert.equal(evidence.source, "中国政府网政策文件库");
+  assert.equal(evidence.publisher, "工业和信息化部电子信息司");
   assert.equal(
     calls.some((url) => url.includes("search-api-web.eastmoney.com")),
     true,
   );
   assert.equal(
-    calls.some((url) => url.includes("search-front-server/api/search/info")),
+    calls.some((url) => url.includes("/search-gov/data")),
     true,
     "发现层成功后仍应查询官方工信部证据层",
   );
@@ -1303,12 +1363,12 @@ test("A-share ETF news falls back to Eastmoney when Google News is blocked at th
   );
   assert.equal(
     result.sources.some(({ source, status }) =>
-      source === "miit-policy-api" && status === "success"),
+      source === "gov-policy-library" && status === "success"),
     true,
   );
 });
 
-test("MIIT evidence failure remains degraded after Eastmoney discovery succeeds", async () => {
+test("government policy evidence failure remains degraded after Eastmoney discovery succeeds", async () => {
   const { collectNewsForProfile } = await import(newsUrl);
   const writes = [];
   const result = await collectNewsForProfile({
@@ -1336,14 +1396,14 @@ test("MIIT evidence failure remains degraded after Eastmoney discovery succeeds"
   assert.equal(writes.flatMap(({ items }) => items).length, 1);
   assert.equal(
     result.sources.some(({ source, status, reason }) =>
-      source === "miit-policy-api"
+      source === "gov-policy-library"
       && status === "failed"
       && reason === "NEWS_HTTP_503"),
     true,
   );
 });
 
-test("MIIT HTTP 200 with a malformed envelope remains degraded", async () => {
+test("government policy HTTP 200 with a malformed envelope remains degraded", async () => {
   const { collectNewsForProfile } = await import(newsUrl);
   const result = await collectNewsForProfile({
     profile: {
@@ -1372,7 +1432,7 @@ test("MIIT HTTP 200 with a malformed envelope remains degraded", async () => {
   assert.equal(result.status, "degraded");
   assert.equal(
     result.sources.some(({ source, status, reason }) =>
-      source === "miit-policy-api"
+      source === "gov-policy-library"
       && status === "failed"
       && reason === "NEWS_MALFORMED_RESPONSE"),
     true,

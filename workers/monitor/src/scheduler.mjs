@@ -369,7 +369,7 @@ export function estimateTaskExternalRequests(profile, task) {
       0,
     );
   }
-  if (task.type === "newsCollect") return 21;
+  if (task.type === "newsCollect") return 23;
   if (task.type === "closeFullAnalysis") return 2;
   if (task.type === "intradaySignal") {
     return Math.max(

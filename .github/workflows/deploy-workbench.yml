@@ -8,6 +8,7 @@ on:
       - "functions/**"
       - "migrations/**"
       - "package.json"
+      - "scripts/deployment-metadata.mjs"
       - "wrangler.toml"
       - ".github/workflows/deploy-workbench.yml"
   workflow_dispatch:
@@ -63,6 +64,12 @@ jobs:
         shell: bash
         run: echo "sha=$(git rev-parse HEAD)" >> "$GITHUB_OUTPUT"
 
+      - name: Generate deployment manifest
+        env:
+          DEPLOY_SHA: ${{ steps.revision.outputs.sha }}
+          DEPLOY_BRANCH: main
+        run: node scripts/deployment-metadata.mjs
+
       - name: Deploy workbench and Pages Functions
         env:
           CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
@@ -85,7 +92,13 @@ jobs:
             health_json="$(curl --fail --silent --show-error "${health_url}?attempt=${attempt}" || true)"
             if HEALTH_JSON="$health_json" DEPLOY_SHA="$DEPLOY_SHA" node --input-type=module -e '
               const health = JSON.parse(process.env.HEALTH_JSON || "{}");
-              process.exit(health?.deployment?.commitSha === process.env.DEPLOY_SHA ? 0 : 1);
+              const deployedAt = health?.deployment?.deployedAt;
+              process.exit(
+                health?.deployment?.commitSha === process.env.DEPLOY_SHA
+                && typeof deployedAt === "string"
+                && Number.isFinite(Date.parse(deployedAt))
+                ? 0 : 1
+              );
             '; then
               exit 0
             fi

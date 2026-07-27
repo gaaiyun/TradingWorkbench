@@ -690,6 +690,102 @@ test("monitor status adds profile-scoped safe notification state and cursor", as
   assert.doesNotMatch(JSON.stringify(payload), /private|policy_snapshot/i);
 });
 
+test("monitor status exposes bounded D1 capacity only when explicitly requested", async () => {
+  const calls = [];
+  const rows = {
+    market_bars: 100001,
+    news_items: 530,
+    market_events: 21,
+    evidence_packets: 9,
+    report_manifests: 58,
+    chat_messages: 17,
+    notification_deliveries: 4,
+  };
+  const DB = {
+    prepare(sql) {
+      return {
+        bind() { return this; },
+        async all() {
+          calls.push(sql);
+          if (/FROM source_health/i.test(sql)) return { results: [] };
+          if (/FROM notification_deliveries/i.test(sql)) return { results: [] };
+          throw new Error("unexpected all query");
+        },
+        async first() {
+          calls.push(sql);
+          if (/^SELECT\s+\(SELECT COUNT/i.test(sql.trim())) return rows;
+          if (/PRAGMA page_count/i.test(sql)) return { page_count: 320 };
+          if (/PRAGMA page_size/i.test(sql)) return { page_size: 4096 };
+          throw new Error("unexpected first query");
+        },
+      };
+    },
+  };
+  const response = await monitorApi.onRequestGet({
+    request: request("/api/monitor-status?capacity=1"),
+    env: { DB },
+  });
+  const payload = await response.json();
+  assert.equal(response.status, 200);
+  assert.equal(payload.capacity.status, "ok");
+  assert.equal(payload.capacity.reason, null);
+  assert.equal(Number.isFinite(Date.parse(payload.capacity.measuredAt)), true);
+  assert.deepEqual(payload.capacity.storage, {
+    status: "ok",
+    pageCount: 320,
+    pageSize: 4096,
+    estimatedBytes: 1310720,
+  });
+  assert.deepEqual(payload.capacity.tables[0], {
+    name: "market_bars",
+    rowCount: 100001,
+    atLeast: true,
+  });
+  assert.match(calls.find((sql) => /^SELECT\s+\(SELECT COUNT/i.test(sql.trim())), /LIMIT 100001/i);
+
+  const withoutCapacity = await monitorApi.onRequestGet({
+    request: request("/api/monitor-status"),
+    env: { DB: new FakeD1() },
+  });
+  assert.equal("capacity" in await withoutCapacity.json(), false);
+});
+
+test("monitor status capacity distinguishes invalid input, missing binding and timeout", async () => {
+  const invalid = await monitorApi.onRequestGet({
+    request: request("/api/monitor-status?capacity=true"),
+    env: {},
+  });
+  assert.equal(invalid.status, 400);
+  assert.equal((await invalid.json()).capacity.reason, "invalid_parameter");
+
+  const missing = await monitorApi.onRequestGet({
+    request: request("/api/monitor-status?capacity=1"),
+    env: {},
+  });
+  assert.equal((await missing.json()).capacity.reason, "no_binding");
+
+  const never = new Promise(() => {});
+  const timeoutDb = {
+    prepare(sql) {
+      return {
+        bind() { return this; },
+        async all() {
+          if (/FROM source_health/i.test(sql) || /FROM notification_deliveries/i.test(sql)) {
+            return { results: [] };
+          }
+          throw new Error("unexpected all query");
+        },
+        async first() { return never; },
+      };
+    },
+  };
+  const timedOut = await monitorApi.onRequestGet({
+    request: request("/api/monitor-status?capacity=1"),
+    env: { DB: timeoutDb, D1_CAPACITY_TIMEOUT_MS: "25" },
+  });
+  assert.equal((await timedOut.json()).capacity.reason, "query_timeout");
+});
+
 test("dynamic queries exclude expired rows before ordering and limiting", async () => {
   const base = {
     symbol: "SPY",

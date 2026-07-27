@@ -6,14 +6,14 @@ const DEFAULT_RESPONSE_LIMIT_BYTES = 256 * 1024;
 const SEC_RESPONSE_LIMIT_BYTES = 512 * 1024;
 const FED_RSS_RESPONSE_LIMIT_BYTES = 128 * 1024;
 const HASHKEY_RESPONSE_LIMIT_BYTES = 1100 * 1024;
-const MIIT_POLICY_SEARCH_URL =
-  "https://www.miit.gov.cn/search-front-server/api/search/info";
-const MIIT_POLICY_COLUMN_IDS = new Set([
-  "03b4fad2648149f0b9735dbb7300f34c", // 通告
-  "cd969bf2ce7e4dd9a90f35e667f22255", // 公告
-  "3e3ad1a3bec74939890a0d3e54815141", // 通知
-  "f208042346424978bb16d077ca4c475b", // 意见
-]);
+const GOV_POLICY_LIBRARY_URL = "https://sousuo.www.gov.cn/search-gov/data";
+const SSE_FUND_ANNOUNCEMENT_URL = "https://query.sse.com.cn/commonQuery.do";
+const GOV_POLICY_CATEGORIES = Object.freeze({
+  bumenfile: "evidence",
+  gongwen: "evidence",
+  gongbao: "evidence",
+  otherfile: "discovery",
+});
 const HASHKEY_IR_URL = "https://group.hashkey.com/en/news/categories/announcement-1";
 const FEDERAL_RESERVE_RSS_URL =
   "https://www.federalreserve.gov/feeds/press_all.xml";
@@ -22,7 +22,8 @@ const SEC_EDGAR_CIK = {
   GOOGL: "0001652044",
 };
 const EVIDENCE_PROVIDERS = new Set([
-  "miit-policy-api",
+  "gov-policy-library",
+  "sse-fund-announcements",
   "hashkey-ir",
   "federal-reserve-rss",
   "sec-edgar-submissions",
@@ -162,7 +163,7 @@ function shanghaiDate(value) {
   return `${part("year")}-${part("month")}-${part("day")}`;
 }
 
-export function parseMiitPolicySearch(payload, {
+export function parseGovPolicyLibrary(payload, {
   begin = null,
   end = null,
   now = null,
@@ -173,29 +174,86 @@ export function parseMiitPolicySearch(payload, {
   } catch {
     return [];
   }
-  const rows = response?.data?.searchResult?.dataResults;
-  if (!Array.isArray(rows)) return [];
+  const categoryMap = response?.searchVO?.catMap;
+  if (!categoryMap || typeof categoryMap !== "object") return [];
+  const items = [];
+  for (const [category, sourceTier] of Object.entries(GOV_POLICY_CATEGORIES)) {
+    const rows = categoryMap?.[category]?.listVO;
+    if (!Array.isArray(rows)) continue;
+    for (const row of rows) {
+      const title = cleanText(row?.title, 300);
+      const summary = cleanText(
+        [row?.pcode || row?.fwzh, row?.summary].filter(Boolean).join(" "),
+        500,
+      );
+      const dateText = String(row?.pubtimeStr || "").trim().replace(/\./g, "-");
+      const published = /^\d{4}-\d{2}-\d{2}$/.test(dateText)
+        ? new Date(`${dateText}T00:00:00+08:00`)
+        : new Date(Number(row?.pubtime));
+      let url;
+      try {
+        url = new URL(String(row?.url || ""));
+        if (url.hostname !== "www.gov.cn") continue;
+        if (!url.pathname.startsWith("/zhengce/") && !url.pathname.startsWith("/gongbao/")) {
+          continue;
+        }
+        url.protocol = "https:";
+      } catch {
+        continue;
+      }
+      if (!title || !Number.isFinite(published.valueOf())) continue;
+      const publishedDate = shanghaiDate(published);
+      if (
+        (now && published.valueOf() > now.valueOf())
+        || (begin && publishedDate < begin)
+        || (end && publishedDate > end)
+      ) continue;
+      items.push({
+        title,
+        url: url.toString(),
+        publishedAt: published.toISOString(),
+        summary,
+        publisher: cleanText(row?.puborg, 120) || "中国政府网",
+        _sourceTier: sourceTier,
+        _policyCategory: category,
+      });
+    }
+  }
+  return items
+    .sort((left, right) => right.publishedAt.localeCompare(left.publishedAt))
+    .slice(0, RSS_LIMIT_PER_QUERY);
+}
+
+export function parseSseFundAnnouncements(payload, symbol, {
+  begin = null,
+  end = null,
+  now = null,
+  targetSymbol = symbol,
+} = {}) {
+  const source = String(payload || "").trim();
+  const match = /^TradingWorkbenchSse\((\{[\s\S]*\})\)\s*;?$/.exec(source);
+  if (!match) return [];
+  let response;
+  try {
+    response = JSON.parse(match[1]);
+  } catch {
+    return [];
+  }
+  const rows = Array.isArray(response?.result) ? response.result : [];
   const items = [];
   for (const row of rows) {
     if (items.length >= RSS_LIMIT_PER_QUERY) break;
-    const data = row?.groupData?.[0]?.data || row?.data;
-    if (!data || !MIIT_POLICY_COLUMN_IDS.has(String(data.columnid || ""))) {
-      continue;
-    }
-    const title = cleanText(
-      data.title_text || data.xxgkextend1 || data.title,
-      300,
-    );
-    const summary = cleanText(
-      data.infocontent || data.filenumbername || data.xxgkextend2,
-      500,
-    );
-    const published = new Date(Number(data.deploytime));
+    if (String(row?.SECURITY_CODE || "") !== symbol) continue;
+    const title = cleanText(row?.TITLE, 300);
+    const dateText = String(row?.SSEDATE || "").trim();
+    const published = /^\d{4}-\d{2}-\d{2}$/.test(dateText)
+      ? new Date(`${dateText}T00:00:00+08:00`)
+      : new Date(Number.NaN);
     let url;
     try {
-      url = new URL(String(data.url || ""), "https://www.miit.gov.cn");
-      if (url.hostname !== "www.miit.gov.cn") continue;
-      if (!url.pathname.startsWith("/zwgk/zcwj/wjfb/")) continue;
+      url = new URL(String(row?.URL || ""), "https://www.sse.com.cn");
+      if (url.hostname !== "www.sse.com.cn") continue;
+      if (!url.pathname.startsWith("/disclosure/fund/announcement/")) continue;
       url.protocol = "https:";
     } catch {
       continue;
@@ -211,11 +269,12 @@ export function parseMiitPolicySearch(payload, {
       title,
       url: url.toString(),
       publishedAt: published.toISOString(),
-      summary,
-      publisher: cleanText(
-        data.publishgroupname || data.xxgkextend2,
-        120,
-      ) || "工业和信息化部",
+      summary: cleanText(
+        [row?.BULLETIN_TYPE, row?.TITLE].filter(Boolean).join(" · "),
+        500,
+      ),
+      publisher: "上海证券交易所",
+      _topicSymbols: [targetSymbol],
     });
   }
   return items;
@@ -588,49 +647,58 @@ function secEdgarSubmissionsUrl(symbol) {
   return `https://data.sec.gov/submissions/CIK${SEC_EDGAR_CIK[symbol]}.json`;
 }
 
-function miitPolicySearchUrl(plan, now) {
+function govPolicySearchUrl(plan, now) {
   const chipSymbols = ["512480.SS", "159995.SZ"];
   const query = plan.topic === "communications"
     ? "通信"
     : plan.symbols.some((symbol) => chipSymbols.includes(symbol))
-      ? "芯片"
+      ? "集成电路"
       : "通信";
   const window = {
     begin: shanghaiDate(new Date(now.valueOf() - 30 * DAY_MS)),
     end: shanghaiDate(now),
   };
   const parameters = new URLSearchParams({
-    websiteid: "110000000000000",
-    scope: "basic",
+    t: "zhengcelibrary",
     q: query,
-    pg: "10",
-    cateid: "58",
-    pos: "title_text,infocontent,titlepy",
-    ...window,
-    dateField: "deploytime",
-    selectFields: [
-      "title",
-      "deploytime",
-      "url",
-      "columnname",
-      "columnid",
-      "filenumbername",
-      "publishgroupname",
-      "publishtime",
-      "xxgkextend1",
-      "xxgkextend2",
-      "themename",
-      "typename",
-      "indexcode",
-      "createdate",
-    ].join(","),
-    group: "distinct",
-    level: "6",
-    sortFields: JSON.stringify([{ name: "deploytime", type: "desc" }]),
+    timetype: "timeqb",
+    sort: "pubtime",
+    sortType: "1",
+    searchfield: "title",
     p: "1",
+    n: "20",
+    type: "gwyzcwjk",
   });
   return {
-    url: `${MIIT_POLICY_SEARCH_URL}?${parameters}`,
+    url: `${GOV_POLICY_LIBRARY_URL}?${parameters}`,
+    window,
+  };
+}
+
+function sseFundAnnouncementUrl(symbol, now) {
+  const window = {
+    begin: shanghaiDate(new Date(now.valueOf() - 30 * DAY_MS)),
+    end: shanghaiDate(now),
+  };
+  const parameters = new URLSearchParams({
+    jsonCallBack: "TradingWorkbenchSse",
+    isPagination: "true",
+    "pageHelp.pageSize": "10",
+    "pageHelp.beginPage": "1",
+    "pageHelp.cacheSize": "1",
+    "pageHelp.endPage": "1",
+    "pageHelp.pageNo": "1",
+    type: "inParams",
+    sqlId: "COMMON_PL_JJXX_JJGG_L",
+    TITLE: "",
+    SECURITY_CODE: symbol,
+    ORG_BULLETIN_TYPE: "",
+    OTHER_TYPE: "",
+    START_DATE: window.begin,
+    END_DATE: window.end,
+  });
+  return {
+    url: `${SSE_FUND_ANNOUNCEMENT_URL}?${parameters}`,
     window,
   };
 }
@@ -685,14 +753,30 @@ function providerCandidates(plan, now) {
       format: "eastmoney-jsonp",
       maxResponseBytes: DEFAULT_RESPONSE_LIMIT_BYTES,
     });
-    const miit = miitPolicySearchUrl(plan, now);
+    const policy = govPolicySearchUrl(plan, now);
     candidates.push({
-      source: "miit-policy-api",
-      url: miit.url,
-      format: "miit-policy-json",
-      policyWindow: miit.window,
+      source: "gov-policy-library",
+      url: policy.url,
+      format: "gov-policy-json",
+      policyWindow: policy.window,
       maxResponseBytes: DEFAULT_RESPONSE_LIMIT_BYTES,
     });
+    if (plan.topic !== "policy") {
+      for (const symbol of plan.symbols.filter((value) =>
+        ["515880.SS", "512480.SS"].includes(value))) {
+        const announcement = sseFundAnnouncementUrl(symbol.slice(0, 6), now);
+        candidates.push({
+          source: "sse-fund-announcements",
+          url: announcement.url,
+          format: "sse-fund-jsonp",
+          policyWindow: announcement.window,
+          symbol: symbol.slice(0, 6),
+          targetSymbol: symbol,
+          referer: `https://www.sse.com.cn/assortment/fund/list/etfinfo/basic/index.shtml?FUNDID=${symbol.slice(0, 6)}`,
+          maxResponseBytes: DEFAULT_RESPONSE_LIMIT_BYTES,
+        });
+      }
+    }
   } else if (plan.topic === "us-semiconductor") {
     candidates.push({
       source: "yahoo-finance-rss",
@@ -916,12 +1000,17 @@ async function fetchContent(candidate, fetcher, requestConfig = {}) {
           ? "text/html,application/xhtml+xml;q=0.9,*/*;q=0.5"
           : candidate.format === "eastmoney-jsonp"
             ? "text/javascript,application/json,text/plain;q=0.9,*/*;q=0.5"
-          : candidate.format === "miit-policy-json"
+          : candidate.format === "gov-policy-json"
             ? "application/json,text/plain;q=0.8,*/*;q=0.5"
+          : candidate.format === "sse-fund-jsonp"
+            ? "text/javascript,application/json,text/plain;q=0.8,*/*;q=0.5"
           : candidate.format === "sec-submissions-json"
             ? "application/json,text/plain;q=0.8,*/*;q=0.5"
           : "application/rss+xml,application/xml,text/xml;q=0.9,*/*;q=0.5",
         "user-agent": userAgent,
+        ...(["gov-policy-json", "sse-fund-jsonp"].includes(candidate.format)
+          ? { referer: candidate.referer || "https://sousuo.www.gov.cn/zcwjk/policyDocumentLibrary" }
+          : {}),
       },
     });
     if (!response?.ok) {
@@ -932,8 +1021,10 @@ async function fetchContent(candidate, fetcher, requestConfig = {}) {
       ? /text\/html/i.test(contentType)
       : candidate.format === "eastmoney-jsonp"
         ? /(?:javascript|json|text\/plain)/i.test(contentType)
-      : candidate.format === "miit-policy-json"
+      : candidate.format === "gov-policy-json"
         ? /(?:application\/json|text\/plain)/i.test(contentType)
+      : candidate.format === "sse-fund-jsonp"
+        ? /(?:javascript|application\/json|text\/plain)/i.test(contentType)
       : candidate.format === "sec-submissions-json"
         ? /(?:application\/json|text\/plain)/i.test(contentType)
       : /(?:xml|rss|text\/plain)/i.test(contentType);
@@ -961,14 +1052,29 @@ function cachedContent(candidate, fetcher, cache, requestConfig) {
 
 function validateEvidenceEnvelope(candidate, content) {
   const value = String(content || "");
-  if (candidate.format === "miit-policy-json") {
+  if (candidate.format === "gov-policy-json") {
     let payload;
     try {
       payload = JSON.parse(value);
     } catch {
       throw new NewsFetchError("NEWS_MALFORMED_RESPONSE");
     }
-    if (!Array.isArray(payload?.data?.searchResult?.dataResults)) {
+    if (
+      String(payload?.code || "") !== "200"
+      || !payload?.searchVO
+      || !(payload.searchVO.catMap === null || typeof payload.searchVO.catMap === "object")
+    ) {
+      throw new NewsFetchError("NEWS_MALFORMED_RESPONSE");
+    }
+  } else if (candidate.format === "sse-fund-jsonp") {
+    const match = /^TradingWorkbenchSse\((\{[\s\S]*\})\)\s*;?$/.exec(value.trim());
+    let payload;
+    try {
+      payload = match ? JSON.parse(match[1]) : null;
+    } catch {
+      payload = null;
+    }
+    if (!payload || !Array.isArray(payload.result)) {
       throw new NewsFetchError("NEWS_MALFORMED_RESPONSE");
     }
   } else if (candidate.format === "sec-submissions-json") {
@@ -1017,10 +1123,16 @@ async function fetchPlan(plan, fetcher, cache, requestConfig) {
         ? parseHashKeyFeedPage(content)
         : candidate.format === "eastmoney-jsonp"
           ? parseEastmoneySearch(content)
-        : candidate.format === "miit-policy-json"
-          ? parseMiitPolicySearch(content, {
+        : candidate.format === "gov-policy-json"
+          ? parseGovPolicyLibrary(content, {
             ...candidate.policyWindow,
             now: requestConfig.now,
+          })
+        : candidate.format === "sse-fund-jsonp"
+          ? parseSseFundAnnouncements(content, candidate.symbol, {
+            ...candidate.policyWindow,
+            now: requestConfig.now,
+            targetSymbol: candidate.targetSymbol,
           })
         : candidate.format === "sec-submissions-json"
           ? parseSecEdgarSubmissions(content, candidate.publisher, {
@@ -1032,7 +1144,9 @@ async function fetchPlan(plan, fetcher, cache, requestConfig) {
         : parseGoogleNewsRss(content);
       const items = parsed
         .filter((item) =>
-          candidate.topicEvidence || relevantToPlan(item, plan))
+          Array.isArray(item._topicSymbols)
+          || candidate.topicEvidence
+          || relevantToPlan(item, plan))
         .map((item) => candidate.symbolScope === "theme-etfs"
           ? {
             ...item,
@@ -1050,6 +1164,7 @@ async function fetchPlan(plan, fetcher, cache, requestConfig) {
         }));
         if (
           evidenceCandidate
+          && tagged.some(({ _sourceTier }) => _sourceTier !== "discovery")
           && !candidate.supplementalEvidence
           && collectedItems.length === 0
         ) {
@@ -1091,7 +1206,12 @@ async function fetchPlan(plan, fetcher, cache, requestConfig) {
 }
 
 function itemSource(provider, item) {
-  if (provider === "miit-policy-api") return "工业和信息化部政策文件库";
+  if (provider === "gov-policy-library") {
+    return item._policyCategory === "otherfile"
+      ? "中国政府网政策解读"
+      : "中国政府网政策文件库";
+  }
+  if (provider === "sse-fund-announcements") return "上海证券交易所基金公告";
   if (provider === "hashkey-ir") return "HashKey Investor Relations";
   if (provider === "federal-reserve-rss") {
     return "Federal Reserve Board Press Releases";
@@ -1234,9 +1354,9 @@ export async function collectNewsForProfile({
           url: item.url,
           publishedAt: item.publishedAt,
           source: itemSource(provider, item),
-          sourceTier: EVIDENCE_PROVIDERS.has(provider)
-            ? "evidence"
-            : "discovery",
+          sourceTier: item._sourceTier || (
+            EVIDENCE_PROVIDERS.has(provider) ? "evidence" : "discovery"
+          ),
           publisher: item.publisher,
           relevance: 1,
           clusterId,
@@ -1244,9 +1364,9 @@ export async function collectNewsForProfile({
           fetchedAt,
           freshness: age >= 0 && age <= 36 * 60 * 60 * 1000 ? "fresh" : "stale",
           adjustment: null,
-          quality: EVIDENCE_PROVIDERS.has(provider)
-            ? "evidence"
-            : "discovery",
+          quality: item._sourceTier || (
+            EVIDENCE_PROVIDERS.has(provider) ? "evidence" : "discovery"
+          ),
           expiresAt,
         };
         const existing = byId.get(id);

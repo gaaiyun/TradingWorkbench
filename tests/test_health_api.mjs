@@ -1,7 +1,11 @@
 import assert from "node:assert/strict";
 import test from "node:test";
 
-import { buildHealthPayload, checkJson } from "../functions/api/_health.mjs";
+import {
+  buildHealthPayload,
+  checkDeploymentManifest,
+  checkJson,
+} from "../functions/api/_health.mjs";
 
 test("checkJson reports upstream status and freshness without leaking the body", async () => {
   const result = await checkJson(
@@ -63,7 +67,19 @@ test("buildHealthPayload exposes booleans only and marks partial failure degrade
       CF_PAGES_BRANCH: "main",
       CF_PAGES_URL: "https://d359044c.tradingagents-board.pages.dev",
     },
-    [{ name: "reports", ok: true }, { name: "options_live", ok: false }],
+    [
+      { name: "reports", ok: true },
+      { name: "options_live", ok: false },
+      {
+        name: "deployment_manifest",
+        ok: true,
+        detail: {
+          commitSha: "208edf3c4afa84fc9f5d00bdadad5b83df3a0d50",
+          deployedAt: "2026-07-22T09:55:00.000Z",
+          branch: "main",
+        },
+      },
+    ],
     new Date("2026-07-22T10:00:00Z"),
   );
 
@@ -78,6 +94,7 @@ test("buildHealthPayload exposes booleans only and marks partial failure degrade
   assert.deepEqual(payload.deployment, {
     service: "pages-functions",
     commitSha: "208edf3c4afa84fc9f5d00bdadad5b83df3a0d50",
+    deployedAt: "2026-07-22T09:55:00.000Z",
     branch: "main",
     url: "https://d359044c.tradingagents-board.pages.dev/",
   });
@@ -98,9 +115,68 @@ test("buildHealthPayload fails closed when Pages deployment metadata is malforme
   assert.deepEqual(payload.deployment, {
     service: "pages-functions",
     commitSha: "unknown",
+    deployedAt: "unknown",
     branch: "unknown",
     url: null,
   });
+});
+
+test("deployment manifest is accepted only for the current immutable revision", async () => {
+  const sha = "208edf3c4afa84fc9f5d00bdadad5b83df3a0d50";
+  const accepted = await checkDeploymentManifest(
+    "https://example.pages.dev/data/deployment.json",
+    sha,
+    {
+      fetchImpl: async () => new Response(JSON.stringify({
+        commitSha: sha,
+        deployedAt: "2026-07-22T09:55:00.000Z",
+        branch: "main",
+      }), { status: 200 }),
+    },
+  );
+  assert.equal(accepted.ok, true);
+  assert.deepEqual(accepted.detail, {
+    commitSha: sha,
+    deployedAt: "2026-07-22T09:55:00.000Z",
+    branch: "main",
+  });
+
+  const mismatch = await checkDeploymentManifest(
+    "https://example.pages.dev/data/deployment.json",
+    sha,
+    {
+      fetchImpl: async () => new Response(JSON.stringify({
+        commitSha: "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+        deployedAt: "2026-07-22T09:55:00.000Z",
+        branch: "main",
+      }), { status: 200 }),
+    },
+  );
+  assert.equal(mismatch.ok, false);
+  assert.equal(mismatch.error, "revision_mismatch");
+  assert.equal(mismatch.detail, null);
+});
+
+test("deployment manifest rejects missing or malformed deployment time", async () => {
+  const sha = "208edf3c4afa84fc9f5d00bdadad5b83df3a0d50";
+  const invalid = await checkDeploymentManifest(
+    "https://example.pages.dev/data/deployment.json",
+    sha,
+    {
+      fetchImpl: async () => new Response(JSON.stringify({
+        commitSha: sha,
+        deployedAt: "not-a-time",
+        branch: "main",
+      }), { status: 200 }),
+    },
+  );
+  assert.equal(invalid.ok, false);
+  assert.equal(invalid.error, "invalid_metadata");
+  assert.equal(invalid.detail, null);
+
+  const missing = await checkDeploymentManifest(null, sha);
+  assert.equal(missing.ok, false);
+  assert.equal(missing.error, "metadata_unavailable");
 });
 
 test("health reports D1-backed persistent conversations as available", () => {

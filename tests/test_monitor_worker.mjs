@@ -736,6 +736,7 @@ test("scheduled handler uses scheduledTime and waitUntil while health reveals no
     },
     newsProviders: {
       status: "unavailable",
+      reason: "no_binding",
       providers: [],
     },
   });
@@ -811,7 +812,7 @@ test("health exposes deployment identity and bounded news provider outcomes with
           body: bodyMarker,
         },
         {
-          source: "miit-policy-api",
+          source: "gov-policy-library",
           status: "success",
           reason: null,
         },
@@ -831,9 +832,10 @@ test("health exposes deployment identity and bounded news provider outcomes with
   });
   assert.deepEqual(payload.newsProviders, {
     status: "degraded",
+    reason: null,
     providers: [
       {
-        source: "miit-policy-api",
+        source: "gov-policy-library",
         status: "ok",
         lastSuccessAt: runAt.toISOString(),
         lastFailureAt: null,
@@ -887,7 +889,92 @@ test("health stays 200 and marks providers unavailable when the bounded D1 query
   });
   assert.deepEqual(payload.newsProviders, {
     status: "unavailable",
+    reason: "query_timeout",
     providers: [],
+  });
+});
+
+test("health distinguishes missing binding, empty table, and D1 query errors", async () => {
+  const { handleFetch } = await import(workerUrl);
+  const missing = await handleFetch(new Request("https://monitor.example/health"), {});
+  assert.deepEqual((await missing.json()).newsProviders, {
+    status: "unavailable",
+    reason: "no_binding",
+    providers: [],
+  });
+
+  const empty = await handleFetch(
+    new Request("https://monitor.example/health"),
+    { DB: sqliteWorkerD1(monitorSettings()) },
+  );
+  assert.deepEqual((await empty.json()).newsProviders, {
+    status: "unavailable",
+    reason: "empty_table",
+    providers: [],
+  });
+
+  const failed = await handleFetch(
+    new Request("https://monitor.example/health"),
+    {
+      DB: {
+        prepare() {
+          throw new Error("private database failure detail");
+        },
+      },
+    },
+  );
+  const failedPayload = await failed.json();
+  assert.deepEqual(failedPayload.newsProviders, {
+    status: "unavailable",
+    reason: "query_error",
+    providers: [],
+  });
+  assert.equal(JSON.stringify(failedPayload).includes("private database failure detail"), false);
+});
+
+test("health retries one cold D1 timeout and returns the recovered provider state", async () => {
+  const { handleFetch } = await import(workerUrl);
+  let attempts = 0;
+  const response = await handleFetch(
+    new Request("https://monitor.example/health"),
+    {
+      DB: {
+        prepare() {
+          return {
+            bind() {
+              return {
+                async all() {
+                  attempts += 1;
+                  if (attempts === 1) return new Promise(() => {});
+                  return {
+                    results: [{
+                      source: "recovered-provider",
+                      status: "ok",
+                      last_success_at: "2026-07-28T00:00:00.000Z",
+                      last_failure_at: null,
+                      last_error_code: null,
+                    }],
+                  };
+                },
+              };
+            },
+          };
+        },
+      },
+      HEALTH_QUERY_TIMEOUT_MS: "10",
+    },
+  );
+  assert.equal(attempts, 2);
+  assert.deepEqual((await response.json()).newsProviders, {
+    status: "ok",
+    reason: null,
+    providers: [{
+      source: "recovered-provider",
+      status: "ok",
+      lastSuccessAt: "2026-07-28T00:00:00.000Z",
+      lastFailureAt: null,
+      lastErrorCode: null,
+    }],
   });
 });
 
@@ -1137,7 +1224,7 @@ test("protected manual news collection pages eight profiles within one bounded r
   assert.equal(firstPayload.nextCursor, 1);
   assert.equal(firstPayload.backlog, 7);
   assert.equal(firstPayload.processed, 1);
-  assert.equal(firstPayload.estimatedWorkUnits, 21);
+  assert.equal(firstPayload.estimatedWorkUnits, 23);
 
   const second = await handleFetch(
     new Request(

@@ -211,10 +211,11 @@ const MANUAL_COLLECTION_TASKS = new Set([
   "newsCollect",
 ]);
 
-// Keep /health bounded, but allow a cold D1 read to complete. Ten
-// milliseconds turned normal cross-region reads into false "unavailable"
-// states; the upper bound still keeps the endpoint cheap for probes.
-const HEALTH_QUERY_TIMEOUT_MS = 750;
+// Keep /health bounded, but allow a cold D1 read to complete. A cold read gets
+// one retry, while binding/query failures remain single-shot so probes cannot
+// amplify a persistent D1 failure.
+const HEALTH_QUERY_TIMEOUT_MS = 1500;
+const HEALTH_QUERY_TIMEOUT_MAX_MS = 3000;
 const HEALTH_PROVIDER_LIMIT = 32;
 const DIRECT_EXTERNAL_REQUEST_LIMIT = 32;
 const QUEUE_DISCOVERY_LIMIT = 10;
@@ -327,8 +328,8 @@ async function collectNewsWithHealth({
   return result;
 }
 
-function unavailableNewsProviders() {
-  return { status: "unavailable", providers: [] };
+function unavailableNewsProviders(reason) {
+  return { status: "unavailable", reason, providers: [] };
 }
 
 function deploymentIdentity(env) {
@@ -346,30 +347,37 @@ function deploymentIdentity(env) {
 }
 
 async function readNewsProviderHealth(db, configuredTimeoutMs = HEALTH_QUERY_TIMEOUT_MS) {
-  if (!db?.prepare) return unavailableNewsProviders();
+  if (!db?.prepare) return unavailableNewsProviders("no_binding");
   const timedOut = Symbol("health-query-timeout");
-  let timer;
+  const timeoutMs = Math.min(
+    HEALTH_QUERY_TIMEOUT_MAX_MS,
+    Math.max(10, Number(configuredTimeoutMs) || HEALTH_QUERY_TIMEOUT_MS),
+  );
+
+  async function queryOnce() {
+    let timer;
+    try {
+      const query = db.prepare(`
+        SELECT source, status, last_success_at, last_failure_at, last_error_code
+        FROM monitor_news_provider_health
+        ORDER BY source ASC
+        LIMIT ?
+      `).bind(HEALTH_PROVIDER_LIMIT).all();
+      return await Promise.race([
+        query,
+        new Promise((resolve) => {
+          timer = setTimeout(() => resolve(timedOut), timeoutMs);
+        }),
+      ]);
+    } finally {
+      clearTimeout(timer);
+    }
+  }
+
   try {
-    const query = db.prepare(`
-      SELECT source, status, last_success_at, last_failure_at, last_error_code
-      FROM monitor_news_provider_health
-      ORDER BY source ASC
-      LIMIT ?
-    `).bind(HEALTH_PROVIDER_LIMIT).all();
-    const timeoutMs = Math.min(
-      1500,
-      Math.max(10, Number(configuredTimeoutMs) || HEALTH_QUERY_TIMEOUT_MS),
-    );
-    const result = await Promise.race([
-      query,
-      new Promise((resolve) => {
-        timer = setTimeout(
-          () => resolve(timedOut),
-          timeoutMs,
-        );
-      }),
-    ]);
-    if (result === timedOut) return unavailableNewsProviders();
+    let result = await queryOnce();
+    if (result === timedOut) result = await queryOnce();
+    if (result === timedOut) return unavailableNewsProviders("query_timeout");
     const providers = (result?.results ?? []).map((row) => ({
       source: row.source,
       status: row.status,
@@ -377,7 +385,7 @@ async function readNewsProviderHealth(db, configuredTimeoutMs = HEALTH_QUERY_TIM
       lastFailureAt: row.last_failure_at ?? null,
       lastErrorCode: row.last_error_code ?? null,
     }));
-    if (providers.length === 0) return unavailableNewsProviders();
+    if (providers.length === 0) return unavailableNewsProviders("empty_table");
     const unavailable = providers.filter(
       ({ status }) => status === "unavailable",
     ).length;
@@ -386,12 +394,11 @@ async function readNewsProviderHealth(db, configuredTimeoutMs = HEALTH_QUERY_TIM
       status: unavailable === providers.length
         ? "unavailable"
         : unavailable > 0 || degraded ? "degraded" : "ok",
+      reason: null,
       providers,
     };
   } catch {
-    return unavailableNewsProviders();
-  } finally {
-    clearTimeout(timer);
+    return unavailableNewsProviders("query_error");
   }
 }
 
