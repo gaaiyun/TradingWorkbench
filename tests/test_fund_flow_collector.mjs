@@ -305,6 +305,10 @@ test("fund-flow workflow schedules a daily collection only after production smok
   assert.match(workflow, /timeout-minutes:\s*15/);
   assert.match(workflow, /permissions:\s*\r?\n\s+contents:\s*read/);
   assert.match(workflow, /concurrency:\s*\r?\n\s+group:\s*fund-flow/);
+  assert.match(
+    workflow,
+    /github\.event_name == 'workflow_dispatch' \|\| vars\.FUND_FLOW_COLLECTION_ENABLED != 'false'/,
+  );
   assert.match(workflow, /github\.event_name == 'schedule' && 'daily' \|\| inputs\.mode/);
   assert.doesNotMatch(workflow, /EVIDENCE|report_manifests|VolGuard/i);
 });

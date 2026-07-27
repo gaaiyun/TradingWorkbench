@@ -39,6 +39,7 @@ ACTIVE_SETTINGS["profiles"].append(SECOND_PROFILE)
 ACTIVE_UPDATED_AT = ["2026-07-23T07:00:00.000Z"]
 MARKET_REQUESTS = []
 MARKET_PROFILE_REQUESTS = []
+FLOW_REQUESTS = []
 ANALYZE_REQUESTS = []
 SETTINGS_REQUESTS = []
 PROFILE_REQUESTS = []
@@ -221,6 +222,35 @@ def advance_settings_revision():
     ).isoformat().replace("+00:00", "Z")
 
 
+def fund_flow_rows(flow_type, profile, symbol):
+    definitions = {
+        "margin_balance": ("CNY", 1_000_000_000, 2_000_000, "eastmoney-margin-daily", "reported", "reported"),
+        "margin_net_buy": ("CNY", -30_000_000, 1_000_000, "eastmoney-margin-daily", "reported", "reported"),
+        "shares_outstanding_derived": ("shares", 60_000_000_000, 100_000_000, "sse-scale-eastmoney-close", "fund_scale_divided_by_unadjusted_close", "derived"),
+        "shares_outstanding_snapshot": ("shares", 60_000_000_000, 100_000_000, "eastmoney-share-snapshot", "observed_without_source_timestamp", "snapshot_unstamped"),
+    }
+    unit, base, step, source, method, quality = definitions[flow_type]
+    first_day = datetime(2026, 5, 25, tzinfo=timezone.utc)
+    return [{
+        "id": f"flow-{profile}-{symbol}-{flow_type}-{index}",
+        "profile_id": profile,
+        "symbol": symbol,
+        "flow_type": flow_type,
+        "period": "1d",
+        "ts": (first_day + timedelta(days=index)).isoformat().replace("+00:00", "Z"),
+        "value": base + step * index,
+        "unit": unit,
+        "currency": "CNY" if unit == "CNY" else None,
+        "source": source,
+        "method": method,
+        "as_of": (first_day + timedelta(days=index)).isoformat().replace("+00:00", "Z"),
+        "fetched_at": "2026-07-25T12:17:00Z",
+        "freshness": "fresh",
+        "adjustment": "none",
+        "quality": quality,
+    } for index in range(61)]
+
+
 def route_api(route):
     parsed = urlparse(route.request.url)
     query = parse_qs(parsed.query)
@@ -299,6 +329,27 @@ def route_api(route):
         MARKET_REQUESTS.append((symbol, timeframe, limit))
         MARKET_PROFILE_REQUESTS.append((profile, symbol, timeframe, limit))
         fulfill_json(route, envelope(bars(symbol, timeframe)[-limit:]))
+    elif path == "/api/flows":
+        profile = query.get("profile", [None])[0]
+        symbol = query.get("symbol", [None])[0]
+        flow_type = query.get("type", ["margin_balance"])[0]
+        period = query.get("period", [None])[0]
+        start = query.get("from", [None])[0]
+        limit = query.get("limit", [None])[0]
+        FLOW_REQUESTS.append((profile, symbol, flow_type, period, start, limit))
+        rows = fund_flow_rows(flow_type, profile, symbol)
+        fulfill_json(route, {
+            "status": "ok",
+            "asOf": rows[-1]["as_of"],
+            "data": rows,
+            "sources": [],
+            "capabilities": {
+                "marketFlowV1": True,
+                "marginDaily": True,
+                "etfSharesDaily": True,
+                "historicalPercentile": True,
+            },
+        })
     elif path == "/api/news":
         fulfill_json(route, envelope(NEWS))
     elif path == "/api/events":
@@ -483,6 +534,25 @@ def run_browser():
 
         assert page.locator("#watchlist .watch-row").count() == 13
         assert page.locator("#market-chart").is_visible()
+        page.wait_for_selector("#fund-flow-grid [data-fund-flow-metric]")
+        assert page.locator("#fund-flow-grid [data-fund-flow-metric]").count() == 3
+        assert page.locator("#fund-flow-panel").is_visible()
+        assert page.locator("#fund-flow-grid").inner_text().count("P100") == 3
+        page.locator("[data-fund-flow-help]").first.focus()
+        assert page.locator(".fund-flow-tooltip").first.is_visible()
+        initial_flow_requests = FLOW_REQUESTS[:4]
+        assert len(initial_flow_requests) == 4
+        assert {request[2] for request in initial_flow_requests} == {
+            "margin_balance",
+            "margin_net_buy",
+            "shares_outstanding_derived",
+            "shares_outstanding_snapshot",
+        }
+        assert all(
+            request[:2] == ("cn-semi-comms", "515880.SS")
+            and request[3:] == ("1d", "2024-01-01", "2000")
+            for request in initial_flow_requests
+        )
         assert page.locator("a[href*='tradingview.com']").count() >= 1
         assert page.locator('[data-route-link="agents"]').first.is_visible()
         assert page.locator('[data-route-link="options"]').first.is_visible()
@@ -513,6 +583,10 @@ def run_browser():
         assert any(
             profile == "profile-b" and symbol == "515880.SS"
             for profile, symbol, _, _ in MARKET_PROFILE_REQUESTS
+        )
+        assert any(
+            profile == "profile-b" and symbol == "515880.SS"
+            for profile, symbol, _, _, _, _ in FLOW_REQUESTS
         )
 
         page.click("#watchlist-edit")
