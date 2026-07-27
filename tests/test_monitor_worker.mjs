@@ -1207,6 +1207,13 @@ test("dedicated monitor deployment fails closed and verifies the online commit",
   assert.match(workflow, /curl[\s\S]+\/health/);
   assert.match(workflow, /deployment\?\.commitSha/);
   assert.match(workflow, /GITHUB_SHA/);
+  assert.match(workflow, /for attempt in \$\(seq 1 12\)/);
+  assert.match(workflow, /health\?attempt=\$\{attempt\}/);
+  assert.match(workflow, /sleep 5/);
+  assert.match(
+    workflow,
+    /Monitor production endpoint did not expose the deployed commit SHA/,
+  );
   assert.match(workflow, /workers\/monitor\/\*\*/);
   assert.match(workflow, /wrangler\.monitor\.toml/);
 });

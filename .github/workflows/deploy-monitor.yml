@@ -78,13 +78,20 @@ jobs:
         env:
           MONITOR_WORKER_URL: ${{ vars.MONITOR_WORKER_URL }}
         run: |
-          health_json="$(
-            curl --fail --silent --show-error --retry 5 --retry-all-errors \
-              "${MONITOR_WORKER_URL%/}/health"
-          )"
-          HEALTH_JSON="$health_json" node --input-type=module -e '
-            const health = JSON.parse(process.env.HEALTH_JSON);
-            if (health?.deployment?.commitSha !== process.env.GITHUB_SHA) {
-              throw new Error("deployed monitor commit SHA does not match");
-            }
-          '
+          for attempt in $(seq 1 12); do
+            health_json="$(
+              curl --fail --silent --show-error --retry 2 --retry-all-errors \
+                "${MONITOR_WORKER_URL%/}/health?attempt=${attempt}" || true
+            )"
+            if HEALTH_JSON="$health_json" node --input-type=module -e '
+              const health = JSON.parse(process.env.HEALTH_JSON || "{}");
+              process.exit(
+                health?.deployment?.commitSha === process.env.GITHUB_SHA ? 0 : 1,
+              );
+            '; then
+              exit 0
+            fi
+            sleep 5
+          done
+          echo "::error::Monitor production endpoint did not expose the deployed commit SHA."
+          exit 1
