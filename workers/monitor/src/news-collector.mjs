@@ -37,7 +37,6 @@ export const ACTIVE_NEWS_PROVIDERS = Object.freeze([
   "gov-policy-library",
   "hashkey-ir",
   "sec-edgar-submissions",
-  "sse-fund-announcements",
   "yahoo-finance-rss",
 ]);
 const SHANGHAI_DATE_FORMATTER = new Intl.DateTimeFormat("en-CA", {
@@ -783,22 +782,6 @@ function providerCandidates(plan, now) {
       policyWindow: policy.window,
       maxResponseBytes: DEFAULT_RESPONSE_LIMIT_BYTES,
     });
-    if (plan.topic !== "policy") {
-      for (const symbol of plan.symbols.filter((value) =>
-        ["515880.SS", "512480.SS"].includes(value))) {
-        const announcement = sseFundAnnouncementUrl(symbol.slice(0, 6), now);
-        candidates.push({
-          source: "sse-fund-announcements",
-          url: announcement.url,
-          format: "sse-fund-jsonp",
-          policyWindow: announcement.window,
-          symbol: symbol.slice(0, 6),
-          targetSymbol: symbol,
-          referer: `https://www.sse.com.cn/home/search/?webswd=${symbol.slice(0, 6)}`,
-          maxResponseBytes: DEFAULT_RESPONSE_LIMIT_BYTES,
-        });
-      }
-    }
   } else if (plan.topic === "us-semiconductor") {
     candidates.push({
       source: "yahoo-finance-rss",

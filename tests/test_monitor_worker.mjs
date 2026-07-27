@@ -1230,7 +1230,7 @@ test("protected manual news collection pages eight profiles within one bounded r
   assert.equal(firstPayload.nextCursor, 1);
   assert.equal(firstPayload.backlog, 7);
   assert.equal(firstPayload.processed, 1);
-  assert.equal(firstPayload.estimatedWorkUnits, 23);
+  assert.equal(firstPayload.estimatedWorkUnits, 21);
 
   const second = await handleFetch(
     new Request(
