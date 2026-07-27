@@ -39,6 +39,10 @@ const fundFlowMigrationUrl = new URL(
   "../migrations/0016_fund_flows.sql",
   import.meta.url,
 );
+const deploymentMetadataMigrationUrl = new URL(
+  "../migrations/0017_deployment_metadata.sql",
+  import.meta.url,
+);
 
 test("D1 migration defines every dynamic workbench table and its lookup indexes", () => {
   const sql = readFileSync(migrationUrl, "utf8");
@@ -438,4 +442,31 @@ test("fund-flow migration is additive, idempotent, indexed, and profile-scoped",
   insert.run("flow-b", "profile-b");
   assert.equal(db.prepare("SELECT count(*) AS count FROM fund_flows").get().count, 2);
   assert.throws(() => insert.run("flow-c", "profile-a"), /UNIQUE constraint failed/i);
+});
+
+test("deployment metadata migration is additive and keeps one current Pages identity", async (t) => {
+  const sql = readFileSync(deploymentMetadataMigrationUrl, "utf8");
+  assert.match(sql, /CREATE TABLE IF NOT EXISTS deployment_metadata/i);
+  assert.doesNotMatch(sql, /\b(?:ALTER|UPDATE|DELETE|DROP)\b/i);
+  let DatabaseSync;
+  try {
+    ({ DatabaseSync } = await import("node:sqlite"));
+  } catch {
+    t.skip("node:sqlite is unavailable on this Node version");
+    return;
+  }
+  const db = new DatabaseSync(":memory:");
+  db.exec(sql);
+  db.exec(sql);
+  db.prepare(`
+    INSERT INTO deployment_metadata
+      (service, commit_sha, deployed_at, branch, url, updated_at)
+    VALUES ('pages-functions', ?, ?, 'main', NULL, ?)
+  `).run("a".repeat(40), "2026-07-27T19:00:00Z", "2026-07-27T19:00:00Z");
+  assert.equal(db.prepare("SELECT count(*) AS count FROM deployment_metadata").get().count, 1);
+  assert.throws(() => db.prepare(`
+    INSERT INTO deployment_metadata
+      (service, commit_sha, deployed_at, branch, url, updated_at)
+    VALUES ('unknown', ?, ?, 'main', NULL, ?)
+  `).run("b".repeat(40), "2026-07-27T19:01:00Z", "2026-07-27T19:01:00Z"), /CHECK constraint failed/i);
 });

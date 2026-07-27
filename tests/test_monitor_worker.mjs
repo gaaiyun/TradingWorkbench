@@ -1336,6 +1336,8 @@ test("Pages and monitor deployments serialize migrations before publishing runti
   assert.notEqual(migration, -1);
   assert.notEqual(deployment, -1);
   assert.equal(migration < deployment, true);
+  assert.match(pages, /Persist deployment identity/);
+  assert.match(pages, /INSERT INTO deployment_metadata/);
   assert.match(
     pages,
     /d1 migrations apply\s+tradingagents-workbench\s+--remote\s+--config wrangler\.toml/,

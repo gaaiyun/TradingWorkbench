@@ -129,6 +129,78 @@ export async function checkDeploymentManifest(
   }
 }
 
+export async function checkDeploymentState(
+  db,
+  expectedCommitSha,
+  { timeoutMs = 1000 } = {},
+) {
+  const started = Date.now();
+  const expected = String(expectedCommitSha || "").trim().toLowerCase();
+  if (!db?.prepare || !/^[0-9a-f]{7,64}$/.test(expected)) {
+    return {
+      name: "deployment_manifest",
+      ok: false,
+      status: 0,
+      latency_ms: Date.now() - started,
+      error: "metadata_unavailable",
+      detail: null,
+    };
+  }
+  const timedOut = Symbol("deployment-state-timeout");
+  let timer;
+  try {
+    const query = db.prepare(`
+      SELECT commit_sha, deployed_at, branch, url
+      FROM deployment_metadata
+      WHERE service = ? AND commit_sha = ?
+      LIMIT 1
+    `).bind("pages-functions", expected).first();
+    const row = await Promise.race([
+      query,
+      new Promise((resolve) => {
+        timer = setTimeout(() => resolve(timedOut), timeoutMs);
+      }),
+    ]);
+    if (row === timedOut) throw new Error("timeout");
+    const commitSha = String(row?.commit_sha || "").trim().toLowerCase();
+    const deployedAt = String(row?.deployed_at || "").trim();
+    const branch = String(row?.branch || "").trim();
+    if (
+      commitSha !== expected
+      || !/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(?:\.\d{3})?Z$/.test(deployedAt)
+      || !Number.isFinite(Date.parse(deployedAt))
+      || !/^[A-Za-z0-9._/-]{1,128}$/.test(branch)
+    ) {
+      return {
+        name: "deployment_manifest",
+        ok: false,
+        status: 0,
+        latency_ms: Date.now() - started,
+        error: "invalid_metadata",
+        detail: null,
+      };
+    }
+    return {
+      name: "deployment_manifest",
+      ok: true,
+      status: 200,
+      latency_ms: Date.now() - started,
+      detail: { commitSha, deployedAt, branch, source: "d1" },
+    };
+  } catch (error) {
+    return {
+      name: "deployment_manifest",
+      ok: false,
+      status: 0,
+      latency_ms: Date.now() - started,
+      error: error?.message === "timeout" ? "timeout" : "metadata_unavailable",
+      detail: null,
+    };
+  } finally {
+    clearTimeout(timer);
+  }
+}
+
 export function buildHealthPayload(env, checks, checkedAt = new Date()) {
   const rawCommitSha = String(env.CF_PAGES_COMMIT_SHA || "").trim().toLowerCase();
   const rawBranch = String(env.CF_PAGES_BRANCH || "").trim();

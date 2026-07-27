@@ -4,6 +4,7 @@ import test from "node:test";
 import {
   buildHealthPayload,
   checkDeploymentManifest,
+  checkDeploymentState,
   checkJson,
 } from "../functions/api/_health.mjs";
 
@@ -177,6 +178,39 @@ test("deployment manifest rejects missing or malformed deployment time", async (
   const missing = await checkDeploymentManifest(null, sha);
   assert.equal(missing.ok, false);
   assert.equal(missing.error, "metadata_unavailable");
+});
+
+test("deployment identity falls back to a bounded D1 record for direct Pages races", async () => {
+  const sha = "208edf3c4afa84fc9f5d00bdadad5b83df3a0d50";
+  const calls = [];
+  const db = {
+    prepare(sql) {
+      calls.push(sql);
+      return {
+        bind(...params) {
+          calls.push(params);
+          return this;
+        },
+        async first() {
+          return {
+            commit_sha: sha,
+            deployed_at: "2026-07-27T19:00:00Z",
+            branch: "main",
+            url: null,
+          };
+        },
+      };
+    },
+  };
+  const result = await checkDeploymentState(db, sha);
+  assert.equal(result.ok, true);
+  assert.deepEqual(result.detail, {
+    commitSha: sha,
+    deployedAt: "2026-07-27T19:00:00Z",
+    branch: "main",
+    source: "d1",
+  });
+  assert.deepEqual(calls[1], ["pages-functions", sha]);
 });
 
 test("health reports D1-backed persistent conversations as available", () => {

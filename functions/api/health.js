@@ -2,6 +2,7 @@ import { RAW_BASE, REPO, ghHeaders, json } from "./_util.js";
 import {
   buildHealthPayload,
   checkDeploymentManifest,
+  checkDeploymentState,
   checkJson,
 } from "./_health.mjs";
 
@@ -35,6 +36,12 @@ export async function onRequestGet({ env, request }) {
       env.CF_PAGES_COMMIT_SHA,
     ),
   ]);
+  if (!checks.at(-1)?.ok) {
+    checks[checks.length - 1] = await checkDeploymentState(
+      env.DB,
+      env.CF_PAGES_COMMIT_SHA,
+    );
+  }
 
   return json(
     buildHealthPayload(env, checks),
