@@ -71,6 +71,7 @@ function marginPayload(code) {
         RZYE: 1_000_000,
         RZMRE: 200_000,
         RZJME: -50_000,
+        SPJ: 2,
       }],
     },
   };
@@ -116,6 +117,7 @@ test("parsers retain negative financing, exact CNY units, and derived inputs", (
   assert.equal(margin.rows.length, 1);
   assert.equal(margin.rows[0].values.margin_net_buy, -50_000);
   assert.equal(margin.rows[0].ts, "2026-07-23T16:00:00.000Z");
+  assert.equal(margin.rows[0].close, 2);
 
   const scale = parseSseScalePage(scalePayload("515880"), "515880");
   assert.equal(scale.rows[0].scaleCny, 1_234_560_000);

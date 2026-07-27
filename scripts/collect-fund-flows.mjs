@@ -152,7 +152,12 @@ export function parseMarginPage(payload, code) {
       margin_net_buy: finiteNumber(item.RZJME),
     };
     if (Object.values(values).every((value) => value === null)) continue;
-    rows.push({ date, ts, values });
+    rows.push({
+      date,
+      ts,
+      values,
+      close: finiteNonNegative(item.SPJ),
+    });
   }
   if (payload.result.data.length > 0 && rows.length === 0) throw new Error("UPSTREAM_SCHEMA");
   return {
@@ -452,14 +457,9 @@ export async function collectFundFlows({
         requestOptions,
         delayImpl,
       });
-      await delayImpl(1000);
-      const closePayload = await fetchBoundedJson(
-        fetchImpl,
-        unadjustedCloseUrl(target.secid, mode === "daily" ? 30 : 2000),
-        { ...requestOptions, delayImpl },
-      );
       rawBySymbol.get(target.symbol).scale = scale;
-      rawBySymbol.get(target.symbol).closes = parseUnadjustedCloses(closePayload, target.code);
+      rawBySymbol.get(target.symbol).closes = new Map(margin.flatMap(({ date, close }) =>
+        close !== null && close > 0 ? [[date, close]] : []));
     } else if (mode === "daily") {
       await delayImpl(1000);
       const snapshotPayload = await fetchBoundedJson(fetchImpl, shareSnapshotUrl(target.secid), {
