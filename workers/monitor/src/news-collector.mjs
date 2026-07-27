@@ -7,7 +7,8 @@ const SEC_RESPONSE_LIMIT_BYTES = 512 * 1024;
 const FED_RSS_RESPONSE_LIMIT_BYTES = 128 * 1024;
 const HASHKEY_RESPONSE_LIMIT_BYTES = 1100 * 1024;
 const GOV_POLICY_LIBRARY_URL = "https://sousuo.www.gov.cn/search-gov/data";
-const SSE_FUND_ANNOUNCEMENT_URL = "https://query.sse.com.cn/commonQuery.do";
+const SSE_FUND_ANNOUNCEMENT_URL =
+  "https://query.sse.com.cn/search/getESSearchDoc.do";
 const GOV_POLICY_CATEGORIES = Object.freeze({
   bumenfile: "evidence",
   gongwen: "evidence",
@@ -249,19 +250,34 @@ export function parseSseFundAnnouncements(payload, symbol, {
   } catch {
     return [];
   }
-  const rows = Array.isArray(response?.result) ? response.result : [];
+  const legacyRows = Array.isArray(response?.result) ? response.result : null;
+  const searchRows = Array.isArray(response?.data?.knowledgeList)
+    ? response.data.knowledgeList
+    : null;
+  const rows = legacyRows || searchRows || [];
   const items = [];
   for (const row of rows) {
     if (items.length >= RSS_LIMIT_PER_QUERY) break;
-    if (String(row?.SECURITY_CODE || "") !== symbol) continue;
-    const title = cleanText(row?.TITLE, 300);
-    const dateText = String(row?.SSEDATE || "").trim();
+    const extension = Object.fromEntries(
+      (Array.isArray(row?.extend) ? row.extend : [])
+        .filter(({ name }) => typeof name === "string")
+        .map(({ name, value }) => [name, value]),
+    );
+    const rawPath = String(row?.URL || extension.CURL || "");
+    if (
+      (legacyRows && String(row?.SECURITY_CODE || "") !== symbol)
+      || (searchRows && !new RegExp(`/${symbol}_[^/]+\\.pdf$`, "i").test(rawPath))
+    ) continue;
+    const title = cleanText(row?.TITLE || row?.title, 300);
+    const dateText = String(row?.SSEDATE || row?.createTime || "")
+      .trim()
+      .slice(0, 10);
     const published = /^\d{4}-\d{2}-\d{2}$/.test(dateText)
       ? new Date(`${dateText}T00:00:00+08:00`)
       : new Date(Number.NaN);
     let url;
     try {
-      url = new URL(String(row?.URL || ""), "https://www.sse.com.cn");
+      url = new URL(rawPath, "https://www.sse.com.cn");
       if (url.hostname !== "www.sse.com.cn") continue;
       if (!url.pathname.startsWith("/disclosure/fund/announcement/")) continue;
       url.protocol = "https:";
@@ -280,7 +296,7 @@ export function parseSseFundAnnouncements(payload, symbol, {
       url: url.toString(),
       publishedAt: published.toISOString(),
       summary: cleanText(
-        [row?.BULLETIN_TYPE, row?.TITLE].filter(Boolean).join(" · "),
+        [row?.BULLETIN_TYPE, row?.TITLE || row?.title].filter(Boolean).join(" · "),
         500,
       ),
       publisher: "上海证券交易所",
@@ -692,20 +708,16 @@ function sseFundAnnouncementUrl(symbol, now) {
   };
   const parameters = new URLSearchParams({
     jsonCallBack: "TradingWorkbenchSse",
-    isPagination: "true",
-    "pageHelp.pageSize": "10",
-    "pageHelp.beginPage": "1",
-    "pageHelp.cacheSize": "1",
-    "pageHelp.endPage": "1",
-    "pageHelp.pageNo": "1",
-    type: "inParams",
-    sqlId: "COMMON_PL_JJXX_JJGG_L",
-    TITLE: "",
-    SECURITY_CODE: symbol,
-    ORG_BULLETIN_TYPE: "",
-    OTHER_TYPE: "",
-    START_DATE: window.begin,
-    END_DATE: window.end,
+    keyword: symbol,
+    spaceId: "3",
+    siteName: "sse",
+    keywordPosition: "title,paper_content",
+    page: "0",
+    limit: "10",
+    publishTimeStart: `${window.begin} 00:00:00`,
+    publishTimeEnd: `${window.end} 23:59:59`,
+    channelId: "10001",
+    searchMode: "preciseMulti",
   });
   return {
     url: `${SSE_FUND_ANNOUNCEMENT_URL}?${parameters}`,
@@ -782,7 +794,7 @@ function providerCandidates(plan, now) {
           policyWindow: announcement.window,
           symbol: symbol.slice(0, 6),
           targetSymbol: symbol,
-          referer: `https://www.sse.com.cn/assortment/fund/list/etfinfo/basic/index.shtml?FUNDID=${symbol.slice(0, 6)}`,
+          referer: `https://www.sse.com.cn/home/search/?webswd=${symbol.slice(0, 6)}`,
           maxResponseBytes: DEFAULT_RESPONSE_LIMIT_BYTES,
         });
       }
@@ -1084,7 +1096,13 @@ function validateEvidenceEnvelope(candidate, content) {
     } catch {
       payload = null;
     }
-    if (!payload || !Array.isArray(payload.result)) {
+    const validLegacy = Array.isArray(payload?.result);
+    const validSearch = (
+      String(payload?.code || "") === "0"
+      && payload?.data?.originKeyword === candidate.symbol
+      && Array.isArray(payload?.data?.knowledgeList)
+    );
+    if (!validLegacy && !validSearch) {
       throw new NewsFetchError("NEWS_MALFORMED_RESPONSE");
     }
   } else if (candidate.format === "sec-submissions-json") {

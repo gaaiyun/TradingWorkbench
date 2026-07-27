@@ -157,6 +157,33 @@ test("SSE fund announcement parser keeps exact ETF filings and official PDF link
   assert.deepEqual(items[0]._topicSymbols, ["512480.SS"]);
 });
 
+test("SSE official search parser accepts exact-code PDF results", async () => {
+  const { parseSseFundAnnouncements } = await import(newsUrl);
+  const payload = `TradingWorkbenchSse(${JSON.stringify({
+    code: "0",
+    data: {
+      originKeyword: "512480",
+      knowledgeList: [{
+        title: "国联安半导体ETF基金份额拆分结果公告",
+        createTime: "2026-07-03 08:56:02",
+        extend: [
+          { name: "CURL", value: "/disclosure/fund/announcement/c/new/2026-07-03/512480_20260703_WPHJ.pdf" },
+          { name: "FILETYPE", value: "pdf" },
+        ],
+      }],
+    },
+  })})`;
+  const items = parseSseFundAnnouncements(payload, "512480", {
+    begin: "2026-06-23",
+    end: "2026-07-23",
+    now: new Date("2026-07-23T01:30:00.000Z"),
+    targetSymbol: "512480.SS",
+  });
+  assert.equal(items.length, 1);
+  assert.equal(items[0].publishedAt, "2026-07-02T16:00:00.000Z");
+  assert.equal(items[0].url, "https://www.sse.com.cn/disclosure/fund/announcement/c/new/2026-07-03/512480_20260703_WPHJ.pdf");
+});
+
 test("SEC EDGAR Atom parser keeps the official filing URL and source timestamp", async () => {
   const { parseSecEdgarAtom } = await import(newsUrl);
   assert.deepEqual(parseSecEdgarAtom(SEC_ATOM), [{
