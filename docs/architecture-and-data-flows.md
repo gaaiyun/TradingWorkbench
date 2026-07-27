@@ -218,12 +218,14 @@ Provider Registry 保存 transport、authority、freshness、授权用途和失�
 ```mermaid
 flowchart LR
     Q["profile 主题"] --> SEC["SEC Submissions"]
-    Q --> MIIT["工信部文件发布 API"]
+    Q --> GOV["中国政府网政策库"]
+    Q --> SSE["上交所 ETF 公告"]
     Q --> IR["HashKey IR"]
     Q --> FED["Federal Reserve RSS"]
     Q --> DISC["Google / 东方财富 / Yahoo"]
     SEC --> E["evidence"]
-    MIIT --> E
+    GOV --> E
+    SSE --> E
     IR --> E
     FED --> E
     DISC --> D["discovery"]
@@ -233,9 +235,11 @@ flowchart LR
 
 SEC 只接受 `8-K/8-K/A` 和 `sec.gov/Archives` 链接。请求必须提供符合 fair-access 的组织和联系邮箱。
 
-工信部请求固定 `cateid=58`，分别查询通信和芯片，使用上海日历 30 天窗口。解析器拒绝未来、窗口外、领导活动和非政策栏目；每个查询最多保留 8 条。
+中国政府网请求使用官网前端的真实参数组合，分别查询“通信”和“集成电路”，再按上海日历执行 30 天 point-in-time 过滤。部门文件、国务院公文和公报进入 evidence；政策解读只作 discovery。解析器拒绝未来、窗口外、非 `www.gov.cn` 原文和不受支持的路径，每个查询最多保留 8 条。
 
-发现层成功不会中断 SEC 或工信部查询。官方源 403、结构错误或超限时，本次结果保持 degraded，即使 discovery 返回了新闻。
+上交所基金公告按 `SECURITY_CODE` 精确查询 `515880`、`512480`，只接受 `www.sse.com.cn/disclosure/fund/announcement/` 的原始文件。季度报告、招募说明书和份额拆分公告直接关联对应 ETF，不靠标题模糊猜标的。
+
+发现层成功不会中断 SEC、中国政府网或上交所查询。任一计划内官方源出现 HTTP、结构或大小错误时，本次结果保持 degraded，即使 discovery 返回了新闻。
 
 D1 有意按“原文 × 关联标的”保存，便于按 profile 和 symbol 查询。网页读取后按 `cluster_id`、原文 URL、规范化标题依次聚合为一张资讯卡，并展示全部关联标的；事件与新闻使用不同分组，不互相吞并。新闻页和监控页在页面可见时每 60 秒刷新，后台标签页停止轮询，恢复可见后立即补一次请求。界面同时显示文章时间和最近请求完成时间，不能用文章发布时间冒充刷新时间。
 
@@ -338,7 +342,7 @@ Web 满足阈值时记录 `sent / WEB_EVENT_PERSISTED`，含义是网页可见�
 | `/api/settings/profiles...` | POST / PATCH / DELETE | profile + revision |
 | `/api/market` | GET | `profile + symbol + timeframe` |
 | `/api/news`、`/api/events` | GET | profile |
-| `/api/monitor-status` | GET | profile，返回来源健康和提醒状态 |
+| `/api/monitor-status` | GET | profile，返回来源健康和提醒状态；显式 `capacity=1` 时附有界 D1 容量快照 |
 | `/api/analyze` | POST | profile manual 或 adhoc |
 | `/api/runs`、`/api/history`、`/api/latest` | GET | profile 或 requestId |
 | `/api/report`、`/api/report-audit` | GET | profile 或 requestId |
@@ -382,12 +386,13 @@ Worker `/health` 返回：
   },
   "newsProviders": {
     "status": "ok",
+    "reason": null,
     "providers": []
   }
 }
 ```
 
-`ok=true` 只表示 health handler 可响应。验收人员还要检查 commit SHA、部署时间和 `newsProviders.status`。
+`ok=true` 只表示 health handler 可响应。验收人员还要检查 commit SHA、部署时间、`newsProviders.status` 和 `reason`。`no_binding`、`query_timeout`、`empty_table`、`query_error` 四种未知原因不会再塌缩成同一个空数组；冷启动超时只重试一次。
 
 Workbench Pages `/api/health` 另返回：
 
@@ -396,13 +401,14 @@ Workbench Pages `/api/health` 另返回：
   "deployment": {
     "service": "pages-functions",
     "commitSha": "...",
+    "deployedAt": "...",
     "branch": "main",
     "url": "https://<deployment>.tradingagents-board.pages.dev/"
   }
 }
 ```
 
-`deploy-workbench.yml` 将实际 checkout 的 SHA 传给 `wrangler pages deploy --commit-hash`，随后从生产域名回读并比较；因此 Pages 与 Worker 都具有可外部验证的版本闭环。
+`deploy-workbench.yml` 在发布前生成 `public/data/deployment.json`，将实际 checkout SHA、构建时 UTC 时间和 branch 随静态站一起发布。Pages health 只在该 manifest SHA 与 `CF_PAGES_COMMIT_SHA` 一致时显示 `deployedAt`，随后 workflow 从生产域名回读 SHA 和时间；因此 Pages 与 Worker 都具有可外部验证的版本闭环。
 
 ## 14. 保留的契约
 

@@ -175,7 +175,7 @@ if ($workerHealth.deployment.deployedAt -eq "unknown") {
 
 顶层 `ok=true` 只说明 health handler 可响应。还要检查 `newsProviders.status` 和每个 provider 的成功、失败时间与错误码。
 
-默认 `/health` 的 D1 provider 查询超时为 750ms，可用 `HEALTH_QUERY_TIMEOUT_MS` 在 10–1500ms 内覆盖。它是有界探针，不代表整个 Worker 运行时间；50ms 在生产跨区域 D1 上会产生已有健康记录却返回空数组的假 `unavailable`。
+默认 `/health` 的 D1 provider 查询超时为 1500ms，可用 `HEALTH_QUERY_TIMEOUT_MS` 在 10–3000ms 内覆盖；冷启动超时会再试一次。`newsProviders.reason` 区分 `no_binding`、`query_timeout`、`empty_table`、`query_error`，因此“暂时不知道”不会再被误判成“所有 provider 挂了”。它仍是有界探针，不代表整个 Worker 运行时间。
 
 资讯刷新由两层组成：
 
@@ -209,6 +209,9 @@ npx --yes wrangler@4.113.0 deploy --config wrangler.monitor.queue.toml `
 
 ```powershell
 $pagesCommit = git rev-parse HEAD
+$env:DEPLOY_SHA = $pagesCommit
+$env:DEPLOY_BRANCH = "main"
+node scripts/deployment-metadata.mjs
 
 npx --yes wrangler@4.113.0 pages deploy public `
   --project-name tradingagents-board `
@@ -222,9 +225,12 @@ $pagesHealth = Invoke-RestMethod `
 if ($pagesHealth.deployment.commitSha -ne $pagesCommit) {
   throw "Pages SHA 不匹配"
 }
+if ($pagesHealth.deployment.deployedAt -eq "unknown") {
+  throw "Pages 部署时间未知或 deployment manifest 与运行时 SHA 不一致"
+}
 ```
 
-`deploy-workbench` 缺 Cloudflare 凭据时直接失败，不再跳过。发布后 workflow 最多等待约两分钟，直到生产域名 `/api/health` 回读到目标 SHA；超时或不一致都视为发布失败。`CF_PAGES_URL` 同时保留本次不可变 deployment URL，便于核对生产 alias 的传播。
+`deploy-workbench` 缺 Cloudflare 凭据时直接失败，不再跳过。发布前生成随静态站发布的 deployment manifest；发布后 workflow 最多等待约两分钟，直到生产域名 `/api/health` 回读到目标 SHA 和合法 `deployedAt`。超时、不一致或 manifest 缺失都视为发布失败。`CF_PAGES_URL` 同时保留本次不可变 deployment URL，便于核对生产 alias 的传播。
 
 ### 5.4 VolGuard
 
@@ -394,20 +400,21 @@ slot 应进入 completed、degraded 或带明确原因的 deferred/failed。检�
 
 若当日没有新 8-K，合法结果可以为零条，但 source trail 必须证明 SEC 查询成功并通过结构校验。
 
-### 12.5 工信部具体检查
+### 12.5 中国政府网与上交所具体检查
 
 对 A 股通信和芯片主题分别检查：
 
-- source trail 包含 `miit-policy-api`；
-- 查询固定 `cateid=58`、`p=1`、`pg=10`；
-- 查询词分别覆盖通信和芯片；
-- `begin=2026-06-27`、`end=2026-07-27`，以上海日历计算；
+- source trail 包含 `gov-policy-library`，目标 ETF 还包含 `sse-fund-announcements`；
+- 政策查询固定 `t=zhengcelibrary`、`timetype=timeqb`、`sort=pubtime`、`searchfield=title`、`p=1`、`n=20`；
+- 查询词分别为“通信”和“集成电路”；
+- 响应仍由客户端按上海日历执行 30 天窗口，拒绝未来和窗口外结果；
 - 每个查询最多保留 8 条；
-- 拒绝未来日期、窗口外结果、部领导活动和非政策栏目；
-- 原文链接属于工信部官方域名；
-- 官方结果标记 `sourceTier=evidence`；
+- 部门文件、国务院公文、公报为 evidence，政策解读为 discovery；
+- 政策原文只接受 `www.gov.cn/zhengce/` 或 `/gongbao/`；
+- 上交所只接受与代码精确相等且位于 `www.sse.com.cn/disclosure/fund/announcement/` 的公告；
+- `512480` 与 `515880` 的季度报告、拆分公告等官方结果标记 `sourceTier=evidence`；
 - 东方财富或 Google 结果保持 `discovery`；
-- 工信部失败时，即使东方财富成功，本次采集仍为 degraded。
+- 计划内任一官方源失败时，即使东方财富成功，本次采集仍为 degraded。
 
 ### 12.6 API 和页面检查
 
@@ -417,6 +424,9 @@ Invoke-RestMethod `
 
 Invoke-RestMethod `
   "https://tradingagents-board.pages.dev/api/monitor-status?profile=cn-semi-comms"
+
+Invoke-RestMethod `
+  "https://tradingagents-board.pages.dev/api/monitor-status?profile=cn-semi-comms&capacity=1"
 ```
 
 确认：
@@ -445,7 +455,7 @@ Invoke-RestMethod `
 - Worker health JSON；
 - migrations list；
 - slot 行和 payload hash；
-- SEC、MIIT source trail；
+- SEC、中国政府网和上交所 source trail；
 - `/api/news`、`/api/monitor-status`、`/api/market` 样本；
 - 页面截图。
 

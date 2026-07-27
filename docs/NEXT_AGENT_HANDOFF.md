@@ -1,6 +1,6 @@
 # Trading Workbench 下一 Agent 交接
 
-更新日期：2026-07-27（自动部署闭环验收后修订）
+更新日期：2026-07-28（外部审核第四轮修复候选）
 
 实现基线：`main`。不要依赖本文中的旧提交号；接手时同时执行 `git rev-parse HEAD`、`git rev-parse origin/main`，并读取 Pages 与 Worker health 的 commit SHA。
 
@@ -26,7 +26,9 @@ GitHub 自动部署链已恢复。仓库主人在 2026-07-27 配置了 `CLOUDFLA
 
 资讯刷新回归已经定位并修复：浏览器原本每 60 秒轮询，但 Worker 的上游采集错误地只挂在交易日 08:25 盘前任务下。现在每个 profile 可独立配置 15/30/60 分钟全天采集，默认 15 分钟；周日 20:00、20:10 与 20:15 的真实批次已让 `cn-semi-comms` 新闻从 146 条增至 162 条，最新 `fetchedAt=2026-07-26T12:15:06.874Z`。来源部分失败会保留成功结果并记录 `NEWS_COLLECTION_PARTIAL`，不会用旧数据伪装全部成功。`market_events` 仍只在真实行情、公告或信号发生时生成，不为周末伪造事件。
 
-2026-07-27 的官方源验收已证明 SEC 修复生效：GOOGL 有真实 `sec.gov/Archives` 8-K evidence；ORCL 最近 8-K 早于 30 天窗口，因此 evidence 为 0 是正确行为，禁止为了凑数放宽窗口。工信部 `search-front-server` 仍不稳定，A 股 ETF evidence 为 0；下一轮应改接中国政府网政策文件库或其它可验证官方原文，不再死磕旧端点。首份 `verified` 报告仍未生成。
+2026-07-27 的官方源验收已证明 SEC 修复生效：GOOGL 有真实 `sec.gov/Archives` 8-K evidence；ORCL 最近 8-K 早于 30 天窗口，因此 evidence 为 0 是正确行为，禁止为了凑数放宽窗口。2026-07-28 的修复候选已删除失效的工信部反爬端点，改接中国政府网政策文件库，并新增上交所 ETF 公告 provider。本机真实请求确认政府网返回合法 JSON；上交所对 `515880` 返回 4 份、`512480` 返回 3 份 30 天内官方公告，包括季度报告和份额拆分原始 PDF。首份 `verified` 报告仍未生成，报告门禁没有放宽。
+
+第四轮还修复了运维可观测性：Worker `/health.newsProviders.reason` 现在区分 `no_binding / query_timeout / empty_table / query_error`，默认 1500ms、冷启动仅重试一次；Pages 发布生成与运行时 SHA 交叉校验的 deployment manifest，`/api/health.deployment` 增加真实 `deployedAt`；`/api/monitor-status?capacity=1` 可按需读取有界 D1 行数和存储估算，默认页面轮询不执行容量查询。
 
 本轮接手已完成数字引用判定修复：`_NUMERIC_CLAIM_RE` 不再把日期、时间戳、标的代码、哈希、Markdown 标题序号和 RSI/MACD/均线参数当作研究数字；逐段复测后 `515880.SS` 为 `179→117`、`512480.SS` 为 `128→84`、`3887.HK` 为 `169→108`，剩余段落仍含未带 Evidence ID 的真实数值，因此没有放宽门禁。三份 `-v4` Manifest 与 `public/data/report-audit.json` 已同步更新。
 
@@ -98,6 +100,7 @@ Pages immutable deployment : 每次发布都会变化，以 `wrangler pages depl
 | Pages | `https://tradingagents-board.pages.dev/` |
 | Monitor Worker | `https://tradingagents-monitor.gaaiyun-risk-selfcheck.workers.dev/` |
 | VolGuard | `https://sh50-volguard.pages.dev/` |
+| 童装 Agent health | `https://amazon-kidswear-agent.pages.dev/healthz` |
 | D1 | `tradingagents-workbench` |
 
 ## 4. 本轮实现
@@ -139,7 +142,8 @@ workflow 校验互斥和字段完整性。history、Manifest、Evidence、run ti
 - `fullAnalysesPerDay` 使用 D1 原子预算；0 表示不 dispatch。
 - profile 公平轮转，计划任务、Queue、consumer 和手工补跑都有硬上限。
 - outbox、receipt 和 reconcile 处理 GitHub dispatch 的不确定响应。
-- Worker `/health` 暴露 commit SHA、部署时间和有界新闻 provider health。
+- Worker `/health` 暴露 commit SHA、部署时间、有界新闻 provider health 和稳定失败原因；冷启动查询只重试一次。
+- `/api/monitor-status?capacity=1` 才执行有界 D1 容量查询，普通页面轮询不增加扫描负担。
 
 ### 4.5 提醒
 
@@ -160,12 +164,13 @@ workflow 校验互斥和字段完整性。history、Manifest、Evidence、run ti
 ### 4.7 新闻证据
 
 - ORCL、GOOGL：SEC EDGAR Submissions `8-K/8-K/A`。
-- A 股通信和芯片：工信部文件发布 API，`cateid=58`，上海 30 天窗口。
+- A 股政策：中国政府网政策文件库，查询“通信 / 集成电路”，上海 30 天窗口；部门文件、公文、公报为 evidence，政策解读为 discovery。
+- `515880`、`512480`：上交所基金公告，按代码精确查询并只接受官方公告路径。
 - 3887.HK：HashKey 投资者关系公告。
 - 宏观：Federal Reserve 官方 RSS。
 - 发现层：Google News；Cloudflare 失败时使用东方财富或 Yahoo。
 
-官方失败不能由 discovery 成功掩盖。SEC、MIIT、HashKey 响应结构错误也算失败。
+官方失败不能由 discovery 成功掩盖。SEC、中国政府网、上交所、HashKey 响应结构错误也算失败。
 
 ## 5. Migration
 
@@ -196,7 +201,7 @@ migration 只向前保留。回退代码时不要删除新表或列。
 
 - `main` 已同步（HEAD = `origin/main`，工作树干净）；
 - Worker `/health` 已实现回读运行时 SHA 和部署时间；
-- Pages `/api/health` 已增加 commit SHA、branch 和不可变 deployment URL；
+- Pages `/api/health` 已增加 commit SHA、deployedAt、branch 和不可变 deployment URL；deployedAt 来自随部署发布且 SHA 匹配的 manifest；
 - 部署 workflow 均写成缺凭据即失败，发布后回读目标 SHA。
 
 ### 生产层已验证
@@ -208,7 +213,7 @@ migration 只向前保留。回退代码时不要删除新表或列。
 
 ### 尚未完成
 
-- 工信部官方政策 evidence 尚未恢复；旧 search API 继续保留失败轨迹，待替换 provider；
+- 本轮政府网与上交所 provider 尚需经 GitHub 自动部署后，从 Cloudflare 出口执行一次真实采集并回读生产 evidence；本机已验证两条官方接口和解析结果；
 - 当前生产审计仍为 `verified=0`；首轮 profile 报告已生成但被引用门禁降为 `Not Rated`，下一轮应先消除 `UNCITED_NUMERIC_CLAIM`、`UNSUPPORTED_ALLOCATION` 和无依据目标价；
 - PushPlus live 尚未开启，也不在本轮默认授权范围内。
 
@@ -220,7 +225,7 @@ migration 只向前保留。回退代码时不要删除新表或列。
 
 | 命令 | 结果 |
 |---|---|
-| `npm run test:functions` | 329 tests：328 passed、1 skipped、0 failed |
+| `npm run test:functions` | 336 tests：335 passed、1 skipped、0 failed（2026-07-28 第四轮候选） |
 | `npm run test:frontend` | 89 passed、0 failed |
 | `npm run check:workbench` | 通过 |
 | `G:\ClaudeCode\TradingAgents\.venv\Scripts\python.exe -m pytest -q` | 651 passed、2 skipped、0 failed；另有 69 个 subtests passed |
@@ -248,14 +253,15 @@ SEC 检查：
 - 零条可以合格，但 source trail 必须证明请求成功且结构有效；
 - 403、malformed 或超限时保持 degraded。
 
-MIIT 检查：
+中国政府网与上交所检查：
 
-- 通信、芯片两条查询；
-- `cateid=58`、`p=1`、`pg=10`；
-- `begin=2026-06-27`、`end=2026-07-27`；
+- 政策查询词为“通信”“集成电路”，参数与政府网网页真实请求一致；
+- 部门文件、公文、公报为 evidence，政策解读为 discovery；
+- 上交所按 `515880`、`512480` 精确查询基金公告；
+- 两条来源都使用上海 30 天 point-in-time 窗口；
 - 每条查询最多 8 项；
-- 拒绝未来、窗口外、领导活动和非政策栏目；
-- 东方财富成功不能掩盖 MIIT 失败。
+- 拒绝未来、窗口外、非官方域名和非公告路径；
+- 东方财富成功不能掩盖官方 provider 失败。
 
 外审还要检查 A 股 qfq、Yahoo `split-and-dividend-adjusted`、`512480.SS` 拆分连续和 PushPlus shadow。
 
@@ -270,7 +276,7 @@ MIIT 检查：
 7. push 后检查 CI、`deploy-monitor` 和 `deploy-workbench`。
 8. 核对 migrations、Worker SHA 和 Pages 路由。
 9. 执行生产 profile、identity、Chat/Evidence、行情、新闻、提醒 shadow 和 VolGuard 冒烟。
-10. 2026-07-27 08:25 外审通过后记录证据。
+10. 记录 2026-07-27 SEC 验收和本轮中国政府网、上交所生产验收证据。
 
 不要 force push，也不要在报告任务写 main 时覆盖同日版本目录。
 
@@ -313,7 +319,7 @@ Codex 根 task ID：`019f8943-9db3-7c52-88de-0cb3773977ba`
 ## 12. 已知边界
 
 - PushPlus live 未启用。
-- 上交所、深交所、巨潮、基金管理人和中证指数的直接适配器仍需补齐。
+- 上交所 ETF 公告已接入；深交所、巨潮、基金管理人和中证指数的直接适配器仍需按具体数据契约补齐。
 - ETF AUM、持仓、份额、费用、跟踪误差和 iNAV 只有取得带时间戳的可靠来源后才能展示。
 - 免费来源可能拒绝 Cloudflare 出口，必须保留 provider 失败轨迹。
 - VolGuard 工作台已保持快报价 30 秒、慢指标 5 分钟的双时钟；卖方策略观察卡按到期日用一日 VaR（缺失时 HV30 正态近似）计算 90% 认怂线与 99% 目标线，低于 90% 不观察，达到 99% 才列候选。缺失 Greeks 时仍展示阈值距离和覆盖率，但明确不生成 Delta 档位或裸卖指令，不能把周末最近收盘误称为实时。
@@ -328,7 +334,7 @@ Codex 根 task ID：`019f8943-9db3-7c52-88de-0cb3773977ba`
 |---|---|---|---|
 | 1 | ~~`evidence_packet.json` 写出了非法 JSON `NaN`~~ **已修复，勿重复处理** | `public/reports/MSFT/2026-07-24/evidence_packet.json:12576` | 该文件确实含字面量 `NaN`，Node `JSON.parse` 抛错（.NET 容忍，PowerShell 检查不出来），被判 `invalidated / INVALID_EVIDENCE_PACKET`。**但代码侧的根因已于 2026-07-26 由 `ed6acb7`「fix(证据): 阻断非有限行情并校验报告文件」修复**：`tradingagents/evidence.py:51`、`tradingagents/reporting.py:366/396` 均已加 `allow_nan=False`，上游另有 `evidence.py:79`、`scripts/run_daily.py:402/572` 的 `math.isfinite` 拦截。MSFT 那份报告提交于 2026-07-25（`2e3cd23`），**早于修复**，属修复前的遗留数据产物，不是活跃缺陷。全仓库仅此一处 |
 | 2 | ~~**Queue 消费路径不可达**~~ **已补齐可审计 IaC，默认仍安全走 direct** | `wrangler.monitor.queue.toml` | 新增可选 Queue 配置，显式绑定 `MONITOR_QUEUE`、批大小、重试和 DLQ；默认 `wrangler.monitor.toml` 不会在未确认账户套餐/队列已创建时强行启用，避免基础设施漂移和意外计费 |
-| 3 | ~~**`/health` 新闻 provider 查询超时过短**~~ **已修复** | `workers/monitor/src/index.mjs` | 50ms 已在生产证明会把已有的 7 条 D1 健康记录误报为空；默认提升到 750ms，并允许运行时在 10–1500ms 内覆盖。测试仍用 10ms 验证有界超时路径 |
+| 3 | ~~**`/health` 新闻 provider 查询超时过短且四态塌缩**~~ **已修复** | `workers/monitor/src/index.mjs` | 默认 1500ms，可在 10–3000ms 覆盖；冷启动 timeout 重试一次。无 binding、两次超时、空表和查询错误分别返回稳定 reason，不泄漏异常正文 |
 | 4 | ~~**"最新观点"路径没有第二道门禁**~~ **已修复** | `functions/api/latest.js` | 无 selector 的首页路径并行读取 `latest.json` 与 `report-audit.json`，只放行 `verified + rated + claimValidation=passed`；审计索引不可用时 fail-closed，不把未审报告当最新观点 |
 | 5 | **`report-audit.mjs` 的失效名单是硬编码** | `scripts/report-audit.mjs:7-11` | `INVALIDATED_REPORTS` 是人工维护的 3 条路径黑名单。新出现的同类污染报告若无人手动加入，只能靠动态一致性检查兜底，两种机制覆盖面不重叠 |
 | 6 | **claim validation 的价格目标/仓位检查仍是无条件关键词匹配** | `tradingagents/reporting.py` | `_PRICE_TARGET_RE` / `_ALLOCATION_RE` 仍不检查附近是否真给了方法论或用户约束。报告写"我们不设目标价"同样会被判违规。文档措辞暗示这是有条件判断，实际不是——**想靠"补一段方法论说明"过门禁是行不通的**。数字主张的结构性误报已在本轮修复：日期、时间戳、标的代码、哈希、Markdown 标题序号和指标参数不再被当作研究数字；剩余价格、比例和指标读数仍需 Evidence ID。 |
@@ -371,11 +377,12 @@ Codex 根 task ID：`019f8943-9db3-7c52-88de-0cb3773977ba`
 
 1. 跑 §10 的接手命令，确认工作树和分支状态。
 2. 读 §1.5，逐条复核生产状态——不要相信本文写的，自己再跑一遍。
-3. **恢复部署凭据**（见 §15.1）。这是所有部署门禁的前提，不做这一步后面全部无从谈起。
-4. 用 `wrangler d1 migrations list --remote` 确认 0013–0015 是否真的已应用。
-5. 重新部署 Monitor Worker 到当前 HEAD，用 `/health` 回读 SHA 验证。
-6. 执行 §8 的 2026-07-27 08:25 外审协议。
-7. 之后才轮到功能开发：消除 `UNCITED_NUMERIC_CLAIM` / `UNSUPPORTED_ALLOCATION`，争取第一份 `verified` 报告。
+3. 确认自动部署凭据仍存在（见 §15.1），不读取 secret 明文。
+4. 用 `wrangler d1 migrations list --remote` 确认 0013–0015 仍已应用。
+5. 比对 GitHub、Pages、Worker 三方 SHA 和两处 deployedAt。
+6. 从生产触发一次 `newsCollect`，确认 `gov-policy-library`、`sse-fund-announcements` 在 Cloudflare 出口成功；核对 `515880.SS`、`512480.SS` 官方 evidence 与原始链接。
+7. 读取 `/api/monitor-status?capacity=1`，确认容量快照有界且不影响默认请求。
+8. 之后才轮到报告质量：消除 `UNCITED_NUMERIC_CLAIM` / `UNSUPPORTED_ALLOCATION`，争取第一份 `verified` 报告。
 
 ### 15.1 恢复部署凭据（2026-07-27 已完成，保留作灾难恢复）
 
@@ -438,3 +445,4 @@ gh workflow run deploy-monitor.yml --repo gaaiyun/TradingWorkbench --ref main
 | 2026-07-26 | 手工发布卖方分位数前端并回读 canonical Pages；修正本文件线上 SHA 与 immutable URL | Pages `62562e64ae34` / `9f5b3f07`，Worker `/health` 仍为 `f88df97`；GitHub CI 与自动部署凭据状态分开记录 |
 | 2026-07-26 | 修复资讯“页面轮询但上游不采集”的调度回归：新增可配置全天 15/30/60 分钟采集、跨 profile 容量保护、周末调度测试；提高 health 查询阈值并适配 HashKey 1MB 官方公告页 | 周日 20:00–20:15 生产批次使 `cn-semi-comms` 新闻 146→162，HashKey 恢复 `ok`，最新 `fetchedAt=2026-07-26T12:15:06.874Z` |
 | 2026-07-27 | 恢复 Cloudflare 自动部署；同一 token 安全复用到 TradingWorkbench 与童装 Agent；Monitor SHA 校验增加生产别名传播等待 | Pages run `30279626692`、Monitor run `30280008338`、CI run `30280007660`、童装 Agent run `30279633026` 全部成功；token 明文未进入仓库或日志 |
+| 2026-07-28 | 外审第四轮：替换工信部旧端点，接入中国政府网政策库与上交所 ETF 公告；拆分 Worker health 四态、为 Pages 增加可信 deployedAt、增加显式有界 D1 容量快照；补童装 Agent `/healthz` URL | 本机官方接口实测：`515880` 4 份、`512480` 3 份上交所公告；Functions 335 passed、1 skipped；生产部署与 Cloudflare 出口验收见本轮后续记录 |

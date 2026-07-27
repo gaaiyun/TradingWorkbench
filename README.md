@@ -106,7 +106,8 @@ Worker 不运行 pandas、LangGraph、GARCH、BSADF 或长历史回测。VolGuar
 独立资讯任务按 profile 全天运行，默认每 15 分钟采集一次；交易日 08:25 盘前还会确保生成同一套幂等新闻槽，为盘前简报提供不超过一个刷新周期的上下文：
 
 - Oracle、Alphabet：SEC EDGAR Submissions 中的 `8-K/8-K/A`。
-- A 股通信与半导体：工信部“文件发布”API，固定 `cateid=58`、通信/芯片查询、上海日历 30 天窗口。
+- A 股政策：中国政府网政策文件库，按“通信 / 集成电路”检索；部门文件、国务院公文和公报为 `evidence`，政策解读只作 `discovery`。
+- A 股 ETF 公告：上交所基金公告按证券代码读取季度报告、招募说明书、份额拆分等原始 PDF；当前覆盖 `515880` 和 `512480`。
 - HashKey：公司投资者关系公告。
 - 宏观：Federal Reserve 官方 RSS 中与 FOMC、货币政策和经济活动有关的条目。
 - 发现层：Google News RSS；Cloudflare 出口不可用时，A 股使用东方财富，美股和港股使用 Yahoo Finance RSS。
@@ -248,11 +249,11 @@ MCP 只提供设置、监控、行情、新闻和研究历史查询，不接收�
 
 部署顺序为 D1 migration → Monitor Worker → Workbench Pages → VolGuard → 生产验收。
 
-`deploy-monitor` 缺少 Cloudflare 凭据或 `MONITOR_WORKER_URL` 时直接失败。部署后 workflow 请求 Worker `/health`，并要求 `deployment.commitSha` 等于本次 GitHub SHA。绿色 workflow 仍需核对 migration、deploy 和 SHA 验证步骤都执行成功。
+`deploy-monitor` 缺少 Cloudflare 凭据或 `MONITOR_WORKER_URL` 时直接失败。部署后 workflow 请求 Worker `/health`，并要求 `deployment.commitSha` 等于本次 GitHub SHA。`deploy-workbench` 还生成随静态站发布的 deployment manifest；Pages health 只有在 manifest SHA 与运行时 SHA 一致时才显示真实 `deployedAt`。绿色 workflow 仍需核对 migration、deploy 和 SHA 验证步骤都执行成功。
 
 本轮发布依赖 migrations `0013_monitor_reliability.sql`、`0014_chat_evidence_scope.sql` 和 `0015_notification_deliveries.sql`。
 
-2026-07-26 已完成 D1 `0013`–`0015`、Monitor Worker 和 Workbench Pages 的生产发布与冒烟。Pages `/api/health` 和 Worker `/health` 都返回运行时 commit SHA；发布 workflow 必须在生产域名回读到目标 SHA 才算成功。同日 20:00、20:10 与 20:15 的周日自动批次已证明全天资讯调度会真实执行：`cn-semi-comms` 的新闻记录从 146 增至 162，最新 `fetchedAt` 为 `2026-07-26T12:15:06.874Z`。HashKey、SEC、东财、Yahoo 和 Fed 来源成功；Google 超时、工信部部分查询结构异常被如实记录。部分来源失败时批次会写入可用结果并标记 `NEWS_COLLECTION_PARTIAL`，而不是让整页空白。2026-07-27 08:25 仍需单独验收 SEC 与工信部的官方证据质量。完整记录、验证协议和回退流程见 [部署与运维](docs/operations-and-deployment.md)。
+2026-07-26 已完成 D1 `0013`–`0015`、Monitor Worker 和 Workbench Pages 的生产发布与冒烟。Pages `/api/health` 和 Worker `/health` 都返回运行时 commit SHA；发布 workflow 必须在生产域名回读到目标 SHA 才算成功。2026-07-27 的外审已确认 SEC provider 能取得 GOOGL 官方 8-K；ORCL 最近 8-K 超出 30 天窗口，零条 evidence 是正确结果。旧工信部反爬端点已从代码中移除，改为中国政府网政策库；另外接入上交所 ETF 公告，直接覆盖两只 A 股 ETF 的季度报告和拆分公告。部分来源失败时批次会写入可用结果并标记 `NEWS_COLLECTION_PARTIAL`，而不是让整页空白。完整记录、验证协议和回退流程见 [部署与运维](docs/operations-and-deployment.md)。
 
 ## 架构取舍
 

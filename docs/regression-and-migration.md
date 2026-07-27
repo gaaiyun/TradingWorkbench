@@ -116,7 +116,8 @@ live PushPlus 尚未启用。只有完成生产 canary、重复事件对账和�
 当前已实现：
 
 - SEC EDGAR Submissions：ORCL、GOOGL 的 `8-K/8-K/A`；
-- 工信部文件发布 API：通信和芯片政策；
+- 中国政府网政策文件库：通信和集成电路政策；
+- 上交所基金公告：`515880`、`512480` 的季度报告、拆分和招募说明书；
 - HashKey 公司投资者关系公告；
 - Federal Reserve 官方 RSS：有界宏观证据；
 - Google、东方财富和 Yahoo 的 discovery 降级链。
@@ -125,7 +126,7 @@ live PushPlus 尚未启用。只有完成生产 canary、重复事件对账和�
 
 仍未完整接入：
 
-- 上交所、深交所基金公告；
+- 深交所基金公告；
 - 巨潮和基金管理人公告；
 - 中证指数成分与公司行动；
 - 更多公司 IR 和 HKEXnews 发行人原文。
