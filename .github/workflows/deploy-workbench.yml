@@ -73,6 +73,18 @@ jobs:
           DEPLOYED_AT: ${{ steps.revision.outputs.deployed_at }}
         run: node scripts/deployment-metadata.mjs
 
+      - name: Deploy workbench and Pages Functions
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID || vars.CLOUDFLARE_ACCOUNT_ID }}
+          DEPLOY_SHA: ${{ steps.revision.outputs.sha }}
+        run: >-
+          npx --yes wrangler@4.113.0 pages deploy public
+          --project-name "$CLOUDFLARE_PAGES_PROJECT"
+          --branch main
+          --commit-hash "$DEPLOY_SHA"
+          --commit-dirty=false
+
       - name: Persist deployment identity
         env:
           CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
@@ -85,18 +97,6 @@ jobs:
             --remote \
             --config wrangler.toml \
             --command "INSERT INTO deployment_metadata (service, commit_sha, deployed_at, branch, url, updated_at) VALUES ('pages-functions', '$DEPLOY_SHA', '$DEPLOYED_AT', 'main', NULL, '$DEPLOYED_AT') ON CONFLICT(service) DO UPDATE SET commit_sha=excluded.commit_sha, deployed_at=excluded.deployed_at, branch=excluded.branch, url=excluded.url, updated_at=excluded.updated_at;"
-
-      - name: Deploy workbench and Pages Functions
-        env:
-          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
-          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID || vars.CLOUDFLARE_ACCOUNT_ID }}
-          DEPLOY_SHA: ${{ steps.revision.outputs.sha }}
-        run: >-
-          npx --yes wrangler@4.113.0 pages deploy public
-          --project-name "$CLOUDFLARE_PAGES_PROJECT"
-          --branch main
-          --commit-hash "$DEPLOY_SHA"
-          --commit-dirty=false
 
       - name: Verify deployed Pages identity
         env:
