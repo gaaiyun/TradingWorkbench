@@ -4,7 +4,7 @@
 
 代码基线：`main`。精确版本以 `git rev-parse origin/main`、Pages `/api/health` 和 Worker `/health` 三方回读为准，不在文档中维护容易失真的固定 SHA。
 
-2026-07-27 已恢复 GitHub Actions 的 Cloudflare 自动发布：Pages run `30279626692`、Monitor run `30280008338` 成功，CI run `30280007660` 全绿；同一 token 在童装 Agent production run `30279633026` 也完成 D1、Worker、Pages 与生产冒烟。SEC 已有 GOOGL 官方 8-K evidence，工信部旧搜索端点仍不稳定，需替换官方政策 provider。
+2026-07-27 已恢复 GitHub Actions 的 Cloudflare 自动发布；同一 token 在童装 Agent production 环境也已验证。SEC 已有 GOOGL 官方 8-K evidence，工信部旧搜索端点已退役并替换为中国政府网政策库。2026-07-28 资金流 migration、回填、关闭态发布和 daily 增量均完成真实生产验收。
 
 ## 1. 生产对象
 
@@ -36,6 +36,7 @@ Workbench、Monitor Worker 和 VolGuard 有独立部署记录与回退路径。
 | `VOLGUARD_SNAPSHOT_URL` | 实时接口失败时的快照 |
 | `EVIDENCE_READ_TOKEN` | Evidence 读取，缺失时 fail-closed |
 | `EVIDENCE_WRITE_TOKEN` | GitHub 任务发布 Packet 和 Manifest |
+| `FUND_FLOW_ENABLED` | Pages 发布能力开关；代码中只接受字符串或布尔值 `true` |
 
 ### Monitor Worker
 
@@ -56,7 +57,12 @@ Worker vars：
 | `WORKER_COMMIT_SHA` | 部署代码 SHA |
 | `WORKER_DEPLOYED_AT` | UTC 部署时间 |
 
-GitHub repository variable `MONITOR_WORKER_URL` 用于部署后 SHA 验证。`deploy-monitor` 缺 Cloudflare 凭据、account ID 或该 URL 时直接失败。
+GitHub repository variables：
+
+| 名称 | 用途 |
+|---|---|
+| `MONITOR_WORKER_URL` | Monitor 部署后 SHA 验证；缺失时发布直接失败 |
+| `FUND_FLOW_COLLECTION_ENABLED` | 资金流定时采集熔断；精确设为 `false` 时跳过 schedule，手工回填和 daily 仍可运行 |
 
 GitHub Actions 的 Python 深度研究另需 secret `TRADINGAGENTS_SEC_CONTACT_EMAIL`。它只用于构造 SEC EDGAR 的合规 User-Agent，不会写入报告、D1 或日志；缺失时 SEC 仍按失败轨迹降级到发现层。
 
@@ -95,6 +101,8 @@ Python 全量测试和浏览器测试在 Windows 上串行执行。交接文档�
 | `0013_monitor_reliability.sql` | slot snapshot、预算、outbox/receipt、bootstrap、scheduler state、新闻健康 |
 | `0014_chat_evidence_scope.sql` | Evidence 和 Manifest scope/owner |
 | `0015_notification_deliveries.sql` | event provenance、通知 shadow 账本 |
+| `0016_fund_flows.sql` | 资金流 long-form 表、自然键和查询索引 |
+| `0017_deployment_metadata.sql` | Pages 发布身份 D1 兜底，避免同 SHA 后续部署遮盖静态 manifest 后 `deployedAt=unknown` |
 
 本地：
 
@@ -116,7 +124,7 @@ npx --yes wrangler@4.113.0 d1 migrations list tradingagents-workbench --remote -
 npx --yes wrangler@4.113.0 d1 execute tradingagents-workbench `
   --remote `
   --config wrangler.monitor.toml `
-  --command "SELECT name FROM sqlite_schema WHERE type='table' AND name IN ('full_analysis_reservations','github_dispatch_outbox','github_dispatch_receipts','monitor_bootstrap_targets','monitor_scheduler_state','monitor_news_provider_health','notification_deliveries') ORDER BY name;"
+  --command "SELECT name FROM sqlite_schema WHERE type='table' AND name IN ('full_analysis_reservations','github_dispatch_outbox','github_dispatch_receipts','monitor_bootstrap_targets','monitor_scheduler_state','monitor_news_provider_health','notification_deliveries','fund_flows','deployment_metadata') ORDER BY name;"
 ```
 
 不要改写已经发布的 migration，也不要在生产 D1 执行未进入 migration 的写 SQL。
@@ -230,7 +238,9 @@ if ($pagesHealth.deployment.deployedAt -eq "unknown") {
 }
 ```
 
-`deploy-workbench` 缺 Cloudflare 凭据时直接失败，不再跳过。发布前生成随静态站发布的 deployment manifest；发布后 workflow 最多等待约两分钟，直到生产域名 `/api/health` 回读到目标 SHA 和合法 `deployedAt`。超时、不一致或 manifest 缺失都视为发布失败。`CF_PAGES_URL` 同时保留本次不可变 deployment URL，便于核对生产 alias 的传播。
+`deploy-workbench` 缺 Cloudflare 凭据时直接失败，不再跳过。发布前用同一个 `DEPLOYED_AT` 生成静态 manifest；`pages deploy` 成功后才参数化 UPSERT 到 D1 `deployment_metadata`，失败的发布不会覆盖当前线上身份。随后 workflow 最多等待约两分钟，直到生产域名 `/api/health` 回读到目标 SHA 和合法 `deployedAt`。Health 优先信任当前 immutable deployment 的静态 manifest，只有它缺失、被 SPA fallback 替换或 SHA 不一致时才有界查询 D1，且仍要求记录 SHA 等于 `CF_PAGES_COMMIT_SHA`。超时或不一致都视为发布失败。`CF_PAGES_URL` 保留不可变 deployment URL，便于核对生产 alias 的传播。
+
+手工 Pages 发布若要保留同等可观测性，必须先应用 migration 0017，并用与 manifest 相同的 SHA/UTC 时间更新 `deployment_metadata`；否则只允许作为临时排障，不能作为最终交付路径。权威生产发布仍是 GitHub `deploy-workbench`。
 
 ### 5.4 VolGuard
 
@@ -463,6 +473,29 @@ Invoke-RestMethod `
 - 页面截图。
 
 外审不记录 access code、token、Cookie、SEC 联系邮箱或完整上游响应。
+
+### 12.9 ETF 资金流采集与回滚
+
+`.github/workflows/fund-flow.yml` 的 daily 任务在工作日 UTC 12:17（北京时间 20:17）运行。它是独立故障域，不占 Monitor Worker 的 32 次外部请求预算，也不与行情或新闻共用熔断状态。全历史回填只手工触发：
+
+```powershell
+gh workflow run fund-flow.yml --repo gaaiyun/TradingWorkbench --ref main -f mode=backfill
+gh workflow run fund-flow.yml --repo gaaiyun/TradingWorkbench --ref main -f mode=daily
+```
+
+生产验收至少检查：
+
+```powershell
+npx wrangler d1 execute DB --remote --command `
+  "SELECT symbol, flow_type, COUNT(*) AS row_count, MIN(ts), MAX(ts) FROM fund_flows GROUP BY symbol, flow_type ORDER BY symbol, flow_type" --json
+
+npx wrangler d1 execute DB --remote --command `
+  "SELECT COUNT(*) AS total_rows, COUNT(DISTINCT profile_id || '|' || symbol || '|' || flow_type || '|' || period || '|' || ts || '|' || source || '|' || adjustment) AS unique_keys FROM fund_flows" --json
+```
+
+`total_rows` 必须等于 `unique_keys`。回填或 daily 的日志只允许稳定来源错误码，不得出现 token 或上游正文。API 验收请求 `/api/flows?profile=cn-semi-comms&symbol=515880.SS&type=margin_net_buy&limit=2`，应返回统一 `status/asOf/data/sources/capabilities` 信封；`/api/monitor-status?capacity=1` 应包含 `fund_flows`。
+
+回滚顺序：先把 repository variable `FUND_FLOW_COLLECTION_ENABLED=false`，确认下一次 schedule 被跳过；再把 `FUND_FLOW_ENABLED` 和页面 `data-fund-flow-enabled` 关为 `false`，最后回退 UI/API/collector。手工 `workflow_dispatch` 不受采集熔断变量限制，仍可用于受控排障。保留 migration 0016 和数据表，不执行破坏性 down migration。回滚后重新验证 Evidence、Manifest、期权、行情、新闻和设置 revision 均未变化。
 
 ## 13. 故障定位
 

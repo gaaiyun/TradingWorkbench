@@ -1,6 +1,6 @@
 # 架构、接口与数据流
 
-更新日期：2026-07-26
+更新日期：2026-07-28
 
 代码基线：`main`；运行版本由 Pages `/api/health` 与 Worker `/health` 的 commit SHA 证明。
 
@@ -13,6 +13,7 @@
 | 研究工作台 | Cloudflare Pages + Functions | 页面、profile API、动态查询、问答、报告、Evidence、VolGuard 代理 |
 | 监控调度器 | Cloudflare Worker + Cron | 轻量采集、slot、预算、outbox、规则信号、提醒 shadow |
 | 深度研究 | GitHub Actions + Python/LangGraph | TradingAgents、多模型调用、Evidence、报告、索引和审计 |
+| 资金流采集 | GitHub Actions + Node.js | 两融日频、ETF 规模/份额回填与工作日增量，参数化写入 D1 |
 | 期权服务 | VolGuard 独立仓库与 Pages | 期权快行情和慢风险模型 |
 
 ```mermaid
@@ -26,6 +27,7 @@ flowchart TB
 
     subgraph Research["GitHub / Python"]
         GH["daily-analysis"]
+        FF["fund-flow"]
         TA["TradingAgentsGraph"]
         EV["Evidence Packet"]
         MF["Manifest + Reports"]
@@ -41,6 +43,7 @@ flowchart TB
     API <--> D
     W <--> D
     W --> GH
+    FF --> D
     GH --> TA
     TA --> EV
     TA --> MF
@@ -63,6 +66,7 @@ Cloudflare 负责有界 I/O 和状态机。Python、LangGraph、LLM 辩论、GAR
 - `workbench-research.mjs`：运行身份、阶段、档案和报告状态。
 - `workbench-options.mjs`：VolGuard schema 归一化和双时钟。
 - `workbench-markdown.mjs`：安全报告渲染。
+- `workbench-fundflow.mjs`：资金面适用性、上海交易日、分位和缺失值展示模型。
 - `workbench.js`：网络请求、图表、设置、研究和问答编排。
 
 ```mermaid
@@ -198,6 +202,7 @@ sequenceDiagram
 | A 股规则信号 | CN core/comparison | 盘中每 15 分钟 |
 | A 股日线回填 | CN core/comparison | 15:20 |
 | 收盘深度分析 | `analysis=full` | 15:20 |
+| ETF 资金面日更 | `515880.SS / 512480.SS / 159995.SZ` | GitHub Actions，工作日 20:17；不占 Worker 32 次请求预算 |
 
 ## 6. Provider 和行情写入
 
@@ -212,6 +217,29 @@ Provider Registry 保存 transport、authority、freshness、授权用途和失�
 - 多种或缺失口径：报告写为 `mixed` 或 `unknown`，不猜测。
 
 报告 Market history 披露 `source`、`adjustment`、`start`、`end` 和 `sampleCount`。指标与报告使用同一批历史。
+
+### 6.1 资金流数据流
+
+`fund_flows` 是独立 long-form 表，业务唯一键为 `profile + symbol + flow_type + period + ts + source + adjustment`。写入使用参数化 JSON1 批次 UPSERT，只有更晚或相同的 `fetched_at` 可以覆盖旧记录。它不复用 `market_bars`、新闻健康、Monitor slot 或 Evidence 表。
+
+```mermaid
+flowchart LR
+    A["fund-flow workflow"] --> M["东财两融日频"]
+    A --> S["上交所日频基金规模"]
+    A --> Q["东财份额快照"]
+    M --> C["同日未复权收盘价"]
+    S --> D["规模 ÷ 收盘价 = derived shares"]
+    C --> D
+    M --> F[("D1 fund_flows")]
+    D --> F
+    Q --> F
+    F --> API["/api/flows"]
+    API --> UI["市场监控资金面板"]
+```
+
+两融与份额源按来源隔离：上交所被 403 或网络阻断时，批次降级为当前份额快照，但已取得的两融数据仍写入。沪市历史份额为 `derived`；深市 `159995.SZ` 仅从上线日起累积 `snapshot_unstamped`。页面只显示融资余额、融资净买入和 ETF 份额；基准从 2024-01-01 开始，当前值不进入 mid-rank 样本，少于 60 个历史观察不输出分位。
+
+资金面当前不进入 EvidencePacket、Manifest、报告哈希或 verified 门禁，也不得被叙述为具体机构买卖。
 
 ## 7. 新闻证据流
 
@@ -341,6 +369,7 @@ Web 满足阈值时记录 `sent / WEB_EVENT_PERSISTED`，含义是网页可见�
 | `/api/settings` | GET / PUT | 全部设置 |
 | `/api/settings/profiles...` | POST / PATCH / DELETE | profile + revision |
 | `/api/market` | GET | `profile + symbol + timeframe` |
+| `/api/flows` | GET | `profile + symbol + type + period`；仅显式 ETF allow-list |
 | `/api/news`、`/api/events` | GET | profile |
 | `/api/monitor-status` | GET | profile，返回来源健康和提醒状态；显式 `capacity=1` 时附有界 D1 容量快照 |
 | `/api/analyze` | POST | profile manual 或 adhoc |
@@ -362,6 +391,8 @@ Web 满足阈值时记录 `sent / WEB_EVENT_PERSISTED`，含义是网页可见�
 | `0013_monitor_reliability.sql` | 不可变 slot、预算、outbox/receipt、bootstrap、公平轮转、新闻健康 |
 | `0014_chat_evidence_scope.sql` | Chat/Evidence/Manifest 的 scope 与 owner |
 | `0015_notification_deliveries.sql` | 事件来源字段和提醒 shadow 账本 |
+| `0016_fund_flows.sql` | 独立资金流 long-form 表、自然键和查询索引 |
+| `0017_deployment_metadata.sql` | Pages 当前 SHA、部署时间和分支的 D1 持久化兜底 |
 
 migration 只向前追加。代码回退时保留新增列和表。
 

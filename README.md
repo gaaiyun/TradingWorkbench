@@ -6,7 +6,7 @@ Trading Workbench 是面向 A 股 ETF 研究的多智能体工作台。它把主
 - 期权数据站：[sh50-volguard.pages.dev](https://sh50-volguard.pages.dev/)
 - 主仓库：[gaaiyun/TradingWorkbench](https://github.com/gaaiyun/TradingWorkbench)
 - 上游框架：[TauricResearch/TradingAgents](https://github.com/TauricResearch/TradingAgents)
-- 当前代码版本：2026-07-26
+- 当前代码版本：2026-07-28
 
 > 本项目只做研究、解释和提醒，不连接券商，也不自动交易。“实时”表示数据带来源和时间戳，不代表交易所逐笔行情。
 
@@ -16,7 +16,7 @@ Trading Workbench 是面向 A 股 ETF 研究的多智能体工作台。它把主
 
 | 工作区 | 用途 | 当前实现 |
 |---|---|---|
-| 市场监控 | 查看主题标的和跨市场驱动 | 多监控组、自选、5m/15m/1h/1d、K 线、成交量、MA、MACD、RSI、事件 |
+| 市场监控 | 查看主题标的和跨市场驱动 | 多监控组、自选、5m/15m/1h/1d、K 线、成交量、MA、MACD、RSI、事件、ETF 日频资金面与历史分位 |
 | Agent 研究 | 临时研究未纳入监控的标的 | 标准/深度模式、独立请求身份、完整 TradingAgents |
 | 研究任务 | 查看和触发当前监控组任务 | 计划时间、启停、下一次执行、运行阶段和失败原因 |
 | 研究档案 | 阅读历史结论 | 13 个角色分栏、审计状态、报告身份和问答上下文 |
@@ -60,6 +60,8 @@ flowchart LR
     W --> R["行情与新闻 Provider"]
     W --> O["Dispatch Outbox"]
     O --> G["GitHub Actions"]
+    G --> FLOW["资金流日更 / 回填"]
+    FLOW --> D
     G --> T["TradingAgents / LangGraph"]
     T --> E["Evidence Packet + Manifest"]
     T --> A["报告与档案"]
@@ -100,6 +102,18 @@ Worker 不运行 pandas、LangGraph、GARCH、BSADF 或长历史回测。VolGuar
 - 页面、Evidence Packet、指标和 Agent 使用同一截止时间与同一历史口径。
 
 `512480.SS` 在 2026-07-03 附近发生份额拆分。回归测试要求前复权序列保持连续，不能把拆分写成约 50% 单日暴跌。
+
+## ETF 日频资金面
+
+市场监控在主图下方显示融资余额、融资净买入和 ETF 份额，不新增一级入口，也不改变三窗格行情图、期权或 Evidence/报告契约。分位从 2024-01-01 起计算，排除当前值，使用 mid-rank；历史样本少于 60 个交易日时只显示“累积中”，不伪造分位。分位用中性灰/警示黄，只有融资净买入的正负按 A 股红涨绿跌显示。
+
+- 融资数据来自东方财富两融日频报表，保存为交易所披露的 CNY 数值；当前三个 ETF 已回填约六年历史。
+- `515880.SS`、`512480.SS` 的历史份额由上交所日频基金规模除以东方财富同日未复权收盘价推导，明确标记 `derived`，不冒充登记份额。
+- `159995.SZ` 没有找到同等级免费日频历史源，从上线日起保存 `f84` 快照并标记 `snapshot_unstamped`。
+- 份额变化只能解释为板块资金进出，不能归因到汇金、证金、险资或任何具体机构。
+- `.github/workflows/fund-flow.yml` 在工作日北京时间 20:17 运行 daily 增量；历史回填只允许手工 `workflow_dispatch`。单一份额源失败时保留两融数据和快照，并记录稳定失败码。
+
+数据落入独立 `fund_flows` 表，经 `/api/flows` 读取；`/api/monitor-status?capacity=1` 会显示该表的有界行数。当前资金面不进入 EvidencePacket、报告哈希或 verified 门禁。
 
 ## 新闻和证据
 
@@ -251,7 +265,7 @@ MCP 只提供设置、监控、行情、新闻和研究历史查询，不接收�
 
 `deploy-monitor` 缺少 Cloudflare 凭据或 `MONITOR_WORKER_URL` 时直接失败。部署后 workflow 请求 Worker `/health`，并要求 `deployment.commitSha` 等于本次 GitHub SHA。`deploy-workbench` 还生成随静态站发布的 deployment manifest；Pages health 只有在 manifest SHA 与运行时 SHA 一致时才显示真实 `deployedAt`。绿色 workflow 仍需核对 migration、deploy 和 SHA 验证步骤都执行成功。
 
-本轮发布依赖 migrations `0013_monitor_reliability.sql`、`0014_chat_evidence_scope.sql` 和 `0015_notification_deliveries.sql`。
+本轮发布依赖 migrations `0013_monitor_reliability.sql`、`0014_chat_evidence_scope.sql`、`0015_notification_deliveries.sql`、纯新增的 `0016_fund_flows.sql` 与 `0017_deployment_metadata.sql`。后者让 Pages 在静态 manifest 被后续同 SHA 部署遮盖时，仍能从 D1 回读可信 `deployedAt`。
 
 2026-07-26 已完成 D1 `0013`–`0015`、Monitor Worker 和 Workbench Pages 的生产发布与冒烟。Pages `/api/health` 和 Worker `/health` 都返回运行时 commit SHA；发布 workflow 必须在生产域名回读到目标 SHA 才算成功。2026-07-27 的外审已确认 SEC provider 能取得 GOOGL 官方 8-K；ORCL 最近 8-K 超出 30 天窗口，零条 evidence 是正确结果。旧工信部反爬端点已从代码中移除，改为中国政府网政策库。上交所因 Cloudflare 出口 403 改由两小时 GitHub Actions 采集；首轮生产任务写入 `515880.SS` 4 条、`512480.SS` 3 条原始公告 evidence，包含二季报和份额拆分。部分来源失败时批次会写入可用结果并标记 `NEWS_COLLECTION_PARTIAL`，而不是让整页空白。完整记录、验证协议和回退流程见 [部署与运维](docs/operations-and-deployment.md)。
 
