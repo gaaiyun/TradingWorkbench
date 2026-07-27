@@ -1,10 +1,10 @@
 # 部署、验收与回退
 
-更新日期：2026-07-26
+更新日期：2026-07-27
 
 代码基线：`main`。精确版本以 `git rev-parse origin/main`、Pages `/api/health` 和 Worker `/health` 三方回读为准，不在文档中维护容易失真的固定 SHA。
 
-2026-07-26 已完成 D1 `0013`–`0015`、Monitor Worker、Workbench Pages 和 VolGuard 生产冒烟。周日 20:00–20:15 的独立资讯任务已在生产真实执行：`cn-semi-comms` 新闻从 146 条增至 162 条，最新 `fetchedAt=2026-07-26T12:15:06.874Z`。HashKey、SEC、东财、Yahoo 和 Fed 成功，Google 超时与工信部部分查询结构异常保留失败轨迹。这证明全天调度与局部降级写入可用；周一 08:25 仍需单独验收 SEC/工信部官方证据质量。
+2026-07-27 已恢复 GitHub Actions 的 Cloudflare 自动发布：Pages run `30279626692`、Monitor run `30280008338` 成功，CI run `30280007660` 全绿；同一 token 在童装 Agent production run `30279633026` 也完成 D1、Worker、Pages 与生产冒烟。SEC 已有 GOOGL 官方 8-K evidence，工信部旧搜索端点仍不稳定，需替换官方政策 provider。
 
 ## 1. 生产对象
 
@@ -141,9 +141,9 @@ flowchart LR
 2. 运行 monitor reliability、slot 和 Worker 测试。
 3. 应用远端 migration。
 4. 部署 Worker，并注入 `GITHUB_SHA` 和部署时间。
-5. 请求 Worker `/health`，要求 `deployment.commitSha === GITHUB_SHA`。
+5. 每 5 秒请求 Worker `/health`，最多等待 12 次生产别名传播，要求 `deployment.commitSha === GITHUB_SHA`。
 
-绿色 workflow 的判断标准是上述步骤都成功。只看 workflow 总结页不足以证明部署；验收人员还要打开各步骤，确认 migration、deploy 和 SHA verify 没有 skipped。
+绿色 workflow 的判断标准是上述步骤都成功。只看 workflow 总结页不足以证明部署；验收人员还要打开各步骤，确认 migration、deploy 和 SHA verify 没有 skipped。2026-07-27 首次自动发布 run `30279619417` 曾因发布后立即读取旧 SHA 而误报失败，实际 Worker 已更新；`96d63da` 加入有界传播等待后，run `30280008338` 首次复验成功。
 
 ### 5.2 手工部署 Worker
 

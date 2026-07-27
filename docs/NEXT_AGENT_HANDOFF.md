@@ -1,6 +1,6 @@
 # Trading Workbench 下一 Agent 交接
 
-更新日期：2026-07-26（全天资讯生产验收后修订）
+更新日期：2026-07-27（自动部署闭环验收后修订）
 
 实现基线：`main`。不要依赖本文中的旧提交号；接手时同时执行 `git rev-parse HEAD`、`git rev-parse origin/main`，并读取 Pages 与 Worker health 的 commit SHA。
 
@@ -18,37 +18,29 @@
 
 多 profile、运行身份隔离、Chat/Evidence owner、调度可靠性、提醒 shadow 账本、Worker/Pages 部署指纹，以及独立的全天资讯采集任务均已合入 `main`。
 
-但**代码合入不等于 GitHub 自动部署链已恢复**。本轮使用本机 Wrangler OAuth 手工发布 Pages 与 Monitor Worker；全天资讯与 HashKey 修复的行为提交为 `40da695`，其后只含文档收口。最终生产 SHA 不在本文写死，必须实时回读 Pages 与 Worker health，并与 `origin/main` 比对。GitHub Actions 仍会因缺 Cloudflare API token 而在凭据检查处失败，不能把手工发布当成 CI 已恢复。
+GitHub 自动部署链已恢复。仓库主人在 2026-07-27 配置了 `CLOUDFLARE_API_TOKEN`，同时补齐 `MONITOR_WORKER_URL`；Pages 自动部署 run `30279626692` 成功，Monitor 在修复生产别名传播等待后 run `30280008338` 成功，CI run `30280007660` 全绿。童装 Agent 使用同一 Cloudflare token 的 production 部署 run `30279633026` 也已从凭据校验、D1 migration、Worker/Pages 发布走到生产冒烟全绿。token 只保存在 GitHub secret，未写入仓库、日志或本文。
 
 同日终审又修复了三个用户可见回归：旧版无 identity 的 43 份 `legacy_unverified` 报告恢复只读展示、同一新闻按 cluster/原文聚合关联标的、交易时钟按沪深与纽约时区及周末判断。历史未验证报告仍不能进入问答，4 份 `invalidated` 报告仍只在“历史审计”中显示。
 
-首轮 `cn-semi-comms` 手工监控组研究已由 GitHub Actions 运行 `30189419616` 完成，并生成 `515880.SS`、`512480.SS` 的 profile-scoped 报告及角色分卷。两份 Evidence Packet 均有效，但引用门禁发现未引用数字、无依据仓位或目标价，故均为 `insufficient_evidence / legacy_unverified / Not Rated`，没有进入最新观点或问答。当前审计为 `49` 份成功报告、`0 verified`、`45 legacy_unverified`、`4 invalidated`。
+`cn-semi-comms` 已在 2026-07-27 再生成 `515880.SS`、`512480.SS` 的 profile-scoped 报告及角色分卷；两份仍被引用门禁判为 `insufficient_evidence / legacy_unverified / Not Rated`，没有进入最新观点或问答。当前审计索引共 `58` 条：`47 legacy_unverified`、`4 invalidated`、`7 invalid_record`、`0 verified`。
 
 资讯刷新回归已经定位并修复：浏览器原本每 60 秒轮询，但 Worker 的上游采集错误地只挂在交易日 08:25 盘前任务下。现在每个 profile 可独立配置 15/30/60 分钟全天采集，默认 15 分钟；周日 20:00、20:10 与 20:15 的真实批次已让 `cn-semi-comms` 新闻从 146 条增至 162 条，最新 `fetchedAt=2026-07-26T12:15:06.874Z`。来源部分失败会保留成功结果并记录 `NEWS_COLLECTION_PARTIAL`，不会用旧数据伪装全部成功。`market_events` 仍只在真实行情、公告或信号发生时生成，不为周末伪造事件。
 
-尚未完成的是 2026-07-27 08:25 的 SEC/工信部官方证据质量验收、补齐 `TRADINGAGENTS_SEC_CONTACT_EMAIL` secret，以及生成首份真正通过当前 Evidence 门禁的报告。不能把旧报告或本次未通过引用门禁的报告升级为 verified。
+2026-07-27 的官方源验收已证明 SEC 修复生效：GOOGL 有真实 `sec.gov/Archives` 8-K evidence；ORCL 最近 8-K 早于 30 天窗口，因此 evidence 为 0 是正确行为，禁止为了凑数放宽窗口。工信部 `search-front-server` 仍不稳定，A 股 ETF evidence 为 0；下一轮应改接中国政府网政策文件库或其它可验证官方原文，不再死磕旧端点。首份 `verified` 报告仍未生成。
 
 本轮接手已完成数字引用判定修复：`_NUMERIC_CLAIM_RE` 不再把日期、时间戳、标的代码、哈希、Markdown 标题序号和 RSI/MACD/均线参数当作研究数字；逐段复测后 `515880.SS` 为 `179→117`、`512480.SS` 为 `128→84`、`3887.HK` 为 `169→108`，剩余段落仍含未带 Evidence ID 的真实数值，因此没有放宽门禁。三份 `-v4` Manifest 与 `public/data/report-audit.json` 已同步更新。
 
-## 1.5 生产状态真相（2026-07-26 独立核查）
+## 1.5 生产状态真相（2026-07-27 独立核查）
 
 以下每条都由实际执行的命令或 HTTP 请求得出，不是从上一轮文档抄来的。已完成项也保留，便于下一个 agent 区分“代码未做”与“生产依赖未满足”。
 
-### 🔴 P0：部署凭据缺失，两条部署流水线已失效
+### ✅ 已完成：Cloudflare 自动部署凭据与流水线
 
-`gh secret list --repo gaaiyun/TradingWorkbench` 只返回三个 secret：`EVIDENCE_WRITE_TOKEN`、`OPENAI_COMPATIBLE_API_KEY`、`PUSHPLUS_TOKEN`。
-
-- **`CLOUDFLARE_API_TOKEN` 不存在**——`deploy-workbench` 和 `deploy-monitor` 都需要它。
-- **`MONITOR_WORKER_URL` variable 不存在**——`deploy-monitor` 额外需要它。
-
-后果：
-
-| workflow | 最近状态 |
-|---|---|
-| `deploy-workbench` | 最近 3 次连续 failure（`d302afe`、`0f889fb`、`4749f70`），全部卡在 `Check deployment credentials`，后续 step 全部 skipped。最后一次成功是 2026-07-25T18:20 的 `d9b6b6f` |
-| `deploy-monitor` | 有记录以来只运行过 1 次（2026-07-26T04:47 `4749f70`），failure。**这条流水线从未成功过** |
-
-`CLOUDFLARE_API_TOKEN` 是在 2026-07-25T18:20 之后、2026-07-26T04:47 之前从仓库消失或失效的。**恢复它是接手后的第一件事**，否则 §6 描述的六道部署门禁全部形同虚设。
+- `CLOUDFLARE_API_TOKEN` 已作为 TradingWorkbench repository secret 保存；
+- `CLOUDFLARE_ACCOUNT_ID`、`CLOUDFLARE_PAGES_PROJECT`、`MONITOR_WORKER_URL` 已作为 repository variable 保存；
+- Pages 自动部署 run `30279626692` 成功；
+- Monitor 首次 run `30279619417` 完成 migration 与发布后，因立即读到旧 SHA 而误报失败；`96d63da` 为 SHA 核验增加 12 次、每 5 秒的有界传播等待，run `30280008338` 随后成功；
+- 同一 token 已保存到 `gaaiyun/amazon-kidswear-operator-agent` 的 `production` Environment，run `30279633026` 成功。
 
 ### ✅ 已完成：Pages 与 Monitor Worker 已发布到当前 SHA
 
@@ -61,9 +53,9 @@ Pages immutable deployment : 每次发布都会变化，以 `wrangler pages depl
 
 2026-07-26 20:20 的线上回读已确认两个运行时与当时的 `origin/main` 一致，并包含全天资讯调度、任务容量保护、750ms 有界健康查询与 HashKey 1,028,172 字节官方公告页适配。任何后续提交都必须重新执行三方 SHA 比对。
 
-### 🟠 P1：GitHub 自动部署凭据仍缺失
+### ✅ 已完成：GitHub 自动部署凭据
 
-`CLOUDFLARE_API_TOKEN` 与 `MONITOR_WORKER_URL` 仍未配置，因此自动部署 workflow 仍 fail-closed；本轮未把 token 写入仓库，也未伪造 secret。
+自动发布已从“本机 Wrangler 手工兜底”恢复为 GitHub Actions 权威路径。后续仍需检查具体 migration、deploy、SHA verify step，不能只看 workflow 名称为绿色。
 
 ### ✅ 已完成：远程 D1 migrations 核验
 
@@ -207,19 +199,16 @@ migration 只向前保留。回退代码时不要删除新表或列。
 - Pages `/api/health` 已增加 commit SHA、branch 和不可变 deployment URL；
 - 部署 workflow 均写成缺凭据即失败，发布后回读目标 SHA。
 
-### 生产层未验证或已失效
+### 生产层已验证
 
-这一节是 2026-07-26 核查后新增的，与上一版文档的表述不同，以本节为准。详细证据见 §1.5。
-
-- **`CLOUDFLARE_API_TOKEN` secret 与 `MONITOR_WORKER_URL` variable 均不存在**，`deploy-workbench` 最近 3 次失败、`deploy-monitor` 从未成功；
-- Monitor Worker 已手工发布并由 `/health` 回读到行为版本 `40da695`，但**未经 GitHub 自动部署门禁发布**；
-- Pages 由本机 Wrangler 发布，仍需在最终文档提交后回读最新 SHA；
-- migrations `0013`–`0015` 已通过远程 D1 的 `d1_migrations` 查询确认；
-- 上一版文档记录的"Pages、Worker、D1、动态 API 与 VolGuard 已完成生产冒烟"是在凭据尚存的时间点做的，**不代表当前部署链路可用**。
+- `deploy-workbench`、`deploy-monitor` 已通过 GitHub Actions 自动发布，不再依赖本机 OAuth；
+- Monitor `/health` 回读到自动部署 SHA，Pages `/api/health` 由自动部署 workflow 通过生产别名核验；
+- migrations `0013`–`0015` 已通过远程 D1 与两条部署 workflow 重复核验；
+- 童装 Agent 的同一 token 复用、D1 migration、Worker、Pages 和生产读路径冒烟均已通过。
 
 ### 尚未完成
 
-- 2026-07-27 08:25 外审尚未执行；
+- 工信部官方政策 evidence 尚未恢复；旧 search API 继续保留失败轨迹，待替换 provider；
 - 当前生产审计仍为 `verified=0`；首轮 profile 报告已生成但被引用门禁降为 `Not Rated`，下一轮应先消除 `UNCITED_NUMERIC_CLAIM`、`UNSUPPORTED_ALLOCATION` 和无依据目标价；
 - PushPlus live 尚未开启，也不在本轮默认授权范围内。
 
@@ -388,18 +377,18 @@ Codex 根 task ID：`019f8943-9db3-7c52-88de-0cb3773977ba`
 6. 执行 §8 的 2026-07-27 08:25 外审协议。
 7. 之后才轮到功能开发：消除 `UNCITED_NUMERIC_CLAIM` / `UNSUPPORTED_ALLOCATION`，争取第一份 `verified` 报告。
 
-### 15.1 恢复部署凭据（需要仓库主人本人操作）
+### 15.1 恢复部署凭据（2026-07-27 已完成，保留作灾难恢复）
 
 **Agent 不能代劳这一步**——创建 API token、填写 secret 属于凭据操作，必须由用户在 Cloudflare 和 GitHub 的界面里自己完成。以下是精确到选项的说明，照做即可。
 
-缺失项与它们各自卡住了什么：
+以下名称已配置。若 secret 被轮换或删除，按本节恢复：
 
-| 缺失项 | 类型 | 缺了会怎样 |
+| 配置项 | 类型 | 缺了会怎样 |
 |---|---|---|
 | `CLOUDFLARE_API_TOKEN` | GitHub Actions **secret** | `deploy-workbench` 与 `deploy-monitor` 都在第一步 `Check deployment credentials` 直接失败 |
 | `MONITOR_WORKER_URL` | GitHub Actions **variable** | 仅 `deploy-monitor` 失败（部署后无法回读 `/health` 校验 SHA） |
 
-已存在、不用动的：`CLOUDFLARE_ACCOUNT_ID`（variable）、`CLOUDFLARE_PAGES_PROJECT`（variable，值 `tradingagents-board`）。
+已存在：`CLOUDFLARE_ACCOUNT_ID`、`CLOUDFLARE_PAGES_PROJECT=tradingagents-board`、`MONITOR_WORKER_URL`。同一 token 也保存在童装 Agent 的 `production` Environment；只轮换值，不把明文复制到文档或命令历史。
 
 **第一步：在 Cloudflare 创建 API token**
 
@@ -448,3 +437,4 @@ gh workflow run deploy-monitor.yml --repo gaaiyun/TradingWorkbench --ref main
 | 2026-07-26 | 卖方策略观察补充分位数规则：为每个到期日计算 90% 认怂线与 99% 目标线，前端显示 Put/Call 行权价边界、真实候选和阈值来源；同步更新静态资源内容哈希 | `test_workbench_options.mjs` 5 项通过、前端 89 项通过；仍受 VolGuard 逐合约 Greeks 覆盖限制，不生成裸卖指令 |
 | 2026-07-26 | 手工发布卖方分位数前端并回读 canonical Pages；修正本文件线上 SHA 与 immutable URL | Pages `62562e64ae34` / `9f5b3f07`，Worker `/health` 仍为 `f88df97`；GitHub CI 与自动部署凭据状态分开记录 |
 | 2026-07-26 | 修复资讯“页面轮询但上游不采集”的调度回归：新增可配置全天 15/30/60 分钟采集、跨 profile 容量保护、周末调度测试；提高 health 查询阈值并适配 HashKey 1MB 官方公告页 | 周日 20:00–20:15 生产批次使 `cn-semi-comms` 新闻 146→162，HashKey 恢复 `ok`，最新 `fetchedAt=2026-07-26T12:15:06.874Z` |
+| 2026-07-27 | 恢复 Cloudflare 自动部署；同一 token 安全复用到 TradingWorkbench 与童装 Agent；Monitor SHA 校验增加生产别名传播等待 | Pages run `30279626692`、Monitor run `30280008338`、CI run `30280007660`、童装 Agent run `30279633026` 全部成功；token 明文未进入仓库或日志 |
