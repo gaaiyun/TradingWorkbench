@@ -130,4 +130,12 @@ jobs:
       - name: Verify production fund-flow business dates
         env:
           WORKBENCH_BASE_URL: https://${{ env.CLOUDFLARE_PAGES_PROJECT }}.pages.dev
-        run: node scripts/verify-fund-flow-production.mjs
+        run: |
+          for attempt in $(seq 1 12); do
+            if node scripts/verify-fund-flow-production.mjs; then
+              exit 0
+            fi
+            sleep 5
+          done
+          echo "::error::Pages production alias did not expose trade_date and business-day invariants after propagation."
+          exit 1
