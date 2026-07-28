@@ -280,6 +280,8 @@ MCP 只提供设置、监控、行情、新闻和研究历史查询，不接收�
 
 2026-07-29 资金观察纠错的功能基线为 `b6d8a88`：CI run `30379749679`、Pages run `30379749744`、Monitor run `30379750103` 全绿；现场回读 `origin/main`、Pages `/api/health` 与 Worker `/health` 三方 SHA 完全一致。Pages `deployedAt=2026-07-28T16:45:54Z`，Worker `deployedAt=2026-07-28T16:46:37Z`。`/api/flows` 中三只 ETF 自身融资净买入分别有 `1638 / 1580 / 1522` 条，最新上海交易日均为 2026-07-27、周末计数均为 0、状态均为 `ok`；同标的 643 个日线覆盖区间内不存在资金交易日缺口。生产浏览器实测 7 个可见一级入口、3 张资金卡、2 条对照线，390px 与 1440px 均无横向溢出、0 pageerror、0 console error，切换标的后确定性叙事同步更新。当前 Worker 新闻健康为 degraded：Google News RSS 返回 503、HashKey IR 返回 404，其余五个来源正常；这不影响资金流接口。上交所 `official-news` 定时任务仍有 `SSE_RESPONSE_INVALID_515880` 等间歇失败，任务会响亮失败并保留既有官方证据，不会用发现层结果冒充交易所 evidence。后续纯文档提交也会触发新部署，当前精确 SHA 仍须从 GitHub 与两个 health 端点实时回读。
 
+同日用户截图红框问题的最终功能基线为 `328cda9`：CI `30383472709`、Pages `30383472699`、Monitor `30383498898` 全绿；生产回读 Pages 与 Worker 完整 SHA 均为 `328cda999dd9d0599bd367445d6976d482f38a8e`。Pages `deployedAt=2026-07-28T17:34:32Z`，Worker `deployedAt=2026-07-28T17:35:39Z`。生产 1440px/390px 实测 `512480.SS` 左侧、标题、资金叙事三处日涨跌均为 `-7.38%`；叙事显示 `SOXX + SMH` 美股半导体基准，主题区显示 `资金偏弱` 与近 5 日 ETF 端 P21、前十大持仓端 P17；两种宽度均无横向溢出、pageerror 或 console warning/error。
+
 ## 架构取舍
 
 项目保留 TradingAgents 的角色协作与报告链，使用 Lightweight Charts 渲染行情，并参考 OpenBB 的统一数据契约、Qlib 的离线评估边界和 FinGPT 的金融语料思路。当前没有引入它们的整套运行时：
