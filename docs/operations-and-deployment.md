@@ -478,7 +478,7 @@ Invoke-RestMethod `
 
 ### 12.9 ETF 资金流采集与回滚
 
-`.github/workflows/fund-flow.yml` 的 daily 任务在工作日 UTC 12:17（北京时间 20:17）运行。它是独立故障域，不占 Monitor Worker 的 32 次外部请求预算，也不与行情或新闻共用熔断状态。全历史回填只手工触发：
+`.github/workflows/fund-flow.yml` 的 daily 任务在工作日 UTC 12:17（北京时间 20:17）运行。它是独立故障域，不占 Monitor Worker 的 32 次外部请求预算，也不与行情或新闻共用熔断状态。成分股篮子每只 ETF 必须解析出 10 个不同代码，跨篮子先去重再串行访问；daily 每股只取最新 50 条，backfill 每股最多 6 页，上交所规模最多 64 页，单请求 15 秒、单轮最多 360 个上游请求且采集阶段最多 12 分钟，整个 job 仍受 15 分钟硬超时约束。单日可用覆盖低于 80% 时不写聚合；8/10 或 9/10 可以作为 partial 写入，但不能覆盖同一交易日已有的 10/10 完整聚合。日志以 `eastmoney-constituent-margin` 的稳定错误码降级。全历史回填只手工触发：
 
 ```powershell
 gh workflow run fund-flow.yml --repo gaaiyun/TradingWorkbench --ref main -f mode=backfill
@@ -495,11 +495,11 @@ npx wrangler d1 execute DB --remote --command `
   "SELECT COUNT(*) AS total_rows, COUNT(DISTINCT profile_id || '|' || symbol || '|' || flow_type || '|' || period || '|' || ts || '|' || source || '|' || adjustment) AS unique_keys FROM fund_flows" --json
 ```
 
-`total_rows` 必须等于 `unique_keys`。回填或 daily 的日志只允许稳定来源错误码，不得出现 token 或上游正文。API 验收请求 `/api/flows?profile=cn-semi-comms&symbol=515880.SS&type=margin_net_buy&limit=2`，应返回统一 `status/asOf/data/sources/capabilities` 信封；`/api/monitor-status?capacity=1` 应包含 `fund_flows`。
+`total_rows` 必须等于 `unique_keys`。回填或 daily 的日志只允许稳定来源错误码，不得出现 token 或上游正文。API 至少验收 `margin_net_buy`、`constituent_margin_net_buy` 和 `constituent_margin_balance`；后两者的 `method` 必须含披露日与 `coverage=N/N`，`quality` 必须明确为当前前 N 大近似。统一信封仍为 `status/asOf/data/sources/capabilities`，其中 `capabilities.constituentMarginDaily=true`；`/api/monitor-status?capacity=1` 应包含 `fund_flows`。
 
 回滚顺序：先把 repository variable `FUND_FLOW_COLLECTION_ENABLED=false`，确认下一次 schedule 被跳过；再把 `FUND_FLOW_ENABLED` 和页面 `data-fund-flow-enabled` 关为 `false`，最后回退 UI/API/collector。手工 `workflow_dispatch` 不受采集熔断变量限制，仍可用于受控排障。保留 migration 0016 和数据表，不执行破坏性 down migration。回滚后重新验证 Evidence、Manifest、期权、行情、新闻和设置 revision 均未变化。
 
-资金叙事层只读取既有 `/api/flows`、日线 `/api/market`、`/api/events` 与 evidence 新闻；关闭页面 `data-fund-flow-enabled` 会同时隐藏三卡、历史分位对照和确定性一句话，不影响采集、主图、期权或 Evidence。事件锚只作同期标记。若仅叙事层有问题，优先关闭页面开关，不删除 `fund_flows` 数据，也不回退 migration。
+资金叙事层只读取既有 `/api/flows`、日线 `/api/market`、`/api/events` 与 evidence 新闻；关闭页面 `data-fund-flow-enabled` 会同时隐藏三卡、ETF vs 成分股分位对照和确定性一句话，不影响采集、主图、期权或 Evidence。事件锚只作同期标记。若仅叙事层有问题，优先关闭页面开关，不删除 `fund_flows` 数据，也不回退 migration。
 
 ## 13. 故障定位
 

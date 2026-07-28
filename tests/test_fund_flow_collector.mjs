@@ -3,9 +3,12 @@ import { readFile } from "node:fs/promises";
 import test from "node:test";
 
 import {
+  aggregateConstituentMargin,
   collectFundFlows,
   fetchBoundedJson,
+  fundHoldingsUrl,
   marginUrl,
+  parseLatestTopHoldings,
   parseMarginPage,
   parseShareSnapshot,
   parseSseScalePage,
@@ -88,6 +91,23 @@ function scalePayload(code) {
   };
 }
 
+function holdingsPayload(code, entries = [
+  { code: "300502", name: "新易盛", weight: 15.6 },
+  { code: "300308", name: "中际旭创", weight: 14.61 },
+  { code: "601138", name: "工业富联", weight: 9.12 },
+  { code: "600487", name: "亨通光电", weight: 6.89 },
+  { code: "300394", name: "天孚通信", weight: 6.33 },
+  { code: "600522", name: "中天科技", weight: 5.3 },
+  { code: "002281", name: "光迅科技", weight: 3.98 },
+  { code: "000063", name: "中兴通讯", weight: 3.73 },
+  { code: "300136", name: "信维通信", weight: 3.69 },
+  { code: "600105", name: "永鼎股份", weight: 2.52 },
+]) {
+  const rows = entries.map((entry, index) => `<tr><td>${index + 1}</td><td><a href='//quote.eastmoney.com/unify/r/0.${entry.code}'>${entry.code}</a></td><td class='tol'><a href='//quote.eastmoney.com/unify/r/0.${entry.code}'>${entry.name}</a></td><td class='tor'><span></span></td><td class='tor'><span></span></td><td class='xglj'>资讯</td><td class='tor'>${entry.weight}%</td></tr>`).join("");
+  const html = `<div><a href='http://fund.eastmoney.com/${code}.html'>${code}</a>截止至：<font class='px12'>2026-06-30</font><table><tbody>${rows}</tbody></table></div>`;
+  return `var apidata={ content:${JSON.stringify(html)}, arryear:[2026], curyear:2026 };`;
+}
+
 test("fund-flow URLs pin exact codes, unadjusted prices, and bounded pages", () => {
   const margin = new URL(marginUrl("515880", 2, 500));
   assert.equal(margin.hostname, "datacenter-web.eastmoney.com");
@@ -110,6 +130,12 @@ test("fund-flow URLs pin exact codes, unadjusted prices, and bounded pages", () 
   const shares = new URL(shareSnapshotUrl("0.159995"));
   assert.equal(shares.hostname, "push2delay.eastmoney.com");
   assert.match(shares.searchParams.get("fields"), /f84/);
+
+  const holdings = new URL(fundHoldingsUrl("515880"));
+  assert.equal(holdings.hostname, "fundf10.eastmoney.com");
+  assert.equal(holdings.searchParams.get("type"), "jjcc");
+  assert.equal(holdings.searchParams.get("code"), "515880");
+  assert.equal(holdings.searchParams.get("topline"), "10");
 });
 
 test("parsers retain negative financing, exact CNY units, and derived inputs", () => {
@@ -134,6 +160,48 @@ test("parsers retain negative financing, exact CNY units, and derived inputs", (
   }, "159995", NOW);
   assert.equal(snapshot.shares, 22_806_126_080);
   assert.equal(snapshot.price, 1.278);
+
+  const basket = parseLatestTopHoldings(holdingsPayload("515880", [
+    { code: "300502", name: "新易盛", weight: 15.6 },
+    { code: "300308", name: "中际旭创", weight: 14.61 },
+  ]), "515880", 2);
+  assert.equal(basket.disclosedAt, "2026-06-30");
+  assert.deepEqual(basket.holdings, [
+    { code: "300502", name: "新易盛", weightPct: 15.6 },
+    { code: "300308", name: "中际旭创", weightPct: 14.61 },
+  ]);
+  assert.throws(() => parseLatestTopHoldings(holdingsPayload("515880", [
+    { code: "300502", name: "新易盛", weight: 15.6 },
+    { code: "300502", name: "新易盛", weight: 15.6 },
+  ]), "515880", 2), /UPSTREAM_SCHEMA/);
+});
+
+test("constituent aggregation aligns dates, keeps signs, and rejects thin coverage", () => {
+  const basket = parseLatestTopHoldings(holdingsPayload("515880", [
+    { code: "300502", name: "新易盛", weight: 15.6 },
+    { code: "300308", name: "中际旭创", weight: 14.61 },
+    { code: "601138", name: "工业富联", weight: 9.12 },
+  ]), "515880", 3);
+  const first = parseMarginPage(marginPayload("300502"), "300502").rows;
+  const second = parseMarginPage({
+    ...marginPayload("300308"),
+    result: {
+      ...marginPayload("300308").result,
+      data: [{ ...marginPayload("300308").result.data[0], RZYE: 2_000_000, RZJME: 75_000 }],
+    },
+  }, "300308").rows;
+  const aggregated = aggregateConstituentMargin(basket, new Map([
+    ["300502", [...first, ...first]],
+    ["300308", second],
+  ]), { minCoverageRatio: 2 / 3 });
+  assert.equal(aggregated.holdingCount, 3);
+  assert.equal(aggregated.rows.length, 1);
+  assert.equal(aggregated.rows[0].values.constituent_margin_balance, 3_000_000);
+  assert.equal(aggregated.rows[0].values.constituent_margin_net_buy, 25_000);
+  assert.equal(aggregated.rows[0].coverage.constituent_margin_net_buy, 2);
+
+  const rejected = aggregateConstituentMargin(basket, new Map([["300502", first]]));
+  assert.deepEqual(rejected.rows, []);
 });
 
 test("collector fans out only to enabled profiles and parameterizes monotonic D1 upserts", async () => {
@@ -161,6 +229,9 @@ test("collector fans out only to enabled profiles and parameterizes monotonic D1
     if (url.hostname === "datacenter-web.eastmoney.com") {
       const code = /SCODE="(\d{6})"/.exec(url.searchParams.get("filter"))[1];
       return Response.json(marginPayload(code));
+    }
+    if (url.hostname === "fundf10.eastmoney.com") {
+      return new Response(holdingsPayload(url.searchParams.get("code")));
     }
     if (url.hostname === "query.sse.com.cn") {
       return Response.json(scalePayload(url.searchParams.get("FUND_CODE")));
@@ -192,7 +263,7 @@ test("collector fans out only to enabled profiles and parameterizes monotonic D1
     randomImpl: () => 0,
   });
 
-  assert.equal(result.written, 16);
+  assert.equal(result.written, 22);
   assert.equal(result.status, "completed");
   assert.deepEqual(result.failures, []);
   assert.deepEqual(result.profiles, ["enabled"]);
@@ -200,6 +271,7 @@ test("collector fans out only to enabled profiles and parameterizes monotonic D1
   assert.equal(writeCalls.length, 1);
   assert.match(writeCalls[0].body.sql, /FROM json_each\(\?\)/);
   assert.match(writeCalls[0].body.sql, /excluded\.fetched_at >= fund_flows\.fetched_at/);
+  assert.match(writeCalls[0].body.sql, /fund_flows\.quality NOT LIKE '%_partial'/);
   const rows = JSON.parse(writeCalls[0].body.params[0]);
   assert.equal(rows.every(({ profileId }) => profileId === "enabled"), true);
   assert.equal(rows.some(({ flowType, value }) =>
@@ -211,6 +283,12 @@ test("collector fans out only to enabled profiles and parameterizes monotonic D1
   assert.equal(rows.some(({ flowType, quality }) =>
     flowType === "shares_outstanding_snapshot"
     && quality === "snapshot_unstamped"), true);
+  assert.equal(rows.some(({ flowType, value, source, method, quality }) =>
+    flowType === "constituent_margin_net_buy"
+    && value === -500_000
+    && source === "eastmoney-constituent-margin"
+    && /@2026-06-30;coverage=10\/10$/.test(method)
+    && quality === "current_top_10_approximation"), true);
   assert.equal(d1Calls.every(({ headers }) =>
     headers.authorization === `Bearer ${API_TOKEN}`), true);
 });
@@ -241,7 +319,13 @@ test("blocked SSE history degrades to a current share snapshot without losing ma
       writes.push(...JSON.parse(body.params[0]));
       return Response.json({ success: true, result: [{ success: true }] });
     }
-    if (url.hostname === "datacenter-web.eastmoney.com") return Response.json(marginPayload("515880"));
+    if (url.hostname === "datacenter-web.eastmoney.com") {
+      const code = /SCODE="(\d{6})"/.exec(url.searchParams.get("filter"))[1];
+      return Response.json(marginPayload(code));
+    }
+    if (url.hostname === "fundf10.eastmoney.com") {
+      return new Response(holdingsPayload(url.searchParams.get("code")));
+    }
     if (url.hostname === "query.sse.com.cn") return new Response("blocked", { status: 403 });
     if (url.hostname === "push2delay.eastmoney.com") {
       return Response.json({ rc: 0, data: { f57: "515880", f43: 2000, f84: 5_000_000, f116: 10_000_000 } });
@@ -268,6 +352,55 @@ test("blocked SSE history degrades to a current share snapshot without losing ma
   assert.equal(writes.some(({ flowType }) => flowType === "margin_net_buy"), true);
   assert.equal(writes.some(({ flowType }) => flowType === "shares_outstanding_snapshot"), true);
   assert.equal(writes.some(({ flowType }) => flowType === "shares_outstanding_derived"), false);
+});
+
+test("one ETF margin failure does not discard other symbols or constituent aggregates", async () => {
+  const settings = { version: 2, profiles: [profile("enabled", true, ["515880.SS", "512480.SS"])] };
+  const writes = [];
+  const fetchImpl = async (input, init = {}) => {
+    const url = new URL(String(input));
+    if (url.hostname === "api.cloudflare.com") {
+      const body = JSON.parse(init.body);
+      if (/SELECT settings_json/.test(body.sql)) {
+        return Response.json({ success: true, result: [{ results: [{ settings_json: JSON.stringify(settings) }] }] });
+      }
+      writes.push(...JSON.parse(body.params[0]));
+      return Response.json({ success: true, result: [{ success: true }] });
+    }
+    if (url.hostname === "datacenter-web.eastmoney.com") {
+      const code = /SCODE="(\d{6})"/.exec(url.searchParams.get("filter"))[1];
+      if (code === "515880") throw new Error("network down");
+      return Response.json(marginPayload(code));
+    }
+    if (url.hostname === "fundf10.eastmoney.com") return new Response(holdingsPayload(url.searchParams.get("code")));
+    if (url.hostname === "query.sse.com.cn") return Response.json(scalePayload(url.searchParams.get("FUND_CODE")));
+    if (url.hostname === "push2delay.eastmoney.com") {
+      const code = url.searchParams.get("secid").split(".")[1];
+      return Response.json({ rc: 0, data: { f57: code, f43: 1000, f84: 5_000_000, f116: 5_000_000 } });
+    }
+    throw new Error(`unexpected URL ${url}`);
+  };
+
+  const result = await collectFundFlows({
+    apiToken: API_TOKEN,
+    accountId: ACCOUNT_ID,
+    mode: "daily",
+    now: NOW,
+    fetchImpl,
+    delayImpl: async () => {},
+    randomImpl: () => 0,
+  });
+
+  assert.equal(result.status, "degraded");
+  assert.equal(result.failures.some(({ symbol, source }) => (
+    symbol === "515880.SS" && source === "eastmoney-margin-daily"
+  )), true);
+  assert.equal(writes.some(({ symbol, flowType }) => (
+    symbol === "512480.SS" && flowType === "margin_net_buy"
+  )), true);
+  assert.equal(writes.some(({ symbol, flowType }) => (
+    symbol === "515880.SS" && flowType === "constituent_margin_net_buy"
+  )), true);
 });
 
 test("SSE scale requests mirror the public page request shape", async () => {

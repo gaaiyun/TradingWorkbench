@@ -225,12 +225,15 @@ Provider Registry 保存 transport、authority、freshness、授权用途和失�
 ```mermaid
 flowchart LR
     A["fund-flow workflow"] --> M["东财两融日频"]
+    A --> H["天天基金最新披露前十大持仓"]
+    H --> CM["持仓股票两融逐只读取并按日合计"]
     A --> S["上交所日频基金规模"]
     A --> Q["东财份额快照"]
     M --> C["同日未复权收盘价"]
     S --> D["规模 ÷ 收盘价 = derived shares"]
     C --> D
     M --> F[("D1 fund_flows")]
+    CM --> F
     D --> F
     Q --> F
     F --> API["/api/flows"]
@@ -239,9 +242,11 @@ flowchart LR
     E["既有 market_events / evidence news"] --> UI
 ```
 
-两融与份额源按来源隔离：上交所被 403 或网络阻断时，批次降级为当前份额快照，但已取得的两融数据仍写入。沪市历史份额为 `derived`；深市 `159995.SZ` 仅从上线日起累积 `snapshot_unstamped`。页面只显示融资余额、融资净买入和 ETF 份额；基准从 2024-01-01 开始，当前值不进入 mid-rank 样本，少于 60 个历史观察不输出分位。份额面板分析日度变化而不是绝对份额，相邻变化超过 35% 时按 `possible_split_or_method_change` 留空，防止拆分被叙述成资金异动。
+两融、成分股聚合与份额源按来源隔离：上交所被 403 或网络阻断时，批次降级为当前份额快照，但已取得的 ETF 两融和成分股聚合仍写入；任一 ETF 自身两融失败也不会丢弃其它标的。每个 ETF 必须解析出最新披露的 10 个不同持仓代码，跨 ETF 重叠股票只请求一次，同一股票同一日期只计一次；覆盖不足 80% 的交易日不写合计。聚合写成 `constituent_margin_balance / constituent_margin_net_buy`，`source=eastmoney-constituent-margin`，`method` 携带披露日和覆盖数，`quality=current_top_N_approximation`。partial 聚合使 API 顶层为 degraded，且不能覆盖同日已有完整聚合。这是当前披露篮子的历史回算，存在持仓变更与存活偏差，不能冒充历史真实指数成分。
 
-资金面叙事由确定性规则组合隔夜驱动、ETF 日线涨跌、融资净买入和日度份额变化；近 60 期双线比较的是各自历史分位，不是把不同单位的金额画在同一尺度。`market_events` 和 evidence 新闻只作为同期时间锚，不能被写成因果。资金面当前不进入 EvidencePacket、Manifest、报告哈希或 verified 门禁，也不得被叙述为具体机构买卖。
+沪市历史份额为 `derived`；深市 `159995.SZ` 仅从上线日起累积 `snapshot_unstamped`。页面三卡仍只显示融资余额、融资净买入和 ETF 份额；基准从 2024-01-01 开始，当前值不进入 mid-rank 样本，少于 60 个历史观察不输出分位。份额面板分析日度变化而不是绝对份额，相邻变化超过 35% 时按 `possible_split_or_method_change` 留空，防止拆分被叙述成资金异动。
+
+资金面叙事由确定性规则组合隔夜驱动、ETF 日线涨跌、ETF 自身融资净买入和成分股融资净买入合计。双线先分别计算近 5 个可用交易日累计，再比较各自近 60 期历史分位；方向由累计值正负决定，分位只描述相对力度。输出限定为 ETF 端/个股端谁更积极、双向一致或双向走弱，并同时披露最新持仓近似的披露日与覆盖数。`market_events` 和 evidence 新闻只作为同期时间锚，不能被写成因果。资金面当前不进入 EvidencePacket、Manifest、报告哈希或 verified 门禁，也不得被叙述为国家队、主力或具体机构买卖。
 
 ## 7. 新闻证据流
 

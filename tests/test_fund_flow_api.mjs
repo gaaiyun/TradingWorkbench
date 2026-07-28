@@ -10,6 +10,7 @@ const flowsApi = await import("../functions/api/flows.js").catch(() => null);
 const ALL_CAPABILITIES = {
   marketFlowV1: true,
   marginDaily: true,
+  constituentMarginDaily: true,
   etfSharesDaily: true,
   historicalPercentile: true,
 };
@@ -70,6 +71,7 @@ test("disabled fund-flow feature returns an explicit unavailable envelope withou
       capabilities: {
         marketFlowV1: false,
         marginDaily: false,
+        constituentMarginDaily: false,
         etfSharesDaily: false,
         historicalPercentile: false,
       },
@@ -88,6 +90,7 @@ test("fund-flow capabilities follow the explicit symbol allowlists", async () =>
     ["SPY", {
       marketFlowV1: true,
       marginDaily: false,
+      constituentMarginDaily: false,
       etfSharesDaily: false,
       historicalPercentile: false,
     }],
@@ -146,6 +149,23 @@ test("fund-flow endpoint parameterizes every supported filter", async () => {
   ]);
   assert.equal(typeof params[7], "string");
   assert.equal(params[8], 25);
+});
+
+test("constituent partial coverage is visible as degraded at envelope level", async () => {
+  if (!flowsApi) return;
+  const partial = flow({
+    flow_type: "constituent_margin_net_buy",
+    source: "eastmoney-constituent-margin",
+    method: "latest_disclosed_top_10_holdings_sum@2026-06-30;coverage=8/10",
+    quality: "current_top_10_approximation_partial",
+  });
+  const response = await flowsApi.onRequestGet({
+    request: request("/api/flows?symbol=515880.SS&type=constituent_margin_net_buy"),
+    env: { DB: new FakeD1({ rows: { fund_flows: [partial] } }), FUND_FLOW_ENABLED: "true" },
+  });
+  const payload = await response.json();
+  assert.equal(payload.status, "degraded");
+  assert.deepEqual(payload.data, [partial]);
 });
 
 test("fund-flow endpoint rejects unsupported, unknown, and inconsistent parameters before D1", async () => {
@@ -221,6 +241,8 @@ test("fund-flow endpoint pages equal timestamps with a composite [ts,id] cursor"
     "margin_balance",
     "margin_buy",
     "margin_net_buy",
+    "constituent_margin_balance",
+    "constituent_margin_net_buy",
     "shares_outstanding_derived",
   ];
   for (let index = 1; index <= types.length; index += 1) {
@@ -229,7 +251,7 @@ test("fund-flow endpoint pages equal timestamps with a composite [ts,id] cursor"
   const DB = new SqliteD1(sqlite);
   const seen = [];
   let after = oldTs;
-  for (let page = 0; page < 3; page += 1) {
+  for (let page = 0; page < 4; page += 1) {
     const response = await flowsApi.onRequestGet({
       request: request(`/api/flows?symbol=515880.SS&limit=2&after=${encodeURIComponent(after)}`),
       env: { DB, FUND_FLOW_ENABLED: "true" },
@@ -238,8 +260,8 @@ test("fund-flow endpoint pages equal timestamps with a composite [ts,id] cursor"
     seen.push(...payload.data.map(({ id }) => id));
     after = payload.cursor;
   }
-  assert.deepEqual(seen, ["flow-1", "flow-2", "flow-3", "flow-4", "flow-5"]);
-  assert.equal(after, `[\"${ts}\",\"flow-5\"]`);
+  assert.deepEqual(seen, ["flow-1", "flow-2", "flow-3", "flow-4", "flow-5", "flow-6", "flow-7"]);
+  assert.equal(after, `[\"${ts}\",\"flow-7\"]`);
 });
 
 test("fund-flow endpoint excludes expired rows and fails soft for missing, empty, or failing D1", async () => {

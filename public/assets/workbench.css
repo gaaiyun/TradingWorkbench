@@ -578,13 +578,13 @@ a { color: inherit; }
 .fund-flow-comparison-head { display: flex; align-items: center; gap: 14px; color: var(--quiet); font-size: 8px; }
 .fund-flow-comparison-head span:last-child { margin-left: auto; }
 .fund-flow-comparison-head i { display: inline-block; width: 12px; height: 2px; margin-right: 5px; vertical-align: middle; }
-.fund-flow-comparison-head .is-leveraged { background: #c8b27a; }
-.fund-flow-comparison-head .is-allocation { background: #6fa7b6; }
+.fund-flow-comparison-head .is-etf-margin { background: #c8b27a; }
+.fund-flow-comparison-head .is-constituent-margin { background: #6fa7b6; }
 .fund-flow-comparison-chart svg { display: block; width: 100%; height: 118px; overflow: visible; }
 .fund-flow-comparison-chart svg text { fill: #596268; font: 8px "IBM Plex Mono", Consolas, monospace; }
 .fund-flow-line { fill: none; stroke-width: 2; vector-effect: non-scaling-stroke; }
-.fund-flow-line.is-leveraged { stroke: #c8b27a; }
-.fund-flow-line.is-allocation { stroke: #6fa7b6; }
+.fund-flow-line.is-etf-margin { stroke: #c8b27a; }
+.fund-flow-line.is-constituent-margin { stroke: #6fa7b6; }
 .fund-flow-band { stroke: #353d42; stroke-width: 1; stroke-dasharray: 4 5; vector-effect: non-scaling-stroke; }
 .fund-flow-event-anchor line { stroke: var(--warning); stroke-width: 1; stroke-dasharray: 2 4; opacity: .7; vector-effect: non-scaling-stroke; }
 .fund-flow-event-anchor circle { fill: var(--warning); }

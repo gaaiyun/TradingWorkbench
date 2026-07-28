@@ -90,7 +90,7 @@ export function isFundFlowUiEnabled(value) {
 export function fundFlowRequestTypes(symbol) {
   const shareTypes = SHARE_TYPES_BY_SYMBOL[String(symbol || "").toUpperCase()];
   return shareTypes
-    ? ["margin_balance", "margin_net_buy", ...shareTypes]
+    ? ["margin_balance", "margin_net_buy", "constituent_margin_net_buy", ...shareTypes]
     : [];
 }
 
@@ -213,6 +213,53 @@ function percentileSeries(rows) {
     });
   }
   return result.filter(({ date }) => date).slice(-FUND_FLOW_CHART_POINTS);
+}
+
+function rollingSumRows(rows, window = 5) {
+  const ordered = latestRowsByTradingDate(Array.isArray(rows) ? rows : []);
+  const result = [];
+  for (let index = window - 1; index < ordered.length; index += 1) {
+    const slice = ordered.slice(index - window + 1, index + 1);
+    const values = slice.map(({ value }) => finiteValue(value));
+    result.push({
+      ...ordered[index],
+      value: values.some((value) => value === null)
+        ? null
+        : values.reduce((total, value) => total + value, 0),
+      observationCount: window,
+    });
+  }
+  return result;
+}
+
+function constituentApproximation(row) {
+  const match = /^latest_disclosed_top_(\d+)_holdings_sum@(\d{4}-\d{2}-\d{2});coverage=(\d+)\/(\d+)$/.exec(
+    String(row?.method || ""),
+  );
+  if (!match) return null;
+  return {
+    topN: Number(match[1]),
+    disclosedAt: match[2],
+    covered: Number(match[3]),
+    total: Number(match[4]),
+    quality: row?.quality || null,
+  };
+}
+
+function buildFinancingComparison(data, flowType) {
+  const rows = latestRowsByTradingDate(metricRows(data, flowType));
+  const rollingRows = rollingSumRows(rows, 5);
+  const current = rollingRows.at(-1) || null;
+  const value = finiteValue(current?.value);
+  const percentile = computeHistoricalPercentile(rollingRows.map((row) => row.value));
+  return {
+    value,
+    percentile,
+    tradingDate: fundFlowTradingDate(current?.ts),
+    asOf: current?.as_of || current?.ts || null,
+    sourceRow: rows.at(-1) || null,
+    points: percentileSeries(rollingRows),
+  };
 }
 
 function median(values) {
@@ -360,13 +407,6 @@ function changePhrase(label, value, date = null) {
   return `${datedLabel}${number >= 0 ? "上涨" : "下跌"}${Math.abs(number).toFixed(2)}%`;
 }
 
-function flowDirection(metric) {
-  if (!metric || metric.percentile?.status !== "ready" || metric.analysisValue === null) return "unknown";
-  if (metric.analysisValue > 0) return "in";
-  if (metric.analysisValue < 0) return "out";
-  return "flat";
-}
-
 export function marketPercentageChange(currentValue, previousValue) {
   if (currentValue === null || currentValue === undefined || currentValue === ""
     || previousValue === null || previousValue === undefined || previousValue === "") return null;
@@ -407,32 +447,40 @@ export function buildFundFlowNarrative(view, {
   anchors = [],
 } = {}) {
   if (!view?.enabled) return "资金行为数据暂不可用。";
-  const margin = view.metrics.find(({ id }) => id === "margin-net-buy");
-  const shares = view.metrics.find(({ id }) => id === "etf-shares");
-  const marginDirection = flowDirection(margin);
-  const shareDirection = flowDirection(shares);
-  const bothComparable = marginDirection !== "unknown" && shareDirection !== "unknown";
-  let conclusion = "两类资金数据尚不足以比较";
-  if (bothComparable && marginDirection === shareDirection) {
-    conclusion = marginDirection === "flat"
-      ? "融资净买入与ETF份额增量同期持平"
-      : "融资净买入与ETF份额增量同期同向";
-  } else if (bothComparable && (marginDirection === "flat" || shareDirection === "flat")) {
-    conclusion = "两类资金同期未形成一致方向";
-  } else if (bothComparable) {
-    conclusion = "融资净买入与ETF份额增量同期分化";
-  } else if (marginDirection !== "unknown" || shareDirection !== "unknown") {
-    conclusion = "仅一类资金具备可比分位";
+  const etf = view.financingComparison?.etf || null;
+  const constituent = view.financingComparison?.constituent || null;
+  const etfReady = etf?.value !== null && etf?.percentile?.status === "ready";
+  const constituentReady = constituent?.value !== null && constituent?.percentile?.status === "ready";
+  let conclusion = "ETF端与个股端数据尚不足以比较";
+  if (etfReady && constituentReady) {
+    if (etf.value > 0 && constituent.value <= 0) conclusion = "ETF端更积极";
+    else if (constituent.value > 0 && etf.value <= 0) conclusion = "个股端更积极";
+    else if (etf.value > 0 && constituent.value > 0) {
+      const difference = etf.percentile.value - constituent.percentile.value;
+      conclusion = Math.abs(difference) < 20
+        ? "双向一致加杠杆"
+        : difference > 0 ? "ETF端更积极" : "个股端更积极";
+    } else if (etf.value < 0 && constituent.value < 0) conclusion = "双向走弱";
+    else if (etf.value === 0 && constituent.value === 0) conclusion = "双向持平";
+    else conclusion = etf.value > constituent.value ? "ETF端相对更稳" : "个股端相对更稳";
   }
+  const etfPhrase = etfReady
+    ? `ETF融资近5日累计 ${formatFundFlowValue(etf.value, "CNY", { signed: true })}（P${etf.percentile.value}）`
+    : "ETF融资近5日累计暂不可比";
+  const constituentPhrase = constituentReady
+    ? `成分股融资近5日累计 ${formatFundFlowValue(constituent.value, "CNY", { signed: true })}（P${constituent.percentile.value}）`
+    : "成分股融资近5日累计暂不可比";
+  const approximation = view.financingComparison?.approximation;
+  const approximationNote = approximation
+    ? `口径：前${approximation.topN}大持仓近似（披露日 ${approximation.disclosedAt}，覆盖 ${approximation.covered}/${approximation.total}），不代表身份与因果`
+    : "口径：成分股篮子为最新披露持仓近似，不代表身份与因果";
   const eventNote = anchors.length
     ? `；${anchors.at(-1).date}“${anchors.at(-1).title}”仅作时间锚，不代表因果`
     : "";
-  return [
-    `${changePhrase(driverSymbol, driverChange, driverDate)}，${changePhrase(symbol, etfChange, etfDate)}`,
-    `${margin?.behavior || "杠杆资金样本暂缺"}（${margin?.percentile?.label || "分位不可用"}）`,
-    `${shares?.behavior || "ETF份额样本暂缺"}（${shares?.percentile?.label || "分位不可用"}）`,
-    `${conclusion}${eventNote}。`,
-  ].join("；");
+  const marketContext = finiteChange(driverChange) !== null || finiteChange(etfChange) !== null
+    ? `${changePhrase(driverSymbol, driverChange, driverDate)}，${changePhrase(symbol, etfChange, etfDate)}；`
+    : "";
+  return `${marketContext}${etfPhrase}；${constituentPhrase}——${conclusion}；${approximationNote}${eventNote}。`;
 }
 
 export function buildFundFlowView(envelope, symbol) {
@@ -449,6 +497,11 @@ export function buildFundFlowView(envelope, symbol) {
   const metrics = METRIC_DEFINITIONS
     .filter(({ capability }) => capabilities[capability] === true)
     .map((definition) => buildMetric(definition, envelope?.data, capabilities, symbol));
+  const etfComparison = buildFinancingComparison(envelope?.data, "margin_net_buy");
+  const constituentComparison = capabilities.constituentMarginDaily === true
+    ? buildFinancingComparison(envelope?.data, "constituent_margin_net_buy")
+    : { value: null, percentile: { status: "unavailable", value: null, sampleSize: 0 }, points: [] };
+  const approximation = constituentApproximation(constituentComparison.sourceRow);
   return {
     enabled: metrics.length > 0,
     status: envelope?.status || "unavailable",
@@ -456,15 +509,20 @@ export function buildFundFlowView(envelope, symbol) {
     metrics,
     comparisonSeries: [
       {
-        id: "leveraged",
-        label: "杠杆资金",
-        points: metrics.find(({ id }) => id === "margin-net-buy")?.percentileSeries || [],
+        id: "etf-margin",
+        label: "ETF融资",
+        points: etfComparison.points,
       },
       {
-        id: "allocation",
-        label: "申赎资金（份额代理）",
-        points: metrics.find(({ id }) => id === "etf-shares")?.percentileSeries || [],
+        id: "constituent-margin",
+        label: "成分股融资",
+        points: constituentComparison.points,
       },
     ],
+    financingComparison: {
+      etf: etfComparison,
+      constituent: constituentComparison,
+      approximation,
+    },
   };
 }

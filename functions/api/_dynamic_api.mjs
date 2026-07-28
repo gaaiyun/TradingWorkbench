@@ -154,7 +154,10 @@ function aggregateStatus(rows, health) {
     if (unavailableCount > 0 || statuses.includes("degraded")) return "degraded";
     if (statuses.includes("stale")) return "stale";
   }
-  if (rows.some((row) => ["degraded", "poor", "error", "partial"].includes(row.quality))) {
+  if (rows.some((row) => (
+    ["degraded", "poor", "error", "partial"].includes(row.quality)
+    || /(^|_)partial($|_)/.test(String(row.quality || ""))
+  ))) {
     return "degraded";
   }
   if (rows.some((row) => row.freshness === "stale")) return "stale";

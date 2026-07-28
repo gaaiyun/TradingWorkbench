@@ -2,6 +2,8 @@ export const FUND_FLOW_TYPES = Object.freeze([
   "margin_balance",
   "margin_buy",
   "margin_net_buy",
+  "constituent_margin_balance",
+  "constituent_margin_net_buy",
   "fund_scale",
   "shares_outstanding_derived",
   "shares_outstanding_snapshot",
@@ -36,6 +38,10 @@ const ETF_SYMBOL_SET = new Set([
   ...SNAPSHOT_SHARE_SYMBOLS,
 ]);
 const MARGIN_TYPES = new Set(["margin_balance", "margin_buy", "margin_net_buy"]);
+const CONSTITUENT_MARGIN_TYPES = new Set([
+  "constituent_margin_balance",
+  "constituent_margin_net_buy",
+]);
 
 export function fundFlowQueryCapabilities() {
   return {
@@ -54,6 +60,7 @@ export function fundFlowCapabilities(symbol = null, enabled = true) {
     return {
       marketFlowV1: false,
       marginDaily: false,
+      constituentMarginDaily: false,
       etfSharesDaily: false,
       historicalPercentile: false,
     };
@@ -62,6 +69,7 @@ export function fundFlowCapabilities(symbol = null, enabled = true) {
   return {
     marketFlowV1: true,
     marginDaily: symbol === null || MARGIN_SYMBOL_SET.has(symbol),
+    constituentMarginDaily: symbol === null || MARGIN_SYMBOL_SET.has(symbol),
     etfSharesDaily: supported,
     historicalPercentile: supported,
   };
@@ -72,6 +80,7 @@ export function isFundFlowApplicable({ symbol, type }) {
   if (!ETF_SYMBOL_SET.has(symbol)) return false;
   if (!type || type === "fund_scale") return true;
   if (MARGIN_TYPES.has(type)) return MARGIN_SYMBOL_SET.has(symbol);
+  if (CONSTITUENT_MARGIN_TYPES.has(type)) return MARGIN_SYMBOL_SET.has(symbol);
   if (type === "shares_outstanding_derived") return DERIVED_SHARE_SYMBOL_SET.has(symbol);
   if (type === "shares_outstanding_snapshot") return SNAPSHOT_SHARE_SYMBOL_SET.has(symbol);
   return false;

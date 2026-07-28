@@ -34,6 +34,8 @@ GitHub 自动部署链已恢复。仓库主人在 2026-07-27 配置了 `CLOUDFLA
 
 第五轮把资金面从三张孤立卡片升级为可核验叙事，但没有虚构“国家队/主力”：三卡继续保留当前值，新增融资净买入与 ETF 份额增量的近 60 期历史分位对照、P85/P15、最多 3 个事件时间锚和确定性一句话。份额相邻跳变超过 35% 会以 `possible_split_or_method_change` 排除，缺值不回退、不跨缺口连线；流入/流出由数值正负决定，分位只描述相对力度。事件明确“不代表因果”，隔夜驱动和 ETF 涨跌都显示实际日线日期。最终 CI run `30340865649`、Pages run `30340878635`、Monitor run `30340881245` 全绿；生产浏览器实测 7 个可见一级入口、3 卡、2 条资金线、1 个事件锚、0 pageerror，390px 与 1440px 无横向溢出。Pages `/api/health` 为 `ok`，deployment manifest 合法。该层仍不进入 EvidencePacket、Manifest、报告哈希或 verified 门禁。
 
+第六轮补齐了真正的对照主体：不再把 ETF 融资与 ETF 份额当作“两个玩家”，而是比较 ETF 自身融资净买入与最新披露前十大持仓融资净买入合计。采集继续留在独立 `fund-flow` Actions，三个篮子各限 10 只、跨篮子去重、串行抓取、覆盖低于 80% 不写；聚合行的 `method/quality` 明示披露日、覆盖数和 `current_top_N_approximation`。UI 两边统一使用近 5 个可用交易日累计及各自历史分位，确定性结论只说 ETF 端/个股端谁更积极、双向一致或双向走弱。页面明确这不识别国家队、主力或任何具体机构，也不代表因果；三卡、七入口、主图三窗格、期权和 Evidence 边界未变。
+
 本轮接手已完成数字引用判定修复：`_NUMERIC_CLAIM_RE` 不再把日期、时间戳、标的代码、哈希、Markdown 标题序号和 RSI/MACD/均线参数当作研究数字；逐段复测后 `515880.SS` 为 `179→117`、`512480.SS` 为 `128→84`、`3887.HK` 为 `169→108`，剩余段落仍含未带 Evidence ID 的真实数值，因此没有放宽门禁。三份 `-v4` Manifest 与 `public/data/report-audit.json` 已同步更新。
 
 ## 1.5 生产状态真相（2026-07-28 独立核查）
@@ -81,8 +83,9 @@ Pages immutable deployment : 每次发布都会变化，以 `wrangler pages depl
 
 ### ✅ 已完成：资金行为叙事与边界审计
 
-- 叙事主语限定为“融资净买入”和“ETF 份额增量”；两者是可观察代理，不识别具体投资者身份；
-- 双线使用各自历史分位，不把 CNY 与份额画在同一金额尺度；
+- 叙事主语限定为“ETF 自身融资净买入”和“最新披露前十大持仓融资净买入合计”；两者都是融资账户代理，不识别具体投资者身份；
+- 双线使用近 5 个可用交易日累计的各自历史分位，正负决定方向，分位只描述力度；
+- 最新持仓近似必须显示披露日和覆盖数；当前篮子回算历史存在持仓变更与存活偏差，不得写成完整指数成分；
 - 事件与官方 evidence 新闻只作同期时间锚；页面、SVG 无障碍描述和交接文档均明确不代表因果；
 - 份额拆分/口径跳变、最新 null、低样本 20 日中位、正负方向反转、图线跨缺口和重复 SOXX 请求均有回归测试；
 - 生产 `515880.SS` 一句话同时显示 SOXX/ETF 日线日期与资金数据截止日，避免把盘中报价、完整日线和滞后两融误当成同一时点；
@@ -102,7 +105,7 @@ Pages immutable deployment : 每次发布都会变化，以 `wrangler pages depl
 - 当前报告审计 `60 / 0 verified / 49 legacy_unverified / 4 invalidated / 7 invalid_record`：直接读 `public/data/report-audit.json`（`generatedAt 2026-07-28T07:50:48.864Z`）核对。零 verified 是 fail-closed 的真实结果。
 - GitHub Actions run `30189419616`（cn-semi-comms 首轮）：conclusion **success**，与文档描述一致。
 - 资金叙事最终验收的 CI run `30340865649` 全绿，Python 3.10–3.13、Pages Functions、浏览器验收、Ruff 和 clean-install 均成功；Pages run `30340878635` 与 Monitor run `30340881245` 的 migration、deploy 和 SHA verify 均执行成功。
-- 上交所 `official-news` 定时任务近期存在间歇性 `SSE_RESPONSE_INVALID_515880`；成功批次与失败批次交替，既有 evidence 会保留。该任务必须继续响亮失败，禁止用东方财富等 discovery 结果冒充上交所原文。
+- 上交所 `official-news` 最近 7 次运行中 2 次成功、5 次失败；`SSE_RESPONSE_INVALID_515880` 占 2/7，另有 2 次连接超时和 1 次 HTTP 403。影响范围仅是新公告入库延迟，既有 evidence 不删除，也不影响资金流、行情、新闻其它来源或报告门禁；这不是本轮成分股融资功能的回归。该任务必须继续响亮失败，禁止用东方财富等 discovery 结果冒充上交所原文。
 
 ## 2. 不可破坏的产品边界
 
@@ -406,7 +409,7 @@ Codex 根 task ID：`019f8943-9db3-7c52-88de-0cb3773977ba`
 4. 用 `wrangler d1 migrations list --remote` 确认 0013–0017 仍已应用。
 5. 比对 GitHub、Pages、Worker 三方 SHA 和两处 deployedAt。
 6. 检查 Worker `gov-policy-library`；另手工运行 `official-news.yml`，核对 `515880.SS`、`512480.SS` 官方 evidence 与原始链接。不要再要求 Cloudflare 直连上交所。
-7. 读取 `/api/flows` 和 `/api/monitor-status?capacity=1`，确认资金面最新交易日、`fund_flows` 行数与日更 workflow 一致；上交所 403 时应是 degraded + snapshot，不得把整批写成“无数据”。
+7. 读取 `/api/flows` 的 `margin_net_buy / constituent_margin_net_buy / constituent_margin_balance` 和 `/api/monitor-status?capacity=1`，确认资金面最新交易日、前十大持仓披露日、覆盖数、`fund_flows` 行数与日更 workflow 一致；上交所 403 时应是 degraded + snapshot，不得把整批写成“无数据”。
 8. 资金面先稳定观察，不进入 Evidence；之后才轮到报告质量：消除 `UNCITED_NUMERIC_CLAIM` / `UNSUPPORTED_ALLOCATION`，争取第一份 `verified` 报告。
 
 ### 15.1 恢复部署凭据（2026-07-27 已完成，保留作灾难恢复）
@@ -475,3 +478,4 @@ gh workflow run deploy-monitor.yml --repo gaaiyun/TradingWorkbench --ref main
 | 2026-07-28 | 接入 ETF 日频资金面：两融六年回填、沪市 derived 份额、深市快照累积、2024 起 mid-rank 分位、独立 API/UI/容量观测和工作日 20:17 日更；保持七入口、三窗格、期权与 Evidence 不变 | 安全 tag `pre-fundflow-20260728`；backfill `30295062725` 写入 19636 条且 0 重复；daily `30295641181` 成功；面板启用 Pages `30295901009`、CI `30295900436` 全绿，SHA `eb8e007` |
 | 2026-07-28 | 修复 Pages 同 SHA 后续部署遮盖静态 manifest 后 `deployedAt=unknown`：发布成功后才参数化写入 D1，health 仅在静态 manifest 失败时有界回读；同步发布 Worker 并完成最终全链审计 | migration `0017`；Pages `30297566846`、Worker `30297566845`、CI `30297566980` 全绿；现场 Pages/Worker SHA `e66def3`，Pages `deployedAt=2026-07-27T19:17:32Z`、Worker `2026-07-27T19:18:37Z` |
 | 2026-07-28 | 将资金面升级为“融资净买入 vs ETF 份额增量”确定性叙事：近 60 期分位双线、事件时间锚、拆分/缺值保护、日线日期与无机构归因边界；保持七入口、主图三窗格、期权和 Evidence 零改动 | 安全 tag `pre-fundflow-narrative-20260728`；功能验收基线 `039ba5a`，CI `30340865649`、Pages `30340878635`、Monitor `30340881245` 全绿；生产 7 入口、3 卡、2 线、1 锚、0 pageerror，`/api/health=ok` 且 manifest 合法 |
+| 2026-07-28 | 将主对照改为“ETF 自身融资 vs 最新披露前十大持仓融资合计”：篮子去重串行采集、80% 覆盖门槛、近 5 日累计分位、直接但不冒充机构身份的确定性结论；官方公告故障频率单独披露 | 本机真实接口复测三个 ETF 均返回 2026-06-30 前十大持仓，抽样成分股两融最新至 2026-07-27；Functions 364 passed/1 skipped、前端 111/111、Python 651 passed/2 skipped、完整浏览器验收通过；GitHub 与生产 run 见本轮最终收口记录 |

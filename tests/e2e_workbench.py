@@ -226,6 +226,7 @@ def fund_flow_rows(flow_type, profile, symbol):
     definitions = {
         "margin_balance": ("CNY", 1_000_000_000, 2_000_000, "eastmoney-margin-daily", "reported", "reported"),
         "margin_net_buy": ("CNY", -30_000_000, 1_000_000, "eastmoney-margin-daily", "reported", "reported"),
+        "constituent_margin_net_buy": ("CNY", -300_000_000, 10_000_000, "eastmoney-constituent-margin", "latest_disclosed_top_10_holdings_sum@2026-06-30;coverage=10/10", "current_top_10_approximation"),
         "shares_outstanding_derived": ("shares", 60_000_000_000, 100_000_000, "sse-scale-eastmoney-close", "fund_scale_divided_by_unadjusted_close", "derived"),
         "shares_outstanding_snapshot": ("shares", 60_000_000_000, 100_000_000, "eastmoney-share-snapshot", "observed_without_source_timestamp", "snapshot_unstamped"),
     }
@@ -346,6 +347,7 @@ def route_api(route):
             "capabilities": {
                 "marketFlowV1": True,
                 "marginDaily": True,
+                "constituentMarginDaily": True,
                 "etfSharesDaily": True,
                 "historicalPercentile": True,
             },
@@ -540,17 +542,18 @@ def run_browser():
         assert page.locator("#fund-flow-grid").inner_text().count("P100") == 2
         assert "P50" in page.locator("#fund-flow-grid").inner_text()
         assert page.locator("[data-fund-flow-series]").count() == 2
-        leveraged_path = page.locator('[data-fund-flow-series="leveraged"]').get_attribute("d")
+        leveraged_path = page.locator('[data-fund-flow-series="etf-margin"]').get_attribute("d")
         assert leveraged_path.count("M") >= 2
         assert page.locator("[data-fund-flow-event]").count() == 1
         assert "仅作时间锚，不代表因果" in page.locator("#fund-flow-narrative").inner_text()
         page.locator("[data-fund-flow-help]").first.focus()
         assert page.locator(".fund-flow-tooltip").first.is_visible()
-        initial_flow_requests = FLOW_REQUESTS[:4]
-        assert len(initial_flow_requests) == 4
+        initial_flow_requests = FLOW_REQUESTS[:5]
+        assert len(initial_flow_requests) == 5
         assert {request[2] for request in initial_flow_requests} == {
             "margin_balance",
             "margin_net_buy",
+            "constituent_margin_net_buy",
             "shares_outstanding_derived",
             "shares_outstanding_snapshot",
         }

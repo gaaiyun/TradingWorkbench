@@ -646,8 +646,11 @@ import {
     const anchorDescription = anchors.length
       ? `时间锚：${anchors.map(({ date, title }) => `${date} ${title}`).join("；")}。均不代表因果。`
       : "当前窗口没有事件时间锚。";
-    host.innerHTML = `<div class="fund-flow-comparison-head"><span><i class="is-leveraged"></i>融资净买入</span><span><i class="is-allocation"></i>ETF份额增量</span><span>近60期历史分位</span></div>
-      <svg viewBox="0 0 ${width} ${height}" role="img" aria-label="融资净买入与ETF份额增量近60期历史分位对照；事件标记仅作时间锚">
+    const legend = (seriesList || []).map((series) => (
+      `<span><i class="is-${escapeHtml(series.id)}"></i>${escapeHtml(series.label)}</span>`
+    )).join("");
+    host.innerHTML = `<div class="fund-flow-comparison-head">${legend}<span>近5日累计 · 近60期历史分位</span></div>
+      <svg viewBox="0 0 ${width} ${height}" role="img" aria-label="ETF融资与成分股融资近5日累计的近60期历史分位对照；事件标记仅作时间锚">
         <desc>${escapeHtml(anchorDescription)}</desc>
         <line class="fund-flow-band" x1="20" x2="980" y1="${yFor(85)}" y2="${yFor(85)}"/><line class="fund-flow-band" x1="20" x2="980" y1="${yFor(15)}" y2="${yFor(15)}"/>
         <text x="22" y="${yFor(85) - 4}">P85</text><text x="22" y="${yFor(15) - 4}">P15</text>${lines}${eventLines}

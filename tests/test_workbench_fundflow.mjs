@@ -41,6 +41,44 @@ function row(flowType, value, day, overrides = {}) {
   };
 }
 
+function buildFinancingComparisonView({
+  etfHistoryValue,
+  etfRecentValue,
+  constituentHistoryValue,
+  constituentRecentValue,
+} = {}) {
+  const data = [];
+  for (let index = 0; index < 124; index += 1) {
+    const day = new Date(Date.UTC(2026, 6, index + 1)).toISOString().slice(0, 10);
+    data.push(row(
+      "margin_net_buy",
+      index < 119 ? etfHistoryValue : etfRecentValue,
+      day,
+    ));
+    data.push(row(
+      "constituent_margin_net_buy",
+      index < 119 ? constituentHistoryValue : constituentRecentValue,
+      day,
+      {
+        source: "constituent-margin-aggregate",
+        method: "latest_disclosed_top_10_holdings_sum@2026-06-30;coverage=8/10",
+        quality: "current_top_10_approximation",
+      },
+    ));
+  }
+  return buildFundFlowView({
+    status: "ok",
+    asOf: data.at(-1).as_of,
+    data,
+    capabilities: {
+      marketFlowV1: true,
+      marginDaily: true,
+      constituentMarginDaily: true,
+      historicalPercentile: true,
+    },
+  }, "515880.SS");
+}
+
 test("fund-flow rollout gate and request plan fail closed", () => {
   assert.equal(FUND_FLOW_START_DATE, "2024-01-01");
   assert.equal(FUND_FLOW_MIN_SAMPLE, 60);
@@ -52,12 +90,14 @@ test("fund-flow rollout gate and request plan fail closed", () => {
   assert.deepEqual(fundFlowRequestTypes("515880.SS"), [
     "margin_balance",
     "margin_net_buy",
+    "constituent_margin_net_buy",
     "shares_outstanding_derived",
     "shares_outstanding_snapshot",
   ]);
   assert.deepEqual(fundFlowRequestTypes("159995.SZ"), [
     "margin_balance",
     "margin_net_buy",
+    "constituent_margin_net_buy",
     "shares_outstanding_snapshot",
   ]);
 });
@@ -161,8 +201,8 @@ test("view model exposes only financing balance, financing net buy, and ETF shar
   assert.equal(view.metrics[0].percentile.sampleSize, 60);
   assert.equal(view.metrics[1].signed, true);
   assert.equal(view.comparisonSeries.length, 2);
-  assert.equal(view.comparisonSeries[0].label, "杠杆资金");
-  assert.equal(view.comparisonSeries[1].label, "申赎资金（份额代理）");
+  assert.equal(view.comparisonSeries[0].label, "ETF融资");
+  assert.equal(view.comparisonSeries[1].label, "成分股融资");
   assert.equal(view.metrics[2].analysisValue, 1);
   assert.match(view.metrics[2].tooltip, /日度份额变化/);
   assert.match(view.metrics[0].tooltip, /2024-01-01/);
@@ -170,24 +210,91 @@ test("view model exposes only financing balance, financing net buy, and ETF shar
   assert.match(view.metrics[0].tooltip, /mid-rank/);
 });
 
+test("comparison series contrast ETF financing with top-ten constituent financing", () => {
+  const view = buildFinancingComparisonView({
+    etfHistoryValue: 1_000_000_000,
+    etfRecentValue: 100_000_000,
+    constituentHistoryValue: -1_000_000_000,
+    constituentRecentValue: -100_000_000,
+  });
+
+  assert.deepEqual(
+    view.comparisonSeries.map(({ label }) => label),
+    ["ETF融资", "成分股融资"],
+  );
+  assert.equal(view.comparisonSeries.length, 2);
+  assert.equal(view.comparisonSeries.every(({ points }) => points.length === 60), true);
+});
+
+test("five-day narrative lets positive ETF financing outrank a higher percentile outflow", () => {
+  const view = buildFinancingComparisonView({
+    etfHistoryValue: 1_000_000_000,
+    etfRecentValue: 100_000_000,
+    constituentHistoryValue: -1_000_000_000,
+    constituentRecentValue: -100_000_000,
+  });
+  const narrative = buildFundFlowNarrative(view);
+
+  assert.match(narrative, /ETF融资.*近5日累计.*\+5\.00亿.*P\d+/);
+  assert.match(narrative, /成分股融资.*近5日累计.*-5\.00亿.*P\d+/);
+  assert.match(narrative, /ETF端更积极/);
+});
+
+test("five-day narrative lets positive constituent financing outrank a higher percentile ETF outflow", () => {
+  const view = buildFinancingComparisonView({
+    etfHistoryValue: -1_000_000_000,
+    etfRecentValue: -100_000_000,
+    constituentHistoryValue: 1_000_000_000,
+    constituentRecentValue: 100_000_000,
+  });
+
+  assert.match(buildFundFlowNarrative(view), /个股端更积极/);
+});
+
+test("five-day narrative reports aligned positive financing as consistent", () => {
+  const view = buildFinancingComparisonView({
+    etfHistoryValue: 1_000_000_000,
+    etfRecentValue: 100_000_000,
+    constituentHistoryValue: 2_000_000_000,
+    constituentRecentValue: 200_000_000,
+  });
+
+  assert.match(buildFundFlowNarrative(view), /双向一致/);
+});
+
+test("five-day narrative reports aligned negative financing as weakening", () => {
+  const view = buildFinancingComparisonView({
+    etfHistoryValue: -1_000_000_000,
+    etfRecentValue: -100_000_000,
+    constituentHistoryValue: -2_000_000_000,
+    constituentRecentValue: -200_000_000,
+  });
+
+  assert.match(buildFundFlowNarrative(view), /双向走弱/);
+});
+
+test("constituent narrative discloses approximation date coverage and attribution limits", () => {
+  const view = buildFinancingComparisonView({
+    etfHistoryValue: 1_000_000_000,
+    etfRecentValue: 100_000_000,
+    constituentHistoryValue: 2_000_000_000,
+    constituentRecentValue: 200_000_000,
+  });
+  const narrative = buildFundFlowNarrative(view);
+
+  assert.match(narrative, /前10大持仓近似/);
+  assert.match(narrative, /披露日 2026-06-30/);
+  assert.match(narrative, /覆盖 8\/10/);
+  assert.match(narrative, /不代表身份与因果/);
+});
+
 test("event anchors and deterministic narrative keep time correlation separate from causality", () => {
-  const data = [];
-  for (let index = 0; index < 62; index += 1) {
-    const day = new Date(Date.UTC(2026, 0, index + 1)).toISOString().slice(0, 10);
-    data.push(row("margin_balance", 100_000_000 + index, day));
-    data.push(row("margin_net_buy", index - 30, day));
-    data.push(row("shares_outstanding_derived", 500_000_000 + index, day));
-  }
-  const view = buildFundFlowView({
-    status: "ok",
-    data,
-    capabilities: {
-      marketFlowV1: true,
-      marginDaily: true,
-      etfSharesDaily: true,
-      historicalPercentile: true,
-    },
-  }, "515880.SS");
+  const view = buildFinancingComparisonView({
+    etfHistoryValue: 1_000_000_000,
+    etfRecentValue: 100_000_000,
+    constituentHistoryValue: 2_000_000_000,
+    constituentRecentValue: 200_000_000,
+  });
   const dates = view.comparisonSeries.flatMap(({ points }) => points.map(({ date }) => date));
   const anchorDate = dates.at(-1);
   const anchors = selectFundFlowEventAnchors([
@@ -207,7 +314,7 @@ test("event anchors and deterministic narrative keep time correlation separate f
   });
   assert.match(narrative, /SOXX（日线 2026-03-02）下跌0\.50%/);
   assert.match(narrative, /515880\.SS（日线 2026-03-03）上涨1\.20%/);
-  assert.match(narrative, /同期同向/);
+  assert.match(narrative, /双向一致/);
   assert.match(narrative, /仅作时间锚，不代表因果/);
   assert.doesNotMatch(narrative, /国家队|主力|导致|推动|买入建议|卖出建议/);
 });
