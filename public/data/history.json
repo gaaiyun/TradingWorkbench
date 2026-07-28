@@ -1,5 +1,105 @@
 [
   {
+    "trade_date": "2026-07-28",
+    "generated_at": "2026-07-28T15:21:34+08:00",
+    "provider": "openai_compatible",
+    "results": [
+      {
+        "ticker": "515880.SS",
+        "rating": "Not Rated",
+        "report": "reports/515880.SS/2026-07-28/complete_report.md",
+        "files": {
+          "fundamentals": "reports/515880.SS/2026-07-28/1_analysts/fundamentals.md",
+          "market": "reports/515880.SS/2026-07-28/1_analysts/market.md",
+          "news": "reports/515880.SS/2026-07-28/1_analysts/news.md",
+          "bear": "reports/515880.SS/2026-07-28/2_research/bear.md",
+          "bull": "reports/515880.SS/2026-07-28/2_research/bull.md",
+          "manager": "reports/515880.SS/2026-07-28/2_research/manager.md",
+          "trader": "reports/515880.SS/2026-07-28/3_trading/trader.md",
+          "aggressive": "reports/515880.SS/2026-07-28/4_risk/aggressive.md",
+          "conservative": "reports/515880.SS/2026-07-28/4_risk/conservative.md",
+          "neutral": "reports/515880.SS/2026-07-28/4_risk/neutral.md",
+          "decision": "reports/515880.SS/2026-07-28/5_portfolio/decision.md",
+          "complete_report": "reports/515880.SS/2026-07-28/complete_report.md"
+        },
+        "error": false,
+        "analysis_status": "insufficient_evidence",
+        "audit_status": "legacy_unverified",
+        "evidence_publish": {
+          "published": false,
+          "reason": "http_error",
+          "status": 400
+        },
+        "marketHistory": {
+          "source": "tencent",
+          "adjustment": "qfq",
+          "barCount": 642,
+          "startAt": "2023-11-29T16:00:00Z",
+          "endAt": "2026-07-26T16:00:00Z"
+        }
+      },
+      {
+        "ticker": "512480.SS",
+        "rating": "Not Rated",
+        "report": "reports/512480.SS/2026-07-28/complete_report.md",
+        "files": {
+          "fundamentals": "reports/512480.SS/2026-07-28/1_analysts/fundamentals.md",
+          "market": "reports/512480.SS/2026-07-28/1_analysts/market.md",
+          "news": "reports/512480.SS/2026-07-28/1_analysts/news.md",
+          "bear": "reports/512480.SS/2026-07-28/2_research/bear.md",
+          "bull": "reports/512480.SS/2026-07-28/2_research/bull.md",
+          "manager": "reports/512480.SS/2026-07-28/2_research/manager.md",
+          "trader": "reports/512480.SS/2026-07-28/3_trading/trader.md",
+          "aggressive": "reports/512480.SS/2026-07-28/4_risk/aggressive.md",
+          "conservative": "reports/512480.SS/2026-07-28/4_risk/conservative.md",
+          "neutral": "reports/512480.SS/2026-07-28/4_risk/neutral.md",
+          "decision": "reports/512480.SS/2026-07-28/5_portfolio/decision.md",
+          "complete_report": "reports/512480.SS/2026-07-28/complete_report.md"
+        },
+        "error": false,
+        "analysis_status": "insufficient_evidence",
+        "audit_status": "legacy_unverified",
+        "evidence_publish": {
+          "published": false,
+          "reason": "http_error",
+          "status": 400
+        },
+        "marketHistory": {
+          "source": "tencent",
+          "adjustment": "qfq",
+          "barCount": 642,
+          "startAt": "2023-11-29T16:00:00Z",
+          "endAt": "2026-07-26T16:00:00Z"
+        }
+      }
+    ],
+    "request": {
+      "requestId": null,
+      "analysts": [
+        "market",
+        "news",
+        "fundamentals"
+      ],
+      "researchDepth": "standard",
+      "kind": "monitor"
+    },
+    "run": {
+      "id": "30338065603",
+      "attempt": "1",
+      "workflow": "daily-analysis",
+      "url": "https://github.com/gaaiyun/TradingWorkbench/actions/runs/30338065603"
+    },
+    "identity": {
+      "scope": "profile",
+      "kind": "monitor",
+      "runId": "30338065603",
+      "profileId": "cn-semi-comms",
+      "requestId": null,
+      "slotId": "slot-60509113eaa7d4f54994f4bb62d3ab2cbd6813408b484fdfc9bcc21fa51c72d6",
+      "scheduledFor": "2026-07-28T07:20:00.000Z"
+    }
+  },
+  {
     "trade_date": "2026-07-27",
     "generated_at": "2026-07-27T15:36:46+08:00",
     "provider": "openai_compatible",
