@@ -277,13 +277,15 @@ MCP 只提供设置、监控、行情、新闻和研究历史查询，不接收�
 
 `deploy-monitor` 缺少 Cloudflare 凭据或 `MONITOR_WORKER_URL` 时直接失败。部署后 workflow 请求 Worker `/health`，并要求 `deployment.commitSha` 等于本次 GitHub SHA。`deploy-workbench` 还生成随静态站发布的 deployment manifest；Pages health 只有在 manifest SHA 与运行时 SHA 一致时才显示真实 `deployedAt`。绿色 workflow 仍需核对 migration、deploy 和 SHA 验证步骤都执行成功。
 
-本轮发布依赖 migrations `0013_monitor_reliability.sql`、`0014_chat_evidence_scope.sql`、`0015_notification_deliveries.sql`、纯新增的 `0016_fund_flows.sql` 与 `0017_deployment_metadata.sql`。后者让 Pages 在静态 manifest 被后续同 SHA 部署遮盖时，仍能从 D1 回读可信 `deployedAt`。
+本轮发布依赖 migrations `0013_monitor_reliability.sql`、`0014_chat_evidence_scope.sql`、`0015_notification_deliveries.sql`、纯新增的 `0016_fund_flows.sql`、`0017_deployment_metadata.sql` 与 `0018_fund_flow_trade_date.sql`。0017 让 Pages 在静态 manifest 被后续同 SHA 部署遮盖时，仍能从 D1 回读可信 `deployedAt`；0018 明示并索引资金业务交易日。
 
 2026-07-26 已完成 D1 `0013`–`0015`、Monitor Worker 和 Workbench Pages 的生产发布与冒烟。Pages `/api/health` 和 Worker `/health` 都返回运行时 commit SHA；发布 workflow 必须在生产域名回读到目标 SHA 才算成功。2026-07-27 的外审已确认 SEC provider 能取得 GOOGL 官方 8-K；ORCL 最近 8-K 超出 30 天窗口，零条 evidence 是正确结果。旧工信部反爬端点已从代码中移除，改为中国政府网政策库。上交所因 Cloudflare 出口 403 改由两小时 GitHub Actions 采集；首轮生产任务写入 `515880.SS` 4 条、`512480.SS` 3 条原始公告 evidence，包含二季报和份额拆分。部分来源失败时批次会写入可用结果并标记 `NEWS_COLLECTION_PARTIAL`，而不是让整页空白。完整记录、验证协议和回退流程见 [部署与运维](docs/operations-and-deployment.md)。
 
 2026-07-29 资金观察纠错的功能基线为 `b6d8a88`：CI run `30379749679`、Pages run `30379749744`、Monitor run `30379750103` 全绿；现场回读 `origin/main`、Pages `/api/health` 与 Worker `/health` 三方 SHA 完全一致。Pages `deployedAt=2026-07-28T16:45:54Z`，Worker `deployedAt=2026-07-28T16:46:37Z`。`/api/flows` 中三只 ETF 自身融资净买入分别有 `1638 / 1580 / 1522` 条，最新上海交易日均为 2026-07-27、周末计数均为 0、状态均为 `ok`；同标的 643 个日线覆盖区间内不存在资金交易日缺口。生产浏览器实测 7 个可见一级入口、3 张资金卡、2 条对照线，390px 与 1440px 均无横向溢出、0 pageerror、0 console error，切换标的后确定性叙事同步更新。当前 Worker 新闻健康为 degraded：Google News RSS 返回 503、HashKey IR 返回 404，其余五个来源正常；这不影响资金流接口。上交所 `official-news` 定时任务仍有 `SSE_RESPONSE_INVALID_515880` 等间歇失败，任务会响亮失败并保留既有官方证据，不会用发现层结果冒充交易所 evidence。后续纯文档提交也会触发新部署，当前精确 SHA 仍须从 GitHub 与两个 health 端点实时回读。
 
 同日用户截图红框问题的最终功能基线为 `328cda9`：CI `30383472709`、Pages `30383472699`、Monitor `30383498898` 全绿；生产回读 Pages 与 Worker 完整 SHA 均为 `328cda999dd9d0599bd367445d6976d482f38a8e`。Pages `deployedAt=2026-07-28T17:34:32Z`，Worker `deployedAt=2026-07-28T17:35:39Z`。生产 1440px/390px 实测 `512480.SS` 左侧、标题、资金叙事三处日涨跌均为 `-7.38%`；叙事显示 `SOXX + SMH` 美股半导体基准，主题区显示 `资金偏弱` 与近 5 日 ETF 端 P21、前十大持仓端 P17；两种宽度均无横向溢出、pageerror 或 console warning/error。
+
+同日外部日期复审纠偏与美股分时的功能基线为 `64934de`：CI `30387614133`、Pages `30387770552`、Monitor `30387613679` 全绿；CI 内浏览器、Python 3.10–3.13、Functions、Ruff 与 clean install 全部成功。生产资金验收从 2024-01-01 起逐标的返回 620 个交易日，周五各 121、周末各 0、日线集合缺失各 0；完整 D1 两融仍为 `1638 / 1580 / 1522`。SOXX/NVDA 各保存 370 根 5m 行情，API 最近 300 根全部位于纽约常规时段、时间戳整 5 分钟、周末 0；首次 bootstrap 产生的两条未完成临时柱已精确删除且不可由新适配器重写。Pages 首次业务验收曾因生产别名传播延迟过早读到旧 schema，workflow 已改为有界重试，后续 run 成功。
 
 ## 架构取舍
 
