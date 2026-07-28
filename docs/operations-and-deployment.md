@@ -351,9 +351,21 @@ Invoke-RestMethod `
   -Headers @{ Authorization = "Bearer <MONITOR_RUN_TOKEN>" }
 ```
 
-支持 `usCloseSnapshot`、`intradayCollect`、`cnDailySnapshot` 和 `newsCollect`。响应包含 cursor、backlog、工作量预算和来源结果。调用方按 cursor 继续，不要用一个请求要求无限补跑。
+支持 `usCloseSnapshot`、`usIntradayCollect`、`intradayCollect`、`cnDailySnapshot` 和 `newsCollect`。`usIntradayCollect` 只会选择 profile 中 role=driver 的 `SOXX / NVDA`，不会顺手扩到全部美股标的。响应包含 cursor、backlog、工作量预算和来源结果。调用方按 cursor 继续，不要用一个请求要求无限补跑。
 
 补跑成功要检查写入数、唯一交易日、来源轨迹和错误码。HTTP 200 本身不是成功证据。
+
+资金交易日验收不要截 `ts`。发布后的权威检查为：
+
+```powershell
+node scripts/verify-fund-flow-production.mjs
+
+npx --yes wrangler@4.113.0 d1 execute tradingagents-workbench `
+  --remote --config wrangler.monitor.toml `
+  --command "SELECT symbol, flow_type, COUNT(*) AS rows, MIN(trade_date), MAX(trade_date), SUM(CASE WHEN CAST(strftime('%w', trade_date) AS INTEGER) IN (0,6) THEN 1 ELSE 0 END) AS weekend_rows FROM fund_flows WHERE flow_type='margin_net_buy' GROUP BY symbol, flow_type"
+```
+
+验收脚本按三个标的逐一要求：`trade_date` 全部存在、周末为 0、周五非 0，并在同标的日线覆盖区间内验证 `fund_flows.trade_date ⊆ market_bars`。`/api/flows?limit=2000` 的 limit 是返回总行数而不是“交易日数”；同时请求多种 flow type 时不能据此判断回填深度。
 
 ## 12. 2026-07-27 周一 08:25 外审协议
 

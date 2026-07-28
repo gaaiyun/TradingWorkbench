@@ -43,6 +43,10 @@ const deploymentMetadataMigrationUrl = new URL(
   "../migrations/0017_deployment_metadata.sql",
   import.meta.url,
 );
+const fundFlowTradeDateMigrationUrl = new URL(
+  "../migrations/0018_fund_flow_trade_date.sql",
+  import.meta.url,
+);
 
 test("D1 migration defines every dynamic workbench table and its lookup indexes", () => {
   const sql = readFileSync(migrationUrl, "utf8");
@@ -469,4 +473,39 @@ test("deployment metadata migration is additive and keeps one current Pages iden
       (service, commit_sha, deployed_at, branch, url, updated_at)
     VALUES ('unknown', ?, ?, 'main', NULL, ?)
   `).run("b".repeat(40), "2026-07-27T19:01:00Z", "2026-07-27T19:01:00Z"), /CHECK constraint failed/i);
+});
+
+test("fund-flow trade-date migration makes the Shanghai business date explicit", async (t) => {
+  const baseSql = readFileSync(fundFlowMigrationUrl, "utf8");
+  const sql = readFileSync(fundFlowTradeDateMigrationUrl, "utf8");
+  assert.match(sql, /ALTER TABLE fund_flows ADD COLUMN trade_date TEXT/i);
+  assert.match(sql, /date\s*\(\s*datetime\s*\(\s*ts\s*,\s*'\+8 hours'\s*\)\s*\)/i);
+  assert.match(sql, /CREATE INDEX[^;]+fund_flows[^;]+trade_date/i);
+  assert.doesNotMatch(sql, /\b(?:DELETE|DROP)\b/i);
+
+  let DatabaseSync;
+  try {
+    ({ DatabaseSync } = await import("node:sqlite"));
+  } catch {
+    t.skip("node:sqlite is unavailable on this Node version");
+    return;
+  }
+  const db = new DatabaseSync(":memory:");
+  db.exec(baseSql);
+  db.prepare(`
+    INSERT INTO fund_flows (
+      id, profile_id, symbol, flow_type, ts, value, unit, source,
+      as_of, fetched_at, freshness, quality, expires_at
+    ) VALUES (
+      'flow-friday', 'profile-a', '515880.SS', 'margin_net_buy',
+      '2026-07-23T16:00:00.000Z', 1, 'CNY', 'exchange',
+      '2026-07-23T16:00:00.000Z', '2026-07-24T01:00:00.000Z',
+      'fresh', 'reported', '2099-01-01T00:00:00.000Z'
+    )
+  `).run();
+  db.exec(sql);
+  assert.equal(
+    db.prepare("SELECT trade_date FROM fund_flows WHERE id = 'flow-friday'").get().trade_date,
+    "2026-07-24",
+  );
 });

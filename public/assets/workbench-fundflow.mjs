@@ -91,7 +91,12 @@ function formattedParts(formatter, value, includeTime = false) {
 }
 
 export function fundFlowTradingDate(value) {
+  if (/^\d{4}-\d{2}-\d{2}$/.test(String(value || ""))) return String(value);
   return formattedParts(SHANGHAI_DATE, value);
+}
+
+function rowTradingDate(row) {
+  return fundFlowTradingDate(row?.trade_date || row?.ts);
 }
 
 function fundFlowFetchedAt(value) {
@@ -163,7 +168,7 @@ export function formatFundFlowValue(value, unit, { signed = false } = {}) {
 function metricRows(data, flowType, symbol) {
   const rows = (Array.isArray(data) ? data : [])
     .filter((row) => {
-      const tradingDate = fundFlowTradingDate(row?.ts);
+      const tradingDate = rowTradingDate(row);
       return tradingDate !== null && tradingDate >= FUND_FLOW_START_DATE;
     });
   const sortRows = (items) => items.sort(
@@ -182,7 +187,7 @@ function metricRows(data, flowType, symbol) {
 function latestRowsByTradingDate(rows) {
   const byDate = new Map();
   for (const row of rows) {
-    const date = fundFlowTradingDate(row?.ts);
+    const date = rowTradingDate(row);
     if (!date) continue;
     const previous = byDate.get(date);
     if (!previous || String(row?.fetched_at || "") >= String(previous?.fetched_at || "")) {
@@ -230,7 +235,7 @@ function percentileSeries(rows) {
     );
     if (percentile.status !== "ready") continue;
     result.push({
-      date: fundFlowTradingDate(rows[index]?.ts),
+      date: rowTradingDate(rows[index]),
       value: percentile.value,
     });
   }
@@ -277,7 +282,7 @@ function buildFinancingComparison(data, flowType) {
   return {
     value,
     percentile,
-    tradingDate: fundFlowTradingDate(current?.ts),
+    tradingDate: rowTradingDate(current),
     asOf: current?.as_of || current?.ts || null,
     sourceRow: rows.at(-1) || null,
     points: percentileSeries(rollingRows),
@@ -354,7 +359,7 @@ function metricTooltip(definition, current, percentile, { percentileBasis = defi
       : "历史分位不可用";
   return [
     definition.label,
-    `数据日 ${fundFlowTradingDate(current?.as_of || current?.ts) || "—"}`,
+      `数据日 ${rowTradingDate(current) || "—"}`,
     `来源 ${current?.source || "—"}`,
     `method ${current?.method || "—"}`,
     `quality ${current?.quality || "—"} · freshness ${current?.freshness || "—"}`,
@@ -399,12 +404,12 @@ function buildMetric(definition, data, capabilities, symbol) {
       ? "无可比历史"
       : comparisonText(definition, analysisRows, analysisValue),
     series: analysisRows.slice(-FUND_FLOW_CHART_POINTS).map((row) => ({
-      date: fundFlowTradingDate(row?.ts),
+      date: rowTradingDate(row),
       value: finiteValue(row?.value),
     })),
     percentileSeries: snapshotOnlyShares ? [] : percentileSeries(analysisRows),
     asOf: current?.as_of || current?.ts || null,
-    tradingDate: fundFlowTradingDate(current?.as_of || current?.ts),
+    tradingDate: rowTradingDate(current),
     source: current?.source || null,
     freshness: current?.freshness || null,
     displayValue: formatFundFlowValue(

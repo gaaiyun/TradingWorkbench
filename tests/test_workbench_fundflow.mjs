@@ -170,6 +170,7 @@ test("fund-flow value formatting preserves missing values and explicit zero", ()
 test("fund-flow trading dates use Asia Shanghai instead of UTC slicing", () => {
   assert.equal(fundFlowTradingDate("2023-12-31T15:59:59.000Z"), "2023-12-31");
   assert.equal(fundFlowTradingDate("2023-12-31T16:00:00.000Z"), "2024-01-01");
+  assert.equal(fundFlowTradingDate("2026-07-24"), "2026-07-24");
   assert.equal(fundFlowTradingDate(null), null);
   assert.equal(fundFlowTradingDate("invalid"), null);
 });

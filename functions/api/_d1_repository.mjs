@@ -332,7 +332,7 @@ export function queryFundFlows(db, query) {
   return queryRows(db, {
     table: "fund_flows",
     columns: [
-      "id", "profile_id", "symbol", "flow_type", "period", "ts", "value", "unit",
+      "id", "profile_id", "symbol", "flow_type", "period", "trade_date", "ts", "value", "unit",
       "currency", "source", "method", ...SOURCE_COLUMNS,
     ],
     filters: [

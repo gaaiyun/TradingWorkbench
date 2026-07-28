@@ -25,8 +25,10 @@ export const PROVIDER_METADATA = Object.freeze({
   tencent: providerMetadata(),
   eastmoney: providerMetadata(),
   "eastmoney-us": providerMetadata(),
+  "eastmoney-us-intraday": providerMetadata(),
   "tencent-us": providerMetadata(),
   yahoo: providerMetadata(),
+  "yahoo-us-intraday": providerMetadata(),
   alphavantage: providerMetadata({
     transportTier: "licensed-api",
     usageScope: "market-data-by-api-key",
@@ -81,7 +83,7 @@ function providerOrder(request, apiKey) {
   if (request.market === "HK") return ["yahoo"];
   const providers = request.timeframe === "1d"
     ? ["yahoo", "eastmoney-us", "tencent-us"]
-    : ["yahoo"];
+    : ["yahoo-us-intraday", "eastmoney-us-intraday"];
   if (apiKey) providers.push("alphavantage");
   if (request.timeframe === "1d") providers.push("stooq");
   return providers;

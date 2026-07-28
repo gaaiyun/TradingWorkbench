@@ -292,6 +292,8 @@ test("collector fans out only to enabled profiles and parameterizes monotonic D1
   assert.match(writeCalls[0].body.sql, /fund_flows\.quality NOT LIKE '%_partial'/);
   const rows = JSON.parse(writeCalls[0].body.params[0]);
   assert.equal(rows.every(({ profileId }) => profileId === "enabled"), true);
+  assert.equal(rows.every(({ tradeDate }) => tradeDate === "2026-07-24" || tradeDate === "2026-07-28"), true);
+  assert.match(writeCalls[0].body.sql, /trade_date/);
   assert.equal(rows.some(({ flowType, value }) =>
     flowType === "margin_net_buy" && value === -50_000), true);
   assert.equal(rows.some(({ flowType, value, quality }) =>

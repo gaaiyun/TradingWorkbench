@@ -26,6 +26,7 @@ function flow(overrides = {}) {
     symbol: "515880.SS",
     flow_type: "margin_balance",
     period: "1d",
+    trade_date: "2026-07-27",
     ts: "2026-07-27T00:00:00.000Z",
     value: 123456,
     unit: "CNY",
@@ -297,15 +298,16 @@ test("fund-flow endpoint pages equal timestamps with a composite [ts,id] cursor"
   }
   const sqlite = new DatabaseSync(":memory:");
   sqlite.exec(readFileSync(new URL("../migrations/0016_fund_flows.sql", import.meta.url), "utf8"));
+  sqlite.exec(readFileSync(new URL("../migrations/0018_fund_flow_trade_date.sql", import.meta.url), "utf8"));
   const insert = sqlite.prepare(`
     INSERT INTO fund_flows (
-      id, profile_id, symbol, flow_type, ts, value, unit, currency, source,
+      id, profile_id, symbol, flow_type, trade_date, ts, value, unit, currency, source,
       as_of, fetched_at, freshness, quality, expires_at
-    ) VALUES (?, 'cn-semi', '515880.SS', ?, ?, 1, 'CNY', 'CNY',
+    ) VALUES (?, 'cn-semi', '515880.SS', ?, date(datetime(?, '+8 hours')), ?, 1, 'CNY', 'CNY',
       'exchange', ?, ?, 'fresh', 'good', '2099-01-01T00:00:00.000Z')
   `);
   const oldTs = "2026-07-26T00:00:00.000Z";
-  insert.run("flow-old", "margin_balance", oldTs, oldTs, oldTs);
+  insert.run("flow-old", "margin_balance", oldTs, oldTs, oldTs, oldTs);
   const ts = "2026-07-27T00:00:00.000Z";
   const types = [
     "fund_scale",
@@ -317,7 +319,7 @@ test("fund-flow endpoint pages equal timestamps with a composite [ts,id] cursor"
     "shares_outstanding_derived",
   ];
   for (let index = 1; index <= types.length; index += 1) {
-    insert.run(`flow-${index}`, types[index - 1], ts, ts, ts);
+    insert.run(`flow-${index}`, types[index - 1], ts, ts, ts, ts);
   }
   const DB = new SqliteD1(sqlite);
   const seen = [];

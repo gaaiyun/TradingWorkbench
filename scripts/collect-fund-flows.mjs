@@ -442,6 +442,7 @@ function flowRow({
   profileId,
   symbol,
   flowType,
+  tradeDate,
   ts,
   value,
   unit,
@@ -459,6 +460,7 @@ function flowRow({
     symbol,
     flowType,
     period: "1d",
+    tradeDate,
     ts,
     value,
     unit,
@@ -538,7 +540,7 @@ function d1Writer(d1Query) {
       const chunk = items.slice(index, index + WRITE_CHUNK_SIZE);
       await d1Query(`
         INSERT INTO fund_flows (
-          id, profile_id, symbol, flow_type, period, ts, value, unit, currency,
+          id, profile_id, symbol, flow_type, period, trade_date, ts, value, unit, currency,
           source, method, as_of, fetched_at, freshness, adjustment, quality,
           expires_at
         )
@@ -548,6 +550,7 @@ function d1Writer(d1Query) {
           json_extract(value, '$.symbol'),
           json_extract(value, '$.flowType'),
           json_extract(value, '$.period'),
+          json_extract(value, '$.tradeDate'),
           json_extract(value, '$.ts'),
           json_extract(value, '$.value'),
           json_extract(value, '$.unit'),
@@ -572,6 +575,7 @@ function d1Writer(d1Query) {
           fetched_at = excluded.fetched_at,
           freshness = excluded.freshness,
           quality = excluded.quality,
+          trade_date = excluded.trade_date,
           expires_at = excluded.expires_at
         WHERE excluded.fetched_at >= fund_flows.fetched_at
           AND NOT (
@@ -777,6 +781,7 @@ export async function collectFundFlows({
             profileId,
             symbol: target.symbol,
             flowType,
+            tradeDate: margin.date,
             ts: margin.ts,
             value,
             unit: "CNY",
@@ -799,6 +804,7 @@ export async function collectFundFlows({
             profileId,
             symbol: target.symbol,
             flowType,
+            tradeDate: aggregate.date,
             ts: aggregate.ts,
             value,
             unit: "CNY",
@@ -819,6 +825,7 @@ export async function collectFundFlows({
           profileId,
           symbol: target.symbol,
           flowType: "fund_scale",
+          tradeDate: scale.date,
           ts: scale.ts,
           value: scale.scaleCny,
           unit: "CNY",
@@ -836,6 +843,7 @@ export async function collectFundFlows({
             profileId,
             symbol: target.symbol,
             flowType: "shares_outstanding_derived",
+            tradeDate: scale.date,
             ts: scale.ts,
             value: Math.round(scale.scaleCny / close),
             unit: "shares",
@@ -853,6 +861,7 @@ export async function collectFundFlows({
           profileId,
           symbol: target.symbol,
           flowType: "shares_outstanding_snapshot",
+          tradeDate: raw.snapshot.date,
           ts: raw.snapshot.ts,
           value: raw.snapshot.shares,
           unit: "shares",

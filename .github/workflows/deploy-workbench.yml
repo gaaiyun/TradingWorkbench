@@ -126,3 +126,8 @@ jobs:
           done
           echo "::error::Pages production alias did not expose the deployed commit SHA."
           exit 1
+
+      - name: Verify production fund-flow business dates
+        env:
+          WORKBENCH_BASE_URL: https://${{ env.CLOUDFLARE_PAGES_PROJECT }}.pages.dev
+        run: node scripts/verify-fund-flow-production.mjs

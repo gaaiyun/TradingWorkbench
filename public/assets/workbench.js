@@ -28,7 +28,7 @@ import {
   isFundFlowUiEnabled,
   marketPercentageChange,
   selectFundFlowEventAnchors,
-} from "./workbench-fundflow.mjs?v=fca9abfd867e";
+} from "./workbench-fundflow.mjs?v=f60d8fde417d";
 import {
   CandlestickSeries,
   ColorType,

@@ -95,6 +95,19 @@ function eastmoneyUsFixture() {
   };
 }
 
+function eastmoneyUsIntradayFixture() {
+  return {
+    rc: 0,
+    data: {
+      code: "NVDA",
+      klines: [
+        "2026-07-28 21:30,170.00,171.00,172.00,169.50,1000000",
+        "2026-07-28 21:35,171.00,171.50,172.10,170.80,800000",
+      ],
+    },
+  };
+}
+
 test("exposes additive provider governance metadata without changing market fetch results", async () => {
   const { createProviderRegistry } = await import(registryUrl);
   const registry = createProviderRegistry({
@@ -294,6 +307,31 @@ test("uses continuous Eastmoney US history before Tencent US", async () => {
   assert.equal(urls.some((url) => /gtimg/i.test(url)), false);
 });
 
+test("US intraday falls back from Yahoo to Eastmoney with Shanghai-stamped 5m bars", async () => {
+  const { createProviderRegistry } = await import(registryUrl);
+  const urls = [];
+  const registry = createProviderRegistry({
+    fetch: async (url) => {
+      urls.push(String(url));
+      if (String(url).includes("yahoo")) return response("", 503);
+      return jsonResponse(eastmoneyUsIntradayFixture());
+    },
+    now: () => new Date("2026-07-28T13:36:00.000Z"),
+  });
+  const result = await registry.fetchMarketData({
+    symbol: "NVDA",
+    market: "US",
+    timeframe: "5m",
+  });
+  assert.equal(result.status, "degraded");
+  assert.equal(result.source, "eastmoney-us-intraday");
+  assert.equal(result.bars.at(-1).timestamp, "2026-07-28T13:35:00.000Z");
+  assert.equal(result.bars.at(-1).adjustment, "none");
+  assert.deepEqual(result.sources.map(({ source }) => source), ["yahoo-us-intraday", "eastmoney-us-intraday"]);
+  assert.match(urls[1], /klt=5/);
+  assert.match(urls[1], /fqt=0/);
+});
+
 test("includes Alpha Vantage between Yahoo and Stooq only when a key is configured", async () => {
   const { createProviderRegistry } = await import(registryUrl);
   const urls = [];
@@ -315,8 +353,8 @@ test("includes Alpha Vantage between Yahoo and Stooq only when a key is configur
 
   assert.equal(result.source, "alphavantage");
   assert.equal(result.bars[0].timestamp, "2026-07-23T02:00:00.000Z");
-  assert.deepEqual(result.sources.map(({ source }) => source), ["yahoo", "alphavantage"]);
-  assert.match(urls[1], /alphavantage\.co/);
+  assert.deepEqual(result.sources.map(({ source }) => source), ["yahoo-us-intraday", "eastmoney-us-intraday", "alphavantage"]);
+  assert.match(urls[2], /alphavantage\.co/);
   assert.doesNotMatch(JSON.stringify(result), /test-secret-key/);
 });
 

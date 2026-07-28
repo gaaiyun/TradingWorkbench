@@ -57,6 +57,14 @@ GitHub 自动部署链已恢复。仓库主人在 2026-07-27 配置了 `CLOUDFLA
 - 新增回归覆盖：驱动篮子、日线/盘中精度合并、陈旧盘中拒绝、规则观察 fallback、标题口径。前端 `118/118`、Functions `368 passed / 1 skipped / 0 failed`、完整浏览器脚本退出 0。最终功能提交 `328cda9` 的 CI `30383472709`、Pages `30383472699`、Monitor `30383498898` 全绿；生产回读 Pages 与 Worker SHA 均为 `328cda999dd9d0599bd367445d6976d482f38a8e`，部署时间分别为 `2026-07-28T17:34:32Z` 与 `2026-07-28T17:35:39Z`。
 - 生产红框复测：1440×1000 与 390×844 均显示 `512480.SS=1.041 / -7.38%`，标的标题和资金叙事同为 `-7.38%`；叙事为“美股半导体基准：SOXX + SMH”，主题观察为“资金偏弱”，近 5 日 ETF 端 `-4937.38万（P21）`、前十大持仓端 `-8.49亿（P17）`。两种宽度均无横向溢出、pageerror 或 console warning/error。
 
+### 2026-07-29 外部日期复审纠偏与美股分时补齐
+
+- 外部复审把 `/api/flows.ts` 的 UTC 日期直接按 `slice(0,10)` 分组，因此把 `2026-07-26T16:00:00Z` 误判为周日；它实际表示上海 `2026-07-27 00:00`。远程 D1 按 `datetime(ts,'+8 hours')` 复核后，三只 ETF 自身两融周末均为 0，周五分别为 `325 / 313 / 302` 条；前十大持仓聚合周五分别为 `332 / 204 / 179` 条。审核建议中的 `-8 hours` 方向也错误，不能采用。
+- “只回填 286/401 天”同样是审核方法错误：它用 `limit=2000` 同时读取 7/5 种 flow type，再把总行数除成日期数。远程 D1 真值为自身 `margin_net_buy`：`515880=1638`、`512480=1580`、`159995=1522`；前十大持仓端为 `1677 / 1035 / 912`。同标的日线覆盖区间内 642 个可比 flow 日期，三只标的缺失于 market bars 的数量都为 0。
+- 虽然数据本身没有周末错位，API 只暴露 `ts` 容易反复误读。migration `0018_fund_flow_trade_date.sql` 因此纯追加 `trade_date`，按 `+8 hours` 回填并建立索引；采集器以后直接写东财/上交所返回的业务日期，API 返回 `trade_date`，前端优先使用它。`scripts/verify-fund-flow-production.mjs` 已加入 Pages 发布后验收，要求周末 0、周五存在、flow 日期属于同标的日线集合。
+- 真正缺陷是美股 5 分钟历史未被任何 slot 采集：registry 虽支持 Yahoo 5m，但现有 `usCloseSnapshot` 只写 1d。现新增独立 `usIntradayCollect`，按 `America/New_York` 交易日和 09:30–16:00 每 15 分钟执行，只选 `SOXX / NVDA`；来源为 Yahoo → 东方财富 → 可选 Alpha Vantage。东财美股 5m 字符串按北京时间解析，不能复用美东日线时区。写入继续使用原 `market_bars`、独立 slot/幂等键、90 天 5m 保留期和 provider 熔断，不改 A 股 intraday、新闻或 Evidence。
+- 本机真实上游契约已验证 Yahoo 与东方财富的 SOXX/NVDA 5m 均返回合法行情；最终 GitHub run、生产 SHA、API 根数与时段分布记录在本节后续交付行，未出现前不得把本机成功写成生产成功。
+
 第六轮既有生产收口以功能提交 `8f6381e` 为基线：CI `30361159671`、Pages `30361159801`、Monitor `30361281881` 全绿；backfill `30361200473` 写入 22,329 条更新，随后 daily `30362024552` 无失败写入 793 条更新。远程 `fund_flows=26899` 且业务自然键也是 26899。三只 ETF 的 `constituent_margin_balance / constituent_margin_net_buy` 分别为 `515880.SS=1677/1677`、`512480.SS=1035/1035`、`159995.SZ=912/912`，最新交易日均为 2026-07-27，披露篮子均为 2026-06-30、覆盖 10/10。生产 390px 与 1440px 浏览器均为 3 卡、2 线、无横向溢出、0 pageerror；这些运行号不代表 2026-07-29 本轮修复已发布。
 
 本轮接手已完成数字引用判定修复：`_NUMERIC_CLAIM_RE` 不再把日期、时间戳、标的代码、哈希、Markdown 标题序号和 RSI/MACD/均线参数当作研究数字；逐段复测后 `515880.SS` 为 `179→117`、`512480.SS` 为 `128→84`、`3887.HK` 为 `169→108`，剩余段落仍含未带 Evidence ID 的真实数值，因此没有放宽门禁。三份 `-v4` Manifest 与 `public/data/report-audit.json` 已同步更新。
@@ -92,7 +100,7 @@ Pages immutable deployment : 每次发布都会变化，以 `wrangler pages depl
 
 ### ✅ 已完成：远程 D1 migrations 核验
 
-`d1_migrations` 只读查询已返回 `0013_monitor_reliability.sql` 至 `0017_deployment_metadata.sql`。0017 用于在同 SHA 的后续 Pages 部署遮盖静态 manifest 时，从 D1 回读可信部署时间。
+`d1_migrations` 只读查询已返回 `0013_monitor_reliability.sql` 至 `0017_deployment_metadata.sql`。0017 用于在同 SHA 的后续 Pages 部署遮盖静态 manifest 时，从 D1 回读可信部署时间；0018 在本轮发布后应新增 `fund_flows.trade_date`，必须用远程 schema/接口回读确认，不能只看文件存在。
 
 ### ✅ 已完成：资金流回填、daily 与生产显示
 

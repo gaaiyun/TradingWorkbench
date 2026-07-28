@@ -21,7 +21,7 @@ test("live free-provider contracts still match the Worker adapters", {
     freshnessThresholdMs: 36 * 60 * 60 * 1000,
   };
 
-  const [tencent5m, tencentDaily, eastmoney, yahoo] = await Promise.all([
+  const [tencent5m, tencentDaily, eastmoney, yahoo, eastmoneyUs5m, yahooUs5m] = await Promise.all([
     adapters.tencent(
       { symbol: "515880.SS", market: "CN", timeframe: "5m" },
       runtime,
@@ -38,8 +38,16 @@ test("live free-provider contracts still match the Worker adapters", {
       { symbol: "515880.SS", market: "CN", timeframe: "5m" },
       runtime,
     ),
+    adapters["eastmoney-us"](
+      { symbol: "NVDA", market: "US", timeframe: "5m" },
+      runtime,
+    ),
+    adapters.yahoo(
+      { symbol: "SOXX", market: "US", timeframe: "5m" },
+      runtime,
+    ),
   ]);
-  for (const bars of [tencent5m, tencentDaily, eastmoney, yahoo]) {
+  for (const bars of [tencent5m, tencentDaily, eastmoney, yahoo, eastmoneyUs5m, yahooUs5m]) {
     assert.ok(bars.length > 0);
     assert.ok(Number.isFinite(bars.at(-1).close));
   }

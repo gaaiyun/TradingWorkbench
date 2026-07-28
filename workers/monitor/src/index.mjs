@@ -207,6 +207,7 @@ function deferredHook() {
 
 const MANUAL_COLLECTION_TASKS = new Set([
   "usCloseSnapshot",
+  "usIntradayCollect",
   "cnDailySnapshot",
   "intradayCollect",
   "newsCollect",

@@ -164,6 +164,35 @@ test("US market-day conversion handles both winter and summer offsets", async ()
   );
 });
 
+test("US intraday collection follows the New York session and only exists for explicit core drivers", async () => {
+  const targets = [
+    ...monitorSettings().profiles[0].targets,
+    { symbol: "SOXX", name: "SOXX", market: "US", role: "driver", analysis: "signal" },
+    { symbol: "NVDA", name: "NVDA", market: "US", role: "driver", analysis: "signal" },
+  ];
+  const summer = await dueAt("2026-07-28T13:30:00.000Z", { targets });
+  assert.deepEqual(
+    summer.filter(({ type }) => type === "usIntradayCollect").map(({ schedule }) => schedule),
+    ["usIntraday/collect"],
+  );
+  const winter = await dueAt("2026-01-09T14:30:00.000Z", { targets });
+  assert.equal(winter.filter(({ type }) => type === "usIntradayCollect").length, 1);
+  const closed = await dueAt("2026-07-28T13:30:00.000Z", {
+    targets,
+    schedules: {
+      ...monitorSettings().profiles[0].schedules,
+      usCloseSnapshot: { enabled: false, time: "05:35" },
+    },
+  });
+  assert.equal(closed.filter(({ type }) => type === "usIntradayCollect").length, 0);
+  const holiday = await dueAt(
+    "2026-07-28T13:30:00.000Z",
+    { targets },
+    { us: new Set(["2026-07-28"]) },
+  );
+  assert.equal(holiday.filter(({ type }) => type === "usIntradayCollect").length, 0);
+});
+
 test("uses IANA DST conversion without repeating or losing ordinary local slots", async () => {
   const profile = { timezone: "America/New_York" };
   const beforeDst = await dueAt("2026-03-06T13:25:00.000Z", profile);

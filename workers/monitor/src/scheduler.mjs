@@ -2,6 +2,10 @@ const LOCAL_FORMATTERS = new Map();
 export const BOOTSTRAP_SCHEMA_VERSION = "v2";
 export const MAX_SCHEDULED_EXTERNAL_REQUESTS = 32;
 export const MAX_SELECTABLE_EXTERNAL_REQUESTS = 40;
+export const US_INTRADAY_SYMBOLS = Object.freeze(["SOXX", "NVDA"]);
+const US_INTRADAY_SET = new Set(US_INTRADAY_SYMBOLS);
+const US_INTRADAY_WINDOW = Object.freeze({ start: "09:30", end: "16:00" });
+const US_INTRADAY_INTERVAL_MINUTES = 15;
 
 function stableValue(value) {
   if (Array.isArray(value)) return value.map(stableValue);
@@ -107,6 +111,10 @@ function dueTasksAtMinute(profile, scheduledTime, holidaySets) {
     scheduledTime,
     "America/New_York",
   );
+  const hasUsIntradayTargets = profile.targets.some((target) =>
+    target.market === "US" &&
+    target.role === "driver" &&
+    US_INTRADAY_SET.has(target.symbol));
 
   if (
     schedules.usCloseSnapshot.enabled &&
@@ -185,6 +193,24 @@ function dueTasksAtMinute(profile, scheduledTime, holidaySets) {
     ));
   }
 
+  if (
+    schedules.usCloseSnapshot.enabled &&
+    hasUsIntradayTargets &&
+    isTradingDay(usMarketLocal, holidaySets.us) &&
+    matchesInterval(
+      usMarketLocal.time,
+      US_INTRADAY_WINDOW,
+      US_INTRADAY_INTERVAL_MINUTES,
+    )
+  ) {
+    tasks.push(scheduledTask(
+      "usIntradayCollect",
+      "usIntraday/collect",
+      local,
+      scheduledTime,
+    ));
+  }
+
   // News uses only the budget left after market snapshots and signals at the
   // same slot. The settings domain caps aggregate profile frequency.
   const newsEnabled = schedules.newsRefresh?.enabled !== false;
@@ -221,6 +247,7 @@ export function dueTasksForProfile(profile, scheduledTime, holidaySets = {}) {
 
 const SCHEDULE_BY_TYPE = {
   usCloseSnapshot: "usCloseSnapshot",
+  usIntradayCollect: "usIntraday/collect",
   cnDailySnapshot: "closeDeepAnalysis/cn-daily",
   newsCollect: "newsRefresh",
   premarketBrief: "preMarketBrief",
@@ -295,11 +322,16 @@ function bootstrapTargetGroups(profile) {
       { taskType: "intradayCollect", target, timeframe: "5m" },
       { taskType: "cnDailySnapshot", target, timeframe: "1d" },
     ]),
-    ...usTargets.map((target) => ({
-      taskType: "usCloseSnapshot",
-      target,
-      timeframe: "1d",
-    })),
+    ...usTargets.flatMap((target) => [
+      {
+        taskType: "usCloseSnapshot",
+        target,
+        timeframe: "1d",
+      },
+      ...(US_INTRADAY_SET.has(target.symbol)
+        ? [{ taskType: "usIntradayCollect", target, timeframe: "5m" }]
+        : []),
+    ]),
     {
       taskType: "newsCollect",
       target: {
@@ -369,6 +401,13 @@ export function estimateTaskExternalRequests(profile, task) {
       0,
     );
   }
+  if (task.type === "usIntradayCollect") {
+    const targets = selectedTargets.filter((target) =>
+      target.market === "US" &&
+      target.role === "driver" &&
+      US_INTRADAY_SET.has(target.symbol));
+    return targets.length * 3;
+  }
   if (task.type === "newsCollect") return 21;
   if (task.type === "closeFullAnalysis") return 2;
   if (task.type === "intradaySignal") {
@@ -395,6 +434,13 @@ function targetExternalRequestCost(taskType, target) {
       return 0;
     }
     return target.market === "US" ? 5 : 1;
+  }
+  if (taskType === "usIntradayCollect") {
+    return target.market === "US" &&
+        target.role === "driver" &&
+        US_INTRADAY_SET.has(target.symbol)
+      ? 3
+      : 0;
   }
   return 0;
 }

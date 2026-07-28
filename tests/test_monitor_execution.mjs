@@ -57,6 +57,37 @@ test("US close uses only US driver targets at 1d and persists returned bars", as
   assert.equal(result.written, 1);
 });
 
+test("US intraday collection is isolated to SOXX and NVDA at 5m", async () => {
+  const { collectForTask } = await import(collectorUrl);
+  const calls = [];
+  const writes = [];
+  const base = monitorSettings().profiles[0];
+  const profile = {
+    ...base,
+    targets: [
+      ...base.targets,
+      { symbol: "SOXX", name: "SOXX", market: "US", role: "driver", analysis: "signal" },
+      { symbol: "NVDA", name: "NVDA", market: "US", role: "driver", analysis: "signal" },
+      { symbol: "SMH", name: "SMH", market: "US", role: "driver", analysis: "signal" },
+    ],
+  };
+  const result = await collectForTask({
+    taskType: "usIntradayCollect",
+    profile,
+    registry: registryWith({}, calls),
+    writeBars: async (_db, payload) => writes.push(payload),
+    db: {},
+    now: new Date("2026-07-28T13:35:00.000Z"),
+  });
+  assert.deepEqual(calls, [
+    { symbol: "SOXX", market: "US", timeframe: "5m" },
+    { symbol: "NVDA", market: "US", timeframe: "5m" },
+  ]);
+  assert.equal(writes.length, 2);
+  assert.equal(result.status, "completed");
+  assert.deepEqual(result.counts, { targets: 2, succeeded: 2, failed: 0 });
+});
+
 test("intraday uses only CN core/comparison targets at 5m and keeps partial success", async () => {
   const { collectForTask } = await import(collectorUrl);
   const calls = [];

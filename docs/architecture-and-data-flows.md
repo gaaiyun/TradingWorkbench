@@ -200,6 +200,7 @@ sequenceDiagram
 | 盘前上下文 | 当前 profile | 08:25 |
 | A 股盘中采集 | CN core/comparison | 09:30–11:30、13:00–15:00，每 5 分钟 |
 | A 股规则信号 | CN core/comparison | 盘中每 15 分钟 |
+| 美股盘中采集 | `SOXX / NVDA` driver | 纽约 09:30–16:00，每 15 分钟抓取 5m 序列 |
 | A 股日线回填 | CN core/comparison | 15:20 |
 | 收盘深度分析 | `analysis=full` | 15:20 |
 | ETF 资金面日更 | `515880.SS / 512480.SS / 159995.SZ` | GitHub Actions，工作日 20:17；不占 Worker 32 次请求预算 |
@@ -209,6 +210,8 @@ sequenceDiagram
 Provider Registry 保存 transport、authority、freshness、授权用途和失败轨迹。适配器先校验 HTTP、内容类型、字段、时间和 OHLC 区间，再把标准记录交给写入层。
 
 同一 `profile + symbol + timeframe + timestamp + source` 只保存一条。15m、30m、1h 和 4h 从 5m 原始记录聚合。
+
+美股分时不复用 A 股盘中 slot。`usIntradayCollect` 由纽约交易日和 `09:30–16:00 America/New_York` 决定，每 15 分钟对 `SOXX / NVDA` 各取一段 5 分钟历史；来源顺序为 Yahoo、东方财富、可选 Alpha Vantage。Yahoo 时间戳本身是 UTC；东方财富美股 5 分钟字符串使用北京时间，适配器按 `Asia/Shanghai` 转 UTC；Alpha Vantage 才按 `America/New_York` 处理。三条链不能共用固定时差。写入仍走原有 `market_bars`、90 天 5m 保留期和 provider circuit breaker，不影响 A 股 `intradayCollect`、新闻健康或 Evidence。
 
 行情历史的 `adjustment` 保留来源语义：
 
@@ -220,7 +223,7 @@ Provider Registry 保存 transport、authority、freshness、授权用途和失�
 
 ### 6.1 资金流数据流
 
-`fund_flows` 是独立 long-form 表，业务唯一键为 `profile + symbol + flow_type + period + ts + source + adjustment`。写入使用参数化 JSON1 批次 UPSERT，只有更晚或相同的 `fetched_at` 可以覆盖旧记录。它不复用 `market_bars`、新闻健康、Monitor slot 或 Evidence 表。
+`fund_flows` 是独立 long-form 表，业务唯一键仍兼容 `profile + symbol + flow_type + period + ts + source + adjustment`，同时以 `trade_date` 明示 Asia/Shanghai 业务日。写入使用参数化 JSON1 批次 UPSERT，只有更晚或相同的 `fetched_at` 可以覆盖旧记录。migration `0018` 仅增加、回填并索引 `trade_date`，不删除或重写任何既有表。它不复用 `market_bars`、新闻健康、Monitor slot 或 Evidence 表。
 
 ```mermaid
 flowchart LR
@@ -244,7 +247,7 @@ flowchart LR
 
 两融、成分股聚合与份额源按来源隔离：上交所被 403 或网络阻断时，批次降级为当前份额快照，但已取得的 ETF 两融和成分股聚合仍写入；任一 ETF 自身两融失败也不会丢弃其它标的。每个 ETF 必须解析出最新披露的 10 个不同持仓代码，跨 ETF 重叠股票只请求一次，同一股票同一日期只计一次；覆盖不足 80% 的交易日不写合计。聚合写成 `constituent_margin_balance / constituent_margin_net_buy`，`source=eastmoney-constituent-margin`，`method` 携带披露日和覆盖数，`quality=current_top_N_approximation`。partial 聚合使 API 顶层为 degraded，且不能覆盖同日已有完整聚合。这是当前披露篮子的历史回算，存在持仓变更与存活偏差，不能冒充历史真实指数成分。
 
-沪市历史份额为 `derived`；深市 `159995.SZ` 仅从上线日起累积 `snapshot_unstamped`。深市卡片必须显式标为“仅快照、历史份额不可用、无可比历史”，不得与沪市 derived 历史并列成同口径。页面三卡仍只显示融资余额、融资净买入和 ETF 份额；基准从 2024-01-01 开始，当前值不进入 mid-rank 样本，少于 60 个历史观察不输出分位。份额面板分析日度变化而不是绝对份额，相邻变化超过 35% 时按 `possible_split_or_method_change` 留空，防止拆分被叙述成资金异动。所有 `ts` 都表示上海交易日 00:00 对应的 UTC 瞬时，业务日期必须用 `Asia/Shanghai` 还原，不能截 UTC 日期。
+沪市历史份额为 `derived`；深市 `159995.SZ` 仅从上线日起累积 `snapshot_unstamped`。深市卡片必须显式标为“仅快照、历史份额不可用、无可比历史”，不得与沪市 derived 历史并列成同口径。页面三卡仍只显示融资余额、融资净买入和 ETF 份额；基准从 2024-01-01 开始，当前值不进入 mid-rank 样本，少于 60 个历史观察不输出分位。份额面板分析日度变化而不是绝对份额，相邻变化超过 35% 时按 `possible_split_or_method_change` 留空，防止拆分被叙述成资金异动。`trade_date` 是业务真源；`ts` 只是上海交易日 00:00 对应的 UTC 瞬时和兼容游标，不能再由调用方自行截断猜日期。
 
 资金面叙事由确定性规则组合标的专属隔夜驱动篮子、ETF 日涨跌、ETF 自身融资净买入和前十大持仓股票融资净买入简单合计（不按 ETF 权重）。`515880.SS` 映射 `NVDA + AVGO`，`512480.SS / 159995.SZ` 映射 `SOXX + SMH`；不再全局硬编码单个 SOXX。A 股日涨跌与图表周期隔离，使用最新 5 分钟精确价和前一交易日日线收盘价，且拒绝早于日线的陈旧盘中值。双线先分别计算近 5 个可用交易日累计，再以 2024-01-01 起的全部自身历史计算分位，图上只展示最近 60 个点；方向由累计值正负决定，分位只描述相对力度。两端交易日不一致时输出日期并标记“暂不可比”，不得硬作方向比较；同日则按显著尾部、偏弱区间、方向分化和相对更明显等中性词汇表达，并同时披露最新持仓近似的披露日与覆盖数。`market_events` 和 evidence 新闻只作为同期时间锚，不能被写成因果。没有 verified 报告时可显示明确标注的“主题观察”，但资金面仍不进入 EvidencePacket、Manifest、报告哈希或 verified 门禁，也不得被叙述为国家队、主力或具体机构买卖。
 

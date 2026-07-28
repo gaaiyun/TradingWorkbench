@@ -1,3 +1,7 @@
+import { US_INTRADAY_SYMBOLS } from "./scheduler.mjs";
+
+const US_INTRADAY_SET = new Set(US_INTRADAY_SYMBOLS);
+
 function targetsForTask(profile, taskType, targetSymbols = null) {
   const selected = Array.isArray(targetSymbols)
     ? new Set(targetSymbols)
@@ -8,6 +12,13 @@ function targetsForTask(profile, taskType, targetSymbols = null) {
       eligible(target) &&
       ["US", "HK"].includes(target.market) &&
       target.role === "driver");
+  }
+  if (taskType === "usIntradayCollect") {
+    return profile.targets.filter((target) =>
+      eligible(target) &&
+      target.market === "US" &&
+      target.role === "driver" &&
+      US_INTRADAY_SET.has(target.symbol));
   }
   if (taskType === "intradayCollect" || taskType === "cnDailySnapshot") {
     return profile.targets.filter((target) =>

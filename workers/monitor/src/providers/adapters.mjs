@@ -180,7 +180,9 @@ function parseTencentUs(payload, request) {
 
 function eastmoneyUsUrl(request) {
   const symbol = mapProviderSymbol("eastmoney-us", request.symbol);
-  return `https://push2his.eastmoney.com/api/qt/stock/kline/get?secid=${symbol}&klt=101&fqt=1&beg=0&end=20500101&lmt=${request.limit || 320}&fields1=f1&fields2=f51,f52,f53,f54,f55,f56`;
+  const klt = request.timeframe === "5m" ? "5" : "101";
+  const adjustment = request.timeframe === "5m" ? "0" : "1";
+  return `https://push2his.eastmoney.com/api/qt/stock/kline/get?secid=${symbol}&klt=${klt}&fqt=${adjustment}&beg=0&end=20500101&lmt=${request.limit || 320}&fields1=f1&fields2=f51,f52,f53,f54,f55,f56`;
 }
 
 function parseEastmoneyUs(payload, request) {
@@ -188,7 +190,10 @@ function parseEastmoneyUs(payload, request) {
   return payload?.data?.klines?.slice(-(request.limit || 320)).map((line) => {
     const [timestamp, open, close, high, low, volume] = String(line).split(",");
     return {
-      timestamp: utcTimestamp(timestamp, "America/New_York"),
+      timestamp: utcTimestamp(
+        timestamp,
+        request.timeframe === "5m" ? "Asia/Shanghai" : "America/New_York",
+      ),
       open,
       high,
       low,
@@ -344,7 +349,7 @@ export function createAdapters({ fetch: fetcher, apiKey, timeoutMs }) {
         runtime.fetchedAt,
         runtime.now,
         runtime.freshnessThresholdMs,
-        "qfq",
+        marketRequest.timeframe === "1d" ? "qfq" : "none",
       ),
     ),
     "eastmoney-us": async (marketRequest, runtime) => normalizeRows(
@@ -355,7 +360,17 @@ export function createAdapters({ fetch: fetcher, apiKey, timeoutMs }) {
         runtime.fetchedAt,
         runtime.now,
         runtime.freshnessThresholdMs,
-        "qfq",
+        marketRequest.timeframe === "1d" ? "qfq" : "none",
+      ),
+    ),
+    "eastmoney-us-intraday": async (marketRequest, runtime) => normalizeRows(
+      parseEastmoneyUs(await fetchJson(eastmoneyUsUrl(marketRequest)), marketRequest),
+      contextFor(
+        marketRequest,
+        "eastmoney-us-intraday",
+        runtime.fetchedAt,
+        runtime.now,
+        runtime.freshnessThresholdMs,
       ),
     ),
     eastmoney: async (marketRequest, runtime) => normalizeRows(
@@ -387,6 +402,16 @@ export function createAdapters({ fetch: fetcher, apiKey, timeoutMs }) {
         return load("query2");
       }
     },
+    "yahoo-us-intraday": async (marketRequest, runtime) => normalizeRows(
+      parseYahoo(await fetchJson(yahooUrl(marketRequest, "query1"))),
+      contextFor(
+        marketRequest,
+        "yahoo-us-intraday",
+        runtime.fetchedAt,
+        runtime.now,
+        runtime.freshnessThresholdMs,
+      ),
+    ),
     alphavantage: async (marketRequest, runtime) => normalizeRows(
       parseAlphaVantage(
         await fetchJson(alphaVantageUrl(marketRequest, apiKey)),

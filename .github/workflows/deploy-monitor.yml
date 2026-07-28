@@ -49,6 +49,11 @@ jobs:
       - name: Test monitor contracts
         run: >-
           node --test
+          tests/test_monitor_scheduler.mjs
+          tests/test_monitor_execution.mjs
+          tests/test_provider_registry.mjs
+          tests/test_provider_adapters_contract.mjs
+          tests/test_market_bar_writer.mjs
           tests/test_monitor_reliability.mjs
           tests/test_monitor_slots.mjs
           tests/test_monitor_worker.mjs
