@@ -22,7 +22,7 @@ GitHub 自动部署链已恢复。仓库主人在 2026-07-27 配置了 `CLOUDFLA
 
 同日终审又修复了三个用户可见回归：旧版无 identity 的 43 份 `legacy_unverified` 报告恢复只读展示、同一新闻按 cluster/原文聚合关联标的、交易时钟按沪深与纽约时区及周末判断。历史未验证报告仍不能进入问答，4 份 `invalidated` 报告仍只在“历史审计”中显示。
 
-`cn-semi-comms` 已在 2026-07-27 再生成 `515880.SS`、`512480.SS` 的 profile-scoped 报告及角色分卷；两份仍被引用门禁判为 `insufficient_evidence / legacy_unverified / Not Rated`，没有进入最新观点或问答。当前审计索引共 `58` 条：`47 legacy_unverified`、`4 invalidated`、`7 invalid_record`、`0 verified`。
+`cn-semi-comms` 已在 2026-07-28 再生成 `515880.SS`、`512480.SS` 的 profile-scoped 报告及角色分卷；两份仍被引用门禁判为 `insufficient_evidence / legacy_unverified / Not Rated`，没有进入最新观点或问答。当前审计索引共 `60` 条：`49 legacy_unverified`、`4 invalidated`、`7 invalid_record`、`0 verified`。
 
 资讯刷新回归已经定位并修复：浏览器原本每 60 秒轮询，但 Worker 的上游采集错误地只挂在交易日 08:25 盘前任务下。现在每个 profile 可独立配置 15/30/60 分钟全天采集，默认 15 分钟；周日 20:00、20:10 与 20:15 的真实批次已让 `cn-semi-comms` 新闻从 146 条增至 162 条，最新 `fetchedAt=2026-07-26T12:15:06.874Z`。来源部分失败会保留成功结果并记录 `NEWS_COLLECTION_PARTIAL`，不会用旧数据伪装全部成功。`market_events` 仍只在真实行情、公告或信号发生时生成，不为周末伪造事件。
 
@@ -31,6 +31,8 @@ GitHub 自动部署链已恢复。仓库主人在 2026-07-27 配置了 `CLOUDFLA
 第四轮还修复了运维可观测性：Worker `/health.newsProviders.reason` 现在区分 `no_binding / query_timeout / empty_table / query_error`，默认 1500ms、冷启动仅重试一次；Pages 发布生成与运行时 SHA 交叉校验的 deployment manifest，`/api/health.deployment` 增加真实 `deployedAt`；`/api/monitor-status?capacity=1` 可按需读取有界 D1 行数和存储估算，默认页面轮询不执行容量查询。
 
 2026-07-28 又完成 ETF 日频资金面：新增纯追加 migration `0016_fund_flows.sql`、`/api/flows`、独立 GitHub Actions 采集器和市场监控内嵌面板。生产 backfill run `30295062725` 写入 `19636` 条，业务自然键重复为 0；三个 ETF 的融资历史分别为 `1637 / 1579 / 1521` 个交易日，两只沪市 ETF 各有 `1354` 条推导份额，三只均有当前份额快照。daily run `30295641181` 成功处理 `491` 条更新、失败源为 0；工作日北京时间 20:17 已启用自动日更。随后用 `0017_deployment_metadata.sql` 修复同 SHA 后续 Pages 部署遮盖静态 manifest 时 `deployedAt=unknown` 的竞态。最终运行时代码为 `e66def33e034b41e63b8ecd4b930a42a38e7c0bc`：Pages run `30297566846`、Worker run `30297566845`、CI run `30297566980` 全绿；Pages `deployedAt=2026-07-27T19:17:32Z`，Worker `deployedAt=2026-07-27T19:18:37Z`。该数据当前不进入 Evidence/报告，报告门禁与 `0 verified` 状态没有改变。
+
+第五轮把资金面从三张孤立卡片升级为可核验叙事，但没有虚构“国家队/主力”：三卡继续保留当前值，新增融资净买入与 ETF 份额增量的近 60 期历史分位对照、P85/P15、最多 3 个事件时间锚和确定性一句话。份额相邻跳变超过 35% 会以 `possible_split_or_method_change` 排除，缺值不回退、不跨缺口连线；流入/流出由数值正负决定，分位只描述相对力度。事件明确“不代表因果”，隔夜驱动和 ETF 涨跌都显示实际日线日期。Pages run `30340399147`、CI run `30340399158` 全绿；生产浏览器实测 7 个可见一级入口、3 卡、2 条资金线、1 个事件锚、0 pageerror、1440px 无横向溢出。Pages `/api/health` 为 `ok`，deployment manifest 合法。该层仍不进入 EvidencePacket、Manifest、报告哈希或 verified 门禁。
 
 本轮接手已完成数字引用判定修复：`_NUMERIC_CLAIM_RE` 不再把日期、时间戳、标的代码、哈希、Markdown 标题序号和 RSI/MACD/均线参数当作研究数字；逐段复测后 `515880.SS` 为 `179→117`、`512480.SS` 为 `128→84`、`3887.HK` 为 `169→108`，剩余段落仍含未带 Evidence ID 的真实数值，因此没有放宽门禁。三份 `-v4` Manifest 与 `public/data/report-audit.json` 已同步更新。
 
@@ -55,9 +57,9 @@ Worker deployedAt : 由生产端点实时回读，不能为 `unknown`
 Pages immutable deployment : 每次发布都会变化，以 `wrangler pages deploy` 输出和 `/api/health` 为准
 ```
 
-2026-07-28 03:21（Asia/Singapore）最终功能发布回读：Pages 与 Worker 均为 `e66def33e034b41e63b8ecd4b930a42a38e7c0bc`；Pages `deployedAt=2026-07-27T19:17:32Z`，Worker `deployedAt=2026-07-27T19:18:37Z`。后续只补 `.github/workflows/fund-flow.yml` 的采集熔断、自动化测试和文档，不触及 Pages/Worker 运行时代码，受 deploy workflow 的 paths 过滤，因此 `origin/main` 可以领先该运行时 SHA；接手时先检查差异是否触及 `public/functions/workers/migrations/package.json`，有运行时代码变化才要求三方 SHA 再次一致。
+`e66def3` 是叙事升级前的历史基线，不再当作当前版本。资金叙事功能由 Pages run `30340399147` 和 CI run `30340399158` 验收；本轮交接提交完成后再次手工触发 `deploy-workbench` 与 `deploy-monitor`，使 `origin/main`、Pages 和 Worker 三方 SHA 对齐。精确 SHA 与部署时间仍以交接时的生产端点实时回读为准，不在本段维护易失真的固定值。
 
-对应成功 run：CI `30297566980`、Monitor `30297566845`、Pages `30297566846`；资金流 backfill `30295062725`、daily `30295641181`；官方公告 `30290500176`。
+其它成功 run：资金流 backfill `30295062725`、daily `30295641181`；官方公告首轮 `30290500176`。
 
 ### ✅ 已完成：GitHub 自动部署凭据
 
@@ -77,6 +79,15 @@ Pages immutable deployment : 每次发布都会变化，以 `wrangler pages depl
 - 沪市份额为 `derived`，深市历史从上线日起累积；不得写成具体机构买卖。
 - repository variable `FUND_FLOW_COLLECTION_ENABLED=false` 可跳过定时采集，但保留手工运维入口；页面/API 另由 `FUND_FLOW_ENABLED` 控制，两层开关的作用不同。
 
+### ✅ 已完成：资金行为叙事与边界审计
+
+- 叙事主语限定为“融资净买入”和“ETF 份额增量”；两者是可观察代理，不识别具体投资者身份；
+- 双线使用各自历史分位，不把 CNY 与份额画在同一金额尺度；
+- 事件与官方 evidence 新闻只作同期时间锚；页面、SVG 无障碍描述和交接文档均明确不代表因果；
+- 份额拆分/口径跳变、最新 null、低样本 20 日中位、正负方向反转、图线跨缺口和重复 SOXX 请求均有回归测试；
+- 生产 `515880.SS` 一句话同时显示 SOXX/ETF 日线日期与资金数据截止日，避免把盘中报价、完整日线和滞后两融误当成同一时点；
+- Cloudflare 项目现场回读 Git Provider 为 `No`。此前同 SHA 覆盖来自无身份的 Wrangler/ad-hoc 发布，不是 Git integration；最终交付必须由 `deploy-workbench` 生成 manifest 并回读 SHA。
+
 ### 🟡 P2：main 是直接 push 的，无 PR 留痕
 
 `git ls-remote --heads origin` 只返回 `refs/heads/main`——远程不存在 `fix/report-evidence-pipeline` 分支。全仓库历史只有 1 个 PR，且与本次工作无关。这不算错，但接手者要知道 review 轨迹只存在于 commit message 里。
@@ -88,9 +99,9 @@ Pages immutable deployment : 每次发布都会变化，以 `wrangler pages depl
 - 周日没有行情/信号事件符合市场时钟，但资讯采集不再受交易日限制。20:00 自动批次与 20:10 重试累计写入 16 条新增记录；组合资讯流会出现新的 `NEWS`，`EVENT` 只在真实行情、公告或信号产生时更新。
 - provider 汇总为 `degraded` 不等于“没有刷新”：成功来源继续入库，失败来源保存状态码与时间，slot 标记 `NEWS_COLLECTION_PARTIAL` 后按幂等键重试。
 - 2026-07-28 03:21 `/health` 现场状态：`eastmoney-search`、`federal-reserve-rss`、`gov-policy-library`、`hashkey-ir`、`sec-edgar-submissions`、`yahoo-finance-rss` 为 `ok`；`google-news-rss=NEWS_HTTP_503`，因此汇总为 degraded。退役的 `miit-policy-api` 与移出 Worker 的上交所 source 均不再污染 active provider health。
-- 当前报告审计 `58 / 0 verified / 47 legacy_unverified / 4 invalidated / 7 invalid_record`：直接读 `public/data/report-audit.json`（`generatedAt 2026-07-27T08:11:55.762Z`）核对。零 verified 是 fail-closed 的真实结果。
+- 当前报告审计 `60 / 0 verified / 49 legacy_unverified / 4 invalidated / 7 invalid_record`：直接读 `public/data/report-audit.json`（`generatedAt 2026-07-28T07:50:48.864Z`）核对。零 verified 是 fail-closed 的真实结果。
 - GitHub Actions run `30189419616`（cn-semi-comms 首轮）：conclusion **success**，与文档描述一致。
-- 当前运行时代码的 CI run `30297566980` 全绿，Python 3.10–3.13、Pages Functions、浏览器验收、Ruff 和 clean-install 均成功。
+- 资金叙事功能的 CI run `30340399158` 全绿，Python 3.10–3.13、Pages Functions、浏览器验收、Ruff 和 clean-install 均成功；Pages run `30340399147` 的 migration、manifest、deploy、D1 identity 和 SHA verify 均执行成功。
 
 ## 2. 不可破坏的产品边界
 
@@ -462,3 +473,4 @@ gh workflow run deploy-monitor.yml --repo gaaiyun/TradingWorkbench --ref main
 | 2026-07-28 | 第四轮生产收口：确认 Cloudflare 无法访问上交所后，将官方公告改为两小时 GitHub Actions；按 enabled profile 参数化写 D1；同步修正文档与运维协议 | SHA `fbe6c4d`；CI `30290486752`、Monitor `30290487359`、Pages `30290488517`、official-news `30290500176` 全绿；生产 `515880.SS=4`、`512480.SS=3` 条 SSE evidence；Functions 340 passed、1 skipped |
 | 2026-07-28 | 接入 ETF 日频资金面：两融六年回填、沪市 derived 份额、深市快照累积、2024 起 mid-rank 分位、独立 API/UI/容量观测和工作日 20:17 日更；保持七入口、三窗格、期权与 Evidence 不变 | 安全 tag `pre-fundflow-20260728`；backfill `30295062725` 写入 19636 条且 0 重复；daily `30295641181` 成功；面板启用 Pages `30295901009`、CI `30295900436` 全绿，SHA `eb8e007` |
 | 2026-07-28 | 修复 Pages 同 SHA 后续部署遮盖静态 manifest 后 `deployedAt=unknown`：发布成功后才参数化写入 D1，health 仅在静态 manifest 失败时有界回读；同步发布 Worker 并完成最终全链审计 | migration `0017`；Pages `30297566846`、Worker `30297566845`、CI `30297566980` 全绿；现场 Pages/Worker SHA `e66def3`，Pages `deployedAt=2026-07-27T19:17:32Z`、Worker `2026-07-27T19:18:37Z` |
+| 2026-07-28 | 将资金面升级为“融资净买入 vs ETF 份额增量”确定性叙事：近 60 期分位双线、事件时间锚、拆分/缺值保护、日线日期与无机构归因边界；保持七入口、主图三窗格、期权和 Evidence 零改动 | 安全 tag `pre-fundflow-narrative-20260728`；Pages `30340399147`、CI `30340399158` 全绿；生产 7 入口、3 卡、2 线、1 锚、0 pageerror，`/api/health=ok` 且 manifest 合法 |
