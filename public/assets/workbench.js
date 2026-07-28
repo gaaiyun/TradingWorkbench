@@ -108,7 +108,13 @@ import {
     historyRange: "5y",
     market: normalizeEnvelope(null),
     fundFlow: buildFundFlowView(null, null),
-    fundFlowContext: { etfChange: null, driverSymbol: "SOXX", driverChange: null },
+    fundFlowContext: {
+      etfChange: null,
+      etfDate: null,
+      driverSymbol: "SOXX",
+      driverChange: null,
+      driverDate: null,
+    },
     quotes: new Map(),
     feeds: [],
     feedEnvelope: normalizeEnvelope(null),
@@ -584,12 +590,16 @@ import {
     const anchors = selectFundFlowEventAnchors(state.feeds, state.selectedSymbol, dates);
     const driverChange = state.quotes.get(state.fundFlowContext.driverSymbol)?.change
       ?? state.fundFlowContext.driverChange;
+    const driverDate = state.quotes.get(state.fundFlowContext.driverSymbol)?.tradingDate
+      ?? state.fundFlowContext.driverDate;
     renderFundFlowComparison(view.comparisonSeries, dates, anchors);
     $("#fund-flow-narrative").textContent = buildFundFlowNarrative(view, {
       symbol: state.selectedSymbol,
       etfChange: state.fundFlowContext.etfChange,
+      etfDate: state.fundFlowContext.etfDate,
       driverSymbol: state.fundFlowContext.driverSymbol,
       driverChange,
+      driverDate,
       anchors,
     });
     bindFundFlowTooltips();
@@ -684,9 +694,13 @@ import {
     };
   }
 
-  function marketEnvelopeChange(payload) {
+  function marketEnvelopeContext(payload) {
     const rows = sortBars(normalizeEnvelope(payload).data);
-    return marketPercentageChange(rows.at(-1)?.close, rows.at(-2)?.close);
+    const latest = rows.at(-1);
+    return {
+      change: marketPercentageChange(latest?.close, rows.at(-2)?.close),
+      tradingDate: fundFlowTradingDate(latest?.ts || latest?.as_of),
+    };
   }
 
   async function loadFundFlow() {
@@ -710,12 +724,16 @@ import {
         requestJson(marketUrl(symbol, "1d", profileId, 2), { signal: request.signal }),
       ).then((value) => ({ status: "fulfilled", value }), () => ({ status: "rejected" }));
       if (!profileRequests.isCurrent(request) || state.selectedSymbol !== symbol) return;
+      const etfContext = contextResult.status === "fulfilled"
+        ? marketEnvelopeContext(contextResult.value)
+        : { change: null, tradingDate: null };
+      const driverQuote = driver ? state.quotes.get(driver.symbol) : null;
       state.fundFlowContext = {
-        etfChange: contextResult.status === "fulfilled"
-          ? marketEnvelopeChange(contextResult.value)
-          : null,
+        etfChange: etfContext.change,
+        etfDate: etfContext.tradingDate,
         driverSymbol: driver?.symbol || "隔夜驱动",
-        driverChange: driver ? state.quotes.get(driver.symbol)?.change ?? null : null,
+        driverChange: driverQuote?.change ?? null,
+        driverDate: driverQuote?.tradingDate ?? null,
       };
     } catch {
       if (request.signal.aborted || !profileRequests.isCurrent(request)) return;
@@ -730,7 +748,13 @@ import {
           historicalPercentile: true,
         },
       }, symbol);
-      state.fundFlowContext = { etfChange: null, driverSymbol: "SOXX", driverChange: null };
+      state.fundFlowContext = {
+        etfChange: null,
+        etfDate: null,
+        driverSymbol: "SOXX",
+        driverChange: null,
+        driverDate: null,
+      };
     } finally {
       profileRequests.finish(request);
     }
@@ -799,7 +823,11 @@ import {
       }
       const last = state.chart.bars.at(-1);
       const prior = state.chart.bars.at(-2);
-      if (last) state.quotes.set(symbol, { close: Number(last.close), change: prior ? (Number(last.close) / Number(prior.close) - 1) * 100 : null });
+      if (last) state.quotes.set(symbol, {
+        close: Number(last.close),
+        change: prior ? (Number(last.close) / Number(prior.close) - 1) * 100 : null,
+        tradingDate: fundFlowTradingDate(last.ts || last.as_of),
+      });
       updateFreshness(envelope);
     } catch (error) {
       if (request.signal.aborted || !marketRequestGate.isCurrent(
@@ -844,7 +872,11 @@ import {
       const bars = sortBars(envelope.data);
       const last = bars.at(-1);
       const previous = bars.at(-2);
-      if (last) state.quotes.set(symbol, { close: Number(last.close), change: previous ? (Number(last.close) / Number(previous.close) - 1) * 100 : null });
+      if (last) state.quotes.set(symbol, {
+        close: Number(last.close),
+        change: previous ? (Number(last.close) / Number(previous.close) - 1) * 100 : null,
+        tradingDate: fundFlowTradingDate(last.ts || last.as_of),
+      });
     }));
     renderWatchlist();
     renderDrivers();
@@ -1863,7 +1895,13 @@ import {
 
   async function selectSymbol(symbol) {
     state.selectedSymbol = symbol;
-    state.fundFlowContext = { etfChange: null, driverSymbol: "SOXX", driverChange: null };
+    state.fundFlowContext = {
+      etfChange: null,
+      etfDate: null,
+      driverSymbol: "SOXX",
+      driverChange: null,
+      driverDate: null,
+    };
     const target = targets().find((item) => item.symbol === symbol);
     if (target?.market !== "CN" && state.timeframe !== "1d") {
       state.timeframe = "1d";
@@ -1881,7 +1919,13 @@ import {
 
   function renderClearedProfileContext() {
     state.fundFlow = buildFundFlowView(null, state.selectedSymbol);
-    state.fundFlowContext = { etfChange: null, driverSymbol: "SOXX", driverChange: null };
+    state.fundFlowContext = {
+      etfChange: null,
+      etfDate: null,
+      driverSymbol: "SOXX",
+      driverChange: null,
+      driverDate: null,
+    };
     renderSettingsSummary();
     renderInstrument();
     renderFundFlow();

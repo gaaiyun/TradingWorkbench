@@ -352,11 +352,12 @@ function finiteChange(value) {
   return number === null ? null : number;
 }
 
-function changePhrase(label, value) {
+function changePhrase(label, value, date = null) {
   const number = finiteChange(value);
-  if (number === null) return `${label}涨跌暂缺`;
-  if (number === 0) return `${label}持平`;
-  return `${label}${number >= 0 ? "上涨" : "下跌"}${Math.abs(number).toFixed(2)}%`;
+  const datedLabel = `${label}${date ? `（日线 ${date}）` : ""}`;
+  if (number === null) return `${datedLabel}涨跌暂缺`;
+  if (number === 0) return `${datedLabel}持平`;
+  return `${datedLabel}${number >= 0 ? "上涨" : "下跌"}${Math.abs(number).toFixed(2)}%`;
 }
 
 function flowDirection(metric) {
@@ -399,8 +400,10 @@ export function selectFundFlowEventAnchors(feeds, symbol, dates, { limit = 3 } =
 export function buildFundFlowNarrative(view, {
   symbol = "ETF",
   etfChange = null,
+  etfDate = null,
   driverSymbol = "SOXX",
   driverChange = null,
+  driverDate = null,
   anchors = [],
 } = {}) {
   if (!view?.enabled) return "资金行为数据暂不可用。";
@@ -425,7 +428,7 @@ export function buildFundFlowNarrative(view, {
     ? `；${anchors.at(-1).date}“${anchors.at(-1).title}”仅作时间锚，不代表因果`
     : "";
   return [
-    `${changePhrase(driverSymbol, driverChange)}，${changePhrase(symbol, etfChange)}`,
+    `${changePhrase(driverSymbol, driverChange, driverDate)}，${changePhrase(symbol, etfChange, etfDate)}`,
     `${margin?.behavior || "杠杆资金样本暂缺"}（${margin?.percentile?.label || "分位不可用"}）`,
     `${shares?.behavior || "ETF份额样本暂缺"}（${shares?.percentile?.label || "分位不可用"}）`,
     `${conclusion}${eventNote}。`,

@@ -199,12 +199,14 @@ test("event anchors and deterministic narrative keep time correlation separate f
   const narrative = buildFundFlowNarrative(view, {
     symbol: "515880.SS",
     etfChange: 1.2,
+    etfDate: "2026-03-03",
     driverSymbol: "SOXX",
     driverChange: -0.5,
+    driverDate: "2026-03-02",
     anchors,
   });
-  assert.match(narrative, /SOXX下跌0\.50%/);
-  assert.match(narrative, /515880\.SS上涨1\.20%/);
+  assert.match(narrative, /SOXX（日线 2026-03-02）下跌0\.50%/);
+  assert.match(narrative, /515880\.SS（日线 2026-03-03）上涨1\.20%/);
   assert.match(narrative, /同期同向/);
   assert.match(narrative, /仅作时间锚，不代表因果/);
   assert.doesNotMatch(narrative, /国家队|主力|导致|推动|买入建议|卖出建议/);
