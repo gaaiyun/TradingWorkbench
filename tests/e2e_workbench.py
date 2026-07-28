@@ -230,7 +230,7 @@ def fund_flow_rows(flow_type, profile, symbol):
         "shares_outstanding_snapshot": ("shares", 60_000_000_000, 100_000_000, "eastmoney-share-snapshot", "observed_without_source_timestamp", "snapshot_unstamped"),
     }
     unit, base, step, source, method, quality = definitions[flow_type]
-    first_day = datetime(2026, 5, 25, tzinfo=timezone.utc)
+    first_day = datetime(2026, 3, 24, tzinfo=timezone.utc)
     return [{
         "id": f"flow-{profile}-{symbol}-{flow_type}-{index}",
         "profile_id": profile,
@@ -238,7 +238,7 @@ def fund_flow_rows(flow_type, profile, symbol):
         "flow_type": flow_type,
         "period": "1d",
         "ts": (first_day + timedelta(days=index)).isoformat().replace("+00:00", "Z"),
-        "value": base + step * index,
+        "value": None if flow_type == "margin_net_buy" and index == 90 else base + step * index,
         "unit": unit,
         "currency": "CNY" if unit == "CNY" else None,
         "source": source,
@@ -248,7 +248,7 @@ def fund_flow_rows(flow_type, profile, symbol):
         "freshness": "fresh",
         "adjustment": "none",
         "quality": quality,
-    } for index in range(61)]
+    } for index in range(122)]
 
 
 def route_api(route):
@@ -537,7 +537,13 @@ def run_browser():
         page.wait_for_selector("#fund-flow-grid [data-fund-flow-metric]")
         assert page.locator("#fund-flow-grid [data-fund-flow-metric]").count() == 3
         assert page.locator("#fund-flow-panel").is_visible()
-        assert page.locator("#fund-flow-grid").inner_text().count("P100") == 3
+        assert page.locator("#fund-flow-grid").inner_text().count("P100") == 2
+        assert "P50" in page.locator("#fund-flow-grid").inner_text()
+        assert page.locator("[data-fund-flow-series]").count() == 2
+        leveraged_path = page.locator('[data-fund-flow-series="leveraged"]').get_attribute("d")
+        assert leveraged_path.count("M") >= 2
+        assert page.locator("[data-fund-flow-event]").count() == 1
+        assert "仅作时间锚，不代表因果" in page.locator("#fund-flow-narrative").inner_text()
         page.locator("[data-fund-flow-help]").first.focus()
         assert page.locator(".fund-flow-tooltip").first.is_visible()
         initial_flow_requests = FLOW_REQUESTS[:4]
@@ -553,6 +559,10 @@ def run_browser():
             and request[3:] == ("1d", "2024-01-01", "2000")
             for request in initial_flow_requests
         )
+        assert sum(
+            symbol == "SOXX" and timeframe == "1d" and limit == 2
+            for symbol, timeframe, limit in MARKET_REQUESTS
+        ) == 1
         assert page.locator("a[href*='tradingview.com']").count() >= 1
         assert page.locator('[data-route-link="agents"]').first.is_visible()
         assert page.locator('[data-route-link="options"]').first.is_visible()

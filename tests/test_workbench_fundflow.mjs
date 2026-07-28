@@ -6,11 +6,16 @@ import {
   FUND_FLOW_MIN_SAMPLE,
   FUND_FLOW_START_DATE,
   buildFundFlowView,
+  buildFundFlowNarrative,
   computeHistoricalPercentile,
   formatFundFlowValue,
+  fundFlowBehavior,
   fundFlowTradingDate,
   fundFlowRequestTypes,
   isFundFlowUiEnabled,
+  marketPercentageChange,
+  selectFundFlowEventAnchors,
+  shareChangeRows,
 } from "../public/assets/workbench-fundflow.mjs";
 
 const html = readFileSync(new URL("../public/index.html", import.meta.url), "utf8");
@@ -78,6 +83,38 @@ test("historical percentile stays in accumulation state below sixty prior observ
   assert.equal(computeHistoricalPercentile([...values, 61]).status, "ready");
 });
 
+test("share-change narrative excludes split-like jumps instead of inventing inflows", () => {
+  const changes = shareChangeRows([
+    row("shares_outstanding_derived", 100, "2026-07-01"),
+    row("shares_outstanding_derived", 102, "2026-07-02"),
+    row("shares_outstanding_derived", 204, "2026-07-03"),
+    row("shares_outstanding_derived", 207, "2026-07-06"),
+  ]);
+  assert.deepEqual(changes.map(({ value }) => value), [2, null, 3]);
+  assert.equal(changes[1].excludedReason, "possible_split_or_method_change");
+});
+
+test("behavior language translates ranks without naming institutions or recommendations", () => {
+  const ready = (value) => ({ status: "ready", value, sampleSize: 60 });
+  assert.equal(fundFlowBehavior("margin_net_buy", ready(97), 10), "融资净流入显著偏高");
+  assert.equal(fundFlowBehavior("margin_net_buy", ready(3), -10), "融资净流出显著偏低");
+  assert.equal(fundFlowBehavior("shares", ready(90), 10), "ETF份额净增加偏高");
+  assert.equal(fundFlowBehavior("margin_net_buy", ready(99), -1), "融资净流出但处于高位");
+  assert.equal(fundFlowBehavior("margin_net_buy", ready(1), 1), "融资净流入但处于低位");
+  assert.equal(fundFlowBehavior("shares", ready(50), 0), "ETF份额净变化持平");
+  assert.equal(fundFlowBehavior("shares", { status: "accumulating" }, 1), "历史样本累积中");
+  assert.equal(fundFlowBehavior("shares", { status: "ready", value: 50 }, null), "当期数据不可用");
+  assert.equal(fundFlowBehavior("margin_balance", ready(50), 10), "杠杆存量处于常态区间");
+});
+
+test("market changes reject missing closes and distinguish flat prices", () => {
+  assert.equal(marketPercentageChange(null, 100), null);
+  assert.equal(marketPercentageChange(100, null), null);
+  assert.equal(marketPercentageChange("", 100), null);
+  assert.equal(marketPercentageChange(100, 100), 0);
+  assert.ok(Math.abs(marketPercentageChange(101, 100) - 1) < 1e-9);
+});
+
 test("fund-flow value formatting preserves missing values and explicit zero", () => {
   assert.equal(formatFundFlowValue(null, "CNY"), "—");
   assert.equal(formatFundFlowValue(undefined, "shares"), "—");
@@ -123,9 +160,54 @@ test("view model exposes only financing balance, financing net buy, and ETF shar
   assert.equal(view.metrics.some(({ label }) => label.includes("融券")), false);
   assert.equal(view.metrics[0].percentile.sampleSize, 60);
   assert.equal(view.metrics[1].signed, true);
+  assert.equal(view.comparisonSeries.length, 2);
+  assert.equal(view.comparisonSeries[0].label, "杠杆资金");
+  assert.equal(view.comparisonSeries[1].label, "申赎资金（份额代理）");
+  assert.equal(view.metrics[2].analysisValue, 1);
+  assert.match(view.metrics[2].tooltip, /日度份额变化/);
   assert.match(view.metrics[0].tooltip, /2024-01-01/);
   assert.match(view.metrics[0].tooltip, /当前值不计入样本/);
   assert.match(view.metrics[0].tooltip, /mid-rank/);
+});
+
+test("event anchors and deterministic narrative keep time correlation separate from causality", () => {
+  const data = [];
+  for (let index = 0; index < 62; index += 1) {
+    const day = new Date(Date.UTC(2026, 0, index + 1)).toISOString().slice(0, 10);
+    data.push(row("margin_balance", 100_000_000 + index, day));
+    data.push(row("margin_net_buy", index - 30, day));
+    data.push(row("shares_outstanding_derived", 500_000_000 + index, day));
+  }
+  const view = buildFundFlowView({
+    status: "ok",
+    data,
+    capabilities: {
+      marketFlowV1: true,
+      marginDaily: true,
+      etfSharesDaily: true,
+      historicalPercentile: true,
+    },
+  }, "515880.SS");
+  const dates = view.comparisonSeries.flatMap(({ points }) => points.map(({ date }) => date));
+  const anchorDate = dates.at(-1);
+  const anchors = selectFundFlowEventAnchors([
+    { type: "event", symbol: "515880.SS", at: `${anchorDate}T02:00:00Z`, title: "政策窗口" },
+    { type: "news", symbol: "515880.SS", at: `${anchorDate}T02:00:00Z`, title: "普通资讯" },
+    { type: "event", symbol: "512480.SS", at: `${anchorDate}T02:00:00Z`, title: "其他标的" },
+  ], "515880.SS", dates);
+  assert.equal(anchors.length, 1);
+  const narrative = buildFundFlowNarrative(view, {
+    symbol: "515880.SS",
+    etfChange: 1.2,
+    driverSymbol: "SOXX",
+    driverChange: -0.5,
+    anchors,
+  });
+  assert.match(narrative, /SOXX下跌0\.50%/);
+  assert.match(narrative, /515880\.SS上涨1\.20%/);
+  assert.match(narrative, /同期同向/);
+  assert.match(narrative, /仅作时间锚，不代表因果/);
+  assert.doesNotMatch(narrative, /国家队|主力|导致|推动|买入建议|卖出建议/);
 });
 
 test("a malformed latest null remains unavailable instead of falling back or becoming zero", () => {
@@ -146,6 +228,47 @@ test("a malformed latest null remains unavailable instead of falling back or bec
   assert.equal(view.metrics[0].value, null);
   assert.equal(view.metrics[0].displayValue, "—");
   assert.equal(view.metrics[0].percentile.status, "unavailable");
+
+  const shareRows = Array.from({ length: 62 }, (_, index) => row(
+    "shares_outstanding_derived",
+    index === 61 ? null : 500_000_000 + index,
+    new Date(Date.UTC(2026, 0, index + 1)).toISOString().slice(0, 10),
+  ));
+  const shareView = buildFundFlowView({
+    status: "degraded",
+    capabilities: {
+      marketFlowV1: true,
+      marginDaily: true,
+      etfSharesDaily: true,
+      historicalPercentile: true,
+    },
+    data: shareRows,
+  }, "515880.SS");
+  const shares = shareView.metrics.find(({ id }) => id === "etf-shares");
+  assert.equal(shares.value, null);
+  assert.equal(shares.analysisValue, null);
+  assert.equal(shares.percentile.status, "unavailable");
+  assert.equal(shares.behavior, "当期数据不可用");
+  assert.equal(shares.comparison, "当期值不可用");
+});
+
+test("twenty-day comparison waits for twenty valid historical observations", () => {
+  const data = Array.from({ length: 6 }, (_, index) => row(
+    "margin_balance",
+    100 + index,
+    `2026-07-0${index + 1}`,
+  ));
+  const view = buildFundFlowView({
+    status: "ok",
+    capabilities: {
+      marketFlowV1: true,
+      marginDaily: true,
+      etfSharesDaily: true,
+      historicalPercentile: true,
+    },
+    data,
+  }, "515880.SS");
+  assert.equal(view.metrics[0].comparison, "20日中位累积中 5/20");
 });
 
 test("Shanghai share rows prefer derived history and fall back to snapshot when derived is absent", () => {
@@ -221,14 +344,22 @@ test("fund-flow panel stays inside monitor after the chart and is enabled after 
   const panel = /<section[^>]+id="fund-flow-panel"[\s\S]*?<\/section>/.exec(html)?.[0] || "";
   assert.match(panel, /hidden/);
   assert.match(panel, /id="fund-flow-grid"/);
+  assert.match(panel, /id="fund-flow-comparison"/);
+  assert.match(panel, /id="fund-flow-narrative"/);
+  assert.match(panel, /不等同于国家队、主力或任何特定机构/);
   assert.doesNotMatch(panel, /融券/);
   assert.match(script, /function loadFundFlow/);
   assert.match(script, /isFundFlowUiEnabled\(document\.body\.dataset\.fundFlowEnabled\)/);
   assert.match(script, /profileRequests\.begin\("fundflow"/);
   assert.match(script, /from:\s*FUND_FLOW_START_DATE[\s\S]*limit:\s*2000/);
   assert.match(script, /view\.status === "ok" \? "数据可用"/);
+  assert.match(script, /data-fund-flow-series/);
+  assert.match(script, /<path class="fund-flow-line/);
+  assert.match(script, /<desc>/);
+  assert.match(script, /selectFundFlowEventAnchors/);
   assert.doesNotMatch(script, /view\.status === "ok" \? "已核验"/);
   assert.doesNotMatch(script, /pollWorkbenchData\(\)[\s\S]*loadFundFlow/);
+  assert.doesNotMatch(script, /配置资金|先行|承接|尚未跟随|尚未确认/);
 });
 
 test("fund-flow tooltip supports pointer, keyboard focus, touch, and neutral percentile tones", () => {

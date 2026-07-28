@@ -7,11 +7,11 @@
   <meta name="color-scheme" content="dark">
   <meta name="description" content="Trading Workbench 多市场研究与风险工作台">
   <title>Trading Workbench · 交易研究工作台</title>
-  <link rel="stylesheet" href="./assets/workbench.css?v=e2a71f8cdd5c">
+  <link rel="stylesheet" href="./assets/workbench.css?v=190dd792fbfa">
   <script type="importmap">
     { "imports": { "fancy-canvas": "./vendor/fancy-canvas/index.mjs" } }
   </script>
-  <script type="module" src="./assets/workbench.js?v=e2a71f8cdd5c"></script>
+  <script type="module" src="./assets/workbench.js?v=190dd792fbfa"></script>
 </head>
 <body data-mobile-view="chart" data-route="monitor" data-fund-flow-enabled="true">
   <a class="skip-link" href="#market-chart">跳到行情图表</a>
@@ -156,6 +156,9 @@
             <span id="fund-flow-asof">等待日频数据</span>
           </header>
           <div class="fund-flow-grid" id="fund-flow-grid"></div>
+          <div class="fund-flow-comparison-chart" id="fund-flow-comparison"></div>
+          <div class="fund-flow-narrative" id="fund-flow-narrative" aria-live="polite">等待可比较的资金行为数据。</div>
+          <div class="fund-flow-caveat">代理观察：融资净买入与 ETF 份额增量不等同于国家队、主力或任何特定机构；事件只作同期时间锚。</div>
         </section>
 
         <section class="research-conclusion" aria-labelledby="conclusion-title">

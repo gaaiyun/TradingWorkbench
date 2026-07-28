@@ -19,9 +19,12 @@ import { renderMarkdown } from "./workbench-markdown.mjs";
 import {
   FUND_FLOW_START_DATE,
   buildFundFlowView,
+  buildFundFlowNarrative,
   fundFlowTradingDate,
   fundFlowRequestTypes,
   isFundFlowUiEnabled,
+  marketPercentageChange,
+  selectFundFlowEventAnchors,
 } from "./workbench-fundflow.mjs";
 import {
   CandlestickSeries,
@@ -105,6 +108,7 @@ import {
     historyRange: "5y",
     market: normalizeEnvelope(null),
     fundFlow: buildFundFlowView(null, null),
+    fundFlowContext: { etfChange: null, driverSymbol: "SOXX", driverChange: null },
     quotes: new Map(),
     feeds: [],
     feedEnvelope: normalizeEnvelope(null),
@@ -548,6 +552,8 @@ import {
     if (!view?.enabled) {
       panel.hidden = true;
       $("#fund-flow-grid").innerHTML = "";
+      $("#fund-flow-comparison").innerHTML = "";
+      $("#fund-flow-narrative").textContent = "等待可比较的资金行为数据。";
       return;
     }
     panel.hidden = false;
@@ -568,9 +574,74 @@ import {
         </div>
         <strong class="${valueTone}">${escapeHtml(metric.displayValue)}</strong>
         <small><span class="fund-flow-percentile ${escapeHtml(metric.percentile.tone)}">${escapeHtml(metric.percentile.label)}</span><span>截至 ${escapeHtml(metric.tradingDate || "—")}</span></small>
+        <div class="fund-flow-behavior">${escapeHtml(metric.behavior)}</div>
+        <div class="fund-flow-comparison-text">${escapeHtml(metric.comparison)}</div>
       </article>`;
     }).join("");
+    const dates = [...new Set(view.comparisonSeries.flatMap(({ points }) => (
+      points.map(({ date }) => date)
+    )))].sort().slice(-60);
+    const anchors = selectFundFlowEventAnchors(state.feeds, state.selectedSymbol, dates);
+    const driverChange = state.quotes.get(state.fundFlowContext.driverSymbol)?.change
+      ?? state.fundFlowContext.driverChange;
+    renderFundFlowComparison(view.comparisonSeries, dates, anchors);
+    $("#fund-flow-narrative").textContent = buildFundFlowNarrative(view, {
+      symbol: state.selectedSymbol,
+      etfChange: state.fundFlowContext.etfChange,
+      driverSymbol: state.fundFlowContext.driverSymbol,
+      driverChange,
+      anchors,
+    });
     bindFundFlowTooltips();
+  }
+
+  function renderFundFlowComparison(seriesList, dates, anchors) {
+    const host = $("#fund-flow-comparison");
+    if (!dates.length || !(seriesList || []).some(({ points }) => points.length)) {
+      host.innerHTML = '<div class="fund-flow-comparison-empty">历史分位序列仍在累积</div>';
+      return;
+    }
+    const width = 1000;
+    const height = 150;
+    const top = 16;
+    const bottom = 124;
+    const xFor = (date) => dates.length === 1
+      ? width / 2
+      : 20 + (dates.indexOf(date) / (dates.length - 1)) * (width - 40);
+    const yFor = (value) => top + (
+      (100 - Math.max(0, Math.min(100, Number(value)))) / 100
+    ) * (bottom - top);
+    const lines = (seriesList || []).map((series) => {
+      const byDate = new Map(series.points.map((point) => [point.date, point.value]));
+      let segmentOpen = false;
+      const path = dates.map((date) => {
+        const value = byDate.get(date);
+        if (!Number.isFinite(value)) {
+          segmentOpen = false;
+          return "";
+        }
+        const command = segmentOpen ? "L" : "M";
+        segmentOpen = true;
+        return `${command}${xFor(date).toFixed(1)},${yFor(value).toFixed(1)}`;
+      }).filter(Boolean).join(" ");
+      return path
+        ? `<path class="fund-flow-line is-${escapeHtml(series.id)}" data-fund-flow-series="${escapeHtml(series.id)}" d="${path}" />`
+        : "";
+    }).join("");
+    const eventLines = anchors.map((anchor) => {
+      const x = xFor(anchor.date).toFixed(1);
+      const title = `${anchor.date} ${anchor.title}（仅作时间锚）`;
+      return `<g class="fund-flow-event-anchor" data-fund-flow-event="${escapeHtml(anchor.date)}"><title>${escapeHtml(title)}</title><line x1="${x}" x2="${x}" y1="${top}" y2="${bottom}"/><circle cx="${x}" cy="${top + 3}" r="3"/></g>`;
+    }).join("");
+    const anchorDescription = anchors.length
+      ? `时间锚：${anchors.map(({ date, title }) => `${date} ${title}`).join("；")}。均不代表因果。`
+      : "当前窗口没有事件时间锚。";
+    host.innerHTML = `<div class="fund-flow-comparison-head"><span><i class="is-leveraged"></i>融资净买入</span><span><i class="is-allocation"></i>ETF份额增量</span><span>近60期历史分位</span></div>
+      <svg viewBox="0 0 ${width} ${height}" role="img" aria-label="融资净买入与ETF份额增量近60期历史分位对照；事件标记仅作时间锚">
+        <desc>${escapeHtml(anchorDescription)}</desc>
+        <line class="fund-flow-band" x1="20" x2="980" y1="${yFor(85)}" y2="${yFor(85)}"/><line class="fund-flow-band" x1="20" x2="980" y1="${yFor(15)}" y2="${yFor(15)}"/>
+        <text x="22" y="${yFor(85) - 4}">P85</text><text x="22" y="${yFor(15) - 4}">P15</text>${lines}${eventLines}
+      </svg><span class="visually-hidden">${escapeHtml(anchorDescription)}</span>`;
   }
 
   function marketUrl(symbol, timeframe, profileId, limit = 240) {
@@ -613,6 +684,11 @@ import {
     };
   }
 
+  function marketEnvelopeChange(payload) {
+    const rows = sortBars(normalizeEnvelope(payload).data);
+    return marketPercentageChange(rows.at(-1)?.close, rows.at(-2)?.close);
+  }
+
   async function loadFundFlow() {
     state.fundFlow = buildFundFlowView(null, state.selectedSymbol);
     renderFundFlow();
@@ -627,6 +703,20 @@ import {
         requestJson(fundFlowUrl(symbol, profileId, type), { signal: request.signal })));
       if (!profileRequests.isCurrent(request) || state.selectedSymbol !== symbol) return;
       state.fundFlow = buildFundFlowView(mergeFundFlowEnvelopes(envelopes), symbol);
+      const driver = targets().find(({ role, symbol: targetSymbol }) => (
+        role === "driver" && targetSymbol === "SOXX"
+      )) || targets().find(({ role }) => role === "driver");
+      const contextResult = await Promise.resolve(
+        requestJson(marketUrl(symbol, "1d", profileId, 2), { signal: request.signal }),
+      ).then((value) => ({ status: "fulfilled", value }), () => ({ status: "rejected" }));
+      if (!profileRequests.isCurrent(request) || state.selectedSymbol !== symbol) return;
+      state.fundFlowContext = {
+        etfChange: contextResult.status === "fulfilled"
+          ? marketEnvelopeChange(contextResult.value)
+          : null,
+        driverSymbol: driver?.symbol || "隔夜驱动",
+        driverChange: driver ? state.quotes.get(driver.symbol)?.change ?? null : null,
+      };
     } catch {
       if (request.signal.aborted || !profileRequests.isCurrent(request)) return;
       state.fundFlow = buildFundFlowView({
@@ -640,6 +730,7 @@ import {
           historicalPercentile: true,
         },
       }, symbol);
+      state.fundFlowContext = { etfChange: null, driverSymbol: "SOXX", driverChange: null };
     } finally {
       profileRequests.finish(request);
     }
@@ -757,6 +848,7 @@ import {
     }));
     renderWatchlist();
     renderDrivers();
+    renderFundFlow();
   }
 
   function normalizeFeed(envelope, type) {
@@ -804,6 +896,7 @@ import {
       renderFeedFilters();
       renderFeed();
       renderNewsWorkspace();
+      renderFundFlow();
     } finally {
       profileRequests.finish(request);
     }
@@ -1770,6 +1863,7 @@ import {
 
   async function selectSymbol(symbol) {
     state.selectedSymbol = symbol;
+    state.fundFlowContext = { etfChange: null, driverSymbol: "SOXX", driverChange: null };
     const target = targets().find((item) => item.symbol === symbol);
     if (target?.market !== "CN" && state.timeframe !== "1d") {
       state.timeframe = "1d";
@@ -1787,6 +1881,7 @@ import {
 
   function renderClearedProfileContext() {
     state.fundFlow = buildFundFlowView(null, state.selectedSymbol);
+    state.fundFlowContext = { etfChange: null, driverSymbol: "SOXX", driverChange: null };
     renderSettingsSummary();
     renderInstrument();
     renderFundFlow();

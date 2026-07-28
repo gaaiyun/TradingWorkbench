@@ -561,6 +561,8 @@ a { color: inherit; }
 .fund-flow-help:hover, .fund-flow-help:focus-visible { border-color: var(--line-strong); color: var(--text); outline: none; }
 .fund-flow-metric > strong { display: block; margin-top: 7px; font: 600 17px "IBM Plex Mono", Consolas, monospace; }
 .fund-flow-metric > small { display: flex; align-items: center; gap: 7px; margin-top: 5px; color: var(--quiet); font-size: 8px; }
+.fund-flow-behavior { margin-top: 9px; color: var(--text); font-size: 10px; }
+.fund-flow-comparison-text { margin-top: 3px; color: var(--quiet); font: 8px "IBM Plex Mono", Consolas, monospace; }
 .fund-flow-percentile {
   display: inline-flex; min-height: 18px; align-items: center; padding: 0 5px; border: 1px solid var(--line-strong);
   color: var(--muted); font: 8px "IBM Plex Mono", Consolas, monospace;
@@ -572,6 +574,24 @@ a { color: inherit; }
   box-shadow: 0 10px 28px rgba(0, 0, 0, .34); font: 9px/1.55 "IBM Plex Mono", Consolas, monospace;
 }
 .fund-flow-tooltip[hidden] { display: none; }
+.fund-flow-comparison-chart { min-height: 146px; padding: 10px 14px 0; border-top: 1px solid var(--line); }
+.fund-flow-comparison-head { display: flex; align-items: center; gap: 14px; color: var(--quiet); font-size: 8px; }
+.fund-flow-comparison-head span:last-child { margin-left: auto; }
+.fund-flow-comparison-head i { display: inline-block; width: 12px; height: 2px; margin-right: 5px; vertical-align: middle; }
+.fund-flow-comparison-head .is-leveraged { background: #c8b27a; }
+.fund-flow-comparison-head .is-allocation { background: #6fa7b6; }
+.fund-flow-comparison-chart svg { display: block; width: 100%; height: 118px; overflow: visible; }
+.fund-flow-comparison-chart svg text { fill: #596268; font: 8px "IBM Plex Mono", Consolas, monospace; }
+.fund-flow-line { fill: none; stroke-width: 2; vector-effect: non-scaling-stroke; }
+.fund-flow-line.is-leveraged { stroke: #c8b27a; }
+.fund-flow-line.is-allocation { stroke: #6fa7b6; }
+.fund-flow-band { stroke: #353d42; stroke-width: 1; stroke-dasharray: 4 5; vector-effect: non-scaling-stroke; }
+.fund-flow-event-anchor line { stroke: var(--warning); stroke-width: 1; stroke-dasharray: 2 4; opacity: .7; vector-effect: non-scaling-stroke; }
+.fund-flow-event-anchor circle { fill: var(--warning); }
+.fund-flow-comparison-empty { display: grid; min-height: 112px; place-items: center; color: var(--quiet); font-size: 9px; }
+.fund-flow-narrative { padding: 11px 14px; border-top: 1px solid var(--line); color: var(--text); font-size: 11px; line-height: 1.65; }
+.fund-flow-narrative::before { content: "资金观察"; display: inline-flex; margin-right: 9px; padding: 1px 5px; border: 1px solid var(--line-strong); color: var(--muted); font: 8px "IBM Plex Mono", Consolas, monospace; }
+.fund-flow-caveat { padding: 0 14px 11px; color: var(--quiet); font-size: 8px; line-height: 1.5; }
 .research-conclusion { min-height: 142px; padding: 0 14px 14px; }
 .research-conclusion > header { display: flex; min-height: 43px; align-items: center; justify-content: space-between; border-bottom: 1px solid var(--line); }
 .research-conclusion h2 { display: inline; margin: 0; font-size: 12px; }
@@ -810,10 +830,17 @@ a { color: inherit; }
   .research-conclusion { padding-inline: 10px; }
   .fund-flow-panel > header { padding-inline: 10px; }
   .fund-flow-grid { grid-template-columns: 1fr; }
-  .fund-flow-metric { border-right: 0; border-bottom: 1px solid var(--line); }
+  .fund-flow-metric { display: grid; grid-template-columns: minmax(0, 1fr) auto; border-right: 0; border-bottom: 1px solid var(--line); }
+  .fund-flow-metric-head, .fund-flow-metric > strong, .fund-flow-metric > small { grid-column: 1; }
+  .fund-flow-behavior, .fund-flow-comparison-text { grid-column: 2; align-self: end; text-align: right; }
+  .fund-flow-behavior { grid-row: 2; margin: 7px 0 0 12px; }
+  .fund-flow-comparison-text { grid-row: 3; margin-left: 12px; }
   .fund-flow-metric:last-child { border-bottom: 0; }
   .fund-flow-help { width: 44px; min-width: 44px; height: 44px; min-height: 44px; }
   .fund-flow-tooltip { top: 47px; }
+  .fund-flow-comparison-chart { padding-inline: 10px; }
+  .fund-flow-comparison-head { gap: 8px; }
+  .fund-flow-narrative, .fund-flow-caveat { padding-inline: 10px; }
   .conclusion-body { grid-template-columns: 64px 1fr; }
   .feed-filters { grid-template-columns: 1fr 1fr 80px; }
   .feed-filters label:last-child { grid-column: auto; }
