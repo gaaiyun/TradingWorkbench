@@ -7,9 +7,11 @@ import {
   FUND_FLOW_START_DATE,
   buildFundFlowView,
   buildFundFlowNarrative,
+  buildFundFlowThemeObservation,
   computeHistoricalPercentile,
   formatFundFlowValue,
   fundFlowBehavior,
+  fundFlowDriverBasket,
   fundFlowTradingDate,
   fundFlowRequestTypes,
   isFundFlowUiEnabled,
@@ -355,16 +357,55 @@ test("event anchors and deterministic narrative keep time correlation separate f
     symbol: "515880.SS",
     etfChange: 1.2,
     etfDate: "2026-03-03",
-    driverSymbol: "SOXX",
-    driverChange: -0.5,
-    driverDate: "2026-03-02",
+    driverLabel: "AI通信驱动",
+    drivers: [
+      { symbol: "NVDA", change: -0.5, date: "2026-03-02" },
+      { symbol: "AVGO", change: 0.25, date: "2026-03-02" },
+    ],
     anchors,
   });
-  assert.match(narrative, /SOXX（日线 2026-03-02）下跌0\.50%/);
+  assert.match(narrative, /AI通信驱动：NVDA（日线 2026-03-02）下跌0\.50%/);
+  assert.match(narrative, /AVGO（日线 2026-03-02）上涨0\.25%/);
   assert.match(narrative, /515880\.SS（日线 2026-03-03）上涨1\.20%/);
   assert.match(narrative, /两端均为净流入，力度未达极端/);
   assert.match(narrative, /仅作时间锚，不代表因果/);
   assert.doesNotMatch(narrative, /国家队|主力|导致|推动|买入建议|卖出建议/);
+});
+
+test("each ETF uses an explicit relevant driver basket instead of hard-coded SOXX", () => {
+  assert.deepEqual(fundFlowDriverBasket("515880.SS"), {
+    label: "AI通信驱动",
+    symbols: ["NVDA", "AVGO"],
+  });
+  for (const symbol of ["512480.SS", "159995.SZ"]) {
+    assert.deepEqual(fundFlowDriverBasket(symbol), {
+      label: "美股半导体基准",
+      symbols: ["SOXX", "SMH"],
+    });
+  }
+  assert.deepEqual(fundFlowDriverBasket("NVDA"), {
+    label: "隔夜驱动",
+    symbols: [],
+  });
+});
+
+test("verified-report absence falls back to a labeled deterministic theme observation", () => {
+  const view = buildFinancingComparisonView({
+    etfHistoryValue: 100_000_000,
+    etfRecentValue: -80_000_000,
+    constituentHistoryValue: 200_000_000,
+    constituentRecentValue: -160_000_000,
+  });
+  const observation = buildFundFlowThemeObservation(view, { symbol: "512480.SS" });
+  assert.equal(observation.label, "资金偏弱");
+  assert.equal(observation.tone, "market-down");
+  assert.match(observation.asOf, /^2026-/);
+  assert.match(observation.text, /近5个可用交易日/);
+  assert.match(observation.text, /ETF端/);
+  assert.match(observation.text, /前10大持仓端/);
+  assert.match(observation.text, /规则观察/);
+  assert.match(observation.text, /不替代通过 Evidence 门禁的研究报告/);
+  assert.doesNotMatch(observation.text, /国家队|主力|买入建议|卖出建议/);
 });
 
 test("a malformed latest null remains unavailable instead of falling back or becoming zero", () => {
@@ -535,6 +576,8 @@ test("fund-flow panel stays inside monitor after the chart and is enabled after 
   assert.match(script, /<path class="fund-flow-line/);
   assert.match(script, /<desc>/);
   assert.match(script, /selectFundFlowEventAnchors/);
+  assert.match(script, /buildFundFlowThemeObservation/);
+  assert.match(script, /主题观察/);
   assert.doesNotMatch(script, /view\.status === "ok" \? "已核验"/);
   assert.doesNotMatch(script, /pollWorkbenchData\(\)[\s\S]*loadFundFlow/);
   assert.doesNotMatch(script, /配置资金|先行|承接|尚未跟随|尚未确认/);

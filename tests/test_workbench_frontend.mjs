@@ -11,6 +11,7 @@ const {
   compactThreads,
   computeNextRun,
   createLatestRequestGate,
+  dailyQuoteFromBars,
   dailyHistoryLimit,
   filterFeedItems,
   groupFeedItems,
@@ -36,6 +37,7 @@ test("research terminal exposes the continuous three-column workspace and indica
   assert.match(html, /id="rsi-chart"/);
   assert.match(html, /id="research-feed"/);
   assert.match(html, /id="cross-market-drivers"/);
+  assert.match(html, /最新 \/ 日涨跌/);
   assert.match(html, /data-timeframe="5m"/);
   assert.match(html, /data-timeframe="15m"/);
   assert.match(html, /data-timeframe="1h"/);
@@ -227,8 +229,13 @@ test("scheduled refresh updates selected bars, watch quotes, feeds, and monitor 
   assert.match(script, /profile\.schedules\.newsRefresh\.intervalMinutes/);
 });
 
-test("US and Hong Kong drivers use daily data and switch to the available daily chart", () => {
-  assert.match(script, /market === "CN" \? state\.timeframe : "1d"/);
+test("watch quotes always use daily bars while chart navigation keeps its own timeframe", () => {
+  assert.match(script, /marketUrl\(symbol, "1d", profileId, 2\)/);
+  assert.match(script, /marketUrl\(symbol, "5m", profileId, 1\)/);
+  assert.match(script, /dailyQuoteFromBars\(dailyEnvelope\.data, \{[\s\S]*currentBar: intradayBar/);
+  assert.doesNotMatch(script, /market === "CN" \? state\.timeframe : "1d"/);
+  assert.match(script, /state\.quotes\.get\(target\.symbol\)\?\.change/);
+  assert.match(script, /if \(timeframe === "1d"\)/);
   assert.match(script, /target\?\.market !== "CN" && state\.timeframe !== "1d"/);
   assert.match(script, /state\.timeframe = "1d"/);
   assert.equal(dailyHistoryLimit("6m"), 126);
@@ -240,6 +247,37 @@ test("US and Hong Kong drivers use daily data and switch to the available daily 
     assert.match(html, new RegExp(`data-history-range="${range}"`));
   }
   assert.match(html, /id="chart-coverage"/);
+});
+
+test("daily watch quote computes day-over-day change even when rows arrive newest first", () => {
+  const quote = dailyQuoteFromBars([
+    { ts: "2026-07-28T00:00:00Z", close: 1.04 },
+    { ts: "2026-07-27T00:00:00Z", close: 1.124 },
+  ]);
+  assert.equal(quote.close, 1.04);
+  assert.equal(quote.ts, "2026-07-28T00:00:00Z");
+  assert.ok(Math.abs(quote.change - (-7.473309608540935)) < 1e-12);
+  assert.equal(dailyQuoteFromBars([{ ts: "2026-07-28T00:00:00Z", close: 1.04 }]).change, null);
+
+  const precise = dailyQuoteFromBars([
+    { ts: "2026-07-27T16:00:00Z", close: 1.04 },
+    { ts: "2026-07-26T16:00:00Z", close: 1.124 },
+  ], {
+    currentBar: { ts: "2026-07-28T07:00:00Z", close: 1.041 },
+    tradingDate: (value) => new Date(value).toLocaleDateString("en-CA", { timeZone: "Asia/Shanghai" }),
+  });
+  assert.equal(precise.close, 1.041);
+  assert.ok(Math.abs(precise.change - (-7.384341637010672)) < 1e-12);
+
+  const staleIntraday = dailyQuoteFromBars([
+    { ts: "2026-07-27T16:00:00Z", close: 1.04 },
+    { ts: "2026-07-26T16:00:00Z", close: 1.124 },
+  ], {
+    currentBar: { ts: "2026-07-27T07:00:00Z", close: 1.03 },
+    tradingDate: (value) => new Date(value).toLocaleDateString("en-CA", { timeZone: "Asia/Shanghai" }),
+  });
+  assert.equal(staleIntraday.close, 1.04);
+  assert.ok(Math.abs(staleIntraday.change - (-7.473309608540935)) < 1e-12);
 });
 
 test("A-share ETF daily charts use the same range controls and coverage summary", () => {

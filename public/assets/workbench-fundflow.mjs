@@ -15,6 +15,21 @@ const SHARE_TYPES_BY_SYMBOL = Object.freeze({
   "159995.SZ": Object.freeze(["shares_outstanding_snapshot"]),
 });
 
+const DRIVER_BASKETS_BY_SYMBOL = Object.freeze({
+  "515880.SS": Object.freeze({
+    label: "AI通信驱动",
+    symbols: Object.freeze(["NVDA", "AVGO"]),
+  }),
+  "512480.SS": Object.freeze({
+    label: "美股半导体基准",
+    symbols: Object.freeze(["SOXX", "SMH"]),
+  }),
+  "159995.SZ": Object.freeze({
+    label: "美股半导体基准",
+    symbols: Object.freeze(["SOXX", "SMH"]),
+  }),
+});
+
 const SHANGHAI_DATE = new Intl.DateTimeFormat("en", {
   timeZone: "Asia/Shanghai",
   year: "numeric",
@@ -92,6 +107,13 @@ export function fundFlowRequestTypes(symbol) {
   return shareTypes
     ? ["margin_balance", "margin_net_buy", "constituent_margin_net_buy", ...shareTypes]
     : [];
+}
+
+export function fundFlowDriverBasket(symbol) {
+  const basket = DRIVER_BASKETS_BY_SYMBOL[String(symbol || "").toUpperCase()];
+  return basket
+    ? { label: basket.label, symbols: [...basket.symbols] }
+    : { label: "隔夜驱动", symbols: [] };
 }
 
 export function computeHistoricalPercentile(values, { minSample = FUND_FLOW_MIN_SAMPLE } = {}) {
@@ -478,6 +500,8 @@ export function buildFundFlowNarrative(view, {
   symbol = "ETF",
   etfChange = null,
   etfDate = null,
+  driverLabel = "隔夜驱动",
+  drivers = [],
   driverSymbol = "SOXX",
   driverChange = null,
   driverDate = null,
@@ -515,10 +539,40 @@ export function buildFundFlowNarrative(view, {
   const eventNote = anchors.length
     ? `；${anchors.at(-1).date}“${anchors.at(-1).title}”仅作时间锚，不代表因果`
     : "";
-  const marketContext = finiteChange(driverChange) !== null || finiteChange(etfChange) !== null
-    ? `${changePhrase(driverSymbol, driverChange, driverDate)}，${changePhrase(symbol, etfChange, etfDate)}；`
+  const driverItems = Array.isArray(drivers) && drivers.length
+    ? drivers
+    : [{ symbol: driverSymbol, change: driverChange, date: driverDate }];
+  const driverContext = driverItems
+    .filter(({ symbol: itemSymbol }) => itemSymbol)
+    .map(({ symbol: itemSymbol, change, date }) => changePhrase(itemSymbol, change, date));
+  const hasMarketContext = driverItems.some(({ change }) => finiteChange(change) !== null)
+    || finiteChange(etfChange) !== null;
+  const marketContext = hasMarketContext
+    ? `${driverLabel}：${driverContext.join("，")}；${changePhrase(symbol, etfChange, etfDate)}；`
     : "";
   return `${marketContext}${dataDateNote}${etfPhrase}；${constituentPhrase}——${conclusion}；${approximationNote}${eventNote}。`;
+}
+
+export function buildFundFlowThemeObservation(view, { symbol = "ETF" } = {}) {
+  if (!view?.enabled) return null;
+  const etf = view.financingComparison?.etf;
+  const constituent = view.financingComparison?.constituent;
+  const ready = etf?.value !== null
+    && constituent?.value !== null
+    && etf?.percentile?.status === "ready"
+    && constituent?.percentile?.status === "ready"
+    && etf.tradingDate
+    && etf.tradingDate === constituent.tradingDate;
+  if (!ready) return null;
+  const conclusion = financingComparisonConclusion(etf, constituent);
+  const bothNegative = etf.value < 0 && constituent.value < 0;
+  const bothPositive = etf.value > 0 && constituent.value > 0;
+  return {
+    label: bothNegative ? "资金偏弱" : bothPositive ? "资金偏强" : "方向分化",
+    tone: bothNegative ? "market-down" : bothPositive ? "market-up" : "neutral",
+    asOf: etf.tradingDate,
+    text: `${symbol} 近5个可用交易日：ETF端 ${formatFundFlowValue(etf.value, "CNY", { signed: true })}（P${etf.percentile.value}），前10大持仓端 ${formatFundFlowValue(constituent.value, "CNY", { signed: true })}（P${constituent.percentile.value}）；${conclusion}。这是可复核的资金规则观察，不替代通过 Evidence 门禁的研究报告，也不构成投资建议。`,
+  };
 }
 
 export function buildFundFlowView(envelope, symbol) {
@@ -526,6 +580,7 @@ export function buildFundFlowView(envelope, symbol) {
   const supported = fundFlowRequestTypes(symbol).length > 0;
   if (!supported || capabilities.marketFlowV1 !== true) {
     return {
+      symbol: String(symbol || "").toUpperCase() || null,
       enabled: false,
       status: "unavailable",
       asOf: null,
@@ -541,6 +596,7 @@ export function buildFundFlowView(envelope, symbol) {
     : { value: null, percentile: { status: "unavailable", value: null, sampleSize: 0 }, points: [] };
   const approximation = constituentApproximation(constituentComparison.sourceRow);
   return {
+    symbol: String(symbol || "").toUpperCase() || null,
     enabled: metrics.length > 0,
     status: envelope?.status || "unavailable",
     asOf: metrics.map(({ asOf }) => asOf).filter(Boolean).sort().at(-1) || null,

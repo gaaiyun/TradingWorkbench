@@ -196,6 +196,45 @@ export function filterFeedItems(items, filters = {}) {
   });
 }
 
+export function dailyQuoteFromBars(rows, { currentBar = null, tradingDate = null } = {}) {
+  const ordered = (Array.isArray(rows) ? rows : [])
+    .filter((row) => row && typeof row.ts === "string" && Number.isFinite(Number(row.close)))
+    .sort((left, right) => left.ts.localeCompare(right.ts));
+  const latestDaily = ordered.at(-1);
+  const candidateCurrent = currentBar
+    && typeof currentBar.ts === "string"
+    && Number.isFinite(Number(currentBar.close))
+    ? currentBar
+    : null;
+  const candidateDay = candidateCurrent && typeof tradingDate === "function"
+    ? tradingDate(candidateCurrent.ts)
+    : null;
+  const latestDailyDay = latestDaily && typeof tradingDate === "function"
+    ? tradingDate(latestDaily.ts)
+    : null;
+  const preciseCurrent = candidateCurrent
+    && (!candidateDay || !latestDailyDay || candidateDay >= latestDailyDay)
+    ? candidateCurrent
+    : null;
+  const latest = preciseCurrent || latestDaily;
+  const sameTradingDay = preciseCurrent && latestDaily && typeof tradingDate === "function"
+    ? candidateDay === latestDailyDay
+    : false;
+  const previous = preciseCurrent
+    ? sameTradingDay ? ordered.at(-2) : latestDaily
+    : ordered.at(-2);
+  if (!latest) return null;
+  const close = Number(latest.close);
+  const previousClose = Number(previous?.close);
+  return {
+    close,
+    change: previous && Number.isFinite(previousClose) && previousClose !== 0
+      ? (close / previousClose - 1) * 100
+      : null,
+    ts: latest.ts,
+  };
+}
+
 function feedGroupKey(item, index) {
   const type = String(item?.type || "news");
   const cluster = String(item?.cluster_id || item?.clusterId || "").trim();
