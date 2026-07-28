@@ -235,11 +235,13 @@ flowchart LR
     Q --> F
     F --> API["/api/flows"]
     API --> UI["市场监控资金面板"]
+    B["既有 market_bars"] --> UI
+    E["既有 market_events / evidence news"] --> UI
 ```
 
-两融与份额源按来源隔离：上交所被 403 或网络阻断时，批次降级为当前份额快照，但已取得的两融数据仍写入。沪市历史份额为 `derived`；深市 `159995.SZ` 仅从上线日起累积 `snapshot_unstamped`。页面只显示融资余额、融资净买入和 ETF 份额；基准从 2024-01-01 开始，当前值不进入 mid-rank 样本，少于 60 个历史观察不输出分位。
+两融与份额源按来源隔离：上交所被 403 或网络阻断时，批次降级为当前份额快照，但已取得的两融数据仍写入。沪市历史份额为 `derived`；深市 `159995.SZ` 仅从上线日起累积 `snapshot_unstamped`。页面只显示融资余额、融资净买入和 ETF 份额；基准从 2024-01-01 开始，当前值不进入 mid-rank 样本，少于 60 个历史观察不输出分位。份额面板分析日度变化而不是绝对份额，相邻变化超过 35% 时按 `possible_split_or_method_change` 留空，防止拆分被叙述成资金异动。
 
-资金面当前不进入 EvidencePacket、Manifest、报告哈希或 verified 门禁，也不得被叙述为具体机构买卖。
+资金面叙事由确定性规则组合隔夜驱动、ETF 日线涨跌、融资净买入和日度份额变化；近 60 期双线比较的是各自历史分位，不是把不同单位的金额画在同一尺度。`market_events` 和 evidence 新闻只作为同期时间锚，不能被写成因果。资金面当前不进入 EvidencePacket、Manifest、报告哈希或 verified 门禁，也不得被叙述为具体机构买卖。
 
 ## 7. 新闻证据流
 

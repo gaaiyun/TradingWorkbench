@@ -240,6 +240,8 @@ if ($pagesHealth.deployment.deployedAt -eq "unknown") {
 
 `deploy-workbench` 缺 Cloudflare 凭据时直接失败，不再跳过。发布前用同一个 `DEPLOYED_AT` 生成静态 manifest；`pages deploy` 成功后才参数化 UPSERT 到 D1 `deployment_metadata`，失败的发布不会覆盖当前线上身份。随后 workflow 最多等待约两分钟，直到生产域名 `/api/health` 回读到目标 SHA 和合法 `deployedAt`。Health 优先信任当前 immutable deployment 的静态 manifest，只有它缺失、被 SPA fallback 替换或 SHA 不一致时才有界查询 D1，且仍要求记录 SHA 等于 `CF_PAGES_COMMIT_SHA`。超时或不一致都视为发布失败。`CF_PAGES_URL` 保留不可变 deployment URL，便于核对生产 alias 的传播。
 
+2026-07-28 现场用 Wrangler 回读 `tradingagents-board` 的 Git Provider 为 `No`，因此项目不存在 Cloudflare Git integration 竞争发布。曾出现的同 SHA 重复部署来自 GitHub workflow 之外的 Wrangler/ad-hoc 发布；这类发布若没有同步生成静态 manifest 和持久化 D1 identity，会被 `/api/health` 正确标成 `deployment_manifest=invalid_metadata`。禁止把无身份的手工发布当成最终交付；若紧急排障确需手工发布，必须按下段补齐 manifest 与 D1 identity，并立即再跑一次权威 `deploy-workbench` 收口。
+
 手工 Pages 发布若要保留同等可观测性，必须先应用 migration 0017，并用与 manifest 相同的 SHA/UTC 时间更新 `deployment_metadata`；否则只允许作为临时排障，不能作为最终交付路径。权威生产发布仍是 GitHub `deploy-workbench`。
 
 ### 5.4 VolGuard
@@ -496,6 +498,8 @@ npx wrangler d1 execute DB --remote --command `
 `total_rows` 必须等于 `unique_keys`。回填或 daily 的日志只允许稳定来源错误码，不得出现 token 或上游正文。API 验收请求 `/api/flows?profile=cn-semi-comms&symbol=515880.SS&type=margin_net_buy&limit=2`，应返回统一 `status/asOf/data/sources/capabilities` 信封；`/api/monitor-status?capacity=1` 应包含 `fund_flows`。
 
 回滚顺序：先把 repository variable `FUND_FLOW_COLLECTION_ENABLED=false`，确认下一次 schedule 被跳过；再把 `FUND_FLOW_ENABLED` 和页面 `data-fund-flow-enabled` 关为 `false`，最后回退 UI/API/collector。手工 `workflow_dispatch` 不受采集熔断变量限制，仍可用于受控排障。保留 migration 0016 和数据表，不执行破坏性 down migration。回滚后重新验证 Evidence、Manifest、期权、行情、新闻和设置 revision 均未变化。
+
+资金叙事层只读取既有 `/api/flows`、日线 `/api/market`、`/api/events` 与 evidence 新闻；关闭页面 `data-fund-flow-enabled` 会同时隐藏三卡、历史分位对照和确定性一句话，不影响采集、主图、期权或 Evidence。事件锚只作同期标记。若仅叙事层有问题，优先关闭页面开关，不删除 `fund_flows` 数据，也不回退 migration。
 
 ## 13. 故障定位
 
