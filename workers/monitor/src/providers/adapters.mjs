@@ -234,7 +234,7 @@ function yahooUrl(request, host = "query1") {
   return `https://${host}.finance.yahoo.com/v8/finance/chart/${symbol}?interval=${interval}&range=${range}&events=history`;
 }
 
-function parseYahoo(payload) {
+function parseYahoo(payload, request) {
   const result = payload?.chart?.result?.[0];
   const quote = result?.indicators?.quote?.[0];
   if (!result || !quote || !Array.isArray(result.timestamp)) return null;
@@ -249,6 +249,10 @@ function parseYahoo(payload) {
     row.timestamp &&
     [row.open, row.high, row.low, row.close, row.volume]
       .every((value) => value !== null && value !== undefined)
+    && (
+      request?.timeframe !== "5m"
+      || Math.floor(Date.parse(row.timestamp) / 1000) % 300 === 0
+    )
   );
 }
 
@@ -386,7 +390,7 @@ export function createAdapters({ fetch: fetcher, apiKey, timeoutMs }) {
     ),
     yahoo: async (marketRequest, runtime) => {
       const load = async (host) => normalizeRows(
-        parseYahoo(await fetchJson(yahooUrl(marketRequest, host))),
+        parseYahoo(await fetchJson(yahooUrl(marketRequest, host)), marketRequest),
         contextFor(
           marketRequest,
           "yahoo",
@@ -403,7 +407,7 @@ export function createAdapters({ fetch: fetcher, apiKey, timeoutMs }) {
       }
     },
     "yahoo-us-intraday": async (marketRequest, runtime) => normalizeRows(
-      parseYahoo(await fetchJson(yahooUrl(marketRequest, "query1"))),
+      parseYahoo(await fetchJson(yahooUrl(marketRequest, "query1")), marketRequest),
       contextFor(
         marketRequest,
         "yahoo-us-intraday",

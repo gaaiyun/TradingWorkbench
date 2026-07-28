@@ -332,6 +332,27 @@ test("US intraday falls back from Yahoo to Eastmoney with Shanghai-stamped 5m ba
   assert.match(urls[1], /fqt=0/);
 });
 
+test("Yahoo US intraday drops its unaligned live partial bar", async () => {
+  const { createProviderRegistry } = await import(registryUrl);
+  const payload = yahooFixture();
+  payload.chart.result[0].timestamp.push(1784772158);
+  for (const field of Object.values(payload.chart.result[0].indicators.quote[0])) {
+    field.push(field[0]);
+  }
+  const registry = createProviderRegistry({
+    fetch: async () => jsonResponse(payload),
+    now: () => new Date("2026-07-23T02:05:00.000Z"),
+  });
+  const result = await registry.fetchMarketData({
+    symbol: "NVDA",
+    market: "US",
+    timeframe: "5m",
+  });
+  assert.equal(result.source, "yahoo-us-intraday");
+  assert.equal(result.bars.length, 1);
+  assert.equal(Date.parse(result.bars[0].timestamp) / 1000 % 300, 0);
+});
+
 test("includes Alpha Vantage between Yahoo and Stooq only when a key is configured", async () => {
   const { createProviderRegistry } = await import(registryUrl);
   const urls = [];
