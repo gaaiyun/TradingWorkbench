@@ -105,7 +105,7 @@ Worker 不运行 pandas、LangGraph、GARCH、BSADF 或长历史回测。VolGuar
 
 ## ETF 日频资金面
 
-市场监控在主图下方显示融资余额、融资净买入和 ETF 份额，不新增一级入口，也不改变三窗格行情图、期权或 Evidence/报告契约。三张卡保留当前值摘要，下面用近 60 期历史分位对照“杠杆资金”和“申赎资金（份额变化代理）”，并给出由确定性规则生成的一句话观察。分位从 2024-01-01 起计算，排除当前值，使用 mid-rank；历史样本少于 60 个交易日时只显示“累积中”，不伪造分位。
+市场监控在主图下方显示融资余额、融资净买入和 ETF 份额，不新增一级入口，也不改变三窗格行情图、期权或 Evidence/报告契约。三张卡保留当前值摘要，下面用近 60 期历史分位对照“融资净买入”和“ETF 份额增量”，并给出由确定性规则生成的一句话观察。隔夜驱动与 ETF 涨跌都显示对应日线日期，资金指标继续显示自己的截止日，避免把盘中报价、完整日线和滞后两融误当成同一时点。分位从 2024-01-01 起计算，排除当前值，使用 mid-rank；历史样本少于 60 个交易日时只显示“累积中”，不伪造分位。
 
 - 融资数据来自东方财富两融日频报表，保存为交易所披露的 CNY 数值；当前三个 ETF 已回填约六年历史。
 - `515880.SS`、`512480.SS` 的历史份额由上交所日频基金规模除以东方财富同日未复权收盘价推导，明确标记 `derived`，不冒充登记份额。
@@ -269,6 +269,8 @@ MCP 只提供设置、监控、行情、新闻和研究历史查询，不接收�
 本轮发布依赖 migrations `0013_monitor_reliability.sql`、`0014_chat_evidence_scope.sql`、`0015_notification_deliveries.sql`、纯新增的 `0016_fund_flows.sql` 与 `0017_deployment_metadata.sql`。后者让 Pages 在静态 manifest 被后续同 SHA 部署遮盖时，仍能从 D1 回读可信 `deployedAt`。
 
 2026-07-26 已完成 D1 `0013`–`0015`、Monitor Worker 和 Workbench Pages 的生产发布与冒烟。Pages `/api/health` 和 Worker `/health` 都返回运行时 commit SHA；发布 workflow 必须在生产域名回读到目标 SHA 才算成功。2026-07-27 的外审已确认 SEC provider 能取得 GOOGL 官方 8-K；ORCL 最近 8-K 超出 30 天窗口，零条 evidence 是正确结果。旧工信部反爬端点已从代码中移除，改为中国政府网政策库。上交所因 Cloudflare 出口 403 改由两小时 GitHub Actions 采集；首轮生产任务写入 `515880.SS` 4 条、`512480.SS` 3 条原始公告 evidence，包含二季报和份额拆分。部分来源失败时批次会写入可用结果并标记 `NEWS_COLLECTION_PARTIAL`，而不是让整页空白。完整记录、验证协议和回退流程见 [部署与运维](docs/operations-and-deployment.md)。
+
+2026-07-28 资金叙事功能验收基线为 `039ba5a`：CI run `30340865649`、Pages run `30340878635`、Monitor run `30340881245` 全绿，验收时 `origin/main`、Pages `/api/health` 与 Worker `/health` 三方 SHA 完全一致。后续纯文档提交也按同一协议重新发布 Pages 与 Worker；当前精确 SHA 必须从 GitHub 与两个 health 端点实时回读，不依赖 README 中的固定值。生产浏览器实测 7 个一级入口、3 张资金卡、2 条分位线、1 个事件锚、0 pageerror，390px 与 1440px 均无横向溢出。资金面最新交易日仍为 2026-07-24，页面按上游事实显示 `stale`；Google News RSS 仍为 503，其余六个 Worker 新闻源正常。上交所 `official-news` 定时任务近期存在 `SSE_RESPONSE_INVALID_515880` 的间歇失败，任务会响亮失败并保留既有官方证据，不会用发现层结果冒充交易所 evidence。
 
 ## 架构取舍
 
