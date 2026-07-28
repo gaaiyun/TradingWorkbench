@@ -28,7 +28,7 @@ import {
   isFundFlowUiEnabled,
   marketPercentageChange,
   selectFundFlowEventAnchors,
-} from "./workbench-fundflow.mjs?v=ba95d7d271ea";
+} from "./workbench-fundflow.mjs?v=fca9abfd867e";
 import {
   CandlestickSeries,
   ColorType,
@@ -600,11 +600,15 @@ import {
       change: state.quotes.get(symbol)?.change ?? null,
       date: state.quotes.get(symbol)?.tradingDate ?? null,
     }));
+    const etfChange = state.quotes.get(state.selectedSymbol)?.change
+      ?? state.fundFlowContext.etfChange;
+    const etfDate = state.quotes.get(state.selectedSymbol)?.tradingDate
+      ?? state.fundFlowContext.etfDate;
     renderFundFlowComparison(view.comparisonSeries, dates, anchors);
     $("#fund-flow-narrative").textContent = buildFundFlowNarrative(view, {
       symbol: state.selectedSymbol,
-      etfChange: state.fundFlowContext.etfChange,
-      etfDate: state.fundFlowContext.etfDate,
+      etfChange,
+      etfDate,
       driverLabel: state.fundFlowContext.driverLabel,
       drivers,
       anchors,

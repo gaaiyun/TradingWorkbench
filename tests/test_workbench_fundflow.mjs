@@ -576,6 +576,8 @@ test("fund-flow panel stays inside monitor after the chart and is enabled after 
   assert.match(script, /<path class="fund-flow-line/);
   assert.match(script, /<desc>/);
   assert.match(script, /selectFundFlowEventAnchors/);
+  assert.match(script, /state\.quotes\.get\(state\.selectedSymbol\)\?\.change\s*\?\?\s*state\.fundFlowContext\.etfChange/);
+  assert.match(script, /state\.quotes\.get\(state\.selectedSymbol\)\?\.tradingDate\s*\?\?\s*state\.fundFlowContext\.etfDate/);
   assert.match(script, /buildFundFlowThemeObservation/);
   assert.match(script, /主题观察/);
   assert.doesNotMatch(script, /view\.status === "ok" \? "已核验"/);
