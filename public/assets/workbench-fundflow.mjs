@@ -303,24 +303,21 @@ export function fundFlowBehavior(flowType, percentile, value) {
     return "杠杆存量处于常态区间";
   }
   const shareMetric = flowType === "shares";
-  const subject = shareMetric ? "ETF份额" : "融资";
-  if (current === 0) return `${subject}净变化持平`;
+  if (current === 0) return shareMetric ? "ETF份额单日净变化持平" : "单日融资净变化持平";
   if (current > 0) {
-    const direction = shareMetric ? "净增加" : "净流入";
-    if (rank >= 95) return `${subject}${direction}显著偏高`;
-    if (rank >= 85) return `${subject}${direction}偏高`;
-    if (rank <= 15) return `${subject}${direction}但处于低位`;
-    return `${subject}${direction}处于常态区间`;
+    if (rank >= 95) return shareMetric ? "ETF份额单日净增加显著" : "单日融资净流入显著";
+    if (rank >= 85) return shareMetric ? "ETF份额单日净增加偏强" : "单日融资净流入偏强";
+    if (rank <= 15) return shareMetric ? "ETF份额单日净增加但幅度偏小" : "单日融资净流入但幅度偏小";
+    return shareMetric ? "ETF份额单日净增加处于常态区间" : "单日融资净流入处于常态区间";
   }
-  const direction = shareMetric ? "净减少" : "净流出";
-  if (rank <= 5) return `${subject}${direction}显著偏低`;
-  if (rank <= 15) return `${subject}${direction}偏低`;
-  if (rank >= 85) return `${subject}${direction}但处于高位`;
-  return `${subject}${direction}处于常态区间`;
+  if (rank <= 5) return shareMetric ? "ETF份额单日净减少显著" : "单日融资净流出显著";
+  if (rank <= 15) return shareMetric ? "ETF份额单日净减少偏强" : "单日融资净流出偏强";
+  if (rank >= 85) return shareMetric ? "ETF份额单日净减少但幅度偏小" : "单日融资净流出但幅度偏小";
+  return shareMetric ? "ETF份额单日净减少处于常态区间" : "单日融资净流出处于常态区间";
 }
 
-function percentileLabel(percentile) {
-  if (percentile.status === "ready") return `P${percentile.value}`;
+function percentileLabel(percentile, context = "历史") {
+  if (percentile.status === "ready") return `${context} P${percentile.value}`;
   if (percentile.status === "accumulating") {
     return `累积中 ${percentile.sampleSize}/${FUND_FLOW_MIN_SAMPLE}`;
   }
@@ -343,7 +340,7 @@ function metricTooltip(definition, current, percentile, { percentileBasis = defi
     current?.flow_type === "shares_outstanding_derived"
       ? "上交所规模÷东财同日未复权收盘价推导，非登记份额"
       : current?.flow_type === "shares_outstanding_snapshot"
-        ? "无来源时间戳；快照仅记录抓取时间"
+        ? "无来源时间戳；快照仅记录抓取时间；无日频历史时不计算份额变化分位"
         : null,
     `${percentileBasis}：${sample}`,
     `口径自 ${FUND_FLOW_START_DATE} 起，当前值不计入样本，使用 mid-rank 处理并列值`,
@@ -356,24 +353,34 @@ function buildMetric(definition, data, capabilities, symbol) {
   const value = finiteValue(current?.value);
   const analysisRows = seriesRows(definition, rows);
   const analysisValue = finiteValue(analysisRows.at(-1)?.value);
-  const percentile = capabilities?.historicalPercentile
+  const snapshotOnlyShares = definition.flowType === "shares"
+    && rows.length > 0
+    && rows.every(({ flow_type: flowType }) => flowType === "shares_outstanding_snapshot");
+  const percentile = capabilities?.historicalPercentile && !snapshotOnlyShares
     ? computeHistoricalPercentile(analysisRows.map((row) => row.value))
     : { status: "unavailable", value: null, sampleSize: 0 };
   const percentileBasis = definition.flowType === "shares" ? "日度份额变化" : definition.label;
+  const percentileContext = definition.flowType === "margin_balance"
+    ? "水平"
+    : definition.flowType === "shares" ? "单日变化" : "单日";
   return {
     id: definition.id,
-    label: definition.label,
+    label: snapshotOnlyShares ? `${definition.label}（仅快照）` : definition.label,
     value,
     unit: current?.unit || (definition.flowType === "shares" ? "shares" : "CNY"),
     signed: definition.signed,
     analysisValue,
-    behavior: fundFlowBehavior(definition.flowType, percentile, analysisValue),
-    comparison: comparisonText(definition, analysisRows, analysisValue),
+    behavior: snapshotOnlyShares
+      ? "历史份额不可用，仅显示快照"
+      : fundFlowBehavior(definition.flowType, percentile, analysisValue),
+    comparison: snapshotOnlyShares
+      ? "无可比历史"
+      : comparisonText(definition, analysisRows, analysisValue),
     series: analysisRows.slice(-FUND_FLOW_CHART_POINTS).map((row) => ({
       date: fundFlowTradingDate(row?.ts),
       value: finiteValue(row?.value),
     })),
-    percentileSeries: percentileSeries(analysisRows),
+    percentileSeries: snapshotOnlyShares ? [] : percentileSeries(analysisRows),
     asOf: current?.as_of || current?.ts || null,
     tradingDate: fundFlowTradingDate(current?.as_of || current?.ts),
     source: current?.source || null,
@@ -385,7 +392,7 @@ function buildMetric(definition, data, capabilities, symbol) {
     ),
     percentile: {
       ...percentile,
-      label: percentileLabel(percentile),
+      label: percentileLabel(percentile, percentileContext),
       tone: percentile.status === "ready" && (percentile.value <= 10 || percentile.value >= 90)
         ? "is-extreme"
         : "is-neutral",
@@ -437,6 +444,36 @@ export function selectFundFlowEventAnchors(feeds, symbol, dates, { limit = 3 } =
     .sort((left, right) => left.date.localeCompare(right.date));
 }
 
+function financingComparisonConclusion(etf, constituent) {
+  if (etf.value > 0 && constituent.value < 0) return "ETF端净流入、个股端净流出，方向分化";
+  if (etf.value < 0 && constituent.value > 0) return "ETF端净流出、个股端净流入，方向分化";
+  if (etf.value === 0 && constituent.value === 0) return "两端均持平";
+  if (etf.value === 0) return constituent.value > 0
+    ? "ETF端持平、个股端净流入"
+    : "ETF端持平、个股端净流出";
+  if (constituent.value === 0) return etf.value > 0
+    ? "ETF端净流入、个股端持平"
+    : "ETF端净流出、个股端持平";
+
+  const etfRank = etf.percentile.value;
+  const constituentRank = constituent.percentile.value;
+  const rankGap = Math.abs(etfRank - constituentRank);
+  if (etf.value < 0 && constituent.value < 0) {
+    if (etfRank <= 15 && constituentRank <= 15) return "两端显著净流出";
+    if (rankGap >= 20) return etfRank < constituentRank
+      ? "两端均为净流出，ETF端撤出更明显"
+      : "两端均为净流出，个股端撤出更明显";
+    if (etfRank <= 40 && constituentRank <= 40) return "两端净流出，均处于历史偏弱区间";
+    return "两端均为净流出，力度未达极端";
+  }
+  if (etfRank >= 85 && constituentRank >= 85) return "两端显著净流入";
+  if (rankGap >= 20) return etfRank > constituentRank
+    ? "两端均为净流入，ETF端流入更明显"
+    : "两端均为净流入，个股端流入更明显";
+  if (etfRank >= 60 && constituentRank >= 60) return "两端净流入，均处于历史偏强区间";
+  return "两端均为净流入，力度未达极端";
+}
+
 export function buildFundFlowNarrative(view, {
   symbol = "ETF",
   etfChange = null,
@@ -453,34 +490,35 @@ export function buildFundFlowNarrative(view, {
   const constituentReady = constituent?.value !== null && constituent?.percentile?.status === "ready";
   let conclusion = "ETF端与个股端数据尚不足以比较";
   if (etfReady && constituentReady) {
-    if (etf.value > 0 && constituent.value <= 0) conclusion = "ETF端更积极";
-    else if (constituent.value > 0 && etf.value <= 0) conclusion = "个股端更积极";
-    else if (etf.value > 0 && constituent.value > 0) {
-      const difference = etf.percentile.value - constituent.percentile.value;
-      conclusion = Math.abs(difference) < 20
-        ? "双向一致加杠杆"
-        : difference > 0 ? "ETF端更积极" : "个股端更积极";
-    } else if (etf.value < 0 && constituent.value < 0) conclusion = "双向走弱";
-    else if (etf.value === 0 && constituent.value === 0) conclusion = "双向持平";
-    else conclusion = etf.value > constituent.value ? "ETF端相对更稳" : "个股端相对更稳";
+    conclusion = financingComparisonConclusion(etf, constituent);
   }
   const etfPhrase = etfReady
-    ? `ETF融资近5日累计 ${formatFundFlowValue(etf.value, "CNY", { signed: true })}（P${etf.percentile.value}）`
-    : "ETF融资近5日累计暂不可比";
+    ? `ETF自身融资净买入（近5个可用交易日累计）${formatFundFlowValue(etf.value, "CNY", { signed: true })}（P${etf.percentile.value}）`
+    : "ETF自身融资净买入近5个可用交易日累计暂不可比";
   const constituentPhrase = constituentReady
-    ? `成分股融资近5日累计 ${formatFundFlowValue(constituent.value, "CNY", { signed: true })}（P${constituent.percentile.value}）`
-    : "成分股融资近5日累计暂不可比";
+    ? `前10大持仓股票融资净买入（近5个可用交易日累计）${formatFundFlowValue(constituent.value, "CNY", { signed: true })}（P${constituent.percentile.value}）`
+    : "前10大持仓股票融资净买入近5个可用交易日累计暂不可比";
+  const etfTradingDate = etfReady ? etf.tradingDate : null;
+  const constituentTradingDate = constituentReady ? constituent.tradingDate : null;
+  const datesMatch = etfTradingDate && constituentTradingDate && etfTradingDate === constituentTradingDate;
+  const datesDiffer = etfReady && constituentReady && !datesMatch;
+  if (datesDiffer) conclusion = "资金日期不一致，暂不可比";
+  const dataDateNote = datesMatch
+    ? `资金数据截至 ${etfTradingDate}：`
+    : etfTradingDate || constituentTradingDate
+      ? `资金日期${datesDiffer ? "不一致" : ""}：ETF端截至 ${etfTradingDate || "—"}，个股端截至 ${constituentTradingDate || "—"}：`
+      : "";
   const approximation = view.financingComparison?.approximation;
   const approximationNote = approximation
-    ? `口径：前${approximation.topN}大持仓近似（披露日 ${approximation.disclosedAt}，覆盖 ${approximation.covered}/${approximation.total}），不代表身份与因果`
-    : "口径：成分股篮子为最新披露持仓近似，不代表身份与因果";
+    ? `口径：前${approximation.topN}大持仓近似（披露日 ${approximation.disclosedAt}，覆盖 ${approximation.covered}/${approximation.total}），股票融资净买入为简单合计，不按ETF权重；不代表身份与因果`
+    : "口径：成分股篮子为最新披露持仓近似，股票融资净买入为简单合计，不按ETF权重；不代表身份与因果";
   const eventNote = anchors.length
     ? `；${anchors.at(-1).date}“${anchors.at(-1).title}”仅作时间锚，不代表因果`
     : "";
   const marketContext = finiteChange(driverChange) !== null || finiteChange(etfChange) !== null
     ? `${changePhrase(driverSymbol, driverChange, driverDate)}，${changePhrase(symbol, etfChange, etfDate)}；`
     : "";
-  return `${marketContext}${etfPhrase}；${constituentPhrase}——${conclusion}；${approximationNote}${eventNote}。`;
+  return `${marketContext}${dataDateNote}${etfPhrase}；${constituentPhrase}——${conclusion}；${approximationNote}${eventNote}。`;
 }
 
 export function buildFundFlowView(envelope, symbol) {
@@ -510,12 +548,12 @@ export function buildFundFlowView(envelope, symbol) {
     comparisonSeries: [
       {
         id: "etf-margin",
-        label: "ETF融资",
+        label: "ETF端",
         points: etfComparison.points,
       },
       {
         id: "constituent-margin",
-        label: "成分股融资",
+        label: "前10大持仓端",
         points: constituentComparison.points,
       },
     ],

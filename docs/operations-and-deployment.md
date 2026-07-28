@@ -497,9 +497,11 @@ npx wrangler d1 execute DB --remote --command `
 
 `total_rows` 必须等于 `unique_keys`。回填或 daily 的日志只允许稳定来源错误码，不得出现 token 或上游正文。API 至少验收 `margin_net_buy`、`constituent_margin_net_buy` 和 `constituent_margin_balance`；后两者的 `method` 必须含披露日与 `coverage=N/N`，`quality` 必须明确为当前前 N 大近似。统一信封仍为 `status/asOf/data/sources/capabilities`，其中 `capabilities.constituentMarginDaily=true`；`/api/monitor-status?capacity=1` 应包含 `fund_flows`。
 
+日期验收必须把 `ts` 转为 `Asia/Shanghai` 后再统计星期：上海周六/周日必须为 0，且流程日期应落在相同标的日线行情交易日集合内。不要直接用 `ts.slice(0, 10)`；上海交易日 2026-07-27 的规范 UTC 表示是 `2026-07-26T16:00:00Z`。东方财富两融 backfill 完成后，三个 ETF 的 `margin_balance / margin_net_buy` 条数应与上游 count 同量级（当前约 1600 / 1500 条），不能把页面最近 60 点展示误当成回填上限。
+
 回滚顺序：先把 repository variable `FUND_FLOW_COLLECTION_ENABLED=false`，确认下一次 schedule 被跳过；再把 `FUND_FLOW_ENABLED` 和页面 `data-fund-flow-enabled` 关为 `false`，最后回退 UI/API/collector。手工 `workflow_dispatch` 不受采集熔断变量限制，仍可用于受控排障。保留 migration 0016 和数据表，不执行破坏性 down migration。回滚后重新验证 Evidence、Manifest、期权、行情、新闻和设置 revision 均未变化。
 
-资金叙事层只读取既有 `/api/flows`、日线 `/api/market`、`/api/events` 与 evidence 新闻；关闭页面 `data-fund-flow-enabled` 会同时隐藏三卡、ETF vs 成分股分位对照和确定性一句话，不影响采集、主图、期权或 Evidence。事件锚只作同期标记。若仅叙事层有问题，优先关闭页面开关，不删除 `fund_flows` 数据，也不回退 migration。
+资金叙事层只读取既有 `/api/flows`、日线 `/api/market`、`/api/events` 与 evidence 新闻；关闭页面 `data-fund-flow-enabled` 会同时隐藏三卡、ETF vs 成分股分位对照和确定性一句话，不影响采集、主图、期权或 Evidence。事件锚只作同期标记。`/api/flows` 历史查询按每条逻辑序列的最新行判断状态，并按当前时间重算 4 天 freshness；不能让窗口内旧行污染最新状态，也不能让较新的一个 flow type 遮住另一个滞后类型。卡片 P 值要区分“水平/单日/单日变化”，叙事 P 值是近 5 个可用交易日累计。若两端交易日不一致，页面必须写明日期并暂不比较。若仅叙事层有问题，优先关闭页面开关，不删除 `fund_flows` 数据，也不回退 migration。
 
 ## 13. 故障定位
 

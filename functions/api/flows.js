@@ -8,6 +8,7 @@ import {
 import { json } from "./_util.js";
 
 const NO_STORE = { "cache-control": "no-store" };
+const FUND_FLOW_FRESHNESS_MAX_AGE_MS = 4 * 24 * 60 * 60 * 1000;
 
 export function onRequestGet(context) {
   const enabled = context.env?.FUND_FLOW_ENABLED === "true"
@@ -25,6 +26,9 @@ export function onRequestGet(context) {
   const capabilities = fundFlowCapabilities(symbol);
   return serveDynamic(context, {
     capabilities: fundFlowQueryCapabilities(),
+    statusScope: "latest-per-series",
+    statusGroupColumns: ["profile_id", "symbol", "flow_type", "period", "source", "adjustment"],
+    freshnessMaxAgeMs: FUND_FLOW_FRESHNESS_MAX_AGE_MS,
     query(db, filters) {
       return isFundFlowApplicable(filters) ? queryFundFlows(db, filters) : [];
     },

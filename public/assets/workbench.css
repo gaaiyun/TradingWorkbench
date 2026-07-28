@@ -575,7 +575,7 @@ a { color: inherit; }
 }
 .fund-flow-tooltip[hidden] { display: none; }
 .fund-flow-comparison-chart { min-height: 146px; padding: 10px 14px 0; border-top: 1px solid var(--line); }
-.fund-flow-comparison-head { display: flex; align-items: center; gap: 14px; color: var(--quiet); font-size: 8px; }
+.fund-flow-comparison-head { display: flex; align-items: center; flex-wrap: wrap; gap: 8px 14px; color: var(--quiet); font-size: 8px; }
 .fund-flow-comparison-head span:last-child { margin-left: auto; }
 .fund-flow-comparison-head i { display: inline-block; width: 12px; height: 2px; margin-right: 5px; vertical-align: middle; }
 .fund-flow-comparison-head .is-etf-margin { background: #c8b27a; }

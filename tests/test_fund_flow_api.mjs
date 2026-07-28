@@ -168,6 +168,77 @@ test("constituent partial coverage is visible as degraded at envelope level", as
   assert.deepEqual(payload.data, [partial]);
 });
 
+test("fund-flow freshness follows the latest as-of row instead of historical rows", async () => {
+  if (!flowsApi) return;
+  const latest = flow({
+    id: "latest",
+    flow_type: "margin_net_buy",
+    ts: "2026-07-27T16:00:00.000Z",
+    as_of: "2026-07-27T16:00:00.000Z",
+    freshness: "fresh",
+  });
+  const historical = flow({
+    id: "historical",
+    flow_type: "margin_net_buy",
+    ts: "2024-01-02T16:00:00.000Z",
+    as_of: "2024-01-02T16:00:00.000Z",
+    freshness: "stale",
+  });
+  const response = await flowsApi.onRequestGet({
+    request: request("/api/flows?symbol=515880.SS&type=margin_net_buy&from=2024-01-01"),
+    env: { DB: new FakeD1({ rows: { fund_flows: [latest, historical] } }), FUND_FLOW_ENABLED: "true" },
+  });
+  const payload = await response.json();
+  assert.equal(payload.status, "ok");
+  assert.equal(payload.asOf, latest.as_of);
+  assert.equal(payload.data.length, 2);
+});
+
+test("fund-flow freshness is recomputed from the latest timestamp instead of trusting stored fresh", async () => {
+  if (!flowsApi) return;
+  const oldButStoredFresh = flow({
+    id: "old-but-stored-fresh",
+    flow_type: "margin_net_buy",
+    ts: "2026-07-01T16:00:00.000Z",
+    as_of: "2026-07-01T16:00:00.000Z",
+    freshness: "fresh",
+  });
+  const response = await flowsApi.onRequestGet({
+    request: request("/api/flows?symbol=515880.SS&type=margin_net_buy&from=2026-01-01"),
+    env: { DB: new FakeD1({ rows: { fund_flows: [oldButStoredFresh] } }), FUND_FLOW_ENABLED: "true" },
+  });
+  const payload = await response.json();
+  assert.equal(payload.status, "stale");
+});
+
+test("fund-flow status keeps the latest state of every returned flow type", async () => {
+  if (!flowsApi) return;
+  const latestNetBuy = flow({
+    id: "latest-net-buy",
+    flow_type: "margin_net_buy",
+    ts: "2026-07-27T16:00:00.000Z",
+    as_of: "2026-07-27T16:00:00.000Z",
+    freshness: "fresh",
+  });
+  const laggingBalance = flow({
+    id: "lagging-balance",
+    flow_type: "margin_balance",
+    ts: "2026-07-20T16:00:00.000Z",
+    as_of: "2026-07-20T16:00:00.000Z",
+    freshness: "stale",
+  });
+  const response = await flowsApi.onRequestGet({
+    request: request("/api/flows?symbol=515880.SS&from=2026-01-01"),
+    env: {
+      DB: new FakeD1({ rows: { fund_flows: [latestNetBuy, laggingBalance] } }),
+      FUND_FLOW_ENABLED: "true",
+    },
+  });
+  const payload = await response.json();
+  assert.equal(payload.status, "stale");
+  assert.equal(payload.asOf, latestNetBuy.as_of);
+});
+
 test("fund-flow endpoint rejects unsupported, unknown, and inconsistent parameters before D1", async () => {
   if (!flowsApi) return;
   const DB = new FakeD1();

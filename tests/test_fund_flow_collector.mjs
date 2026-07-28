@@ -176,6 +176,24 @@ test("parsers retain negative financing, exact CNY units, and derived inputs", (
   ]), "515880", 2), /UPSTREAM_SCHEMA/);
 });
 
+test("margin rows preserve the Shanghai trade date and reject weekend ghosts", () => {
+  const friday = parseMarginPage(marginPayload("515880"), "515880").rows[0];
+  const parts = new Intl.DateTimeFormat("en-CA", {
+    timeZone: "Asia/Shanghai",
+    year: "numeric",
+    month: "2-digit",
+    day: "2-digit",
+    weekday: "short",
+  }).formatToParts(new Date(friday.ts));
+  const values = Object.fromEntries(parts.filter(({ type }) => type !== "literal").map(({ type, value }) => [type, value]));
+  assert.equal(`${values.year}-${values.month}-${values.day}`, "2026-07-24");
+  assert.equal(values.weekday, "Fri");
+
+  const weekend = marginPayload("515880");
+  weekend.result.data[0].DATE = "2026-07-26 00:00:00";
+  assert.throws(() => parseMarginPage(weekend, "515880"), /UPSTREAM_SCHEMA/);
+});
+
 test("constituent aggregation aligns dates, keeps signs, and rejects thin coverage", () => {
   const basket = parseLatestTopHoldings(holdingsPayload("515880", [
     { code: "300502", name: "新易盛", weight: 15.6 },

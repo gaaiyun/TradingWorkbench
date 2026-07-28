@@ -164,6 +164,21 @@ function aggregateStatus(rows, health) {
   return "ok";
 }
 
+function latestRowsPerSeries(rows, columns) {
+  const groups = new Map();
+  for (const row of rows) {
+    const key = JSON.stringify(columns.map((column) => row?.[column] ?? null));
+    const asOf = row?.as_of ?? null;
+    const previous = groups.get(key);
+    if (!previous || (asOf && (!previous.asOf || asOf > previous.asOf))) {
+      groups.set(key, { asOf, rows: [row] });
+    } else if (asOf === previous.asOf) {
+      previous.rows.push(row);
+    }
+  }
+  return [...groups.values()].flatMap(({ rows: groupRows }) => groupRows);
+}
+
 export function dynamicEnvelope(
   rows,
   {
@@ -171,6 +186,9 @@ export function dynamicEnvelope(
     cursorColumn = null,
     cursorForward = false,
     statusScope = "all",
+    statusGroupColumns = [],
+    freshnessMaxAgeMs = null,
+    freshnessNow = Date.now(),
   } = {},
 ) {
   const sources = [];
@@ -188,8 +206,19 @@ export function dynamicEnvelope(
   }, null);
   const statusRows = statusScope === "latest-as-of" && asOf
     ? rows.filter((row) => row.as_of === asOf)
-    : rows;
-  const envelope = { status: aggregateStatus(statusRows, health), asOf, data: rows, sources };
+    : statusScope === "latest-per-series" && statusGroupColumns.length
+      ? latestRowsPerSeries(rows, statusGroupColumns)
+      : rows;
+  const effectiveStatusRows = Number.isFinite(freshnessMaxAgeMs) && freshnessMaxAgeMs >= 0
+    ? statusRows.map((row) => {
+      const timestamp = Date.parse(row.as_of ?? row.ts ?? "");
+      if (!Number.isFinite(timestamp) || freshnessNow - timestamp > freshnessMaxAgeMs || freshnessNow < timestamp) {
+        return { ...row, freshness: "stale" };
+      }
+      return row;
+    })
+    : statusRows;
+  const envelope = { status: aggregateStatus(effectiveStatusRows, health), asOf, data: rows, sources };
   if (cursorColumn) {
     const cursorRow = cursorForward ? rows.at(-1) : rows[0];
     const columns = Array.isArray(cursorColumn) ? cursorColumn : [cursorColumn];
@@ -215,6 +244,9 @@ export async function serveDynamic(
     health = false,
     cursorColumn = null,
     statusScope = "all",
+    statusGroupColumns = [],
+    freshnessMaxAgeMs = null,
+    freshnessNow = Date.now(),
     envelopeExtras = {},
   },
 ) {
@@ -244,6 +276,9 @@ export async function serveDynamic(
         cursorColumn,
         cursorForward: Boolean(filters.after),
         statusScope,
+        statusGroupColumns,
+        freshnessMaxAgeMs,
+        freshnessNow,
       }),
       ...envelopeExtras,
     }, 200, {

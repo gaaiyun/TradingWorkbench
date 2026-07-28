@@ -25,7 +25,7 @@ import {
   isFundFlowUiEnabled,
   marketPercentageChange,
   selectFundFlowEventAnchors,
-} from "./workbench-fundflow.mjs";
+} from "./workbench-fundflow.mjs?v=129a850652a8";
 import {
   CandlestickSeries,
   ColorType,
@@ -649,8 +649,8 @@ import {
     const legend = (seriesList || []).map((series) => (
       `<span><i class="is-${escapeHtml(series.id)}"></i>${escapeHtml(series.label)}</span>`
     )).join("");
-    host.innerHTML = `<div class="fund-flow-comparison-head">${legend}<span>近5日累计 · 近60期历史分位</span></div>
-      <svg viewBox="0 0 ${width} ${height}" role="img" aria-label="ETF融资与成分股融资近5日累计的近60期历史分位对照；事件标记仅作时间锚">
+    host.innerHTML = `<div class="fund-flow-comparison-head">${legend}<span>近5个可用交易日累计 · 最近60点展示 · 分位基准自2024-01-01</span></div>
+      <svg viewBox="0 0 ${width} ${height}" role="img" aria-label="ETF端与前10大持仓端融资净买入近5个可用交易日累计的最近60点历史分位对照；分位基准自2024-01-01；事件标记仅作时间锚">
         <desc>${escapeHtml(anchorDescription)}</desc>
         <line class="fund-flow-band" x1="20" x2="980" y1="${yFor(85)}" y2="${yFor(85)}"/><line class="fund-flow-band" x1="20" x2="980" y1="${yFor(15)}" y2="${yFor(15)}"/>
         <text x="22" y="${yFor(85) - 4}">P85</text><text x="22" y="${yFor(15) - 4}">P15</text>${lines}${eventLines}

@@ -1329,6 +1329,9 @@ test("Pages and monitor deployments serialize migrations before publishing runti
   }
   assert.match(pages, /Cloudflare deployment credentials are required/);
   assert.match(pages, /exit 1/);
+  assert.match(pages, /npm run test:frontend/);
+  assert.match(pages, /npm run check:workbench/);
+  assert.match(pages, /npm run check:asset-version/);
   assert.doesNotMatch(pages, /available=(?:true|false)|steps\.cloudflare\.outputs\.available/);
   assert.match(pages, /migrations\/\*\*/);
   const migration = pages.indexOf("d1 migrations apply");

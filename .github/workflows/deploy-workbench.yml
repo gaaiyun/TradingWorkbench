@@ -47,7 +47,11 @@ jobs:
           fi
 
       - name: Test Pages Functions contracts
-        run: npm run test:functions
+        run: |
+          npm run test:functions
+          npm run test:frontend
+          npm run check:workbench
+          npm run check:asset-version
 
       - name: Apply workbench database migrations
         env:

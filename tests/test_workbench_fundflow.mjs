@@ -21,6 +21,7 @@ import {
 const html = readFileSync(new URL("../public/index.html", import.meta.url), "utf8");
 const script = readFileSync(new URL("../public/assets/workbench.js", import.meta.url), "utf8");
 const css = readFileSync(new URL("../public/assets/workbench.css", import.meta.url), "utf8");
+const assetVersionScript = readFileSync(new URL("../scripts/asset-version.mjs", import.meta.url), "utf8");
 
 function row(flowType, value, day, overrides = {}) {
   return {
@@ -136,12 +137,12 @@ test("share-change narrative excludes split-like jumps instead of inventing infl
 
 test("behavior language translates ranks without naming institutions or recommendations", () => {
   const ready = (value) => ({ status: "ready", value, sampleSize: 60 });
-  assert.equal(fundFlowBehavior("margin_net_buy", ready(97), 10), "融资净流入显著偏高");
-  assert.equal(fundFlowBehavior("margin_net_buy", ready(3), -10), "融资净流出显著偏低");
-  assert.equal(fundFlowBehavior("shares", ready(90), 10), "ETF份额净增加偏高");
-  assert.equal(fundFlowBehavior("margin_net_buy", ready(99), -1), "融资净流出但处于高位");
-  assert.equal(fundFlowBehavior("margin_net_buy", ready(1), 1), "融资净流入但处于低位");
-  assert.equal(fundFlowBehavior("shares", ready(50), 0), "ETF份额净变化持平");
+  assert.equal(fundFlowBehavior("margin_net_buy", ready(97), 10), "单日融资净流入显著");
+  assert.equal(fundFlowBehavior("margin_net_buy", ready(3), -10), "单日融资净流出显著");
+  assert.equal(fundFlowBehavior("shares", ready(90), 10), "ETF份额单日净增加偏强");
+  assert.equal(fundFlowBehavior("margin_net_buy", ready(99), -1), "单日融资净流出但幅度偏小");
+  assert.equal(fundFlowBehavior("margin_net_buy", ready(1), 1), "单日融资净流入但幅度偏小");
+  assert.equal(fundFlowBehavior("shares", ready(50), 0), "ETF份额单日净变化持平");
   assert.equal(fundFlowBehavior("shares", { status: "accumulating" }, 1), "历史样本累积中");
   assert.equal(fundFlowBehavior("shares", { status: "ready", value: 50 }, null), "当期数据不可用");
   assert.equal(fundFlowBehavior("margin_balance", ready(50), 10), "杠杆存量处于常态区间");
@@ -179,6 +180,7 @@ test("view model exposes only financing balance, financing net buy, and ETF shar
     data.push(row("margin_net_buy", index - 30, day));
     data.push(row("shares_outstanding_derived", 500_000_000 + index, day));
   }
+  data.push(row("shares_outstanding_derived", 500_000_061, "2024-03-02"));
   const view = buildFundFlowView({
     status: "ok",
     asOf: data.at(-1).as_of,
@@ -201,8 +203,11 @@ test("view model exposes only financing balance, financing net buy, and ETF shar
   assert.equal(view.metrics[0].percentile.sampleSize, 60);
   assert.equal(view.metrics[1].signed, true);
   assert.equal(view.comparisonSeries.length, 2);
-  assert.equal(view.comparisonSeries[0].label, "ETF融资");
-  assert.equal(view.comparisonSeries[1].label, "成分股融资");
+  assert.equal(view.comparisonSeries[0].label, "ETF端");
+  assert.equal(view.comparisonSeries[1].label, "前10大持仓端");
+  assert.match(view.metrics[0].percentile.label, /^水平 P/);
+  assert.match(view.metrics[1].percentile.label, /^单日 P/);
+  assert.match(view.metrics[2].percentile.label, /^单日变化 P/);
   assert.equal(view.metrics[2].analysisValue, 1);
   assert.match(view.metrics[2].tooltip, /日度份额变化/);
   assert.match(view.metrics[0].tooltip, /2024-01-01/);
@@ -220,7 +225,7 @@ test("comparison series contrast ETF financing with top-ten constituent financin
 
   assert.deepEqual(
     view.comparisonSeries.map(({ label }) => label),
-    ["ETF融资", "成分股融资"],
+    ["ETF端", "前10大持仓端"],
   );
   assert.equal(view.comparisonSeries.length, 2);
   assert.equal(view.comparisonSeries.every(({ points }) => points.length === 60), true);
@@ -235,9 +240,9 @@ test("five-day narrative lets positive ETF financing outrank a higher percentile
   });
   const narrative = buildFundFlowNarrative(view);
 
-  assert.match(narrative, /ETF融资.*近5日累计.*\+5\.00亿.*P\d+/);
-  assert.match(narrative, /成分股融资.*近5日累计.*-5\.00亿.*P\d+/);
-  assert.match(narrative, /ETF端更积极/);
+  assert.match(narrative, /ETF自身融资净买入.*近5个可用交易日累计.*\+5\.00亿.*P\d+/);
+  assert.match(narrative, /前10大持仓股票融资净买入.*-5\.00亿.*P\d+/);
+  assert.match(narrative, /ETF端净流入、个股端净流出，方向分化/);
 });
 
 test("five-day narrative lets positive constituent financing outrank a higher percentile ETF outflow", () => {
@@ -248,10 +253,10 @@ test("five-day narrative lets positive constituent financing outrank a higher pe
     constituentRecentValue: 100_000_000,
   });
 
-  assert.match(buildFundFlowNarrative(view), /个股端更积极/);
+  assert.match(buildFundFlowNarrative(view), /ETF端净流出、个股端净流入，方向分化/);
 });
 
-test("five-day narrative reports aligned positive financing as consistent", () => {
+test("five-day narrative does not overstate mild aligned inflows", () => {
   const view = buildFinancingComparisonView({
     etfHistoryValue: 1_000_000_000,
     etfRecentValue: 100_000_000,
@@ -259,10 +264,10 @@ test("five-day narrative reports aligned positive financing as consistent", () =
     constituentRecentValue: 200_000_000,
   });
 
-  assert.match(buildFundFlowNarrative(view), /双向一致/);
+  assert.match(buildFundFlowNarrative(view), /两端均为净流入，力度未达极端/);
 });
 
-test("five-day narrative reports aligned negative financing as weakening", () => {
+test("five-day narrative does not overstate mild aligned outflows", () => {
   const view = buildFinancingComparisonView({
     etfHistoryValue: -1_000_000_000,
     etfRecentValue: -100_000_000,
@@ -270,7 +275,49 @@ test("five-day narrative reports aligned negative financing as weakening", () =>
     constituentRecentValue: -200_000_000,
   });
 
-  assert.match(buildFundFlowNarrative(view), /双向走弱/);
+  assert.match(buildFundFlowNarrative(view), /两端均为净流出，力度未达极端/);
+});
+
+test("five-day narrative distinguishes extreme and asymmetric outflows", () => {
+  const view = {
+    enabled: true,
+    financingComparison: {
+      etf: { value: -184_372_426, percentile: { status: "ready", value: 3 }, tradingDate: "2026-07-27" },
+      constituent: { value: -4_320_551_623, percentile: { status: "ready", value: 2 }, tradingDate: "2026-07-27" },
+      approximation: { topN: 10, disclosedAt: "2026-06-30", covered: 10, total: 10 },
+    },
+  };
+  const extreme = buildFundFlowNarrative(view);
+  assert.match(extreme, /资金数据截至 2026-07-27/);
+  assert.match(extreme, /两端显著净流出/);
+  assert.match(extreme, /简单合计，不按ETF权重/);
+
+  view.financingComparison.etf = {
+    value: -3_196_135,
+    percentile: { status: "ready", value: 48 },
+    tradingDate: "2026-07-27",
+  };
+  view.financingComparison.constituent = {
+    value: -731_238_576,
+    percentile: { status: "ready", value: 19 },
+    tradingDate: "2026-07-27",
+  };
+  assert.match(buildFundFlowNarrative(view), /两端均为净流出，个股端撤出更明显/);
+});
+
+test("five-day narrative refuses a cross-date comparison", () => {
+  const view = {
+    enabled: true,
+    financingComparison: {
+      etf: { value: -184_372_426, percentile: { status: "ready", value: 3 }, tradingDate: "2026-07-27" },
+      constituent: { value: -4_320_551_623, percentile: { status: "ready", value: 2 }, tradingDate: "2026-07-26" },
+      approximation: { topN: 10, disclosedAt: "2026-06-30", covered: 10, total: 10 },
+    },
+  };
+  const narrative = buildFundFlowNarrative(view);
+  assert.match(narrative, /ETF端截至 2026-07-27/);
+  assert.match(narrative, /个股端截至 2026-07-26/);
+  assert.match(narrative, /资金日期不一致，暂不可比/);
 });
 
 test("constituent narrative discloses approximation date coverage and attribution limits", () => {
@@ -286,6 +333,7 @@ test("constituent narrative discloses approximation date coverage and attributio
   assert.match(narrative, /披露日 2026-06-30/);
   assert.match(narrative, /覆盖 8\/10/);
   assert.match(narrative, /不代表身份与因果/);
+  assert.match(narrative, /简单合计，不按ETF权重/);
 });
 
 test("event anchors and deterministic narrative keep time correlation separate from causality", () => {
@@ -314,7 +362,7 @@ test("event anchors and deterministic narrative keep time correlation separate f
   });
   assert.match(narrative, /SOXX（日线 2026-03-02）下跌0\.50%/);
   assert.match(narrative, /515880\.SS（日线 2026-03-03）上涨1\.20%/);
-  assert.match(narrative, /双向一致/);
+  assert.match(narrative, /两端均为净流入，力度未达极端/);
   assert.match(narrative, /仅作时间锚，不代表因果/);
   assert.doesNotMatch(narrative, /国家队|主力|导致|推动|买入建议|卖出建议/);
 });
@@ -359,6 +407,27 @@ test("a malformed latest null remains unavailable instead of falling back or bec
   assert.equal(shares.percentile.status, "unavailable");
   assert.equal(shares.behavior, "当期数据不可用");
   assert.equal(shares.comparison, "当期值不可用");
+});
+
+test("snapshot-only Shenzhen shares are explicit instead of looking comparable to derived history", () => {
+  const view = buildFundFlowView({
+    status: "ok",
+    capabilities: {
+      marketFlowV1: true,
+      marginDaily: true,
+      etfSharesDaily: true,
+      historicalPercentile: true,
+    },
+    data: [row("shares_outstanding_snapshot", 228_100_000_000, "2026-07-27", {
+      quality: "snapshot_unstamped",
+      method: "observed_without_source_timestamp",
+    })],
+  }, "159995.SZ");
+  const shares = view.metrics.find(({ id }) => id === "etf-shares");
+  assert.match(shares.label, /仅快照/);
+  assert.equal(shares.percentile.status, "unavailable");
+  assert.equal(shares.behavior, "历史份额不可用，仅显示快照");
+  assert.equal(shares.comparison, "无可比历史");
 });
 
 test("twenty-day comparison waits for twenty valid historical observations", () => {
@@ -481,4 +550,9 @@ test("fund-flow tooltip supports pointer, keyboard focus, touch, and neutral per
   assert.match(css, /\.fund-flow-percentile\.is-extreme[^}]*var\(--warning\)/);
   assert.doesNotMatch(css, /\.fund-flow-percentile[^}]*var\(--market-up\)/);
   assert.doesNotMatch(css, /\.fund-flow-percentile[^}]*var\(--market-down\)/);
+});
+
+test("fund-flow module participates in the browser cache version", () => {
+  assert.match(script, /\.\/workbench-fundflow\.mjs\?v=[a-f0-9]{12}/);
+  assert.match(assetVersionScript, /workbench-fundflow\.mjs/);
 });

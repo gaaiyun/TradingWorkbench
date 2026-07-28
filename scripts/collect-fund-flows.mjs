@@ -261,6 +261,10 @@ export function parseMarginPage(payload, code) {
   for (const item of payload.result.data) {
     if (String(item?.SCODE || "") !== code) continue;
     const date = String(item?.DATE || "").slice(0, 10);
+    const weekday = /^\d{4}-\d{2}-\d{2}$/.test(date)
+      ? new Date(`${date}T00:00:00Z`).getUTCDay()
+      : null;
+    if (weekday === 0 || weekday === 6) continue;
     const ts = tradeDateTimestamp(date);
     if (!ts) continue;
     const values = {
