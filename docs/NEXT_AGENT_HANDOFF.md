@@ -96,7 +96,8 @@ GitHub 自动部署链已恢复。仓库主人在 2026-07-27 配置了 `CLOUDFLA
   因此不能接受这种语义越界。全局 Agent context 已新增硬规则：OHLCV 只证明价格与
   成交量，不能改写为资金流、申赎或具体主体行为；`unavailable` 只表示无法判断，
   不能作为隐性风险或定价失效证据。必须以后续重跑的公开正文为准，v4 不作为最终
-  质量基线。
+  质量基线；两份 v4 已加入 `INVALIDATED_REPORTS`，不能进入最新观点、问答或 verified
+  统计。
 - 本地专项 `19 passed`，完整 Python 为 `671 passed / 2 skipped / 0 failed`；独立规格
   与代码质量复审均无剩余 P0/P1。真实 `512480.SS / 515880.SS` profile 报告正在
   GitHub run `30499471528` 重跑；最终评级、审计计数和生产部署指纹必须以后续实际

@@ -10,6 +10,8 @@ export const INVALIDATED_REPORTS = new Set([
   "reports/512480.SS/2026-07-24/complete_report.md",
   "reports/512480.SS/2026-07-28/complete_report.md",
   "reports/515880.SS/2026-07-28/complete_report.md",
+  "reports/512480.SS/2026-07-29-v4/complete_report.md",
+  "reports/515880.SS/2026-07-29-v4/complete_report.md",
 ]);
 
 const ETF_SYMBOLS = new Set(["510050.SS", "512480.SS", "515880.SS", "SPY"]);
