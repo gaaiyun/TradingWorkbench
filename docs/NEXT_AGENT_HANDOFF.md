@@ -533,7 +533,7 @@ gh workflow run deploy-monitor.yml --repo gaaiyun/TradingWorkbench --ref main
 本轮代码修复：
 
 - direct cron 每轮最多一个任务、task shard 最多三个外部请求；取消被更新高频 slot 取代的 backlog，三次重试耗尽后标 `RETRY_EXHAUSTED`；多 shard 的 `scheduled_for` 按秒错开；
-- 市场任务优先于新闻；SOXX/NVDA 在 UI 开放真实 `5m/15m/1h`，其他美股仍只开放日线；收盘端点并入前一聚合桶；
+- 市场任务优先于新闻；SOXX/NVDA 在 UI 开放真实 `5m/15m/1h`，其他美股仍只开放日线；Yahoo 16:00 的 `O=H=L=C / volume=0` 收盘哨兵在采集和 API 读取两层过滤，15m/1h 收盘端点并入前一聚合桶；
 - evidence/discovery 分层查询，事件 freshness 按四天重算，source health 暴露错误码和熔断元数据；
 - 任务板无结果时显示“未验证”；
 - Evidence 截止时间不晚于实际生成时点，官方拆分公告进入公司行动；有 EvidencePacket 时 Market Analyst 不再调用另一套精确行情工具；

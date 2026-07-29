@@ -146,6 +146,23 @@ function sessionCloseTimestamp(symbol, timestamp) {
   return Number(parts.hour) === closeHour && Number(parts.minute) === 0;
 }
 
+function usSessionCloseSentinel(row) {
+  const symbol = String(row?.symbol || "").toUpperCase();
+  if (
+    !symbol
+    || symbol.endsWith(".SS")
+    || symbol.endsWith(".SZ")
+    || symbol.endsWith(".HK")
+    || Number(row?.volume) !== 0
+    || !sessionCloseTimestamp(symbol, row?.ts)
+  ) {
+    return false;
+  }
+  return [row.high, row.low, row.close].every(
+    (value) => Number(value) === Number(row.open),
+  );
+}
+
 export function aggregateMarketBars(rows, timeframe, milliseconds, limit) {
   const groups = new Map();
   for (const row of [...rows].sort((left, right) => left.ts.localeCompare(right.ts))) {
@@ -202,12 +219,12 @@ export async function onRequestGet({ request, env }) {
       sourceLimit,
       query.timeframe === "1d",
     );
-    const storedRows = query.timeframe === "1d"
+    const canonicalRows = query.timeframe === "1d"
       ? contiguousDailyBars(distinctRows)
-      : distinctRows;
+      : distinctRows.filter((row) => !usSessionCloseSentinel(row));
     const rows = derived
-      ? aggregateMarketBars(storedRows, query.timeframe, derived.milliseconds, query.limit)
-      : storedRows;
+      ? aggregateMarketBars(canonicalRows, query.timeframe, derived.milliseconds, query.limit)
+      : canonicalRows;
     const envelope = marketEnvelope(rows, query.timeframe);
     return json({
       ...envelope,

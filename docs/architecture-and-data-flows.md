@@ -211,7 +211,7 @@ Provider Registry 保存 transport、authority、freshness、授权用途和失�
 
 同一 `profile + symbol + timeframe + timestamp + source` 只保存一条。15m、30m、1h 和 4h 从 5m 原始记录聚合。
 
-美股分时不复用 A 股盘中 slot。`usIntradayCollect` 由纽约交易日和 `09:30–16:00 America/New_York` 决定，每 15 分钟对 `SOXX / NVDA` 各取一段 5 分钟历史；来源顺序为 Yahoo、东方财富、可选 Alpha Vantage。Yahoo 时间戳本身是 UTC，但响应末尾可能追加一个带秒数的未完成实时柱；适配器只接受整 5 分钟时间戳，避免每轮写入不同的临时柱。东方财富美股 5 分钟字符串使用北京时间，适配器按 `Asia/Shanghai` 转 UTC；Alpha Vantage 才按 `America/New_York` 处理。三条链不能共用固定时差。写入仍走原有 `market_bars`、90 天 5m 保留期和 provider circuit breaker，不影响 A 股 `intradayCollect`、新闻健康或 Evidence。
+美股分时不复用 A 股盘中 slot。`usIntradayCollect` 由纽约交易日和 `09:30–16:00 America/New_York` 决定，每 15 分钟对 `SOXX / NVDA` 各取一段 5 分钟历史；来源顺序为 Yahoo、东方财富、可选 Alpha Vantage。Yahoo 时间戳本身是 UTC，但响应末尾可能追加一个带秒数的未完成实时柱，或在 16:00 追加 `O=H=L=C / volume=0` 的收盘哨兵；适配器拒绝非整 5 分钟临时柱和收盘哨兵，API 读取层也过滤历史中已存的哨兵。东方财富美股 5 分钟字符串使用北京时间，适配器按 `Asia/Shanghai` 转 UTC；Alpha Vantage 才按 `America/New_York` 处理。三条链不能共用固定时差。写入仍走原有 `market_bars`、90 天 5m 保留期和 provider circuit breaker，不影响 A 股 `intradayCollect`、新闻健康或 Evidence。
 
 行情历史的 `adjustment` 保留来源语义：
 

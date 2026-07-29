@@ -292,6 +292,49 @@ test("market API folds a session-close endpoint into the preceding aggregate buc
   }
 });
 
+test("market API hides a stored US session-close sentinel from five-minute charts", async () => {
+  const base = {
+    symbol: "SOXX",
+    profile_id: "cn-semi-comms",
+    timeframe: "5m",
+    source: "yahoo-us-intraday",
+    source_tier: "discovery",
+    fetched_at: "2026-07-29T20:01:00Z",
+    freshness: "fresh",
+    adjustment: "none",
+    quality: "good",
+    as_of: "2026-07-29T20:00:00Z",
+  };
+  const rows = [
+    {
+      ...base,
+      ts: "2026-07-29T19:55:00Z",
+      open: 493.99,
+      high: 495.80,
+      low: 490.65,
+      close: 491.46,
+      volume: 1321018,
+    },
+    {
+      ...base,
+      ts: "2026-07-29T20:00:00Z",
+      open: 491.46,
+      high: 491.46,
+      low: 491.46,
+      close: 491.46,
+      volume: 0,
+    },
+  ];
+  const response = await marketApi.onRequestGet({
+    request: request("/api/market?symbol=SOXX&profile=cn-semi-comms&timeframe=5m&limit=300"),
+    env: { DB: new FakeD1({ rows: { market_bars: rows } }) },
+  });
+  const payload = await response.json();
+
+  assert.deepEqual(payload.data.map(({ ts }) => ts), ["2026-07-29T19:55:00Z"]);
+  assert.equal(payload.indicators.bars, 1);
+});
+
 test("market API returns distinct timestamps when provider fallbacks overlap", async () => {
   const base = {
     symbol: "ORCL",

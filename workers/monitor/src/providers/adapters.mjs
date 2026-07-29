@@ -234,6 +234,28 @@ function yahooUrl(request, host = "query1") {
   return `https://${host}.finance.yahoo.com/v8/finance/chart/${symbol}?interval=${interval}&range=${range}&events=history`;
 }
 
+function yahooSessionCloseSentinel(row, request) {
+  if (request?.timeframe !== "5m" || request?.market !== "US") return false;
+  if (
+    Number(row.volume) !== 0
+    || ![row.high, row.low, row.close].every(
+      (value) => Number(value) === Number(row.open),
+    )
+  ) {
+    return false;
+  }
+  const parts = Object.fromEntries(
+    new Intl.DateTimeFormat("en-US", {
+      timeZone: "America/New_York",
+      hour: "2-digit",
+      minute: "2-digit",
+      hourCycle: "h23",
+    }).formatToParts(new Date(row.timestamp))
+      .map(({ type, value }) => [type, value]),
+  );
+  return Number(parts.hour) === 16 && Number(parts.minute) === 0;
+}
+
 function parseYahoo(payload, request) {
   const result = payload?.chart?.result?.[0];
   const quote = result?.indicators?.quote?.[0];
@@ -253,6 +275,7 @@ function parseYahoo(payload, request) {
       request?.timeframe !== "5m"
       || Math.floor(Date.parse(row.timestamp) / 1000) % 300 === 0
     )
+    && !yahooSessionCloseSentinel(row, request)
   );
 }
 

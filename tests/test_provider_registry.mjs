@@ -353,6 +353,32 @@ test("Yahoo US intraday drops its unaligned live partial bar", async () => {
   assert.equal(Date.parse(result.bars[0].timestamp) / 1000 % 300, 0);
 });
 
+test("Yahoo US intraday drops the flat zero-volume session-close sentinel", async () => {
+  const { createProviderRegistry } = await import(registryUrl);
+  const payload = yahooFixture();
+  payload.chart.result[0].timestamp = [1785268500, 1785268800];
+  payload.chart.result[0].indicators.quote[0] = {
+    open: [198, 197],
+    high: [198.2, 197],
+    low: [196.75, 197],
+    close: [197, 197],
+    volume: [8805369, 0],
+  };
+  const registry = createProviderRegistry({
+    fetch: async () => jsonResponse(payload),
+    now: () => new Date("2026-07-28T20:01:00.000Z"),
+  });
+  const result = await registry.fetchMarketData({
+    symbol: "NVDA",
+    market: "US",
+    timeframe: "5m",
+  });
+  assert.equal(result.source, "yahoo-us-intraday");
+  assert.equal(result.bars.length, 1);
+  assert.equal(result.bars[0].timestamp, "2026-07-28T19:55:00.000Z");
+  assert.equal(result.bars[0].volume, 8805369);
+});
+
 test("includes Alpha Vantage between Yahoo and Stooq only when a key is configured", async () => {
   const { createProviderRegistry } = await import(registryUrl);
   const urls = [];
