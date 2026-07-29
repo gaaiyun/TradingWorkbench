@@ -203,6 +203,15 @@ Worker 为每个理论任务生成稳定 `slotId`，并在首次入库时冻结 
 网站只展示 fail-closed 的 `complete_report.md`；带幻觉或无引用数字的角色分卷仍保留在
 GitHub 供审计，但不再作为网页报告标签页或 profile 报告 API 输出。
 
+`evidence_packet` 与 `analysis_status` 是 LangGraph `AgentState` 的显式字段，不能只在
+初始字典中临时附加；否则编译后的图会丢弃两者，Agent 将在没有 Evidence ledger 的
+情况下生成文本。存在 packet 时，公开 `complete_report.md` 只由 Evidence Snapshot
+和最终 Portfolio Decision 组成，内部分析、辩论与交易草稿只写入分卷供开发审计。
+最终结论按段 fail-closed：未知或非法 Evidence ID、无引用数字、无方法目标价、数字
+仓位段落整段省略且记录 `omittedUnsafeParagraphs`；剩余正文没有至少一个合法引用时
+仍为 `Not Rated`。校验器支持同前缀范围与组合引用，同时限制正文、引用容器、编号
+位数和展开数量，异常输入只能验证失败，不能拖垮报告任务。
+
 ```mermaid
 flowchart LR
     S["行情、公告、新闻"] --> V["确定性校验"]
@@ -214,7 +223,7 @@ flowchart LR
     C -->|"失败"| N
 ```
 
-报告落盘前检查未知 Evidence ID、无引用数字、无方法目标价和缺少用户约束时的具体仓位比例。失败草稿保留供审计，但不能进入首页最新观点、问答或推送。
+报告落盘前检查未知/非法 Evidence ID、无引用数字、无方法目标价和缺少用户约束时的具体仓位比例。失败草稿保留供审计，但不能进入首页最新观点、问答或推送。
 
 Evidence GET 必须选择一个范围：
 

@@ -1,6 +1,6 @@
 # Trading Workbench 下一 Agent 交接
 
-更新日期：2026-07-29（资金观察红框问题已发布并完成生产回读）
+更新日期：2026-07-30（全局运行、数据、图形、分析与报告质量收口进行中）
 
 实现基线：`main`。不要依赖本文中的旧提交号；接手时同时执行 `git rev-parse HEAD`、`git rev-parse origin/main`，并读取 Pages 与 Worker health 的 commit SHA。
 
@@ -71,6 +71,30 @@ GitHub 自动部署链已恢复。仓库主人在 2026-07-27 配置了 `CLOUDFLA
 第六轮既有生产收口以功能提交 `8f6381e` 为基线：CI `30361159671`、Pages `30361159801`、Monitor `30361281881` 全绿；backfill `30361200473` 写入 22,329 条更新，随后 daily `30362024552` 无失败写入 793 条更新。远程 `fund_flows=26899` 且业务自然键也是 26899。三只 ETF 的 `constituent_margin_balance / constituent_margin_net_buy` 分别为 `515880.SS=1677/1677`、`512480.SS=1035/1035`、`159995.SZ=912/912`，最新交易日均为 2026-07-27，披露篮子均为 2026-06-30、覆盖 10/10。生产 390px 与 1440px 浏览器均为 3 卡、2 线、无横向溢出、0 pageerror；这些运行号不代表 2026-07-29 本轮修复已发布。
 
 本轮接手已完成数字引用判定修复：`_NUMERIC_CLAIM_RE` 不再把日期、时间戳、标的代码、哈希、Markdown 标题序号和 RSI/MACD/均线参数当作研究数字；逐段复测后 `515880.SS` 为 `179→117`、`512480.SS` 为 `128→84`、`3887.HK` 为 `169→108`，剩余段落仍含未带 Evidence ID 的真实数值，因此没有放宽门禁。三份 `-v4` Manifest 与 `public/data/report-audit.json` 已同步更新。
+
+### 2026-07-30 报告证据链根因与公开边界修复
+
+- 根因不是 LLM 单次失常：`Propagator.create_initial_state()` 虽写入
+  `evidence_packet / analysis_status`，但 `AgentState` 未声明这两个字段，编译后的
+  LangGraph 会将其丢弃。Agent 因此在没有 Evidence ledger 的情况下生成数字；报告
+  writer 最后才看到 packet 并 fail-closed。两个字段现已进入状态 schema，并有真实
+  compiled graph 回归测试，不能再改回只在初始字典临时附加。
+- 三个核心 ETF 的官方身份已作为静态权威映射提供给 Agent；有 packet 时市场、新闻和
+  基本面节点只读 ledger，禁止另取 Yahoo、聚合 discovery、上市公司财务或预测市场
+  补数。Evidence 截止日按标的市场业务日展示，不再把原始 UTC 日期当交易日。
+- packet 模式不再把全部内部草稿拼成公开报告。角色分卷仍原样留在 GitHub 审计；
+  `complete_report.md` 只含 Evidence Snapshot 与最终 Portfolio Decision。最终结论
+  中含未知/非法引用、无引用数字、目标价或数字仓位的段落整段省略，不自动补引用；
+  Manifest 记录 `omittedUnsafeParagraphs`。省略后没有至少一个合法引用时仍为
+  `Not Rated`。
+- 引用门禁支持 `[M1-M2, S1]` 等组合与同前缀范围，同时拒绝跨前缀、倒序、未知和
+  Markdown-link 伪引用。正常数字免责声明不会误删；真实目标价和中英文数字仓位仍
+  拦截。容器长度、编号位数、展开数和推荐语邻域均有预算，超长恶意输入只会
+  fail-closed，不会让报告任务崩溃或产生 CPU 回溯。
+- 本地专项 `19 passed`，完整 Python 为 `671 passed / 2 skipped / 0 failed`；独立规格
+  与代码质量复审均无剩余 P0/P1。真实 `512480.SS / 515880.SS` profile 报告正在
+  GitHub run `30499471528` 重跑；最终评级、审计计数和生产部署指纹必须以后续实际
+  输出回填，不能提前写成 verified。
 
 ## 1.5 生产状态真相（2026-07-29 独立核查）
 

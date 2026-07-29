@@ -372,6 +372,16 @@ flowchart LR
 
 保存角色分卷有利于审计，但 claim validation 失败时继续在 `complete_report.md` 展示 SELL、目标仓位或交易计划会误导用户。新增规则是：Manifest 保留失败详情，分卷保留原始文本；汇总正文只展示 Evidence Snapshot、`Not Rated` 和错误码。verified 门禁不放宽。
 
+### 报告公开边界按最终结论校验，不按内部草稿校验
+
+内部 Market、News、Fundamentals、多空辩论和 Trader 草稿用于形成决策，也用于 GitHub
+审计，但不是用户可见报告。packet 模式的公开产物只包含 Evidence Snapshot 与最终
+Portfolio Decision。最终结论逐段检查：未知/非法 Evidence ID、无引用数字、无方法
+目标价和数字仓位会整段省略，Manifest 记录 `omittedUnsafeParagraphs`；剩余正文没有
+合法引用时仍为 `Not Rated`。这不是降低门禁，而是使“被校验的文本”和“被公开的文本”
+完全一致。组合或同前缀范围引用可以使用；Markdown link 不能伪装 Evidence，异常长度
+和展开范围受有界预算保护。
+
 ### ETF 拆分公告作为公司行动事实，不猜测参数
 
 上交所 evidence 标题明确包含“份额拆分”时，可在 EvidencePacket 中记录 `fund_share_split_notice` 的公告日期、标题、原文 URL 和来源。公告未明确或解析器未验证的拆分比例、除权日不得补猜。Market Analyst 有 packet 时禁止再调用另一套精确行情工具，避免复权口径冲突。

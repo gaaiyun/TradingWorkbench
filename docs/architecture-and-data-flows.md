@@ -234,6 +234,15 @@ EvidencePacket 存在时，Market、News、Fundamentals 三个分析节点全部
 失败后，`complete_report.md` 是唯一可公开读取的报告页；角色分卷继续进 GitHub 归档供
 开发审计，但前端不生成标签页，带 profile/request 身份的报告 API 也拒绝返回。
 
+`AgentState` 必须声明 `evidence_packet` 与 `analysis_status`。LangGraph 会按状态 schema
+过滤未声明字段；只在初始字典附加会让运行时节点看不到 Evidence ledger。packet 模式的
+报告写入分为两层：角色分卷保存原始输出用于复盘；用户可见汇总只渲染 Evidence
+Snapshot 与经过逐段门禁的 Portfolio Decision。门禁不修补模型文本，只省略含非法或
+未知引用、无引用数字、目标价或数字仓位的段落，并把省略数写入 Manifest。剩余结论
+若没有合法 Evidence ID，汇总回退为 `Not Rated`。组合/范围引用在有界解析器中展开，
+Markdown link 不作为 Evidence；容器长度、编号位数和最大展开数量均有预算，超限输入
+按非法引用 fail-closed。
+
 ### 6.1 资金流数据流
 
 `fund_flows` 是独立 long-form 表，业务唯一键仍兼容 `profile + symbol + flow_type + period + ts + source + adjustment`，同时以 `trade_date` 明示 Asia/Shanghai 业务日。写入使用参数化 JSON1 批次 UPSERT，只有更晚或相同的 `fetched_at` 可以覆盖旧记录。migration `0018` 仅增加、回填并索引 `trade_date`，不删除或重写任何既有表。它不复用 `market_bars`、新闻健康、Monitor slot 或 Evidence 表。
@@ -498,6 +507,6 @@ Monitor Worker 的生产 direct 模式运行在 Cloudflare 免费 CPU 预算内�
 
 新闻读取层支持 `tier=evidence|discovery`。前端分别取两层各 200 条后聚合，来源筛选仍保留层级。`source_health` 对外带稳定错误码、最近成功时间、连续失败次数和暂停时间；`market_events` freshness 在读取时按四天重算。
 
-报告生成只有一个精确市场数值真源：存在 EvidencePacket 时，Market Analyst 不再额外调用另一套行情工具。Evidence `asOf` 取交易日结束和当前时点中较早者，禁止未来截止时间；官方“份额拆分”公告只形成带日期、标题、来源和 URL 的公司行动通知，不猜测比例或除权日。claim validation 失败后，Manifest 仍保存原始审计结果和角色分卷，但 `complete_report.md` 只输出 Evidence Snapshot、`Not Rated` 和失败码，避免无效建议继续暴露给用户。
+报告生成只有一个精确市场数值真源：存在 EvidencePacket 时，Market Analyst 不再额外调用另一套行情工具。Evidence `asOf` 取交易日结束和当前时点中较早者，禁止未来截止时间；官方“份额拆分”公告只形成带日期、标题、来源和 URL 的公司行动通知，不猜测比例或除权日。公开汇总不再拼接全部 Agent 草稿：它只发布 Evidence Snapshot 和通过逐段门禁的最终 Portfolio Decision；失败时只输出 Snapshot、`Not Rated` 和失败码。Manifest 记录引用结果与 `omittedUnsafeParagraphs`，原始角色分卷仍只供 GitHub 开发审计。
 
 界面分时能力由真实采集能力决定：A 股核心标的和 `SOXX / NVDA` 可选分时，其他美股/港股锁定日线。15m/1h 聚合在当地 session close 时把终点柱并入前一桶，避免收盘瞬间生成单点零成交伪 K 线。任务看板未接入任务级结果时统一显示 `unknown / 未验证`。

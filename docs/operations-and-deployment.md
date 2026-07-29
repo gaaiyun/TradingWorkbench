@@ -607,6 +607,19 @@ DAILY_RECOVERY_ENABLED = "true"
    `complete_report.md`；Market/News/Fundamentals 等原始角色分卷只留在 GitHub 做开发审计；
 7. 只有新版本 Manifest、Evidence packet、packet file hash 和 claim validation 全部匹配，才可重新成为 verified 候选。
 
+新报告的验收必须以用户可见边界为准：
+
+1. 确认 LangGraph 编译图运行后仍保留 `evidence_packet` 与 `analysis_status`；
+2. Manifest 的 `claimValidation` 只评价最终 Portfolio Decision，Evidence Snapshot
+   不能用自身引用掩盖结论缺少引用；
+3. `complete_report.md` 只能包含 Evidence Snapshot 与通过门禁的最终结论；
+4. `omittedUnsafeParagraphs > 0` 时，逐段确认被省略文本仍存在于 `1_analysts` 至
+   `5_portfolio` 原始分卷，但不出现在公开汇总；
+5. 组合与范围引用、非法引用、目标价、数字仓位、数字免责声明、Markdown link 和
+   超长恶意输入的回归测试全部通过；
+6. 若最终结论没有至少一个合法 Evidence ID，必须保持 `Not Rated`，不得为了制造
+   `verified` 放宽门禁。
+
 本轮已精确 invalidated：
 
 - `reports/512480.SS/2026-07-28/complete_report.md`
