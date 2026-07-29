@@ -8,6 +8,8 @@ crons = ["*/5 * * * *"]
 [vars]
 GITHUB_REPOSITORY = "gaaiyun/TradingWorkbench"
 GITHUB_WORKFLOW_ID = "daily-analysis.yml"
+DIRECT_MAX_TASKS = "1"
+DIRECT_TASK_REQUEST_LIMIT = "3"
 
 [[d1_databases]]
 binding = "DB"

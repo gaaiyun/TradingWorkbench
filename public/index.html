@@ -7,11 +7,11 @@
   <meta name="color-scheme" content="dark">
   <meta name="description" content="Trading Workbench 多市场研究与风险工作台">
   <title>Trading Workbench · 交易研究工作台</title>
-  <link rel="stylesheet" href="./assets/workbench.css?v=f60d8fde417d">
+  <link rel="stylesheet" href="./assets/workbench.css?v=d7f545a4f48e">
   <script type="importmap">
     { "imports": { "fancy-canvas": "./vendor/fancy-canvas/index.mjs" } }
   </script>
-  <script type="module" src="./assets/workbench.js?v=f60d8fde417d"></script>
+  <script type="module" src="./assets/workbench.js?v=d7f545a4f48e"></script>
 </head>
 <body data-mobile-view="chart" data-route="monitor" data-fund-flow-enabled="true">
   <a class="skip-link" href="#market-chart">跳到行情图表</a>
@@ -92,7 +92,7 @@
             <button class="mini-button" id="run-analysis-left" type="button">立即运行</button>
           </div>
           <ol class="task-timeline" id="task-timeline">
-            <li class="is-pending"><time>—</time><span><b>等待监控状态</b><small>尚未确认任务结果</small></span></li>
+            <li class="is-unknown"><time>—</time><span><b>等待监控状态</b><small>尚未接入单任务结果，不能判断成功或失败</small></span></li>
           </ol>
         </section>
       </aside>
@@ -182,6 +182,7 @@
           <div class="feed-filters">
             <label><span>标的</span><select id="feed-symbol" aria-label="新闻标的筛选"><option value="all">全部标的</option></select></label>
             <label><span>来源</span><select id="feed-source" aria-label="新闻来源筛选"><option value="all">全部来源</option></select></label>
+            <label><span>等级</span><select id="feed-tier" aria-label="新闻来源等级筛选"><option value="all">全部等级</option><option value="evidence">官方证据</option><option value="discovery">聚合发现</option></select></label>
             <label><span>重要性</span><select id="feed-importance" aria-label="最低重要性筛选"><option value="low">全部</option><option value="medium">中+</option><option value="high">高+</option><option value="critical">关键</option></select></label>
           </div>
           <div class="feed-list" id="research-feed">

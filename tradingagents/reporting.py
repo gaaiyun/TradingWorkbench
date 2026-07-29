@@ -385,6 +385,20 @@ def write_report_tree(
     if packet and status == "rated" and claim_validation["status"] != "passed":
         status = "insufficient_evidence"
         final_state["analysis_status"] = status
+    if packet and status == "insufficient_evidence":
+        error_codes = ", ".join(claim_validation.get("errorCodes") or []) or "CLAIM_VALIDATION_FAILED"
+        report_body = "\n\n".join([
+            _render_evidence_snapshot(packet),
+            (
+                "## Research conclusion\n\n"
+                "**Not Rated**\n\n"
+                "The generated analysis did not pass the evidence claim gate, so the "
+                "consolidated report intentionally withholds directional, allocation, "
+                "and trading conclusions. Raw agent sections remain in the report "
+                "subdirectories for audit only and must not be treated as verified output.\n\n"
+                f"Validation errors: `{error_codes}`"
+            ),
+        ])
     audit_status = (
         "verified"
         if (

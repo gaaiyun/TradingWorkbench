@@ -32,6 +32,14 @@ const FRESHNESS_RANK = {
 };
 
 const SOURCE_OVERLAP_FACTOR = 6;
+const INTRADAY_FRESHNESS_MAX_AGE_MS = {
+  "1m": 26 * 60 * 1000,
+  "5m": 30 * 60 * 1000,
+  "15m": 45 * 60 * 1000,
+  "30m": 60 * 60 * 1000,
+  "1h": 90 * 60 * 1000,
+  "4h": 270 * 60 * 1000,
+};
 // 春节、国庆等合法休市可能超过一周；只有超过一个半月的断口才按旧种子处理。
 const DAILY_MAX_CONTIGUOUS_GAP_MS = 45 * 24 * 60 * 60 * 1000;
 
@@ -98,13 +106,44 @@ function contiguousDailyBars(rows) {
   return kept;
 }
 
-function marketEnvelope(rows) {
+function marketEnvelope(rows, timeframe, now = Date.now()) {
   const latest = rows.reduce(
     (current, row) => (!current || row.ts > current.ts ? row : current),
     null,
   );
-  const envelope = dynamicEnvelope(latest ? [latest] : []);
+  const maxAge = INTRADAY_FRESHNESS_MAX_AGE_MS[timeframe];
+  const timestamp = Date.parse(latest?.as_of ?? latest?.ts ?? "");
+  const effectivelyStale = Number.isFinite(maxAge) && (
+    !Number.isFinite(timestamp) ||
+    now < timestamp ||
+    now - timestamp > maxAge
+  );
+  const statusRow = latest && effectivelyStale
+    ? { ...latest, freshness: "stale" }
+    : latest;
+  const envelope = dynamicEnvelope(statusRow ? [statusRow] : []);
   return { ...envelope, data: rows };
+}
+
+function sessionCloseTimestamp(symbol, timestamp) {
+  const date = new Date(timestamp);
+  if (!Number.isFinite(date.valueOf())) return false;
+  const value = String(symbol || "").toUpperCase();
+  const timeZone = value.endsWith(".SS") || value.endsWith(".SZ")
+    ? "Asia/Shanghai"
+    : value.endsWith(".HK")
+      ? "Asia/Hong_Kong"
+      : "America/New_York";
+  const parts = Object.fromEntries(
+    new Intl.DateTimeFormat("en-US", {
+      timeZone,
+      hour: "2-digit",
+      minute: "2-digit",
+      hourCycle: "h23",
+    }).formatToParts(date).map(({ type, value: part }) => [type, part]),
+  );
+  const closeHour = value.endsWith(".SS") || value.endsWith(".SZ") ? 15 : 16;
+  return Number(parts.hour) === closeHour && Number(parts.minute) === 0;
 }
 
 export function aggregateMarketBars(rows, timeframe, milliseconds, limit) {
@@ -112,7 +151,12 @@ export function aggregateMarketBars(rows, timeframe, milliseconds, limit) {
   for (const row of [...rows].sort((left, right) => left.ts.localeCompare(right.ts))) {
     const parsed = Date.parse(row.ts);
     if (!Number.isFinite(parsed)) continue;
-    const bucketTimestamp = new Date(Math.floor(parsed / milliseconds) * milliseconds).toISOString();
+    const bucketValue = sessionCloseTimestamp(row.symbol, row.ts)
+      ? parsed - 1
+      : parsed;
+    const bucketTimestamp = new Date(
+      Math.floor(bucketValue / milliseconds) * milliseconds,
+    ).toISOString();
     const group = groups.get(bucketTimestamp) || [];
     group.push(row);
     groups.set(bucketTimestamp, group);
@@ -164,7 +208,7 @@ export async function onRequestGet({ request, env }) {
     const rows = derived
       ? aggregateMarketBars(storedRows, query.timeframe, derived.milliseconds, query.limit)
       : storedRows;
-    const envelope = marketEnvelope(rows);
+    const envelope = marketEnvelope(rows, query.timeframe);
     return json({
       ...envelope,
       indicators: rows.length

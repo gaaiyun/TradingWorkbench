@@ -403,9 +403,11 @@ test("bootstrap identity is isolated by profile, symbol, timeframe, schema, and 
 test("direct fallback uses real upper bounds, clamps at forty, and shards fourteen targets", async () => {
   const {
     estimateTaskExternalRequests,
+    scheduledPayloadForTask,
     selectFairWorkWithinBudget,
     splitTaskWithinRequestLimit,
   } = await import(schedulerUrl);
+  const { stageScheduledSlots } = await import(slotsUrl);
   const profiles = ["a", "b", "c"].map((id) => ({
     ...structuredClone(monitorSettings().profiles[0]),
     id,
@@ -440,11 +442,38 @@ test("direct fallback uses real upper bounds, clamps at forty, and shards fourte
   );
   assert.equal(shards.length, 2);
   assert.equal(
+    new Set(shards.map(({ scheduledFor }) => scheduledFor)).size,
+    2,
+    "every shard needs a distinct dispatch timestamp under the legacy unique key",
+  );
+  assert.equal(
     new Set(shards.flatMap(({ targetSymbols }) => targetSymbols)).size,
     14,
   );
   assert.ok(shards.every((shard) =>
     estimateTaskExternalRequests(fourteenTargetProfile, shard) <= 32));
+  const sqlite = reliabilityDatabase();
+  const staged = await stageScheduledSlots(
+    d1(sqlite),
+    await Promise.all(shards.map(async (shard, index) => ({
+      id: `shard-${index}`,
+      profileId: fourteenTargetProfile.id,
+      slotType: shard.type,
+      scheduledFor: shard.scheduledFor,
+      localDate: "2026-07-23",
+      ...await scheduledPayloadForTask(
+        fourteenTargetProfile,
+        shard,
+        "r1",
+      ),
+      now: new Date("2026-07-23T01:30:00.000Z"),
+    }))),
+  );
+  assert.equal(staged.staged, 2);
+  assert.equal(
+    sqlite.prepare("SELECT COUNT(*) AS count FROM scheduled_slots").get().count,
+    2,
+  );
   const { collectForTask } = await import(
     "../workers/monitor/src/collector.mjs"
   );
@@ -610,6 +639,140 @@ test("backlog SQL admits B before a two-hundred-row A prefix can starve it", asy
   );
   assert.equal(rows.length, 200);
   assert.ok(rows.some(({ profile_id: profileId }) => profileId === "profile-b"));
+});
+
+test("retry backlog prioritizes market collection before news at the same slot", async () => {
+  const { listRetryableSlots } = await import(slotsUrl);
+  const sqlite = reliabilityDatabase();
+  const insert = sqlite.prepare(`
+    INSERT INTO scheduled_slots (
+      id, profile_id, slot_type, scheduled_for, status, expires_at,
+      attempt_count, updated_at, next_attempt_at, profile_revision,
+      payload_json, payload_hash, local_date
+    ) VALUES (?, 'profile-a', ?, '2026-07-23T13:45:00.000Z',
+      'pending', '2026-10-01T00:00:00.000Z', 0,
+      '2026-07-23T13:45:00.000Z', '2026-07-23T13:45:00.000Z',
+      'r1', ?, ?, '2026-07-23')
+  `);
+  for (const type of ["newsCollect", "usIntradayCollect"]) {
+    insert.run(
+      type,
+      type,
+      JSON.stringify({
+        profile: { id: "profile-a" },
+        task: { type, scheduledFor: "2026-07-23T13:45:00.000Z" },
+      }),
+      `hash-${type}`,
+    );
+  }
+  const rows = await listRetryableSlots(
+    d1(sqlite),
+    new Date("2026-07-23T14:00:00.000Z"),
+    2,
+  );
+  assert.deepEqual(
+    rows.map(({ slot_type: slotType }) => slotType),
+    ["usIntradayCollect", "newsCollect"],
+  );
+});
+
+test("superseded high-frequency backlog is cancelled while the newest slot remains", async () => {
+  const { cancelSupersededScheduledSlots } = await import(slotsUrl);
+  const sqlite = reliabilityDatabase();
+  const insert = sqlite.prepare(`
+    INSERT INTO scheduled_slots (
+      id, profile_id, slot_type, scheduled_for, status, expires_at,
+      attempt_count, updated_at, lease_until, next_attempt_at,
+      profile_revision, payload_json, payload_hash, local_date
+    ) VALUES (?, 'profile-a', ?, ?, ?, '2026-10-01T00:00:00.000Z',
+      ?, ?, ?, ?, 'r1', ?, ?, '2026-07-23')
+  `);
+  const rows = [
+    ["old-market", "usIntradayCollect", "2026-07-23T13:45:00.000Z", "pending", 0],
+    ["new-market", "usIntradayCollect", "2026-07-23T14:00:00.000Z", "pending", 0],
+    ["old-news", "newsCollect", "2026-07-23T13:45:00.000Z", "failed", 2],
+    ["new-news", "newsCollect", "2026-07-23T14:00:00.000Z", "pending", 0],
+    ["daily", "usCloseSnapshot", "2026-07-23T13:45:00.000Z", "pending", 0],
+  ];
+  for (const [id, type, scheduledFor, status, attempts] of rows) {
+    insert.run(
+      id,
+      type,
+      scheduledFor,
+      status,
+      attempts,
+      scheduledFor,
+      status === "claimed" ? scheduledFor : null,
+      scheduledFor,
+      JSON.stringify({
+        profile: { id: "profile-a" },
+        task: { type, scheduledFor },
+      }),
+      `hash-${id}`,
+    );
+  }
+  const result = await cancelSupersededScheduledSlots(
+    d1(sqlite),
+    new Date("2026-07-23T14:05:00.000Z"),
+  );
+  assert.equal(result.changed, 2);
+  const states = Object.fromEntries(
+    sqlite.prepare(
+      "SELECT id, status, last_error_code FROM scheduled_slots ORDER BY id",
+    ).all().map((row) => [row.id, row]),
+  );
+  assert.equal(states["old-market"].status, "cancelled");
+  assert.equal(states["old-market"].last_error_code, "SUPERSEDED_BY_NEWER_SLOT");
+  assert.equal(states["old-news"].status, "cancelled");
+  assert.equal(states["new-market"].status, "pending");
+  assert.equal(states["new-news"].status, "pending");
+  assert.equal(states.daily.status, "pending");
+});
+
+test("retry-exhausted backlog is finalized instead of remaining claimed or failed", async () => {
+  const { finalizeExhaustedScheduledSlots } = await import(slotsUrl);
+  const sqlite = reliabilityDatabase();
+  const insert = sqlite.prepare(`
+    INSERT INTO scheduled_slots (
+      id, profile_id, slot_type, scheduled_for, status, expires_at,
+      attempt_count, updated_at, lease_until, next_attempt_at,
+      profile_revision, payload_json, payload_hash, local_date
+    ) VALUES (?, 'profile-a', 'newsCollect', ?, ?,
+      '2026-10-01T00:00:00.000Z', 3, '2026-07-23T14:00:00.000Z', ?, ?,
+      'r1', '{}', ?, '2026-07-23')
+  `);
+  insert.run(
+    "failed-max",
+    "2026-07-23T13:45:00.000Z",
+    "failed",
+    null,
+    "2026-07-23T14:05:00.000Z",
+    "hash-failed",
+  );
+  insert.run(
+    "claimed-max",
+    "2026-07-23T13:46:00.000Z",
+    "claimed",
+    "2026-07-23T13:59:00.000Z",
+    null,
+    "hash-claimed",
+  );
+
+  const result = await finalizeExhaustedScheduledSlots(
+    d1(sqlite),
+    new Date("2026-07-23T14:05:00.000Z"),
+  );
+  assert.equal(result.changed, 2);
+  const rows = sqlite.prepare(`
+    SELECT status, last_error_code, lease_until, next_attempt_at
+    FROM scheduled_slots ORDER BY id
+  `).all();
+  for (const row of rows) {
+    assert.equal(row.status, "cancelled");
+    assert.equal(row.last_error_code, "RETRY_EXHAUSTED");
+    assert.equal(row.lease_until, null);
+    assert.equal(row.next_attempt_at, null);
+  }
 });
 
 test("queue consumer deduplicates one identity and retries unique work beyond its batch cap", async () => {

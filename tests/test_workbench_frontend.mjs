@@ -20,6 +20,7 @@ const {
   mergeIncrementalBars,
   normalizeEnvelope,
   notificationDeliveryBadges,
+  supportsIntradayTarget,
 } = workbenchData;
 
 const html = readFileSync(new URL("../public/index.html", import.meta.url), "utf8");
@@ -163,9 +164,9 @@ test("market request gate preserves an in-flight full load from same-context pol
 
 test("feed filtering supports symbol, source hierarchy, and minimum importance", () => {
   const items = [
-    { symbol: "NVDA", source: "sec", importance: "high" },
-    { symbol: "NVDA", source: "reuters", importance: "medium" },
-    { symbol: "TSM", source: "reuters", importance: "critical" },
+    { symbol: "NVDA", source: "sec", source_tier: "evidence", importance: "high" },
+    { symbol: "NVDA", source: "reuters", source_tier: "discovery", importance: "medium" },
+    { symbol: "TSM", source: "reuters", source_tier: "discovery", importance: "critical" },
   ];
   assert.deepEqual(
     filterFeedItems(items, { symbol: "NVDA", source: "sec", importance: "medium" }),
@@ -174,6 +175,15 @@ test("feed filtering supports symbol, source hierarchy, and minimum importance",
   assert.deepEqual(
     filterFeedItems(items, { symbol: "all", source: "reuters", importance: "high" }),
     [items[2]],
+  );
+  assert.deepEqual(
+    filterFeedItems(items, {
+      symbol: "all",
+      source: "all",
+      tier: "evidence",
+      importance: "low",
+    }),
+    [items[0]],
   );
 });
 
@@ -236,8 +246,13 @@ test("watch quotes always use daily bars while chart navigation keeps its own ti
   assert.doesNotMatch(script, /market === "CN" \? state\.timeframe : "1d"/);
   assert.match(script, /state\.quotes\.get\(target\.symbol\)\?\.change/);
   assert.match(script, /if \(timeframe === "1d"\)/);
-  assert.match(script, /target\?\.market !== "CN" && state\.timeframe !== "1d"/);
+  assert.match(script, /!supportsIntradayTarget\(target\) && state\.timeframe !== "1d"/);
   assert.match(script, /state\.timeframe = "1d"/);
+  assert.equal(supportsIntradayTarget({ symbol: "512480.SS", market: "CN" }), true);
+  assert.equal(supportsIntradayTarget({ symbol: "SOXX", market: "US" }), true);
+  assert.equal(supportsIntradayTarget({ symbol: "NVDA", market: "US" }), true);
+  assert.equal(supportsIntradayTarget({ symbol: "SMH", market: "US" }), false);
+  assert.equal(supportsIntradayTarget({ symbol: "3887.HK", market: "HK" }), false);
   assert.equal(dailyHistoryLimit("6m"), 126);
   assert.equal(dailyHistoryLimit("1y"), 252);
   assert.equal(dailyHistoryLimit("3y"), 756);
@@ -307,8 +322,8 @@ test("task timeline never maps source health rows to schedule slots by array pos
     { source: "yahoo", status: "ok", detail: "healthy" },
   ]);
   assert.equal(timeline.length, 5);
-  assert.equal(timeline.every((item) => item.status === "pending"), true);
-  assert.equal(timeline.every((item) => item.detail === "任务结果接口未提供"), true);
+  assert.equal(timeline.every((item) => item.status === "unknown"), true);
+  assert.equal(timeline.every((item) => item.detail === "未接入单任务结果，不能判断成功或失败"), true);
 });
 
 test("feed grouping collapses one article across related symbols and retains provenance", () => {

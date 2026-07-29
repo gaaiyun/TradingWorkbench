@@ -476,3 +476,15 @@ ETF 工作台是编排层，不替代原 TradingAgents 内核。
 | VolGuard | 期权快行情和慢模型分层 | 保持独立仓库与部署，工作台通过 API 接入 |
 
 免费来源的授权和稳定性不同。系统保存来源、时间、质量和降级轨迹，不把可访问等同于官方授权，也不把 discovery 升级为 evidence。更多项目评估见 [参考项目与架构决策](etf-monitoring-reference-and-decisions.md)。
+
+## 16. 输出质量与边缘调度保护
+
+Monitor Worker 的生产 direct 模式运行在 Cloudflare 免费 CPU 预算内。调度器每次 cron 最多执行一个任务，发现阶段按最多三个外部请求拆 shard；旧的高频行情、信号、新闻和美股分时 slot 在有至少晚 15 分钟的新 slot 时标为 `SUPERSEDED_BY_NEWER_SLOT`，三次重试耗尽的 failed 或过期 claimed slot 标为 `RETRY_EXHAUSTED`。这只清理不可再执行的调度状态，不删除行情、新闻、Evidence 或报告。
+
+同一 `usCloseSnapshot` 的多个 shard 使用相差一秒的 `scheduled_for`，兼容既有 `profile + slot_type + scheduled_for` 唯一约束，避免第二 shard 静默丢失。市场类任务优先于新闻；但仍保留 profile 公平轮转和原有 attempt fencing。若生产 tail 继续出现 `exceededCpu`，应保持 fail-closed，并考虑把异步执行迁到已设计但尚未启用的 Queue；不得仅把 direct 上限调大。
+
+新闻读取层支持 `tier=evidence|discovery`。前端分别取两层各 200 条后聚合，来源筛选仍保留层级。`source_health` 对外带稳定错误码、最近成功时间、连续失败次数和暂停时间；`market_events` freshness 在读取时按四天重算。
+
+报告生成只有一个精确市场数值真源：存在 EvidencePacket 时，Market Analyst 不再额外调用另一套行情工具。Evidence `asOf` 取交易日结束和当前时点中较早者，禁止未来截止时间；官方“份额拆分”公告只形成带日期、标题、来源和 URL 的公司行动通知，不猜测比例或除权日。claim validation 失败后，Manifest 仍保存原始审计结果和角色分卷，但 `complete_report.md` 只输出 Evidence Snapshot、`Not Rated` 和失败码，避免无效建议继续暴露给用户。
+
+界面分时能力由真实采集能力决定：A 股核心标的和 `SOXX / NVDA` 可选分时，其他美股/港股锁定日线。15m/1h 聚合在当地 session close 时把终点柱并入前一桶，避免收盘瞬间生成单点零成交伪 K 线。任务看板未接入任务级结果时统一显示 `unknown / 未验证`。

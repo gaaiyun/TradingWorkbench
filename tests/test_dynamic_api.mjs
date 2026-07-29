@@ -92,26 +92,32 @@ async function sqliteEventsFixture(t, { maxBindings = Infinity } = {}) {
 }
 
 test("market API builds parameterized symbol/profile/timeframe/date filters and source metadata", async () => {
+  const now = new Date();
+  now.setUTCSeconds(0, 0);
+  now.setUTCMinutes(Math.floor(now.getUTCMinutes() / 5) * 5);
+  const currentTs = now.toISOString();
   const row = {
     symbol: "SPY",
     profile_id: "us-core",
     timeframe: "5m",
-    ts: "2026-07-23T10:00:00Z",
+    ts: currentTs,
     open: 620,
     high: 622,
     low: 619,
     close: 621,
     volume: 1000,
     source: "market-provider",
-    as_of: "2026-07-23T10:01:00Z",
-    fetched_at: "2026-07-23T10:01:05Z",
+    as_of: currentTs,
+    fetched_at: currentTs,
     freshness: "fresh",
     adjustment: "split",
     quality: "good",
   };
   const DB = new FakeD1({ rows: { market_bars: [row] } });
+  const from = new Date(now.valueOf() - 60 * 60 * 1000).toISOString();
+  const to = new Date(now.valueOf() + 60 * 60 * 1000).toISOString();
   const response = await marketApi.onRequestGet({
-    request: request("/api/market?symbol=spy&profile=us-core&timeframe=5m&from=2026-07-23T09:00:00Z&to=2026-07-23T11:00:00Z&limit=25"),
+    request: request(`/api/market?symbol=spy&profile=us-core&timeframe=5m&from=${from}&to=${to}&limit=25`),
     env: { DB },
   });
   const payload = await response.json();
@@ -126,8 +132,8 @@ test("market API builds parameterized symbol/profile/timeframe/date filters and 
   assert.equal(payload.indicators.adjustment, "split");
   assert.deepEqual(payload.sources[0], {
     source: "market-provider",
-    asOf: "2026-07-23T10:01:00Z",
-    fetchedAt: "2026-07-23T10:01:05Z",
+    asOf: currentTs,
+    fetchedAt: currentTs,
     freshness: "fresh",
     adjustment: "split",
     quality: "good",
@@ -139,9 +145,39 @@ test("market API builds parameterized symbol/profile/timeframe/date filters and 
   assert.match(sql, /ts\s*>=\s*\?/i);
   assert.match(sql, /ts\s*<=\s*\?/i);
   assert.match(sql, /LIMIT\s+\?/i);
-  assert.deepEqual(params.slice(0, 5), ["SPY", "us-core", "5m", "2026-07-23T09:00:00.000Z", "2026-07-23T11:00:00.000Z"]);
+  assert.deepEqual(params.slice(0, 5), ["SPY", "us-core", "5m", from, to]);
   assert.equal(typeof params[5], "string");
   assert.equal(params[6], 150);
+});
+
+test("market API marks an old intraday series and its source stale at read time", async () => {
+  const old = new Date(Date.now() - 2 * 60 * 60 * 1000).toISOString();
+  const row = {
+    symbol: "SOXX",
+    profile_id: "cn-semi-comms",
+    timeframe: "5m",
+    ts: old,
+    open: 300,
+    high: 301,
+    low: 299,
+    close: 300,
+    volume: 1000,
+    source: "yahoo-us-intraday",
+    as_of: old,
+    fetched_at: old,
+    freshness: "fresh",
+    adjustment: "none",
+    quality: "good",
+  };
+  const response = await marketApi.onRequestGet({
+    request: request("/api/market?symbol=SOXX&profile=cn-semi-comms&timeframe=5m"),
+    env: { DB: new FakeD1({ rows: { market_bars: [row] } }) },
+  });
+  const payload = await response.json();
+
+  assert.equal(payload.status, "stale");
+  assert.equal(payload.sources[0].freshness, "stale");
+  assert.equal(payload.data[0].freshness, "fresh");
 });
 
 test("market API aggregates stored 5m bars for a requested 15m timeframe", async () => {
@@ -205,6 +241,55 @@ test("market API aggregates stored 5m bars for a requested 15m timeframe", async
   });
   assert.equal(payload.indicators.bars, 2);
   assert.equal(DB.calls[0].params[2], "5m");
+});
+
+test("market API folds a session-close endpoint into the preceding aggregate bucket", async () => {
+  const base = {
+    profile_id: "cn-semi-comms",
+    timeframe: "5m",
+    source: "wire",
+    source_tier: "evidence",
+    fetched_at: "2026-07-29T20:01:00Z",
+    freshness: "fresh",
+    adjustment: "none",
+    quality: "good",
+  };
+  for (const [symbol, timestamps] of [
+    ["512480.SS", [
+      "2026-07-29T06:50:00Z",
+      "2026-07-29T06:55:00Z",
+      "2026-07-29T07:00:00Z",
+    ]],
+    ["SOXX", [
+      "2026-07-29T19:50:00Z",
+      "2026-07-29T19:55:00Z",
+      "2026-07-29T20:00:00Z",
+    ]],
+  ]) {
+    const rows = timestamps.map((ts, index) => ({
+      ...base,
+      symbol,
+      ts,
+      as_of: timestamps.at(-1),
+      open: 10 + index,
+      high: 11 + index,
+      low: 9 + index,
+      close: 10.5 + index,
+      volume: 100 * (index + 1),
+    }));
+    const response = await marketApi.onRequestGet({
+      request: request(`/api/market?symbol=${symbol}&profile=cn-semi-comms&timeframe=15m&limit=2`),
+      env: { DB: new FakeD1({ rows: { market_bars: rows } }) },
+    });
+    const payload = await response.json();
+    assert.equal(
+      payload.data.length,
+      1,
+      `${symbol} close must not create a one-point candle`,
+    );
+    assert.equal(payload.data[0].volume, 600);
+    assert.equal(payload.data[0].close, 12.5);
+  }
 });
 
 test("market API returns distinct timestamps when provider fallbacks overlap", async () => {
@@ -396,6 +481,7 @@ test("news and events APIs support topic and importance filters without interpol
     title: "Chip update",
     published_at: "2026-07-23T09:00:00Z",
     source: "wire",
+    source_tier: "evidence",
     as_of: "2026-07-23T09:01:00Z",
     fetched_at: "2026-07-23T09:01:05Z",
     freshness: "stale",
@@ -419,7 +505,7 @@ test("news and events APIs support topic and importance filters without interpol
   const DB = new FakeD1({ rows: { news_items: [newsRow], market_events: [eventRow] } });
 
   const newsResponse = await newsApi.onRequestGet({
-    request: request(`/api/news?symbol=nvda&profile=semi&topic=${encodeURIComponent(injectedTopic)}&limit=9999`),
+    request: request(`/api/news?symbol=nvda&profile=semi&topic=${encodeURIComponent(injectedTopic)}&tier=evidence&limit=9999`),
     env: { DB },
   });
   const eventResponse = await eventsApi.onRequestGet({
@@ -432,10 +518,12 @@ test("news and events APIs support topic and importance filters without interpol
   assertEnvelope(newsPayload);
   assertEnvelope(eventPayload);
   assert.equal(newsPayload.status, "stale");
-  assert.equal(eventPayload.status, "ok");
+  assert.equal(eventPayload.status, "stale");
   const newsCall = DB.calls[0];
   assert.equal(newsCall.sql.includes(injectedTopic), false);
   assert.equal(newsCall.params.includes(injectedTopic), true);
+  assert.match(newsCall.sql, /source_tier\s*=\s*\?/i);
+  assert.equal(newsCall.params.includes("evidence"), true);
   assert.equal(newsCall.params.at(-1), 2000);
   assert.match(DB.calls[1].sql, /importance\s*=\s*\?/i);
   assert.deepEqual(DB.calls[1].params.slice(0, 3), ["semi", "earnings", "high"]);
@@ -536,7 +624,7 @@ test("events expose structured provenance, safe delivery state, and an after cur
   });
   const payload = await response.json();
 
-  assert.equal(payload.status, "ok");
+  assert.equal(payload.status, "stale");
   assert.equal(
     payload.cursor,
     '["2026-07-24T09:00:00Z","event-new"]',
@@ -572,7 +660,7 @@ test("events use a composite cursor to page every equal-timestamp row in real SQ
       env: { DB: value.db },
     });
     const payload = await response.json();
-    assert.equal(payload.status, "ok");
+    assert.equal(payload.status, "stale");
     seen.push(...payload.data.map(({ id }) => id));
     after = payload.cursor;
     if (payload.data.length < 40) break;
@@ -599,7 +687,7 @@ test("events enrich pages above one hundred rows without exceeding D1 bind limit
   });
   const payload = await response.json();
 
-  assert.equal(payload.status, "ok");
+  assert.equal(payload.status, "stale");
   assert.equal(payload.data.length, 125);
   assert.equal(
     payload.data.every(({ deliveries }) => deliveries.length === 1),

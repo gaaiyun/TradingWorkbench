@@ -301,7 +301,19 @@ MCP 只提供设置、监控、行情、新闻和研究历史查询，不接收�
 
 - [架构、接口与数据流](docs/architecture-and-data-flows.md)
 - [部署、验收与回退](docs/operations-and-deployment.md)
+- [云端 Agent 每日全局审查提示词](docs/CLOUD_AGENT_DAILY_AUDIT_PROMPT.md)
 - [产品回归与迁移](docs/regression-and-migration.md)
 - [报告质量审计](docs/REPORT_QUALITY_AUDIT.md)
 - [下一 Agent 交接](docs/NEXT_AGENT_HANDOFF.md)
 - [只读 MCP](docs/mcp-readonly.md)
+
+## 生产输出边界
+
+- 美股日线覆盖全部配置标的；生产分时目前只覆盖 `SOXX / NVDA`。二者可在页面选择 `5m / 15m / 1h / 1d`，其余美股和港股仍只开放 `1d`，不会用空数据伪装分时能力。
+- SOXX/NVDA 分时来源链是 Yahoo → 东方财富 → 配置 key 时的 Alpha Vantage；这是一条有固定优先级和独立熔断的降级链，不是单一固定来源。
+- 任务列表没有单任务结果接口时显示“未验证”，不再显示成“等待中”。
+- evidence 与 discovery 新闻分别查询后合并展示，官方证据不会再被前 200 条发现层资讯挤出。
+- Evidence claim validation 失败时，用户可见的汇总报告只显示 `Not Rated` 和失败原因，不再保留方向、仓位或交易指令；原始角色分卷仅作审计。
+- `512480.SS / 515880.SS` 的 2026-07-28 报告把份额拆分误判为价格崩跌，已列入 invalidated 清单，不能进入最新观点或问答。
+
+每日云端审查应同时验证运行、数据、图形、分析正文和报告门禁，不能只检查 health。可直接使用上面的[每日审查提示词](docs/CLOUD_AGENT_DAILY_AUDIT_PROMPT.md)。

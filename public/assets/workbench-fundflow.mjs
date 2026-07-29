@@ -454,7 +454,8 @@ export function marketPercentageChange(currentValue, previousValue) {
 export function selectFundFlowEventAnchors(feeds, symbol, dates, { limit = 3 } = {}) {
   const available = new Set((Array.isArray(dates) ? dates : []).filter(Boolean));
   if (!available.size) return [];
-  return (Array.isArray(feeds) ? feeds : [])
+  const unique = new Map();
+  for (const anchor of (Array.isArray(feeds) ? feeds : [])
     .filter((item) => {
       const symbols = new Set([item?.symbol, ...(item?.symbols || [])].filter(Boolean));
       const evidenceNews = item?.type === "news" && (item?.source_tier || item?.sourceTier) === "evidence";
@@ -466,7 +467,11 @@ export function selectFundFlowEventAnchors(feeds, symbol, dates, { limit = 3 } =
       type: item?.type === "event" ? "event" : "evidence",
     }))
     .filter(({ date }) => available.has(date))
-    .sort((left, right) => right.date.localeCompare(left.date))
+    .sort((left, right) => right.date.localeCompare(left.date))) {
+    const key = `${anchor.date}\n${anchor.title.toLowerCase().replace(/\s+/g, "")}`;
+    if (!unique.has(key)) unique.set(key, anchor);
+  }
+  return [...unique.values()]
     .slice(0, limit)
     .sort((left, right) => left.date.localeCompare(right.date));
 }

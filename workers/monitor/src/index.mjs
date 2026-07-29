@@ -22,9 +22,11 @@ import {
   taskFromScheduledSlot,
 } from "./scheduler.mjs";
 import {
+  cancelSupersededScheduledSlots,
   cancelStaleScheduledSlots,
   claimScheduledSlot,
   countScheduledBacklog,
+  finalizeExhaustedScheduledSlots,
   finishScheduledSlot,
   listRetryableSlots,
   markScheduledSlotsQueued,
@@ -511,6 +513,7 @@ async function stageDiscoveredSlots({
   loaded,
   now,
   bootstrapRotation,
+  requestLimit = MAX_SCHEDULED_EXTERNAL_REQUESTS,
 }) {
   const holidaySets = {
     cn: parseHolidaySet(deps.cnHolidays ?? env.CN_HOLIDAY_DATES),
@@ -542,7 +545,7 @@ async function stageDiscoveredSlots({
       splitTaskWithinRequestLimit(
         profile,
         task,
-        MAX_SCHEDULED_EXTERNAL_REQUESTS,
+        requestLimit,
       ));
     for (const task of tasks) {
       const id = await slotIdForTask(profile.id, task);
@@ -706,6 +709,24 @@ function configuredDirectBudget(value) {
   );
 }
 
+function configuredDirectMaxTasks(value) {
+  const parsed = Number(value);
+  if (!Number.isFinite(parsed)) return MAX_SCHEDULED_EXTERNAL_REQUESTS;
+  return Math.min(
+    MAX_SCHEDULED_EXTERNAL_REQUESTS,
+    Math.max(1, Math.floor(parsed)),
+  );
+}
+
+function configuredDirectTaskRequestLimit(value) {
+  const parsed = Number(value);
+  if (!Number.isFinite(parsed)) return MAX_SCHEDULED_EXTERNAL_REQUESTS;
+  return Math.min(
+    MAX_SCHEDULED_EXTERNAL_REQUESTS,
+    Math.max(1, Math.floor(parsed)),
+  );
+}
+
 function configuredQueueDiscoveryLimit(value) {
   const parsed = Number(value);
   if (!Number.isFinite(parsed)) return QUEUE_DISCOVERY_LIMIT;
@@ -790,7 +811,14 @@ export async function runScheduled(scheduledTime, env, deps = {}) {
       loaded,
       now,
       bootstrapRotation: rotation,
+      requestLimit: env.MONITOR_QUEUE
+        ? MAX_SCHEDULED_EXTERNAL_REQUESTS
+        : configuredDirectTaskRequestLimit(env.DIRECT_TASK_REQUEST_LIMIT),
     });
+    const superseded = await cancelSupersededScheduledSlots(env.DB, now);
+    summary.cancelled += superseded.changed;
+    const exhausted = await finalizeExhaustedScheduledSlots(env.DB, now);
+    summary.cancelled += exhausted.changed;
   } catch {
     return {
       ...summary,
@@ -853,6 +881,7 @@ export async function runScheduled(scheduledTime, env, deps = {}) {
       externalRequestBudget: configuredDirectBudget(
         env.DIRECT_EXTERNAL_REQUEST_BUDGET,
       ),
+      maxTasks: configuredDirectMaxTasks(env.DIRECT_MAX_TASKS),
       rotation,
     });
     summary.externalRequestBudget = selection.externalRequestBudget;

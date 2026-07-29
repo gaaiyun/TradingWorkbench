@@ -1,11 +1,11 @@
 {
   "version": 1,
-  "generatedAt": "2026-07-28T07:50:48.864Z",
+  "generatedAt": "2026-07-29T20:09:40.495Z",
   "summary": {
     "successfulReports": 53,
     "verifiedReports": 0,
-    "invalidatedReports": 4,
-    "legacyUnverifiedReports": 49,
+    "invalidatedReports": 6,
+    "legacyUnverifiedReports": 47,
     "invalidRecords": 7,
     "evidenceValidationFailures": 4,
     "analysisExecutionFailures": 2,
@@ -20,9 +20,10 @@
       "rating": "Not Rated",
       "analysisStatus": "insufficient_evidence",
       "report": "reports/515880.SS/2026-07-28/complete_report.md",
-      "auditStatus": "legacy_unverified",
+      "auditStatus": "invalidated",
       "failureClass": null,
       "problemCodes": [
+        "CORPORATE_ACTION_CONTAMINATION",
         "ETF_TEMPLATE_MISMATCH",
         "MISSING_CLAIM_EVIDENCE"
       ],
@@ -73,9 +74,10 @@
       "rating": "Not Rated",
       "analysisStatus": "insufficient_evidence",
       "report": "reports/512480.SS/2026-07-28/complete_report.md",
-      "auditStatus": "legacy_unverified",
+      "auditStatus": "invalidated",
       "failureClass": null,
       "problemCodes": [
+        "CORPORATE_ACTION_CONTAMINATION",
         "ETF_TEMPLATE_MISMATCH",
         "MISSING_CLAIM_EVIDENCE"
       ],

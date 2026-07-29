@@ -350,6 +350,7 @@ test("event anchors and deterministic narrative keep time correlation separate f
   const anchorDate = dates.at(-1);
   const anchors = selectFundFlowEventAnchors([
     { type: "event", symbol: "515880.SS", at: `${anchorDate}T02:00:00Z`, title: "政策窗口" },
+    { type: "event", symbol: "515880.SS", at: `${anchorDate}T03:00:00Z`, title: "政策窗口" },
     { type: "news", symbol: "515880.SS", at: `${anchorDate}T02:00:00Z`, title: "普通资讯" },
     { type: "event", symbol: "512480.SS", at: `${anchorDate}T02:00:00Z`, title: "其他标的" },
   ], "515880.SS", dates);

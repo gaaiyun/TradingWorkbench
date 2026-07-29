@@ -110,7 +110,13 @@ def test_uncited_numeric_claims_are_saved_as_not_rated(tmp_path):
     assert manifest["auditStatus"] == "legacy_unverified"
     assert "UNCITED_NUMERIC_CLAIM" in manifest["claimValidation"]["errorCodes"]
     assert state["analysis_status"] == "insufficient_evidence"
-    assert "Evidence claim validation: `failed`" in out.read_text()
+    complete = out.read_text()
+    assert "Evidence claim validation: `failed`" in complete
+    assert "Not Rated" in complete
+    assert "The close was 180 without a citation." not in complete
+    assert (tmp_path / "1_analysts" / "market.md").read_text() == (
+        "The close was 180 without a citation."
+    )
 
 
 @pytest.mark.unit

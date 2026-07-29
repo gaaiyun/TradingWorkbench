@@ -12,5 +12,6 @@ export function onRequestGet(context) {
     },
     query: queryMarketEvents,
     cursorColumn: ["event_at", "id"],
+    freshnessMaxAgeMs: 4 * 24 * 60 * 60 * 1000,
   });
 }

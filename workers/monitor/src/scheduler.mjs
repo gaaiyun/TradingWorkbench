@@ -487,12 +487,16 @@ export function splitTaskWithinRequestLimit(
   if (group.length > 0) groups.push(group);
   return groups.map((targetSymbols, index) => {
     const allowed = new Set(targetSymbols);
+    const scheduledFor = new Date(
+      Date.parse(task.scheduledFor) + index * 1000,
+    ).toISOString();
     const bootstrapRequirements = Array.isArray(task.bootstrapRequirements)
       ? task.bootstrapRequirements.filter(({ symbol }) => allowed.has(symbol))
       : undefined;
     return {
       ...task,
       localSlot: `${task.localSlot}#part-${index + 1}-of-${groups.length}`,
+      scheduledFor,
       targetSymbols,
       ...(bootstrapRequirements
         ? { bootstrapRequirements }

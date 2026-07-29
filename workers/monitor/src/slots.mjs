@@ -219,7 +219,17 @@ export async function listRetryableSlots(db, now, limit = 100) {
   const result = await db.prepare(`
     WITH ready AS (
       SELECT id, profile_id, slot_type, scheduled_for, status, attempt_count,
-        profile_revision, payload_json, payload_hash, local_date
+        profile_revision, payload_json, payload_hash, local_date,
+        CASE
+          WHEN slot_type IN (
+            'intradayCollect', 'usIntradayCollect',
+            'cnDailySnapshot', 'usCloseSnapshot'
+          ) THEN 0
+          WHEN slot_type = 'intradaySignal' THEN 1
+          WHEN slot_type IN ('closeFullAnalysis', 'premarketBrief') THEN 2
+          WHEN slot_type = 'newsCollect' THEN 3
+          ELSE 4
+        END AS task_priority
       FROM scheduled_slots
       WHERE attempt_count < ?
         AND (
@@ -237,17 +247,76 @@ export async function listRetryableSlots(db, now, limit = 100) {
       SELECT *,
         ROW_NUMBER() OVER (
           PARTITION BY profile_id
-          ORDER BY scheduled_for ASC, id ASC
+          ORDER BY scheduled_for ASC, task_priority ASC, id ASC
         ) AS profile_rank
       FROM ready
     )
     SELECT id, profile_id, slot_type, scheduled_for, status, attempt_count,
       profile_revision, payload_json, payload_hash, local_date
     FROM ranked
-    ORDER BY profile_rank ASC, scheduled_for ASC, profile_id ASC, id ASC
+    ORDER BY profile_rank ASC, scheduled_for ASC, task_priority ASC,
+      profile_id ASC, id ASC
     LIMIT ?
   `).bind(MAX_ATTEMPTS, timestamp, timestamp, Math.max(1, Number(limit))).all();
   return result?.results ?? [];
+}
+
+export async function cancelSupersededScheduledSlots(db, now) {
+  const timestamp = asDate(now).toISOString();
+  const result = await db.prepare(`
+    UPDATE scheduled_slots AS current
+    SET status = 'cancelled',
+        completed_at = ?,
+        last_error_code = 'SUPERSEDED_BY_NEWER_SLOT',
+        updated_at = ?,
+        lease_until = NULL,
+        next_attempt_at = NULL
+    WHERE current.slot_type IN (
+        'intradayCollect', 'intradaySignal', 'newsCollect', 'usIntradayCollect'
+      )
+      AND (
+        current.status IN ('pending', 'queued', 'failed')
+        OR (
+          current.status = 'claimed'
+          AND current.lease_until <= ?
+        )
+      )
+      AND EXISTS (
+        SELECT 1
+        FROM scheduled_slots AS newer
+        WHERE newer.profile_id = current.profile_id
+          AND newer.slot_type = current.slot_type
+          AND newer.scheduled_for > current.scheduled_for
+          AND (
+            julianday(newer.scheduled_for)
+            - julianday(current.scheduled_for)
+          ) * 1440 >= 15
+          AND newer.status != 'cancelled'
+      )
+  `).bind(timestamp, timestamp, timestamp).run();
+  return { changed: Number(result?.meta?.changes ?? 0) };
+}
+
+export async function finalizeExhaustedScheduledSlots(db, now) {
+  const timestamp = asDate(now).toISOString();
+  const result = await db.prepare(`
+    UPDATE scheduled_slots
+    SET status = 'cancelled',
+        completed_at = ?,
+        last_error_code = 'RETRY_EXHAUSTED',
+        updated_at = ?,
+        lease_until = NULL,
+        next_attempt_at = NULL
+    WHERE attempt_count >= ?
+      AND (
+        status = 'failed'
+        OR (
+          status = 'claimed'
+          AND lease_until <= ?
+        )
+      )
+  `).bind(timestamp, timestamp, MAX_ATTEMPTS, timestamp).run();
+  return { changed: Number(result?.meta?.changes ?? 0) };
 }
 
 export async function countScheduledBacklog(db, now) {

@@ -6,6 +6,7 @@ const PROFILE = /^[A-Za-z0-9][A-Za-z0-9_-]{0,63}$/;
 const SOURCE = /^[A-Za-z0-9][A-Za-z0-9_.:-]{0,63}$/;
 const TIMEFRAMES = new Set(["1m", "5m", "15m", "30m", "1h", "4h", "1d"]);
 const IMPORTANCE = new Set(["low", "medium", "high", "critical"]);
+const SOURCE_TIERS = new Set(["evidence", "discovery"]);
 const MAX_LIMIT = 2000;
 
 export class DynamicQueryError extends Error {}
@@ -97,7 +98,8 @@ export function parseDynamicQuery(request, capabilities = {}) {
   if (capabilities.strict) {
     const allowed = new Set(["from", "to", "limit"]);
     for (const name of [
-      "symbol", "profile", "timeframe", "after", "importance", "topic", "source", "type", "period",
+      "symbol", "profile", "timeframe", "after", "importance", "topic",
+      "source", "tier", "type", "period",
     ]) {
       if (capabilities[name]) allowed.add(name);
     }
@@ -113,6 +115,9 @@ export function parseDynamicQuery(request, capabilities = {}) {
     importance: null,
     topic: capabilities.topic ? optionalText(params, "topic") : null,
     source: capabilities.source ? optionalPattern(params, "source", SOURCE) : null,
+    tier: capabilities.tier
+      ? optionalEnum(params, "tier", SOURCE_TIERS)
+      : null,
     limit: limitValue(params),
   };
   if (capabilities.type) query.type = optionalEnum(params, "type", capabilities.type);

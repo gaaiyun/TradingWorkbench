@@ -242,6 +242,7 @@ export function queryNewsItems(db, query) {
       ["symbol", query.symbol],
       ["profile_id", query.profile],
       ["topic", query.topic],
+      ["source_tier", query.tier],
     ],
     timeColumn: "published_at",
     ...query,
@@ -320,7 +321,12 @@ export async function queryMarketEvents(db, query) {
 export function querySourceHealth(db, query) {
   return queryRows(db, {
     table: "source_health",
-    columns: ["source", "status", "as_of", "fetched_at", "freshness", "adjustment", "quality", "detail"],
+    columns: [
+      "source", "status", "as_of", "fetched_at", "freshness", "adjustment",
+      "quality", "COALESCE(detail, last_error_code) AS detail",
+      "last_error_code", "last_success_at", "consecutive_failures",
+      "paused_until",
+    ],
     filters: [["source", query.source]],
     timeColumn: "as_of",
     ...query,

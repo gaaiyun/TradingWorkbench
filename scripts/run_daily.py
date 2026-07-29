@@ -55,6 +55,53 @@ _NEWS_ITEM_FIELDS = (
 )
 
 
+def _point_in_time_cutoff(
+    trade_date: str,
+    *,
+    now: str | datetime | None = None,
+) -> str:
+    trade_day = datetime.strptime(trade_date, "%Y-%m-%d").replace(
+        tzinfo=timezone.utc
+    )
+    end_of_day = trade_day + timedelta(days=1) - timedelta(seconds=1)
+    if isinstance(now, str):
+        current = datetime.fromisoformat(now.replace("Z", "+00:00"))
+    elif isinstance(now, datetime):
+        current = now
+    else:
+        current = datetime.now(timezone.utc)
+    if current.tzinfo is None:
+        current = current.replace(tzinfo=timezone.utc)
+    current = current.astimezone(timezone.utc).replace(microsecond=0)
+    if current < trade_day:
+        raise ValueError("trade_date cannot be in the future")
+    cutoff = min(end_of_day, current)
+    return cutoff.isoformat().replace("+00:00", "Z")
+
+
+def _corporate_actions_from_news(
+    items: list[dict[str, Any]],
+) -> list[dict[str, Any]]:
+    actions = []
+    for item in items:
+        title = str(item.get("title") or "")
+        published_at = str(item.get("publishedAt") or "")
+        if (
+            str(item.get("sourceTier") or "").lower() != "evidence"
+            or "份额拆分" not in title
+            or len(published_at) < 10
+        ):
+            continue
+        actions.append({
+            "type": "fund_share_split_notice",
+            "date": published_at[:10],
+            "title": title,
+            "url": str(item.get("url") or ""),
+            "source": str(item.get("source") or ""),
+        })
+    return actions
+
+
 def _failed_news_bundle(
     *,
     query_type: str,
@@ -336,7 +383,11 @@ def _load_workbench_news(symbol: str, trade_date: str) -> dict[str, Any]:
     if not base.startswith("https://"):
         return empty
     try:
-        params: dict[str, Any] = {"symbol": symbol, "limit": 50}
+        params: dict[str, Any] = {
+            "symbol": symbol,
+            "tier": "evidence",
+            "limit": 200,
+        }
         identity = _workflow_identity()
         if identity["scope"] == "profile":
             params["profile"] = identity["profileId"]
@@ -355,7 +406,7 @@ def _load_workbench_news(symbol: str, trade_date: str) -> dict[str, Any]:
     rows = payload.get("data")
     if not isinstance(rows, list):
         return empty
-    cutoff = f"{trade_date}T23:59:59Z"
+    cutoff = _point_in_time_cutoff(trade_date)
     items = []
     for row in rows:
         published_at = str(row.get("published_at") or row.get("publishedAt") or "")
@@ -523,7 +574,7 @@ def build_runtime_evidence(ticker: str, trade_date: str) -> dict[str, Any]:
 
     symbol = normalize_ticker_symbol(ticker)
     asset_type = detect_asset_type(symbol).value
-    cutoff = f"{trade_date}T23:59:59Z"
+    cutoff = _point_in_time_cutoff(trade_date)
     workbench = _load_workbench_daily(symbol, trade_date)
     workbench_news = _load_workbench_news(symbol, trade_date)
     if workbench:
@@ -535,6 +586,9 @@ def build_runtime_evidence(ticker: str, trade_date: str) -> dict[str, Any]:
             indicators=workbench["indicators"],
             sources=[*workbench["sources"], *workbench_news["sources"]],
             news=workbench_news["items"],
+            corporate_actions=_corporate_actions_from_news(
+                workbench_news["items"]
+            ),
         )
 
     import yfinance as yf

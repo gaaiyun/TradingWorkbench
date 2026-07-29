@@ -15,7 +15,7 @@ test("checkJson reports upstream status and freshness without leaking the body",
     {},
     {
       fetchImpl: async () =>
-        new Response(JSON.stringify({ generated_at: "2026-07-22T10:00:00Z", status: "ok", secret: "x" }), {
+        new Response(JSON.stringify({ generated_at: "2026-07-22T10:00:00Z", trade_date: "2026-07-22", status: "ok", secret: "x" }), {
           status: 200,
           headers: { "content-type": "application/json" },
         }),
@@ -26,6 +26,7 @@ test("checkJson reports upstream status and freshness without leaking the body",
   assert.equal(result.status, 200);
   assert.deepEqual(result.detail, {
     generated_at: "2026-07-22T10:00:00Z",
+    trade_date: "2026-07-22",
     status: "ok",
   });
   assert.equal("secret" in result.detail, false);
@@ -54,6 +55,7 @@ test("checkJson understands the realtime options freshness contract", async () =
 
   assert.deepEqual(result.detail, {
     generated_at: "2026-07-22T18:42:00+08:00",
+    trade_date: null,
     status: "market_closed",
   });
 });
@@ -233,4 +235,26 @@ test("health degrades when the latest report request succeeded but the research 
   );
 
   assert.equal(payload.status, "degraded");
+});
+
+test("health reports a missed scheduled research date instead of staying green", () => {
+  const checks = [{
+    name: "reports",
+    ok: true,
+    detail: {
+      generated_at: "2026-07-28T07:36:00Z",
+      trade_date: "2026-07-28",
+      status: "ok",
+    },
+  }];
+  const payload = buildHealthPayload(
+    {},
+    checks,
+    new Date("2026-07-30T02:00:00Z"),
+  );
+
+  assert.equal(payload.status, "degraded");
+  assert.equal(checks[0].error, "report_lag");
+  assert.equal(checks[0].detail.expected_trade_date, "2026-07-29");
+  assert.equal(checks[0].detail.freshness, "stale");
 });

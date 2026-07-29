@@ -351,3 +351,25 @@ flowchart LR
 - schema、成本、安全和测试影响。
 
 没有完成这些检查的来源只能进入实验环境。
+
+## 11. 2026-07-30 全局复审后的新增决策
+
+### 美股分时按真实能力开放
+
+生产不是“所有美股都有分时”。只有 `SOXX / NVDA` 有 `usIntradayCollect`，所以只有它们与 A 股核心标的开放 `5m / 15m / 1h`；其他美股和港股只开放日线。来源链保持 Yahoo → 东方财富 → 可选 Alpha Vantage，任一来源成功即可降级服务，但必须暴露来源和 freshness。若要扩到全部美股，应先做 D1 90 天容量、请求数、信号相关性和免费 Worker CPU 预算评估。
+
+### 无任务级结果时不用“pending”冒充状态
+
+当前 task board 只有计划配置和整体 monitor 状态，没有每个语义 slot 的结果 API。因此显示 `unknown / 未验证`，而不是“等待中”。将来只有在 API 返回稳定 slot identity 和结果后，才能显示 success/failed/running。
+
+### 报告失败后用户可见正文必须 fail-closed
+
+保存角色分卷有利于审计，但 claim validation 失败时继续在 `complete_report.md` 展示 SELL、目标仓位或交易计划会误导用户。新增规则是：Manifest 保留失败详情，分卷保留原始文本；汇总正文只展示 Evidence Snapshot、`Not Rated` 和错误码。verified 门禁不放宽。
+
+### ETF 拆分公告作为公司行动事实，不猜测参数
+
+上交所 evidence 标题明确包含“份额拆分”时，可在 EvidencePacket 中记录 `fund_share_split_notice` 的公告日期、标题、原文 URL 和来源。公告未明确或解析器未验证的拆分比例、除权日不得补猜。Market Analyst 有 packet 时禁止再调用另一套精确行情工具，避免复权口径冲突。
+
+### 免费边缘调度先缩小工作单元
+
+生产观察到 direct cron `exceededCpu` 后，优先把每轮任务数限制为一、每个 task shard 限为三个外部请求，同时取消已被较新高频 slot 取代的 backlog并收口重试耗尽任务。若生产仍超 10ms，正确升级路径是经用户确认后启用 Queue，不是增加 direct 工作量或把 LangGraph 移进 Worker。

@@ -19,6 +19,7 @@ export async function checkJson(
         const body = await response.json();
         detail = {
           generated_at: body?.quote_generated_at || body?.generated_at || null,
+          trade_date: body?.trade_date || null,
           status: body?.source_status?.overall || body?.status || null,
         };
       } catch {
@@ -43,6 +44,40 @@ export async function checkJson(
   } finally {
     clearTimeout(timeout);
   }
+}
+
+function expectedReportDate(now) {
+  const date = now instanceof Date ? now : new Date(now);
+  const parts = Object.fromEntries(
+    new Intl.DateTimeFormat("en-CA", {
+      timeZone: "Asia/Shanghai",
+      year: "numeric",
+      month: "2-digit",
+      day: "2-digit",
+      weekday: "short",
+      hour: "2-digit",
+      minute: "2-digit",
+      hourCycle: "h23",
+    }).formatToParts(date).map(({ type, value }) => [type, value]),
+  );
+  let candidate = new Date(
+    `${parts.year}-${parts.month}-${parts.day}T00:00:00+08:00`,
+  );
+  if (Number(parts.hour) * 60 + Number(parts.minute) < 16 * 60) {
+    candidate = new Date(candidate.valueOf() - 24 * 60 * 60 * 1000);
+  }
+  while (["Sat", "Sun"].includes(new Intl.DateTimeFormat("en-US", {
+    timeZone: "Asia/Shanghai",
+    weekday: "short",
+  }).format(candidate))) {
+    candidate = new Date(candidate.valueOf() - 24 * 60 * 60 * 1000);
+  }
+  return new Intl.DateTimeFormat("en-CA", {
+    timeZone: "Asia/Shanghai",
+    year: "numeric",
+    month: "2-digit",
+    day: "2-digit",
+  }).format(candidate);
 }
 
 export async function checkDeploymentManifest(
@@ -239,13 +274,28 @@ export function buildHealthPayload(env, checks, checkedAt = new Date()) {
     "unavailable",
     "data_validation_failed",
   ]);
+  const expectedTradeDate = expectedReportDate(checkedAt);
+  const reports = checks.find(({ name }) => name === "reports");
+  const reportLag = Boolean(
+    reports?.ok
+    && /^\d{4}-\d{2}-\d{2}$/.test(String(reports.detail?.trade_date || ""))
+    && reports.detail.trade_date < expectedTradeDate
+  );
+  if (reportLag) {
+    reports.error = "report_lag";
+    reports.detail = {
+      ...reports.detail,
+      expected_trade_date: expectedTradeDate,
+      freshness: "stale",
+    };
+  }
   const healthy = checks.every((item) => (
     item.ok
     && !(
       item.name === "reports"
       && unhealthyDetailStatuses.has(String(item.detail?.status || "").toLowerCase())
     )
-  ));
+  )) && !reportLag;
   return {
     status: healthy ? "ok" : "degraded",
     checked_at: checkedAt.toISOString(),

@@ -22,9 +22,16 @@ const DAILY_HISTORY_LIMITS = Object.freeze({
   "3y": 756,
   "5y": 1260,
 });
+const US_INTRADAY_SYMBOLS = new Set(["SOXX", "NVDA"]);
 
 export function dailyHistoryLimit(range) {
   return DAILY_HISTORY_LIMITS[range] || DAILY_HISTORY_LIMITS["5y"];
+}
+
+export function supportsIntradayTarget(target) {
+  return target?.market === "CN" || (
+    target?.market === "US" && US_INTRADAY_SYMBOLS.has(String(target?.symbol || "").toUpperCase())
+  );
 }
 
 export function normalizeEnvelope(value) {
@@ -190,8 +197,11 @@ export function filterFeedItems(items, filters = {}) {
   const minScore = IMPORTANCE_SCORE[filters.importance] ?? -1;
   return (Array.isArray(items) ? items : []).filter((item) => {
     const symbols = Array.isArray(item.symbols) ? item.symbols : [item.symbol].filter(Boolean);
+    const tier = item.sourceTier || item.source_tier
+      || (item.type === "event" ? "evidence" : "discovery");
     if (filters.symbol && filters.symbol !== "all" && !symbols.includes(filters.symbol)) return false;
     if (filters.source && filters.source !== "all" && item.source !== filters.source) return false;
+    if (filters.tier && filters.tier !== "all" && tier !== filters.tier) return false;
     return (IMPORTANCE_SCORE[item.importance] ?? 0) >= minScore;
   });
 }
@@ -405,8 +415,8 @@ export function buildTaskTimeline(profile) {
     },
   ].filter((item) => item.enabled).map((item) => ({
     ...item,
-    status: "pending",
-    detail: "任务结果接口未提供",
+    status: "unknown",
+    detail: "未接入单任务结果，不能判断成功或失败",
   }));
 }
 

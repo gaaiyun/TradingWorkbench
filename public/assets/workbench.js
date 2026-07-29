@@ -15,6 +15,7 @@ import {
   normalizeEnvelope,
   notificationDeliveryBadges,
   selectConclusion,
+  supportsIntradayTarget,
 } from "./workbench-data.mjs";
 import { renderMarkdown } from "./workbench-markdown.mjs";
 import {
@@ -28,7 +29,7 @@ import {
   isFundFlowUiEnabled,
   marketPercentageChange,
   selectFundFlowEventAnchors,
-} from "./workbench-fundflow.mjs?v=f60d8fde417d";
+} from "./workbench-fundflow.mjs?v=d7f545a4f48e";
 import {
   CandlestickSeries,
   ColorType,
@@ -441,7 +442,7 @@ import {
       $("#history-range-tabs").hidden = true;
       return;
     }
-    const isDailyMarket = target.market !== "CN";
+    const isDailyMarket = !supportsIntradayTarget(target);
     const isDaily = state.timeframe === "1d";
     const bars = state.chart.bars;
     const bar = bars.at(-1);
@@ -910,9 +911,19 @@ import {
     if (!profileId) return;
     const request = profileRequests.begin("feeds");
     try {
-      const [newsResult, eventsResult] = await Promise.allSettled([
+      const [evidenceResult, discoveryResult, eventsResult] = await Promise.allSettled([
         requestJson(
-          profileRequestUrl("/api/news", profileId, { limit: 200 }),
+          profileRequestUrl("/api/news", profileId, {
+            tier: "evidence",
+            limit: 200,
+          }),
+          { signal: request.signal },
+        ),
+        requestJson(
+          profileRequestUrl("/api/news", profileId, {
+            tier: "discovery",
+            limit: 200,
+          }),
           { signal: request.signal },
         ),
         requestJson(
@@ -921,20 +932,26 @@ import {
         ),
       ]);
       if (!profileRequests.isCurrent(request)) return;
-      const news = normalizeEnvelope(newsResult.status === "fulfilled" ? newsResult.value : null);
+      const evidence = normalizeEnvelope(
+        evidenceResult.status === "fulfilled" ? evidenceResult.value : null,
+      );
+      const discovery = normalizeEnvelope(
+        discoveryResult.status === "fulfilled" ? discoveryResult.value : null,
+      );
       const events = normalizeEnvelope(eventsResult.status === "fulfilled" ? eventsResult.value : null);
       state.feeds = groupFeedItems([
-        ...normalizeFeed(news, "news"),
+        ...normalizeFeed(evidence, "news"),
+        ...normalizeFeed(discovery, "news"),
         ...normalizeFeed(events, "event"),
       ])
         .sort((a, b) => String(b.at || "").localeCompare(String(a.at || "")));
       state.feedLastRefreshedAt = new Date().toISOString();
-      const statuses = [news.status, events.status];
+      const statuses = [evidence.status, discovery.status, events.status];
       state.feedEnvelope = {
         status: statuses.every((status) => status === "unavailable") ? "unavailable" : statuses.includes("degraded") || statuses.includes("unavailable") ? "degraded" : statuses.includes("stale") ? "stale" : "ok",
-        asOf: [news.asOf, events.asOf].filter(Boolean).sort().at(-1) || null,
+        asOf: [evidence.asOf, discovery.asOf, events.asOf].filter(Boolean).sort().at(-1) || null,
         data: state.feeds,
-        sources: [...news.sources, ...events.sources],
+        sources: [...evidence.sources, ...discovery.sources, ...events.sources],
       };
       renderFeedFilters();
       renderFeed();
@@ -957,6 +974,7 @@ import {
     const filtered = filterFeedItems(state.feeds, {
       symbol: $("#feed-symbol").value,
       source: $("#feed-source").value,
+      tier: $("#feed-tier").value,
       importance: $("#feed-importance").value,
     });
     $("#feed-asof").textContent = `${filtered.length} 条 · ${formatTime(state.feedEnvelope.asOf, true)}`;
@@ -1320,7 +1338,7 @@ import {
     $("#task-board").innerHTML = rows.map(({ time, label, status, detail }) => `<li class="is-${escapeHtml(status)}">
       <time>${escapeHtml(time)}</time>
       <div><b>${escapeHtml(label)}</b><small>${escapeHtml(detail)}</small></div>
-      <span>${escapeHtml(status === "success" ? "成功" : status === "failed" ? "失败" : status === "running" ? "运行中" : "等待结果")}</span>
+      <span>${escapeHtml(status === "success" ? "成功" : status === "failed" ? "失败" : status === "running" ? "运行中" : status === "unknown" ? "未验证" : "等待结果")}</span>
     </li>`).join("") || (profile?.enabled === false
       ? "<li class=\"is-disabled\"><time>—</time><div><b>监控组已停用</b><small>不会创建或等待计划任务。</small></div><span>已停用</span></li>"
       : "<li class=\"is-disabled\"><time>—</time><div><b>未启用研究计划</b><small>在设置中启用至少一个时段。</small></div><span>已停用</span></li>");
@@ -1720,7 +1738,11 @@ import {
   }
 
   function renderDrivers() {
-    const drivers = targets().filter((target) => ["driver", "benchmark"].includes(target.role)).slice(0, 4);
+    const basket = fundFlowDriverBasket(state.selectedSymbol);
+    const basketSymbols = new Set(basket.symbols || []);
+    const drivers = targets()
+      .filter((target) => basketSymbols.has(target.symbol))
+      .slice(0, 4);
     const cells = drivers.filter((target) => state.quotes.has(target.symbol)).map((target) => {
       const quote = state.quotes.get(target.symbol);
       const tone = marketTone(quote.change, target.market);
@@ -1919,7 +1941,7 @@ import {
     state.selectedSymbol = symbol;
     state.fundFlowContext = emptyFundFlowContext(symbol);
     const target = targets().find((item) => item.symbol === symbol);
-    if (target?.market !== "CN" && state.timeframe !== "1d") {
+    if (!supportsIntradayTarget(target) && state.timeframe !== "1d") {
       state.timeframe = "1d";
       $$("[data-timeframe]").forEach((button) => {
         const active = button.dataset.timeframe === "1d";
@@ -1988,7 +2010,7 @@ import {
     state.selectedReportEntry = null;
     state.latestReportIdentity = null;
     const selectedTarget = targets().find(({ symbol }) => symbol === state.selectedSymbol);
-    if (selectedTarget?.market !== "CN") state.timeframe = "1d";
+    if (!supportsIntradayTarget(selectedTarget)) state.timeframe = "1d";
     renderClearedProfileContext();
     if (newThread && state.threads.length) {
       createThread(`${currentProfile()?.name || "监控组"}问答`, currentProfile()?.id);
@@ -3005,7 +3027,7 @@ import {
     $("#profile-selector").addEventListener("change", (event) => selectProfile(event.target.value));
     $("#settings-profile-selector").addEventListener("change", (event) => selectProfile(event.target.value));
     $("#refresh-feed").addEventListener("click", loadFeeds);
-    ["#feed-symbol", "#feed-source", "#feed-importance"].forEach((selector) => $(selector).addEventListener("change", renderFeed));
+    ["#feed-symbol", "#feed-source", "#feed-tier", "#feed-importance"].forEach((selector) => $(selector).addEventListener("change", renderFeed));
     $$("[data-mobile-section]").forEach((button) => button.addEventListener("click", () => setMobileView(button.dataset.mobileSection)));
     const openSettings = () => openDrawer("#settings-drawer", "#settings-overlay");
     const openDeepAnalysis = () => {

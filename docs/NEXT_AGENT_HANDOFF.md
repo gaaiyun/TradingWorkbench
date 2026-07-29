@@ -516,3 +516,28 @@ gh workflow run deploy-monitor.yml --repo gaaiyun/TradingWorkbench --ref main
 | 2026-07-29 | 全面纠正资金观察状态与叙事：按逻辑序列判断 freshness，区分卡片与近 5 日分位口径，按正负确定资金方向，补齐全历史回填并证明 UTC 周日为上海周一；深市份额明确仅快照 | 功能提交 `b6d8a88`；CI `30379749679`、Pages `30379749744`、Monitor `30379750103` 全绿；backfill `30378437748` 更新 21471 条；三方 SHA 一致；三只 ETF 自身两融 `1638 / 1580 / 1522` 条、上海周末为 0、`/api/flows=ok`；1440px/390px 生产切换标的验收无溢出和控制台错误 |
 | 2026-07-29 | 修复用户截图红框：标的专属隔夜驱动篮子、精确日涨跌、无 verified 报告时的规则化主题观察；Evidence 与问答门禁不变 | 功能提交 `328cda9`；CI `30383472709`、Pages `30383472699`、Monitor `30383498898` 全绿；三方 SHA 对齐；1440px/390px 生产实测 512480 左侧、标题、叙事均为 -7.38%，主题观察显示资金偏弱，0 溢出和控制台错误 |
 | 2026-07-29 | 证伪 UTC 截断造成的伪周末结论；增加显式 `trade_date` 与生产业务日门禁；补齐 SOXX/NVDA 独立美股 5m 采集、纽约时段/DST、东财北京时间降级和未完成柱过滤 | 功能提交 `64934de`；CI `30387614133`、Pages `30387770552`、Monitor `30387613679` 全绿；三只资金序列周末 0、日线缺口 0；SOXX/NVDA 各 370 根且非整 5 分钟行 0；首次两条临时柱已精确删除 |
+| 2026-07-30 | 全局运行、数据、图形、分析和报告正文复审：修复 Worker CPU 工作单元与积压收口、收盘聚合伪 K 线、SOXX/NVDA 分时 UI、新闻层级可见性、任务状态误导、报告未来截止与拆分污染、无效报告仍显示建议等问题；新增云端 Agent 每日全局审查提示词 | 本地前端 118/118、Functions 381/1 skip、Python 654/2 skip、Ruff 与语法检查通过；生产部署与最终运行证据须以本轮提交后的 GitHub/Pages/Worker 三方 SHA 和 §1.6 记录为准 |
+
+## 1.6 2026-07-30 全局质量复审
+
+生产审计确认的真实问题：
+
+- Monitor direct cron 出现 Cloudflare 免费计划 `exceededCpu`，同时存在被新高频 slot 替代的积压、三次重试耗尽但仍显示 failed/claimed 的历史状态；
+- `usCloseSnapshot` 多 shard 共用同一 `scheduled_for`，被既有唯一键静默吞掉第二 shard，造成 ASML/ORCL/GOOGL/3887.HK 日线落后；
+- SOXX/NVDA 已有生产 5m 数据，但前端把所有非 A 股强制锁为日线；15m/1h 在精确 session close 时会产生单点零成交伪柱；
+- 前 200 条 discovery 新闻挤掉 official evidence，source health API 没完整带出稳定错误码，事件旧数据仍可能显示 fresh；
+- 任务板没有任务级结果 API，却把所有计划写成 pending；
+- 2026-07-28 的 `512480.SS / 515880.SS` 报告把 ETF 份额拆分误判为价格崩跌，Evidence `asOf` 还晚于生成时间；packet 没带公司行动，Market Analyst 又调用了另一套精确行情，导致数字与复权口径冲突；
+- 上述报告虽被外层门禁标为 Not Rated，用户可见 `complete_report.md` 仍保留 SELL 和仓位建议。
+
+本轮代码修复：
+
+- direct cron 每轮最多一个任务、task shard 最多三个外部请求；取消被更新高频 slot 取代的 backlog，三次重试耗尽后标 `RETRY_EXHAUSTED`；多 shard 的 `scheduled_for` 按秒错开；
+- 市场任务优先于新闻；SOXX/NVDA 在 UI 开放真实 `5m/15m/1h`，其他美股仍只开放日线；收盘端点并入前一聚合桶；
+- evidence/discovery 分层查询，事件 freshness 按四天重算，source health 暴露错误码和熔断元数据；
+- 任务板无结果时显示“未验证”；
+- Evidence 截止时间不晚于实际生成时点，官方拆分公告进入公司行动；有 EvidencePacket 时 Market Analyst 不再调用另一套精确行情工具；
+- 精确 invalidated 两份 2026-07-28 拆分污染报告；新报告 claim validation 失败时，汇总正文只显示 Evidence Snapshot、Not Rated 和失败码，原始分卷只保留审计；
+- 新增 [云端 Agent 每日全局审查提示词](CLOUD_AGENT_DAILY_AUDIT_PROMPT.md)，覆盖部署、调度、行情、图形、资金、新闻、报告、VolGuard 和问答。
+
+生产尚须本轮提交后复验：免费 Worker 在一任务/三请求上限下是否仍 `exceededCpu`，积压是否真实前移，落后的美股日线是否补齐，当日分析是否恢复，以及 Pages/Worker/GitHub SHA 是否一致。任何一项未通过都必须保留为“未解决”，不能用本地测试替代。

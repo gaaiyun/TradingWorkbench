@@ -3,7 +3,11 @@ import math
 import pandas as pd
 import pytest
 
-from scripts.run_daily import build_runtime_evidence
+from scripts.run_daily import (
+    _corporate_actions_from_news,
+    _point_in_time_cutoff,
+    build_runtime_evidence,
+)
 from tradingagents.evidence import (
     EvidenceValidationError,
     build_evidence_packet,
@@ -22,6 +26,34 @@ def bar(ts, close, adjustment="qfq"):
         "volume": 100,
         "adjustment": adjustment,
     }
+
+
+def test_runtime_cutoff_never_claims_a_future_end_of_day():
+    assert _point_in_time_cutoff(
+        "2026-07-28",
+        now="2026-07-28T07:21:00Z",
+    ) == "2026-07-28T07:21:00Z"
+    assert _point_in_time_cutoff(
+        "2026-07-28",
+        now="2026-07-29T01:00:00Z",
+    ) == "2026-07-28T23:59:59Z"
+
+
+def test_official_split_notice_becomes_a_citable_corporate_action():
+    actions = _corporate_actions_from_news([{
+        "title": "某基金基金份额拆分结果的公告",
+        "publishedAt": "2026-07-05T16:00:00Z",
+        "url": "https://www.sse.com.cn/split.pdf",
+        "source": "上海证券交易所基金公告",
+        "sourceTier": "evidence",
+    }])
+    assert actions == [{
+        "type": "fund_share_split_notice",
+        "date": "2026-07-05",
+        "title": "某基金基金份额拆分结果的公告",
+        "url": "https://www.sse.com.cn/split.pdf",
+        "source": "上海证券交易所基金公告",
+    }]
 
 
 def test_packet_filters_future_news_and_records_point_in_time_evidence():
@@ -674,4 +706,8 @@ def test_runtime_evidence_includes_point_in_time_workbench_news(monkeypatch):
     assert packet["news"][0]["evidenceId"] == "N1"
     assert packet["news"][0]["sourceTier"] == "evidence"
     assert observed["url"] == "https://board.example/api/news"
-    assert observed["params"] == {"symbol": "3887.HK", "limit": 50}
+    assert observed["params"] == {
+        "symbol": "3887.HK",
+        "tier": "evidence",
+        "limit": 200,
+    }

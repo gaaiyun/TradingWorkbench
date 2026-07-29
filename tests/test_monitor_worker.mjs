@@ -37,7 +37,7 @@ function sqliteWorkerD1(settings, { failNextFinish = false } = {}) {
           run: async () => {
             if (
               state.failNextFinish &&
-              /UPDATE\s+scheduled_slots/i.test(sql)
+              /UPDATE\s+scheduled_slots[\s\S]+SET\s+status\s*=\s*\?/i.test(sql)
             ) {
               state.failNextFinish = false;
               throw new Error("simulated terminal write failure");
@@ -339,7 +339,11 @@ test("core scheduled run reads D1 settings, executes due tasks, and is awaitable
   const db = new WorkerD1(monitorSettings());
   const result = await runScheduled(
     Date.parse("2026-07-23T01:30:00.000Z"),
-    { DB: db, DIRECT_EXTERNAL_REQUEST_BUDGET: "999" },
+    {
+      DB: db,
+      DIRECT_EXTERNAL_REQUEST_BUDGET: "999",
+      DIRECT_MAX_TASKS: "1",
+    },
     {
       registryFactory: () => ({
         fetchMarketData: async (request) => ({
@@ -351,21 +355,21 @@ test("core scheduled run reads D1 settings, executes due tasks, and is awaitable
       }),
     },
   );
-  assert.equal(result.status, "completed");
+  assert.equal(result.status, "degraded");
   assert.equal(result.externalRequestBudget, 32);
   assert.deepEqual(result.counts, {
     due: 2,
-    claimed: 2,
+    claimed: 1,
     completed: 1,
     degraded: 0,
-    deferred: 1,
+    deferred: 0,
     failed: 0,
     skipped: 0,
   });
   assert.equal(db.barWrites.length, 2);
   assert.deepEqual(
     [...db.slots.values()].map((row) => row.status).sort(),
-    ["completed", "deferred"],
+    ["completed", "pending"],
   );
 });
 

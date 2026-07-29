@@ -562,3 +562,40 @@ SHA 不符时按未部署处理。
 - 设置：D1 是真值，仓库 JSON 不能覆盖已有在线设置。
 
 回退后重新检查 Worker SHA、profile 隔离、行情、新闻、Evidence、问答、提醒 shadow 和 VolGuard。
+
+## 15. 免费 Worker CPU 与积压处理
+
+生产 direct 配置固定：
+
+```toml
+DIRECT_MAX_TASKS = "1"
+DIRECT_TASK_REQUEST_LIMIT = "3"
+```
+
+这两个值是针对免费 Worker 10ms CPU 观测到的 `exceededCpu` 做的保守上限，不是吞吐承诺。每次 cron 先取消被更新 slot 替代的高频 backlog，再把三次尝试耗尽的 failed/过期 claimed slot收口为 `cancelled / RETRY_EXHAUSTED`，最后只执行一个有界任务。发布后必须用 Worker tail 和 D1 同时验证：
+
+- cron 不再持续 `exceededCpu`；
+- 最新行情、新闻或分析 slot 真正从 pending 走到 completed/degraded；
+- backlog 最老时间持续前移；
+- `claimed` 中没有过期租约；
+- 取消只发生于 superseded 或 retry-exhausted，不影响一次性日线或完整分析。
+
+如果仍超 CPU，不得继续提高 direct 上限。下一步是评估并由用户确认 Cloudflare Queue 的费用和配额后启用 `wrangler.monitor.queue.toml`；未获授权不得创建付费资源。
+
+## 16. 报告质量事故处理
+
+发现已发布报告把拆分、复权或其他公司行动误判为涨跌时：
+
+1. 先把精确 `ticker/trade_date/path` 加入 `scripts/report-audit.mjs` 的 invalidated 集合并重新生成 `public/data/report-audit.json`；
+2. 验证最新观点和问答都不能读取该报告；
+3. 修复 Evidence `asOf`、公司行动和单一市场数值真源；
+4. 不修改历史正文伪造“当时正确”；历史角色分卷保留审计；
+5. 新报告若 claim validation 失败，汇总正文必须只有 Evidence Snapshot、`Not Rated` 和失败码，不得继续显示交易指令；
+6. 只有新版本 Manifest、Evidence packet、packet file hash 和 claim validation 全部匹配，才可重新成为 verified 候选。
+
+本轮已精确 invalidated：
+
+- `reports/512480.SS/2026-07-28/complete_report.md`
+- `reports/515880.SS/2026-07-28/complete_report.md`
+
+每日全局验收可直接使用 [云端 Agent 每日审查提示词](CLOUD_AGENT_DAILY_AUDIT_PROMPT.md)。
