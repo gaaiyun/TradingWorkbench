@@ -1,9 +1,9 @@
 {
   "version": 1,
-  "generatedAt": "2026-07-29T22:42:25.466Z",
+  "generatedAt": "2026-07-29T23:38:43.994Z",
   "summary": {
-    "successfulReports": 59,
-    "verifiedReports": 0,
+    "successfulReports": 61,
+    "verifiedReports": 2,
     "invalidatedReports": 6,
     "legacyUnverifiedReports": 53,
     "invalidRecords": 7,
@@ -12,6 +12,108 @@
     "invalidInputs": 1
   },
   "reports": [
+    {
+      "ticker": "512480.SS",
+      "tradeDate": "2026-07-29",
+      "generatedAt": "2026-07-30T07:26:03+08:00",
+      "provider": "openai_compatible",
+      "rating": "Underweight",
+      "analysisStatus": "rated",
+      "report": "reports/512480.SS/2026-07-29-v4/complete_report.md",
+      "auditStatus": "verified",
+      "failureClass": null,
+      "problemCodes": [
+        "ETF_TEMPLATE_MISMATCH",
+        "MISSING_PUBLICATION_TIME"
+      ],
+      "evidence": {
+        "urlCount": 3,
+        "claimCitationCount": 0,
+        "finalProposalMarkers": 0,
+        "priceTargetCount": 0,
+        "valuationMethodCount": 0,
+        "publishedMarkerCount": 0
+      },
+      "claimValidation": {
+        "status": "passed",
+        "errorCodes": [],
+        "citationCount": 17,
+        "unknownEvidenceIds": [],
+        "invalidEvidenceCitations": [],
+        "uncitedNumericParagraphs": 0,
+        "omittedUnsafeParagraphs": 1
+      },
+      "evidencePacket": {
+        "status": "ok",
+        "asOf": "2026-07-29T23:26:12Z",
+        "contentHash": "a1f25ed3bab173f328f28f97d347ba259719bbe671e550ae6aaac58f2912933a"
+      },
+      "evidencePublish": {
+        "published": true,
+        "status": 201
+      },
+      "identity": {
+        "scope": "profile",
+        "kind": "manual",
+        "runId": "30499471528",
+        "profileId": "cn-semi-comms",
+        "requestId": null,
+        "slotId": null,
+        "scheduledFor": null
+      },
+      "supersededBy": null
+    },
+    {
+      "ticker": "515880.SS",
+      "tradeDate": "2026-07-29",
+      "generatedAt": "2026-07-30T07:26:03+08:00",
+      "provider": "openai_compatible",
+      "rating": "Underweight",
+      "analysisStatus": "rated",
+      "report": "reports/515880.SS/2026-07-29-v4/complete_report.md",
+      "auditStatus": "verified",
+      "failureClass": null,
+      "problemCodes": [
+        "ETF_TEMPLATE_MISMATCH",
+        "MISSING_PUBLICATION_TIME"
+      ],
+      "evidence": {
+        "urlCount": 4,
+        "claimCitationCount": 0,
+        "finalProposalMarkers": 0,
+        "priceTargetCount": 0,
+        "valuationMethodCount": 1,
+        "publishedMarkerCount": 0
+      },
+      "claimValidation": {
+        "status": "passed",
+        "errorCodes": [],
+        "citationCount": 14,
+        "unknownEvidenceIds": [],
+        "invalidEvidenceCitations": [],
+        "uncitedNumericParagraphs": 0,
+        "omittedUnsafeParagraphs": 1
+      },
+      "evidencePacket": {
+        "status": "ok",
+        "asOf": "2026-07-29T23:32:28Z",
+        "contentHash": "06b97205374973cb5eac306dd627b81c45c9ff7774a3f5fc6bf456e2d0618a82"
+      },
+      "evidencePublish": {
+        "published": true,
+        "status": 201
+      },
+      "identity": {
+        "scope": "profile",
+        "kind": "manual",
+        "runId": "30499471528",
+        "profileId": "cn-semi-comms",
+        "requestId": null,
+        "slotId": null,
+        "scheduledFor": null
+      },
+      "supersededBy": null
+    },
     {
       "ticker": "512480.SS",
       "tradeDate": "2026-07-29",
@@ -385,7 +487,7 @@
         "slotId": "slot-60509113eaa7d4f54994f4bb62d3ab2cbd6813408b484fdfc9bcc21fa51c72d6",
         "scheduledFor": "2026-07-28T07:20:00.000Z"
       },
-      "supersededBy": null
+      "supersededBy": "reports/515880.SS/2026-07-29-v4/complete_report.md"
     },
     {
       "ticker": "512480.SS",
@@ -439,7 +541,7 @@
         "slotId": "slot-60509113eaa7d4f54994f4bb62d3ab2cbd6813408b484fdfc9bcc21fa51c72d6",
         "scheduledFor": "2026-07-28T07:20:00.000Z"
       },
-      "supersededBy": null
+      "supersededBy": "reports/512480.SS/2026-07-29-v4/complete_report.md"
     },
     {
       "ticker": "515880.SS",
@@ -1608,7 +1710,7 @@
         "slotId": null,
         "scheduledFor": null
       },
-      "supersededBy": null
+      "supersededBy": "reports/515880.SS/2026-07-29-v4/complete_report.md"
     },
     {
       "ticker": "512480.SS",
@@ -1646,7 +1748,7 @@
         "slotId": null,
         "scheduledFor": null
       },
-      "supersededBy": null
+      "supersededBy": "reports/512480.SS/2026-07-29-v4/complete_report.md"
     },
     {
       "ticker": "512480.SS",
@@ -1682,7 +1784,7 @@
         "slotId": null,
         "scheduledFor": null
       },
-      "supersededBy": null
+      "supersededBy": "reports/512480.SS/2026-07-29-v4/complete_report.md"
     },
     {
       "ticker": "NVDA",
