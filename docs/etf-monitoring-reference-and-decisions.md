@@ -378,4 +378,4 @@ flowchart LR
 
 ### 免费边缘调度先缩小工作单元
 
-生产观察到 direct cron `exceededCpu` 后，优先把每轮任务数限制为一、每个 task shard 限为三个外部请求，同时取消已被较新高频 slot 取代的 backlog并收口重试耗尽任务。若生产仍超 10ms，正确升级路径是经用户确认后启用 Queue，不是增加 direct 工作量或把 LangGraph 移进 Worker。
+生产观察到 direct cron `exceededCpu` 后，优先把每轮任务数限制为一、每个 task shard 限为三个外部请求，同时取消已被较新高频 slot 取代的 backlog并收口重试耗尽任务。任务被拆分后，同一 profile 必须先完成全部市场数据 shard 再启动 `closeFullAnalysis`，否则报告会读到混合截面。若生产仍超 10ms，正确升级路径是经用户确认后启用 Queue，不是增加 direct 工作量或把 LangGraph 移进 Worker。

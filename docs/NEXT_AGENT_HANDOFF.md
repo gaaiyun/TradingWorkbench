@@ -532,7 +532,7 @@ gh workflow run deploy-monitor.yml --repo gaaiyun/TradingWorkbench --ref main
 
 本轮代码修复：
 
-- direct cron 每轮最多一个任务、task shard 最多三个外部请求；取消被更新高频 slot 取代的 backlog，三次重试耗尽后标 `RETRY_EXHAUSTED`；多 shard 的 `scheduled_for` 按秒错开；
+- direct cron 每轮最多一个任务、task shard 最多三个外部请求；取消被更新高频 slot 取代的 backlog，三次重试耗尽后标 `RETRY_EXHAUSTED`；多 shard 的 `scheduled_for` 按秒错开；同一 profile 的 retry backlog 先按 `task_priority` 再按 `scheduled_for` 排序，确保全部日线 shard 完成后才启动 `closeFullAnalysis`；
 - 增加 36 小时关键日任务补偿：Cron 在入库前失败时，后续 tick 只补建
   `cnDailySnapshot / closeFullAnalysis / usCloseSnapshot`，稳定 slotId 去重；不追赶
   盘中、信号和新闻高频任务；

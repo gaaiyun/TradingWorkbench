@@ -171,6 +171,7 @@ Worker 为每个理论任务生成稳定 `slotId`，并在首次入库时冻结 
 
 - 原子租约、attempt fencing、最多三次重试。
 - 关键日任务补偿：若某次 Cron 在入库前失败，后续 tick 会在 36 小时内重新发现 `cnDailySnapshot`、`closeFullAnalysis`、`usCloseSnapshot`；稳定 slotId 保证只入库一次。盘中、信号和新闻高频任务不追溯，避免恢复风暴。
+- 同一监控组的待执行任务先按类型、再按计划时间排序：行情采集及其全部分片先于 `closeFullAnalysis`，避免收盘报告读取只更新了一部分标的的混合截面。
 - `profile + localDate` 的完整分析预算；`fullAnalysesPerDay=0` 时不 dispatch。
 - profile 公平轮转、单 tick 工作量上限和外部请求预算。
 - 新闻任务排在同一时间槽的行情与规则信号之后，只使用剩余预算；所有启用 profile 的资讯总频率最多相当于每小时 8 次，避免多监控组造成无界积压。

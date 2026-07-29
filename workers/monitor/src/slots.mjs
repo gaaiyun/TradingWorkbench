@@ -247,14 +247,14 @@ export async function listRetryableSlots(db, now, limit = 100) {
       SELECT *,
         ROW_NUMBER() OVER (
           PARTITION BY profile_id
-          ORDER BY scheduled_for ASC, task_priority ASC, id ASC
+          ORDER BY task_priority ASC, scheduled_for ASC, id ASC
         ) AS profile_rank
       FROM ready
     )
     SELECT id, profile_id, slot_type, scheduled_for, status, attempt_count,
       profile_revision, payload_json, payload_hash, local_date
     FROM ranked
-    ORDER BY profile_rank ASC, scheduled_for ASC, task_priority ASC,
+    ORDER BY profile_rank ASC, task_priority ASC, scheduled_for ASC,
       profile_id ASC, id ASC
     LIMIT ?
   `).bind(MAX_ATTEMPTS, timestamp, timestamp, Math.max(1, Number(limit))).all();
