@@ -3,6 +3,7 @@ import sys
 
 import pandas as pd
 import pytest
+from langgraph.graph import END, START, StateGraph
 
 from scripts.run_daily import (
     _corporate_actions_from_news,
@@ -175,6 +176,32 @@ def test_langgraph_state_schema_preserves_evidence_gate_fields():
     ].AgentState
     assert "evidence_packet" in AgentState.__annotations__
     assert "analysis_status" in AgentState.__annotations__
+
+    packet = build_evidence_packet(
+        ticker="512480.SS",
+        asset_type="cn_etf",
+        as_of="2026-07-29T08:00:00Z",
+        bars=[bar("2026-07-28T16:00:00Z", 1.05)],
+        sources=[{"source": "tencent", "sourceTier": "evidence"}],
+        generated_at="2026-07-29T08:05:00Z",
+    )
+    initial = Propagator().create_initial_state(
+        "512480.SS",
+        "2026-07-29",
+        asset_type="cn_etf",
+        evidence_packet=packet,
+    )
+    workflow = StateGraph(AgentState)
+    workflow.add_node(
+        "observe_evidence",
+        lambda state: {"analysis_status": state["analysis_status"]},
+    )
+    workflow.add_edge(START, "observe_evidence")
+    workflow.add_edge("observe_evidence", END)
+
+    final = workflow.compile().invoke(initial)
+    assert final["evidence_packet"]["contentHash"] == packet["contentHash"]
+    assert final["analysis_status"] == "rated"
 
 
 def test_cn_runtime_evidence_prefers_workbench_qfq_history(monkeypatch):
