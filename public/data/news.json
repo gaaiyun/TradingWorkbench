@@ -1,7 +1,7 @@
 {
   "version": 1,
   "status": "ok",
-  "generated_at": "2026-07-30T07:26:03+08:00",
+  "generated_at": "2026-07-30T07:42:28+08:00",
   "trade_date": "2026-07-29",
   "global": {
     "status": "ok",
@@ -9,25 +9,55 @@
     "ticker": null,
     "start_date": "2026-07-22",
     "end_date": "2026-07-29",
-    "fetched_at": "2026-07-29T23:26:04Z",
+    "fetched_at": "2026-07-29T23:42:30Z",
     "items": [
+      {
+        "title": "Dow Jones Futures: Stock Market Tumbles, Oil Prices Soar On Trump's Iran Threats; Microsoft, Meta, Fortinet Earnings Late",
+        "summary": "",
+        "url": "https://finance.yahoo.com/m/58bee05c-df37-343b-b099-b9d3d5fa6440/dow-jones-futures%3A-stock.html",
+        "source": "Investor's Business Daily",
+        "published_at": "2026-07-29T23:39:56Z",
+        "fetched_at": "2026-07-29T23:42:30Z",
+        "ticker": null,
+        "source_tier": "aggregator"
+      },
+      {
+        "title": "As Geopolitical Forces Shape Australian Markets, Mitrade Announces Bloomberg.com Partnership for a Better-Informed Financial World",
+        "summary": "",
+        "url": "https://finance.yahoo.com/markets/currencies/articles/geopolitical-forces-shape-australian-markets-233000821.html",
+        "source": "PR Newswire",
+        "published_at": "2026-07-29T23:30:00Z",
+        "fetched_at": "2026-07-29T23:42:30Z",
+        "ticker": null,
+        "source_tier": "aggregator"
+      },
+      {
+        "title": "Unifor condemns HF Sinclair decision to shut Canada's largest base oil refinery",
+        "summary": "",
+        "url": "https://finance.yahoo.com/energy/articles/unifor-condemns-hf-sinclair-decision-232300470.html",
+        "source": "CNW Group",
+        "published_at": "2026-07-29T23:23:00Z",
+        "fetched_at": "2026-07-29T23:42:30Z",
+        "ticker": null,
+        "source_tier": "aggregator"
+      },
+      {
+        "title": "Major supermarket chain closing more stores",
+        "summary": "",
+        "url": "https://finance.yahoo.com/m/d1846cc1-edd9-35a2-b964-908c3ae8bc82/major-supermarket-chain.html",
+        "source": "TheStreet",
+        "published_at": "2026-07-29T23:17:00Z",
+        "fetched_at": "2026-07-29T23:42:30Z",
+        "ticker": null,
+        "source_tier": "aggregator"
+      },
       {
         "title": "Bank of England to keep rates steady while oil prices gyrate",
         "summary": "",
         "url": "https://finance.yahoo.com/economy/policy/articles/bank-england-keep-rates-steady-230552713.html",
         "source": "Reuters",
         "published_at": "2026-07-29T23:05:52Z",
-        "fetched_at": "2026-07-29T23:26:04Z",
-        "ticker": null,
-        "source_tier": "aggregator"
-      },
-      {
-        "title": "Dow Jones Futures: Stock Market Tumbles, Oil Prices Soar On Trump's Iran Threats; Microsoft, Meta, Fortinet Earnings Late",
-        "summary": "",
-        "url": "https://finance.yahoo.com/m/58bee05c-df37-343b-b099-b9d3d5fa6440/dow-jones-futures%3A-stock.html",
-        "source": "Investor's Business Daily",
-        "published_at": "2026-07-29T23:04:46Z",
-        "fetched_at": "2026-07-29T23:26:04Z",
+        "fetched_at": "2026-07-29T23:42:30Z",
         "ticker": null,
         "source_tier": "aggregator"
       },
@@ -37,7 +67,7 @@
         "url": "https://finance.yahoo.com/small-business/articles/mac-bid-brings-1-online-221900110.html",
         "source": "PR Newswire",
         "published_at": "2026-07-29T22:19:00Z",
-        "fetched_at": "2026-07-29T23:26:04Z",
+        "fetched_at": "2026-07-29T23:42:30Z",
         "ticker": null,
         "source_tier": "aggregator"
       },
@@ -47,7 +77,17 @@
         "url": "https://finance.yahoo.com/m/39e3e28e-0997-316b-a968-ee911fcc47b4/the-fed-held-rates-at.html",
         "source": "Motley Fool",
         "published_at": "2026-07-29T22:10:08Z",
-        "fetched_at": "2026-07-29T23:26:04Z",
+        "fetched_at": "2026-07-29T23:42:30Z",
+        "ticker": null,
+        "source_tier": "aggregator"
+      },
+      {
+        "title": "What to Look Out for in Economic Data This Week (July 27-31)",
+        "summary": "",
+        "url": "https://finance.yahoo.com/m/ccc6c9bc-3fd0-375a-987d-5c44992f45c8/what-to-look-out-for-in.html",
+        "source": "Kiplinger",
+        "published_at": "2026-07-29T21:30:30Z",
+        "fetched_at": "2026-07-29T23:42:30Z",
         "ticker": null,
         "source_tier": "aggregator"
       },
@@ -57,7 +97,7 @@
         "url": "https://finance.yahoo.com/energy/articles/crude-jumps-fresh-mideast-flare-030605104.html",
         "source": "AFP",
         "published_at": "2026-07-29T21:26:10Z",
-        "fetched_at": "2026-07-29T23:26:04Z",
+        "fetched_at": "2026-07-29T23:42:30Z",
         "ticker": null,
         "source_tier": "aggregator"
       },
@@ -67,47 +107,7 @@
         "url": "https://finance.yahoo.com/markets/stocks/articles/comstock-resources-nyse-crk-reports-212218325.html",
         "source": "StockStory",
         "published_at": "2026-07-29T21:22:18Z",
-        "fetched_at": "2026-07-29T23:26:04Z",
-        "ticker": null,
-        "source_tier": "aggregator"
-      },
-      {
-        "title": "Stock Market Today, July 29: Stocks Slide on Hawkish Fed and Increased Middle East Tensions",
-        "summary": "",
-        "url": "https://finance.yahoo.com/m/cac74475-bd77-347d-bc9a-d526ac5a91a4/stock-market-today%2C-july-29%3A.html",
-        "source": "Motley Fool",
-        "published_at": "2026-07-29T21:21:35Z",
-        "fetched_at": "2026-07-29T23:26:04Z",
-        "ticker": null,
-        "source_tier": "aggregator"
-      },
-      {
-        "title": "Antero Resources (NYSE:AR) Surprises With Q2 CY2026 Sales",
-        "summary": "",
-        "url": "https://finance.yahoo.com/energy/articles/antero-resources-nyse-ar-surprises-210706982.html",
-        "source": "StockStory",
-        "published_at": "2026-07-29T21:07:06Z",
-        "fetched_at": "2026-07-29T23:26:04Z",
-        "ticker": null,
-        "source_tier": "aggregator"
-      },
-      {
-        "title": "Marathon Petroleum Corp. Announces Quarterly Dividend",
-        "summary": "",
-        "url": "https://finance.yahoo.com/markets/stocks/articles/marathon-petroleum-corp-announces-quarterly-210500655.html",
-        "source": "PR Newswire",
-        "published_at": "2026-07-29T21:05:00Z",
-        "fetched_at": "2026-07-29T23:26:04Z",
-        "ticker": null,
-        "source_tier": "aggregator"
-      },
-      {
-        "title": "Cenovus Energy Q2 Earnings Call Highlights",
-        "summary": "",
-        "url": "https://finance.yahoo.com/m/b2282651-0912-33af-b3f2-3e73ebd55dc0/cenovus-energy-q2-earnings.html",
-        "source": "MarketBeat",
-        "published_at": "2026-07-29T21:04:02Z",
-        "fetched_at": "2026-07-29T23:26:04Z",
+        "fetched_at": "2026-07-29T23:42:30Z",
         "ticker": null,
         "source_tier": "aggregator"
       }
@@ -132,7 +132,7 @@
       "ticker": "512480.SS",
       "start_date": "2026-07-29",
       "end_date": "2026-07-29",
-      "fetched_at": "2026-07-29T23:26:05Z",
+      "fetched_at": "2026-07-29T23:42:31Z",
       "items": [
         {
           "title": "7月28日半导体ETF国联安（512480）份额增加3.60亿份，最新份额190.58亿份，最新规模198.79亿元",
@@ -140,7 +140,7 @@
           "url": "https://news.google.com/rss/articles/CBMimwFBVV95cUxPcjhtV0hlQUZReF93SlRENS1IaTJRSkdRTUt6QlhyelRtUXlnOVJzeURCN3RlQVhmOHMtZHZyM3hXOVVDTlB6clRqR1pCcUktZWtFZHNuM1BXSXFIRlFITXVXTmJYZ0doQ0dyS3lFWWxHeVFFQkt0S25OS2dQdGt3NjV5TW00M2E5SmJaQi05WkZsWkFBZl85djIwTQ?oc=5",
           "source": "Google News / 新浪财经",
           "published_at": "2026-07-29T01:00:00Z",
-          "fetched_at": "2026-07-29T23:26:05Z",
+          "fetched_at": "2026-07-29T23:42:31Z",
           "ticker": "512480.SS",
           "source_tier": "aggregator"
         }
@@ -169,7 +169,7 @@
       "ticker": "515880.SS",
       "start_date": "2026-07-29",
       "end_date": "2026-07-29",
-      "fetched_at": "2026-07-29T23:26:08Z",
+      "fetched_at": "2026-07-29T23:42:33Z",
       "items": [],
       "source_statuses": [
         {
@@ -192,22 +192,52 @@
   },
   "items": [
     {
+      "title": "Dow Jones Futures: Stock Market Tumbles, Oil Prices Soar On Trump's Iran Threats; Microsoft, Meta, Fortinet Earnings Late",
+      "summary": "",
+      "url": "https://finance.yahoo.com/m/58bee05c-df37-343b-b099-b9d3d5fa6440/dow-jones-futures%3A-stock.html",
+      "source": "Investor's Business Daily",
+      "published_at": "2026-07-29T23:39:56Z",
+      "fetched_at": "2026-07-29T23:42:30Z",
+      "ticker": null,
+      "source_tier": "aggregator"
+    },
+    {
+      "title": "As Geopolitical Forces Shape Australian Markets, Mitrade Announces Bloomberg.com Partnership for a Better-Informed Financial World",
+      "summary": "",
+      "url": "https://finance.yahoo.com/markets/currencies/articles/geopolitical-forces-shape-australian-markets-233000821.html",
+      "source": "PR Newswire",
+      "published_at": "2026-07-29T23:30:00Z",
+      "fetched_at": "2026-07-29T23:42:30Z",
+      "ticker": null,
+      "source_tier": "aggregator"
+    },
+    {
+      "title": "Unifor condemns HF Sinclair decision to shut Canada's largest base oil refinery",
+      "summary": "",
+      "url": "https://finance.yahoo.com/energy/articles/unifor-condemns-hf-sinclair-decision-232300470.html",
+      "source": "CNW Group",
+      "published_at": "2026-07-29T23:23:00Z",
+      "fetched_at": "2026-07-29T23:42:30Z",
+      "ticker": null,
+      "source_tier": "aggregator"
+    },
+    {
+      "title": "Major supermarket chain closing more stores",
+      "summary": "",
+      "url": "https://finance.yahoo.com/m/d1846cc1-edd9-35a2-b964-908c3ae8bc82/major-supermarket-chain.html",
+      "source": "TheStreet",
+      "published_at": "2026-07-29T23:17:00Z",
+      "fetched_at": "2026-07-29T23:42:30Z",
+      "ticker": null,
+      "source_tier": "aggregator"
+    },
+    {
       "title": "Bank of England to keep rates steady while oil prices gyrate",
       "summary": "",
       "url": "https://finance.yahoo.com/economy/policy/articles/bank-england-keep-rates-steady-230552713.html",
       "source": "Reuters",
       "published_at": "2026-07-29T23:05:52Z",
-      "fetched_at": "2026-07-29T23:26:04Z",
-      "ticker": null,
-      "source_tier": "aggregator"
-    },
-    {
-      "title": "Dow Jones Futures: Stock Market Tumbles, Oil Prices Soar On Trump's Iran Threats; Microsoft, Meta, Fortinet Earnings Late",
-      "summary": "",
-      "url": "https://finance.yahoo.com/m/58bee05c-df37-343b-b099-b9d3d5fa6440/dow-jones-futures%3A-stock.html",
-      "source": "Investor's Business Daily",
-      "published_at": "2026-07-29T23:04:46Z",
-      "fetched_at": "2026-07-29T23:26:04Z",
+      "fetched_at": "2026-07-29T23:42:30Z",
       "ticker": null,
       "source_tier": "aggregator"
     },
@@ -217,7 +247,7 @@
       "url": "https://finance.yahoo.com/small-business/articles/mac-bid-brings-1-online-221900110.html",
       "source": "PR Newswire",
       "published_at": "2026-07-29T22:19:00Z",
-      "fetched_at": "2026-07-29T23:26:04Z",
+      "fetched_at": "2026-07-29T23:42:30Z",
       "ticker": null,
       "source_tier": "aggregator"
     },
@@ -227,7 +257,17 @@
       "url": "https://finance.yahoo.com/m/39e3e28e-0997-316b-a968-ee911fcc47b4/the-fed-held-rates-at.html",
       "source": "Motley Fool",
       "published_at": "2026-07-29T22:10:08Z",
-      "fetched_at": "2026-07-29T23:26:04Z",
+      "fetched_at": "2026-07-29T23:42:30Z",
+      "ticker": null,
+      "source_tier": "aggregator"
+    },
+    {
+      "title": "What to Look Out for in Economic Data This Week (July 27-31)",
+      "summary": "",
+      "url": "https://finance.yahoo.com/m/ccc6c9bc-3fd0-375a-987d-5c44992f45c8/what-to-look-out-for-in.html",
+      "source": "Kiplinger",
+      "published_at": "2026-07-29T21:30:30Z",
+      "fetched_at": "2026-07-29T23:42:30Z",
       "ticker": null,
       "source_tier": "aggregator"
     },
@@ -237,7 +277,7 @@
       "url": "https://finance.yahoo.com/energy/articles/crude-jumps-fresh-mideast-flare-030605104.html",
       "source": "AFP",
       "published_at": "2026-07-29T21:26:10Z",
-      "fetched_at": "2026-07-29T23:26:04Z",
+      "fetched_at": "2026-07-29T23:42:30Z",
       "ticker": null,
       "source_tier": "aggregator"
     },
@@ -247,47 +287,7 @@
       "url": "https://finance.yahoo.com/markets/stocks/articles/comstock-resources-nyse-crk-reports-212218325.html",
       "source": "StockStory",
       "published_at": "2026-07-29T21:22:18Z",
-      "fetched_at": "2026-07-29T23:26:04Z",
-      "ticker": null,
-      "source_tier": "aggregator"
-    },
-    {
-      "title": "Stock Market Today, July 29: Stocks Slide on Hawkish Fed and Increased Middle East Tensions",
-      "summary": "",
-      "url": "https://finance.yahoo.com/m/cac74475-bd77-347d-bc9a-d526ac5a91a4/stock-market-today%2C-july-29%3A.html",
-      "source": "Motley Fool",
-      "published_at": "2026-07-29T21:21:35Z",
-      "fetched_at": "2026-07-29T23:26:04Z",
-      "ticker": null,
-      "source_tier": "aggregator"
-    },
-    {
-      "title": "Antero Resources (NYSE:AR) Surprises With Q2 CY2026 Sales",
-      "summary": "",
-      "url": "https://finance.yahoo.com/energy/articles/antero-resources-nyse-ar-surprises-210706982.html",
-      "source": "StockStory",
-      "published_at": "2026-07-29T21:07:06Z",
-      "fetched_at": "2026-07-29T23:26:04Z",
-      "ticker": null,
-      "source_tier": "aggregator"
-    },
-    {
-      "title": "Marathon Petroleum Corp. Announces Quarterly Dividend",
-      "summary": "",
-      "url": "https://finance.yahoo.com/markets/stocks/articles/marathon-petroleum-corp-announces-quarterly-210500655.html",
-      "source": "PR Newswire",
-      "published_at": "2026-07-29T21:05:00Z",
-      "fetched_at": "2026-07-29T23:26:04Z",
-      "ticker": null,
-      "source_tier": "aggregator"
-    },
-    {
-      "title": "Cenovus Energy Q2 Earnings Call Highlights",
-      "summary": "",
-      "url": "https://finance.yahoo.com/m/b2282651-0912-33af-b3f2-3e73ebd55dc0/cenovus-energy-q2-earnings.html",
-      "source": "MarketBeat",
-      "published_at": "2026-07-29T21:04:02Z",
-      "fetched_at": "2026-07-29T23:26:04Z",
+      "fetched_at": "2026-07-29T23:42:30Z",
       "ticker": null,
       "source_tier": "aggregator"
     },
@@ -297,7 +297,7 @@
       "url": "https://news.google.com/rss/articles/CBMimwFBVV95cUxPcjhtV0hlQUZReF93SlRENS1IaTJRSkdRTUt6QlhyelRtUXlnOVJzeURCN3RlQVhmOHMtZHZyM3hXOVVDTlB6clRqR1pCcUktZWtFZHNuM1BXSXFIRlFITXVXTmJYZ0doQ0dyS3lFWWxHeVFFQkt0S25OS2dQdGt3NjV5TW00M2E5SmJaQi05WkZsWkFBZl85djIwTQ?oc=5",
       "source": "Google News / 新浪财经",
       "published_at": "2026-07-29T01:00:00Z",
-      "fetched_at": "2026-07-29T23:26:05Z",
+      "fetched_at": "2026-07-29T23:42:31Z",
       "ticker": "512480.SS",
       "source_tier": "aggregator"
     }
