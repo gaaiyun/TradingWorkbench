@@ -97,8 +97,10 @@ export function buildArchiveFileTabs(entry) {
   const files = { ...(entry?.files || {}) };
   const baseDir = archiveBaseDir(entry?.report);
   if (!baseDir) return [];
+  const claimFailed = entry?.claimValidation?.status === "failed";
   return ARCHIVE_FILE_COLUMNS
     .map(({ id, label, relative }) => {
+      if (claimFailed && id !== "complete_report") return null;
       const expectedPath = `${baseDir}/${relative}`;
       const actualPath = id === "complete_report" ? entry.report : files[id];
       return actualPath === expectedPath ? { id, label, path: expectedPath } : null;

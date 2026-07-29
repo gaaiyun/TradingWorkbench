@@ -1,4 +1,5 @@
 import assert from "node:assert/strict";
+import { readFileSync } from "node:fs";
 import test from "node:test";
 
 import * as research from "../public/assets/workbench-research.mjs";
@@ -14,6 +15,15 @@ import {
   legacyHistoryEntries,
   latestResearchRun,
 } from "../public/assets/workbench-research.mjs";
+
+const workbenchScript = readFileSync(
+  new URL("../public/assets/workbench.js", import.meta.url),
+  "utf8",
+);
+const assetVersionScript = readFileSync(
+  new URL("../scripts/asset-version.mjs", import.meta.url),
+  "utf8",
+);
 
 test("research history becomes a stable newest-first archive index", () => {
   const entries = buildArchiveEntries([
@@ -348,6 +358,38 @@ test("archive entries retain report files and expose ordered available columns",
     research.buildArchiveFileTabs(entry).map(({ id }) => id),
     ["market", "fundamentals", "bull", "conservative", "decision", "complete_report"],
   );
+});
+
+test("claim-failed reports expose only the fail-closed consolidated report in the UI", () => {
+  const entry = {
+    report: "reports/515880.SS/2026-07-29/complete_report.md",
+    auditStatus: "legacy_unverified",
+    claimValidation: {
+      status: "failed",
+      errorCodes: ["UNCITED_NUMERIC_CLAIM", "UNSUPPORTED_ALLOCATION"],
+    },
+    files: {
+      market: "reports/515880.SS/2026-07-29/1_analysts/market.md",
+      decision: "reports/515880.SS/2026-07-29/5_portfolio/decision.md",
+      complete_report: "reports/515880.SS/2026-07-29/complete_report.md",
+    },
+  };
+  assert.deepEqual(
+    research.buildArchiveFileTabs(entry),
+    [{
+      id: "complete_report",
+      label: "完整报告",
+      path: "reports/515880.SS/2026-07-29/complete_report.md",
+    }],
+  );
+});
+
+test("research module participates in the browser cache version", () => {
+  assert.match(
+    workbenchScript,
+    /\.\/workbench-research\.mjs\?v=[a-f0-9]{12}/,
+  );
+  assert.match(assetVersionScript, /workbench-research\.mjs/);
 });
 
 test("report URLs select exactly one verified run identity", () => {

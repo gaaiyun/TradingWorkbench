@@ -592,6 +592,34 @@ test("bootstrap discovery advances one of eight profiles per cron tick", async (
   );
 });
 
+test("daily recovery stages only missed critical semantic slots after a failed cron", async () => {
+  const { runScheduled } = await import(workerUrl);
+  const settings = monitorSettings();
+  const db = sqliteWorkerD1(settings);
+  await markBootstrapComplete(db, settings);
+  const result = await runScheduled(
+    Date.parse("2026-07-29T20:38:00.000Z"),
+    { DB: db, DIRECT_EXTERNAL_REQUEST_BUDGET: "0" },
+    {
+      now: () => new Date("2026-07-29T20:38:00.000Z"),
+      dailyRecoveryEnabled: true,
+    },
+  );
+  assert.equal(result.discovered, 3);
+  const rows = db.sqlite.prepare(
+    "SELECT slot_type FROM scheduled_slots ORDER BY slot_type",
+  ).all();
+  assert.deepEqual(
+    rows.map(({ slot_type: type }) => type),
+    ["closeFullAnalysis", "cnDailySnapshot", "usCloseSnapshot"],
+  );
+  assert.equal(
+    rows.some(({ slot_type: type }) =>
+      ["intradayCollect", "intradaySignal", "newsCollect"].includes(type)),
+    false,
+  );
+});
+
 test("a 204 dispatch completes the slot and queued workflow time never causes a lease retry", async () => {
   const { runScheduled } = await import(workerUrl);
   const settings = monitorSettings();

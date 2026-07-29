@@ -15,6 +15,7 @@ import {
   localDateTimeAt,
   MAX_SCHEDULED_EXTERNAL_REQUESTS,
   profileRevisionForProfile,
+  recoveryTasksForProfile,
   scheduledPayloadForTask,
   selectFairWorkWithinBudget,
   splitTaskWithinRequestLimit,
@@ -535,12 +536,24 @@ async function stageDiscoveredSlots({
   );
   const discovered = [];
   for (const profile of loaded.settings.profiles) {
-    const rawTasks = [
+    const rawTasksWithDuplicates = [
       ...dueTasksForProfile(profile, scheduledTime, holidaySets),
+      ...(
+        env.DAILY_RECOVERY_ENABLED === "true" ||
+          deps.dailyRecoveryEnabled === true
+          ? recoveryTasksForProfile(profile, scheduledTime, holidaySets)
+          : []
+      ),
       ...(bootstrapProfileIds.has(profile.id)
         ? await bootstrapTasks(profile, scheduledTime, completedBootstrap)
         : []),
     ];
+    const rawTasks = [...new Map(
+      rawTasksWithDuplicates.map((task) => [
+        `${task.type}|${task.localSlot}`,
+        task,
+      ]),
+    ).values()];
     const tasks = rawTasks.flatMap((task) =>
       splitTaskWithinRequestLimit(
         profile,

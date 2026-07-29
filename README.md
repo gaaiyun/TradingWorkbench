@@ -170,6 +170,7 @@ Worker 为每个理论任务生成稳定 `slotId`，并在首次入库时冻结 
 调度器还提供：
 
 - 原子租约、attempt fencing、最多三次重试。
+- 关键日任务补偿：若某次 Cron 在入库前失败，后续 tick 会在 36 小时内重新发现 `cnDailySnapshot`、`closeFullAnalysis`、`usCloseSnapshot`；稳定 slotId 保证只入库一次。盘中、信号和新闻高频任务不追溯，避免恢复风暴。
 - `profile + localDate` 的完整分析预算；`fullAnalysesPerDay=0` 时不 dispatch。
 - profile 公平轮转、单 tick 工作量上限和外部请求预算。
 - 新闻任务排在同一时间槽的行情与规则信号之后，只使用剩余预算；所有启用 profile 的资讯总频率最多相当于每小时 8 次，避免多监控组造成无界积压。
@@ -194,6 +195,12 @@ Worker 为每个理论任务生成稳定 `slotId`，并在首次入库时冻结 
 ## Evidence 和报告门禁
 
 `EvidencePacketV1` 保存标的身份、市场、币种、资产类型、截止时间、OHLCV、复权口径、公司行动、指标、点时新闻、来源轨迹、Evidence ID 和内容哈希。
+
+当 EvidencePacket 存在时，市场、新闻和基本面分析师都关闭平行精确数据工具，
+只能使用 packet ledger；ETF 基本面缺少持仓、费率、NAV 或跟踪误差时必须写
+“不可用”，不能用上市公司财报或模型常识补数。若最终 claim validation 失败，
+网站只展示 fail-closed 的 `complete_report.md`；带幻觉或无引用数字的角色分卷仍保留在
+GitHub 供审计，但不再作为网页报告标签页或 profile 报告 API 输出。
 
 ```mermaid
 flowchart LR

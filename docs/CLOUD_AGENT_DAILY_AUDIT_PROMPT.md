@@ -39,6 +39,11 @@ GET：
 
 检查 Worker 最近 cron 是否有 `exceededCpu`、超时、重试耗尽、过期租约或持续 backlog。Cloudflare 免费 Worker 的 CPU 预算很小；若发现积压，必须同时报告“待处理数、最老任务、任务类型、尝试次数、最近错误码”，不能只写一个 degraded。
 
+按 profile 本地业务日检查三类关键日 slot 是否真实存在：
+`cnDailySnapshot / closeFullAnalysis / usCloseSnapshot`。某次 Cron 失败后，36 小时内的
+后续 tick 应通过 daily recovery 补建缺失 slot；若只看到普通 Cron 恢复、但缺失的
+收盘 slot 仍不存在，仍判定为故障。高频盘中、信号和新闻不会历史追赶，这是有意边界。
+
 核对下列数据的最新业务日期，不得把 UTC 时间戳前十位直接当交易日：
 
 - A 股日线和 5 分钟：按 `Asia/Shanghai`；
@@ -111,7 +116,7 @@ SOXX、NVDA 另外检查 `5m / 15m / 1h`。当前只有这两只美股配置生�
 4. 每个可核验数字附近应有合法 Evidence ID；
 5. 目标价、仓位和方向建议必须通过 claim validation；
 6. 门禁失败时汇总报告必须显示 `Not Rated`，且不得继续展示 SELL/BUY、目标仓位或交易指令；
-7. 原始 Agent 分卷可为审计保留，但必须明确“仅供审计，未验证”，不能进入最新观点或问答上下文；
+7. 原始 Agent 分卷可在 GitHub 为开发审计保留；claim validation 失败时，网页标签页和带身份的报告 API 只能返回 fail-closed `complete_report.md`，不能公开原始角色分卷，也不能进入最新观点或问答上下文；
 8. 报告中的基金名称、管理人、日期、拆分、涨跌幅和技术指标逐项与证据核对；
 9. `verified=0` 可以是正确的 fail-closed 结果，不得放宽门禁凑 verified；
 10. “主题观察”是确定性资金规则输出，不等同于研究报告结论。

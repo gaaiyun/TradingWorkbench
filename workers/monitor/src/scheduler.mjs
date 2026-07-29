@@ -245,6 +245,85 @@ export function dueTasksForProfile(profile, scheduledTime, holidaySets = {}) {
   return tasks;
 }
 
+const RECOVERABLE_DAILY_TASKS = new Set([
+  "cnDailySnapshot",
+  "closeFullAnalysis",
+  "usCloseSnapshot",
+]);
+const DAILY_RECOVERY_LOOKBACK_MS = 36 * 60 * 60 * 1000;
+
+function localClockInstant(date, time, timeZone) {
+  const [year, month, day] = date.split("-").map(Number);
+  const [hour, minute] = time.split(":").map(Number);
+  const desired = Date.UTC(year, month - 1, day, hour, minute);
+  let candidate = desired;
+  for (let attempt = 0; attempt < 3; attempt += 1) {
+    const shown = localDateTimeAt(candidate, timeZone);
+    const [shownYear, shownMonth, shownDay] = shown.date.split("-").map(Number);
+    const [shownHour, shownMinute] = shown.time.split(":").map(Number);
+    const delta = desired - Date.UTC(
+      shownYear,
+      shownMonth - 1,
+      shownDay,
+      shownHour,
+      shownMinute,
+    );
+    candidate += delta;
+    if (delta === 0) break;
+  }
+  return candidate;
+}
+
+function adjacentIsoDate(date, offsetDays) {
+  const [year, month, day] = date.split("-").map(Number);
+  return new Date(Date.UTC(year, month - 1, day + offsetDays))
+    .toISOString()
+    .slice(0, 10);
+}
+
+/**
+ * Recover only critical daily semantic slots that a failed cron tick may have
+ * missed. High-frequency market/news work is intentionally never replayed.
+ */
+export function recoveryTasksForProfile(
+  profile,
+  scheduledTime,
+  holidaySets = {},
+) {
+  if (!profile?.enabled) return [];
+  const tick = Math.floor(scheduledTime / 60_000) * 60_000;
+  const timeZone = profile.timezone || "Asia/Shanghai";
+  const currentLocalDate = localDateTimeAt(tick, timeZone).date;
+  const candidateDates = [
+    adjacentIsoDate(currentLocalDate, -2),
+    adjacentIsoDate(currentLocalDate, -1),
+    currentLocalDate,
+  ];
+  const clocks = new Set([
+    profile.schedules?.closeDeepAnalysis?.time,
+    profile.schedules?.usCloseSnapshot?.time,
+  ].filter(Boolean));
+  const recovered = [];
+  for (const date of candidateDates) {
+    for (const clock of clocks) {
+      const candidate = localClockInstant(date, clock, timeZone);
+      const age = tick - candidate;
+      if (age < 0 || age > DAILY_RECOVERY_LOOKBACK_MS) continue;
+      recovered.push(
+        ...dueTasksAtMinute(profile, candidate, holidaySets)
+          .filter(({ type }) => RECOVERABLE_DAILY_TASKS.has(type)),
+      );
+    }
+  }
+  const unique = new Map();
+  for (const task of recovered) {
+    unique.set(`${task.type}|${task.localSlot}`, task);
+  }
+  return [...unique.values()].sort((left, right) =>
+    left.scheduledFor.localeCompare(right.scheduledFor) ||
+    left.type.localeCompare(right.type));
+}
+
 const SCHEDULE_BY_TYPE = {
   usCloseSnapshot: "usCloseSnapshot",
   usIntradayCollect: "usIntraday/collect",

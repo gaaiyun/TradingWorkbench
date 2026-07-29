@@ -675,6 +675,7 @@ test("profile-scoped report reads require a matching manifest and keep nested re
       return Response.json({
         ticker: "SPY",
         tradeDate: "2026-07-25",
+        claimValidation: { status: "passed", errorCodes: [] },
         identity: {
           scope: "profile",
           kind: "manual",
@@ -715,6 +716,64 @@ test("profile-scoped report reads require a matching manifest and keep nested re
     });
     assert.equal(legacy.status, 200);
     assert.equal(fetched.some((url) => url.endsWith("report_manifest.json")), false);
+  } finally {
+    globalThis.fetch = originalFetch;
+  }
+});
+
+test("profile-scoped claim-failed reports keep raw agent sections off the public report API", async () => {
+  const originalFetch = globalThis.fetch;
+  const base = "reports/515880.SS/2026-07-29";
+  const rawPath = `${base}/1_analysts/market.md`;
+  const completePath = `${base}/complete_report.md`;
+  const fetched = [];
+  globalThis.fetch = async (url) => {
+    fetched.push(String(url));
+    if (String(url).endsWith(`/${base}/report_manifest.json`)) {
+      return Response.json({
+        ticker: "515880.SS",
+        tradeDate: "2026-07-29",
+        claimValidation: {
+          status: "failed",
+          errorCodes: ["UNCITED_NUMERIC_CLAIM"],
+        },
+        identity: {
+          scope: "profile",
+          kind: "manual",
+          profileId: "cn-semi-comms",
+          requestId: null,
+          slotId: null,
+          scheduledFor: null,
+        },
+      });
+    }
+    if (String(url).endsWith(`/${rawPath}`)) {
+      return new Response("unsafe raw section", { status: 200 });
+    }
+    if (String(url).endsWith(`/${completePath}`)) {
+      return new Response("Not Rated", { status: 200 });
+    }
+    return new Response(null, { status: 404 });
+  };
+  try {
+    const denied = await getReport({
+      request: new Request(
+        `https://workbench.test/api/report?path=${encodeURIComponent(rawPath)}&profile=cn-semi-comms`,
+      ),
+    });
+    assert.equal(denied.status, 409);
+    assert.equal(
+      fetched.some((url) => url.endsWith(`/${rawPath}`)),
+      false,
+    );
+
+    const consolidated = await getReport({
+      request: new Request(
+        `https://workbench.test/api/report?path=${encodeURIComponent(completePath)}&profile=cn-semi-comms`,
+      ),
+    });
+    assert.equal(consolidated.status, 200);
+    assert.equal(await consolidated.text(), "Not Rated");
   } finally {
     globalThis.fetch = originalFetch;
   }

@@ -9,6 +9,7 @@ const assetPaths = [
   resolve(root, "public/assets/workbench.css"),
   resolve(root, "public/assets/workbench.js"),
   resolve(root, "public/assets/workbench-fundflow.mjs"),
+  resolve(root, "public/assets/workbench-research.mjs"),
 ];
 
 const digest = createHash("sha256");
@@ -18,7 +19,10 @@ for (const path of assetPaths) {
   // platform newline convention.
   const normalized = (await readFile(path, "utf8"))
     .replace(/\r\n/g, "\n")
-    .replace(/(\.\/workbench-fundflow\.mjs)(?:\?v=[a-f0-9]{12})?/g, "$1");
+    .replace(
+      /(\.\/workbench-(?:fundflow|research)\.mjs)(?:\?v=[a-f0-9]{12})?/g,
+      "$1",
+    );
   digest.update(normalized);
 }
 const version = digest.digest("hex").slice(0, 12);
@@ -29,7 +33,7 @@ const updated = source
 const workbenchPath = resolve(root, "public/assets/workbench.js");
 const workbenchSource = await readFile(workbenchPath, "utf8");
 const updatedWorkbench = workbenchSource.replace(
-  /(\.\/workbench-fundflow\.mjs)(?:\?v=[a-f0-9]{12})?/g,
+  /(\.\/workbench-(?:fundflow|research)\.mjs)(?:\?v=[a-f0-9]{12})?/g,
   `$1?v=${version}`,
 );
 

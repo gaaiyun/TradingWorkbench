@@ -25,6 +25,27 @@ async function dueAt(iso, profileOverrides = {}, holidaySets = {}) {
   return dueTasksForProfile(profile, Date.parse(iso), holidaySets);
 }
 
+async function recoveryAt(iso, profileOverrides = {}, holidaySets = {}) {
+  const { recoveryTasksForProfile } = await import(schedulerUrl);
+  const baseSchedules = monitorSettings().profiles[0].schedules;
+  const profile = monitorSettings({
+    ...profileOverrides,
+    schedules: {
+      ...baseSchedules,
+      ...profileOverrides.schedules,
+      newsRefresh: profileOverrides.schedules?.newsRefresh ?? {
+        enabled: true,
+        intervalMinutes: 15,
+      },
+    },
+  }).profiles[0];
+  return recoveryTasksForProfile(
+    profile,
+    Date.parse(iso),
+    holidaySets,
+  );
+}
+
 test("maps configured one-off schedule times from the planned event", async () => {
   assert.deepEqual(
     (await dueAt("2026-07-23T21:35:00.000Z")).map((task) => task.type),
@@ -285,5 +306,81 @@ test("intervals below five minutes emit every crossed theoretical slot", async (
     tasks.filter((task) => task.type === "intradayCollect")
       .map((task) => task.localSlot),
     ["2026-07-23T09:32", "2026-07-23T09:34"],
+  );
+});
+
+test("recovers a missed CN close snapshot and report without replaying high-frequency work", async () => {
+  const tasks = await recoveryAt("2026-07-29T20:38:00.000Z");
+  assert.deepEqual(
+    tasks.map(({ type, localSlot }) => ({ type, localSlot })),
+    [
+      {
+        type: "usCloseSnapshot",
+        localSlot: "2026-07-29T05:35",
+      },
+      {
+        type: "closeFullAnalysis",
+        localSlot: "2026-07-29T15:20",
+      },
+      {
+        type: "cnDailySnapshot",
+        localSlot: "2026-07-29T15:20",
+      },
+    ],
+  );
+  assert.equal(
+    tasks.some(({ type }) =>
+      ["intradayCollect", "intradaySignal", "newsCollect"].includes(type)),
+    false,
+  );
+});
+
+test("recovers the profile-local US close snapshot using the New York market date", async () => {
+  const tasks = await recoveryAt("2026-07-29T22:00:00.000Z");
+  assert.deepEqual(
+    tasks.filter(({ type }) => type === "usCloseSnapshot")
+      .map(({ localSlot }) => localSlot),
+    ["2026-07-29T05:35", "2026-07-30T05:35"],
+  );
+});
+
+test("recovery respects holidays and never reaches beyond the bounded lookback", async () => {
+  const holiday = await recoveryAt(
+    "2026-07-29T20:38:00.000Z",
+    {},
+    { cn: new Set(["2026-07-29"]) },
+  );
+  assert.equal(
+    holiday.some(({ type }) =>
+      ["cnDailySnapshot", "closeFullAnalysis"].includes(type)),
+    false,
+  );
+
+  const disabled = await recoveryAt("2026-07-29T20:38:00.000Z", {
+    schedules: {
+      ...monitorSettings().profiles[0].schedules,
+      closeDeepAnalysis: { enabled: false, time: "15:20" },
+      usCloseSnapshot: { enabled: false, time: "05:35" },
+    },
+  });
+  assert.deepEqual(disabled, []);
+});
+
+test("recovery still finds Friday close work early Sunday within the 36-hour bound", async () => {
+  const tasks = await recoveryAt("2026-08-01T17:00:00.000Z");
+  assert.deepEqual(
+    tasks.filter(({ type }) =>
+      ["cnDailySnapshot", "closeFullAnalysis"].includes(type))
+      .map(({ type, localSlot }) => ({ type, localSlot })),
+    [
+      {
+        type: "closeFullAnalysis",
+        localSlot: "2026-07-31T15:20",
+      },
+      {
+        type: "cnDailySnapshot",
+        localSlot: "2026-07-31T15:20",
+      },
+    ],
   );
 });

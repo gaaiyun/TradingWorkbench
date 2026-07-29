@@ -205,6 +205,13 @@ sequenceDiagram
 | 收盘深度分析 | `analysis=full` | 15:20 |
 | ETF 资金面日更 | `515880.SS / 512480.SS / 159995.SZ` | GitHub Actions，工作日 20:17；不占 Worker 32 次请求预算 |
 
+Cron 的 5 分钟即时发现窗口不再是关键日任务的唯一入口。启用
+`DAILY_RECOVERY_ENABLED=true` 后，每个 tick 还会查看 profile 本地日期的当天和前一天，
+只恢复 36 小时内应出现的 `cnDailySnapshot`、`closeFullAnalysis` 和
+`usCloseSnapshot`。候选时间先按 profile IANA 时区转换成 UTC，再复用原交易日/节假日
+判定；稳定 slotId 和 D1 `ON CONFLICT DO NOTHING` 保证重复发现不重复执行。盘中采集、
+规则信号和新闻不做历史追赶，避免一次故障形成无界任务风暴。
+
 ## 6. Provider 和行情写入
 
 Provider Registry 保存 transport、authority、freshness、授权用途和失败轨迹。适配器先校验 HTTP、内容类型、字段、时间和 OHLC 区间，再把标准记录交给写入层。
@@ -220,6 +227,12 @@ Provider Registry 保存 transport、authority、freshness、授权用途和失�
 - 多种或缺失口径：报告写为 `mixed` 或 `unknown`，不猜测。
 
 报告 Market history 披露 `source`、`adjustment`、`start`、`end` 和 `sampleCount`。指标与报告使用同一批历史。
+
+EvidencePacket 存在时，Market、News、Fundamentals 三个分析节点全部进入 ledger-only
+模式，关闭各自的行情、聚合新闻、宏观/预测市场和上市公司财务平行工具。ETF 公告标题
+只能证明公告存在，不能推断未读取正文中的拆分比例、持仓、费率或 NAV。claim validation
+失败后，`complete_report.md` 是唯一可公开读取的报告页；角色分卷继续进 GitHub 归档供
+开发审计，但前端不生成标签页，带 profile/request 身份的报告 API 也拒绝返回。
 
 ### 6.1 资金流数据流
 

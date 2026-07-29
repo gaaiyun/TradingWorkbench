@@ -570,6 +570,7 @@ SHA 不符时按未部署处理。
 ```toml
 DIRECT_MAX_TASKS = "1"
 DIRECT_TASK_REQUEST_LIMIT = "3"
+DAILY_RECOVERY_ENABLED = "true"
 ```
 
 这两个值是针对免费 Worker 10ms CPU 观测到的 `exceededCpu` 做的保守上限，不是吞吐承诺。每次 cron 先取消被更新 slot 替代的高频 backlog，再把三次尝试耗尽的 failed/过期 claimed slot收口为 `cancelled / RETRY_EXHAUSTED`，最后只执行一个有界任务。发布后必须用 Worker tail 和 D1 同时验证：
@@ -579,6 +580,12 @@ DIRECT_TASK_REQUEST_LIMIT = "3"
 - backlog 最老时间持续前移；
 - `claimed` 中没有过期租约；
 - 取消只发生于 superseded 或 retry-exhausted，不影响一次性日线或完整分析。
+- 当天收盘任务因 Cron 失败未曾入库时，后续 tick 会在 36 小时内补建
+  `cnDailySnapshot / closeFullAnalysis / usCloseSnapshot`；检查 D1 中必须存在对应
+  `local_date`，不能只看 Worker 本次返回 completed。
+
+`DAILY_RECOVERY_ENABLED` 只控制关键日任务的重新发现，不会补跑盘中、信号或新闻。
+紧急关闭后，既有 slot 仍按原租约规则处理；恢复时重新设为 `true` 并部署 Worker。
 
 如果仍超 CPU，不得继续提高 direct 上限。下一步是评估并由用户确认 Cloudflare Queue 的费用和配额后启用 `wrangler.monitor.queue.toml`；未获授权不得创建付费资源。
 
@@ -591,7 +598,9 @@ DIRECT_TASK_REQUEST_LIMIT = "3"
 3. 修复 Evidence `asOf`、公司行动和单一市场数值真源；
 4. 不修改历史正文伪造“当时正确”；历史角色分卷保留审计；
 5. 新报告若 claim validation 失败，汇总正文必须只有 Evidence Snapshot、`Not Rated` 和失败码，不得继续显示交易指令；
-6. 只有新版本 Manifest、Evidence packet、packet file hash 和 claim validation 全部匹配，才可重新成为 verified 候选。
+6. claim-failed 报告在网页和带身份的 `/api/report` 中只能读取
+   `complete_report.md`；Market/News/Fundamentals 等原始角色分卷只留在 GitHub 做开发审计；
+7. 只有新版本 Manifest、Evidence packet、packet file hash 和 claim validation 全部匹配，才可重新成为 verified 候选。
 
 本轮已精确 invalidated：
 

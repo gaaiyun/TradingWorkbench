@@ -303,6 +303,12 @@ flowchart LR
 - 五年美股日线请求和页面区间；
 - 动态行情、新闻、事件、状态 API；
 - A 股最多 1500 根前复权日线、每日收盘回填和 `512480.SS` 拆分连续性校验；
+- 每日资金与行情解释依赖的收盘业务日必须有真实任务记录。Monitor 对
+  `cnDailySnapshot / closeFullAnalysis / usCloseSnapshot` 提供 36 小时有界补偿，
+  但不历史追赶盘中、信号或新闻；“接口还能访问”不能代替对应业务日 slot 已入库。
+- ETF 报告的 Market、News、Fundamentals 在 EvidencePacket 存在时只能读取 ledger；
+  不得用上市公司财务、聚合新闻、预测市场或另一套行情填补缺口。claim validation 失败
+  后公开界面只保留 `complete_report.md` 的 Not Rated 快照，角色分卷仅留 GitHub 审计。
 - Google News RSS 主题发现、实体别名和 `SMH` 短缩写误报回归；
 - MA、MACD、RSI、ATR 和实现波动率；
 - 七工作区产品壳；

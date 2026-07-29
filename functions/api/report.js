@@ -37,6 +37,14 @@ export async function onRequestGet({ request }) {
     if (!identityMatches(manifest?.identity, selectors)) {
       return json({ error: "报告不存在" }, 404);
     }
+    if (
+      manifest?.claimValidation?.status === "failed" &&
+      !path.endsWith("/complete_report.md")
+    ) {
+      return json({
+        error: "报告未通过证据门禁，仅可读取完整报告",
+      }, 409);
+    }
   }
   return proxyRaw(path, { cacheSeconds: 300 });
 }

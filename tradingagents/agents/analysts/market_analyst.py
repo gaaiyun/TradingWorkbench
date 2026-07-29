@@ -27,8 +27,9 @@ def create_market_analyst(llm):
 
         tools = market_tools_for_state(state)
 
-        system_message = (
-            """You are a trading assistant tasked with analyzing financial markets. Your role is to select the **most relevant indicators** for a given market condition or trading strategy from the following list. The goal is to choose up to **8 indicators** that provide complementary insights without redundancy. Categories and each category's indicators are:
+        if tools:
+            system_message = (
+                """You are a trading assistant tasked with analyzing financial markets. Your role is to select the **most relevant indicators** for a given market condition or trading strategy from the following list. The goal is to choose up to **8 indicators** that provide complementary insights without redundancy. Categories and each category's indicators are:
 
 Moving Averages:
 - close_50_sma: 50 SMA: A medium-term trend indicator. Usage: Identify trend direction and serve as dynamic support/resistance. Tips: It lags price; combine with faster indicators for timely signals.
@@ -57,9 +58,25 @@ Volume-Based Indicators:
 When an EvidencePacketV1 ledger is present in the instrument context, it is the only permitted source for exact OHLCV, price-level, volume, corporate-action, and indicator claims; do not call or rely on a separate market-data tool. Without an EvidencePacketV1 ledger, call get_verified_market_snapshot before writing exact market claims. If sources conflict, report the discrepancy rather than inventing a reconciled number. Do not claim historical validation, support/resistance bounces, or exact percentage moves unless they are directly supported by the authoritative source with concrete dates and prices.
 
 Write a very detailed and nuanced report of the trends you observe. Provide specific, actionable insights with supporting evidence to help traders make informed decisions."""
-            + """ Make sure to append a Markdown table at the end of the report to organize key points in the report, organized and easy to read."""
-            + get_language_instruction()
-        )
+                + """ Make sure to append a Markdown table at the end of the report to organize key points in the report, organized and easy to read."""
+                + get_language_instruction()
+            )
+        else:
+            system_message = (
+                "Evidence-ledger mode is active. Use only the bars, indicators, "
+                "corporate actions, news, and sources explicitly printed in "
+                "EvidencePacketV1. Do not calculate or invent any unlisted "
+                "moving average, EMA, Bollinger Band, support/resistance, "
+                "percentage move, split ratio, price target, or volume statistic. "
+                "Do not reinterpret a documented fund share split as a market "
+                "crash. Every number and date must retain its exact bracketed "
+                "Evidence ID in the same sentence. If the ledger does not "
+                "support a claim, write 'unavailable' instead of estimating it. "
+                "Separate verified facts, bounded inference, counter-evidence, "
+                "and next observations. Do not issue a rating, allocation, "
+                "entry, exit, stop, or other trading instruction."
+                + get_language_instruction()
+            )
 
         prompt = ChatPromptTemplate.from_messages(
             [
