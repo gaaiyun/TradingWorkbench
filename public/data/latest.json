@@ -1,6 +1,6 @@
 {
   "status": "ok",
-  "generated_at": "2026-07-30T05:56:51+08:00",
+  "generated_at": "2026-07-30T06:27:25+08:00",
   "trade_date": "2026-07-29",
   "provider": "openai_compatible",
   "analysts": [
@@ -16,22 +16,22 @@
       "fundamentals"
     ],
     "researchDepth": "standard",
-    "kind": "monitor"
+    "kind": "legacy"
   },
   "run": {
-    "id": "30494237001",
+    "id": "30496154204",
     "attempt": "1",
     "workflow": "daily-analysis",
-    "url": "https://github.com/gaaiyun/TradingWorkbench/actions/runs/30494237001"
+    "url": "https://github.com/gaaiyun/TradingWorkbench/actions/runs/30496154204"
   },
   "identity": {
-    "scope": "profile",
-    "kind": "monitor",
-    "runId": "30494237001",
-    "profileId": "cn-semi-comms",
+    "scope": "legacy",
+    "kind": "legacy",
+    "runId": "30496154204",
+    "profileId": null,
     "requestId": null,
-    "slotId": "slot-6bad372d4d6acac28f0359721218f36cd5c651d4b49f02a29df9f8259f5264fd",
-    "scheduledFor": "2026-07-29T07:20:00.000Z"
+    "slotId": null,
+    "scheduledFor": null
   },
   "rating_tiers": [
     "Sell",
@@ -42,24 +42,24 @@
   ],
   "results": [
     {
-      "ticker": "515880.SS",
+      "ticker": "512480.SS",
       "rating": "Not Rated",
-      "report": "reports/515880.SS/2026-07-29-v2/complete_report.md",
+      "report": "reports/512480.SS/2026-07-29-v3/complete_report.md",
       "files": {
-        "fundamentals": "reports/515880.SS/2026-07-29-v2/1_analysts/fundamentals.md",
-        "market": "reports/515880.SS/2026-07-29-v2/1_analysts/market.md",
-        "news": "reports/515880.SS/2026-07-29-v2/1_analysts/news.md",
-        "bear": "reports/515880.SS/2026-07-29-v2/2_research/bear.md",
-        "bull": "reports/515880.SS/2026-07-29-v2/2_research/bull.md",
-        "manager": "reports/515880.SS/2026-07-29-v2/2_research/manager.md",
-        "trader": "reports/515880.SS/2026-07-29-v2/3_trading/trader.md",
-        "aggressive": "reports/515880.SS/2026-07-29-v2/4_risk/aggressive.md",
-        "conservative": "reports/515880.SS/2026-07-29-v2/4_risk/conservative.md",
-        "neutral": "reports/515880.SS/2026-07-29-v2/4_risk/neutral.md",
-        "decision": "reports/515880.SS/2026-07-29-v2/5_portfolio/decision.md",
-        "complete_report": "reports/515880.SS/2026-07-29-v2/complete_report.md"
+        "fundamentals": "reports/512480.SS/2026-07-29-v3/1_analysts/fundamentals.md",
+        "market": "reports/512480.SS/2026-07-29-v3/1_analysts/market.md",
+        "news": "reports/512480.SS/2026-07-29-v3/1_analysts/news.md",
+        "bear": "reports/512480.SS/2026-07-29-v3/2_research/bear.md",
+        "bull": "reports/512480.SS/2026-07-29-v3/2_research/bull.md",
+        "manager": "reports/512480.SS/2026-07-29-v3/2_research/manager.md",
+        "trader": "reports/512480.SS/2026-07-29-v3/3_trading/trader.md",
+        "aggressive": "reports/512480.SS/2026-07-29-v3/4_risk/aggressive.md",
+        "conservative": "reports/512480.SS/2026-07-29-v3/4_risk/conservative.md",
+        "neutral": "reports/512480.SS/2026-07-29-v3/4_risk/neutral.md",
+        "decision": "reports/512480.SS/2026-07-29-v3/5_portfolio/decision.md",
+        "complete_report": "reports/512480.SS/2026-07-29-v3/complete_report.md"
       },
-      "decision_excerpt": "**Rating**: Underweight\n\n**Executive Summary**: 综合三方风险分析师的辩论，515880.SS（国泰中证全指通信设备ETF）当前面临技术面下行趋势未确认反转、宏观高利率久期压制、以及成分股集中度风险三重逆风，三方均认同减持方向。但在执行节奏上，激进派主张果断转战、保守派强调资本保护与流动性监控、中立派则支持分批减持以利用潜在反抽优化出场价格。鉴于当前价格处于近期低点附近且波动率有所收敛，一次性清仓存在卖在地板价的风险，故维持Underweight评级，建议逐步降低敞口而非恐慌性抛售。\n\n**Investment Thesis**: **评级依据：Underweight——逐步减仓，而非一次性清仓**\n\n三方风险分析师在减持方向上达成共识，但在执行节奏和理由上存在分歧。综合评估后，Underweight评级最符合当前风险收益比。\n\n**一、技术面",
+      "decision_excerpt": "**Rating**: Sell\n\n**Executive Summary**: 512480.SS 技术面全面破位且空头动能加速释放，ETF核心运作数据（NAV、折溢价率、跟踪误差、持仓集中度）全部缺失构成不可量化的尾部风险，建议退出或避免入场。MACD空头排列持续扩张，收盘价远低于MA20与MA60，盘中已跌破1.0元心理关口且伴随放量，短期无企稳信号。在极端波动率环境下持有多头敞口的边际风险极高，优先保护资本。\n\n**Investment Thesis**: **评级依据：Sell**\n\n**一、已验证事实**\n\n1. 价格走势：7月29日收盘价1.027 [M644]，盘中最低0.978 [M644]，已跌破1.0元心理关口。这是近8个交易日的最低收盘价，从7月22日高点1.152 [M639]至7月29日收盘1.027 [M644]，五个交易日跌幅约10.9%。\n\n2. 技术指标",
       "analysis_status": "insufficient_evidence",
       "audit_status": "legacy_unverified",
       "evidence_publish": {
@@ -76,24 +76,24 @@
       "error": null
     },
     {
-      "ticker": "512480.SS",
+      "ticker": "515880.SS",
       "rating": "Not Rated",
-      "report": "reports/512480.SS/2026-07-29-v2/complete_report.md",
+      "report": "reports/515880.SS/2026-07-29-v3/complete_report.md",
       "files": {
-        "fundamentals": "reports/512480.SS/2026-07-29-v2/1_analysts/fundamentals.md",
-        "market": "reports/512480.SS/2026-07-29-v2/1_analysts/market.md",
-        "news": "reports/512480.SS/2026-07-29-v2/1_analysts/news.md",
-        "bear": "reports/512480.SS/2026-07-29-v2/2_research/bear.md",
-        "bull": "reports/512480.SS/2026-07-29-v2/2_research/bull.md",
-        "manager": "reports/512480.SS/2026-07-29-v2/2_research/manager.md",
-        "trader": "reports/512480.SS/2026-07-29-v2/3_trading/trader.md",
-        "aggressive": "reports/512480.SS/2026-07-29-v2/4_risk/aggressive.md",
-        "conservative": "reports/512480.SS/2026-07-29-v2/4_risk/conservative.md",
-        "neutral": "reports/512480.SS/2026-07-29-v2/4_risk/neutral.md",
-        "decision": "reports/512480.SS/2026-07-29-v2/5_portfolio/decision.md",
-        "complete_report": "reports/512480.SS/2026-07-29-v2/complete_report.md"
+        "fundamentals": "reports/515880.SS/2026-07-29-v3/1_analysts/fundamentals.md",
+        "market": "reports/515880.SS/2026-07-29-v3/1_analysts/market.md",
+        "news": "reports/515880.SS/2026-07-29-v3/1_analysts/news.md",
+        "bear": "reports/515880.SS/2026-07-29-v3/2_research/bear.md",
+        "bull": "reports/515880.SS/2026-07-29-v3/2_research/bull.md",
+        "manager": "reports/515880.SS/2026-07-29-v3/2_research/manager.md",
+        "trader": "reports/515880.SS/2026-07-29-v3/3_trading/trader.md",
+        "aggressive": "reports/515880.SS/2026-07-29-v3/4_risk/aggressive.md",
+        "conservative": "reports/515880.SS/2026-07-29-v3/4_risk/conservative.md",
+        "neutral": "reports/515880.SS/2026-07-29-v3/4_risk/neutral.md",
+        "decision": "reports/515880.SS/2026-07-29-v3/5_portfolio/decision.md",
+        "complete_report": "reports/515880.SS/2026-07-29-v3/complete_report.md"
       },
-      "decision_excerpt": "**Rating**: Underweight\n\n**Executive Summary**: 512480.SS（国泰君安安联中证全指半导体产品与设备ETF）当前技术面、资金面与宏观面三重利空共振，风险收益比明显不利于多头。该ETF 100%暴露于强周期半导体行业且52周振幅高达193.1%，在均线全面空头排列、宏观流动性收紧的背景下，应大幅降低敞口以规避尾部风险。但鉴于价格已从高点暴跌约63%、长期国产替代逻辑尚未证伪，建议采取Underweight而非完全清仓，保留少量底仓以应对极端超跌后的均值回归可能。\n\n**Investment Thesis**: **一、技术面：空头压制远未解除，\"见底信号\"不构成可靠买入依据**\n\n当前收盘价1.04元远低于10日EMA（1.159）、50日SMA（1.855）和200日SMA（1.636），偏离50日SMA达-43.9%，均线全面空头排列格",
+      "decision_excerpt": "**Rating**: Underweight\n\n**Executive Summary**: 515880.SS 当前技术面呈现完整空头结构，现价远低于 MA20 与 MA60，MACD 三线空头排列且柱状图未收敛，叠加极端波动率与放量下行，继续持仓的预期风险无法被任何可验证的收益锚定对冲。但 RSI 尚未触及极端超卖阈值、该标的历史上出现过单日近 10% 的暴力反弹，且 NAV/折溢价率等 ETF 定价核心数据全部缺失，一次性清仓的执行风险同样不可忽视。建议逐步降低敞口，在关键 ETF 数据补齐及技术反转信号出现前不加仓、不抄底。\n\n**Investment Thesis**: 【验证事实】\n1. 现价 0.602 [M644] 同时低于 MA20（0.7155 [I5]）与 MA60（0.77903333 [I6]），乖离分别约 15.9% 和 22.7%，中期下行结构完整。\n2. ",
       "analysis_status": "insufficient_evidence",
       "audit_status": "legacy_unverified",
       "evidence_publish": {

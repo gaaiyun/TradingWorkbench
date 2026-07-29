@@ -1,7 +1,7 @@
 {
   "version": 1,
   "status": "ok",
-  "generated_at": "2026-07-30T05:56:51+08:00",
+  "generated_at": "2026-07-30T06:27:25+08:00",
   "trade_date": "2026-07-29",
   "global": {
     "status": "ok",
@@ -9,15 +9,25 @@
     "ticker": null,
     "start_date": "2026-07-22",
     "end_date": "2026-07-29",
-    "fetched_at": "2026-07-29T21:56:53Z",
+    "fetched_at": "2026-07-29T22:27:26Z",
     "items": [
       {
         "title": "Dow Jones Futures: Stock Market Tumbles, Oil Prices Soar On Trump's Iran Threats; Microsoft, Meta, Fortinet Earnings Late",
         "summary": "",
         "url": "https://finance.yahoo.com/m/58bee05c-df37-343b-b099-b9d3d5fa6440/dow-jones-futures%3A-stock.html",
         "source": "Investor's Business Daily",
-        "published_at": "2026-07-29T21:40:29Z",
-        "fetched_at": "2026-07-29T21:56:53Z",
+        "published_at": "2026-07-29T22:18:19Z",
+        "fetched_at": "2026-07-29T22:27:26Z",
+        "ticker": null,
+        "source_tier": "aggregator"
+      },
+      {
+        "title": "The Fed Held Rates at 3.5%-3.75%. Here's What That Means for Walmart, Costco, and Target.",
+        "summary": "",
+        "url": "https://finance.yahoo.com/m/39e3e28e-0997-316b-a968-ee911fcc47b4/the-fed-held-rates-at.html",
+        "source": "Motley Fool",
+        "published_at": "2026-07-29T22:10:08Z",
+        "fetched_at": "2026-07-29T22:27:26Z",
         "ticker": null,
         "source_tier": "aggregator"
       },
@@ -27,7 +37,7 @@
         "url": "https://finance.yahoo.com/energy/articles/crude-jumps-fresh-mideast-flare-030605104.html",
         "source": "AFP",
         "published_at": "2026-07-29T21:26:10Z",
-        "fetched_at": "2026-07-29T21:56:53Z",
+        "fetched_at": "2026-07-29T22:27:26Z",
         "ticker": null,
         "source_tier": "aggregator"
       },
@@ -37,7 +47,7 @@
         "url": "https://finance.yahoo.com/markets/stocks/articles/comstock-resources-nyse-crk-reports-212218325.html",
         "source": "StockStory",
         "published_at": "2026-07-29T21:22:18Z",
-        "fetched_at": "2026-07-29T21:56:53Z",
+        "fetched_at": "2026-07-29T22:27:26Z",
         "ticker": null,
         "source_tier": "aggregator"
       },
@@ -47,17 +57,17 @@
         "url": "https://finance.yahoo.com/m/cac74475-bd77-347d-bc9a-d526ac5a91a4/stock-market-today%2C-july-29%3A.html",
         "source": "Motley Fool",
         "published_at": "2026-07-29T21:21:35Z",
-        "fetched_at": "2026-07-29T21:56:53Z",
+        "fetched_at": "2026-07-29T22:27:26Z",
         "ticker": null,
         "source_tier": "aggregator"
       },
       {
-        "title": "Toy Story maker hit by another round of Disney cuts",
+        "title": "Antero Resources (NYSE:AR) Surprises With Q2 CY2026 Sales",
         "summary": "",
-        "url": "https://finance.yahoo.com/m/bbd9cbb5-e203-3fd9-a347-d086d32e892b/toy-story-maker-hit-by.html",
-        "source": "TheStreet",
-        "published_at": "2026-07-29T21:17:00Z",
-        "fetched_at": "2026-07-29T21:56:53Z",
+        "url": "https://finance.yahoo.com/energy/articles/antero-resources-nyse-ar-surprises-210706982.html",
+        "source": "StockStory",
+        "published_at": "2026-07-29T21:07:06Z",
+        "fetched_at": "2026-07-29T22:27:26Z",
         "ticker": null,
         "source_tier": "aggregator"
       },
@@ -67,7 +77,7 @@
         "url": "https://finance.yahoo.com/markets/stocks/articles/marathon-petroleum-corp-announces-quarterly-210500655.html",
         "source": "PR Newswire",
         "published_at": "2026-07-29T21:05:00Z",
-        "fetched_at": "2026-07-29T21:56:53Z",
+        "fetched_at": "2026-07-29T22:27:26Z",
         "ticker": null,
         "source_tier": "aggregator"
       },
@@ -77,7 +87,7 @@
         "url": "https://finance.yahoo.com/m/f2cb5920-13e2-3ab9-9b48-00cb2915ed16/eni-q2-earnings-call.html",
         "source": "MarketBeat",
         "published_at": "2026-07-29T21:04:03Z",
-        "fetched_at": "2026-07-29T21:56:53Z",
+        "fetched_at": "2026-07-29T22:27:26Z",
         "ticker": null,
         "source_tier": "aggregator"
       },
@@ -87,7 +97,7 @@
         "url": "https://finance.yahoo.com/m/b2282651-0912-33af-b3f2-3e73ebd55dc0/cenovus-energy-q2-earnings.html",
         "source": "MarketBeat",
         "published_at": "2026-07-29T21:04:02Z",
-        "fetched_at": "2026-07-29T21:56:53Z",
+        "fetched_at": "2026-07-29T22:27:26Z",
         "ticker": null,
         "source_tier": "aggregator"
       },
@@ -97,17 +107,7 @@
         "url": "https://finance.yahoo.com/markets/commodities/articles/first-quantum-minerals-ltd-fqvlf-210135847.html",
         "source": "GuruFocus.com",
         "published_at": "2026-07-29T21:01:35Z",
-        "fetched_at": "2026-07-29T21:56:53Z",
-        "ticker": null,
-        "source_tier": "aggregator"
-      },
-      {
-        "title": "Saturn Oil & Gas Inc. Increases 2026 Guidance Following Continued Operational Outperformance, Successful Tuck-In Acquisition Activity and Senior Notes Refinancing",
-        "summary": "",
-        "url": "https://finance.yahoo.com/energy/articles/saturn-oil-gas-inc-increases-210000269.html",
-        "source": "TMX Newsfile",
-        "published_at": "2026-07-29T21:00:00Z",
-        "fetched_at": "2026-07-29T21:56:53Z",
+        "fetched_at": "2026-07-29T22:27:26Z",
         "ticker": null,
         "source_tier": "aggregator"
       }
@@ -126,14 +126,25 @@
     ]
   },
   "tickers": {
-    "515880.SS": {
-      "status": "empty",
+    "512480.SS": {
+      "status": "ok",
       "query_type": "ticker",
-      "ticker": "515880.SS",
+      "ticker": "512480.SS",
       "start_date": "2026-07-29",
       "end_date": "2026-07-29",
-      "fetched_at": "2026-07-29T21:56:55Z",
-      "items": [],
+      "fetched_at": "2026-07-29T22:27:27Z",
+      "items": [
+        {
+          "title": "7月28日半导体ETF国联安（512480）份额增加3.60亿份，最新份额190.58亿份，最新规模198.79亿元",
+          "summary": "7月28日半导体ETF国联安（512480）份额增加3.60亿份，最新份额190.58亿份，最新规模198.79亿元 新浪财经",
+          "url": "https://news.google.com/rss/articles/CBMimwFBVV95cUxPcjhtV0hlQUZReF93SlRENS1IaTJRSkdRTUt6QlhyelRtUXlnOVJzeURCN3RlQVhmOHMtZHZyM3hXOVVDTlB6clRqR1pCcUktZWtFZHNuM1BXSXFIRlFITXVXTmJYZ0doQ0dyS3lFWWxHeVFFQkt0S25OS2dQdGt3NjV5TW00M2E5SmJaQi05WkZsWkFBZl85djIwTQ?oc=5",
+          "source": "Google News / 新浪财经",
+          "published_at": "2026-07-29T01:00:00Z",
+          "fetched_at": "2026-07-29T22:27:27Z",
+          "ticker": "512480.SS",
+          "source_tier": "aggregator"
+        }
+      ],
       "source_statuses": [
         {
           "source": "Yahoo Finance",
@@ -142,8 +153,8 @@
         },
         {
           "source": "Google News RSS",
-          "status": "empty",
-          "item_count": 0
+          "status": "ok",
+          "item_count": 1
         },
         {
           "source": "SEC EDGAR",
@@ -152,13 +163,13 @@
         }
       ]
     },
-    "512480.SS": {
+    "515880.SS": {
       "status": "empty",
       "query_type": "ticker",
-      "ticker": "512480.SS",
+      "ticker": "515880.SS",
       "start_date": "2026-07-29",
       "end_date": "2026-07-29",
-      "fetched_at": "2026-07-29T21:56:58Z",
+      "fetched_at": "2026-07-29T22:27:30Z",
       "items": [],
       "source_statuses": [
         {
@@ -185,8 +196,18 @@
       "summary": "",
       "url": "https://finance.yahoo.com/m/58bee05c-df37-343b-b099-b9d3d5fa6440/dow-jones-futures%3A-stock.html",
       "source": "Investor's Business Daily",
-      "published_at": "2026-07-29T21:40:29Z",
-      "fetched_at": "2026-07-29T21:56:53Z",
+      "published_at": "2026-07-29T22:18:19Z",
+      "fetched_at": "2026-07-29T22:27:26Z",
+      "ticker": null,
+      "source_tier": "aggregator"
+    },
+    {
+      "title": "The Fed Held Rates at 3.5%-3.75%. Here's What That Means for Walmart, Costco, and Target.",
+      "summary": "",
+      "url": "https://finance.yahoo.com/m/39e3e28e-0997-316b-a968-ee911fcc47b4/the-fed-held-rates-at.html",
+      "source": "Motley Fool",
+      "published_at": "2026-07-29T22:10:08Z",
+      "fetched_at": "2026-07-29T22:27:26Z",
       "ticker": null,
       "source_tier": "aggregator"
     },
@@ -196,7 +217,7 @@
       "url": "https://finance.yahoo.com/energy/articles/crude-jumps-fresh-mideast-flare-030605104.html",
       "source": "AFP",
       "published_at": "2026-07-29T21:26:10Z",
-      "fetched_at": "2026-07-29T21:56:53Z",
+      "fetched_at": "2026-07-29T22:27:26Z",
       "ticker": null,
       "source_tier": "aggregator"
     },
@@ -206,7 +227,7 @@
       "url": "https://finance.yahoo.com/markets/stocks/articles/comstock-resources-nyse-crk-reports-212218325.html",
       "source": "StockStory",
       "published_at": "2026-07-29T21:22:18Z",
-      "fetched_at": "2026-07-29T21:56:53Z",
+      "fetched_at": "2026-07-29T22:27:26Z",
       "ticker": null,
       "source_tier": "aggregator"
     },
@@ -216,17 +237,17 @@
       "url": "https://finance.yahoo.com/m/cac74475-bd77-347d-bc9a-d526ac5a91a4/stock-market-today%2C-july-29%3A.html",
       "source": "Motley Fool",
       "published_at": "2026-07-29T21:21:35Z",
-      "fetched_at": "2026-07-29T21:56:53Z",
+      "fetched_at": "2026-07-29T22:27:26Z",
       "ticker": null,
       "source_tier": "aggregator"
     },
     {
-      "title": "Toy Story maker hit by another round of Disney cuts",
+      "title": "Antero Resources (NYSE:AR) Surprises With Q2 CY2026 Sales",
       "summary": "",
-      "url": "https://finance.yahoo.com/m/bbd9cbb5-e203-3fd9-a347-d086d32e892b/toy-story-maker-hit-by.html",
-      "source": "TheStreet",
-      "published_at": "2026-07-29T21:17:00Z",
-      "fetched_at": "2026-07-29T21:56:53Z",
+      "url": "https://finance.yahoo.com/energy/articles/antero-resources-nyse-ar-surprises-210706982.html",
+      "source": "StockStory",
+      "published_at": "2026-07-29T21:07:06Z",
+      "fetched_at": "2026-07-29T22:27:26Z",
       "ticker": null,
       "source_tier": "aggregator"
     },
@@ -236,7 +257,7 @@
       "url": "https://finance.yahoo.com/markets/stocks/articles/marathon-petroleum-corp-announces-quarterly-210500655.html",
       "source": "PR Newswire",
       "published_at": "2026-07-29T21:05:00Z",
-      "fetched_at": "2026-07-29T21:56:53Z",
+      "fetched_at": "2026-07-29T22:27:26Z",
       "ticker": null,
       "source_tier": "aggregator"
     },
@@ -246,7 +267,7 @@
       "url": "https://finance.yahoo.com/m/f2cb5920-13e2-3ab9-9b48-00cb2915ed16/eni-q2-earnings-call.html",
       "source": "MarketBeat",
       "published_at": "2026-07-29T21:04:03Z",
-      "fetched_at": "2026-07-29T21:56:53Z",
+      "fetched_at": "2026-07-29T22:27:26Z",
       "ticker": null,
       "source_tier": "aggregator"
     },
@@ -256,7 +277,7 @@
       "url": "https://finance.yahoo.com/m/b2282651-0912-33af-b3f2-3e73ebd55dc0/cenovus-energy-q2-earnings.html",
       "source": "MarketBeat",
       "published_at": "2026-07-29T21:04:02Z",
-      "fetched_at": "2026-07-29T21:56:53Z",
+      "fetched_at": "2026-07-29T22:27:26Z",
       "ticker": null,
       "source_tier": "aggregator"
     },
@@ -266,18 +287,18 @@
       "url": "https://finance.yahoo.com/markets/commodities/articles/first-quantum-minerals-ltd-fqvlf-210135847.html",
       "source": "GuruFocus.com",
       "published_at": "2026-07-29T21:01:35Z",
-      "fetched_at": "2026-07-29T21:56:53Z",
+      "fetched_at": "2026-07-29T22:27:26Z",
       "ticker": null,
       "source_tier": "aggregator"
     },
     {
-      "title": "Saturn Oil & Gas Inc. Increases 2026 Guidance Following Continued Operational Outperformance, Successful Tuck-In Acquisition Activity and Senior Notes Refinancing",
-      "summary": "",
-      "url": "https://finance.yahoo.com/energy/articles/saturn-oil-gas-inc-increases-210000269.html",
-      "source": "TMX Newsfile",
-      "published_at": "2026-07-29T21:00:00Z",
-      "fetched_at": "2026-07-29T21:56:53Z",
-      "ticker": null,
+      "title": "7月28日半导体ETF国联安（512480）份额增加3.60亿份，最新份额190.58亿份，最新规模198.79亿元",
+      "summary": "7月28日半导体ETF国联安（512480）份额增加3.60亿份，最新份额190.58亿份，最新规模198.79亿元 新浪财经",
+      "url": "https://news.google.com/rss/articles/CBMimwFBVV95cUxPcjhtV0hlQUZReF93SlRENS1IaTJRSkdRTUt6QlhyelRtUXlnOVJzeURCN3RlQVhmOHMtZHZyM3hXOVVDTlB6clRqR1pCcUktZWtFZHNuM1BXSXFIRlFITXVXTmJYZ0doQ0dyS3lFWWxHeVFFQkt0S25OS2dQdGt3NjV5TW00M2E5SmJaQi05WkZsWkFBZl85djIwTQ?oc=5",
+      "source": "Google News / 新浪财经",
+      "published_at": "2026-07-29T01:00:00Z",
+      "fetched_at": "2026-07-29T22:27:27Z",
+      "ticker": "512480.SS",
       "source_tier": "aggregator"
     }
   ]
