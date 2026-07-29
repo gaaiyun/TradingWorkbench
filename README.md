@@ -138,7 +138,7 @@ Worker 不运行 pandas、LangGraph、GARCH、BSADF 或长历史回测。VolGuar
 - 宏观：Federal Reserve 官方 RSS 中与 FOMC、货币政策和经济活动有关的条目。
 - 发现层：Google News RSS；Cloudflare 出口不可用时，A 股使用东方财富，美股和港股使用 Yahoo Finance RSS。
 
-官方来源标记为 `evidence`，聚合和搜索结果标记为 `discovery`。Monitor 内的发现层成功不会跳过官方查询；官方源失败时，本次采集保持 `degraded` 并保存失败码。上交所任务与 Worker 故障域隔离，凭据、HTTP、响应结构或 D1 写入失败都会让对应 Actions run 失败，不能用旧数据伪装成功。
+官方来源标记为 `evidence`，聚合和搜索结果标记为 `discovery`。Monitor 内的发现层成功不会跳过官方查询；官方源失败时，本次采集保持 `degraded` 并保存失败码。上交所任务与 Worker 故障域隔离；网络错误、HTTP 429/5xx 和临时无效响应最多重试两次，仍失败或遇到其它 4xx、凭据、大小、D1 错误时 Actions run 响亮失败，不能用旧数据伪装成功。
 
 Python TradingAgents 的 SEC 客户端使用运行时 `TRADINGAGENTS_SEC_CONTACT_EMAIL`（GitHub Actions secret）构造 fair-access User-Agent；未配置时保留失败轨迹并降级，不把 Yahoo 发现层冒充 SEC evidence。
 

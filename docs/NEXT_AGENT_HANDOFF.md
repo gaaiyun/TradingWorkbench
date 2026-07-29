@@ -139,7 +139,7 @@ Pages immutable deployment : 每次发布都会变化，以 `wrangler pages depl
 - 当前报告审计 `60 / 0 verified / 49 legacy_unverified / 4 invalidated / 7 invalid_record`：直接读 `public/data/report-audit.json`（`generatedAt 2026-07-28T07:50:48.864Z`）核对。零 verified 是 fail-closed 的真实结果。
 - GitHub Actions run `30189419616`（cn-semi-comms 首轮）：conclusion **success**，与文档描述一致。
 - 资金叙事最终验收的 CI run `30340865649` 全绿，Python 3.10–3.13、Pages Functions、浏览器验收、Ruff 和 clean-install 均成功；Pages run `30340878635` 与 Monitor run `30340881245` 的 migration、deploy 和 SHA verify 均执行成功。
-- 上交所 `official-news` 最近 7 次运行中 2 次成功、5 次失败；`SSE_RESPONSE_INVALID_515880` 占 2/7，另有 2 次连接超时和 1 次 HTTP 403。影响范围仅是新公告入库延迟，既有 evidence 不删除，也不影响资金流、行情、新闻其它来源或报告门禁；这不是本轮成分股融资功能的回归。该任务必须继续响亮失败，禁止用东方财富等 discovery 结果冒充上交所原文。
+- 上交所 `official-news` 的历史间歇失败包括 `SSE_RESPONSE_INVALID_515880`、连接超时和 HTTP 403。2026-07-30 run `30491426783` 再次因 GitHub runner 连接超时失败；随后代码只对网络错误、HTTP 429/5xx 和临时无效响应按 1 秒、3 秒做两次有界重试，耗尽或其它 4xx 仍响亮失败。影响范围仅是新公告入库延迟，既有 evidence 不删除，也不影响资金流、行情、新闻其它来源或报告门禁；禁止用东方财富等 discovery 结果冒充上交所原文。
 
 ## 2. 不可破坏的产品边界
 

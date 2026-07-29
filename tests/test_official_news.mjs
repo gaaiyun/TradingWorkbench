@@ -152,6 +152,113 @@ test("official SSE collector rejects invalid account IDs before network access",
   assert.equal(called, false);
 });
 
+test("official SSE collector retries a transient exchange timeout without hiding failure", async () => {
+  const settings = {
+    version: 2,
+    profiles: [profile("both", true, ["515880.SS", "512480.SS"])],
+  };
+  const attempts = new Map();
+  const fetchImpl = async (input, init = {}) => {
+    const url = new URL(String(input));
+    if (url.hostname === "api.cloudflare.com") {
+      const body = JSON.parse(init.body);
+      if (/SELECT settings_json/.test(body.sql)) {
+        return Response.json({
+          success: true,
+          result: [{ results: [{ settings_json: JSON.stringify(settings) }] }],
+        });
+      }
+      return Response.json({ success: true, result: [{ success: true }] });
+    }
+    const code = url.searchParams.get("keyword");
+    const count = (attempts.get(code) || 0) + 1;
+    attempts.set(code, count);
+    if (code === "515880" && count === 1) {
+      throw new TypeError("fetch failed");
+    }
+    return new Response(ssePayload(code), { status: 200 });
+  };
+
+  const result = await collectSseFundNews({
+    apiToken: API_TOKEN,
+    accountId: ACCOUNT_ID,
+    now: NOW,
+    fetchImpl,
+    sleepImpl: async () => {},
+  });
+
+  assert.equal(result.status, "completed");
+  assert.equal(attempts.get("515880"), 2);
+  assert.equal(attempts.get("512480"), 1);
+});
+
+test("official SSE collector exhausts transient retries with a stable error", async () => {
+  let sseAttempts = 0;
+  const settings = {
+    version: 2,
+    profiles: [profile("both", true, ["515880.SS", "512480.SS"])],
+  };
+  const error = await collectSseFundNews({
+    apiToken: API_TOKEN,
+    accountId: ACCOUNT_ID,
+    now: NOW,
+    sleepImpl: async () => {},
+    fetchImpl: async (input, init = {}) => {
+      const url = new URL(String(input));
+      if (url.hostname === "api.cloudflare.com") {
+        const body = JSON.parse(init.body);
+        return Response.json({
+          success: true,
+          result: [{
+            results: /SELECT settings_json/.test(body.sql)
+              ? [{ settings_json: JSON.stringify(settings) }]
+              : [],
+          }],
+        });
+      }
+      sseAttempts += 1;
+      throw new TypeError("fetch failed with internal network details");
+    },
+  }).then(() => null, (reason) => reason);
+
+  assert.equal(sseAttempts, 3);
+  assert.equal(error.message, "SSE_NETWORK_ERROR_515880");
+  assert.equal(error.message.includes(API_TOKEN), false);
+});
+
+test("official SSE collector does not retry a non-retryable 4xx", async () => {
+  let sseAttempts = 0;
+  const settings = {
+    version: 2,
+    profiles: [profile("both", true, ["515880.SS", "512480.SS"])],
+  };
+  const error = await collectSseFundNews({
+    apiToken: API_TOKEN,
+    accountId: ACCOUNT_ID,
+    now: NOW,
+    sleepImpl: async () => {},
+    fetchImpl: async (input, init = {}) => {
+      const url = new URL(String(input));
+      if (url.hostname === "api.cloudflare.com") {
+        const body = JSON.parse(init.body);
+        return Response.json({
+          success: true,
+          result: [{
+            results: /SELECT settings_json/.test(body.sql)
+              ? [{ settings_json: JSON.stringify(settings) }]
+              : [],
+          }],
+        });
+      }
+      sseAttempts += 1;
+      return new Response("blocked", { status: 403 });
+    },
+  }).then(() => null, (reason) => reason);
+
+  assert.equal(sseAttempts, 1);
+  assert.equal(error.message, "SSE_HTTP_403_515880");
+});
+
 test("D1 failures expose only the status code, never the API token", async () => {
   const error = await collectSseFundNews({
     apiToken: API_TOKEN,

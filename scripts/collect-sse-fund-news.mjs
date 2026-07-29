@@ -10,6 +10,7 @@ import {
 } from "../workers/monitor/src/news-collector.mjs";
 
 const DAY_MS = 24 * 60 * 60 * 1000;
+const SSE_RETRY_DELAYS_MS = Object.freeze([1_000, 3_000]);
 const SYMBOLS = Object.freeze([
   { symbol: "515880.SS", code: "515880", topic: "communications" },
   { symbol: "512480.SS", code: "512480", topic: "cn-semiconductor" },
@@ -70,11 +71,59 @@ function databaseIdFromConfig(config) {
   return match[1];
 }
 
+function isRetryableSseError(error) {
+  if (error instanceof TypeError || error?.name === "AbortError") return true;
+  return /^SSE_HTTP_(429|5\d\d)_/.test(String(error?.message || ""))
+    || /^SSE_RESPONSE_INVALID_/.test(String(error?.message || ""));
+}
+
+async function fetchSseDocument({
+  target,
+  request,
+  fetchImpl,
+  sleepImpl,
+}) {
+  for (let attempt = 0; attempt <= SSE_RETRY_DELAYS_MS.length; attempt += 1) {
+    try {
+      const response = await fetchImpl(request.url, {
+        headers: {
+          accept: "text/javascript,application/json,text/plain;q=0.8,*/*;q=0.5",
+          referer: `https://www.sse.com.cn/home/search/?webswd=${target.code}`,
+          "user-agent": "TradingWorkbench/1.0 (+https://github.com/gaaiyun/TradingWorkbench)",
+        },
+      });
+      if (!response.ok) {
+        throw new Error(`SSE_HTTP_${response.status}_${target.code}`);
+      }
+      const content = await response.text();
+      if (new TextEncoder().encode(content).byteLength > 256 * 1024) {
+        throw new Error(`SSE_RESPONSE_TOO_LARGE_${target.code}`);
+      }
+      assertSseEnvelope(content, target.code);
+      return content;
+    } catch (error) {
+      if (
+        attempt >= SSE_RETRY_DELAYS_MS.length
+        || !isRetryableSseError(error)
+      ) {
+        if (error instanceof TypeError || error?.name === "AbortError") {
+          throw new Error(`SSE_NETWORK_ERROR_${target.code}`);
+        }
+        throw error;
+      }
+      await sleepImpl(SSE_RETRY_DELAYS_MS[attempt]);
+    }
+  }
+  throw new Error(`SSE_NETWORK_ERROR_${target.code}`);
+}
+
 export async function collectSseFundNews({
   apiToken,
   accountId,
   now = new Date(),
   fetchImpl = globalThis.fetch,
+  sleepImpl = (delayMs) => new Promise((resolveSleep) =>
+    setTimeout(resolveSleep, delayMs)),
 } = {}) {
   if (!apiToken || !accountId) throw new Error("CLOUDFLARE_CREDENTIALS_REQUIRED");
   if (!/^[0-9a-f]{32}$/i.test(accountId)) {
@@ -111,19 +160,12 @@ export async function collectSseFundNews({
   const parsedBySymbol = new Map();
   for (const target of SYMBOLS) {
     const request = sseSearchUrl(target.code, now);
-    const response = await fetchImpl(request.url, {
-      headers: {
-        accept: "text/javascript,application/json,text/plain;q=0.8,*/*;q=0.5",
-        referer: `https://www.sse.com.cn/home/search/?webswd=${target.code}`,
-        "user-agent": "TradingWorkbench/1.0 (+https://github.com/gaaiyun/TradingWorkbench)",
-      },
+    const content = await fetchSseDocument({
+      target,
+      request,
+      fetchImpl,
+      sleepImpl,
     });
-    if (!response.ok) throw new Error(`SSE_HTTP_${response.status}_${target.code}`);
-    const content = await response.text();
-    if (new TextEncoder().encode(content).byteLength > 256 * 1024) {
-      throw new Error(`SSE_RESPONSE_TOO_LARGE_${target.code}`);
-    }
-    assertSseEnvelope(content, target.code);
     parsedBySymbol.set(target.symbol, parseSseFundAnnouncements(
       content,
       target.code,

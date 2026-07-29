@@ -290,7 +290,7 @@ SEC 只接受 `8-K/8-K/A` 和 `sec.gov/Archives` 链接。请求必须提供符�
 
 上交所的两个查询入口从本机和 GitHub runner 可用，但从 Cloudflare 出口稳定返回 403。为避免持续制造 Worker degraded 和浪费 15 分钟采集预算，`.github/workflows/official-news.yml` 每两小时第 17 分钟从 GitHub runner 执行一次。脚本读取 D1 当前 settings，只向包含目标 ETF 的 enabled profile 分发；按证券代码精确查询 `515880`、`512480`，只接受 `www.sse.com.cn/disclosure/fund/announcement/` 的原始 PDF，并使用 JSON1 参数化 UPSERT。季度报告、招募说明书和份额拆分公告直接关联对应 ETF，不靠标题模糊猜标的。
 
-发现层成功不会中断 Monitor 内的 SEC、中国政府网、HashKey 或 Federal Reserve 查询。任一计划内官方源出现 HTTP、结构或大小错误时，本次 Worker 结果保持 degraded，即使 discovery 返回了新闻。上交所属于独立 Actions 故障域：缺 Cloudflare 凭据、SSE HTTP/结构异常或 D1 写入失败时 workflow 直接失败；它不再参与 Worker `/health.newsProviders`，其健康状态以 `official-news` run 为准。
+发现层成功不会中断 Monitor 内的 SEC、中国政府网、HashKey 或 Federal Reserve 查询。任一计划内官方源出现 HTTP、结构或大小错误时，本次 Worker 结果保持 degraded，即使 discovery 返回了新闻。上交所属于独立 Actions 故障域：脚本只对网络异常、HTTP 429/5xx 和临时无效响应做两次有界重试；重试耗尽、其它 4xx、缺 Cloudflare 凭据、响应过大或 D1 写入失败时 workflow 直接失败。它不再参与 Worker `/health.newsProviders`，其健康状态以 `official-news` run 为准。
 
 D1 有意按“原文 × 关联标的”保存，便于按 profile 和 symbol 查询。网页读取后按 `cluster_id`、原文 URL、规范化标题依次聚合为一张资讯卡，并展示全部关联标的；事件与新闻使用不同分组，不互相吞并。新闻页和监控页在页面可见时每 60 秒刷新，后台标签页停止轮询，恢复可见后立即补一次请求。界面同时显示文章时间和最近请求完成时间，不能用文章发布时间冒充刷新时间。
 

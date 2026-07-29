@@ -436,6 +436,7 @@ slot 应进入 completed、degraded 或带明确原因的 deferred/failed。检�
 - 部门文件、国务院公文、公报为 evidence，政策解读为 discovery；
 - 政策原文只接受 `www.gov.cn/zhengce/` 或 `/gongbao/`；
 - 手工或定时运行 `.github/workflows/official-news.yml`，确认凭据检查、上交所请求和 D1 写入三步均成功；
+- 网络错误、HTTP 429/5xx 或临时无效响应会按 1 秒、3 秒间隔最多重试两次；其它 4xx 不重试，耗尽后必须以 `SSE_NETWORK_ERROR_<code>`、`SSE_HTTP_<status>_<code>` 或 `SSE_RESPONSE_INVALID_<code>` 失败；
 - 上交所只接受与代码精确相等且位于 `www.sse.com.cn/disclosure/fund/announcement/` 的 PDF 公告；
 - `512480` 与 `515880` 的季度报告、拆分公告等官方结果标记 `sourceTier=evidence`；
 - 东方财富或 Google 结果保持 `discovery`；
