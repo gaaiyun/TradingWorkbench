@@ -599,7 +599,7 @@ DAILY_RECOVERY_ENABLED = "true"
 发现已发布报告把拆分、复权或其他公司行动误判为涨跌时：
 
 1. 先把精确 `ticker/trade_date/path` 加入 `scripts/report-audit.mjs` 的 invalidated 集合并重新生成 `public/data/report-audit.json`；
-2. 验证最新观点和问答都不能读取该报告；
+2. 验证无 selector 及带 `profile` / `requestId` 的最新观点都不再返回该报告，并验证问答不能读取；
 3. 修复 Evidence `asOf`、公司行动和单一市场数值真源；
 4. 不修改历史正文伪造“当时正确”；历史角色分卷保留审计；
 5. 新报告若 claim validation 失败，汇总正文必须只有 Evidence Snapshot、`Not Rated` 和失败码，不得继续显示交易指令；

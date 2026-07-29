@@ -322,7 +322,7 @@ flowchart TD
 - monitor 三个字段缺一即拒绝；
 - workflow run name 编码 identity；
 - Python 把 identity 写入 history、Manifest 和 Evidence；
-- `/api/history`、`/api/latest`、`/api/runs`、`/api/report-audit` 和 `/api/report` 使用 `profile` 或 `requestId` 过滤；
+- `/api/history`、`/api/latest`、`/api/runs`、`/api/report-audit` 和 `/api/report` 使用 `profile` 或 `requestId` 过滤；`/api/latest` 无论是否带 selector 都会再以 `report-audit.json` 做 verified-only 交叉门禁，后续被 invalidated 的报告不能继续沿历史批次冒充“最新已验证观点”；
 - identity 上线前生成的报告只作为显式 `legacy` 数据源读取；`legacy_unverified` 可以带警告阅读，`invalidated` 只在历史审计出现，两者都不能进入问答；
 - 报告正文请求带 selector 时，服务端读取相邻 Manifest 并校验 identity。
 

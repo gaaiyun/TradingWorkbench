@@ -468,6 +468,8 @@ test("history, latest, and report audit selectors never mix profiles or adhoc re
       ticker: "SPY",
       report: batch.results[0].report,
       auditStatus: "verified",
+      analysisStatus: "rated",
+      claimValidation: { status: "passed" },
       failureClass: null,
       identity: batch.identity,
     })),
@@ -540,6 +542,8 @@ test("latest, report audit, and report honor adhoc requestId selectors", async (
       report: entry.results[0].report,
       identity: entry.identity,
       auditStatus: "verified",
+      analysisStatus: "rated",
+      claimValidation: { status: "passed" },
     })),
   };
   const manifestPayload = {
@@ -659,6 +663,57 @@ test("unscoped latest applies a verified report audit gate", async () => {
     assert.equal(response.status, 200);
     const payload = await response.json();
     assert.deepEqual(payload.results.map((entry) => entry.ticker), ["GOOD"]);
+    assert.equal(payload.evidenceGate.filteredCount, 1);
+  } finally {
+    globalThis.fetch = originalFetch;
+  }
+});
+
+test("profile-scoped latest also removes reports invalidated after publication", async () => {
+  const originalFetch = globalThis.fetch;
+  const report = "reports/512480.SS/2026-07-29-v4/complete_report.md";
+  const history = [{
+    trade_date: "2026-07-29",
+    generated_at: "2026-07-30T07:26:03+08:00",
+    identity: {
+      scope: "profile",
+      kind: "manual",
+      profileId: "cn-semi-comms",
+      requestId: null,
+      slotId: null,
+      scheduledFor: null,
+    },
+    results: [{
+      ticker: "512480.SS",
+      report,
+      analysis_status: "rated",
+      audit_status: "verified",
+    }],
+  }];
+  const audit = {
+    reports: [{
+      report,
+      auditStatus: "invalidated",
+      analysisStatus: "rated",
+      claimValidation: { status: "passed" },
+      identity: history[0].identity,
+    }],
+  };
+  globalThis.fetch = async (url) => {
+    if (String(url).endsWith("/data/history.json")) return Response.json(history);
+    if (String(url).endsWith("/data/report-audit.json")) return Response.json(audit);
+    return new Response(null, { status: 404 });
+  };
+  try {
+    const response = await getLatest({
+      request: new Request(
+        "https://workbench.test/api/latest?profile=cn-semi-comms",
+      ),
+    });
+    assert.equal(response.status, 200);
+    const payload = await response.json();
+    assert.deepEqual(payload.results, []);
+    assert.equal(payload.evidenceGate.policy, "verified-only");
     assert.equal(payload.evidenceGate.filteredCount, 1);
   } finally {
     globalThis.fetch = originalFetch;

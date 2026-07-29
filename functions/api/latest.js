@@ -4,6 +4,33 @@ import {
   parseRunSelectors,
 } from "./_run_identity.mjs";
 
+function verifiedReportPaths(audit) {
+  return new Set(
+    (Array.isArray(audit?.reports) ? audit.reports : [])
+      .filter((entry) =>
+        entry?.auditStatus === "verified" &&
+        entry?.analysisStatus === "rated" &&
+        entry?.claimValidation?.status === "passed")
+      .map((entry) => String(entry.report || "")),
+  );
+}
+
+function applyEvidenceGate(batch, verifiedReports) {
+  const originalResults = Array.isArray(batch?.results) ? batch.results : [];
+  const results = originalResults.filter((entry) =>
+    verifiedReports.has(String(entry?.report || "")),
+  );
+  return {
+    ...batch,
+    results,
+    evidenceGate: {
+      policy: "verified-only",
+      source: "data/report-audit.json",
+      filteredCount: originalResults.length - results.length,
+    },
+  };
+}
+
 // GET /api/latest → main 分支上最新的 latest.json（随每次运行 commit 更新）
 export async function onRequestGet({ request } = {}) {
   let selectors;
@@ -45,17 +72,7 @@ export async function onRequestGet({ request } = {}) {
         502,
       );
     }
-    const verifiedReports = new Set(
-      audit.reports
-        .filter((entry) =>
-          entry?.auditStatus === "verified" &&
-          entry?.analysisStatus === "rated" &&
-          entry?.claimValidation?.status === "passed")
-        .map((entry) => String(entry.report || "")),
-    );
-    const results = latest.results.filter((entry) =>
-      verifiedReports.has(String(entry?.report || "")),
-    );
+    const verifiedReports = verifiedReportPaths(audit);
     if (latest.results.length === 0) {
       return new Response(JSON.stringify(latest), {
         status: 200,
@@ -65,29 +82,38 @@ export async function onRequestGet({ request } = {}) {
         },
       });
     }
+    return json(applyEvidenceGate(latest, verifiedReports), 200, {
+      "cache-control": "public, max-age=60",
+    });
+  }
+  const [historyResponse, auditResponse] = await Promise.all([
+    proxyRaw("data/history.json", { cacheSeconds: 60 }),
+    proxyRaw("data/report-audit.json", { cacheSeconds: 60 }),
+  ]);
+  if (!historyResponse.ok) return historyResponse;
+  if (!auditResponse.ok) {
     return json(
-      {
-        ...latest,
-        results,
-        evidenceGate: {
-          policy: "verified-only",
-          source: "data/report-audit.json",
-          filteredCount: latest.results.length - results.length,
-        },
-      },
-      200,
-      { "cache-control": "public, max-age=60" },
+      { status: "unavailable", error: "最新观点审计索引不可用", results: [] },
+      503,
     );
   }
-  const response = await proxyRaw("data/history.json", { cacheSeconds: 60 });
-  if (!response.ok) return response;
   let history;
+  let audit;
   try {
-    history = await response.json();
+    history = await historyResponse.json();
+    audit = await auditResponse.json();
   } catch {
-    return json({ error: "历史索引无效" }, 502);
+    return json(
+      { status: "unavailable", error: "历史索引或审计索引无效", results: [] },
+      502,
+    );
   }
-  if (!Array.isArray(history)) return json({ error: "历史索引无效" }, 502);
+  if (!Array.isArray(history) || !Array.isArray(audit?.reports)) {
+    return json(
+      { status: "unavailable", error: "历史索引或审计索引无效", results: [] },
+      502,
+    );
+  }
   const matches = history.filter(
     (entry) => identityMatches(entry?.identity, selectors),
   );
@@ -95,5 +121,9 @@ export async function onRequestGet({ request } = {}) {
     right?.generated_at || right?.trade_date || "",
   ).localeCompare(String(left?.generated_at || left?.trade_date || "")));
   if (!matches.length) return json({ error: "没有匹配的运行结果" }, 404);
-  return json(matches[0], 200, { "cache-control": "public, max-age=60" });
+  return json(
+    applyEvidenceGate(matches[0], verifiedReportPaths(audit)),
+    200,
+    { "cache-control": "public, max-age=60" },
+  );
 }
