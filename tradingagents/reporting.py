@@ -12,7 +12,7 @@ import re
 from datetime import datetime, timezone
 from pathlib import Path
 
-from tradingagents.evidence import validate_evidence_packet
+from tradingagents.evidence import market_trade_date, validate_evidence_packet
 
 
 class ReportValidationError(ValueError):
@@ -183,6 +183,7 @@ def _render_evidence_snapshot(packet: dict) -> str:
     actions = list(packet.get("corporateActions") or [])
     news = list(packet.get("news") or [])
     sources = list(packet.get("sources") or [])
+    market = str((packet.get("instrument") or {}).get("market") or "")
     anchor = (
         (bars[-1].get("evidenceId") if bars else None)
         or (sources[0].get("evidenceId") if sources else None)
@@ -210,7 +211,9 @@ def _render_evidence_snapshot(packet: dict) -> str:
         lines.extend(["", "### Latest market bars", ""])
         for row in bars[-5:]:
             lines.append(
-                f"- [{row.get('evidenceId')}] {row.get('ts')}: "
+                f"- [{row.get('evidenceId')}] trade date "
+                f"{market_trade_date(row.get('ts'), market)} "
+                f"(raw UTC {row.get('ts')}): "
                 f"O {row.get('open')} · H {row.get('high')} · "
                 f"L {row.get('low')} · C {row.get('close')} · "
                 f"volume {row.get('volume')}"

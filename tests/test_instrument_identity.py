@@ -75,6 +75,16 @@ class ResolveInstrumentIdentityTests(unittest.TestCase):
         self.assertEqual(hashkey["company_name"], "HashKey Holdings Limited")
         self.assertEqual(hashkey["industry"], "Financial Data & Stock Exchanges")
 
+    def test_core_cn_etf_identity_is_authoritative_without_vendor_guessing(self):
+        with patch("tradingagents.agents.utils.agent_utils.yf.Ticker") as mock:
+            identity = resolve_instrument_identity("512480.SS")
+        mock.assert_not_called()
+        self.assertEqual(
+            identity["company_name"],
+            "国联安中证全指半导体产品与设备交易型开放式指数证券投资基金",
+        )
+        self.assertEqual(identity["exchange"], "SSE")
+
 
 @pytest.mark.unit
 class BuildInstrumentContextTests(unittest.TestCase):
@@ -152,6 +162,7 @@ class GetInstrumentContextFromStateTests(unittest.TestCase):
         self.assertIn("EvidencePacketV1", context)
         self.assertIn("Evidence ID", context)
         self.assertIn("abc123", context)
+        self.assertIn("Do not propose a target price, numeric allocation", context)
 
     def test_evidence_packet_context_includes_a_compact_citable_ledger(self):
         context = get_instrument_context_from_state({
@@ -190,6 +201,29 @@ class GetInstrumentContextFromStateTests(unittest.TestCase):
         self.assertIn("rsi14=55.2", context)
         self.assertIn("[N1]", context)
         self.assertIn("[S1]", context)
+
+    def test_cn_evidence_ledger_labels_the_shanghai_trade_date(self):
+        context = get_instrument_context_from_state({
+            "company_of_interest": "512480.SS",
+            "asset_type": "cn_etf",
+            "evidence_packet": {
+                "status": "ok",
+                "asOf": "2026-07-29T08:00:00Z",
+                "contentHash": "abc123",
+                "instrument": {"market": "CN"},
+                "integrity": {"errors": []},
+                "bars": [{
+                    "evidenceId": "M1",
+                    "ts": "2026-07-28T16:00:00Z",
+                    "open": 1,
+                    "high": 1,
+                    "low": 1,
+                    "close": 1,
+                    "volume": 100,
+                }],
+            },
+        })
+        self.assertIn("[M1] tradeDate=2026-07-29", context)
 
 
 @pytest.mark.unit

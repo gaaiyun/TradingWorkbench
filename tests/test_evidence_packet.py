@@ -1,4 +1,5 @@
 import math
+import sys
 
 import pandas as pd
 import pytest
@@ -165,6 +166,15 @@ def test_propagator_carries_packet_status_into_agent_state():
     )
     assert state["analysis_status"] == "degraded"
     assert state["evidence_packet"]["contentHash"] == packet["contentHash"]
+
+
+def test_langgraph_state_schema_preserves_evidence_gate_fields():
+    """The compiled graph must not silently discard the evidence ledger."""
+    AgentState = sys.modules[
+        "tradingagents.agents.utils.agent_states"
+    ].AgentState
+    assert "evidence_packet" in AgentState.__annotations__
+    assert "analysis_status" in AgentState.__annotations__
 
 
 def test_cn_runtime_evidence_prefers_workbench_qfq_history(monkeypatch):

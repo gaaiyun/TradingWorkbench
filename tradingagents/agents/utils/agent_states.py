@@ -1,4 +1,4 @@
-from typing import Annotated
+from typing import Annotated, Any
 
 from langgraph.graph import MessagesState
 from typing_extensions import TypedDict
@@ -49,6 +49,14 @@ class AgentState(MessagesState):
     asset_type: Annotated[str, "Asset type under analysis such as stock or crypto"]
     instrument_context: Annotated[str, "Deterministic ticker identity resolved at run start"]
     trade_date: Annotated[str, "What date we are trading at"]
+    evidence_packet: Annotated[
+        dict[str, Any] | None,
+        "Point-in-time evidence ledger that constrains every generated claim",
+    ]
+    analysis_status: Annotated[
+        str,
+        "Current evidence and report-rating state",
+    ]
 
     sender: Annotated[str, "Agent that sent this message"]
 

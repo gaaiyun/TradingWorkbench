@@ -6,6 +6,8 @@ from typing import Any
 import yfinance as yf
 from langchain_core.messages import HumanMessage, RemoveMessage
 
+from tradingagents.evidence import market_trade_date
+
 # Import tools from separate utility files
 from tradingagents.agents.utils.core_stock_tools import get_stock_data
 from tradingagents.agents.utils.fundamental_data_tools import (
@@ -49,6 +51,24 @@ __all__ = [
 logger = logging.getLogger(__name__)
 
 _STATIC_IDENTITIES = {
+    "515880.SS": {
+        "company_name": "国泰中证全指通信设备交易型开放式指数证券投资基金",
+        "sector": "Communication Equipment",
+        "industry": "Exchange Traded Fund",
+        "exchange": "SSE",
+    },
+    "512480.SS": {
+        "company_name": "国联安中证全指半导体产品与设备交易型开放式指数证券投资基金",
+        "sector": "Semiconductors",
+        "industry": "Exchange Traded Fund",
+        "exchange": "SSE",
+    },
+    "159995.SZ": {
+        "company_name": "华夏国证半导体芯片交易型开放式指数证券投资基金",
+        "sector": "Semiconductors",
+        "industry": "Exchange Traded Fund",
+        "exchange": "SZSE",
+    },
     "GOOG": {
         "company_name": "Alphabet Inc.",
         "sector": "Communication Services",
@@ -117,6 +137,8 @@ def resolve_instrument_identity(ticker: str) -> dict:
     from tradingagents.dataflows.symbol_utils import normalize_symbol
 
     canonical = normalize_symbol(ticker)
+    if canonical in _STATIC_IDENTITIES:
+        return dict(_STATIC_IDENTITIES[canonical])
     try:
         info = yf.Ticker(canonical).info or {}
     except Exception as exc:  # noqa: BLE001 — fail open, never block the run
@@ -218,6 +240,7 @@ def get_instrument_context_from_state(state: Mapping[str, Any]) -> str:
         )
     packet = state.get("evidence_packet")
     if isinstance(packet, Mapping):
+        market = str((packet.get("instrument") or {}).get("market") or "")
         errors = packet.get("integrity", {}).get("errors", [])
         result += (
             " EvidencePacketV1 is authoritative for this run: "
@@ -226,6 +249,9 @@ def get_instrument_context_from_state(state: Mapping[str, Any]) -> str:
             f"contentHash={packet.get('contentHash', 'unknown')}. "
             "Every numerical claim must cite the packet's exact Evidence ID "
             "(M=market, I=indicator, CA=corporate action, N=news, S=source). "
+            "Do not introduce a number that is absent from the ledger; write "
+            "'unavailable' instead. Do not propose a target price, numeric "
+            "allocation, entry level, exit level, or stop loss. "
             "Separate verified facts, inference, transmission path, confidence, "
             "counter-evidence, and the next observation. "
         )
@@ -237,7 +263,9 @@ def get_instrument_context_from_state(state: Mapping[str, Any]) -> str:
         ledger: list[str] = []
         for row in list(packet.get("bars") or [])[-8:]:
             ledger.append(
-                f"[{row.get('evidenceId')}] {row.get('ts')} "
+                f"[{row.get('evidenceId')}] "
+                f"tradeDate={market_trade_date(row.get('ts'), market)} "
+                f"ts={row.get('ts')} "
                 f"open={row.get('open')} high={row.get('high')} "
                 f"low={row.get('low')} close={row.get('close')} "
                 f"volume={row.get('volume')}"

@@ -71,3 +71,33 @@ def test_report_explicitly_records_market_history_metadata(
         f"Market history: source `{source}`; adjustment `{adjustment}`; "
         "2 bars from `2026-07-22T07:00:00Z` to `2026-07-23T07:00:00Z`"
     ) in report
+
+
+@pytest.mark.unit
+def test_cn_report_shows_business_trade_date_before_raw_utc_timestamp(tmp_path):
+    packet = build_evidence_packet(
+        ticker="512480.SS",
+        asset_type="cn_etf",
+        as_of="2026-07-29T08:00:00Z",
+        bars=[{
+            "ts": "2026-07-28T16:00:00Z",
+            "open": 1.0,
+            "high": 1.1,
+            "low": 0.9,
+            "close": 1.05,
+            "volume": 100,
+            "adjustment": "qfq",
+        }],
+        sources=[{"source": "tencent", "sourceTier": "evidence"}],
+        generated_at="2026-07-29T08:05:00Z",
+    )
+
+    report_path = write_report_tree(
+        {**_state(), "evidence_packet": packet},
+        packet["instrument"]["symbol"],
+        tmp_path,
+    )
+
+    report = report_path.read_text()
+    assert "[M1] trade date 2026-07-29" in report
+    assert "raw UTC 2026-07-28T16:00:00Z" in report

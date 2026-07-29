@@ -13,11 +13,17 @@ import math
 from collections.abc import Mapping
 from datetime import datetime, timezone
 from typing import Any
+from zoneinfo import ZoneInfo
 
 from tradingagents.dataflows.symbol_utils import normalize_symbol
 
 SCHEMA_VERSION = "EvidencePacketV1"
 _JUMP_THRESHOLD = 0.25
+_MARKET_TIMEZONES = {
+    "CN": "Asia/Shanghai",
+    "HK": "Asia/Hong_Kong",
+    "US": "America/New_York",
+}
 
 
 class EvidenceValidationError(ValueError):
@@ -39,6 +45,13 @@ def _iso(value: Any, field: str) -> str:
 
 def _time(value: Any) -> datetime:
     return datetime.fromisoformat(_iso(value, "timestamp").replace("Z", "+00:00"))
+
+
+def market_trade_date(value: Any, market: str | None) -> str:
+    """Return the business date represented by a UTC market-bar timestamp."""
+    timestamp = _time(value)
+    timezone_name = _MARKET_TIMEZONES.get(str(market or "").upper(), "UTC")
+    return timestamp.astimezone(ZoneInfo(timezone_name)).date().isoformat()
 
 
 def _json(value: Any) -> str:
