@@ -163,6 +163,10 @@ class GetInstrumentContextFromStateTests(unittest.TestCase):
         self.assertIn("Evidence ID", context)
         self.assertIn("abc123", context)
         self.assertIn("Do not propose a target price, numeric allocation", context)
+        self.assertIn("Price and volume evidence only support price and volume", context)
+        self.assertIn("fund inflow or outflow", context)
+        self.assertIn("stop-loss, quantitative, retail, institutional", context)
+        self.assertIn("Unavailable ETF data means the question cannot be assessed", context)
 
     def test_evidence_packet_context_includes_a_compact_citable_ledger(self):
         context = get_instrument_context_from_state({
