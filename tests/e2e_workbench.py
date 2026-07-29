@@ -573,7 +573,9 @@ def run_browser():
             "element => getComputedStyle(element).color",
         ) == "rgb(224, 95, 104)"
         assert "最近采集成功" not in page.locator("#task-timeline").inner_text()
-        assert "任务结果接口未提供" in page.locator("#task-timeline").inner_text()
+        assert "未接入单任务结果，不能判断成功或失败" in page.locator(
+            "#task-timeline"
+        ).inner_text()
 
         assert page.input_value("#profile-selector") == "cn-semi-comms"
         assert page.locator("#watchlist .watch-row").count() == 13
@@ -585,7 +587,9 @@ def run_browser():
         assert urlparse(page.url).fragment == "monitor"
         assert page.locator("#watchlist .watch-row").count() == 2
         assert "监控组已停用" in page.locator("#task-timeline").inner_text()
-        assert "任务结果接口未提供" not in page.locator("#task-timeline").inner_text()
+        assert "未接入单任务结果，不能判断成功或失败" not in page.locator(
+            "#task-timeline"
+        ).inner_text()
         assert page.evaluate(
             "localStorage.getItem('ta.workbench.selected-profile.v1')"
         ) == "profile-b"
@@ -944,6 +948,10 @@ def run_browser():
         assert race.locator("#instrument-change").evaluate(
             "element => getComputedStyle(element).color",
         ) == "rgb(56, 183, 136)"
+        assert not race.get_by_role("tab", name="5m", exact=True).is_disabled()
+        assert not race.get_by_role("tab", name="15m", exact=True).is_disabled()
+        race.get_by_role("tab", name="1d", exact=True).click()
+        race.wait_for_timeout(120)
         assert race.locator("#history-range-tabs").is_visible()
         assert any(
             symbol == "NVDA" and timeframe == "1d" and limit == 1260
