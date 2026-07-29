@@ -586,9 +586,10 @@ DAILY_RECOVERY_ENABLED = "true"
   `local_date`，不能只看 Worker 本次返回 completed。
 
 `DAILY_RECOVERY_ENABLED` 只控制关键日任务的重新发现，不会补跑盘中、信号或新闻。
-同一 profile 的 retry backlog 必须先完成行情任务的全部分片，再运行
-`closeFullAnalysis`；实现顺序是 `task_priority → scheduled_for → id`。验收时不能只看
-分析 workflow 已触发，还要先证明同一业务日的 `cnDailySnapshot` 分片均已完成。
+同一 profile 的 retry backlog 必须先完成同一业务日行情任务的全部分片，再运行
+`closeFullAnalysis`；实现顺序是 `local_date → task_priority → scheduled_for → id`，
+避免次日新行情饿死前一日分析。验收时不能只看分析 workflow 已触发，还要先证明
+同一业务日的 `cnDailySnapshot` 分片均已完成。
 紧急关闭后，既有 slot 仍按原租约规则处理；恢复时重新设为 `true` 并部署 Worker。
 
 如果仍超 CPU，不得继续提高 direct 上限。下一步是评估并由用户确认 Cloudflare Queue 的费用和配额后启用 `wrangler.monitor.queue.toml`；未获授权不得创建付费资源。

@@ -494,7 +494,7 @@ ETF 工作台是编排层，不替代原 TradingAgents 内核。
 
 Monitor Worker 的生产 direct 模式运行在 Cloudflare 免费 CPU 预算内。调度器每次 cron 最多执行一个任务，发现阶段按最多三个外部请求拆 shard；旧的高频行情、信号、新闻和美股分时 slot 在有至少晚 15 分钟的新 slot 时标为 `SUPERSEDED_BY_NEWER_SLOT`，三次重试耗尽的 failed 或过期 claimed slot 标为 `RETRY_EXHAUSTED`。这只清理不可再执行的调度状态，不删除行情、新闻、Evidence 或报告。
 
-同一任务的多个 shard 使用相差一秒的 `scheduled_for`，兼容既有 `profile + slot_type + scheduled_for` 唯一约束，避免第二 shard 静默丢失。每个 profile 的 backlog 先按任务优先级、再按计划时间排序，保证日线采集的所有 shard 先于 `closeFullAnalysis`；profile 之间仍按 rank 公平轮转并保留原有 attempt fencing。市场类任务也因此优先于新闻。若生产 tail 继续出现 `exceededCpu`，应保持 fail-closed，并考虑把异步执行迁到已设计但尚未启用的 Queue；不得仅把 direct 上限调大。
+同一任务的多个 shard 使用相差一秒的 `scheduled_for`，兼容既有 `profile + slot_type + scheduled_for` 唯一约束，避免第二 shard 静默丢失。每个 profile 的 backlog 按 `local_date → task_priority → scheduled_for → id` 排序，保证同一业务日日线采集的所有 shard 先于 `closeFullAnalysis`，同时防止次日新行情饿死前一日分析；profile 之间仍按 rank 公平轮转并保留原有 attempt fencing。市场类任务也因此在同一业务日优先于新闻。若生产 tail 继续出现 `exceededCpu`，应保持 fail-closed，并考虑把异步执行迁到已设计但尚未启用的 Queue；不得仅把 direct 上限调大。
 
 新闻读取层支持 `tier=evidence|discovery`。前端分别取两层各 200 条后聚合，来源筛选仍保留层级。`source_health` 对外带稳定错误码、最近成功时间、连续失败次数和暂停时间；`market_events` freshness 在读取时按四天重算。
 

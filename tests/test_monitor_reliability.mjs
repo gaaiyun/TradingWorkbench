@@ -719,6 +719,48 @@ test("retry backlog completes offset daily shards before close analysis", async 
   );
 });
 
+test("retry backlog does not let a newer market day starve an older analysis", async () => {
+  const { listRetryableSlots } = await import(slotsUrl);
+  const sqlite = reliabilityDatabase();
+  const insert = sqlite.prepare(`
+    INSERT INTO scheduled_slots (
+      id, profile_id, slot_type, scheduled_for, status, expires_at,
+      attempt_count, updated_at, next_attempt_at, profile_revision,
+      payload_json, payload_hash, local_date
+    ) VALUES (?, 'profile-a', ?, ?, 'pending',
+      '2026-10-01T00:00:00.000Z', 0, ?, ?, 'r1', ?, ?, ?)
+  `);
+  const rows = [
+    ["older-analysis", "closeFullAnalysis", "2026-07-23T07:20:00.000Z", "2026-07-23"],
+    ["newer-market", "usCloseSnapshot", "2026-07-23T21:35:00.000Z", "2026-07-24"],
+  ];
+  for (const [id, type, scheduledFor, localDate] of rows) {
+    insert.run(
+      id,
+      type,
+      scheduledFor,
+      scheduledFor,
+      scheduledFor,
+      JSON.stringify({
+        profile: { id: "profile-a" },
+        task: { type, scheduledFor },
+      }),
+      `hash-${id}`,
+      localDate,
+    );
+  }
+
+  const retryable = await listRetryableSlots(
+    d1(sqlite),
+    new Date("2026-07-24T08:00:00.000Z"),
+    2,
+  );
+  assert.deepEqual(
+    retryable.map(({ id }) => id),
+    ["older-analysis", "newer-market"],
+  );
+});
+
 test("superseded high-frequency backlog is cancelled while the newest slot remains", async () => {
   const { cancelSupersededScheduledSlots } = await import(slotsUrl);
   const sqlite = reliabilityDatabase();
