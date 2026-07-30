@@ -1,7 +1,7 @@
 {
   "version": 1,
   "status": "ok",
-  "generated_at": "2026-07-30T14:31:02+08:00",
+  "generated_at": "2026-07-30T15:03:34+08:00",
   "trade_date": "2026-07-30",
   "global": {
     "status": "ok",
@@ -9,7 +9,7 @@
     "ticker": null,
     "start_date": "2026-07-23",
     "end_date": "2026-07-30",
-    "fetched_at": "2026-07-30T06:31:05Z",
+    "fetched_at": "2026-07-30T07:03:35Z",
     "items": [
       {
         "title": "Meridian Smelter Tests Deliver High Quality Blister Copper from Cabaçal Copper Concentrates",
@@ -17,7 +17,7 @@
         "url": "https://finance.yahoo.com/markets/commodities/articles/meridian-smelter-tests-deliver-high-060000614.html",
         "source": "TMX Newsfile",
         "published_at": "2026-07-30T06:00:00Z",
-        "fetched_at": "2026-07-30T06:31:05Z",
+        "fetched_at": "2026-07-30T07:03:35Z",
         "ticker": null,
         "source_tier": "aggregator"
       },
@@ -27,7 +27,7 @@
         "url": "https://finance.yahoo.com/markets/articles/oil-prices-slip-asian-shares-050950736.html",
         "source": "Associated Press",
         "published_at": "2026-07-30T05:09:50Z",
-        "fetched_at": "2026-07-30T06:31:05Z",
+        "fetched_at": "2026-07-30T07:03:35Z",
         "ticker": null,
         "source_tier": "aggregator"
       },
@@ -37,7 +37,7 @@
         "url": "https://finance.yahoo.com/m/b2d26461-c630-35bb-a1b0-6f914492c115/bofa-just-turned-on-exxon-in.html",
         "source": "TheStreet",
         "published_at": "2026-07-30T05:07:00Z",
-        "fetched_at": "2026-07-30T06:31:05Z",
+        "fetched_at": "2026-07-30T07:03:35Z",
         "ticker": null,
         "source_tier": "aggregator"
       },
@@ -47,7 +47,7 @@
         "url": "https://finance.yahoo.com/news/oil-prices-slip-tankers-continue-003657966.html",
         "source": "Reuters",
         "published_at": "2026-07-30T04:22:03Z",
-        "fetched_at": "2026-07-30T06:31:05Z",
+        "fetched_at": "2026-07-30T07:03:35Z",
         "ticker": null,
         "source_tier": "aggregator"
       },
@@ -57,7 +57,7 @@
         "url": "https://finance.yahoo.com/video/trump-says-british-pm-told-040643899.html",
         "source": "Reuters Videos",
         "published_at": "2026-07-30T04:06:43Z",
-        "fetched_at": "2026-07-30T06:31:05Z",
+        "fetched_at": "2026-07-30T07:03:35Z",
         "ticker": null,
         "source_tier": "aggregator"
       },
@@ -67,7 +67,7 @@
         "url": "https://finance.yahoo.com/m/7b38b11b-2954-3bb5-b379-69f29082468a/hudbay-minerals-q2-earnings.html",
         "source": "MarketBeat",
         "published_at": "2026-07-30T04:03:55Z",
-        "fetched_at": "2026-07-30T06:31:05Z",
+        "fetched_at": "2026-07-30T07:03:35Z",
         "ticker": null,
         "source_tier": "aggregator"
       },
@@ -77,7 +77,7 @@
         "url": "https://finance.yahoo.com/energy/articles/oil-prices-slip-despite-attacks-040109065.html",
         "source": "Oilprice.com",
         "published_at": "2026-07-30T04:01:09Z",
-        "fetched_at": "2026-07-30T06:31:05Z",
+        "fetched_at": "2026-07-30T07:03:35Z",
         "ticker": null,
         "source_tier": "aggregator"
       },
@@ -87,7 +87,7 @@
         "url": "https://finance.yahoo.com/markets/stocks/articles/ap-top-financial-news-12-040000457.html",
         "source": "Associated Press",
         "published_at": "2026-07-30T04:00:00Z",
-        "fetched_at": "2026-07-30T06:31:05Z",
+        "fetched_at": "2026-07-30T07:03:35Z",
         "ticker": null,
         "source_tier": "aggregator"
       },
@@ -97,7 +97,7 @@
         "url": "https://finance.yahoo.com/economy/articles/ap-top-extended-financial-headlines-040000790.html",
         "source": "Associated Press",
         "published_at": "2026-07-30T04:00:00Z",
-        "fetched_at": "2026-07-30T06:31:05Z",
+        "fetched_at": "2026-07-30T07:03:35Z",
         "ticker": null,
         "source_tier": "aggregator"
       },
@@ -107,7 +107,7 @@
         "url": "https://finance.yahoo.com/markets/stocks/articles/asian-stocks-choppy-rout-fed-014549754.html",
         "source": "Reuters",
         "published_at": "2026-07-30T03:43:11Z",
-        "fetched_at": "2026-07-30T06:31:05Z",
+        "fetched_at": "2026-07-30T07:03:35Z",
         "ticker": null,
         "source_tier": "aggregator"
       }
@@ -132,25 +132,25 @@
       "ticker": "515880.SS",
       "start_date": "2026-07-30",
       "end_date": "2026-07-30",
-      "fetched_at": "2026-07-30T06:31:06Z",
+      "fetched_at": "2026-07-30T07:03:36Z",
       "items": [
         {
           "title": "通信ETF国泰（515880）开盘跌1.50%，重仓股新易盛跌2.61%，中际旭创跌3.36%",
-          "summary": "通信ETF国泰（515880）开盘跌1.50%，重仓股新易盛跌2.61%，中际旭创跌3.36% 新浪财经",
+          "summary": "通信ETF国泰（515880）开盘跌1.50%，重仓股新易盛跌2.61%，中际旭创跌3.36% 新浪网",
           "url": "https://news.google.com/rss/articles/CBMimAFBVV95cUxQbzlvSlZSVUhjeEVjZGNCMHcxZVdRQVdaclF0Z29XZVh2VVNKSGVQbW5UQUNnLUZEU2F1bFVtb0tfeFdEM2ZfVHZuOGNwZ1RUSFhsYU5vcUk2TkNlY1BFTW1MWGNZTmVRVi1FeGdiTjlCY3pBbF9BMjFrSGNTT012UzBhQnE4a2JBNkhhRkpoMk5HbnZlaTk0Yw?oc=5",
-          "source": "Google News / 新浪财经",
+          "source": "Google News / 新浪网",
           "published_at": "2026-07-30T01:30:00Z",
-          "fetched_at": "2026-07-30T06:31:06Z",
+          "fetched_at": "2026-07-30T07:03:36Z",
           "ticker": "515880.SS",
           "source_tier": "aggregator"
         },
         {
           "title": "7月29日通信ETF国泰（515880）份额减少7.52亿份，最新份额685.50亿份，最新规模413.36亿元",
-          "summary": "7月29日通信ETF国泰（515880）份额减少7.52亿份，最新份额685.50亿份，最新规模413.36亿元 新浪财经",
+          "summary": "7月29日通信ETF国泰（515880）份额减少7.52亿份，最新份额685.50亿份，最新规模413.36亿元 新浪网",
           "url": "https://news.google.com/rss/articles/CBMimwFBVV95cUxNbElPcXlFMFRDNHV6cXhXOXgxXzk5MHVaazNjdzhHaVEyR2lFeTNmYzcyQlZ5Sk4zTUlvbW5aLV9uc0tHcFM0S3VDdzZKZ25zY2VYZzRjZmNqN1d6Y0RIMm9VM3VCVWdldDRVejNjbFdfVVYtdF9pSDFfLXlqQWswOEk3OXdGNHpIQ21nM01vaTZ2WEpMR3ZRdFh4Zw?oc=5",
-          "source": "Google News / 新浪财经",
+          "source": "Google News / 新浪网",
           "published_at": "2026-07-30T01:00:00Z",
-          "fetched_at": "2026-07-30T06:31:06Z",
+          "fetched_at": "2026-07-30T07:03:36Z",
           "ticker": "515880.SS",
           "source_tier": "aggregator"
         }
@@ -174,13 +174,24 @@
       ]
     },
     "512480.SS": {
-      "status": "empty",
+      "status": "ok",
       "query_type": "ticker",
       "ticker": "512480.SS",
       "start_date": "2026-07-30",
       "end_date": "2026-07-30",
-      "fetched_at": "2026-07-30T06:31:09Z",
-      "items": [],
+      "fetched_at": "2026-07-30T07:03:39Z",
+      "items": [
+        {
+          "title": "7月29日半导体ETF国联安（512480）份额增加2.92亿份，最新份额193.50亿份，最新规模198.38亿元",
+          "summary": "7月29日半导体ETF国联安（512480）份额增加2.92亿份，最新份额193.50亿份，最新规模198.38亿元 新浪网",
+          "url": "https://news.google.com/rss/articles/CBMimwFBVV95cUxQU3lMTVJ2Q2dkVXpMTWtxLXNIYXppODBXcFlDU1RudVowZ2hCQXppOE9NQzVrd0tiTjJTQmJJQ3pwbWZGYzdoVE1CRkF5ZktJSWhKa1V1TjZFMTlYLTBfUkoteDBVbU51enVlcnhPdzZxeEY5YjZtQ0VZbS1fR3A5Qm91ejlHTmtuYjB1aWNBQWc0X0Zzay03QW5UZw?oc=5",
+          "source": "Google News / 新浪网",
+          "published_at": "2026-07-30T01:00:00Z",
+          "fetched_at": "2026-07-30T07:03:39Z",
+          "ticker": "512480.SS",
+          "source_tier": "aggregator"
+        }
+      ],
       "source_statuses": [
         {
           "source": "Yahoo Finance",
@@ -189,8 +200,8 @@
         },
         {
           "source": "Google News RSS",
-          "status": "empty",
-          "item_count": 0
+          "status": "ok",
+          "item_count": 1
         },
         {
           "source": "SEC EDGAR",
@@ -207,7 +218,7 @@
       "url": "https://finance.yahoo.com/markets/commodities/articles/meridian-smelter-tests-deliver-high-060000614.html",
       "source": "TMX Newsfile",
       "published_at": "2026-07-30T06:00:00Z",
-      "fetched_at": "2026-07-30T06:31:05Z",
+      "fetched_at": "2026-07-30T07:03:35Z",
       "ticker": null,
       "source_tier": "aggregator"
     },
@@ -217,7 +228,7 @@
       "url": "https://finance.yahoo.com/markets/articles/oil-prices-slip-asian-shares-050950736.html",
       "source": "Associated Press",
       "published_at": "2026-07-30T05:09:50Z",
-      "fetched_at": "2026-07-30T06:31:05Z",
+      "fetched_at": "2026-07-30T07:03:35Z",
       "ticker": null,
       "source_tier": "aggregator"
     },
@@ -227,7 +238,7 @@
       "url": "https://finance.yahoo.com/m/b2d26461-c630-35bb-a1b0-6f914492c115/bofa-just-turned-on-exxon-in.html",
       "source": "TheStreet",
       "published_at": "2026-07-30T05:07:00Z",
-      "fetched_at": "2026-07-30T06:31:05Z",
+      "fetched_at": "2026-07-30T07:03:35Z",
       "ticker": null,
       "source_tier": "aggregator"
     },
@@ -237,7 +248,7 @@
       "url": "https://finance.yahoo.com/news/oil-prices-slip-tankers-continue-003657966.html",
       "source": "Reuters",
       "published_at": "2026-07-30T04:22:03Z",
-      "fetched_at": "2026-07-30T06:31:05Z",
+      "fetched_at": "2026-07-30T07:03:35Z",
       "ticker": null,
       "source_tier": "aggregator"
     },
@@ -247,7 +258,7 @@
       "url": "https://finance.yahoo.com/video/trump-says-british-pm-told-040643899.html",
       "source": "Reuters Videos",
       "published_at": "2026-07-30T04:06:43Z",
-      "fetched_at": "2026-07-30T06:31:05Z",
+      "fetched_at": "2026-07-30T07:03:35Z",
       "ticker": null,
       "source_tier": "aggregator"
     },
@@ -257,7 +268,7 @@
       "url": "https://finance.yahoo.com/m/7b38b11b-2954-3bb5-b379-69f29082468a/hudbay-minerals-q2-earnings.html",
       "source": "MarketBeat",
       "published_at": "2026-07-30T04:03:55Z",
-      "fetched_at": "2026-07-30T06:31:05Z",
+      "fetched_at": "2026-07-30T07:03:35Z",
       "ticker": null,
       "source_tier": "aggregator"
     },
@@ -267,7 +278,7 @@
       "url": "https://finance.yahoo.com/energy/articles/oil-prices-slip-despite-attacks-040109065.html",
       "source": "Oilprice.com",
       "published_at": "2026-07-30T04:01:09Z",
-      "fetched_at": "2026-07-30T06:31:05Z",
+      "fetched_at": "2026-07-30T07:03:35Z",
       "ticker": null,
       "source_tier": "aggregator"
     },
@@ -277,7 +288,7 @@
       "url": "https://finance.yahoo.com/markets/stocks/articles/ap-top-financial-news-12-040000457.html",
       "source": "Associated Press",
       "published_at": "2026-07-30T04:00:00Z",
-      "fetched_at": "2026-07-30T06:31:05Z",
+      "fetched_at": "2026-07-30T07:03:35Z",
       "ticker": null,
       "source_tier": "aggregator"
     },
@@ -287,7 +298,7 @@
       "url": "https://finance.yahoo.com/economy/articles/ap-top-extended-financial-headlines-040000790.html",
       "source": "Associated Press",
       "published_at": "2026-07-30T04:00:00Z",
-      "fetched_at": "2026-07-30T06:31:05Z",
+      "fetched_at": "2026-07-30T07:03:35Z",
       "ticker": null,
       "source_tier": "aggregator"
     },
@@ -297,28 +308,38 @@
       "url": "https://finance.yahoo.com/markets/stocks/articles/asian-stocks-choppy-rout-fed-014549754.html",
       "source": "Reuters",
       "published_at": "2026-07-30T03:43:11Z",
-      "fetched_at": "2026-07-30T06:31:05Z",
+      "fetched_at": "2026-07-30T07:03:35Z",
       "ticker": null,
       "source_tier": "aggregator"
     },
     {
       "title": "通信ETF国泰（515880）开盘跌1.50%，重仓股新易盛跌2.61%，中际旭创跌3.36%",
-      "summary": "通信ETF国泰（515880）开盘跌1.50%，重仓股新易盛跌2.61%，中际旭创跌3.36% 新浪财经",
+      "summary": "通信ETF国泰（515880）开盘跌1.50%，重仓股新易盛跌2.61%，中际旭创跌3.36% 新浪网",
       "url": "https://news.google.com/rss/articles/CBMimAFBVV95cUxQbzlvSlZSVUhjeEVjZGNCMHcxZVdRQVdaclF0Z29XZVh2VVNKSGVQbW5UQUNnLUZEU2F1bFVtb0tfeFdEM2ZfVHZuOGNwZ1RUSFhsYU5vcUk2TkNlY1BFTW1MWGNZTmVRVi1FeGdiTjlCY3pBbF9BMjFrSGNTT012UzBhQnE4a2JBNkhhRkpoMk5HbnZlaTk0Yw?oc=5",
-      "source": "Google News / 新浪财经",
+      "source": "Google News / 新浪网",
       "published_at": "2026-07-30T01:30:00Z",
-      "fetched_at": "2026-07-30T06:31:06Z",
+      "fetched_at": "2026-07-30T07:03:36Z",
       "ticker": "515880.SS",
       "source_tier": "aggregator"
     },
     {
       "title": "7月29日通信ETF国泰（515880）份额减少7.52亿份，最新份额685.50亿份，最新规模413.36亿元",
-      "summary": "7月29日通信ETF国泰（515880）份额减少7.52亿份，最新份额685.50亿份，最新规模413.36亿元 新浪财经",
+      "summary": "7月29日通信ETF国泰（515880）份额减少7.52亿份，最新份额685.50亿份，最新规模413.36亿元 新浪网",
       "url": "https://news.google.com/rss/articles/CBMimwFBVV95cUxNbElPcXlFMFRDNHV6cXhXOXgxXzk5MHVaazNjdzhHaVEyR2lFeTNmYzcyQlZ5Sk4zTUlvbW5aLV9uc0tHcFM0S3VDdzZKZ25zY2VYZzRjZmNqN1d6Y0RIMm9VM3VCVWdldDRVejNjbFdfVVYtdF9pSDFfLXlqQWswOEk3OXdGNHpIQ21nM01vaTZ2WEpMR3ZRdFh4Zw?oc=5",
-      "source": "Google News / 新浪财经",
+      "source": "Google News / 新浪网",
       "published_at": "2026-07-30T01:00:00Z",
-      "fetched_at": "2026-07-30T06:31:06Z",
+      "fetched_at": "2026-07-30T07:03:36Z",
       "ticker": "515880.SS",
+      "source_tier": "aggregator"
+    },
+    {
+      "title": "7月29日半导体ETF国联安（512480）份额增加2.92亿份，最新份额193.50亿份，最新规模198.38亿元",
+      "summary": "7月29日半导体ETF国联安（512480）份额增加2.92亿份，最新份额193.50亿份，最新规模198.38亿元 新浪网",
+      "url": "https://news.google.com/rss/articles/CBMimwFBVV95cUxQU3lMTVJ2Q2dkVXpMTWtxLXNIYXppODBXcFlDU1RudVowZ2hCQXppOE9NQzVrd0tiTjJTQmJJQ3pwbWZGYzdoVE1CRkF5ZktJSWhKa1V1TjZFMTlYLTBfUkoteDBVbU51enVlcnhPdzZxeEY5YjZtQ0VZbS1fR3A5Qm91ejlHTmtuYjB1aWNBQWc0X0Zzay03QW5UZw?oc=5",
+      "source": "Google News / 新浪网",
+      "published_at": "2026-07-30T01:00:00Z",
+      "fetched_at": "2026-07-30T07:03:39Z",
+      "ticker": "512480.SS",
       "source_tier": "aggregator"
     }
   ]
