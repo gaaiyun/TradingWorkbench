@@ -30,7 +30,12 @@ export async function onRequestGet({ env, request }) {
     checkJson("actions", `https://api.github.com/repos/${REPO}/actions/runs?per_page=1`, {
       headers: ghHeaders(env),
     }),
-    checkJson("options_live", `${env.VOLGUARD_LIVE_URL || VOLGUARD_LIVE}?ts=${Date.now()}`),
+    checkJson(
+      "options_live",
+      `${env.VOLGUARD_LIVE_URL || VOLGUARD_LIVE}?ts=${Date.now()}`,
+      {},
+      { timeoutMs: 8000 },
+    ),
     checkDeploymentManifest(
       deploymentManifestUrl,
       env.CF_PAGES_COMMIT_SHA,
