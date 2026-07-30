@@ -617,6 +617,52 @@ test("news envelope freshness follows the newest article instead of the oldest r
   assert.equal(payload.data.length, 2);
 });
 
+test("news API hides stored policy false positives before applying the response limit", async () => {
+  const base = {
+    symbol: "512480.SS",
+    profile_id: "cn-semi-comms",
+    topic: "policy",
+    source: "东方财富搜索 / 期货研究",
+    source_tier: "discovery",
+    fetched_at: "2026-07-30T01:15:53Z",
+    freshness: "fresh",
+    adjustment: null,
+    quality: "discovery",
+  };
+  const DB = new FakeD1({
+    rows: {
+      news_items: [
+        {
+          ...base,
+          id: "news-false-positive",
+          title: "碳酸锂：旺季预期下价格有望继续向上试探",
+          summary: "风险提示：宏观情绪反复、半导体行业景气度不及预期。",
+          published_at: "2026-07-30T01:13:52Z",
+          as_of: "2026-07-30T01:13:52Z",
+        },
+        {
+          ...base,
+          id: "news-relevant",
+          title: "光通信与存储板块继续调整",
+          summary: "费城半导体指数回落。",
+          published_at: "2026-07-30T00:41:24Z",
+          as_of: "2026-07-30T00:41:24Z",
+        },
+      ],
+    },
+  });
+
+  const response = await newsApi.onRequestGet({
+    request: request("/api/news?profile=cn-semi-comms&limit=1"),
+    env: { DB },
+  });
+  const payload = await response.json();
+
+  assert.equal(payload.status, "ok");
+  assert.deepEqual(payload.data.map(({ id }) => id), ["news-relevant"]);
+  assert.equal(DB.calls[0].params.at(-1), 4);
+});
+
 test("events expose structured provenance, safe delivery state, and an after cursor", async () => {
   const oldEvent = {
     id: "event-old",
