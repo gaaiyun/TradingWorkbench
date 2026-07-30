@@ -1501,7 +1501,7 @@ test("semiconductor policy news maps to both chip ETFs without polluting the com
   assert.deepEqual([...symbols].sort(), ["159995.SZ", "512480.SS"]);
 });
 
-test("policy discovery rejects unrelated articles with a sector term only in risk boilerplate", async () => {
+test("A-share discovery rejects unrelated articles with sector terms only in summaries", async () => {
   const { collectNewsForProfile } = await import(newsUrl);
   const writes = [];
   const falsePositiveRss = `<?xml version="1.0"?><rss><channel>
@@ -1512,11 +1512,25 @@ test("policy discovery rejects unrelated articles with a sector term only in ris
       <description>风险提示：宏观情绪反复、半导体行业景气度不及预期。</description>
       <source>期货研究</source>
     </item>
+    <item>
+      <title>7月30日投资日历：美国将公布核心PCE数据</title>
+      <link>https://example.com/investment-calendar</link>
+      <pubDate>Thu, 30 Jul 2026 01:12:52 GMT</pubDate>
+      <description>今日还将关注芯片产业与贵金属市场波动。</description>
+      <source>财经日历</source>
+    </item>
+    <item>
+      <title>ETF追踪：资金加仓中证1000ETF</title>
+      <link>https://example.com/etf-tracker</link>
+      <pubDate>Thu, 30 Jul 2026 01:11:52 GMT</pubDate>
+      <description>榜单还包括5G主题基金。</description>
+      <source>ETF日报</source>
+    </item>
   </channel></rss>`;
   await collectNewsForProfile({
     profile: {
       ...monitorSettings().profiles[0],
-      targets: [{ symbol: "512480.SS" }],
+      targets: [{ symbol: "512480.SS" }, { symbol: "515880.SS" }],
     },
     db: {},
     fetcher: async (url) => {
@@ -1561,9 +1575,12 @@ test("policy discovery rejects unrelated articles with a sector term only in ris
     now: new Date("2026-07-30T02:00:00.000Z"),
   });
 
-  assert.equal(
-    writes.flatMap(({ items }) => items)
-      .some(({ url }) => url === "https://example.com/lithium-futures"),
-    false,
-  );
+  const urls = new Set(writes.flatMap(({ items }) => items).map(({ url }) => url));
+  for (const url of [
+    "https://example.com/lithium-futures",
+    "https://example.com/investment-calendar",
+    "https://example.com/etf-tracker",
+  ]) {
+    assert.equal(urls.has(url), false, url);
+  }
 });

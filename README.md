@@ -136,7 +136,7 @@ Worker 不运行 pandas、LangGraph、GARCH、BSADF 或长历史回测。VolGuar
 - A 股 ETF 公告：`.github/workflows/official-news.yml` 从 GitHub runner 按证券代码读取上交所季度报告、招募说明书、份额拆分等原始 PDF；当前覆盖 `515880` 和 `512480`。
 - HashKey：公司投资者关系公告。
 - 宏观：Federal Reserve 官方 RSS 中与 FOMC、货币政策和经济活动有关的条目。
-- 发现层：Google News RSS；Cloudflare 出口不可用时，A 股使用东方财富，美股和港股使用 Yahoo Finance RSS。A 股政策发现要求行业词出现在标题，或标题明确来自国务院、发改委、工信部、证监会、财政部且摘要含行业词；采集和 `/api/news` 读取两层都会拒绝仅在“风险提示”里顺带出现半导体/通信的其它行业文章。
+- 发现层：Google News RSS；Cloudflare 出口不可用时，A 股使用东方财富，美股和港股使用 Yahoo Finance RSS。A 股通信与半导体发现要求对应行业词直接出现在标题；政策类只有在标题同时包含明确政策机关和政策动作时，才允许用摘要中的行业词补充匹配。采集和 `/api/news` 读取两层执行同一门禁，会拒绝投资日历、宽基 ETF、海外个案或仅在风险提示中顺带出现半导体/通信的文章。
 
 官方来源标记为 `evidence`，聚合和搜索结果标记为 `discovery`。Monitor 内的发现层成功不会跳过官方查询；官方源失败时，本次采集保持 `degraded` 并保存失败码。上交所任务与 Worker 故障域隔离；网络错误、HTTP 429/5xx 和临时无效响应最多重试两次，仍失败或遇到其它 4xx、凭据、大小、D1 错误时 Actions run 响亮失败，不能用旧数据伪装成功。
 

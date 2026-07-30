@@ -440,7 +440,7 @@ slot 应进入 completed、degraded 或带明确原因的 deferred/failed。检�
 - 上交所只接受与代码精确相等且位于 `www.sse.com.cn/disclosure/fund/announcement/` 的 PDF 公告；
 - `512480` 与 `515880` 的季度报告、拆分公告等官方结果标记 `sourceTier=evidence`；
 - 东方财富或 Google 结果保持 `discovery`；
-- 抽查 discovery 标题：行业词应出现在标题；若只在摘要出现，标题必须明确包含国务院、发改委、工信部、证监会或财政部。仅在风险提示中顺带出现行业词的其它行业文章不得入库；
+- 抽查 A 股 discovery 标题：通信与半导体主题必须在标题中直接命中对应行业词；若政策主题只在摘要命中行业词，标题还必须同时含明确政策机关与政策动作。投资日历、宽基 ETF、海外个案或仅在风险提示中顺带出现行业词的文章不得入库，也不得由 `/api/news` 返回；
 - Monitor 内计划官方源失败时，即使东方财富成功，本次采集仍为 degraded；上交所失败则对应 `official-news` run 为 failure，不污染 Worker 健康状态。
 
 生产核对必须使用 `profile=cn-semi-comms&limit=200`，否则 `512480.SS` 的高频 discovery 可能把较早的拆分公告挤出较小的时间窗口。2026-07-28 首轮生产 run `30290500176` 写入 7 行：`515880.SS=4`、`512480.SS=3`。

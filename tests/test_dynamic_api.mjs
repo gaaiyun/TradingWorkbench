@@ -617,7 +617,7 @@ test("news envelope freshness follows the newest article instead of the oldest r
   assert.equal(payload.data.length, 2);
 });
 
-test("news API hides stored policy false positives before applying the response limit", async () => {
+test("news API hides stored A-share discovery false positives before applying the response limit", async () => {
   const base = {
     symbol: "512480.SS",
     profile_id: "cn-semi-comms",
@@ -639,6 +639,24 @@ test("news API hides stored policy false positives before applying the response 
           summary: "风险提示：宏观情绪反复、半导体行业景气度不及预期。",
           published_at: "2026-07-30T01:13:52Z",
           as_of: "2026-07-30T01:13:52Z",
+        },
+        {
+          ...base,
+          id: "news-calendar",
+          topic: "cn-semiconductor",
+          title: "7月30日投资日历：美国将公布核心PCE数据",
+          summary: "今日还将关注芯片产业与贵金属市场波动。",
+          published_at: "2026-07-30T01:12:52Z",
+          as_of: "2026-07-30T01:12:52Z",
+        },
+        {
+          ...base,
+          id: "news-etf-tracker",
+          topic: "communications",
+          title: "ETF追踪：资金加仓中证1000ETF",
+          summary: "榜单还包括5G主题基金。",
+          published_at: "2026-07-30T01:11:52Z",
+          as_of: "2026-07-30T01:11:52Z",
         },
         {
           ...base,

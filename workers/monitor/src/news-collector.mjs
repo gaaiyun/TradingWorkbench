@@ -68,6 +68,14 @@ const TARGET_ALIASES = {
     "3887.HK",
   ],
 };
+const COMMUNICATIONS_TITLE =
+  /(通信ETF|光模块|光通信|通信设备|5G|6G)/i;
+const SEMICONDUCTOR_TITLE =
+  /(半导体ETF|芯片ETF|半导体|芯片|集成电路)/i;
+const POLICY_AUTHORITY =
+  /(国务院|国家发展改革委|工信部|工业和信息化部|证监会|财政部(?!长))/i;
+const POLICY_ACTION =
+  /(发布|印发|通知|意见|办法|规划|公告|决定|征求意见|答记者问|政策)/i;
 
 function decodeEntities(value) {
   return String(value || "")
@@ -861,12 +869,15 @@ function matchedSymbols(item, plan) {
 
 function relevantToPlan(item, plan) {
   if (plan.topic === "policy") {
-    const sectorPattern = /(半导体|芯片|集成电路|通信ETF|光模块|光通信|通信设备|5G|6G)/i;
-    if (sectorPattern.test(item.title)) return true;
-    return /(国务院|国家发展改革委|工信部|工业和信息化部|证监会|财政部)/i
-      .test(item.title)
-      && sectorPattern.test(item.summary);
+    if (COMMUNICATIONS_TITLE.test(item.title) || SEMICONDUCTOR_TITLE.test(item.title)) {
+      return true;
+    }
+    return POLICY_AUTHORITY.test(item.title)
+      && POLICY_ACTION.test(item.title)
+      && (COMMUNICATIONS_TITLE.test(item.summary) || SEMICONDUCTOR_TITLE.test(item.summary));
   }
+  if (plan.topic === "communications") return COMMUNICATIONS_TITLE.test(item.title);
+  if (plan.topic === "cn-semiconductor") return SEMICONDUCTOR_TITLE.test(item.title);
   return matchedSymbol(item, plan.symbols) !== null;
 }
 
