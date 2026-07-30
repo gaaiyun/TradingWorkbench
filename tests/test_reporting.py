@@ -191,6 +191,90 @@ def test_claim_validation_accepts_grouped_and_range_evidence_citations():
 
 
 @pytest.mark.unit
+def test_claim_validation_rejects_derived_numbers_not_present_in_cited_rows():
+    packet = build_evidence_packet(
+        ticker="512480.SS",
+        asset_type="cn_etf",
+        as_of="2026-07-29T08:00:00Z",
+        bars=[
+            {"ts": "2026-07-22T16:00:00Z", "high": 1.21, "close": 1.152},
+            {"ts": "2026-07-28T16:00:00Z", "close": 1.027},
+        ],
+        sources=[{"source": "tencent", "sourceTier": "evidence"}],
+        generated_at="2026-07-29T08:05:00Z",
+    )
+
+    exact = validate_report_claims(
+        "The cited closes are 1.152 and 1.027 [M1-M2].",
+        packet,
+    )
+    derived = validate_report_claims(
+        "The price fell about 10.9% from the 1.21 high to the 1.027 close [M1-M2].",
+        packet,
+    )
+
+    assert exact["status"] == "passed"
+    assert "UNSUPPORTED_DERIVED_NUMERIC_CLAIM" in derived["errorCodes"]
+    assert derived["unsupportedDerivedNumericParagraphs"] == 1
+
+
+@pytest.mark.unit
+def test_single_snapshot_indicator_cannot_claim_expansion_or_convergence():
+    packet = build_evidence_packet(
+        ticker="512480.SS",
+        asset_type="cn_etf",
+        as_of="2026-07-29T08:00:00Z",
+        bars=[{"ts": "2026-07-28T16:00:00Z", "close": 1.027}],
+        indicators={
+            "macd": -0.04770645,
+            "macdSignal": -0.01957457,
+            "macdHistogram": -0.02813188,
+        },
+        sources=[{"source": "tencent", "sourceTier": "evidence"}],
+        generated_at="2026-07-29T08:05:00Z",
+    )
+
+    current = validate_report_claims(
+        "MACD and its signal are both negative [I1-I3].",
+        packet,
+    )
+    trend = validate_report_claims(
+        "MACD柱状图仍在扩张，表明下行动能加速 [I1-I3]。",
+        packet,
+    )
+
+    assert current["status"] == "passed"
+    assert "UNSUPPORTED_SINGLE_SNAPSHOT_TREND" in trend["errorCodes"]
+    assert trend["unsupportedSingleSnapshotTrendParagraphs"] == 1
+
+
+@pytest.mark.unit
+def test_moving_average_alignment_must_match_price_and_average_order():
+    packet = build_evidence_packet(
+        ticker="512480.SS",
+        asset_type="cn_etf",
+        as_of="2026-07-29T08:00:00Z",
+        bars=[{"ts": "2026-07-28T16:00:00Z", "close": 1.027}],
+        indicators={"ma20": 1.2169, "ma60": 1.16035},
+        sources=[{"source": "tencent", "sourceTier": "evidence"}],
+        generated_at="2026-07-29T08:05:00Z",
+    )
+
+    below = validate_report_claims(
+        "The close is below MA20 and MA60 [M1, I1-I2].",
+        packet,
+    )
+    false_alignment = validate_report_claims(
+        "均线系统呈现空头排列 [M1, I1-I2]。",
+        packet,
+    )
+
+    assert below["status"] == "passed"
+    assert "CONTRADICTED_MOVING_AVERAGE_ALIGNMENT" in false_alignment["errorCodes"]
+    assert false_alignment["contradictedMovingAverageAlignmentParagraphs"] == 1
+
+
+@pytest.mark.unit
 def test_claim_validation_ignores_target_and_allocation_disclaimers():
     packet = build_evidence_packet(
         ticker="GOOGL",
@@ -398,7 +482,11 @@ def test_long_markdown_links_are_removed_before_recommendation_scanning():
     ]
     elapsed = time.perf_counter() - started
 
-    assert all(result["status"] == "passed" for result in results)
+    assert all(result["status"] == "passed" for result in results[:4])
+    assert all(
+        "UNSUPPORTED_DERIVED_NUMERIC_CLAIM" in result["errorCodes"]
+        for result in results[4:]
+    )
     assert all(
         "UNSUPPORTED_ALLOCATION" not in result["errorCodes"]
         for result in results

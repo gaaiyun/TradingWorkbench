@@ -167,6 +167,9 @@ class GetInstrumentContextFromStateTests(unittest.TestCase):
         self.assertIn("fund inflow or outflow", context)
         self.assertIn("stop-loss, quantitative, retail, institutional", context)
         self.assertIn("Unavailable ETF data means the question cannot be assessed", context)
+        self.assertIn("derived returns, percentage changes", context)
+        self.assertIn("A single indicator snapshot supports only its current value", context)
+        self.assertIn("close < MA20 < MA60", context)
 
     def test_evidence_packet_context_includes_a_compact_citable_ledger(self):
         context = get_instrument_context_from_state({

@@ -8,6 +8,7 @@ run produces the same on-disk report tree a CLI run does.
 
 import hashlib
 import json
+import math
 import re
 from datetime import datetime, timezone
 from pathlib import Path
@@ -133,6 +134,25 @@ _ALLOCATION_RE = re.compile(
     rf"(?:the{_CLAIM_WORD_GAP_PATTERN})?portfolio\b",
     re.IGNORECASE,
 )
+_SINGLE_SNAPSHOT_INDICATOR_TREND_RE = re.compile(
+    r"(?is)(?:MACD|RSI|ATR|均线|移动平均|波动率|"
+    r"momentum|moving\s+average|volatility)"
+    r".{0,240}?"
+    r"(?:仍(?:在)?(?:扩张|发散|走负|走强|走弱)|"
+    r"尚未(?:出现)?(?:收敛|收窄|拐头|改善)|"
+    r"(?:负向|正向)(?:扩张|发散)|"
+    r"动能(?:加速|减速|增强|衰减)|"
+    r"still\s+(?:widening|narrowing|diverging|converging)|"
+    r"continues?\s+to\s+(?:widen|narrow|diverge|converge|accelerate|decelerate))",
+)
+_BEARISH_ALIGNMENT_RE = re.compile(
+    r"空头排列|bearish\s+(?:moving[-\s]average\s+)?alignment",
+    re.IGNORECASE,
+)
+_BULLISH_ALIGNMENT_RE = re.compile(
+    r"多头排列|bullish\s+(?:moving[-\s]average\s+)?alignment",
+    re.IGNORECASE,
+)
 
 
 def _packet_evidence_ids(packet: dict) -> set[str]:
@@ -142,6 +162,116 @@ def _packet_evidence_ids(packet: dict) -> set[str]:
             if isinstance(row, dict) and row.get("evidenceId"):
                 ids.add(str(row["evidenceId"]).upper())
     return ids
+
+
+def _packet_evidence_rows(packet: dict) -> dict[str, dict]:
+    rows: dict[str, dict] = {}
+    for key in ("bars", "indicatorEvidence", "corporateActions", "news", "sources"):
+        for row in packet.get(key) or []:
+            if isinstance(row, dict) and row.get("evidenceId"):
+                rows[str(row["evidenceId"]).upper()] = row
+    return rows
+
+
+def _row_numeric_values(value, *, key: str | None = None) -> list[float]:
+    if key == "evidenceId" or isinstance(value, bool):
+        return []
+    if isinstance(value, (int, float)):
+        numeric = float(value)
+        return [numeric] if math.isfinite(numeric) else []
+    if isinstance(value, dict):
+        result: list[float] = []
+        for child_key, child in value.items():
+            result.extend(_row_numeric_values(child, key=str(child_key)))
+        return result
+    if isinstance(value, (list, tuple)):
+        result = []
+        for child in value:
+            result.extend(_row_numeric_values(child))
+        return result
+    if isinstance(value, str):
+        result = []
+        for token in re.findall(r"[-+]?\d+(?:\.\d+)?", value):
+            try:
+                numeric = float(token)
+            except ValueError:
+                continue
+            if math.isfinite(numeric):
+                result.append(numeric)
+        return result
+    return []
+
+
+def _numeric_token_value(token: str) -> tuple[float, int] | None:
+    normalized = re.sub(r"[$¥£€,%\s]", "", str(token or ""))
+    try:
+        value = float(normalized)
+    except ValueError:
+        return None
+    if not math.isfinite(value):
+        return None
+    decimal_places = (
+        len(normalized.rsplit(".", 1)[1])
+        if "." in normalized
+        else 0
+    )
+    return value, decimal_places
+
+
+def _unsupported_derived_numbers(
+    paragraph: str,
+    packet_rows: dict[str, dict],
+    paragraph_ids: set[str],
+) -> list[str]:
+    claim_text = _mask_non_claim_numeric_context(_claim_scan_text(paragraph))
+    numeric_tokens = [
+        match.group(0) for match in _NUMERIC_CLAIM_RE.finditer(claim_text)
+    ]
+    if not numeric_tokens:
+        return []
+    supported_values: list[float] = []
+    for evidence_id in paragraph_ids:
+        row = packet_rows.get(evidence_id)
+        if row is not None:
+            supported_values.extend(_row_numeric_values(row))
+    unsupported: list[str] = []
+    for token in numeric_tokens:
+        parsed = _numeric_token_value(token)
+        if parsed is None:
+            unsupported.append(token)
+            continue
+        value, decimal_places = parsed
+        if decimal_places == 0:
+            is_supported = any(value == candidate for candidate in supported_values)
+        else:
+            tolerance = 0.5 * (10 ** -decimal_places) + 1e-12
+            is_supported = any(
+                abs(value - candidate) <= tolerance
+                for candidate in supported_values
+            )
+        if not is_supported:
+            unsupported.append(token)
+    return unsupported
+
+
+def _moving_average_alignment_is_contradicted(paragraph: str, packet: dict) -> bool:
+    bearish_claim = bool(_BEARISH_ALIGNMENT_RE.search(paragraph))
+    bullish_claim = bool(_BULLISH_ALIGNMENT_RE.search(paragraph))
+    if not bearish_claim and not bullish_claim:
+        return False
+    indicators = packet.get("indicators") or {}
+    bars = packet.get("bars") or []
+    try:
+        close = float(bars[-1]["close"])
+        ma20 = float(indicators["ma20"])
+        ma60 = float(indicators["ma60"])
+    except (IndexError, KeyError, TypeError, ValueError):
+        return True
+    if not all(math.isfinite(value) for value in (close, ma20, ma60)):
+        return True
+    if bearish_claim and not (close < ma20 < ma60):
+        return True
+    return bool(bullish_claim and not close > ma20 > ma60)
 
 
 def _parse_evidence_citation(body: str) -> frozenset[str] | None:
@@ -288,10 +418,14 @@ def _market_history_metadata(packet: dict) -> dict:
 def validate_report_claims(text: str, packet: dict) -> dict:
     """Validate that a rated narrative remains tied to packet evidence."""
     known_ids = _packet_evidence_ids(packet)
+    packet_rows = _packet_evidence_rows(packet)
     cited_ids: set[str] = set()
     invalid_citations: list[str] = []
     parse_cache: dict[str, frozenset[str] | None] = {}
     uncited_numeric = 0
+    unsupported_derived_numeric = 0
+    unsupported_single_snapshot_trend = 0
+    contradicted_ma_alignment = 0
     has_price_target = False
     has_allocation = False
     for paragraph in re.split(r"\n\s*\n", str(text or "")):
@@ -309,6 +443,23 @@ def validate_report_claims(text: str, packet: dict) -> dict:
             and not paragraph_ids.intersection(known_ids)
         ):
             uncited_numeric += 1
+        known_paragraph_ids = paragraph_ids.intersection(known_ids)
+        if known_paragraph_ids and _unsupported_derived_numbers(
+            paragraph,
+            packet_rows,
+            known_paragraph_ids,
+        ):
+            unsupported_derived_numeric += 1
+        if (
+            known_paragraph_ids
+            and _SINGLE_SNAPSHOT_INDICATOR_TREND_RE.search(claim_text)
+        ):
+            unsupported_single_snapshot_trend += 1
+        if (
+            known_paragraph_ids
+            and _moving_average_alignment_is_contradicted(claim_text, packet)
+        ):
+            contradicted_ma_alignment += 1
         has_price_target = has_price_target or bool(
             _PRICE_TARGET_RE.search(claim_text)
         )
@@ -323,6 +474,12 @@ def validate_report_claims(text: str, packet: dict) -> dict:
         error_codes.append("INVALID_EVIDENCE_CITATION")
     if uncited_numeric:
         error_codes.append("UNCITED_NUMERIC_CLAIM")
+    if unsupported_derived_numeric:
+        error_codes.append("UNSUPPORTED_DERIVED_NUMERIC_CLAIM")
+    if unsupported_single_snapshot_trend:
+        error_codes.append("UNSUPPORTED_SINGLE_SNAPSHOT_TREND")
+    if contradicted_ma_alignment:
+        error_codes.append("CONTRADICTED_MOVING_AVERAGE_ALIGNMENT")
     if has_price_target:
         error_codes.append("UNSUPPORTED_PRICE_TARGET")
     if has_allocation:
@@ -334,6 +491,11 @@ def validate_report_claims(text: str, packet: dict) -> dict:
         "unknownEvidenceIds": unknown_ids,
         "invalidEvidenceCitations": invalid_citations,
         "uncitedNumericParagraphs": uncited_numeric,
+        "unsupportedDerivedNumericParagraphs": unsupported_derived_numeric,
+        "unsupportedSingleSnapshotTrendParagraphs": (
+            unsupported_single_snapshot_trend
+        ),
+        "contradictedMovingAverageAlignmentParagraphs": contradicted_ma_alignment,
     }
 
 
@@ -643,6 +805,9 @@ def write_report_tree(
             "unknownEvidenceIds": [],
             "invalidEvidenceCitations": [],
             "uncitedNumericParagraphs": 0,
+            "unsupportedDerivedNumericParagraphs": 0,
+            "unsupportedSingleSnapshotTrendParagraphs": 0,
+            "contradictedMovingAverageAlignmentParagraphs": 0,
         }
     )
     if packet:

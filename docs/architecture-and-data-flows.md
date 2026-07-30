@@ -325,6 +325,9 @@ flowchart TD
 - `/api/history`、`/api/latest`、`/api/runs`、`/api/report-audit` 和 `/api/report` 使用 `profile` 或 `requestId` 过滤；`/api/latest` 无论是否带 selector 都会再以 `report-audit.json` 做 verified-only 交叉门禁，后续被 invalidated 的报告不能继续沿历史批次冒充“最新已验证观点”；
 - identity 上线前生成的报告只作为显式 `legacy` 数据源读取；`legacy_unverified` 可以带警告阅读，`invalidated` 只在历史审计出现，两者都不能进入问答；
 - 报告正文请求带 selector 时，服务端读取相邻 Manifest 并校验 identity。
+- 最终结论的派生数字必须先成为 Evidence ledger 的确定性字段；Agent 不能在正文临时
+  计算收益率、比例、均线偏离或交易日数量。单个指标快照不能支持“扩张/收敛/加速”
+  等时间趋势，均线排列还要由最新收盘、MA20、MA60 的实际顺序做确定性校验。
 
 旧报告可以继续阅读，但服务端不会为缺失 identity 的历史数据猜 profile。
 

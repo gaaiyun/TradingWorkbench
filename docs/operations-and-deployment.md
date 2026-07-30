@@ -619,10 +619,16 @@ DAILY_RECOVERY_ENABLED = "true"
    超长恶意输入的回归测试全部通过；
 6. 若最终结论没有至少一个合法 Evidence ID，必须保持 `Not Rated`，不得为了制造
    `verified` 放宽门禁。
+7. 人工复算至少一段涨跌幅和均线关系；派生数字不在 cited ledger、单时点指标被写成
+   趋势、或均线排列与 `close/MA20/MA60` 顺序矛盾时，必须 `Not Rated`。
 
 本轮已精确 invalidated：
 
 - `reports/512480.SS/2026-07-28/complete_report.md`
 - `reports/515880.SS/2026-07-28/complete_report.md`
+- `reports/512480.SS/2026-07-29-v4/complete_report.md`
+- `reports/515880.SS/2026-07-29-v4/complete_report.md`
+- `reports/512480.SS/2026-07-29-v5/complete_report.md`
+- `reports/515880.SS/2026-07-29-v5/complete_report.md`
 
 每日全局验收可直接使用 [云端 Agent 每日审查提示词](CLOUD_AGENT_DAILY_AUDIT_PROMPT.md)。
