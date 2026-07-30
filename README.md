@@ -309,7 +309,7 @@ MCP 只提供设置、监控、行情、新闻和研究历史查询，不接收�
 
 `daily-analysis` 用 `GITHUB_TOKEN` 把报告产物提交回 `main`；这类机器人 push 不会可靠级联触发其它 `on: push` workflow。因此持久化成功后，它使用同一个 job 的最小 `actions: write` 权限显式 dispatch `deploy-workbench.yml`，不依赖 PAT，也不允许用缺少 manifest/D1 身份写入的手工 Wrangler 发布代替。日报验收必须同时看到报告数据提交、独立 Pages deploy run，以及生产 `/api/health.deployment.commitSha` 与最新 `main` 完整 SHA 一致。
 
-`/api/health` 的 VolGuard live 探针与实际 `/api/volguard` 代理统一使用 8 秒有界预算和 15 秒 Cloudflare 缓存。它只减少绕过缓存和 6 秒阈值造成的假 degraded，不重试、不把真实超时改写为 ok；期权链、慢指标和两个独立时钟仍需从 `/api/volguard` 正文核验。
+`/api/health` 检查与用户实际 `/api/volguard` 相同的 live→snapshot 降级链，使用 5 秒 live + 3 秒 snapshot 的总有界预算；detail 明示实际 `mode` 和 fallback 原因，snapshot 可用时不再把整个工作台误报为故障，也不会冒充 live。期权链、慢指标和两个独立时钟仍需从 `/api/volguard` 正文核验。
 
 本轮发布依赖 migrations `0013_monitor_reliability.sql`、`0014_chat_evidence_scope.sql`、`0015_notification_deliveries.sql`、纯新增的 `0016_fund_flows.sql`、`0017_deployment_metadata.sql` 与 `0018_fund_flow_trade_date.sql`。0017 让 Pages 在静态 manifest 被后续同 SHA 部署遮盖时，仍能从 D1 回读可信 `deployedAt`；0018 明示并索引资金业务交易日。
 

@@ -105,18 +105,18 @@ test("buildHealthPayload exposes booleans only and marks partial failure degrade
   assert.equal(JSON.stringify(payload).includes("do-not-return"), false);
 });
 
-test("health gives the live options source the same bounded budget as its proxy", async () => {
+test("health checks the same bounded live-to-snapshot chain as the user route", async () => {
   const source = await readFile(
     new URL("../functions/api/health.js", import.meta.url),
     "utf8",
   );
   assert.match(
     source,
-    /checkJson\(\s*"options_live"[\s\S]*?cacheTtl:\s*15[\s\S]*?cacheEverything:\s*true[\s\S]*?\{\s*timeoutMs:\s*8000\s*\}/,
+    /loadVolguardData\(\{[\s\S]*?liveTimeoutMs:\s*5000[\s\S]*?snapshotTimeoutMs:\s*3000/,
   );
-  assert.doesNotMatch(
+  assert.match(
     source,
-    /VOLGUARD_LIVE_URL \|\| VOLGUARD_LIVE\}\?ts=/,
+    /mode:\s*result\.mode[\s\S]*?fallback:\s*result\.fallback_reason/,
   );
 });
 

@@ -484,8 +484,8 @@ Workbench Pages `/api/health` 另返回：
 报告审计不只信历史 manifest 的一次性结论。旧 bundle 若声称 rated/verified、但同时
 记录 `omittedUnsafeParagraphs > 0`，当前索引会将其标为 `invalidated`；人工证实的
 早期语义绕过按报告路径进入失效清单。这样最新报告失败时不会回退到旧的不安全评级。
-Workbench health 对 VolGuard live 使用与代理一致的 8 秒有界预算和 15 秒 Cloudflare
-缓存，无自动重试。
+Workbench health 检查与用户路由一致的 live→snapshot 链，预算为 5 秒 + 3 秒；
+detail 保留真实 mode 和 fallback 原因。snapshot 可用算产品可用，但不会冒充 live。
 
 ## 14. 保留的契约
 

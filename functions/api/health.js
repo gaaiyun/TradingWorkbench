@@ -5,8 +5,44 @@ import {
   checkDeploymentState,
   checkJson,
 } from "./_health.mjs";
+import {
+  DEFAULT_SNAPSHOT_URL as VOLGUARD_SNAPSHOT,
+  loadVolguardData,
+} from "./_volguard.mjs";
 
 const VOLGUARD_LIVE = "https://sh50-volguard.pages.dev/api/live";
+
+async function checkVolguard(env) {
+  const startedAt = Date.now();
+  const result = await loadVolguardData({
+    liveUrl: env.VOLGUARD_LIVE_URL || VOLGUARD_LIVE,
+    snapshotUrl: env.VOLGUARD_SNAPSHOT_URL || VOLGUARD_SNAPSHOT,
+    liveTimeoutMs: 5000,
+    snapshotTimeoutMs: 3000,
+  });
+  if (!result.ok) {
+    return {
+      name: "options_live",
+      ok: false,
+      status: 0,
+      latency_ms: Date.now() - startedAt,
+      error: "unavailable",
+    };
+  }
+  return {
+    name: "options_live",
+    ok: true,
+    status: 200,
+    latency_ms: Date.now() - startedAt,
+    detail: {
+      status: result.data?.source_status?.overall
+        || result.data?.status
+        || result.mode,
+      mode: result.mode,
+      fallback: result.fallback_reason || null,
+    },
+  };
+}
 
 // GET /api/health
 // 只暴露能力是否已配置，不返回任何 secret、token 或访问码。
@@ -30,15 +66,7 @@ export async function onRequestGet({ env, request }) {
     checkJson("actions", `https://api.github.com/repos/${REPO}/actions/runs?per_page=1`, {
       headers: ghHeaders(env),
     }),
-    checkJson(
-      "options_live",
-      env.VOLGUARD_LIVE_URL || VOLGUARD_LIVE,
-      {
-        headers: { accept: "application/json" },
-        cf: { cacheTtl: 15, cacheEverything: true },
-      },
-      { timeoutMs: 8000 },
-    ),
+    checkVolguard(env),
     checkDeploymentManifest(
       deploymentManifestUrl,
       env.CF_PAGES_COMMIT_SHA,
