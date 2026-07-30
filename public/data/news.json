@@ -1,15 +1,15 @@
 {
   "version": 1,
   "status": "ok",
-  "generated_at": "2026-07-30T07:42:28+08:00",
-  "trade_date": "2026-07-29",
+  "generated_at": "2026-07-30T08:07:29+08:00",
+  "trade_date": "2026-07-30",
   "global": {
     "status": "ok",
     "query_type": "global",
     "ticker": null,
-    "start_date": "2026-07-22",
-    "end_date": "2026-07-29",
-    "fetched_at": "2026-07-29T23:42:30Z",
+    "start_date": "2026-07-23",
+    "end_date": "2026-07-30",
+    "fetched_at": "2026-07-30T00:07:33Z",
     "items": [
       {
         "title": "Dow Jones Futures: Stock Market Tumbles, Oil Prices Soar On Trump's Iran Threats; Microsoft, Meta, Fortinet Earnings Late",
@@ -17,7 +17,7 @@
         "url": "https://finance.yahoo.com/m/58bee05c-df37-343b-b099-b9d3d5fa6440/dow-jones-futures%3A-stock.html",
         "source": "Investor's Business Daily",
         "published_at": "2026-07-29T23:39:56Z",
-        "fetched_at": "2026-07-29T23:42:30Z",
+        "fetched_at": "2026-07-30T00:07:33Z",
         "ticker": null,
         "source_tier": "aggregator"
       },
@@ -27,7 +27,7 @@
         "url": "https://finance.yahoo.com/markets/currencies/articles/geopolitical-forces-shape-australian-markets-233000821.html",
         "source": "PR Newswire",
         "published_at": "2026-07-29T23:30:00Z",
-        "fetched_at": "2026-07-29T23:42:30Z",
+        "fetched_at": "2026-07-30T00:07:33Z",
         "ticker": null,
         "source_tier": "aggregator"
       },
@@ -37,7 +37,7 @@
         "url": "https://finance.yahoo.com/energy/articles/unifor-condemns-hf-sinclair-decision-232300470.html",
         "source": "CNW Group",
         "published_at": "2026-07-29T23:23:00Z",
-        "fetched_at": "2026-07-29T23:42:30Z",
+        "fetched_at": "2026-07-30T00:07:33Z",
         "ticker": null,
         "source_tier": "aggregator"
       },
@@ -47,7 +47,7 @@
         "url": "https://finance.yahoo.com/m/d1846cc1-edd9-35a2-b964-908c3ae8bc82/major-supermarket-chain.html",
         "source": "TheStreet",
         "published_at": "2026-07-29T23:17:00Z",
-        "fetched_at": "2026-07-29T23:42:30Z",
+        "fetched_at": "2026-07-30T00:07:33Z",
         "ticker": null,
         "source_tier": "aggregator"
       },
@@ -57,7 +57,7 @@
         "url": "https://finance.yahoo.com/economy/policy/articles/bank-england-keep-rates-steady-230552713.html",
         "source": "Reuters",
         "published_at": "2026-07-29T23:05:52Z",
-        "fetched_at": "2026-07-29T23:42:30Z",
+        "fetched_at": "2026-07-30T00:07:33Z",
         "ticker": null,
         "source_tier": "aggregator"
       },
@@ -67,7 +67,7 @@
         "url": "https://finance.yahoo.com/small-business/articles/mac-bid-brings-1-online-221900110.html",
         "source": "PR Newswire",
         "published_at": "2026-07-29T22:19:00Z",
-        "fetched_at": "2026-07-29T23:42:30Z",
+        "fetched_at": "2026-07-30T00:07:33Z",
         "ticker": null,
         "source_tier": "aggregator"
       },
@@ -77,7 +77,7 @@
         "url": "https://finance.yahoo.com/m/39e3e28e-0997-316b-a968-ee911fcc47b4/the-fed-held-rates-at.html",
         "source": "Motley Fool",
         "published_at": "2026-07-29T22:10:08Z",
-        "fetched_at": "2026-07-29T23:42:30Z",
+        "fetched_at": "2026-07-30T00:07:33Z",
         "ticker": null,
         "source_tier": "aggregator"
       },
@@ -87,7 +87,7 @@
         "url": "https://finance.yahoo.com/m/ccc6c9bc-3fd0-375a-987d-5c44992f45c8/what-to-look-out-for-in.html",
         "source": "Kiplinger",
         "published_at": "2026-07-29T21:30:30Z",
-        "fetched_at": "2026-07-29T23:42:30Z",
+        "fetched_at": "2026-07-30T00:07:33Z",
         "ticker": null,
         "source_tier": "aggregator"
       },
@@ -97,7 +97,7 @@
         "url": "https://finance.yahoo.com/energy/articles/crude-jumps-fresh-mideast-flare-030605104.html",
         "source": "AFP",
         "published_at": "2026-07-29T21:26:10Z",
-        "fetched_at": "2026-07-29T23:42:30Z",
+        "fetched_at": "2026-07-30T00:07:33Z",
         "ticker": null,
         "source_tier": "aggregator"
       },
@@ -107,7 +107,7 @@
         "url": "https://finance.yahoo.com/markets/stocks/articles/comstock-resources-nyse-crk-reports-212218325.html",
         "source": "StockStory",
         "published_at": "2026-07-29T21:22:18Z",
-        "fetched_at": "2026-07-29T23:42:30Z",
+        "fetched_at": "2026-07-30T00:07:33Z",
         "ticker": null,
         "source_tier": "aggregator"
       }
@@ -127,24 +127,13 @@
   },
   "tickers": {
     "512480.SS": {
-      "status": "ok",
+      "status": "empty",
       "query_type": "ticker",
       "ticker": "512480.SS",
-      "start_date": "2026-07-29",
-      "end_date": "2026-07-29",
-      "fetched_at": "2026-07-29T23:42:31Z",
-      "items": [
-        {
-          "title": "7月28日半导体ETF国联安（512480）份额增加3.60亿份，最新份额190.58亿份，最新规模198.79亿元",
-          "summary": "7月28日半导体ETF国联安（512480）份额增加3.60亿份，最新份额190.58亿份，最新规模198.79亿元 新浪财经",
-          "url": "https://news.google.com/rss/articles/CBMimwFBVV95cUxPcjhtV0hlQUZReF93SlRENS1IaTJRSkdRTUt6QlhyelRtUXlnOVJzeURCN3RlQVhmOHMtZHZyM3hXOVVDTlB6clRqR1pCcUktZWtFZHNuM1BXSXFIRlFITXVXTmJYZ0doQ0dyS3lFWWxHeVFFQkt0S25OS2dQdGt3NjV5TW00M2E5SmJaQi05WkZsWkFBZl85djIwTQ?oc=5",
-          "source": "Google News / 新浪财经",
-          "published_at": "2026-07-29T01:00:00Z",
-          "fetched_at": "2026-07-29T23:42:31Z",
-          "ticker": "512480.SS",
-          "source_tier": "aggregator"
-        }
-      ],
+      "start_date": "2026-07-30",
+      "end_date": "2026-07-30",
+      "fetched_at": "2026-07-30T00:07:35Z",
+      "items": [],
       "source_statuses": [
         {
           "source": "Yahoo Finance",
@@ -153,8 +142,8 @@
         },
         {
           "source": "Google News RSS",
-          "status": "ok",
-          "item_count": 1
+          "status": "empty",
+          "item_count": 0
         },
         {
           "source": "SEC EDGAR",
@@ -167,9 +156,9 @@
       "status": "empty",
       "query_type": "ticker",
       "ticker": "515880.SS",
-      "start_date": "2026-07-29",
-      "end_date": "2026-07-29",
-      "fetched_at": "2026-07-29T23:42:33Z",
+      "start_date": "2026-07-30",
+      "end_date": "2026-07-30",
+      "fetched_at": "2026-07-30T00:07:38Z",
       "items": [],
       "source_statuses": [
         {
@@ -197,7 +186,7 @@
       "url": "https://finance.yahoo.com/m/58bee05c-df37-343b-b099-b9d3d5fa6440/dow-jones-futures%3A-stock.html",
       "source": "Investor's Business Daily",
       "published_at": "2026-07-29T23:39:56Z",
-      "fetched_at": "2026-07-29T23:42:30Z",
+      "fetched_at": "2026-07-30T00:07:33Z",
       "ticker": null,
       "source_tier": "aggregator"
     },
@@ -207,7 +196,7 @@
       "url": "https://finance.yahoo.com/markets/currencies/articles/geopolitical-forces-shape-australian-markets-233000821.html",
       "source": "PR Newswire",
       "published_at": "2026-07-29T23:30:00Z",
-      "fetched_at": "2026-07-29T23:42:30Z",
+      "fetched_at": "2026-07-30T00:07:33Z",
       "ticker": null,
       "source_tier": "aggregator"
     },
@@ -217,7 +206,7 @@
       "url": "https://finance.yahoo.com/energy/articles/unifor-condemns-hf-sinclair-decision-232300470.html",
       "source": "CNW Group",
       "published_at": "2026-07-29T23:23:00Z",
-      "fetched_at": "2026-07-29T23:42:30Z",
+      "fetched_at": "2026-07-30T00:07:33Z",
       "ticker": null,
       "source_tier": "aggregator"
     },
@@ -227,7 +216,7 @@
       "url": "https://finance.yahoo.com/m/d1846cc1-edd9-35a2-b964-908c3ae8bc82/major-supermarket-chain.html",
       "source": "TheStreet",
       "published_at": "2026-07-29T23:17:00Z",
-      "fetched_at": "2026-07-29T23:42:30Z",
+      "fetched_at": "2026-07-30T00:07:33Z",
       "ticker": null,
       "source_tier": "aggregator"
     },
@@ -237,7 +226,7 @@
       "url": "https://finance.yahoo.com/economy/policy/articles/bank-england-keep-rates-steady-230552713.html",
       "source": "Reuters",
       "published_at": "2026-07-29T23:05:52Z",
-      "fetched_at": "2026-07-29T23:42:30Z",
+      "fetched_at": "2026-07-30T00:07:33Z",
       "ticker": null,
       "source_tier": "aggregator"
     },
@@ -247,7 +236,7 @@
       "url": "https://finance.yahoo.com/small-business/articles/mac-bid-brings-1-online-221900110.html",
       "source": "PR Newswire",
       "published_at": "2026-07-29T22:19:00Z",
-      "fetched_at": "2026-07-29T23:42:30Z",
+      "fetched_at": "2026-07-30T00:07:33Z",
       "ticker": null,
       "source_tier": "aggregator"
     },
@@ -257,7 +246,7 @@
       "url": "https://finance.yahoo.com/m/39e3e28e-0997-316b-a968-ee911fcc47b4/the-fed-held-rates-at.html",
       "source": "Motley Fool",
       "published_at": "2026-07-29T22:10:08Z",
-      "fetched_at": "2026-07-29T23:42:30Z",
+      "fetched_at": "2026-07-30T00:07:33Z",
       "ticker": null,
       "source_tier": "aggregator"
     },
@@ -267,7 +256,7 @@
       "url": "https://finance.yahoo.com/m/ccc6c9bc-3fd0-375a-987d-5c44992f45c8/what-to-look-out-for-in.html",
       "source": "Kiplinger",
       "published_at": "2026-07-29T21:30:30Z",
-      "fetched_at": "2026-07-29T23:42:30Z",
+      "fetched_at": "2026-07-30T00:07:33Z",
       "ticker": null,
       "source_tier": "aggregator"
     },
@@ -277,7 +266,7 @@
       "url": "https://finance.yahoo.com/energy/articles/crude-jumps-fresh-mideast-flare-030605104.html",
       "source": "AFP",
       "published_at": "2026-07-29T21:26:10Z",
-      "fetched_at": "2026-07-29T23:42:30Z",
+      "fetched_at": "2026-07-30T00:07:33Z",
       "ticker": null,
       "source_tier": "aggregator"
     },
@@ -287,18 +276,8 @@
       "url": "https://finance.yahoo.com/markets/stocks/articles/comstock-resources-nyse-crk-reports-212218325.html",
       "source": "StockStory",
       "published_at": "2026-07-29T21:22:18Z",
-      "fetched_at": "2026-07-29T23:42:30Z",
+      "fetched_at": "2026-07-30T00:07:33Z",
       "ticker": null,
-      "source_tier": "aggregator"
-    },
-    {
-      "title": "7月28日半导体ETF国联安（512480）份额增加3.60亿份，最新份额190.58亿份，最新规模198.79亿元",
-      "summary": "7月28日半导体ETF国联安（512480）份额增加3.60亿份，最新份额190.58亿份，最新规模198.79亿元 新浪财经",
-      "url": "https://news.google.com/rss/articles/CBMimwFBVV95cUxPcjhtV0hlQUZReF93SlRENS1IaTJRSkdRTUt6QlhyelRtUXlnOVJzeURCN3RlQVhmOHMtZHZyM3hXOVVDTlB6clRqR1pCcUktZWtFZHNuM1BXSXFIRlFITXVXTmJYZ0doQ0dyS3lFWWxHeVFFQkt0S25OS2dQdGt3NjV5TW00M2E5SmJaQi05WkZsWkFBZl85djIwTQ?oc=5",
-      "source": "Google News / 新浪财经",
-      "published_at": "2026-07-29T01:00:00Z",
-      "fetched_at": "2026-07-29T23:42:31Z",
-      "ticker": "512480.SS",
       "source_tier": "aggregator"
     }
   ]
