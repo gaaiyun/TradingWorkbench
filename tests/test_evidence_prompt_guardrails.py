@@ -32,3 +32,4 @@ def test_final_guardrail_distrusts_history_and_forbids_numeric_or_flow_invention
     assert "must appear verbatim in the cited ledger row" in source
     assert "Do not calculate, round, or repeat" in source
     assert "buyer, seller, fund-flow, institutional, or retail activity" in source
+    assert "Calling an attribution a hypothesis" in source

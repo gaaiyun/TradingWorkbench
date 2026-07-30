@@ -631,6 +631,7 @@ DAILY_RECOVERY_ENABLED = "true"
 - `reports/515880.SS/2026-07-29-v4/complete_report.md`
 - `reports/512480.SS/2026-07-29-v5/complete_report.md`
 - `reports/515880.SS/2026-07-29-v5/complete_report.md`
+- `reports/515880.SS/2026-07-30-v3/complete_report.md`（价量被越界叙述为“抛压”；错误码 `UNSUPPORTED_ACTOR_OR_FLOW_ATTRIBUTION`）
 
 每日全局验收可直接使用 [云端 Agent 每日审查提示词](CLOUD_AGENT_DAILY_AUDIT_PROMPT.md)。
 

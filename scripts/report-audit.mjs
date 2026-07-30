@@ -14,6 +14,14 @@ export const INVALIDATED_REPORTS = new Set([
   "reports/515880.SS/2026-07-29-v4/complete_report.md",
   "reports/512480.SS/2026-07-29-v5/complete_report.md",
   "reports/515880.SS/2026-07-29-v5/complete_report.md",
+  "reports/515880.SS/2026-07-30-v3/complete_report.md",
+]);
+
+const INVALIDATION_CODE_BY_REPORT = new Map([
+  [
+    "reports/515880.SS/2026-07-30-v3/complete_report.md",
+    "UNSUPPORTED_ACTOR_OR_FLOW_ATTRIBUTION",
+  ],
 ]);
 
 const ETF_SYMBOLS = new Set(["510050.SS", "512480.SS", "515880.SS", "SPY"]);
@@ -60,7 +68,10 @@ function problemCodesFor({
   if (!report) return codes;
   if (!text) codes.push("REPORT_MISSING");
   if (isInvalidatedReport(report)) {
-    codes.push("CORPORATE_ACTION_CONTAMINATION");
+    codes.push(
+      INVALIDATION_CODE_BY_REPORT.get(normalizedReportPath(report))
+      || "CORPORATE_ACTION_CONTAMINATION",
+    );
   }
   if (invalidEvidencePacket) codes.push("INVALID_EVIDENCE_PACKET");
   if (ETF_SYMBOLS.has(ticker)) codes.push("ETF_TEMPLATE_MISMATCH");

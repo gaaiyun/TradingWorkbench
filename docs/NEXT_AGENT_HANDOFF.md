@@ -20,6 +20,8 @@
 
 2026-07-30 本轮全局审查新增四个收口：定时 5 分钟采集每标的只处理最近 96 根而不删除 D1 的 90 天历史；超过 30 分钟仍未执行的高频 slot 以 `STALE_SLOT_EXPIRED` 收口，真实 staging 唯一键冲突单独计入 `conflicted`；5 分钟 freshness 改为上海/纽约会话感知，午休、收盘和周末不再误报 stale，开盘期真实延迟仍保留；EvidencePacket 增加带方法、窗口和输入引用的 `D#` 派生证据，Risk/Portfolio 最终提示禁止自行算数及从 OHLCV 归因主力、机构、承接盘、卖压或资金流。旧的 2026-07-30 原始决策仍被门禁拒绝，受控 D 引用样例通过；本轮没有降低 verified 标准。
 
+第一次真实重跑暴露了校验器把中文“20日已实现波动率”的数值整数部分误当周期、并把“不满足空头排列/关注是否形成多头排列”误当正向主张；两处已按语义修正，8 日窗口长度也进入 D 行。第二次真实重跑让 `515880.SS` 首次生成 `verified` 报告、`512480.SS` 只剩上述误判；但人工逐句复核又发现 `515880.SS 2026-07-30-v3` 把高成交量写成“更可能反映抛压”。即使标成“假设”也超出 OHLCV 证据边界，因此该报告已精确 invalidated，校验器新增 `UNSUPPORTED_ACTOR_OR_FLOW_ATTRIBUTION`，不能把该 v3 当质量基线。
+
 GitHub 自动部署链已恢复。仓库主人在 2026-07-27 配置了 `CLOUDFLARE_API_TOKEN`，同时补齐 `MONITOR_WORKER_URL`；Pages 自动部署 run `30279626692` 成功，Monitor 在修复生产别名传播等待后 run `30280008338` 成功，CI run `30280007660` 全绿。童装 Agent 使用同一 Cloudflare token 的 production 部署 run `30279633026` 也已从凭据校验、D1 migration、Worker/Pages 发布走到生产冒烟全绿。token 只保存在 GitHub secret，未写入仓库、日志或本文。
 
 同日终审又修复了三个用户可见回归：旧版无 identity 的 43 份 `legacy_unverified` 报告恢复只读展示、同一新闻按 cluster/原文聚合关联标的、交易时钟按沪深与纽约时区及周末判断。历史未验证报告仍不能进入问答，4 份 `invalidated` 报告仍只在“历史审计”中显示。

@@ -123,7 +123,7 @@ _NON_CLAIM_NUMERIC_CONTEXT = (
     re.compile(r"(?i)\bMACD\s*\d+\s*[-/]\s*\d+(?:\s*[-/]\s*\d+)?"),
     re.compile(
         r"(?i)(?<![A-Za-z0-9])"
-        r"(?:RSI|ATR|ADX|KDJ|MA|SMA|EMA|realizedVolatility)\s*\d+"
+        r"(?:RSI|ATR|ADX|KDJ|MA|SMA|EMA|realizedVolatility)\d+"
         r"(?![A-Za-z0-9])"
     ),
     re.compile(r"(?<=已实现波动率)\d+(?![A-Za-z0-9])"),
@@ -168,6 +168,20 @@ _BEARISH_ALIGNMENT_RE = re.compile(
 _BULLISH_ALIGNMENT_RE = re.compile(
     r"多头排列|bullish\s+(?:moving[-\s]average\s+)?alignment",
     re.IGNORECASE,
+)
+_ACTOR_OR_FLOW_ATTRIBUTION_RE = re.compile(
+    r"(?:资金(?:净)?(?:流入|流出)|资金主体|主力(?:资金)?|"
+    r"散户(?:接盘|买入|卖出)|机构(?:买入|卖出|资金|行为|意图)|"
+    r"程序化(?:买盘|卖盘|交易)|承接盘|抛压|卖压|买盘|"
+    r"申购(?:增加|减少|流入|行为|资金)|"
+    r"赎回(?:增加|减少|流出|行为|资金)|"
+    r"accumulation|distribution|buying\s+support|selling\s+pressure|"
+    r"fund\s+(?:inflow|outflow)|institutional\s+buying|retail\s+buying)",
+    re.IGNORECASE,
+)
+_ATTRIBUTION_NEGATION_RE = re.compile(
+    r"(?:不能|不可|无法|不应|不得|并非|不是|不等同于|没有证据|"
+    r"未能证明|不足以证明|不可据此|不能据此)"
 )
 
 
@@ -276,7 +290,7 @@ def _unsupported_derived_numbers(
 
 def _moving_average_alignment_is_contradicted(paragraph: str, packet: dict) -> bool:
     evaluable_text = re.sub(
-        r"(?:不|未|无|尚未)(?:满足|构成|形成|属于|是)?"
+        r"(?:不|未|无|尚未|并非|而非|不是)(?:满足|构成|形成|属于|是)?"
         r"[^。；;\n]{0,80}?(?:多头|空头)排列(?:定义|条件|信号)?",
         "",
         paragraph,
@@ -304,6 +318,20 @@ def _moving_average_alignment_is_contradicted(paragraph: str, packet: dict) -> b
     if bearish_claim and not (close < ma20 < ma60):
         return True
     return bool(bullish_claim and not close > ma20 > ma60)
+
+
+def _has_unsupported_actor_or_flow_attribution(paragraph: str) -> bool:
+    """Reject price/volume narratives that invent actors or fund flows."""
+    for sentence in re.split(r"[。！？；;\n]+", str(paragraph or "")):
+        matches = list(_ACTOR_OR_FLOW_ATTRIBUTION_RE.finditer(sentence))
+        if not matches:
+            continue
+        first_start = matches[0].start()
+        prefix = sentence[:first_start]
+        if _ATTRIBUTION_NEGATION_RE.search(prefix):
+            continue
+        return True
+    return False
 
 
 def _parse_evidence_citation(body: str) -> frozenset[str] | None:
@@ -458,6 +486,7 @@ def validate_report_claims(text: str, packet: dict) -> dict:
     unsupported_derived_numeric = 0
     unsupported_single_snapshot_trend = 0
     contradicted_ma_alignment = 0
+    unsupported_actor_or_flow_attribution = 0
     has_price_target = False
     has_allocation = False
     for paragraph in re.split(r"\n\s*\n", str(text or "")):
@@ -492,6 +521,11 @@ def validate_report_claims(text: str, packet: dict) -> dict:
             and _moving_average_alignment_is_contradicted(claim_text, packet)
         ):
             contradicted_ma_alignment += 1
+        if (
+            known_paragraph_ids
+            and _has_unsupported_actor_or_flow_attribution(claim_text)
+        ):
+            unsupported_actor_or_flow_attribution += 1
         has_price_target = has_price_target or bool(
             _PRICE_TARGET_RE.search(claim_text)
         )
@@ -512,6 +546,8 @@ def validate_report_claims(text: str, packet: dict) -> dict:
         error_codes.append("UNSUPPORTED_SINGLE_SNAPSHOT_TREND")
     if contradicted_ma_alignment:
         error_codes.append("CONTRADICTED_MOVING_AVERAGE_ALIGNMENT")
+    if unsupported_actor_or_flow_attribution:
+        error_codes.append("UNSUPPORTED_ACTOR_OR_FLOW_ATTRIBUTION")
     if has_price_target:
         error_codes.append("UNSUPPORTED_PRICE_TARGET")
     if has_allocation:
@@ -528,6 +564,9 @@ def validate_report_claims(text: str, packet: dict) -> dict:
             unsupported_single_snapshot_trend
         ),
         "contradictedMovingAverageAlignmentParagraphs": contradicted_ma_alignment,
+        "unsupportedActorOrFlowAttributionParagraphs": (
+            unsupported_actor_or_flow_attribution
+        ),
     }
 
 
@@ -855,6 +894,7 @@ def write_report_tree(
             "unsupportedDerivedNumericParagraphs": 0,
             "unsupportedSingleSnapshotTrendParagraphs": 0,
             "contradictedMovingAverageAlignmentParagraphs": 0,
+            "unsupportedActorOrFlowAttributionParagraphs": 0,
         }
     )
     if packet:

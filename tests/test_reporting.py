@@ -398,6 +398,32 @@ def test_negated_and_conditional_moving_average_phrases_are_not_claims():
 
 
 @pytest.mark.unit
+def test_price_and_volume_cannot_be_relabelled_as_flow_or_selling_pressure():
+    packet = build_evidence_packet(
+        ticker="515880.SS",
+        asset_type="cn_etf",
+        as_of="2026-07-29T08:00:00Z",
+        bars=[{
+            "ts": "2026-07-28T07:00:00Z",
+            "close": 0.602,
+            "volume": 79_074_757,
+        }],
+        sources=[{"source": "tencent", "sourceTier": "evidence"}],
+        generated_at="2026-07-29T08:05:00Z",
+    )
+    invented = "高成交量更可能反映抛压放大，此为假设 [M1]。"
+    bounded = "成交量仅证明交易活跃，不能据此推断资金流出或抛压 [M1]。"
+
+    invented_result = validate_report_claims(invented, packet)
+    bounded_result = validate_report_claims(bounded, packet)
+
+    assert "UNSUPPORTED_ACTOR_OR_FLOW_ATTRIBUTION" in invented_result["errorCodes"]
+    assert invented_result["unsupportedActorOrFlowAttributionParagraphs"] == 1
+    assert bounded_result["status"] == "passed"
+    assert bounded_result["unsupportedActorOrFlowAttributionParagraphs"] == 0
+
+
+@pytest.mark.unit
 @pytest.mark.parametrize("ticker", ["515880.SS", "512480.SS"])
 def test_july_30_production_raw_decisions_remain_fail_closed(ticker):
     report_dir = (

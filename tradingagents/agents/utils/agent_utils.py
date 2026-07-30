@@ -122,7 +122,8 @@ FINAL EVIDENCE CHECK — this overrides any conflicting upstream text:
 - Price and volume alone cannot identify buyer, seller, fund-flow, institutional, or retail activity.
   Do not claim buying support, selling pressure, accumulation,
   distribution, inflow, outflow, or actor intent unless the cited row directly
-  measures that actor and behavior.
+  measures that actor and behavior. Calling an attribution a hypothesis does
+  not make it citable or permissible.
 - Use unnumbered bullets instead of numeric outline labels. Before responding,
   remove every unsupported number and every unsupported actor attribution.
 """
