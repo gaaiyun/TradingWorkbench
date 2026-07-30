@@ -24,6 +24,8 @@
 
 本轮还补齐日报到生产的自动部署链：`daily-analysis` 的 `GITHUB_TOKEN` 数据 push 受 GitHub 递归保护，不能依赖它级联触发 `on: push`。报告持久化成功后现在用 job 自带的最小 `actions: write` 权限和 `github.token` 显式 dispatch `deploy-workbench.yml`，无需新增 PAT；持久化失败不触发部署。提示词同时明确禁止用“估算/约为/本段临时计算”等免责声明绕过派生数字门禁，只能引用已有 `D#` 或改成无数字的定性表达。
 
+人工回读 v7 后发现审计索引仍把旧 v5/v6 三份语义越界评级当作 verified。当前索引已精确失效 `515880.SS 2026-07-30-v5/v6` 与 `512480.SS 2026-07-30-v6`，并加入通用规则：历史 bundle 若声称 rated/verified 但 `omittedUnsafeParagraphs > 0`，直接判 `invalidated`。重建后的索引为 `77 successful / 0 verified / 14 invalidated / 63 legacy_unverified / 7 invalid_record`；`/api/latest?profile=cn-semi-comms` 不再回退到旧 Sell/Underweight。Workbench health 的 VolGuard live 探针也由 6 秒改为与真实代理一致的 8 秒有界预算和 15 秒 Cloudflare 缓存，不重试、不掩盖持续故障。
+
 第一次真实重跑暴露了校验器把中文“20日已实现波动率”的数值整数部分误当周期、并把“不满足空头排列/关注是否形成多头排列”误当正向主张；两处已按语义修正，8 日窗口长度也进入 D 行。第二次真实重跑让 `515880.SS` 首次生成 `verified` 报告、`512480.SS` 只剩上述误判；但人工逐句复核又发现 `515880.SS 2026-07-30-v3` 把高成交量写成“更可能反映抛压”。即使标成“假设”也超出 OHLCV 证据边界，因此该报告已精确 invalidated，校验器新增 `UNSUPPORTED_ACTOR_OR_FLOW_ATTRIBUTION`，不能把该 v3 当质量基线。
 
 GitHub 自动部署链已恢复。仓库主人在 2026-07-27 配置了 `CLOUDFLARE_API_TOKEN`，同时补齐 `MONITOR_WORKER_URL`；Pages 自动部署 run `30279626692` 成功，Monitor 在修复生产别名传播等待后 run `30280008338` 成功，CI run `30280007660` 全绿。童装 Agent 使用同一 Cloudflare token 的 production 部署 run `30279633026` 也已从凭据校验、D1 migration、Worker/Pages 发布走到生产冒烟全绿。token 只保存在 GitHub secret，未写入仓库、日志或本文。

@@ -215,6 +215,9 @@ Markdown 标题和 Rating 字段不能夹带分析结论；只剩评级、引用
 或“下一步观察”的空壳报告同样保持 `Not Rated`。否定词只保护真正否定归因的局部
 从句，不能用“不能忽视/无法否认”掩盖主力或资金流断言；普通新闻或公司行动引用也
 不能替无关的价格路径和因果关系背书。
+审计索引还会反向检查历史 manifest：若旧报告曾标为 rated/verified，却记录
+`omittedUnsafeParagraphs > 0`，当前索引会将它判为 `invalidated`。已人工确认的旧
+语义绕过也按精确报告路径失效，不能作为“最新观点”的回退来源。
 价格和成交量只证明价格、成交量行为，不能改写成资金流入流出、申购赎回或特定投资者
 行为；缺失 NAV、折溢价等数据只表示无法判断，不是隐性风险或定价失效的证据。
 引用存在不代表算术正确：最终结论中的数字必须直接存在于所引 Evidence 行，模型自行
@@ -305,6 +308,8 @@ MCP 只提供设置、监控、行情、新闻和研究历史查询，不接收�
 `deploy-monitor` 缺少 Cloudflare 凭据或 `MONITOR_WORKER_URL` 时直接失败。部署后 workflow 请求 Worker `/health`，并要求 `deployment.commitSha` 等于本次 GitHub SHA。`deploy-workbench` 还生成随静态站发布的 deployment manifest；Pages health 只有在 manifest SHA 与运行时 SHA 一致时才显示真实 `deployedAt`。绿色 workflow 仍需核对 migration、deploy 和 SHA 验证步骤都执行成功。
 
 `daily-analysis` 用 `GITHUB_TOKEN` 把报告产物提交回 `main`；这类机器人 push 不会可靠级联触发其它 `on: push` workflow。因此持久化成功后，它使用同一个 job 的最小 `actions: write` 权限显式 dispatch `deploy-workbench.yml`，不依赖 PAT，也不允许用缺少 manifest/D1 身份写入的手工 Wrangler 发布代替。日报验收必须同时看到报告数据提交、独立 Pages deploy run，以及生产 `/api/health.deployment.commitSha` 与最新 `main` 完整 SHA 一致。
+
+`/api/health` 的 VolGuard live 探针与实际 `/api/volguard` 代理统一使用 8 秒有界预算和 15 秒 Cloudflare 缓存。它只减少绕过缓存和 6 秒阈值造成的假 degraded，不重试、不把真实超时改写为 ok；期权链、慢指标和两个独立时钟仍需从 `/api/volguard` 正文核验。
 
 本轮发布依赖 migrations `0013_monitor_reliability.sql`、`0014_chat_evidence_scope.sql`、`0015_notification_deliveries.sql`、纯新增的 `0016_fund_flows.sql`、`0017_deployment_metadata.sql` 与 `0018_fund_flow_trade_date.sql`。0017 让 Pages 在静态 manifest 被后续同 SHA 部署遮盖时，仍能从 D1 回读可信 `deployedAt`；0018 明示并索引资金业务交易日。
 

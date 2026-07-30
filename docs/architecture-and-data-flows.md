@@ -481,6 +481,12 @@ Workbench Pages `/api/health` 另返回：
 
 报告产物由 `daily-analysis.yml` 内的 `GITHUB_TOKEN` 提交到 `main`。GitHub 对机器人 push 有工作流递归保护，不能把 `deploy-workbench.yml` 的 `on: push` 当作可靠级联路径。因此同一 job 在报告持久化成功后以 `actions: write` 的最小权限显式执行 `workflow_dispatch`。部署 job 自己重新检出运行时最新 `main`，并受 `cloudflare-workbench` 并发锁保护；这既覆盖报告数据提交，也避免引入额外 PAT。若持久化失败则不 dispatch，若 dispatch 失败则日报 job 失败。
 
+报告审计不只信历史 manifest 的一次性结论。旧 bundle 若声称 rated/verified、但同时
+记录 `omittedUnsafeParagraphs > 0`，当前索引会将其标为 `invalidated`；人工证实的
+早期语义绕过按报告路径进入失效清单。这样最新报告失败时不会回退到旧的不安全评级。
+Workbench health 对 VolGuard live 使用与代理一致的 8 秒有界预算和 15 秒 Cloudflare
+缓存，无自动重试。
+
 ## 14. 保留的契约
 
 回归测试保护以下能力：

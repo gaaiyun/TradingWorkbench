@@ -112,7 +112,7 @@ test("health gives the live options source the same bounded budget as its proxy"
   );
   assert.match(
     source,
-    /checkJson\(\s*"options_live"[\s\S]*?\{\s*timeoutMs:\s*8000\s*\}/,
+    /checkJson\(\s*"options_live"[\s\S]*?cacheTtl:\s*15[\s\S]*?cacheEverything:\s*true[\s\S]*?\{\s*timeoutMs:\s*8000\s*\}/,
   );
 });
 

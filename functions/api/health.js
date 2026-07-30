@@ -33,7 +33,10 @@ export async function onRequestGet({ env, request }) {
     checkJson(
       "options_live",
       `${env.VOLGUARD_LIVE_URL || VOLGUARD_LIVE}?ts=${Date.now()}`,
-      {},
+      {
+        headers: { accept: "application/json" },
+        cf: { cacheTtl: 15, cacheEverything: true },
+      },
       { timeoutMs: 8000 },
     ),
     checkDeploymentManifest(

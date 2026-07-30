@@ -242,6 +242,11 @@ if ($pagesHealth.deployment.deployedAt -eq "unknown") {
 
 每日分析的报告提交由 Actions 自带 `GITHUB_TOKEN` 完成。机器人 push 可能因 GitHub 递归保护不触发其它 `on: push` workflow，所以 `daily-analysis.yml` 在 `Persist reports to main` 成功后显式运行 `gh workflow run deploy-workbench.yml --ref main`。该 job 只增加 `actions: write`，继续使用 `github.token`，不需要新建 PAT；报告持久化失败时不会触发部署。真实验收必须同时记录 daily run、其生成的数据 commit、随后独立的 deploy-workbench run，并确认生产 `/api/health` 的完整 SHA 等于该数据 commit 或其后的最新 `main`。
 
+Workbench `/api/health` 对 VolGuard live 的单次探针预算为 8 秒，并复用
+`/api/volguard` 的 15 秒 Cloudflare 缓存策略；不做超时重试。若 health 因 `options_live`
+超时 degraded，应直接请求 `/api/volguard` 核对实时链、合约覆盖和 slow snapshot，
+并区分瞬时尾延迟与持续不可用，不能把 deployment manifest 误判为根因。
+
 2026-07-28 现场用 Wrangler 回读 `tradingagents-board` 的 Git Provider 为 `No`，因此项目不存在 Cloudflare Git integration 竞争发布。曾出现的同 SHA 重复部署来自 GitHub workflow 之外的 Wrangler/ad-hoc 发布；这类发布若没有同步生成静态 manifest 和持久化 D1 identity，会被 `/api/health` 正确标成 `deployment_manifest=invalid_metadata`。禁止把无身份的手工发布当成最终交付；若紧急排障确需手工发布，必须按下段补齐 manifest 与 D1 identity，并立即再跑一次权威 `deploy-workbench` 收口。
 
 手工 Pages 发布若要保留同等可观测性，必须先应用 migration 0017，并用与 manifest 相同的 SHA/UTC 时间更新 `deployment_metadata`；否则只允许作为临时排障，不能作为最终交付路径。权威生产发布仍是 GitHub `deploy-workbench`。

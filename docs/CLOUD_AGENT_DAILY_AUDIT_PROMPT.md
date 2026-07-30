@@ -153,6 +153,9 @@ SOXX、NVDA 另外检查 `5m / 15m / 1h`。当前只有这两只美股配置生�
     `deploy-workbench` run。不能以机器人 push、GitHub Pages job 或手工 Wrangler
     部署代替；最终 `/api/health.deployment.commitSha` 必须等于最新 `main` 完整 SHA，
     且 `deployment_manifest.ok=true`。
+21. 检查所有 `auditStatus=verified` 条目：
+    `claimValidation.omittedUnsafeParagraphs` 必须为 0；大于 0 的历史 rated bundle
+    必须成为 `invalidated`，不得被 `/api/latest` 选中。
 
 ### 七、检查 VolGuard 和问答
 
