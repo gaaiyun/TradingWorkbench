@@ -38,6 +38,7 @@ GET：
 - `unknown`：接口没有提供足够信息，禁止写成“等待中”或“正常”。
 
 检查 Worker 最近 cron 是否有 `exceededCpu`、超时、重试耗尽、过期租约或持续 backlog。Cloudflare 免费 Worker 的 CPU 预算很小；若发现积压，必须同时报告“待处理数、最老任务、任务类型、尝试次数、最近错误码”，不能只写一个 degraded。
+同时检查调度摘要的 `discovered / staged / conflicted`：幂等重复不算冲突，真实唯一键冲突必须显示 `SCHEDULER_STAGE_CONFLICT`。`intradayCollect / intradaySignal / newsCollect / usIntradayCollect` 超过 30 分钟仍未执行时应以 `STALE_SLOT_EXPIRED` 收口；一次性日线和完整分析不得被该规则取消。
 
 按 profile 本地业务日检查三类关键日 slot 是否真实存在：
 `cnDailySnapshot / closeFullAnalysis / usCloseSnapshot`。某次 Cron 失败后，36 小时内的
@@ -66,6 +67,7 @@ SOXX、NVDA 另外检查 `5m / 15m / 1h`。当前只有这两只美股配置生�
 4. 无周末、无纽约常规时段外数据；
 5. 15m/1h 的 session close 柱并入前一桶，不能产生只有一个点、成交量为零的伪 K 线；
 6. 最新柱与市场开闭状态一致，休市时旧收盘应标明，不得冒充实时；
+   A 股午休、收盘、周末与美股收盘、周末应停在最近合法会话端点，不得因自然时间流逝误报 stale；真实开盘时段超过 30 分钟未更新仍必须 stale；
 7. 自选列表“日涨跌”使用日线前收口径，不得跟随当前图表周期；
 8. A 股红涨绿跌，美股/港股绿涨红跌；健康状态色不得与涨跌色混用；
 9. 桌面和手机视口都检查七个一级入口、图表、tooltip、时间范围、无横向溢出和无 page error。
@@ -120,13 +122,16 @@ SOXX、NVDA 另外检查 `5m / 15m / 1h`。当前只有这两只美股配置生�
 8. 报告中的基金名称、管理人、日期、拆分、涨跌幅和技术指标逐项与证据核对；
 9. `verified=0` 可以是正确的 fail-closed 结果，不得放宽门禁凑 verified；
 10. 不要因段落“有 Evidence ID”就判正确：逐段复算涨跌幅、比例、均线偏离和交易日
-    数；任何派生数字必须已经存在于 cited ledger，不能由模型临时计算；
+    数；任何派生数字必须已经存在于 cited `D#` ledger，且 D 行包含方法、窗口和输入
+    Evidence ID，不能由模型临时计算、取整或复述；
 11. 单时点 MACD/RSI/波动率只能描述当前值，不能声称“仍在扩张、尚未收敛、正在
     加速”；空头排列必须满足 `close < MA20 < MA60`，多头排列必须满足
     `close > MA20 > MA60`；
 12. 同时请求无 selector 与带 `profile=cn-semi-comms` 的 `/api/latest`，两者都不得
     返回 `report-audit` 已标 invalidated 的路径；
 13. “主题观察”是确定性资金规则输出，不等同于研究报告结论。
+14. OHLCV 只能证明价量，不能支持“承接盘、卖压、主力、机构、散户、申赎或资金
+    流”归因；若最终结论这样越界，即使数字和引用存在也不能判通过。
 
 ### 七、检查 VolGuard 和问答
 

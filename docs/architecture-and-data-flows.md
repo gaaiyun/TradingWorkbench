@@ -507,12 +507,12 @@ ETF 工作台是编排层，不替代原 TradingAgents 内核。
 
 ## 16. 输出质量与边缘调度保护
 
-Monitor Worker 的生产 direct 模式运行在 Cloudflare 免费 CPU 预算内。调度器每次 cron 最多执行一个任务，发现阶段按最多三个外部请求拆 shard；旧的高频行情、信号、新闻和美股分时 slot 在有至少晚 15 分钟的新 slot 时标为 `SUPERSEDED_BY_NEWER_SLOT`，三次重试耗尽的 failed 或过期 claimed slot 标为 `RETRY_EXHAUSTED`。这只清理不可再执行的调度状态，不删除行情、新闻、Evidence 或报告。
+Monitor Worker 的生产 direct 模式运行在 Cloudflare 免费 CPU 预算内。调度器每次 cron 最多执行一个任务，发现阶段按最多三个外部请求拆 shard；定时 5 分钟任务每个标的只解析和写入最近 96 根，日线仍保留 1500 根回填窗口，D1 的 90 天 5 分钟保留策略不变。旧的高频行情、信号、新闻和美股分时 slot 在有至少晚 15 分钟的新 slot 时标为 `SUPERSEDED_BY_NEWER_SLOT`；无论是否已有更新 slot，超过 30 分钟仍未执行的高频 slot 都以 `STALE_SLOT_EXPIRED` 收口，三次重试耗尽的 failed 或过期 claimed slot 标为 `RETRY_EXHAUSTED`。这只清理不可再执行的调度状态，不删除行情、新闻、Evidence 或报告。
 
-同一任务的多个 shard 使用相差一秒的 `scheduled_for`，兼容既有 `profile + slot_type + scheduled_for` 唯一约束，避免第二 shard 静默丢失。每个 profile 的 backlog 按 `local_date → task_priority → scheduled_for → id` 排序，保证同一业务日日线采集的所有 shard 先于 `closeFullAnalysis`，同时防止次日新行情饿死前一日分析；profile 之间仍按 rank 公平轮转并保留原有 attempt fencing。市场类任务也因此在同一业务日优先于新闻。若生产 tail 继续出现 `exceededCpu`，应保持 fail-closed，并考虑把异步执行迁到已设计但尚未启用的 Queue；不得仅把 direct 上限调大。
+同一任务的多个 shard 使用相差一秒的 `scheduled_for`，兼容既有 `profile + slot_type + scheduled_for` 唯一约束，避免第二 shard 静默丢失。slot staging 先用一次 JSON1 查询区分幂等重复和真实唯一键冲突；后者计入 `conflicted` 并把本轮标成 `SCHEDULER_STAGE_CONFLICT`，不会静默吞掉。每个 profile 的 backlog 按 `local_date → task_priority → scheduled_for → id` 排序，保证同一业务日日线采集的所有 shard 先于 `closeFullAnalysis`，同时防止次日新行情饿死前一日分析；profile 之间仍按 rank 公平轮转并保留原有 attempt fencing。市场类任务也因此在同一业务日优先于新闻。若生产 tail 继续出现 `exceededCpu`，应保持 fail-closed，并考虑把异步执行迁到已设计但尚未启用的 Queue；不得仅把 direct 上限调大。
 
-新闻读取层支持 `tier=evidence|discovery`。前端分别取两层各 200 条后聚合，来源筛选仍保留层级。`source_health` 对外带稳定错误码、最近成功时间、连续失败次数和暂停时间；`market_events` freshness 在读取时按四天重算。
+新闻读取层支持 `tier=evidence|discovery`。前端分别取两层各 200 条后聚合，来源筛选仍保留层级。`source_health` 对外带稳定错误码、最近成功时间、连续失败次数和暂停时间；`market_events` freshness 在读取时按四天重算。5 分钟行情使用独立的 session-aware freshness：上海午休、收盘、周末冻结在最近完成的合法 5 分钟端点，纽约按 `America/New_York` 的 DST 与常规时段处理；只有合法端点可被重分类，日线健康记录和未来/错位端点不会被误洗成 fresh。
 
-报告生成只有一个精确市场数值真源：存在 EvidencePacket 时，Market Analyst 不再额外调用另一套行情工具。Evidence `asOf` 取交易日结束和当前时点中较早者，禁止未来截止时间；官方“份额拆分”公告只形成带日期、标题、来源和 URL 的公司行动通知，不猜测比例或除权日。公开汇总不再拼接全部 Agent 草稿：它只发布 Evidence Snapshot 和通过逐段门禁的最终 Portfolio Decision；失败时只输出 Snapshot、`Not Rated` 和失败码。Manifest 记录引用结果与 `omittedUnsafeParagraphs`，原始角色分卷仍只供 GitHub 开发审计。
+报告生成只有一个精确市场数值真源：存在 EvidencePacket 时，Market Analyst 不再额外调用另一套行情工具。Evidence `asOf` 取交易日结束和当前时点中较早者，禁止未来截止时间；官方“份额拆分”公告只形成带日期、标题、来源和 URL 的公司行动通知，不猜测比例或除权日。确定性派生层将窗口交易日数、窗口/最新收盘涨跌、ATR 占最新收盘、最新收盘距 MA20/MA60、严格均线排列及 RSI 30/50/70 固定惯例写成 `D#` ledger；每行保存方法、窗口和输入 Evidence ID。Risk debate 与 Portfolio Manager 把上游辩论视为不可信文本，只能逐字引用 ledger 已有数字，禁止临时计算、取整、复述派生比例，也禁止从价量推断承接盘、卖压、资金流或具体主体。公开汇总不再拼接全部 Agent 草稿：它只发布 Evidence Snapshot 和通过逐段门禁的最终 Portfolio Decision；失败时只输出 Snapshot、`Not Rated` 和失败码。Manifest 记录引用结果与 `omittedUnsafeParagraphs`，原始角色分卷仍只供 GitHub 开发审计。
 
 界面分时能力由真实采集能力决定：A 股核心标的和 `SOXX / NVDA` 可选分时，其他美股/港股锁定日线。15m/1h 聚合在当地 session close 时把终点柱并入前一桶，避免收盘瞬间生成单点零成交伪 K 线。任务看板未接入任务级结果时统一显示 `unknown / 未验证`。
