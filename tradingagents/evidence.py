@@ -127,6 +127,159 @@ def _indicator_evidence(indicators: Mapping[str, Any] | None) -> list[dict[str, 
     return rows
 
 
+def _derived_evidence(
+    bars: list[dict[str, Any]],
+    indicators: Mapping[str, Any] | None,
+) -> list[dict[str, Any]]:
+    """Precompute reproducible arithmetic that agents must not perform."""
+    if not bars:
+        return []
+    rows: list[dict[str, Any]] = []
+
+    def append(
+        *,
+        name: str,
+        value: float | int | str,
+        unit: str,
+        method: str,
+        window: dict[str, str],
+        input_ids: list[str],
+    ) -> None:
+        rows.append({
+            "evidenceId": f"D{len(rows) + 1}",
+            "name": name,
+            "value": value,
+            "unit": unit,
+            "method": method,
+            "window": window,
+            "inputEvidenceIds": input_ids,
+        })
+
+    recent = bars[-8:]
+    recent_ids = [str(row["evidenceId"]) for row in recent]
+    recent_window = {
+        "startEvidenceId": recent_ids[0],
+        "endEvidenceId": recent_ids[-1],
+    }
+    append(
+        name="recentWindowTradingDays",
+        value=len(recent),
+        unit="trading_days",
+        method="count_market_bars",
+        window=recent_window,
+        input_ids=recent_ids,
+    )
+    if len(recent) >= 2:
+        append(
+            name="recentWindowCloseChangePct",
+            value=round(
+                (recent[-1]["close"] / recent[0]["close"] - 1) * 100,
+                8,
+            ),
+            unit="percent",
+            method="close_change_pct",
+            window=recent_window,
+            input_ids=[recent_ids[0], recent_ids[-1]],
+        )
+    if len(bars) >= 2:
+        previous, latest = bars[-2:]
+        previous_id = str(previous["evidenceId"])
+        latest_id = str(latest["evidenceId"])
+        append(
+            name="latestCloseChangePct",
+            value=round(
+                (latest["close"] / previous["close"] - 1) * 100,
+                8,
+            ),
+            unit="percent",
+            method="close_change_pct",
+            window={
+                "startEvidenceId": previous_id,
+                "endEvidenceId": latest_id,
+            },
+            input_ids=[previous_id, latest_id],
+        )
+
+    latest = bars[-1]
+    latest_id = str(latest["evidenceId"])
+    numeric_indicators: dict[str, float] = {}
+    for name in ("atr14", "ma20", "ma60", "rsi14"):
+        try:
+            value = float((indicators or {}).get(name))
+        except (TypeError, ValueError):
+            continue
+        if math.isfinite(value):
+            numeric_indicators[name] = value
+    indicator_ids = {
+        str(row["name"]): str(row["evidenceId"])
+        for row in _indicator_evidence(indicators)
+    }
+    if "atr14" in numeric_indicators:
+        append(
+            name="atrPctOfLatestClose",
+            value=round(
+                numeric_indicators["atr14"] / latest["close"] * 100,
+                8,
+            ),
+            unit="percent",
+            method="ratio_to_latest_close_pct",
+            window={"asOfEvidenceId": latest_id},
+            input_ids=[indicator_ids["atr14"], latest_id],
+        )
+    for average_name, derived_name in (
+        ("ma20", "closeVsMa20Pct"),
+        ("ma60", "closeVsMa60Pct"),
+    ):
+        average = numeric_indicators.get(average_name)
+        if average is None or average == 0:
+            continue
+        append(
+            name=derived_name,
+            value=round((latest["close"] / average - 1) * 100, 8),
+            unit="percent",
+            method="close_vs_moving_average_pct",
+            window={"asOfEvidenceId": latest_id},
+            input_ids=[latest_id, indicator_ids[average_name]],
+        )
+    if {"ma20", "ma60"}.issubset(numeric_indicators):
+        ma20 = numeric_indicators["ma20"]
+        ma60 = numeric_indicators["ma60"]
+        alignment = (
+            "bearish"
+            if latest["close"] < ma20 < ma60
+            else "bullish"
+            if latest["close"] > ma20 > ma60
+            else "none"
+        )
+        append(
+            name="strictMovingAverageAlignment",
+            value=alignment,
+            unit="categorical",
+            method="deterministic_comparison",
+            window={"asOfEvidenceId": latest_id},
+            input_ids=[
+                latest_id,
+                indicator_ids["ma20"],
+                indicator_ids["ma60"],
+            ],
+        )
+    if "rsi14" in numeric_indicators:
+        for name, value in (
+            ("rsiOversoldThreshold", 30),
+            ("rsiMidlineThreshold", 50),
+            ("rsiOverboughtThreshold", 70),
+        ):
+            append(
+                name=name,
+                value=value,
+                unit="rsi_points",
+                method="configured_technical_convention",
+                window={"asOfEvidenceId": indicator_ids["rsi14"]},
+                input_ids=[indicator_ids["rsi14"]],
+            )
+    return rows
+
+
 def _news(row: Mapping[str, Any], as_of: datetime) -> dict[str, Any] | None:
     published = row.get("publishedAt") or row.get("published_at")
     if not published:
@@ -226,6 +379,7 @@ def build_evidence_packet(
         for index, row in enumerate((sources or []), start=1)
     ]
     indicator_rows = _indicator_evidence(indicators)
+    derived_rows = _derived_evidence(normalized_bars, indicators)
     status = "ok"
     if errors:
         status = "data_validation_failed"
@@ -253,6 +407,7 @@ def build_evidence_packet(
         "bars": normalized_bars,
         "indicators": dict(indicators or {}),
         "indicatorEvidence": indicator_rows,
+        "derivedEvidence": derived_rows,
         "corporateActions": actions,
         "financials": dict(financials or {}),
         "news": normalized_news,
@@ -261,6 +416,7 @@ def build_evidence_packet(
             "barCount": len(normalized_bars),
             "newsCount": len(normalized_news),
             "indicatorCount": len(indicator_rows),
+            "derivedCount": len(derived_rows),
             "errors": sorted(set(errors)),
             "warnings": sorted(set(warnings)),
             "pointInTime": True,

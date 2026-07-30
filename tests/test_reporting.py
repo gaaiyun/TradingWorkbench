@@ -3,6 +3,7 @@ programmatic API alike (#1037)."""
 
 import hashlib
 import time
+from pathlib import Path
 from types import SimpleNamespace
 
 import pytest
@@ -216,6 +217,126 @@ def test_claim_validation_rejects_derived_numbers_not_present_in_cited_rows():
     assert exact["status"] == "passed"
     assert "UNSUPPORTED_DERIVED_NUMERIC_CLAIM" in derived["errorCodes"]
     assert derived["unsupportedDerivedNumericParagraphs"] == 1
+
+
+@pytest.mark.unit
+def test_indicator_periods_and_inline_ordinals_are_structural_not_derived_claims():
+    packet = build_evidence_packet(
+        ticker="512480.SS",
+        asset_type="cn_etf",
+        as_of="2026-07-29T08:00:00Z",
+        bars=[{"ts": "2026-07-28T07:00:00Z", "close": 1.041}],
+        indicators={
+            "atr14": 0.08685811,
+            "ma20": 1.2169,
+            "ma60": 1.16035,
+            "realizedVolatility20": 81.62166617,
+            "rsi14": 37.12045566,
+        },
+        news=[{
+            "publishedAt": "2026-07-20T07:00:00Z",
+            "title": "2026年第2季度报告",
+            "source": "SSE",
+        }],
+        sources=[{"source": "tencent", "sourceTier": "evidence"}],
+        generated_at="2026-07-29T08:05:00Z",
+    )
+    evidence_ids = {
+        row["name"]: row["evidenceId"] for row in packet["indicatorEvidence"]
+    }
+    text = (
+        f"RSI14=37.12045566 [{evidence_ids['rsi14']}]，"
+        f"MA20=1.2169 [{evidence_ids['ma20']}]，"
+        f"MA60=1.16035 [{evidence_ids['ma60']}]，"
+        f"ATR14=0.08685811 [{evidence_ids['atr14']}]。\n\n"
+        f"20日已实现波动率=81.62166617 "
+        f"[{evidence_ids['realizedVolatility20']}]，"
+        f"已实现波动率20=81.62166617 "
+        f"[{evidence_ids['realizedVolatility20']}]，"
+        "2026年第2季度为报告期 [N1]。\n\n"
+        f"理由如下：(1) RSI偏弱 [{evidence_ids['rsi14']}]；"
+        f"(2) 价格低于均线 [{evidence_ids['ma20']}]。\n\n"
+        f"1. RSI偏弱 [{evidence_ids['rsi14']}]；"
+        f"2. 价格低于均线 [{evidence_ids['ma20']}]。"
+    )
+
+    result = validate_report_claims(text, packet)
+
+    assert result["status"] == "passed"
+    assert result["unsupportedDerivedNumericParagraphs"] == 0
+
+
+@pytest.mark.unit
+def test_precomputed_derived_rows_pass_but_unlisted_thresholds_and_math_fail():
+    packet = build_evidence_packet(
+        ticker="512480.SS",
+        asset_type="cn_etf",
+        as_of="2026-07-29T08:00:00Z",
+        bars=[
+            {
+                "ts": f"2026-07-{day:02d}T07:00:00Z",
+                "close": 1 + offset / 100,
+            }
+            for offset, day in enumerate(range(20, 29))
+        ],
+        indicators={"atr14": 0.08, "rsi14": 37.12045566},
+        sources=[{"source": "tencent", "sourceTier": "evidence"}],
+        generated_at="2026-07-29T08:05:00Z",
+    )
+    assert "derivedEvidence" in packet
+    derived = {row["name"]: row for row in packet["derivedEvidence"]}
+    indicators = {row["name"]: row for row in packet["indicatorEvidence"]}
+    window = derived["recentWindowTradingDays"]
+    atr_ratio = derived["atrPctOfLatestClose"]
+    rsi_threshold = derived["rsiOversoldThreshold"]
+    controlled = (
+        f"观察窗口包含 {window['value']} 个交易日 [{window['evidenceId']}]。"
+        f"\n\nATR相对最新收盘为 {atr_ratio['value']}% "
+        f"[{atr_ratio['evidenceId']}]。"
+        f"\n\n配置的RSI超卖阈值为 {rsi_threshold['value']} "
+        f"[{rsi_threshold['evidenceId']}]。"
+    )
+    unlisted_threshold = (
+        f"RSI14为37.12045566 [{indicators['rsi14']['evidenceId']}]，"
+        "高于30阈值。"
+    )
+    self_calculated = (
+        f"ATR14为0.08 [{indicators['atr14']['evidenceId']}]，"
+        f"最新收盘1.08 [M9]，约占7.4%。"
+    )
+
+    assert validate_report_claims(controlled, packet)["status"] == "passed"
+    assert "UNSUPPORTED_DERIVED_NUMERIC_CLAIM" in validate_report_claims(
+        unlisted_threshold,
+        packet,
+    )["errorCodes"]
+    assert "UNSUPPORTED_DERIVED_NUMERIC_CLAIM" in validate_report_claims(
+        self_calculated,
+        packet,
+    )["errorCodes"]
+
+
+@pytest.mark.unit
+@pytest.mark.parametrize("ticker", ["515880.SS", "512480.SS"])
+def test_july_30_production_raw_decisions_remain_fail_closed(ticker):
+    report_dir = (
+        Path(__file__).resolve().parents[1]
+        / "public"
+        / "reports"
+        / ticker
+        / "2026-07-30"
+    )
+    packet = __import__("json").loads(
+        (report_dir / "evidence_packet.json").read_text(encoding="utf-8")
+    )
+    raw_decision = (report_dir / "5_portfolio" / "decision.md").read_text(
+        encoding="utf-8"
+    )
+
+    result = validate_report_claims(raw_decision, packet)
+
+    assert result["status"] == "failed"
+    assert "UNSUPPORTED_DERIVED_NUMERIC_CLAIM" in result["errorCodes"]
 
 
 @pytest.mark.unit

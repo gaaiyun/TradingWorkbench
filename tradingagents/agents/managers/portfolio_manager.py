@@ -12,6 +12,7 @@ from __future__ import annotations
 
 from tradingagents.agents.schemas import PortfolioDecision, render_pm_decision
 from tradingagents.agents.utils.agent_utils import (
+    get_final_evidence_guardrail,
     get_instrument_context_from_state,
     get_language_instruction,
 )
@@ -70,7 +71,8 @@ Non-negotiable evidence rules:
   and matching Evidence IDs are all present.
 - Separate verified fact, inference, confidence, counter-evidence, and the next observation.
 
-Be decisive only within those evidence limits.{get_language_instruction()}"""
+Be decisive only within those evidence limits.{get_language_instruction()}
+{get_final_evidence_guardrail()}"""
 
         final_trade_decision = invoke_structured_or_freetext(
             structured_llm,

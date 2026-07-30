@@ -82,8 +82,84 @@ def test_packet_filters_future_news_and_records_point_in_time_evidence():
         {"evidenceId": "I1", "name": "ma20", "value": 9.8},
         {"evidenceId": "I2", "name": "rsi14", "value": 55.2},
     ]
+    assert "derivedEvidence" in packet
+    assert [row["evidenceId"] for row in packet["derivedEvidence"]] == [
+        "D1",
+        "D2",
+        "D3",
+        "D4",
+        "D5",
+        "D6",
+        "D7",
+    ]
     assert packet["contentHash"] and len(packet["contentHash"]) == 64
     validate_evidence_packet(packet)
+
+
+def test_packet_precomputes_citable_recent_window_and_indicator_ratios():
+    packet = build_evidence_packet(
+        ticker="512480.SS",
+        asset_type="cn_etf",
+        as_of="2026-07-30T08:00:00Z",
+        bars=[
+            bar(f"2026-07-{day:02d}T07:00:00Z", 100 + offset)
+            for offset, day in enumerate(range(20, 29))
+        ],
+        indicators={"atr14": 2, "ma20": 105, "ma60": 110},
+        sources=[{"source": "tencent", "sourceTier": "evidence"}],
+        generated_at="2026-07-30T08:05:00Z",
+    )
+    assert "derivedEvidence" in packet
+    derived = {row["name"]: row for row in packet["derivedEvidence"]}
+
+    assert derived["recentWindowTradingDays"] == {
+        "evidenceId": "D1",
+        "name": "recentWindowTradingDays",
+        "value": 8,
+        "unit": "trading_days",
+        "method": "count_market_bars",
+        "window": {
+            "startEvidenceId": "M2",
+            "endEvidenceId": "M9",
+        },
+        "inputEvidenceIds": [f"M{index}" for index in range(2, 10)],
+    }
+    assert derived["recentWindowCloseChangePct"]["value"] == pytest.approx(
+        6.93069307
+    )
+    assert derived["recentWindowCloseChangePct"]["method"] == "close_change_pct"
+    assert derived["latestCloseChangePct"]["value"] == pytest.approx(0.93457944)
+    assert derived["atrPctOfLatestClose"]["value"] == pytest.approx(1.85185185)
+    assert derived["closeVsMa20Pct"]["value"] == pytest.approx(2.85714286)
+    assert derived["closeVsMa60Pct"]["value"] == pytest.approx(-1.81818182)
+    assert derived["strictMovingAverageAlignment"]["value"] == "none"
+    assert (
+        derived["strictMovingAverageAlignment"]["method"]
+        == "deterministic_comparison"
+    )
+    validate_evidence_packet(packet)
+
+
+def test_packet_labels_rsi_thresholds_as_configured_conventions():
+    packet = build_evidence_packet(
+        ticker="512480.SS",
+        asset_type="cn_etf",
+        as_of="2026-07-30T08:00:00Z",
+        bars=[bar("2026-07-29T07:00:00Z", 1.02)],
+        indicators={"rsi14": 37.12045566},
+        generated_at="2026-07-30T08:05:00Z",
+    )
+    derived = {row["name"]: row for row in packet["derivedEvidence"]}
+
+    assert "rsiOversoldThreshold" in derived
+    assert derived["rsiOversoldThreshold"]["value"] == 30
+    assert derived["rsiMidlineThreshold"]["value"] == 50
+    assert derived["rsiOverboughtThreshold"]["value"] == 70
+    assert {
+        derived["rsiOversoldThreshold"]["method"],
+        derived["rsiMidlineThreshold"]["method"],
+        derived["rsiOverboughtThreshold"]["method"],
+    } == {"configured_technical_convention"}
 
 
 def test_unadjusted_split_jump_blocks_rating():

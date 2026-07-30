@@ -193,6 +193,18 @@ class GetInstrumentContextFromStateTests(unittest.TestCase):
                     "name": "rsi14",
                     "value": 55.2,
                 }],
+                "derivedEvidence": [{
+                    "evidenceId": "D1",
+                    "name": "recentWindowTradingDays",
+                    "value": 8,
+                    "unit": "trading_days",
+                    "method": "count_market_bars",
+                    "window": {
+                        "startEvidenceId": "M1",
+                        "endEvidenceId": "M1",
+                    },
+                    "inputEvidenceIds": ["M1"],
+                }],
                 "news": [{
                     "evidenceId": "N1",
                     "title": "Alphabet files results",
@@ -206,6 +218,9 @@ class GetInstrumentContextFromStateTests(unittest.TestCase):
         self.assertIn("close=180", context)
         self.assertIn("[I1]", context)
         self.assertIn("rsi14=55.2", context)
+        self.assertIn("[D1]", context)
+        self.assertIn("recentWindowTradingDays=8", context)
+        self.assertIn("method=count_market_bars", context)
         self.assertIn("[N1]", context)
         self.assertIn("[S1]", context)
 

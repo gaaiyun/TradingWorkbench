@@ -22,7 +22,7 @@ class ReportValidationError(ValueError):
 
 _EVIDENCE_CITATION_RE = re.compile(r"\[([^\[\]\r\n]+)\]")
 _EVIDENCE_CITATION_TOKEN_RE = re.compile(
-    r"^(M|I|CA|N|S)(\d+)(?:\s*-\s*(?:(M|I|CA|N|S))?(\d+))?$",
+    r"^(M|I|D|CA|N|S)(\d+)(?:\s*-\s*(?:(M|I|D|CA|N|S))?(\d+))?$",
     re.IGNORECASE,
 )
 _EVIDENCE_LIKE_CONTAINER_RE = re.compile(r"^\s*[A-Z]{1,3}\d", re.IGNORECASE)
@@ -36,7 +36,7 @@ _MARKDOWN_LINK_RE = re.compile(
 _CLAIM_GAP_PATTERN = r"\s{0,16}"
 _CLAIM_WORD_GAP_PATTERN = r"\s{1,16}"
 _NUMERIC_CLAIM_RE = re.compile(
-    rf"(?<![A-Za-z])(?:[$¥£€]{_CLAIM_GAP_PATTERN})?"
+    rf"(?<![A-Za-z0-9])(?:[$¥£€]{_CLAIM_GAP_PATTERN})?"
     r"[-+]?\d+(?:,\d{3})*(?:\.\d+)?%?"
 )
 _NUMERIC_VALUE_PATTERN = (
@@ -97,6 +97,10 @@ _NON_CLAIM_NUMERIC_CONTEXT = (
         r"(?<!\d)(?:19|20)\d{2}年\s*\d{1,2}月(?:\s*\d{1,2}日)?",
     ),
     re.compile(r"(?<!\d)\d{1,2}月\s*\d{1,2}日"),
+    re.compile(
+        r"(?i)(?<!\d)(?:19|20)\d{2}\s*(?:年\s*)?"
+        r"(?:第\s*)?(?:[1-4]\s*季度|Q[1-4])(?!\d)",
+    ),
     # Hashes and supported instrument identifiers are structural metadata.
     re.compile(r"(?i)(?<![A-Za-z0-9])[0-9a-f]{32,}(?![A-Za-z0-9])"),
     re.compile(
@@ -105,16 +109,24 @@ _NON_CLAIM_NUMERIC_CONTEXT = (
     ),
     # Markdown heading/list ordinals are not research values.
     re.compile(r"^\s*(?:#{1,6}\s+)?\d+(?:\.\d+)*[.)、．]?"),
+    re.compile(r"(?<![A-Za-z0-9])\(\d{1,2}\)(?=\s)"),
+    re.compile(r"(?m)(?:^|[；;])\s*\d{1,2}[.)、．](?=\s)"),
     # Indicator look-back periods and canonical parameter tuples.
     re.compile(
         r"(?i)(?<!\d)\d+\s*(?:日|天|周|月)?\s*"
         r"(?=(?:均线|EMA|SMA|MA|ATR|RSI|MACD|KDJ|布林|"
-        r"移动平均线|指数移动平均线|简单移动平均线))",
+        r"移动平均线|指数移动平均线|简单移动平均线|"
+        r"已实现波动率|realized\s*volatility))",
     ),
     re.compile(r"(?i)(?<!\d)\d+\s*(?:EMA|SMA|MA|ATR)\b"),
     re.compile(r"(?i)\b(?:RSI|ATR)\s*\(\s*\d+\s*\)"),
     re.compile(r"(?i)\bMACD\s*\d+\s*[-/]\s*\d+(?:\s*[-/]\s*\d+)?"),
-    re.compile(r"(?i)\b(?:RSI|ATR|ADX|KDJ)\d+\b"),
+    re.compile(
+        r"(?i)(?<![A-Za-z0-9])"
+        r"(?:RSI|ATR|ADX|KDJ|MA|SMA|EMA|realizedVolatility|"
+        r"(?:已实现)?波动率)\s*\d+"
+        r"(?![A-Za-z0-9])"
+    ),
 )
 _PRICE_TARGET_RE = re.compile(
     rf"{_PRICE_TARGET_TERM_PATTERN}{_CLAIM_GAP_PATTERN}"
@@ -161,7 +173,14 @@ _BULLISH_ALIGNMENT_RE = re.compile(
 
 def _packet_evidence_ids(packet: dict) -> set[str]:
     ids = set()
-    for key in ("bars", "indicatorEvidence", "corporateActions", "news", "sources"):
+    for key in (
+        "bars",
+        "indicatorEvidence",
+        "derivedEvidence",
+        "corporateActions",
+        "news",
+        "sources",
+    ):
         for row in packet.get(key) or []:
             if isinstance(row, dict) and row.get("evidenceId"):
                 ids.add(str(row["evidenceId"]).upper())
@@ -170,7 +189,14 @@ def _packet_evidence_ids(packet: dict) -> set[str]:
 
 def _packet_evidence_rows(packet: dict) -> dict[str, dict]:
     rows: dict[str, dict] = {}
-    for key in ("bars", "indicatorEvidence", "corporateActions", "news", "sources"):
+    for key in (
+        "bars",
+        "indicatorEvidence",
+        "derivedEvidence",
+        "corporateActions",
+        "news",
+        "sources",
+    ):
         for row in packet.get(key) or []:
             if isinstance(row, dict) and row.get("evidenceId"):
                 rows[str(row["evidenceId"]).upper()] = row
@@ -192,16 +218,6 @@ def _row_numeric_values(value, *, key: str | None = None) -> list[float]:
         result = []
         for child in value:
             result.extend(_row_numeric_values(child))
-        return result
-    if isinstance(value, str):
-        result = []
-        for token in re.findall(r"[-+]?\d+(?:\.\d+)?", value):
-            try:
-                numeric = float(token)
-            except ValueError:
-                continue
-            if math.isfinite(numeric):
-                result.append(numeric)
         return result
     return []
 
@@ -573,6 +589,7 @@ def _render_evidence_snapshot(packet: dict) -> str:
     """Render a compact, human-readable ledger without inventing analysis."""
     bars = list(packet.get("bars") or [])
     indicators = list(packet.get("indicatorEvidence") or [])
+    derived = list(packet.get("derivedEvidence") or [])
     actions = list(packet.get("corporateActions") or [])
     news = list(packet.get("news") or [])
     sources = list(packet.get("sources") or [])
@@ -616,6 +633,20 @@ def _render_evidence_snapshot(packet: dict) -> str:
         for row in indicators[:12]:
             lines.append(
                 f"- [{row.get('evidenceId')}] {row.get('name')}: {row.get('value')}"
+            )
+    if derived:
+        lines.extend(["", "### Precomputed derived evidence", ""])
+        for row in derived:
+            window = row.get("window") or {}
+            window_text = " → ".join(
+                str(window.get(key))
+                for key in ("startEvidenceId", "endEvidenceId")
+                if window.get(key)
+            ) or str(window.get("asOfEvidenceId") or "unavailable")
+            lines.append(
+                f"- [{row.get('evidenceId')}] {row.get('name')}: "
+                f"{row.get('value')} {row.get('unit')} · "
+                f"method `{row.get('method')}` · window `{window_text}`"
             )
     if actions:
         lines.extend(["", "### Corporate actions", ""])

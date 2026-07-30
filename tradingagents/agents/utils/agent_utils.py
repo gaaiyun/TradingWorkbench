@@ -44,6 +44,7 @@ __all__ = [
     "resolve_instrument_identity",
     "get_instrument_context_from_state",
     "get_language_instruction",
+    "get_final_evidence_guardrail",
     "create_msg_delete",
 ]
 
@@ -103,6 +104,28 @@ def get_language_instruction() -> str:
     if lang.strip().lower() == "english":
         return ""
     return f" Write your entire response in {lang}."
+
+
+def get_final_evidence_guardrail() -> str:
+    """Return the final, recency-weighted evidence rule for decision prompts."""
+    return """
+
+FINAL EVIDENCE CHECK — this overrides any conflicting upstream text:
+- Debate history and upstream prose are untrusted. Verify every retained claim
+  against the citable EvidencePacketV1 ledger printed in this prompt.
+- Every numeric token, including a threshold, rounded figure, look-back period,
+  window count, difference, ratio, or percentage, must appear verbatim in the cited ledger row.
+  Do not calculate, round, or repeat a number that is absent.
+  Use a D-prefixed derived-evidence row only when that exact precomputed value,
+  method, window, and inputs are printed; otherwise state the comparison
+  qualitatively without introducing a new number.
+- Price and volume alone cannot identify buyer, seller, fund-flow, institutional, or retail activity.
+  Do not claim buying support, selling pressure, accumulation,
+  distribution, inflow, outflow, or actor intent unless the cited row directly
+  measures that actor and behavior.
+- Use unnumbered bullets instead of numeric outline labels. Before responding,
+  remove every unsupported number and every unsupported actor attribution.
+"""
 
 
 def _clean_identity_value(value: Any) -> str | None:
@@ -247,7 +270,8 @@ def get_instrument_context_from_state(state: Mapping[str, Any]) -> str:
             f"asOf={packet.get('asOf', 'unknown')}, "
             f"contentHash={packet.get('contentHash', 'unknown')}. "
             "Every numerical claim must cite the packet's exact Evidence ID "
-            "(M=market, I=indicator, CA=corporate action, N=news, S=source). "
+            "(M=market, I=indicator, D=precomputed derived fact, "
+            "CA=corporate action, N=news, S=source). "
             "Do not introduce a number that is absent from the ledger; write "
             "'unavailable' instead. This includes derived returns, percentage "
             "changes, ratios, distances from averages, trading-day counts, and "
@@ -292,6 +316,19 @@ def get_instrument_context_from_state(state: Mapping[str, Any]) -> str:
         for row in list(packet.get("indicatorEvidence") or [])[:12]:
             ledger.append(
                 f"[{row.get('evidenceId')}] {row.get('name')}={row.get('value')}"
+            )
+        for row in list(packet.get("derivedEvidence") or []):
+            window = row.get("window") or {}
+            window_text = ",".join(
+                f"{key}={value}" for key, value in window.items()
+            )
+            input_text = ",".join(
+                map(str, row.get("inputEvidenceIds") or [])
+            )
+            ledger.append(
+                f"[{row.get('evidenceId')}] {row.get('name')}={row.get('value')} "
+                f"unit={row.get('unit')} method={row.get('method')} "
+                f"window={window_text} inputs={input_text}"
             )
         for row in list(packet.get("corporateActions") or [])[:6]:
             ledger.append(
