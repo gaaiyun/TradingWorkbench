@@ -1500,3 +1500,70 @@ test("semiconductor policy news maps to both chip ETFs without polluting the com
   );
   assert.deepEqual([...symbols].sort(), ["159995.SZ", "512480.SS"]);
 });
+
+test("policy discovery rejects unrelated articles with a sector term only in risk boilerplate", async () => {
+  const { collectNewsForProfile } = await import(newsUrl);
+  const writes = [];
+  const falsePositiveRss = `<?xml version="1.0"?><rss><channel>
+    <item>
+      <title>碳酸锂：旺季预期下价格有望继续向上试探</title>
+      <link>https://example.com/lithium-futures</link>
+      <pubDate>Thu, 30 Jul 2026 01:13:52 GMT</pubDate>
+      <description>风险提示：宏观情绪反复、半导体行业景气度不及预期。</description>
+      <source>期货研究</source>
+    </item>
+  </channel></rss>`;
+  await collectNewsForProfile({
+    profile: {
+      ...monitorSettings().profiles[0],
+      targets: [{ symbol: "512480.SS" }],
+    },
+    db: {},
+    fetcher: async (url) => {
+      if (String(url).includes("/search-gov/data")) {
+        return new Response(JSON.stringify({
+          code: "200",
+          searchVO: { catMap: {} },
+        }), {
+          status: 200,
+          headers: { "content-type": "application/json" },
+        });
+      }
+      if (String(url).includes("query.sse.com.cn")) {
+        return new Response('TradingWorkbenchSse({"result":[]})', {
+          status: 200,
+          headers: { "content-type": "application/javascript" },
+        });
+      }
+      if (String(url).includes("search-api-web.eastmoney.com")) {
+        return new Response(`callback(${JSON.stringify({
+          code: 0,
+          result: {
+            cmsArticleWebOld: [{
+              date: "2026-07-30 09:13:52",
+              title: "碳酸锂：旺季预期下价格有望继续向上试探",
+              content: "风险提示：宏观情绪反复、半导体行业景气度不及预期。",
+              mediaName: "期货研究",
+              url: "https://example.com/lithium-futures",
+            }],
+          },
+        })})`, {
+          status: 200,
+          headers: { "content-type": "text/javascript" },
+        });
+      }
+      return new Response(falsePositiveRss, {
+        status: 200,
+        headers: { "content-type": "application/rss+xml" },
+      });
+    },
+    writeItems: async (_db, payload) => writes.push(payload),
+    now: new Date("2026-07-30T02:00:00.000Z"),
+  });
+
+  assert.equal(
+    writes.flatMap(({ items }) => items)
+      .some(({ url }) => url === "https://example.com/lithium-futures"),
+    false,
+  );
+});

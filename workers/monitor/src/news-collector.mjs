@@ -861,8 +861,11 @@ function matchedSymbols(item, plan) {
 
 function relevantToPlan(item, plan) {
   if (plan.topic === "policy") {
-    return /(工信部|工业和信息化部|半导体|芯片|通信|光模块)/i
-      .test(`${item.title} ${item.summary}`);
+    const sectorPattern = /(半导体|芯片|集成电路|通信ETF|光模块|光通信|通信设备|5G|6G)/i;
+    if (sectorPattern.test(item.title)) return true;
+    return /(国务院|国家发展改革委|工信部|工业和信息化部|证监会|财政部)/i
+      .test(item.title)
+      && sectorPattern.test(item.summary);
   }
   return matchedSymbol(item, plan.symbols) !== null;
 }

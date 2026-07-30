@@ -577,6 +577,7 @@ gh workflow run deploy-monitor.yml --repo gaaiyun/TradingWorkbench --ref main
 - 任务板无结果时显示“未验证”；
 - Evidence 截止时间不晚于实际生成时点，官方拆分公告进入公司行动；有 EvidencePacket 时 Market Analyst 不再调用另一套精确行情工具；
 - 精确 invalidated 两份 2026-07-28 拆分污染报告；新报告 claim validation 失败时，汇总正文只显示 Evidence Snapshot、Not Rated 和失败码；Market/News/Fundamentals 在 packet 存在时全部关闭平行精确数据工具，失败报告的原始角色分卷只留 GitHub 开发审计，不再出现在网页标签页或带身份的报告 API；
+- 2026-07-30 新报告仍因自行计算派生比例而被 `UNSUPPORTED_DERIVED_NUMERIC_CLAIM` 降为 Not Rated；这是门禁正常工作，不是可用结论。生产资讯另发现“碳酸锂”文章仅因风险提示含“半导体行业”而误路由，现将 A 股政策 discovery 改为标题优先，或仅允许明确政策机关标题配合摘要行业词；
 - 新增 [云端 Agent 每日全局审查提示词](CLOUD_AGENT_DAILY_AUDIT_PROMPT.md)，覆盖部署、调度、行情、图形、资金、新闻、报告、VolGuard 和问答。
 
 生产尚须本轮提交后复验：免费 Worker 在一任务/三请求上限下是否仍 `exceededCpu`，积压是否真实前移，落后的美股日线是否补齐，当日分析是否恢复，以及 Pages/Worker/GitHub SHA 是否一致。任何一项未通过都必须保留为“未解决”，不能用本地测试替代。

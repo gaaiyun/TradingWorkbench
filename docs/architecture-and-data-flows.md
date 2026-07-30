@@ -298,7 +298,7 @@ flowchart LR
 
 SEC 只接受 `8-K/8-K/A` 和 `sec.gov/Archives` 链接。请求必须提供符合 fair-access 的组织和联系邮箱。
 
-中国政府网请求使用官网前端的真实参数组合，分别查询“通信”和“集成电路”，再按上海日历执行 30 天 point-in-time 过滤。部门文件、国务院公文和公报进入 evidence；政策解读只作 discovery。解析器拒绝未来、窗口外、非 `www.gov.cn` 原文和不受支持的路径，每个查询最多保留 8 条。
+中国政府网请求使用官网前端的真实参数组合，分别查询“通信”和“集成电路”，再按上海日历执行 30 天 point-in-time 过滤。部门文件、国务院公文和公报进入 evidence；政策解读只作 discovery。解析器拒绝未来、窗口外、非 `www.gov.cn` 原文和不受支持的路径，每个查询最多保留 8 条。聚合发现层还执行标题优先的主题门禁：行业词必须出现在标题；只有标题明确属于国务院、发改委、工信部、证监会或财政部时，才允许用摘要中的行业词补充匹配。这避免把“碳酸锂”等无关文章仅因风险提示里出现一次“半导体行业”而路由给 ETF。
 
 上交所的两个查询入口从本机和 GitHub runner 可用，但从 Cloudflare 出口稳定返回 403。为避免持续制造 Worker degraded 和浪费 15 分钟采集预算，`.github/workflows/official-news.yml` 每两小时第 17 分钟从 GitHub runner 执行一次。脚本读取 D1 当前 settings，只向包含目标 ETF 的 enabled profile 分发；按证券代码精确查询 `515880`、`512480`，只接受 `www.sse.com.cn/disclosure/fund/announcement/` 的原始 PDF，并使用 JSON1 参数化 UPSERT。季度报告、招募说明书和份额拆分公告直接关联对应 ETF，不靠标题模糊猜标的。
 
