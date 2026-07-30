@@ -317,6 +317,87 @@ def test_precomputed_derived_rows_pass_but_unlisted_thresholds_and_math_fail():
 
 
 @pytest.mark.unit
+def test_chinese_realized_volatility_value_is_not_masked_as_an_indicator_period():
+    packet = build_evidence_packet(
+        ticker="512480.SS",
+        asset_type="cn_etf",
+        as_of="2026-07-29T08:00:00Z",
+        bars=[{"ts": "2026-07-28T07:00:00Z", "close": 1.027}],
+        indicators={"realizedVolatility20": 81.62166617},
+        sources=[{"source": "tencent", "sourceTier": "evidence"}],
+        generated_at="2026-07-29T08:05:00Z",
+    )
+    evidence_id = packet["indicatorEvidence"][0]["evidenceId"]
+
+    result = validate_report_claims(
+        f"20日已实现波动率为81.62166617 [{evidence_id}]。",
+        packet,
+    )
+
+    assert result["status"] == "passed"
+    assert result["unsupportedDerivedNumericParagraphs"] == 0
+
+
+@pytest.mark.unit
+def test_close_change_derived_row_carries_its_trading_day_window():
+    packet = build_evidence_packet(
+        ticker="515880.SS",
+        asset_type="cn_etf",
+        as_of="2026-07-29T08:00:00Z",
+        bars=[
+            {
+                "ts": f"2026-07-{day:02d}T07:00:00Z",
+                "close": 1 + offset / 100,
+            }
+            for offset, day in enumerate(range(20, 29))
+        ],
+        sources=[{"source": "tencent", "sourceTier": "evidence"}],
+        generated_at="2026-07-29T08:05:00Z",
+    )
+    row = next(
+        item
+        for item in packet["derivedEvidence"]
+        if item["name"] == "recentWindowCloseChangePct"
+    )
+    text = (
+        f"8个交易日窗口累计变动为{row['value']}% "
+        f"[{row['evidenceId']}]。"
+    )
+
+    assert row["window"]["tradingDays"] == 8
+    assert validate_report_claims(text, packet)["status"] == "passed"
+
+
+@pytest.mark.unit
+def test_negated_and_conditional_moving_average_phrases_are_not_claims():
+    packet = build_evidence_packet(
+        ticker="512480.SS",
+        asset_type="cn_etf",
+        as_of="2026-07-29T08:00:00Z",
+        bars=[{"ts": "2026-07-28T07:00:00Z", "close": 1.027}],
+        indicators={"ma20": 1.2169, "ma60": 1.16035},
+        sources=[{"source": "tencent", "sourceTier": "evidence"}],
+        generated_at="2026-07-29T08:05:00Z",
+    )
+    derived = next(
+        item
+        for item in packet["derivedEvidence"]
+        if item["name"] == "strictMovingAverageAlignment"
+    )
+    text = (
+        f"当前不满足 close < MA20 < MA60 的空头排列定义 "
+        f"[{derived['evidenceId']}]。\n\n"
+        f"关注是否出现 close > MA20 > MA60 的多头排列信号 "
+        f"[{derived['evidenceId']}]。"
+    )
+
+    result = validate_report_claims(text, packet)
+
+    assert result["status"] == "passed"
+    assert result["contradictedMovingAverageAlignmentParagraphs"] == 0
+
+
+@pytest.mark.unit
 @pytest.mark.parametrize("ticker", ["515880.SS", "512480.SS"])
 def test_july_30_production_raw_decisions_remain_fail_closed(ticker):
     report_dir = (

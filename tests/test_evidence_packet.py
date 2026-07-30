@@ -118,10 +118,11 @@ def test_packet_precomputes_citable_recent_window_and_indicator_ratios():
         "value": 8,
         "unit": "trading_days",
         "method": "count_market_bars",
-        "window": {
-            "startEvidenceId": "M2",
-            "endEvidenceId": "M9",
-        },
+            "window": {
+                "startEvidenceId": "M2",
+                "endEvidenceId": "M9",
+                "tradingDays": 8,
+            },
         "inputEvidenceIds": [f"M{index}" for index in range(2, 10)],
     }
     assert derived["recentWindowCloseChangePct"]["value"] == pytest.approx(

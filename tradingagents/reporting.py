@@ -123,10 +123,10 @@ _NON_CLAIM_NUMERIC_CONTEXT = (
     re.compile(r"(?i)\bMACD\s*\d+\s*[-/]\s*\d+(?:\s*[-/]\s*\d+)?"),
     re.compile(
         r"(?i)(?<![A-Za-z0-9])"
-        r"(?:RSI|ATR|ADX|KDJ|MA|SMA|EMA|realizedVolatility|"
-        r"(?:已实现)?波动率)\s*\d+"
+        r"(?:RSI|ATR|ADX|KDJ|MA|SMA|EMA|realizedVolatility)\s*\d+"
         r"(?![A-Za-z0-9])"
     ),
+    re.compile(r"(?<=已实现波动率)\d+(?![A-Za-z0-9])"),
 )
 _PRICE_TARGET_RE = re.compile(
     rf"{_PRICE_TARGET_TERM_PATTERN}{_CLAIM_GAP_PATTERN}"
@@ -275,8 +275,20 @@ def _unsupported_derived_numbers(
 
 
 def _moving_average_alignment_is_contradicted(paragraph: str, packet: dict) -> bool:
-    bearish_claim = bool(_BEARISH_ALIGNMENT_RE.search(paragraph))
-    bullish_claim = bool(_BULLISH_ALIGNMENT_RE.search(paragraph))
+    evaluable_text = re.sub(
+        r"(?:不|未|无|尚未)(?:满足|构成|形成|属于|是)?"
+        r"[^。；;\n]{0,80}?(?:多头|空头)排列(?:定义|条件|信号)?",
+        "",
+        paragraph,
+    )
+    evaluable_text = re.sub(
+        r"(?:若|如果|一旦|关注是否|等待)"
+        r"[^。；;\n]{0,80}?(?:多头|空头)排列(?:信号|条件)?",
+        "",
+        evaluable_text,
+    )
+    bearish_claim = bool(_BEARISH_ALIGNMENT_RE.search(evaluable_text))
+    bullish_claim = bool(_BULLISH_ALIGNMENT_RE.search(evaluable_text))
     if not bearish_claim and not bullish_claim:
         return False
     indicators = packet.get("indicators") or {}

@@ -142,7 +142,7 @@ def _derived_evidence(
         value: float | int | str,
         unit: str,
         method: str,
-        window: dict[str, str],
+        window: dict[str, str | int],
         input_ids: list[str],
     ) -> None:
         rows.append({
@@ -160,6 +160,7 @@ def _derived_evidence(
     recent_window = {
         "startEvidenceId": recent_ids[0],
         "endEvidenceId": recent_ids[-1],
+        "tradingDays": len(recent),
     }
     append(
         name="recentWindowTradingDays",
