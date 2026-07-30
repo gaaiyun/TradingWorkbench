@@ -167,6 +167,51 @@ def test_public_report_omits_unsafe_final_paragraphs_but_keeps_cited_conclusion(
 
 
 @pytest.mark.unit
+def test_public_report_omits_semantic_claim_violations_and_keeps_safe_conclusion(
+    tmp_path,
+):
+    packet = build_evidence_packet(
+        ticker="512480.SS",
+        asset_type="cn_etf",
+        as_of="2026-07-23T08:00:00Z",
+        bars=[
+            {"ts": "2026-07-22T07:00:00Z", "close": 175},
+            {"ts": "2026-07-23T07:00:00Z", "close": 180},
+        ],
+        sources=[{"source": "exchange", "sourceTier": "evidence"}],
+        generated_at="2026-07-23T08:05:00Z",
+    )
+    state = {
+        **_state(),
+        "risk_debate_state": {
+            "judge_decision": (
+                "**Rating**: Hold\n\n"
+                "The verified close is 180 [M2].\n\n"
+                "The close rose 2.86% across the window [M1-M2].\n\n"
+                "主力资金正在流出 [M2]。\n\n"
+                "宏观逆风可能继续压制该ETF。"
+            ),
+        },
+        "trade_date": "2026-07-23",
+        "analysis_status": "rated",
+        "evidence_packet": packet,
+    }
+
+    out = write_report_tree(state, "512480.SS", tmp_path)
+    manifest = __import__("json").loads((tmp_path / "report_manifest.json").read_text())
+    complete = out.read_text()
+
+    assert manifest["analysisStatus"] == "rated"
+    assert manifest["auditStatus"] == "verified"
+    assert manifest["claimValidation"]["omittedUnsafeParagraphs"] == 3
+    assert manifest["claimValidation"]["status"] == "passed"
+    assert "The verified close is 180 [M2]." in complete
+    assert "2.86%" not in complete
+    assert "主力资金正在流出" not in complete
+    assert "宏观逆风" not in complete
+
+
+@pytest.mark.unit
 def test_claim_validation_accepts_grouped_and_range_evidence_citations():
     packet = build_evidence_packet(
         ticker="GOOGL",
@@ -387,6 +432,8 @@ def test_negated_and_conditional_moving_average_phrases_are_not_claims():
     text = (
         f"当前不满足 close < MA20 < MA60 的空头排列定义 "
         f"[{derived['evidenceId']}]。\n\n"
+        f"当前既非严格多头排列亦非严格空头排列 "
+        f"[{derived['evidenceId']}]。\n\n"
         f"关注是否出现 close > MA20 > MA60 的多头排列信号 "
         f"[{derived['evidenceId']}]。"
     )
@@ -412,7 +459,10 @@ def test_price_and_volume_cannot_be_relabelled_as_flow_or_selling_pressure():
         generated_at="2026-07-29T08:05:00Z",
     )
     invented = "高成交量更可能反映抛压放大，此为假设 [M1]。"
-    bounded = "成交量仅证明交易活跃，不能据此推断资金流出或抛压 [M1]。"
+    bounded = (
+        "成交量仅证明交易活跃，不能据此推断资金流出或抛压 [M1]。\n\n"
+        "卖压是否已经释放无法从单一快照确认 [M1]。"
+    )
 
     invented_result = validate_report_claims(invented, packet)
     bounded_result = validate_report_claims(bounded, packet)
@@ -421,6 +471,48 @@ def test_price_and_volume_cannot_be_relabelled_as_flow_or_selling_pressure():
     assert invented_result["unsupportedActorOrFlowAttributionParagraphs"] == 1
     assert bounded_result["status"] == "passed"
     assert bounded_result["unsupportedActorOrFlowAttributionParagraphs"] == 0
+
+
+@pytest.mark.unit
+def test_window_rank_face_value_and_price_only_causality_fail_closed():
+    packet = build_evidence_packet(
+        ticker="512480.SS",
+        asset_type="cn_etf",
+        as_of="2026-07-29T08:00:00Z",
+        bars=[
+            {"ts": "2026-07-27T07:00:00Z", "close": 1.04, "volume": 10},
+            {"ts": "2026-07-28T07:00:00Z", "close": 1.027, "volume": 20},
+        ],
+        sources=[{"source": "tencent", "sourceTier": "evidence"}],
+        generated_at="2026-07-29T08:05:00Z",
+    )
+
+    rank = validate_report_claims(
+        "最新收盘价为窗口最低，成交量为第二高 [M1-M2]。",
+        packet,
+    )
+    face_value = validate_report_claims(
+        "盘中价格击穿1元面值 [M2]。",
+        packet,
+    )
+    path = validate_report_claims(
+        "价格随后持续回落，证明高波动制造了反弹机会 [M1-M2]。",
+        packet,
+    )
+    independence = validate_report_claims(
+        "多重独立指标共同确认趋势 [M1-M2]。",
+        packet,
+    )
+    conditional = validate_report_claims(
+        "若后续收盘价创新低，需要重新评估 [M2]。",
+        packet,
+    )
+
+    assert "UNSUPPORTED_WINDOW_RANK_CLAIM" in rank["errorCodes"]
+    assert "UNSUPPORTED_FACE_VALUE_CLAIM" in face_value["errorCodes"]
+    assert "UNSUPPORTED_CAUSAL_OR_PATH_CLAIM" in path["errorCodes"]
+    assert "UNSUPPORTED_CAUSAL_OR_PATH_CLAIM" in independence["errorCodes"]
+    assert conditional["status"] == "passed"
 
 
 @pytest.mark.unit

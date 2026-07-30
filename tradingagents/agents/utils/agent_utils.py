@@ -124,6 +124,11 @@ FINAL EVIDENCE CHECK — this overrides any conflicting upstream text:
   distribution, inflow, outflow, or actor intent unless the cited row directly
   measures that actor and behavior. Calling an attribution a hypothesis does
   not make it citable or permissible.
+- Do not invent a window rank or extremum (lowest, highest, second-highest,
+  new high, or new low), a par-value/face-value comparison, a continuous path,
+  or a causal conclusion unless one cited ledger row explicitly contains that
+  exact fact. Multiple indicators calculated from the same OHLCV history are
+  not independent evidence. Qualitative factual claims also require a citation.
 - Use unnumbered bullets instead of numeric outline labels. Before responding,
   remove every unsupported number and every unsupported actor attribution.
 """

@@ -577,9 +577,11 @@ gh workflow run deploy-monitor.yml --repo gaaiyun/TradingWorkbench --ref main
   `cnDailySnapshot / closeFullAnalysis / usCloseSnapshot`，稳定 slotId 去重；不追赶
   盘中、信号和新闻高频任务；
 - 市场任务优先于新闻；SOXX/NVDA 在 UI 开放真实 `5m/15m/1h`，其他美股仍只开放日线；Yahoo 16:00 的 `O=H=L=C / volume=0` 收盘哨兵在采集和 API 读取两层过滤，15m/1h 收盘端点并入前一聚合桶；
+- A 股腾讯当前形成柱使用区间结束标签，读取层只容忍一个合法 5 分钟步长内的前置端点；这修复了监控状态每五分钟规律性闪烁 stale，同时继续拒绝更远未来、非整 5 分钟和时段外时间戳；
 - evidence/discovery 分层查询，事件 freshness 按四天重算，source health 暴露错误码和熔断元数据；
 - 任务板无结果时显示“未验证”；
 - Evidence 截止时间不晚于实际生成时点，官方拆分公告进入公司行动；有 EvidencePacket 时 Market Analyst 不再调用另一套精确行情工具；
+- 公开 Portfolio Decision 逐段复用 claim validator：无引用定性叙事、未预计算的窗口排名/极值、面值、持续路径/价量因果和虚构主体归因会被剔除并计入 `omittedUnsafeParagraphs`，孤立标题一并清理；raw Agent 分卷保留审计但不对用户发布。否定式均线与“无法确认卖压是否释放”已加入防误报回归；
 - 精确 invalidated 两份 2026-07-28 拆分污染报告；新报告 claim validation 失败时，汇总正文只显示 Evidence Snapshot、Not Rated 和失败码；Market/News/Fundamentals 在 packet 存在时全部关闭平行精确数据工具，失败报告的原始角色分卷只留 GitHub 开发审计，不再出现在网页标签页或带身份的报告 API；
 - 2026-07-30 新报告仍因自行计算派生比例而被 `UNSUPPORTED_DERIVED_NUMERIC_CLAIM` 降为 Not Rated；这是门禁正常工作，不是可用结论。生产资讯发现碳酸锂、海外个案、投资日历和宽基 ETF 文章会因摘要碰词误路由，现将 A 股通信、半导体与政策 discovery 统一为标题优先：前两类必须在标题命中行业词；政策类只有在标题同时命中政策机关与政策动作时才允许摘要补充行业词。采集与 `/api/news` 两层执行同一规则，旧误入库记录无需等过期即从页面隐藏；
 - 新增 [云端 Agent 每日全局审查提示词](CLOUD_AGENT_DAILY_AUDIT_PROMPT.md)，覆盖部署、调度、行情、图形、资金、新闻、报告、VolGuard 和问答。

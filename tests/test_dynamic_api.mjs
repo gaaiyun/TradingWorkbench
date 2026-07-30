@@ -935,6 +935,32 @@ test("monitor status leaves a tencent daily snapshot health row unchanged", asyn
   assert.equal(payload.data[0].freshness, "fresh");
 });
 
+test("monitor status accepts the current five-minute endpoint before its label time", async (t) => {
+  t.mock.method(Date, "now", () => Date.parse("2026-07-30T05:56:00Z"));
+  const health = {
+    source: "tencent",
+    status: "stale",
+    as_of: "2026-07-30T06:00:00Z",
+    fetched_at: "2026-07-30T05:55:53Z",
+    freshness: "stale",
+    adjustment: "none",
+    quality: "good",
+    last_error_code: null,
+    last_success_at: "2026-07-30T05:55:53Z",
+    consecutive_failures: 0,
+    paused_until: null,
+  };
+  const response = await monitorApi.onRequestGet({
+    request: request("/api/monitor-status?profile=cn-semi-comms"),
+    env: { DB: new FakeD1({ rows: { source_health: [health] } }) },
+  });
+  const payload = await response.json();
+
+  assert.equal(payload.status, "ok");
+  assert.equal(payload.data[0].status, "ok");
+  assert.equal(payload.data[0].freshness, "fresh");
+});
+
 test("monitor status uses New York regular-session endpoints across DST", async (t) => {
   const cases = [
     {

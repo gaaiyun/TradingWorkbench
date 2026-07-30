@@ -158,6 +158,7 @@ _SINGLE_SNAPSHOT_INDICATOR_TREND_RE = re.compile(
     r"尚未(?:出现)?(?:收敛|收窄|拐头|改善)|"
     r"(?:负向|正向)(?:扩张|发散)|"
     r"动能(?:加速|减速|增强|衰减)|"
+    r"下行动能可能仍有释放空间|"
     r"still\s+(?:widening|narrowing|diverging|converging)|"
     r"continues?\s+to\s+(?:widen|narrow|diverge|converge|accelerate|decelerate))",
 )
@@ -182,6 +183,50 @@ _ACTOR_OR_FLOW_ATTRIBUTION_RE = re.compile(
 _ATTRIBUTION_NEGATION_RE = re.compile(
     r"(?:不能|不可|无法|不应|不得|并非|不是|不等同于|没有证据|"
     r"未能证明|不足以证明|不可据此|不能据此)"
+)
+_ATTRIBUTION_POST_NEGATION_RE = re.compile(
+    r"(?:是否|能否).{0,80}?(?:不能|不可|无法|未能|不足以)"
+    r".{0,40}?(?:确认|判断|证明|推断)"
+)
+_WINDOW_RANK_RE = re.compile(
+    r"(?:窗口(?:内)?|近\s*\d+\s*(?:个)?交易日|本期|最新交易日).{0,60}?"
+    r"(?:最低|最高|第[二三四五]高|次高|次低)|"
+    r"(?:收盘价|成交量|价格).{0,40}?(?:创新高|创新低|刷新高点|刷新低点)|"
+    r"(?:下行|下跌)日.{0,40}?成交量.{0,40}?高于.{0,20}?(?:反弹|上涨)日|"
+    r"\b(?:window|period)[-\s]?(?:low|high)|"
+    r"\b(?:lowest|highest|second[-\s]highest|new\s+(?:high|low))\b",
+    re.IGNORECASE,
+)
+_HYPOTHETICAL_PREFIX_RE = re.compile(
+    r"(?:若|如果|一旦|后续|未来|关注是否|等待|\bwhen\b|\bif\b)",
+    re.IGNORECASE,
+)
+_CAUSAL_OR_PATH_RE = re.compile(
+    r"(?:持续回落|持续下跌|持续上涨|连续走低|连续走高|"
+    r"已证明|证明了|导致|造成|引发|"
+    r"多重独立指标|相互独立(?:的)?指标|"
+    r"continued?\s+(?:decline|rise|fall)|"
+    r"(?:proves?|demonstrates?|causes?|drives?|triggers?)\b|"
+    r"independent\s+indicators?)",
+    re.IGNORECASE,
+)
+_FACE_VALUE_RE = re.compile(
+    r"(?:击穿|跌破|低于|高于|突破|below|above|breach(?:ed)?)"
+    r".{0,32}?(?:面值|票面价值|par\s+value)",
+    re.IGNORECASE,
+)
+_STRUCTURAL_FINAL_PARAGRAPH_RE = re.compile(
+    r"^(?:"
+    r"\*\*(?:Rating|Time\s+Horizon)\*\*\s*:\s*[^\n]{1,80}|"
+    r"#{1,6}\s+[^\n]{1,120}|"
+    r"\*\*[^*\n]{1,100}\*\*\s*:?"
+    r"(?:\s*\*\*[^*\n]{1,100}\*\*)?"
+    r")$",
+    re.IGNORECASE,
+)
+_RATING_OR_HORIZON_RE = re.compile(
+    r"^\*\*(?:Rating|Time\s+Horizon)\*\*\s*:",
+    re.IGNORECASE,
 )
 
 
@@ -290,7 +335,7 @@ def _unsupported_derived_numbers(
 
 def _moving_average_alignment_is_contradicted(paragraph: str, packet: dict) -> bool:
     evaluable_text = re.sub(
-        r"(?:不|未|无|尚未|并非|而非|不是)(?:满足|构成|形成|属于|是)?"
+        r"(?:不|未|无|非|尚未|并非|而非|不是)(?:满足|构成|形成|属于|是)?"
         r"[^。；;\n]{0,80}?(?:多头|空头)排列(?:定义|条件|信号)?",
         "",
         paragraph,
@@ -328,10 +373,72 @@ def _has_unsupported_actor_or_flow_attribution(paragraph: str) -> bool:
             continue
         first_start = matches[0].start()
         prefix = sentence[:first_start]
-        if _ATTRIBUTION_NEGATION_RE.search(prefix):
+        suffix = sentence[first_start:]
+        if (
+            _ATTRIBUTION_NEGATION_RE.search(prefix)
+            or _ATTRIBUTION_POST_NEGATION_RE.search(suffix)
+        ):
             continue
         return True
     return False
+
+
+def _has_unsupported_window_rank(
+    paragraph: str,
+    packet_rows: dict[str, dict],
+    paragraph_ids: set[str],
+) -> bool:
+    for sentence in re.split(r"[。！？；;\n]+", str(paragraph or "")):
+        match = _WINDOW_RANK_RE.search(sentence)
+        if not match:
+            continue
+        if _HYPOTHETICAL_PREFIX_RE.search(sentence[:match.start()]):
+            continue
+        supported = any(
+            str((packet_rows.get(evidence_id) or {}).get("name") or "").lower()
+            in {
+                "recentwindowcloseextremum",
+                "latestcloserankinrecentwindow",
+                "latestvolumerankinrecentwindow",
+            }
+            for evidence_id in paragraph_ids
+        )
+        if not supported:
+            return True
+    return False
+
+
+def _has_unsupported_causal_or_path_claim(
+    paragraph: str,
+    paragraph_ids: set[str],
+) -> bool:
+    if not _CAUSAL_OR_PATH_RE.search(str(paragraph or "")):
+        return False
+    return not any(
+        evidence_id.startswith(("N", "CA"))
+        for evidence_id in paragraph_ids
+    )
+
+
+def _is_structural_final_paragraph(paragraph: str) -> bool:
+    return bool(_STRUCTURAL_FINAL_PARAGRAPH_RE.fullmatch(str(paragraph or "").strip()))
+
+
+def _is_rating_or_horizon_paragraph(paragraph: str) -> bool:
+    return bool(_RATING_OR_HORIZON_RE.match(str(paragraph or "").strip()))
+
+
+def _has_substantive_claim_text(claim_text: str) -> bool:
+    return bool(re.sub(r"[\s*_#：:，,。.!！?？；;—–-]+", "", str(claim_text or "")))
+
+
+def _is_numeric_recommendation_disclaimer(paragraph: str) -> bool:
+    original = str(paragraph or "")
+    if not _NUMERIC_RECOMMENDATION_DISCLAIMER_RE.search(original):
+        return False
+    remainder = _NUMERIC_RECOMMENDATION_DISCLAIMER_RE.sub("", original)
+    remainder = re.sub(r"(?i)\bthis\s+report\b|本报告", "", remainder)
+    return not _has_substantive_claim_text(remainder)
 
 
 def _parse_evidence_citation(body: str) -> frozenset[str] | None:
@@ -487,6 +594,9 @@ def validate_report_claims(text: str, packet: dict) -> dict:
     unsupported_single_snapshot_trend = 0
     contradicted_ma_alignment = 0
     unsupported_actor_or_flow_attribution = 0
+    unsupported_window_rank = 0
+    unsupported_causal_or_path = 0
+    unsupported_face_value = 0
     has_price_target = False
     has_allocation = False
     for paragraph in re.split(r"\n\s*\n", str(text or "")):
@@ -526,6 +636,25 @@ def validate_report_claims(text: str, packet: dict) -> dict:
             and _has_unsupported_actor_or_flow_attribution(claim_text)
         ):
             unsupported_actor_or_flow_attribution += 1
+        if (
+            known_paragraph_ids
+            and _has_unsupported_window_rank(
+                claim_text,
+                packet_rows,
+                known_paragraph_ids,
+            )
+        ):
+            unsupported_window_rank += 1
+        if (
+            known_paragraph_ids
+            and _has_unsupported_causal_or_path_claim(
+                claim_text,
+                known_paragraph_ids,
+            )
+        ):
+            unsupported_causal_or_path += 1
+        if known_paragraph_ids and _FACE_VALUE_RE.search(claim_text):
+            unsupported_face_value += 1
         has_price_target = has_price_target or bool(
             _PRICE_TARGET_RE.search(claim_text)
         )
@@ -548,6 +677,12 @@ def validate_report_claims(text: str, packet: dict) -> dict:
         error_codes.append("CONTRADICTED_MOVING_AVERAGE_ALIGNMENT")
     if unsupported_actor_or_flow_attribution:
         error_codes.append("UNSUPPORTED_ACTOR_OR_FLOW_ATTRIBUTION")
+    if unsupported_window_rank:
+        error_codes.append("UNSUPPORTED_WINDOW_RANK_CLAIM")
+    if unsupported_causal_or_path:
+        error_codes.append("UNSUPPORTED_CAUSAL_OR_PATH_CLAIM")
+    if unsupported_face_value:
+        error_codes.append("UNSUPPORTED_FACE_VALUE_CLAIM")
     if has_price_target:
         error_codes.append("UNSUPPORTED_PRICE_TARGET")
     if has_allocation:
@@ -567,19 +702,26 @@ def validate_report_claims(text: str, packet: dict) -> dict:
         "unsupportedActorOrFlowAttributionParagraphs": (
             unsupported_actor_or_flow_attribution
         ),
+        "unsupportedWindowRankParagraphs": unsupported_window_rank,
+        "unsupportedCausalOrPathParagraphs": unsupported_causal_or_path,
+        "unsupportedFaceValueParagraphs": unsupported_face_value,
     }
 
 
 def _filter_public_final_decision(text: str, packet: dict) -> tuple[str, int, set[str]]:
     """Omit unsafe final-decision paragraphs without modifying their claims."""
     known_ids = _packet_evidence_ids(packet)
-    kept: list[str] = []
+    packet_rows = _packet_evidence_rows(packet)
+    paragraphs = [
+        paragraph.strip()
+        for paragraph in re.split(r"\n\s*\n", str(text or ""))
+        if paragraph.strip()
+    ]
+    kept_indexes: list[int] = []
     omitted = 0
     omitted_error_codes: set[str] = set()
     parse_cache: dict[str, frozenset[str] | None] = {}
-    for paragraph in re.split(r"\n\s*\n", str(text or "")):
-        if not paragraph.strip():
-            continue
+    for index, paragraph in enumerate(paragraphs):
         paragraph_ids, invalid_citations = _scan_evidence_citations(
             paragraph,
             parse_cache,
@@ -594,12 +736,65 @@ def _filter_public_final_decision(text: str, packet: dict) -> tuple[str, int, se
         has_uncited_numeric = has_numeric_claim and not paragraph_ids.intersection(known_ids)
         has_price_target = bool(_PRICE_TARGET_RE.search(claim_text))
         has_allocation = bool(_ALLOCATION_RE.search(claim_text))
+        known_paragraph_ids = paragraph_ids.intersection(known_ids)
+        has_unsupported_derived_numeric = bool(
+            known_paragraph_ids
+            and _unsupported_derived_numbers(
+                paragraph,
+                packet_rows,
+                known_paragraph_ids,
+            )
+        )
+        has_unsupported_snapshot_trend = bool(
+            known_paragraph_ids
+            and _SINGLE_SNAPSHOT_INDICATOR_TREND_RE.search(claim_text)
+        )
+        has_contradicted_ma_alignment = bool(
+            known_paragraph_ids
+            and _moving_average_alignment_is_contradicted(claim_text, packet)
+        )
+        has_unsupported_actor_or_flow = bool(
+            known_paragraph_ids
+            and _has_unsupported_actor_or_flow_attribution(claim_text)
+        )
+        has_unsupported_window_rank = bool(
+            known_paragraph_ids
+            and _has_unsupported_window_rank(
+                claim_text,
+                packet_rows,
+                known_paragraph_ids,
+            )
+        )
+        has_unsupported_causal_or_path = bool(
+            known_paragraph_ids
+            and _has_unsupported_causal_or_path_claim(
+                claim_text,
+                known_paragraph_ids,
+            )
+        )
+        has_unsupported_face_value = bool(
+            known_paragraph_ids and _FACE_VALUE_RE.search(claim_text)
+        )
+        has_missing_qualitative_citation = bool(
+            _has_substantive_claim_text(claim_text)
+            and not known_paragraph_ids
+            and not _is_structural_final_paragraph(paragraph)
+            and not _is_numeric_recommendation_disclaimer(paragraph)
+        )
         if (
             unknown_ids
             or invalid_citations
             or has_uncited_numeric
+            or has_missing_qualitative_citation
             or has_price_target
             or has_allocation
+            or has_unsupported_derived_numeric
+            or has_unsupported_snapshot_trend
+            or has_contradicted_ma_alignment
+            or has_unsupported_actor_or_flow
+            or has_unsupported_window_rank
+            or has_unsupported_causal_or_path
+            or has_unsupported_face_value
         ):
             omitted += 1
             if unknown_ids:
@@ -608,12 +803,44 @@ def _filter_public_final_decision(text: str, packet: dict) -> tuple[str, int, se
                 omitted_error_codes.add("INVALID_EVIDENCE_CITATION")
             if has_uncited_numeric:
                 omitted_error_codes.add("UNCITED_NUMERIC_CLAIM")
+            if has_missing_qualitative_citation:
+                omitted_error_codes.add("MISSING_EVIDENCE_CITATION")
             if has_price_target:
                 omitted_error_codes.add("UNSUPPORTED_PRICE_TARGET")
             if has_allocation:
                 omitted_error_codes.add("UNSUPPORTED_ALLOCATION")
+            if has_unsupported_derived_numeric:
+                omitted_error_codes.add("UNSUPPORTED_DERIVED_NUMERIC_CLAIM")
+            if has_unsupported_snapshot_trend:
+                omitted_error_codes.add("UNSUPPORTED_SINGLE_SNAPSHOT_TREND")
+            if has_contradicted_ma_alignment:
+                omitted_error_codes.add("CONTRADICTED_MOVING_AVERAGE_ALIGNMENT")
+            if has_unsupported_actor_or_flow:
+                omitted_error_codes.add("UNSUPPORTED_ACTOR_OR_FLOW_ATTRIBUTION")
+            if has_unsupported_window_rank:
+                omitted_error_codes.add("UNSUPPORTED_WINDOW_RANK_CLAIM")
+            if has_unsupported_causal_or_path:
+                omitted_error_codes.add("UNSUPPORTED_CAUSAL_OR_PATH_CLAIM")
+            if has_unsupported_face_value:
+                omitted_error_codes.add("UNSUPPORTED_FACE_VALUE_CLAIM")
             continue
-        kept.append(paragraph.strip())
+        kept_indexes.append(index)
+    kept_index_set = set(kept_indexes)
+    kept: list[str] = []
+    for index in kept_indexes:
+        paragraph = paragraphs[index]
+        if (
+            _is_structural_final_paragraph(paragraph)
+            and not _is_rating_or_horizon_paragraph(paragraph)
+            and (
+                index + 1 not in kept_index_set
+                or _is_structural_final_paragraph(paragraphs[index + 1])
+            )
+        ):
+            omitted += 1
+            omitted_error_codes.add("ORPHAN_HEADING")
+            continue
+        kept.append(paragraph)
     return "\n\n".join(kept), omitted, omitted_error_codes
 
 
@@ -895,6 +1122,9 @@ def write_report_tree(
             "unsupportedSingleSnapshotTrendParagraphs": 0,
             "contradictedMovingAverageAlignmentParagraphs": 0,
             "unsupportedActorOrFlowAttributionParagraphs": 0,
+            "unsupportedWindowRankParagraphs": 0,
+            "unsupportedCausalOrPathParagraphs": 0,
+            "unsupportedFaceValueParagraphs": 0,
         }
     )
     if packet:

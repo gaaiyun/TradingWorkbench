@@ -33,3 +33,6 @@ def test_final_guardrail_distrusts_history_and_forbids_numeric_or_flow_invention
     assert "Do not calculate, round, or repeat" in source
     assert "buyer, seller, fund-flow, institutional, or retail activity" in source
     assert "Calling an attribution a hypothesis" in source
+    assert "Do not invent a window rank or extremum" in source
+    assert "not independent evidence" in source
+    assert "Qualitative factual claims also require a citation" in source

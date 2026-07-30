@@ -149,7 +149,7 @@ export function sessionAwareFreshness({
   maxAgeMs = DEFAULT_MAX_AGE_MS,
 } = {}) {
   const timestamp = Date.parse(asOf || "");
-  if (!Number.isFinite(timestamp) || !Number.isFinite(now) || now < timestamp) return "stale";
+  if (!Number.isFinite(timestamp) || !Number.isFinite(now)) return "stale";
   const endpoint = latestCompletedEndpoint(now, market);
   if (!Number.isFinite(endpoint)) return "stale";
   return endpoint - timestamp > maxAgeMs || timestamp - endpoint > FIVE_MINUTES_MS

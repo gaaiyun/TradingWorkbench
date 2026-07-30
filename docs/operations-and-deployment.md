@@ -640,9 +640,9 @@ DAILY_RECOVERY_ENABLED = "true"
 盘中采集发布后除常规 health 外，还必须执行以下业务验收：
 
 1. A 股午休、收盘后和周末的 5 分钟序列应停在最近合法上海会话端点，不得仅因自然时间流逝变成 stale；美股按纽约常规时段和 DST 做同样核对。
-2. 在真实开盘时段制造或读取一个超过 30 分钟未更新的合法端点，仍必须是 stale；未来时间、非整 5 分钟和时段外端点不得被 freshness 修正掩盖。
+2. 在真实开盘时段制造或读取一个超过 30 分钟未更新的合法端点，仍必须是 stale。腾讯当前形成柱可以使用最多一个 5 分钟步长后的合法区间结束标签；超过该步长的未来时间、非整 5 分钟和时段外端点不得被 freshness 修正掩盖。
 3. 检查 cron 摘要的 `discovered / staged / conflicted`。幂等重复不计冲突；真实唯一键冲突必须产生 `SCHEDULER_STAGE_CONFLICT`。
 4. `intradayCollect / intradaySignal / newsCollect / usIntradayCollect` 超过 30 分钟仍未执行时应以 `STALE_SLOT_EXPIRED` 收口；一次性日线和完整分析不得被该规则取消。
 5. 定时 5 分钟 provider 单标的最多返回 96 根给写入层；确认这只是单轮工作量限制，D1 既有 90 天历史没有被删除。
 
-新报告验收还要读取 `evidence_packet.json` 的 `derivedEvidence`：每个 `D#` 必须包含 `method / window / inputEvidenceIds`，最终 Portfolio Decision 中的派生数字必须逐字存在于所引 D 行。旧的 2026-07-30 原始决策仍应因未引用的自算比例而 fail-closed；受控、正确引用 D 行的新样例应通过。任何“主力、机构、散户、承接盘、卖压、资金流”表述若只引用 OHLCV，均视为语义越界并阻止发布。
+新报告验收还要读取 `evidence_packet.json` 的 `derivedEvidence`：每个 `D#` 必须包含 `method / window / inputEvidenceIds`。公开 Portfolio Decision 会逐段剔除未支持的自算比例、窗口极值/排名、面值、持续路径、因果或主体归因，并在 manifest 的 `omittedUnsafeParagraphs` 留痕；剩余文本仍须整体通过 claim gate。否定与不确定性边界要人工抽查：“既非严格空头排列”和“卖压是否释放无法确认”不能被误报成正向结论。旧 raw agent 分卷即使保留 Underweight/Sell 等字样，也不等于公开 verified 结论。
