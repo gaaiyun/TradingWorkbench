@@ -1,6 +1,6 @@
 {
   "status": "ok",
-  "generated_at": "2026-07-30T08:08:57+08:00",
+  "generated_at": "2026-07-30T13:02:01+08:00",
   "trade_date": "2026-07-30",
   "provider": "openai_compatible",
   "analysts": [
@@ -19,15 +19,15 @@
     "kind": "manual"
   },
   "run": {
-    "id": "30501730091",
+    "id": "30515444707",
     "attempt": "1",
     "workflow": "daily-analysis",
-    "url": "https://github.com/gaaiyun/TradingWorkbench/actions/runs/30501730091"
+    "url": "https://github.com/gaaiyun/TradingWorkbench/actions/runs/30515444707"
   },
   "identity": {
     "scope": "profile",
     "kind": "manual",
-    "runId": "30501730091",
+    "runId": "30515444707",
     "profileId": "cn-semi-comms",
     "requestId": null,
     "slotId": null,
@@ -42,23 +42,24 @@
   ],
   "results": [
     {
-      "ticker": "512480.SS",
+      "ticker": "515880.SS",
       "rating": "Not Rated",
-      "report": "reports/512480.SS/2026-07-30/complete_report.md",
+      "report": "reports/515880.SS/2026-07-30-v2/complete_report.md",
       "files": {
-        "fundamentals": "reports/512480.SS/2026-07-30/1_analysts/fundamentals.md",
-        "market": "reports/512480.SS/2026-07-30/1_analysts/market.md",
-        "bear": "reports/512480.SS/2026-07-30/2_research/bear.md",
-        "bull": "reports/512480.SS/2026-07-30/2_research/bull.md",
-        "manager": "reports/512480.SS/2026-07-30/2_research/manager.md",
-        "trader": "reports/512480.SS/2026-07-30/3_trading/trader.md",
-        "aggressive": "reports/512480.SS/2026-07-30/4_risk/aggressive.md",
-        "conservative": "reports/512480.SS/2026-07-30/4_risk/conservative.md",
-        "neutral": "reports/512480.SS/2026-07-30/4_risk/neutral.md",
-        "decision": "reports/512480.SS/2026-07-30/5_portfolio/decision.md",
-        "complete_report": "reports/512480.SS/2026-07-30/complete_report.md"
+        "fundamentals": "reports/515880.SS/2026-07-30-v2/1_analysts/fundamentals.md",
+        "market": "reports/515880.SS/2026-07-30-v2/1_analysts/market.md",
+        "news": "reports/515880.SS/2026-07-30-v2/1_analysts/news.md",
+        "bear": "reports/515880.SS/2026-07-30-v2/2_research/bear.md",
+        "bull": "reports/515880.SS/2026-07-30-v2/2_research/bull.md",
+        "manager": "reports/515880.SS/2026-07-30-v2/2_research/manager.md",
+        "trader": "reports/515880.SS/2026-07-30-v2/3_trading/trader.md",
+        "aggressive": "reports/515880.SS/2026-07-30-v2/4_risk/aggressive.md",
+        "conservative": "reports/515880.SS/2026-07-30-v2/4_risk/conservative.md",
+        "neutral": "reports/515880.SS/2026-07-30-v2/4_risk/neutral.md",
+        "decision": "reports/515880.SS/2026-07-30-v2/5_portfolio/decision.md",
+        "complete_report": "reports/515880.SS/2026-07-30-v2/complete_report.md"
       },
-      "decision_excerpt": "**Rating**: Underweight\n\n**Executive Summary**: 512480.SS近期价格持续下行，7月29日收盘1.027 [M644]创观测窗口新低，盘中最低触及0.978 [M644]。技术指标全面偏空：收盘价1.041 [M643]同时低于MA20（1.2169 [I5]）和MA60（1.16035 [I6]），MACD三线均为负值 [I7][I8][I9]，RSI14为37.12045566 [I11]低于50中线，20日已实现波动率高达81.62166617 [I10]。ETF关键质量数据（NAV/折溢价率、跟踪误差、持仓集中度、AUM、费率）全部unavailable，无法评估底层资产质量与交易安全。建议逐步削减敞口，但鉴于MA20仍高于MA60（趋势结构尚未完全确认走坏）且RSI未进入极端超卖区域，维持Underweight而非Sell评级，",
+      "decision_excerpt": "**Rating**: Underweight\n\n**Executive Summary**: 515880.SS 当前存在确认的严格空头排列、MACD 三线全负及窗口内反弹高点持续递减，技术结构全面偏空，建议降低敞口。但 RSI 已极度接近超卖阈值、ETF 关键基本面数据全部不可得、且波动率极端，一次性清仓的执行风险同样不可忽视，因此选择 Underweight 而非 Sell。建议分步减持，并将节奏与关键技术观察点挂钩，待 Q2 季报正文及 NAV、跟踪误差等数据到位后重新评估。\n\n**Investment Thesis**: 一、已核实事实\n\n- 严格空头排列已确认 [D7]：收盘价 0.602 [M644] < MA20=0.7155 [I5] < MA60=0.77903333 [I6]，结构性下行压力确凿。\n- MACD 三线全负：MACD=-0.05062674 [I7]、S",
       "analysis_status": "insufficient_evidence",
       "audit_status": "legacy_unverified",
       "evidence_publish": {
@@ -75,24 +76,24 @@
       "error": null
     },
     {
-      "ticker": "515880.SS",
+      "ticker": "512480.SS",
       "rating": "Not Rated",
-      "report": "reports/515880.SS/2026-07-30/complete_report.md",
+      "report": "reports/512480.SS/2026-07-30-v2/complete_report.md",
       "files": {
-        "fundamentals": "reports/515880.SS/2026-07-30/1_analysts/fundamentals.md",
-        "market": "reports/515880.SS/2026-07-30/1_analysts/market.md",
-        "news": "reports/515880.SS/2026-07-30/1_analysts/news.md",
-        "bear": "reports/515880.SS/2026-07-30/2_research/bear.md",
-        "bull": "reports/515880.SS/2026-07-30/2_research/bull.md",
-        "manager": "reports/515880.SS/2026-07-30/2_research/manager.md",
-        "trader": "reports/515880.SS/2026-07-30/3_trading/trader.md",
-        "aggressive": "reports/515880.SS/2026-07-30/4_risk/aggressive.md",
-        "conservative": "reports/515880.SS/2026-07-30/4_risk/conservative.md",
-        "neutral": "reports/515880.SS/2026-07-30/4_risk/neutral.md",
-        "decision": "reports/515880.SS/2026-07-30/5_portfolio/decision.md",
-        "complete_report": "reports/515880.SS/2026-07-30/complete_report.md"
+        "fundamentals": "reports/512480.SS/2026-07-30-v2/1_analysts/fundamentals.md",
+        "market": "reports/512480.SS/2026-07-30-v2/1_analysts/market.md",
+        "news": "reports/512480.SS/2026-07-30-v2/1_analysts/news.md",
+        "bear": "reports/512480.SS/2026-07-30-v2/2_research/bear.md",
+        "bull": "reports/512480.SS/2026-07-30-v2/2_research/bull.md",
+        "manager": "reports/512480.SS/2026-07-30-v2/2_research/manager.md",
+        "trader": "reports/512480.SS/2026-07-30-v2/3_trading/trader.md",
+        "aggressive": "reports/512480.SS/2026-07-30-v2/4_risk/aggressive.md",
+        "conservative": "reports/512480.SS/2026-07-30-v2/4_risk/conservative.md",
+        "neutral": "reports/512480.SS/2026-07-30-v2/4_risk/neutral.md",
+        "decision": "reports/512480.SS/2026-07-30-v2/5_portfolio/decision.md",
+        "complete_report": "reports/512480.SS/2026-07-30-v2/complete_report.md"
       },
-      "decision_excerpt": "**Rating**: Underweight\n\n**Executive Summary**: 515880.SS 当前技术面呈现明确的空头均线排列（close 0.600 < MA20 0.7155 < MA60 0.77903333），MACD 三线均为负，已实现波动率处于 81.77 的极端高位，07-29 最低价 0.574 创区间新低，底部尚未确认。建议降低持仓敞口但不执行全仓清仓——在 NAV/IOPV 等 ETF 关键数据 unavailable、指标快照仅覆盖至 07-28、07-29 收盘未进一步恶化的情况下，分步有序减仓优于在潜在底部区域一次性了结。\n\n**Investment Thesis**: **已核实事实：**\n截至 2026-07-28 指标快照日 [I2]，收盘价 0.600 [M643] 低于 MA20（0.7155 [I5]）且 MA20 低于 MA60",
+      "decision_excerpt": "**Rating**: Underweight\n\n**Executive Summary**: 512480.SS 最新收盘价 1.027 [M644] 同时低于 MA20 与 MA60，偏离幅度分别达 -15.60522639% [D5] 和 -11.49222217% [D6]，叠加 20 日已实现波动率 81.62166617 [I10] 与 ATR 占收盘价比 8.45745959% [D4] 的高位状态，价格承压与单日波动风险显著。MACD 三线全负 [I7][I8][I9]、RSI 处于中位下方 [I11][D9]，当前快照无任何正向动能证据。ETF 核心数据（NAV、溢价折价、跟踪误差、持仓集中度）全部 unavailable，无法验证运作安全性与交易定价合理性。建议降低敞口，但均线排列为 none [D7]、RSI 仍在超卖阈值之上 [D8]，尚不构成确认性趋势崩塌，不建议",
       "analysis_status": "insufficient_evidence",
       "audit_status": "legacy_unverified",
       "evidence_publish": {

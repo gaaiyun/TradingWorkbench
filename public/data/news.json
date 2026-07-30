@@ -1,7 +1,7 @@
 {
   "version": 1,
   "status": "ok",
-  "generated_at": "2026-07-30T08:08:57+08:00",
+  "generated_at": "2026-07-30T13:02:01+08:00",
   "trade_date": "2026-07-30",
   "global": {
     "status": "ok",
@@ -9,105 +9,105 @@
     "ticker": null,
     "start_date": "2026-07-23",
     "end_date": "2026-07-30",
-    "fetched_at": "2026-07-30T00:08:58Z",
+    "fetched_at": "2026-07-30T05:02:02Z",
     "items": [
       {
-        "title": "Dow Jones Futures: Stock Market Tumbles, Oil Prices Soar On Trump's Iran Threats; Microsoft, Meta, Fortinet Earnings Late",
+        "title": "Oil slips as markets look for cues on Gulf supplies",
         "summary": "",
-        "url": "https://finance.yahoo.com/m/58bee05c-df37-343b-b099-b9d3d5fa6440/dow-jones-futures%3A-stock.html",
-        "source": "Investor's Business Daily",
-        "published_at": "2026-07-29T23:39:56Z",
-        "fetched_at": "2026-07-30T00:08:58Z",
-        "ticker": null,
-        "source_tier": "aggregator"
-      },
-      {
-        "title": "As Geopolitical Forces Shape Australian Markets, Mitrade Announces Bloomberg.com Partnership for a Better-Informed Financial World",
-        "summary": "",
-        "url": "https://finance.yahoo.com/markets/currencies/articles/geopolitical-forces-shape-australian-markets-233000821.html",
-        "source": "PR Newswire",
-        "published_at": "2026-07-29T23:30:00Z",
-        "fetched_at": "2026-07-30T00:08:58Z",
-        "ticker": null,
-        "source_tier": "aggregator"
-      },
-      {
-        "title": "Unifor condemns HF Sinclair decision to shut Canada's largest base oil refinery",
-        "summary": "",
-        "url": "https://finance.yahoo.com/energy/articles/unifor-condemns-hf-sinclair-decision-232300470.html",
-        "source": "CNW Group",
-        "published_at": "2026-07-29T23:23:00Z",
-        "fetched_at": "2026-07-30T00:08:58Z",
-        "ticker": null,
-        "source_tier": "aggregator"
-      },
-      {
-        "title": "Major supermarket chain closing more stores",
-        "summary": "",
-        "url": "https://finance.yahoo.com/m/d1846cc1-edd9-35a2-b964-908c3ae8bc82/major-supermarket-chain.html",
-        "source": "TheStreet",
-        "published_at": "2026-07-29T23:17:00Z",
-        "fetched_at": "2026-07-30T00:08:58Z",
-        "ticker": null,
-        "source_tier": "aggregator"
-      },
-      {
-        "title": "Bank of England to keep rates steady while oil prices gyrate",
-        "summary": "",
-        "url": "https://finance.yahoo.com/economy/policy/articles/bank-england-keep-rates-steady-230552713.html",
+        "url": "https://finance.yahoo.com/news/oil-prices-slip-tankers-continue-003657966.html",
         "source": "Reuters",
-        "published_at": "2026-07-29T23:05:52Z",
-        "fetched_at": "2026-07-30T00:08:58Z",
+        "published_at": "2026-07-30T04:22:03Z",
+        "fetched_at": "2026-07-30T05:02:02Z",
         "ticker": null,
         "source_tier": "aggregator"
       },
       {
-        "title": "MAC.BID Brings $1 Online Auctions & Deep Retail Discounts to the St. Louis Metro",
+        "title": "Trump says British PM told him North Sea will open to oil",
         "summary": "",
-        "url": "https://finance.yahoo.com/small-business/articles/mac-bid-brings-1-online-221900110.html",
-        "source": "PR Newswire",
-        "published_at": "2026-07-29T22:19:00Z",
-        "fetched_at": "2026-07-30T00:08:58Z",
+        "url": "https://finance.yahoo.com/video/trump-says-british-pm-told-040643899.html",
+        "source": "Reuters Videos",
+        "published_at": "2026-07-30T04:06:43Z",
+        "fetched_at": "2026-07-30T05:02:02Z",
         "ticker": null,
         "source_tier": "aggregator"
       },
       {
-        "title": "The Fed Held Rates at 3.5%-3.75%. Here's What That Means for Walmart, Costco, and Target.",
+        "title": "HudBay Minerals Q2 Earnings Call Highlights",
         "summary": "",
-        "url": "https://finance.yahoo.com/m/39e3e28e-0997-316b-a968-ee911fcc47b4/the-fed-held-rates-at.html",
-        "source": "Motley Fool",
-        "published_at": "2026-07-29T22:10:08Z",
-        "fetched_at": "2026-07-30T00:08:58Z",
+        "url": "https://finance.yahoo.com/m/7b38b11b-2954-3bb5-b379-69f29082468a/hudbay-minerals-q2-earnings.html",
+        "source": "MarketBeat",
+        "published_at": "2026-07-30T04:03:55Z",
+        "fetched_at": "2026-07-30T05:02:02Z",
         "ticker": null,
         "source_tier": "aggregator"
       },
       {
-        "title": "What to Look Out for in Economic Data This Week (July 27-31)",
+        "title": "Oil Prices Slip Despite New Attacks Across the Middle East",
         "summary": "",
-        "url": "https://finance.yahoo.com/m/ccc6c9bc-3fd0-375a-987d-5c44992f45c8/what-to-look-out-for-in.html",
-        "source": "Kiplinger",
-        "published_at": "2026-07-29T21:30:30Z",
-        "fetched_at": "2026-07-30T00:08:58Z",
+        "url": "https://finance.yahoo.com/energy/articles/oil-prices-slip-despite-attacks-040109065.html",
+        "source": "Oilprice.com",
+        "published_at": "2026-07-30T04:01:09Z",
+        "fetched_at": "2026-07-30T05:02:02Z",
         "ticker": null,
         "source_tier": "aggregator"
       },
       {
-        "title": "Oil prices surge while US stocks fall as Fed keeps rates unchanged",
+        "title": "AP Top Financial News at 12:34 a.m. EDT",
         "summary": "",
-        "url": "https://finance.yahoo.com/energy/articles/crude-jumps-fresh-mideast-flare-030605104.html",
-        "source": "AFP",
-        "published_at": "2026-07-29T21:26:10Z",
-        "fetched_at": "2026-07-30T00:08:58Z",
+        "url": "https://finance.yahoo.com/markets/stocks/articles/ap-top-financial-news-12-040000457.html",
+        "source": "Associated Press",
+        "published_at": "2026-07-30T04:00:00Z",
+        "fetched_at": "2026-07-30T05:02:02Z",
         "ticker": null,
         "source_tier": "aggregator"
       },
       {
-        "title": "Comstock Resources (NYSE:CRK) Reports Sales Below Analyst Estimates In Q2 CY2026 Earnings",
+        "title": "AP Top Extended Financial Headlines at 12:34 a.m. EDT",
         "summary": "",
-        "url": "https://finance.yahoo.com/markets/stocks/articles/comstock-resources-nyse-crk-reports-212218325.html",
-        "source": "StockStory",
-        "published_at": "2026-07-29T21:22:18Z",
-        "fetched_at": "2026-07-30T00:08:58Z",
+        "url": "https://finance.yahoo.com/economy/articles/ap-top-extended-financial-headlines-040000790.html",
+        "source": "Associated Press",
+        "published_at": "2026-07-30T04:00:00Z",
+        "fetched_at": "2026-07-30T05:02:02Z",
+        "ticker": null,
+        "source_tier": "aggregator"
+      },
+      {
+        "title": "Asian stocks stutters after rout, Fed leaves markets guessing on rates",
+        "summary": "",
+        "url": "https://finance.yahoo.com/markets/stocks/articles/asian-stocks-choppy-rout-fed-014549754.html",
+        "source": "Reuters",
+        "published_at": "2026-07-30T03:43:11Z",
+        "fetched_at": "2026-07-30T05:02:02Z",
+        "ticker": null,
+        "source_tier": "aggregator"
+      },
+      {
+        "title": "Aramco just shut major refinery after a Houthi strike",
+        "summary": "",
+        "url": "https://finance.yahoo.com/m/faa2f4e9-ca72-3a49-ab5f-8717378359fe/aramco-just-shut-major.html",
+        "source": "TheStreet",
+        "published_at": "2026-07-30T03:17:00Z",
+        "fetched_at": "2026-07-30T05:02:02Z",
+        "ticker": null,
+        "source_tier": "aggregator"
+      },
+      {
+        "title": "The Fed Decided to Do Nothing and That Decision Backfired: Here’s Why",
+        "summary": "",
+        "url": "https://finance.yahoo.com/m/f2072284-e7ef-3501-a135-6032f95c6f21/the-fed-decided-to-do-nothing.html",
+        "source": "BeInCrypto",
+        "published_at": "2026-07-30T03:10:41Z",
+        "fetched_at": "2026-07-30T05:02:02Z",
+        "ticker": null,
+        "source_tier": "aggregator"
+      },
+      {
+        "title": "Dow Jones Futures Rise; Microsoft, Meta Lead Big Earnings After Market Tumbles, Oil Prices Soar",
+        "summary": "",
+        "url": "https://finance.yahoo.com/m/58bee05c-df37-343b-b099-b9d3d5fa6440/dow-jones-futures-rise%3B.html",
+        "source": "Investor's Business Daily",
+        "published_at": "2026-07-30T03:07:36Z",
+        "fetched_at": "2026-07-30T05:02:02Z",
         "ticker": null,
         "source_tier": "aggregator"
       }
@@ -126,14 +126,35 @@
     ]
   },
   "tickers": {
-    "512480.SS": {
-      "status": "empty",
+    "515880.SS": {
+      "status": "ok",
       "query_type": "ticker",
-      "ticker": "512480.SS",
+      "ticker": "515880.SS",
       "start_date": "2026-07-30",
       "end_date": "2026-07-30",
-      "fetched_at": "2026-07-30T00:08:59Z",
-      "items": [],
+      "fetched_at": "2026-07-30T05:02:04Z",
+      "items": [
+        {
+          "title": "通信ETF国泰（515880）开盘跌1.50%，重仓股新易盛跌2.61%，中际旭创跌3.36%",
+          "summary": "通信ETF国泰（515880）开盘跌1.50%，重仓股新易盛跌2.61%，中际旭创跌3.36% 新浪网",
+          "url": "https://news.google.com/rss/articles/CBMimAFBVV95cUxQbzlvSlZSVUhjeEVjZGNCMHcxZVdRQVdaclF0Z29XZVh2VVNKSGVQbW5UQUNnLUZEU2F1bFVtb0tfeFdEM2ZfVHZuOGNwZ1RUSFhsYU5vcUk2TkNlY1BFTW1MWGNZTmVRVi1FeGdiTjlCY3pBbF9BMjFrSGNTT012UzBhQnE4a2JBNkhhRkpoMk5HbnZlaTk0Yw?oc=5",
+          "source": "Google News / 新浪网",
+          "published_at": "2026-07-30T01:30:00Z",
+          "fetched_at": "2026-07-30T05:02:04Z",
+          "ticker": "515880.SS",
+          "source_tier": "aggregator"
+        },
+        {
+          "title": "7月29日通信ETF国泰（515880）份额减少7.52亿份，最新份额685.50亿份，最新规模413.36亿元",
+          "summary": "7月29日通信ETF国泰（515880）份额减少7.52亿份，最新份额685.50亿份，最新规模413.36亿元 新浪网",
+          "url": "https://news.google.com/rss/articles/CBMimwFBVV95cUxNbElPcXlFMFRDNHV6cXhXOXgxXzk5MHVaazNjdzhHaVEyR2lFeTNmYzcyQlZ5Sk4zTUlvbW5aLV9uc0tHcFM0S3VDdzZKZ25zY2VYZzRjZmNqN1d6Y0RIMm9VM3VCVWdldDRVejNjbFdfVVYtdF9pSDFfLXlqQWswOEk3OXdGNHpIQ21nM01vaTZ2WEpMR3ZRdFh4Zw?oc=5",
+          "source": "Google News / 新浪网",
+          "published_at": "2026-07-30T01:00:00Z",
+          "fetched_at": "2026-07-30T05:02:04Z",
+          "ticker": "515880.SS",
+          "source_tier": "aggregator"
+        }
+      ],
       "source_statuses": [
         {
           "source": "Yahoo Finance",
@@ -142,8 +163,8 @@
         },
         {
           "source": "Google News RSS",
-          "status": "empty",
-          "item_count": 0
+          "status": "ok",
+          "item_count": 2
         },
         {
           "source": "SEC EDGAR",
@@ -152,14 +173,25 @@
         }
       ]
     },
-    "515880.SS": {
-      "status": "empty",
+    "512480.SS": {
+      "status": "ok",
       "query_type": "ticker",
-      "ticker": "515880.SS",
+      "ticker": "512480.SS",
       "start_date": "2026-07-30",
       "end_date": "2026-07-30",
-      "fetched_at": "2026-07-30T00:09:02Z",
-      "items": [],
+      "fetched_at": "2026-07-30T05:02:07Z",
+      "items": [
+        {
+          "title": "7月29日半导体ETF国联安（512480）份额增加2.92亿份，最新份额193.50亿份，最新规模198.38亿元",
+          "summary": "7月29日半导体ETF国联安（512480）份额增加2.92亿份，最新份额193.50亿份，最新规模198.38亿元 新浪网",
+          "url": "https://news.google.com/rss/articles/CBMimwFBVV95cUxQU3lMTVJ2Q2dkVXpMTWtxLXNIYXppODBXcFlDU1RudVowZ2hCQXppOE9NQzVrd0tiTjJTQmJJQ3pwbWZGYzdoVE1CRkF5ZktJSWhKa1V1TjZFMTlYLTBfUkoteDBVbU51enVlcnhPdzZxeEY5YjZtQ0VZbS1fR3A5Qm91ejlHTmtuYjB1aWNBQWc0X0Zzay03QW5UZw?oc=5",
+          "source": "Google News / 新浪网",
+          "published_at": "2026-07-30T01:00:00Z",
+          "fetched_at": "2026-07-30T05:02:07Z",
+          "ticker": "512480.SS",
+          "source_tier": "aggregator"
+        }
+      ],
       "source_statuses": [
         {
           "source": "Yahoo Finance",
@@ -168,8 +200,8 @@
         },
         {
           "source": "Google News RSS",
-          "status": "empty",
-          "item_count": 0
+          "status": "ok",
+          "item_count": 1
         },
         {
           "source": "SEC EDGAR",
@@ -181,103 +213,133 @@
   },
   "items": [
     {
-      "title": "Dow Jones Futures: Stock Market Tumbles, Oil Prices Soar On Trump's Iran Threats; Microsoft, Meta, Fortinet Earnings Late",
+      "title": "Oil slips as markets look for cues on Gulf supplies",
       "summary": "",
-      "url": "https://finance.yahoo.com/m/58bee05c-df37-343b-b099-b9d3d5fa6440/dow-jones-futures%3A-stock.html",
-      "source": "Investor's Business Daily",
-      "published_at": "2026-07-29T23:39:56Z",
-      "fetched_at": "2026-07-30T00:08:58Z",
-      "ticker": null,
-      "source_tier": "aggregator"
-    },
-    {
-      "title": "As Geopolitical Forces Shape Australian Markets, Mitrade Announces Bloomberg.com Partnership for a Better-Informed Financial World",
-      "summary": "",
-      "url": "https://finance.yahoo.com/markets/currencies/articles/geopolitical-forces-shape-australian-markets-233000821.html",
-      "source": "PR Newswire",
-      "published_at": "2026-07-29T23:30:00Z",
-      "fetched_at": "2026-07-30T00:08:58Z",
-      "ticker": null,
-      "source_tier": "aggregator"
-    },
-    {
-      "title": "Unifor condemns HF Sinclair decision to shut Canada's largest base oil refinery",
-      "summary": "",
-      "url": "https://finance.yahoo.com/energy/articles/unifor-condemns-hf-sinclair-decision-232300470.html",
-      "source": "CNW Group",
-      "published_at": "2026-07-29T23:23:00Z",
-      "fetched_at": "2026-07-30T00:08:58Z",
-      "ticker": null,
-      "source_tier": "aggregator"
-    },
-    {
-      "title": "Major supermarket chain closing more stores",
-      "summary": "",
-      "url": "https://finance.yahoo.com/m/d1846cc1-edd9-35a2-b964-908c3ae8bc82/major-supermarket-chain.html",
-      "source": "TheStreet",
-      "published_at": "2026-07-29T23:17:00Z",
-      "fetched_at": "2026-07-30T00:08:58Z",
-      "ticker": null,
-      "source_tier": "aggregator"
-    },
-    {
-      "title": "Bank of England to keep rates steady while oil prices gyrate",
-      "summary": "",
-      "url": "https://finance.yahoo.com/economy/policy/articles/bank-england-keep-rates-steady-230552713.html",
+      "url": "https://finance.yahoo.com/news/oil-prices-slip-tankers-continue-003657966.html",
       "source": "Reuters",
-      "published_at": "2026-07-29T23:05:52Z",
-      "fetched_at": "2026-07-30T00:08:58Z",
+      "published_at": "2026-07-30T04:22:03Z",
+      "fetched_at": "2026-07-30T05:02:02Z",
       "ticker": null,
       "source_tier": "aggregator"
     },
     {
-      "title": "MAC.BID Brings $1 Online Auctions & Deep Retail Discounts to the St. Louis Metro",
+      "title": "Trump says British PM told him North Sea will open to oil",
       "summary": "",
-      "url": "https://finance.yahoo.com/small-business/articles/mac-bid-brings-1-online-221900110.html",
-      "source": "PR Newswire",
-      "published_at": "2026-07-29T22:19:00Z",
-      "fetched_at": "2026-07-30T00:08:58Z",
+      "url": "https://finance.yahoo.com/video/trump-says-british-pm-told-040643899.html",
+      "source": "Reuters Videos",
+      "published_at": "2026-07-30T04:06:43Z",
+      "fetched_at": "2026-07-30T05:02:02Z",
       "ticker": null,
       "source_tier": "aggregator"
     },
     {
-      "title": "The Fed Held Rates at 3.5%-3.75%. Here's What That Means for Walmart, Costco, and Target.",
+      "title": "HudBay Minerals Q2 Earnings Call Highlights",
       "summary": "",
-      "url": "https://finance.yahoo.com/m/39e3e28e-0997-316b-a968-ee911fcc47b4/the-fed-held-rates-at.html",
-      "source": "Motley Fool",
-      "published_at": "2026-07-29T22:10:08Z",
-      "fetched_at": "2026-07-30T00:08:58Z",
+      "url": "https://finance.yahoo.com/m/7b38b11b-2954-3bb5-b379-69f29082468a/hudbay-minerals-q2-earnings.html",
+      "source": "MarketBeat",
+      "published_at": "2026-07-30T04:03:55Z",
+      "fetched_at": "2026-07-30T05:02:02Z",
       "ticker": null,
       "source_tier": "aggregator"
     },
     {
-      "title": "What to Look Out for in Economic Data This Week (July 27-31)",
+      "title": "Oil Prices Slip Despite New Attacks Across the Middle East",
       "summary": "",
-      "url": "https://finance.yahoo.com/m/ccc6c9bc-3fd0-375a-987d-5c44992f45c8/what-to-look-out-for-in.html",
-      "source": "Kiplinger",
-      "published_at": "2026-07-29T21:30:30Z",
-      "fetched_at": "2026-07-30T00:08:58Z",
+      "url": "https://finance.yahoo.com/energy/articles/oil-prices-slip-despite-attacks-040109065.html",
+      "source": "Oilprice.com",
+      "published_at": "2026-07-30T04:01:09Z",
+      "fetched_at": "2026-07-30T05:02:02Z",
       "ticker": null,
       "source_tier": "aggregator"
     },
     {
-      "title": "Oil prices surge while US stocks fall as Fed keeps rates unchanged",
+      "title": "AP Top Financial News at 12:34 a.m. EDT",
       "summary": "",
-      "url": "https://finance.yahoo.com/energy/articles/crude-jumps-fresh-mideast-flare-030605104.html",
-      "source": "AFP",
-      "published_at": "2026-07-29T21:26:10Z",
-      "fetched_at": "2026-07-30T00:08:58Z",
+      "url": "https://finance.yahoo.com/markets/stocks/articles/ap-top-financial-news-12-040000457.html",
+      "source": "Associated Press",
+      "published_at": "2026-07-30T04:00:00Z",
+      "fetched_at": "2026-07-30T05:02:02Z",
       "ticker": null,
       "source_tier": "aggregator"
     },
     {
-      "title": "Comstock Resources (NYSE:CRK) Reports Sales Below Analyst Estimates In Q2 CY2026 Earnings",
+      "title": "AP Top Extended Financial Headlines at 12:34 a.m. EDT",
       "summary": "",
-      "url": "https://finance.yahoo.com/markets/stocks/articles/comstock-resources-nyse-crk-reports-212218325.html",
-      "source": "StockStory",
-      "published_at": "2026-07-29T21:22:18Z",
-      "fetched_at": "2026-07-30T00:08:58Z",
+      "url": "https://finance.yahoo.com/economy/articles/ap-top-extended-financial-headlines-040000790.html",
+      "source": "Associated Press",
+      "published_at": "2026-07-30T04:00:00Z",
+      "fetched_at": "2026-07-30T05:02:02Z",
       "ticker": null,
+      "source_tier": "aggregator"
+    },
+    {
+      "title": "Asian stocks stutters after rout, Fed leaves markets guessing on rates",
+      "summary": "",
+      "url": "https://finance.yahoo.com/markets/stocks/articles/asian-stocks-choppy-rout-fed-014549754.html",
+      "source": "Reuters",
+      "published_at": "2026-07-30T03:43:11Z",
+      "fetched_at": "2026-07-30T05:02:02Z",
+      "ticker": null,
+      "source_tier": "aggregator"
+    },
+    {
+      "title": "Aramco just shut major refinery after a Houthi strike",
+      "summary": "",
+      "url": "https://finance.yahoo.com/m/faa2f4e9-ca72-3a49-ab5f-8717378359fe/aramco-just-shut-major.html",
+      "source": "TheStreet",
+      "published_at": "2026-07-30T03:17:00Z",
+      "fetched_at": "2026-07-30T05:02:02Z",
+      "ticker": null,
+      "source_tier": "aggregator"
+    },
+    {
+      "title": "The Fed Decided to Do Nothing and That Decision Backfired: Here’s Why",
+      "summary": "",
+      "url": "https://finance.yahoo.com/m/f2072284-e7ef-3501-a135-6032f95c6f21/the-fed-decided-to-do-nothing.html",
+      "source": "BeInCrypto",
+      "published_at": "2026-07-30T03:10:41Z",
+      "fetched_at": "2026-07-30T05:02:02Z",
+      "ticker": null,
+      "source_tier": "aggregator"
+    },
+    {
+      "title": "Dow Jones Futures Rise; Microsoft, Meta Lead Big Earnings After Market Tumbles, Oil Prices Soar",
+      "summary": "",
+      "url": "https://finance.yahoo.com/m/58bee05c-df37-343b-b099-b9d3d5fa6440/dow-jones-futures-rise%3B.html",
+      "source": "Investor's Business Daily",
+      "published_at": "2026-07-30T03:07:36Z",
+      "fetched_at": "2026-07-30T05:02:02Z",
+      "ticker": null,
+      "source_tier": "aggregator"
+    },
+    {
+      "title": "通信ETF国泰（515880）开盘跌1.50%，重仓股新易盛跌2.61%，中际旭创跌3.36%",
+      "summary": "通信ETF国泰（515880）开盘跌1.50%，重仓股新易盛跌2.61%，中际旭创跌3.36% 新浪网",
+      "url": "https://news.google.com/rss/articles/CBMimAFBVV95cUxQbzlvSlZSVUhjeEVjZGNCMHcxZVdRQVdaclF0Z29XZVh2VVNKSGVQbW5UQUNnLUZEU2F1bFVtb0tfeFdEM2ZfVHZuOGNwZ1RUSFhsYU5vcUk2TkNlY1BFTW1MWGNZTmVRVi1FeGdiTjlCY3pBbF9BMjFrSGNTT012UzBhQnE4a2JBNkhhRkpoMk5HbnZlaTk0Yw?oc=5",
+      "source": "Google News / 新浪网",
+      "published_at": "2026-07-30T01:30:00Z",
+      "fetched_at": "2026-07-30T05:02:04Z",
+      "ticker": "515880.SS",
+      "source_tier": "aggregator"
+    },
+    {
+      "title": "7月29日通信ETF国泰（515880）份额减少7.52亿份，最新份额685.50亿份，最新规模413.36亿元",
+      "summary": "7月29日通信ETF国泰（515880）份额减少7.52亿份，最新份额685.50亿份，最新规模413.36亿元 新浪网",
+      "url": "https://news.google.com/rss/articles/CBMimwFBVV95cUxNbElPcXlFMFRDNHV6cXhXOXgxXzk5MHVaazNjdzhHaVEyR2lFeTNmYzcyQlZ5Sk4zTUlvbW5aLV9uc0tHcFM0S3VDdzZKZ25zY2VYZzRjZmNqN1d6Y0RIMm9VM3VCVWdldDRVejNjbFdfVVYtdF9pSDFfLXlqQWswOEk3OXdGNHpIQ21nM01vaTZ2WEpMR3ZRdFh4Zw?oc=5",
+      "source": "Google News / 新浪网",
+      "published_at": "2026-07-30T01:00:00Z",
+      "fetched_at": "2026-07-30T05:02:04Z",
+      "ticker": "515880.SS",
+      "source_tier": "aggregator"
+    },
+    {
+      "title": "7月29日半导体ETF国联安（512480）份额增加2.92亿份，最新份额193.50亿份，最新规模198.38亿元",
+      "summary": "7月29日半导体ETF国联安（512480）份额增加2.92亿份，最新份额193.50亿份，最新规模198.38亿元 新浪网",
+      "url": "https://news.google.com/rss/articles/CBMimwFBVV95cUxQU3lMTVJ2Q2dkVXpMTWtxLXNIYXppODBXcFlDU1RudVowZ2hCQXppOE9NQzVrd0tiTjJTQmJJQ3pwbWZGYzdoVE1CRkF5ZktJSWhKa1V1TjZFMTlYLTBfUkoteDBVbU51enVlcnhPdzZxeEY5YjZtQ0VZbS1fR3A5Qm91ejlHTmtuYjB1aWNBQWc0X0Zzay03QW5UZw?oc=5",
+      "source": "Google News / 新浪网",
+      "published_at": "2026-07-30T01:00:00Z",
+      "fetched_at": "2026-07-30T05:02:07Z",
+      "ticker": "512480.SS",
       "source_tier": "aggregator"
     }
   ]
