@@ -26,7 +26,7 @@ function writeReport(publicDir, name, manifest, completeReport) {
   fs.writeFileSync(path.join(reportDir, "5_portfolio", "decision.md"), "评级：Underweight", "utf8");
 }
 
-test("Pages deployment artifact excludes raw sections from unverified reports", (t) => {
+test("Pages deployment artifact replaces raw sections of unverified reports with safe tombstones", (t) => {
   const fixtureRoot = fs.mkdtempSync(path.join(os.tmpdir(), "pages-boundary-"));
   t.after(() => fs.rmSync(fixtureRoot, { recursive: true, force: true }));
   const publicDir = path.join(fixtureRoot, "public");
@@ -97,8 +97,18 @@ test("Pages deployment artifact excludes raw sections from unverified reports", 
   assert.equal(fs.readFileSync(path.join(outputDir, "index.html"), "utf8"), "safe app");
 
   const unverifiedDir = path.join(outputDir, "reports", "UNVERIFIED", "2026-07-30");
-  assert.equal(fs.existsSync(path.join(unverifiedDir, "1_analysts", "market.md")), false);
-  assert.equal(fs.existsSync(path.join(unverifiedDir, "5_portfolio", "decision.md")), false);
+  const unverifiedMarket = fs.readFileSync(
+    path.join(unverifiedDir, "1_analysts", "market.md"),
+    "utf8",
+  );
+  const unverifiedDecision = fs.readFileSync(
+    path.join(unverifiedDir, "5_portfolio", "decision.md"),
+    "utf8",
+  );
+  assert.match(unverifiedMarket, /Not Rated/);
+  assert.match(unverifiedDecision, /Not Rated/);
+  assert.doesNotMatch(unverifiedMarket, /raw analyst direction/);
+  assert.doesNotMatch(unverifiedDecision, /Underweight/);
   assert.match(fs.readFileSync(path.join(unverifiedDir, "complete_report.md"), "utf8"), /Not Rated/);
 
   const unsafeComplete = fs.readFileSync(
@@ -113,7 +123,10 @@ test("Pages deployment artifact excludes raw sections from unverified reports", 
   assert.equal(fs.readFileSync(path.join(verifiedDir, "5_portfolio", "decision.md"), "utf8"), "评级：Underweight");
 
   const staleDir = path.join(outputDir, "reports", "STALE", "2026-07-30");
-  assert.equal(fs.existsSync(path.join(staleDir, "1_analysts", "market.md")), false);
+  assert.match(
+    fs.readFileSync(path.join(staleDir, "1_analysts", "market.md"), "utf8"),
+    /Not Rated/,
+  );
   assert.doesNotMatch(fs.readFileSync(path.join(staleDir, "complete_report.md"), "utf8"), /Sell/);
 
   const smuggled = fs.readFileSync(

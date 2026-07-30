@@ -967,7 +967,7 @@ test("report API rechecks invalidation without serving a cached verified raw res
     assert.equal(denied.status, 409);
     assert.equal(auditRequests.length, 2);
     assert.ok(auditRequests.every(({ value }) => value.includes("__tw_no_cache=")));
-    assert.ok(auditRequests.every(({ init }) => init.cache === "no-store"));
+    assert.ok(auditRequests.every(({ init }) => init.headers?.["cache-control"] === "no-cache"));
     assert.ok(auditRequests.every(({ init }) => init.cf?.cacheTtl === 0));
   } finally {
     globalThis.fetch = originalFetch;

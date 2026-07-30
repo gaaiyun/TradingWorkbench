@@ -16,7 +16,7 @@
 
 ## 1. 当前结论
 
-2026-07-31 本轮发布修复包含：Pages 以 `public/data/report-audit.json` 为权威 allowlist 生成 `build/pages-public`，旧 Manifest 即使仍写 verified、但当前索引已 invalidated，也不能发布角色分卷；未验证报告始终生成统一 `Not Rated`，不再用正文 marker 判断安全。`/api/report` 无 selector 和带 selector 都逐请求校验 Manifest 与当前审计索引，门禁和 raw 响应均为 `no-store`，未验证 raw 返回 409。A 股 5m 在采集层拒绝 Yahoo 午休/零成交平盘端点，读取层按交易日选单一来源，migration `0019` 精确清理既有脏行。报告校验补齐“实现波动率”和中文跨月日期的结构数字识别，最终提示词不再诱导无 capability 的传导路径、置信度或公司行动效果。Hermes 原 Job `8dc0823402e7` 已从工程审计原地切换为 08:30 盘前投资简报；旧工程审计 Skill 保留为手工排障，不新建重复 cron。上线真相仍须按 §1.5 的 GitHub、Pages、Worker 三方完整 SHA 和生产端点实时回读，不以本文中的旧短 SHA替代。
+2026-07-31 本轮发布修复包含：Pages 以 `public/data/report-audit.json` 为权威 allowlist 生成 `build/pages-public`，旧 Manifest 即使仍写 verified、但当前索引已 invalidated，也不能发布角色分卷；未验证报告的完整正文和原 raw 同名路径始终生成统一 `Not Rated` 安全内容，以覆盖旧部署/CDN 可能缓存的历史评级，不再用正文 marker 判断安全。`/api/report` 无 selector 和带 selector 都逐请求校验 Manifest 与当前审计索引，门禁和 raw 响应均为 `no-store`，未验证 raw 返回 409。A 股 5m 在采集层拒绝 Yahoo 午休/零成交平盘端点，读取层按交易日选单一来源，migration `0019` 精确清理既有脏行。报告校验补齐“实现波动率”和中文跨月日期的结构数字识别，最终提示词不再诱导无 capability 的传导路径、置信度或公司行动效果。Hermes 原 Job `8dc0823402e7` 已从工程审计原地切换为 08:30 盘前投资简报；旧工程审计 Skill 保留为手工排障，不新建重复 cron。上线真相仍须按 §1.5 的 GitHub、Pages、Worker 三方完整 SHA 和生产端点实时回读，不以本文中的旧短 SHA替代。
 
 多 profile、运行身份隔离、Chat/Evidence owner、调度可靠性、提醒 shadow 账本、Worker/Pages 部署指纹，以及独立的全天资讯采集任务均已合入 `main`。
 
@@ -318,7 +318,7 @@ migration 只向前保留。回退代码时不要删除新表或列。
 - Worker `/health` 已实现回读运行时 SHA 和部署时间；
 - Pages `/api/health` 已增加 commit SHA、deployedAt、branch 和不可变 deployment URL；deployedAt 来自随部署发布且 SHA 匹配的 manifest；
 - 部署 workflow 均写成缺凭据即失败，发布后回读目标 SHA。
-- Pages 和可选 GitHub Pages workflow 均只上传 `build/pages-public`；当前审计索引未明确 verified 的报告不含 raw 分卷。
+- Pages 和可选 GitHub Pages workflow 均只上传 `build/pages-public`；当前审计索引未明确 verified 的报告，其 raw Markdown 同名路径只含统一 `Not Rated` 安全墓碑，不含原始分卷正文。
 
 ### 生产层已验证
 

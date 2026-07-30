@@ -17,6 +17,21 @@ function copyIfFile(source, target) {
   fs.copyFileSync(source, target);
 }
 
+function writeRawTombstones(sourceDir, targetDir, placeholder) {
+  for (const entry of fs.readdirSync(sourceDir, { withFileTypes: true })) {
+    const sourcePath = path.join(sourceDir, entry.name);
+    const targetPath = path.join(targetDir, entry.name);
+    if (entry.isDirectory()) {
+      writeRawTombstones(sourcePath, targetPath, placeholder);
+      continue;
+    }
+    if (entry.isFile() && entry.name.endsWith(".md") && entry.name !== "complete_report.md") {
+      fs.mkdirSync(path.dirname(targetPath), { recursive: true });
+      fs.writeFileSync(targetPath, placeholder, "utf8");
+    }
+  }
+}
+
 function safeReportIdentity(manifest, reportDir) {
   const directoryTicker = path.basename(path.dirname(reportDir));
   const ticker = /^[A-Za-z0-9._-]+$/.test(String(manifest?.ticker || ""))
@@ -118,6 +133,13 @@ export function preparePagesPublic(sourceDir, outputDir) {
       path.join(targetDir, "complete_report.md"),
       failClosedPlaceholder(manifest, reportDir),
       "utf8",
+    );
+    // 同路径安全墓碑会覆盖旧部署/CDN 中可能残留的 raw Markdown；
+    // 只删除文件不足以保证旧缓存立即失效。
+    writeRawTombstones(
+      reportDir,
+      targetDir,
+      "# Report section unavailable\n\n**Not Rated**\n\nThis raw section is not published.\n",
     );
   }
 }

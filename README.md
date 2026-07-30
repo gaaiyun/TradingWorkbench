@@ -354,7 +354,7 @@ MCP 只提供设置、监控、行情、新闻和研究历史查询，不接收�
 - 高频行情、信号、新闻和美股分时 slot 超过 30 分钟仍未执行会以 `STALE_SLOT_EXPIRED` 收口；调度器把真实唯一键冲突单独计为 `conflicted`，不再与幂等重复混为一谈。
 - evidence 与 discovery 新闻分别查询后合并展示，官方证据不会再被前 200 条发现层资讯挤出。
 - Evidence claim validation 失败时，用户可见的汇总报告只显示 `Not Rated` 和失败原因，不再保留方向、仓位或交易指令；原始角色分卷仅作审计。
-- Pages 发布产物只完整包含 `auditStatus=verified` 的报告目录；未验证目录只保留 Manifest、EvidencePacket 和 fail-closed `complete_report.md`，不包含 `1_analysts` 至 `5_portfolio`。原始分卷仍可在 GitHub 开发审计记录中存在，因此这里的保证是“不经 Pages/API 对用户发布”，不是删除审计证据。
+- Pages 发布产物只完整包含 `auditStatus=verified` 的报告目录；未验证目录保留 Manifest、EvidencePacket 和 fail-closed `complete_report.md`，并用统一 `Not Rated` 安全墓碑覆盖原 raw Markdown 的同名路径，确保旧部署/CDN 缓存也不能继续返回历史评级。原始分卷仍可在 GitHub 开发审计记录中存在，因此这里的保证是“不经 Pages/API 对用户发布”，不是删除审计证据。
 - 可复算的窗口涨跌、ATR/收盘比、均线距离和 RSI 固定阈值先写入 `D#` 派生证据；最终决策只能逐字引用 ledger 中已有数字。价量本身不能被叙述为主力、机构、承接盘、卖压或资金流。
 - 公开报告按段落复用同一 Evidence validator：无引用的定性叙事、未预计算的窗口排名/极值、“跌破面值”、仅由价量推出的持续路径或因果关系，以及把同源技术指标称为“相互独立”，都会计入 `omittedUnsafeParagraphs`；只要最终稿有一段被过滤，整份方向性结论即降为 `Not Rated`，禁止删掉坏段后继续保留 Sell/Underweight 等评级。原始 Agent 文本只留在审计分卷。被否定的表述（如“既非空头排列”“卖压是否释放无法确认”）不会误判为正向事实。
 - 标题伪装、Rating 尾随理由、纯引用残片和只有条件/后续观察的空壳报告不能成为 verified；泛化的新闻或公司行动引用不证明无关因果，否定判断按局部从句生效。

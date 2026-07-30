@@ -74,7 +74,10 @@ export async function proxyRaw(path, { cacheSeconds = 60 } = {}) {
   const upstream = `${RAW_BASE}/${path}${nonce}`;
   const resp = await fetch(upstream, noStore
     ? {
-        cache: "no-store",
+        headers: {
+          "cache-control": "no-cache",
+          pragma: "no-cache",
+        },
         cf: { cacheTtl: 0, cacheEverything: false },
       }
     : { cf: { cacheTtl: cacheSeconds, cacheEverything: true } });
