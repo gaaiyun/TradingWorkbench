@@ -114,6 +114,10 @@ test("health gives the live options source the same bounded budget as its proxy"
     source,
     /checkJson\(\s*"options_live"[\s\S]*?cacheTtl:\s*15[\s\S]*?cacheEverything:\s*true[\s\S]*?\{\s*timeoutMs:\s*8000\s*\}/,
   );
+  assert.doesNotMatch(
+    source,
+    /VOLGUARD_LIVE_URL \|\| VOLGUARD_LIVE\}\?ts=/,
+  );
 });
 
 test("buildHealthPayload fails closed when Pages deployment metadata is malformed", () => {
