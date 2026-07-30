@@ -370,6 +370,66 @@ test("audit invalidates a verified report when packet bytes no longer match the 
   assert.ok(audit.reports[0].problemCodes.includes("INVALID_EVIDENCE_PACKET"));
 });
 
+test("audit never verifies a rated report that filtered unsafe public paragraphs", async (t) => {
+  const root = await fs.mkdtemp(path.join(os.tmpdir(), "tradingworkbench-audit-filtered-"));
+  t.after(() => fs.rm(root, { recursive: true, force: true }));
+  const reportDir = path.join(root, "MSFT", "2026-07-24");
+  await fs.mkdir(reportDir, { recursive: true });
+  const packet = {
+    schemaVersion: "EvidencePacketV1",
+    status: "ok",
+    asOf: "2026-07-24T20:00:00Z",
+    canRate: true,
+    contentHash: "a".repeat(64),
+    instrument: { symbol: "MSFT" },
+    bars: [{ ts: "2026-07-24T20:00:00Z", close: 192 }],
+    corporateActions: [],
+    news: [],
+    sources: [],
+    integrity: { errors: [], warnings: [] },
+  };
+  const packetText = JSON.stringify(packet);
+  const packetFileHash = createHash("sha256").update(packetText).digest("hex");
+  await fs.writeFile(path.join(reportDir, "complete_report.md"), "Close 192 [M1].");
+  await fs.writeFile(path.join(reportDir, "evidence_packet.json"), packetText);
+  await fs.writeFile(path.join(reportDir, "report_manifest.json"), JSON.stringify({
+    ticker: "MSFT",
+    tradeDate: "2026-07-24",
+    analysisStatus: "rated",
+    auditStatus: "verified",
+    claimValidation: {
+      status: "passed",
+      errorCodes: [],
+      omittedUnsafeParagraphs: 1,
+    },
+    evidence: {
+      status: "ok",
+      contentHash: packet.contentHash,
+      packetFileHash,
+    },
+  }));
+
+  const audit = await buildReportAudit({
+    history: [{
+      trade_date: "2026-07-24",
+      generated_at: "2026-07-25T08:00:00Z",
+      results: [{
+        ticker: "MSFT",
+        rating: "Sell",
+        report: "reports/MSFT/2026-07-24/complete_report.md",
+        error: false,
+      }],
+    }],
+    reportsRoot: root,
+  });
+
+  assert.equal(audit.summary.verifiedReports, 0);
+  assert.equal(audit.reports[0].auditStatus, "invalidated");
+  assert.ok(
+    audit.reports[0].problemCodes.includes("FILTERED_UNSAFE_PUBLIC_CLAIM"),
+  );
+});
+
 test("report persistence regenerates the audit index after merging history", async () => {
   const script = await fs.readFile(
     path.join(repoRoot, "scripts", "persist_reports.sh"),

@@ -15,12 +15,27 @@ export const INVALIDATED_REPORTS = new Set([
   "reports/512480.SS/2026-07-29-v5/complete_report.md",
   "reports/515880.SS/2026-07-29-v5/complete_report.md",
   "reports/515880.SS/2026-07-30-v3/complete_report.md",
+  "reports/515880.SS/2026-07-30-v5/complete_report.md",
+  "reports/515880.SS/2026-07-30-v6/complete_report.md",
+  "reports/512480.SS/2026-07-30-v6/complete_report.md",
 ]);
 
 const INVALIDATION_CODE_BY_REPORT = new Map([
   [
     "reports/515880.SS/2026-07-30-v3/complete_report.md",
     "UNSUPPORTED_ACTOR_OR_FLOW_ATTRIBUTION",
+  ],
+  [
+    "reports/515880.SS/2026-07-30-v5/complete_report.md",
+    "LEGACY_SEMANTIC_GATE_BYPASS",
+  ],
+  [
+    "reports/515880.SS/2026-07-30-v6/complete_report.md",
+    "FILTERED_UNSAFE_PUBLIC_CLAIM",
+  ],
+  [
+    "reports/512480.SS/2026-07-30-v6/complete_report.md",
+    "FILTERED_UNSAFE_PUBLIC_CLAIM",
   ],
 ]);
 
@@ -46,6 +61,10 @@ function isInvalidatedReport(report) {
   return INVALIDATED_REPORTS.has(normalizedReportPath(report));
 }
 
+function hasFilteredUnsafeParagraphs(bundle) {
+  return Number(bundle?.manifest?.claimValidation?.omittedUnsafeParagraphs || 0) > 0;
+}
+
 function problemCodesFor({
   ticker,
   analysisStatus,
@@ -55,6 +74,7 @@ function problemCodesFor({
   evidence,
   verifiedEvidence = false,
   invalidEvidencePacket = false,
+  filteredUnsafeParagraphs = false,
 }) {
   const codes = [];
   if (error || !report) {
@@ -74,6 +94,7 @@ function problemCodesFor({
     );
   }
   if (invalidEvidencePacket) codes.push("INVALID_EVIDENCE_PACKET");
+  if (filteredUnsafeParagraphs) codes.push("FILTERED_UNSAFE_PUBLIC_CLAIM");
   if (ETF_SYMBOLS.has(ticker)) codes.push("ETF_TEMPLATE_MISMATCH");
   if (!verifiedEvidence && (evidence.claimCitationCount === 0 || evidence.urlCount === 0)) {
     codes.push("MISSING_CLAIM_EVIDENCE");
@@ -217,6 +238,7 @@ function hasVerifiedBundle(bundle) {
     && bundle.manifest?.analysisStatus === "rated"
     && bundle.manifest?.auditStatus === "verified"
     && bundle.manifest?.claimValidation?.status === "passed"
+    && !hasFilteredUnsafeParagraphs(bundle)
     && bundle.manifest?.evidence?.status === "ok"
     && bundle.packet?.status === "ok"
     && /^[a-f0-9]{64}$/i.test(
@@ -253,6 +275,14 @@ export async function buildReportAudit({ history, reportsRoot }) {
           tradeDate,
         }),
       );
+      const filteredUnsafeParagraphs = hasFilteredUnsafeParagraphs(bundle);
+      const filteredUnsafeRatedBundle = Boolean(
+        filteredUnsafeParagraphs
+        && (
+          bundle.manifest?.analysisStatus === "rated"
+          || bundle.manifest?.auditStatus === "verified"
+        ),
+      );
       const problemCodes = problemCodesFor({
         ticker,
         analysisStatus,
@@ -262,10 +292,11 @@ export async function buildReportAudit({ history, reportsRoot }) {
         evidence,
         verifiedEvidence,
         invalidEvidencePacket,
+        filteredUnsafeParagraphs,
       });
       const auditStatus = error || !report
         ? "invalid_record"
-        : isInvalidatedReport(report) || invalidEvidencePacket
+        : isInvalidatedReport(report) || invalidEvidencePacket || filteredUnsafeRatedBundle
           ? "invalidated"
           : verifiedEvidence
             ? "verified"

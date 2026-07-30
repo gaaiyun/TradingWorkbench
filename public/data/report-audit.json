@@ -1,10 +1,10 @@
 {
   "version": 1,
-  "generatedAt": "2026-07-30T08:02:08.798Z",
+  "generatedAt": "2026-07-30T08:05:54.865Z",
   "summary": {
     "successfulReports": 77,
-    "verifiedReports": 3,
-    "invalidatedReports": 11,
+    "verifiedReports": 0,
+    "invalidatedReports": 14,
     "legacyUnverifiedReports": 63,
     "invalidRecords": 7,
     "evidenceValidationFailures": 4,
@@ -23,6 +23,7 @@
       "auditStatus": "legacy_unverified",
       "failureClass": null,
       "problemCodes": [
+        "FILTERED_UNSAFE_PUBLIC_CLAIM",
         "ETF_TEMPLATE_MISMATCH",
         "MISSING_CLAIM_EVIDENCE",
         "MISSING_PUBLICATION_TIME"
@@ -86,6 +87,7 @@
       "auditStatus": "legacy_unverified",
       "failureClass": null,
       "problemCodes": [
+        "FILTERED_UNSAFE_PUBLIC_CLAIM",
         "ETF_TEMPLATE_MISMATCH",
         "MISSING_CLAIM_EVIDENCE",
         "MISSING_PUBLICATION_TIME"
@@ -147,10 +149,12 @@
       "rating": "Sell",
       "analysisStatus": "rated",
       "report": "reports/515880.SS/2026-07-30-v6/complete_report.md",
-      "auditStatus": "verified",
+      "auditStatus": "invalidated",
       "failureClass": null,
       "problemCodes": [
+        "FILTERED_UNSAFE_PUBLIC_CLAIM",
         "ETF_TEMPLATE_MISMATCH",
+        "MISSING_CLAIM_EVIDENCE",
         "MISSING_PUBLICATION_TIME"
       ],
       "evidence": {
@@ -205,10 +209,12 @@
       "rating": "Underweight",
       "analysisStatus": "rated",
       "report": "reports/512480.SS/2026-07-30-v6/complete_report.md",
-      "auditStatus": "verified",
+      "auditStatus": "invalidated",
       "failureClass": null,
       "problemCodes": [
+        "FILTERED_UNSAFE_PUBLIC_CLAIM",
         "ETF_TEMPLATE_MISMATCH",
+        "MISSING_CLAIM_EVIDENCE",
         "MISSING_PUBLICATION_TIME"
       ],
       "evidence": {
@@ -263,9 +269,10 @@
       "rating": "Underweight",
       "analysisStatus": "rated",
       "report": "reports/515880.SS/2026-07-30-v5/complete_report.md",
-      "auditStatus": "verified",
+      "auditStatus": "invalidated",
       "failureClass": null,
       "problemCodes": [
+        "LEGACY_SEMANTIC_GATE_BYPASS",
         "ETF_TEMPLATE_MISMATCH",
         "MISSING_PUBLICATION_TIME"
       ],
@@ -545,7 +552,7 @@
         "slotId": null,
         "scheduledFor": null
       },
-      "supersededBy": "reports/515880.SS/2026-07-30-v6/complete_report.md"
+      "supersededBy": null
     },
     {
       "ticker": "512480.SS",
@@ -788,6 +795,7 @@
       "auditStatus": "legacy_unverified",
       "failureClass": null,
       "problemCodes": [
+        "FILTERED_UNSAFE_PUBLIC_CLAIM",
         "ETF_TEMPLATE_MISMATCH",
         "MISSING_CLAIM_EVIDENCE",
         "MISSING_PUBLICATION_TIME"
@@ -846,7 +854,9 @@
       "failureClass": null,
       "problemCodes": [
         "CORPORATE_ACTION_CONTAMINATION",
+        "FILTERED_UNSAFE_PUBLIC_CLAIM",
         "ETF_TEMPLATE_MISMATCH",
+        "MISSING_CLAIM_EVIDENCE",
         "MISSING_PUBLICATION_TIME"
       ],
       "evidence": {
@@ -884,7 +894,7 @@
         "slotId": null,
         "scheduledFor": null
       },
-      "supersededBy": "reports/512480.SS/2026-07-30-v6/complete_report.md"
+      "supersededBy": null
     },
     {
       "ticker": "515880.SS",
@@ -898,7 +908,9 @@
       "failureClass": null,
       "problemCodes": [
         "CORPORATE_ACTION_CONTAMINATION",
+        "FILTERED_UNSAFE_PUBLIC_CLAIM",
         "ETF_TEMPLATE_MISMATCH",
+        "MISSING_CLAIM_EVIDENCE",
         "MISSING_PUBLICATION_TIME"
       ],
       "evidence": {
@@ -936,7 +948,7 @@
         "slotId": null,
         "scheduledFor": null
       },
-      "supersededBy": "reports/515880.SS/2026-07-30-v6/complete_report.md"
+      "supersededBy": null
     },
     {
       "ticker": "512480.SS",
@@ -950,7 +962,9 @@
       "failureClass": null,
       "problemCodes": [
         "CORPORATE_ACTION_CONTAMINATION",
+        "FILTERED_UNSAFE_PUBLIC_CLAIM",
         "ETF_TEMPLATE_MISMATCH",
+        "MISSING_CLAIM_EVIDENCE",
         "MISSING_PUBLICATION_TIME"
       ],
       "evidence": {
@@ -988,7 +1002,7 @@
         "slotId": null,
         "scheduledFor": null
       },
-      "supersededBy": "reports/512480.SS/2026-07-30-v6/complete_report.md"
+      "supersededBy": null
     },
     {
       "ticker": "515880.SS",
@@ -1002,7 +1016,9 @@
       "failureClass": null,
       "problemCodes": [
         "CORPORATE_ACTION_CONTAMINATION",
+        "FILTERED_UNSAFE_PUBLIC_CLAIM",
         "ETF_TEMPLATE_MISMATCH",
+        "MISSING_CLAIM_EVIDENCE",
         "MISSING_PUBLICATION_TIME"
       ],
       "evidence": {
@@ -1040,7 +1056,7 @@
         "slotId": null,
         "scheduledFor": null
       },
-      "supersededBy": "reports/515880.SS/2026-07-30-v6/complete_report.md"
+      "supersededBy": null
     },
     {
       "ticker": "512480.SS",
@@ -1415,7 +1431,7 @@
         "slotId": "slot-60509113eaa7d4f54994f4bb62d3ab2cbd6813408b484fdfc9bcc21fa51c72d6",
         "scheduledFor": "2026-07-28T07:20:00.000Z"
       },
-      "supersededBy": "reports/515880.SS/2026-07-30-v6/complete_report.md"
+      "supersededBy": null
     },
     {
       "ticker": "512480.SS",
@@ -1469,7 +1485,7 @@
         "slotId": "slot-60509113eaa7d4f54994f4bb62d3ab2cbd6813408b484fdfc9bcc21fa51c72d6",
         "scheduledFor": "2026-07-28T07:20:00.000Z"
       },
-      "supersededBy": "reports/512480.SS/2026-07-30-v6/complete_report.md"
+      "supersededBy": null
     },
     {
       "ticker": "515880.SS",
@@ -2638,7 +2654,7 @@
         "slotId": null,
         "scheduledFor": null
       },
-      "supersededBy": "reports/515880.SS/2026-07-30-v6/complete_report.md"
+      "supersededBy": null
     },
     {
       "ticker": "512480.SS",
@@ -2676,7 +2692,7 @@
         "slotId": null,
         "scheduledFor": null
       },
-      "supersededBy": "reports/512480.SS/2026-07-30-v6/complete_report.md"
+      "supersededBy": null
     },
     {
       "ticker": "512480.SS",
@@ -2712,7 +2728,7 @@
         "slotId": null,
         "scheduledFor": null
       },
-      "supersededBy": "reports/512480.SS/2026-07-30-v6/complete_report.md"
+      "supersededBy": null
     },
     {
       "ticker": "NVDA",
