@@ -1,7 +1,7 @@
 {
   "version": 1,
   "status": "ok",
-  "generated_at": "2026-07-30T15:34:29+08:00",
+  "generated_at": "2026-07-30T16:03:15+08:00",
   "trade_date": "2026-07-30",
   "global": {
     "status": "ok",
@@ -9,15 +9,35 @@
     "ticker": null,
     "start_date": "2026-07-23",
     "end_date": "2026-07-30",
-    "fetched_at": "2026-07-30T07:34:31Z",
+    "fetched_at": "2026-07-30T08:03:17Z",
     "items": [
+      {
+        "title": "Interim Management Statement Q3 2026",
+        "summary": "",
+        "url": "https://finance.yahoo.com/markets/stocks/articles/interim-management-statement-q3-2026-073600867.html",
+        "source": "GlobeNewswire",
+        "published_at": "2026-07-30T07:36:00Z",
+        "fetched_at": "2026-07-30T08:03:17Z",
+        "ticker": null,
+        "source_tier": "aggregator"
+      },
+      {
+        "title": "Shell plans £3.1bn of buybacks as profits soar on higher oil prices",
+        "summary": "",
+        "url": "https://finance.yahoo.com/m/3e8c0e77-c66f-309a-9ed0-40c061c652eb/shell-plans-%C2%A33.1bn-of.html",
+        "source": "Proactive",
+        "published_at": "2026-07-30T07:26:00Z",
+        "fetched_at": "2026-07-30T08:03:17Z",
+        "ticker": null,
+        "source_tier": "aggregator"
+      },
       {
         "title": "Oil rises in volatile trade as US resumes attacks on Iran",
         "summary": "",
         "url": "https://finance.yahoo.com/news/oil-prices-slip-tankers-continue-003657966.html",
         "source": "Reuters",
         "published_at": "2026-07-30T07:19:51Z",
-        "fetched_at": "2026-07-30T07:34:31Z",
+        "fetched_at": "2026-07-30T08:03:17Z",
         "ticker": null,
         "source_tier": "aggregator"
       },
@@ -27,7 +47,27 @@
         "url": "https://finance.yahoo.com/m/519eb252-fc2e-3357-aba4-7a959fc1245e/propetro-q2-earnings-call.html",
         "source": "MarketBeat",
         "published_at": "2026-07-30T07:04:01Z",
-        "fetched_at": "2026-07-30T07:34:31Z",
+        "fetched_at": "2026-07-30T08:03:17Z",
+        "ticker": null,
+        "source_tier": "aggregator"
+      },
+      {
+        "title": "Why Is The Crypto Market Up Today?",
+        "summary": "",
+        "url": "https://finance.yahoo.com/m/a073a26d-d1e4-3ccc-a0ae-5ba418ba6862/why-is-the-crypto-market-up.html",
+        "source": "BeInCrypto",
+        "published_at": "2026-07-30T06:45:47Z",
+        "fetched_at": "2026-07-30T08:03:17Z",
+        "ticker": null,
+        "source_tier": "aggregator"
+      },
+      {
+        "title": "Shell profits double to nearly $10bn as oil prices spike",
+        "summary": "",
+        "url": "https://finance.yahoo.com/m/92e4cc85-7079-3b15-a9f4-3cc999ecebfb/shell-profits-double-to.html",
+        "source": "The Telegraph",
+        "published_at": "2026-07-30T06:24:33Z",
+        "fetched_at": "2026-07-30T08:03:17Z",
         "ticker": null,
         "source_tier": "aggregator"
       },
@@ -37,7 +77,7 @@
         "url": "https://finance.yahoo.com/markets/commodities/articles/meridian-smelter-tests-deliver-high-060000614.html",
         "source": "TMX Newsfile",
         "published_at": "2026-07-30T06:00:00Z",
-        "fetched_at": "2026-07-30T07:34:31Z",
+        "fetched_at": "2026-07-30T08:03:17Z",
         "ticker": null,
         "source_tier": "aggregator"
       },
@@ -47,7 +87,7 @@
         "url": "https://finance.yahoo.com/markets/articles/oil-prices-slip-asian-shares-050950736.html",
         "source": "Associated Press",
         "published_at": "2026-07-30T05:09:50Z",
-        "fetched_at": "2026-07-30T07:34:31Z",
+        "fetched_at": "2026-07-30T08:03:17Z",
         "ticker": null,
         "source_tier": "aggregator"
       },
@@ -57,7 +97,7 @@
         "url": "https://finance.yahoo.com/m/b2d26461-c630-35bb-a1b0-6f914492c115/bofa-just-turned-on-exxon-in.html",
         "source": "TheStreet",
         "published_at": "2026-07-30T05:07:00Z",
-        "fetched_at": "2026-07-30T07:34:31Z",
+        "fetched_at": "2026-07-30T08:03:17Z",
         "ticker": null,
         "source_tier": "aggregator"
       },
@@ -67,47 +107,7 @@
         "url": "https://finance.yahoo.com/video/trump-says-british-pm-told-040643899.html",
         "source": "Reuters Videos",
         "published_at": "2026-07-30T04:06:43Z",
-        "fetched_at": "2026-07-30T07:34:31Z",
-        "ticker": null,
-        "source_tier": "aggregator"
-      },
-      {
-        "title": "HudBay Minerals Q2 Earnings Call Highlights",
-        "summary": "",
-        "url": "https://finance.yahoo.com/m/7b38b11b-2954-3bb5-b379-69f29082468a/hudbay-minerals-q2-earnings.html",
-        "source": "MarketBeat",
-        "published_at": "2026-07-30T04:03:55Z",
-        "fetched_at": "2026-07-30T07:34:31Z",
-        "ticker": null,
-        "source_tier": "aggregator"
-      },
-      {
-        "title": "Oil Prices Slip Despite New Attacks Across the Middle East",
-        "summary": "",
-        "url": "https://finance.yahoo.com/energy/articles/oil-prices-slip-despite-attacks-040109065.html",
-        "source": "Oilprice.com",
-        "published_at": "2026-07-30T04:01:09Z",
-        "fetched_at": "2026-07-30T07:34:31Z",
-        "ticker": null,
-        "source_tier": "aggregator"
-      },
-      {
-        "title": "AP Top Financial News at 1:10 a.m. EDT",
-        "summary": "",
-        "url": "https://finance.yahoo.com/markets/stocks/articles/ap-top-financial-news-12-040000457.html",
-        "source": "Associated Press",
-        "published_at": "2026-07-30T04:00:00Z",
-        "fetched_at": "2026-07-30T07:34:31Z",
-        "ticker": null,
-        "source_tier": "aggregator"
-      },
-      {
-        "title": "AP Top Extended Financial Headlines at 1:10 a.m. EDT",
-        "summary": "",
-        "url": "https://finance.yahoo.com/economy/articles/ap-top-extended-financial-headlines-040000790.html",
-        "source": "Associated Press",
-        "published_at": "2026-07-30T04:00:00Z",
-        "fetched_at": "2026-07-30T07:34:31Z",
+        "fetched_at": "2026-07-30T08:03:17Z",
         "ticker": null,
         "source_tier": "aggregator"
       }
@@ -132,7 +132,7 @@
       "ticker": "515880.SS",
       "start_date": "2026-07-30",
       "end_date": "2026-07-30",
-      "fetched_at": "2026-07-30T07:34:32Z",
+      "fetched_at": "2026-07-30T08:03:18Z",
       "items": [
         {
           "title": "通信ETF国泰（515880）开盘跌1.50%，重仓股新易盛跌2.61%，中际旭创跌3.36%",
@@ -140,7 +140,7 @@
           "url": "https://news.google.com/rss/articles/CBMimAFBVV95cUxQbzlvSlZSVUhjeEVjZGNCMHcxZVdRQVdaclF0Z29XZVh2VVNKSGVQbW5UQUNnLUZEU2F1bFVtb0tfeFdEM2ZfVHZuOGNwZ1RUSFhsYU5vcUk2TkNlY1BFTW1MWGNZTmVRVi1FeGdiTjlCY3pBbF9BMjFrSGNTT012UzBhQnE4a2JBNkhhRkpoMk5HbnZlaTk0Yw?oc=5",
           "source": "Google News / 新浪网",
           "published_at": "2026-07-30T01:30:00Z",
-          "fetched_at": "2026-07-30T07:34:32Z",
+          "fetched_at": "2026-07-30T08:03:18Z",
           "ticker": "515880.SS",
           "source_tier": "aggregator"
         },
@@ -150,7 +150,7 @@
           "url": "https://news.google.com/rss/articles/CBMimwFBVV95cUxNbElPcXlFMFRDNHV6cXhXOXgxXzk5MHVaazNjdzhHaVEyR2lFeTNmYzcyQlZ5Sk4zTUlvbW5aLV9uc0tHcFM0S3VDdzZKZ25zY2VYZzRjZmNqN1d6Y0RIMm9VM3VCVWdldDRVejNjbFdfVVYtdF9pSDFfLXlqQWswOEk3OXdGNHpIQ21nM01vaTZ2WEpMR3ZRdFh4Zw?oc=5",
           "source": "Google News / 新浪网",
           "published_at": "2026-07-30T01:00:00Z",
-          "fetched_at": "2026-07-30T07:34:32Z",
+          "fetched_at": "2026-07-30T08:03:18Z",
           "ticker": "515880.SS",
           "source_tier": "aggregator"
         }
@@ -174,13 +174,24 @@
       ]
     },
     "512480.SS": {
-      "status": "empty",
+      "status": "ok",
       "query_type": "ticker",
       "ticker": "512480.SS",
       "start_date": "2026-07-30",
       "end_date": "2026-07-30",
-      "fetched_at": "2026-07-30T07:34:34Z",
-      "items": [],
+      "fetched_at": "2026-07-30T08:03:21Z",
+      "items": [
+        {
+          "title": "7月29日半导体ETF国联安（512480）份额增加2.92亿份，最新份额193.50亿份，最新规模198.38亿元",
+          "summary": "7月29日半导体ETF国联安（512480）份额增加2.92亿份，最新份额193.50亿份，最新规模198.38亿元 新浪网",
+          "url": "https://news.google.com/rss/articles/CBMimwFBVV95cUxQU3lMTVJ2Q2dkVXpMTWtxLXNIYXppODBXcFlDU1RudVowZ2hCQXppOE9NQzVrd0tiTjJTQmJJQ3pwbWZGYzdoVE1CRkF5ZktJSWhKa1V1TjZFMTlYLTBfUkoteDBVbU51enVlcnhPdzZxeEY5YjZtQ0VZbS1fR3A5Qm91ejlHTmtuYjB1aWNBQWc0X0Zzay03QW5UZw?oc=5",
+          "source": "Google News / 新浪网",
+          "published_at": "2026-07-30T01:00:00Z",
+          "fetched_at": "2026-07-30T08:03:21Z",
+          "ticker": "512480.SS",
+          "source_tier": "aggregator"
+        }
+      ],
       "source_statuses": [
         {
           "source": "Yahoo Finance",
@@ -189,8 +200,8 @@
         },
         {
           "source": "Google News RSS",
-          "status": "empty",
-          "item_count": 0
+          "status": "ok",
+          "item_count": 1
         },
         {
           "source": "SEC EDGAR",
@@ -202,12 +213,32 @@
   },
   "items": [
     {
+      "title": "Interim Management Statement Q3 2026",
+      "summary": "",
+      "url": "https://finance.yahoo.com/markets/stocks/articles/interim-management-statement-q3-2026-073600867.html",
+      "source": "GlobeNewswire",
+      "published_at": "2026-07-30T07:36:00Z",
+      "fetched_at": "2026-07-30T08:03:17Z",
+      "ticker": null,
+      "source_tier": "aggregator"
+    },
+    {
+      "title": "Shell plans £3.1bn of buybacks as profits soar on higher oil prices",
+      "summary": "",
+      "url": "https://finance.yahoo.com/m/3e8c0e77-c66f-309a-9ed0-40c061c652eb/shell-plans-%C2%A33.1bn-of.html",
+      "source": "Proactive",
+      "published_at": "2026-07-30T07:26:00Z",
+      "fetched_at": "2026-07-30T08:03:17Z",
+      "ticker": null,
+      "source_tier": "aggregator"
+    },
+    {
       "title": "Oil rises in volatile trade as US resumes attacks on Iran",
       "summary": "",
       "url": "https://finance.yahoo.com/news/oil-prices-slip-tankers-continue-003657966.html",
       "source": "Reuters",
       "published_at": "2026-07-30T07:19:51Z",
-      "fetched_at": "2026-07-30T07:34:31Z",
+      "fetched_at": "2026-07-30T08:03:17Z",
       "ticker": null,
       "source_tier": "aggregator"
     },
@@ -217,7 +248,27 @@
       "url": "https://finance.yahoo.com/m/519eb252-fc2e-3357-aba4-7a959fc1245e/propetro-q2-earnings-call.html",
       "source": "MarketBeat",
       "published_at": "2026-07-30T07:04:01Z",
-      "fetched_at": "2026-07-30T07:34:31Z",
+      "fetched_at": "2026-07-30T08:03:17Z",
+      "ticker": null,
+      "source_tier": "aggregator"
+    },
+    {
+      "title": "Why Is The Crypto Market Up Today?",
+      "summary": "",
+      "url": "https://finance.yahoo.com/m/a073a26d-d1e4-3ccc-a0ae-5ba418ba6862/why-is-the-crypto-market-up.html",
+      "source": "BeInCrypto",
+      "published_at": "2026-07-30T06:45:47Z",
+      "fetched_at": "2026-07-30T08:03:17Z",
+      "ticker": null,
+      "source_tier": "aggregator"
+    },
+    {
+      "title": "Shell profits double to nearly $10bn as oil prices spike",
+      "summary": "",
+      "url": "https://finance.yahoo.com/m/92e4cc85-7079-3b15-a9f4-3cc999ecebfb/shell-profits-double-to.html",
+      "source": "The Telegraph",
+      "published_at": "2026-07-30T06:24:33Z",
+      "fetched_at": "2026-07-30T08:03:17Z",
       "ticker": null,
       "source_tier": "aggregator"
     },
@@ -227,7 +278,7 @@
       "url": "https://finance.yahoo.com/markets/commodities/articles/meridian-smelter-tests-deliver-high-060000614.html",
       "source": "TMX Newsfile",
       "published_at": "2026-07-30T06:00:00Z",
-      "fetched_at": "2026-07-30T07:34:31Z",
+      "fetched_at": "2026-07-30T08:03:17Z",
       "ticker": null,
       "source_tier": "aggregator"
     },
@@ -237,7 +288,7 @@
       "url": "https://finance.yahoo.com/markets/articles/oil-prices-slip-asian-shares-050950736.html",
       "source": "Associated Press",
       "published_at": "2026-07-30T05:09:50Z",
-      "fetched_at": "2026-07-30T07:34:31Z",
+      "fetched_at": "2026-07-30T08:03:17Z",
       "ticker": null,
       "source_tier": "aggregator"
     },
@@ -247,7 +298,7 @@
       "url": "https://finance.yahoo.com/m/b2d26461-c630-35bb-a1b0-6f914492c115/bofa-just-turned-on-exxon-in.html",
       "source": "TheStreet",
       "published_at": "2026-07-30T05:07:00Z",
-      "fetched_at": "2026-07-30T07:34:31Z",
+      "fetched_at": "2026-07-30T08:03:17Z",
       "ticker": null,
       "source_tier": "aggregator"
     },
@@ -257,47 +308,7 @@
       "url": "https://finance.yahoo.com/video/trump-says-british-pm-told-040643899.html",
       "source": "Reuters Videos",
       "published_at": "2026-07-30T04:06:43Z",
-      "fetched_at": "2026-07-30T07:34:31Z",
-      "ticker": null,
-      "source_tier": "aggregator"
-    },
-    {
-      "title": "HudBay Minerals Q2 Earnings Call Highlights",
-      "summary": "",
-      "url": "https://finance.yahoo.com/m/7b38b11b-2954-3bb5-b379-69f29082468a/hudbay-minerals-q2-earnings.html",
-      "source": "MarketBeat",
-      "published_at": "2026-07-30T04:03:55Z",
-      "fetched_at": "2026-07-30T07:34:31Z",
-      "ticker": null,
-      "source_tier": "aggregator"
-    },
-    {
-      "title": "Oil Prices Slip Despite New Attacks Across the Middle East",
-      "summary": "",
-      "url": "https://finance.yahoo.com/energy/articles/oil-prices-slip-despite-attacks-040109065.html",
-      "source": "Oilprice.com",
-      "published_at": "2026-07-30T04:01:09Z",
-      "fetched_at": "2026-07-30T07:34:31Z",
-      "ticker": null,
-      "source_tier": "aggregator"
-    },
-    {
-      "title": "AP Top Financial News at 1:10 a.m. EDT",
-      "summary": "",
-      "url": "https://finance.yahoo.com/markets/stocks/articles/ap-top-financial-news-12-040000457.html",
-      "source": "Associated Press",
-      "published_at": "2026-07-30T04:00:00Z",
-      "fetched_at": "2026-07-30T07:34:31Z",
-      "ticker": null,
-      "source_tier": "aggregator"
-    },
-    {
-      "title": "AP Top Extended Financial Headlines at 1:10 a.m. EDT",
-      "summary": "",
-      "url": "https://finance.yahoo.com/economy/articles/ap-top-extended-financial-headlines-040000790.html",
-      "source": "Associated Press",
-      "published_at": "2026-07-30T04:00:00Z",
-      "fetched_at": "2026-07-30T07:34:31Z",
+      "fetched_at": "2026-07-30T08:03:17Z",
       "ticker": null,
       "source_tier": "aggregator"
     },
@@ -307,7 +318,7 @@
       "url": "https://news.google.com/rss/articles/CBMimAFBVV95cUxQbzlvSlZSVUhjeEVjZGNCMHcxZVdRQVdaclF0Z29XZVh2VVNKSGVQbW5UQUNnLUZEU2F1bFVtb0tfeFdEM2ZfVHZuOGNwZ1RUSFhsYU5vcUk2TkNlY1BFTW1MWGNZTmVRVi1FeGdiTjlCY3pBbF9BMjFrSGNTT012UzBhQnE4a2JBNkhhRkpoMk5HbnZlaTk0Yw?oc=5",
       "source": "Google News / 新浪网",
       "published_at": "2026-07-30T01:30:00Z",
-      "fetched_at": "2026-07-30T07:34:32Z",
+      "fetched_at": "2026-07-30T08:03:18Z",
       "ticker": "515880.SS",
       "source_tier": "aggregator"
     },
@@ -317,8 +328,18 @@
       "url": "https://news.google.com/rss/articles/CBMimwFBVV95cUxNbElPcXlFMFRDNHV6cXhXOXgxXzk5MHVaazNjdzhHaVEyR2lFeTNmYzcyQlZ5Sk4zTUlvbW5aLV9uc0tHcFM0S3VDdzZKZ25zY2VYZzRjZmNqN1d6Y0RIMm9VM3VCVWdldDRVejNjbFdfVVYtdF9pSDFfLXlqQWswOEk3OXdGNHpIQ21nM01vaTZ2WEpMR3ZRdFh4Zw?oc=5",
       "source": "Google News / 新浪网",
       "published_at": "2026-07-30T01:00:00Z",
-      "fetched_at": "2026-07-30T07:34:32Z",
+      "fetched_at": "2026-07-30T08:03:18Z",
       "ticker": "515880.SS",
+      "source_tier": "aggregator"
+    },
+    {
+      "title": "7月29日半导体ETF国联安（512480）份额增加2.92亿份，最新份额193.50亿份，最新规模198.38亿元",
+      "summary": "7月29日半导体ETF国联安（512480）份额增加2.92亿份，最新份额193.50亿份，最新规模198.38亿元 新浪网",
+      "url": "https://news.google.com/rss/articles/CBMimwFBVV95cUxQU3lMTVJ2Q2dkVXpMTWtxLXNIYXppODBXcFlDU1RudVowZ2hCQXppOE9NQzVrd0tiTjJTQmJJQ3pwbWZGYzdoVE1CRkF5ZktJSWhKa1V1TjZFMTlYLTBfUkoteDBVbU51enVlcnhPdzZxeEY5YjZtQ0VZbS1fR3A5Qm91ejlHTmtuYjB1aWNBQWc0X0Zzay03QW5UZw?oc=5",
+      "source": "Google News / 新浪网",
+      "published_at": "2026-07-30T01:00:00Z",
+      "fetched_at": "2026-07-30T08:03:21Z",
+      "ticker": "512480.SS",
       "source_tier": "aggregator"
     }
   ]
