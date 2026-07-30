@@ -97,7 +97,7 @@ test("production workflows scope secrets and deploy the latest main under one lo
   const dailyAnalysis = daily.match(
     /^  analyze-and-persist:[\s\S]*?(?=^  deploy-github-pages:)/m,
   )?.[0] || "";
-  assert.match(dailyAnalysis, /permissions:\r?\n      contents: write/);
+  assert.match(dailyAnalysis, /permissions:\r?\n      actions: write\r?\n      contents: write/);
   assert.doesNotMatch(
     dailyAnalysis.slice(0, dailyAnalysis.indexOf("    steps:")),
     /\$\{\{\s*secrets\./,
@@ -113,6 +113,10 @@ test("production workflows scope secrets and deploy the latest main under one lo
   assert.match(
     dailyAnalysis,
     /name:\s*Persist reports to main[\s\S]*?if:\s*\$\{\{\s*always\(\)\s*\}\}/,
+  );
+  assert.match(
+    dailyAnalysis,
+    /name:\s*Trigger Cloudflare Pages deployment[\s\S]*?steps\.persist_reports\.outcome == 'success'[\s\S]*?GH_TOKEN:\s*\$\{\{\s*github\.token\s*\}\}[\s\S]*?gh workflow run deploy-workbench\.yml --ref main/,
   );
   assert.match(
     dailyAnalysis,

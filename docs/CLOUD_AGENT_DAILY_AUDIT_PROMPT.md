@@ -124,7 +124,8 @@ SOXX、NVDA 另外检查 `5m / 15m / 1h`。当前只有这两只美股配置生�
 9. `verified=0` 可以是正确的 fail-closed 结果，不得放宽门禁凑 verified；
 10. 不要因段落“有 Evidence ID”就判正确：逐段复算涨跌幅、比例、均线偏离和交易日
     数；任何派生数字必须已经存在于 cited `D#` ledger，且 D 行包含方法、窗口和输入
-    Evidence ID，不能由模型临时计算、取整或复述；
+    Evidence ID，不能由模型临时计算、取整或复述；即使段落自称“估算”“约为”或
+    “本段临时算术”也不能放行，ledger 没有该结果时只能作无数字的定性表达；
 11. 单时点 MACD/RSI/波动率只能描述当前值，不能声称“仍在扩张、尚未收敛、正在
     加速”；空头排列必须满足 `close < MA20 < MA60`，多头排列必须满足
     `close > MA20 > MA60`；
@@ -148,6 +149,10 @@ SOXX、NVDA 另外检查 `5m / 15m / 1h`。当前只有这两只美股配置生�
     等经济效果。检查同义改写，不能只搜索固定短语。
 19. Portfolio Manager 最终稿只要 `omittedUnsafeParagraphs > 0`，整份方向性报告必须
     `Not Rated` 且包含 `FILTERED_UNSAFE_PUBLIC_CLAIM`；不得删除坏段后保留评级。
+20. 核对本次 `daily-analysis` 的报告数据 commit 后是否出现独立
+    `deploy-workbench` run。不能以机器人 push、GitHub Pages job 或手工 Wrangler
+    部署代替；最终 `/api/health.deployment.commitSha` 必须等于最新 `main` 完整 SHA，
+    且 `deployment_manifest.ok=true`。
 
 ### 七、检查 VolGuard 和问答
 

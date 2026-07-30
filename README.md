@@ -304,6 +304,8 @@ MCP 只提供设置、监控、行情、新闻和研究历史查询，不接收�
 
 `deploy-monitor` 缺少 Cloudflare 凭据或 `MONITOR_WORKER_URL` 时直接失败。部署后 workflow 请求 Worker `/health`，并要求 `deployment.commitSha` 等于本次 GitHub SHA。`deploy-workbench` 还生成随静态站发布的 deployment manifest；Pages health 只有在 manifest SHA 与运行时 SHA 一致时才显示真实 `deployedAt`。绿色 workflow 仍需核对 migration、deploy 和 SHA 验证步骤都执行成功。
 
+`daily-analysis` 用 `GITHUB_TOKEN` 把报告产物提交回 `main`；这类机器人 push 不会可靠级联触发其它 `on: push` workflow。因此持久化成功后，它使用同一个 job 的最小 `actions: write` 权限显式 dispatch `deploy-workbench.yml`，不依赖 PAT，也不允许用缺少 manifest/D1 身份写入的手工 Wrangler 发布代替。日报验收必须同时看到报告数据提交、独立 Pages deploy run，以及生产 `/api/health.deployment.commitSha` 与最新 `main` 完整 SHA 一致。
+
 本轮发布依赖 migrations `0013_monitor_reliability.sql`、`0014_chat_evidence_scope.sql`、`0015_notification_deliveries.sql`、纯新增的 `0016_fund_flows.sql`、`0017_deployment_metadata.sql` 与 `0018_fund_flow_trade_date.sql`。0017 让 Pages 在静态 manifest 被后续同 SHA 部署遮盖时，仍能从 D1 回读可信 `deployedAt`；0018 明示并索引资金业务交易日。
 
 2026-07-26 已完成 D1 `0013`–`0015`、Monitor Worker 和 Workbench Pages 的生产发布与冒烟。Pages `/api/health` 和 Worker `/health` 都返回运行时 commit SHA；发布 workflow 必须在生产域名回读到目标 SHA 才算成功。2026-07-27 的外审已确认 SEC provider 能取得 GOOGL 官方 8-K；ORCL 最近 8-K 超出 30 天窗口，零条 evidence 是正确结果。旧工信部反爬端点已从代码中移除，改为中国政府网政策库。上交所因 Cloudflare 出口 403 改由两小时 GitHub Actions 采集；首轮生产任务写入 `515880.SS` 4 条、`512480.SS` 3 条原始公告 evidence，包含二季报和份额拆分。部分来源失败时批次会写入可用结果并标记 `NEWS_COLLECTION_PARTIAL`，而不是让整页空白。完整记录、验证协议和回退流程见 [部署与运维](docs/operations-and-deployment.md)。

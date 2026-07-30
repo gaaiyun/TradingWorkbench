@@ -22,6 +22,8 @@
 
 同轮独立终审继续封堵公开报告绕过：结构豁免只接受受控 Rating/Time Horizon 值，标题与 Rating 尾随理由不能夹带结论；纯引用、免责声明、条件句和“下一步观察”不能单独构成 verified 报告；普通 N#/CA# 不替无关因果或连续价格路径背书；资金归因的否定按局部从句生效，“不能忽视/无法否认主力流出”仍会被拒。没有阈值、历史分位、统计检验或显式证据能力时，“极端/异常/罕见”“无信号/随机/噪音”、指标一致带来置信度、单点波动率推出反弹或清仓风险、公司行动不损害权益等同义改写同样拒绝；只有被引证据声明对应 `claimCapabilities` 才能放行。更关键的是，最终决策只要有任一段被过滤，就追加 `FILTERED_UNSAFE_PUBLIC_CLAIM` 并将整份方向性报告降为 `Not Rated`，不能局部洗白后保留 Sell/Underweight。真实 v6 重放中两份报告分别有 9/7 个被过滤段落，因此旧的 verified 结果必须由最终代码重算为未评级。
 
+本轮还补齐日报到生产的自动部署链：`daily-analysis` 的 `GITHUB_TOKEN` 数据 push 受 GitHub 递归保护，不能依赖它级联触发 `on: push`。报告持久化成功后现在用 job 自带的最小 `actions: write` 权限和 `github.token` 显式 dispatch `deploy-workbench.yml`，无需新增 PAT；持久化失败不触发部署。提示词同时明确禁止用“估算/约为/本段临时计算”等免责声明绕过派生数字门禁，只能引用已有 `D#` 或改成无数字的定性表达。
+
 第一次真实重跑暴露了校验器把中文“20日已实现波动率”的数值整数部分误当周期、并把“不满足空头排列/关注是否形成多头排列”误当正向主张；两处已按语义修正，8 日窗口长度也进入 D 行。第二次真实重跑让 `515880.SS` 首次生成 `verified` 报告、`512480.SS` 只剩上述误判；但人工逐句复核又发现 `515880.SS 2026-07-30-v3` 把高成交量写成“更可能反映抛压”。即使标成“假设”也超出 OHLCV 证据边界，因此该报告已精确 invalidated，校验器新增 `UNSUPPORTED_ACTOR_OR_FLOW_ATTRIBUTION`，不能把该 v3 当质量基线。
 
 GitHub 自动部署链已恢复。仓库主人在 2026-07-27 配置了 `CLOUDFLARE_API_TOKEN`，同时补齐 `MONITOR_WORKER_URL`；Pages 自动部署 run `30279626692` 成功，Monitor 在修复生产别名传播等待后 run `30280008338` 成功，CI run `30280007660` 全绿。童装 Agent 使用同一 Cloudflare token 的 production 部署 run `30279633026` 也已从凭据校验、D1 migration、Worker/Pages 发布走到生产冒烟全绿。token 只保存在 GitHub secret，未写入仓库、日志或本文。

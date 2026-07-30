@@ -49,6 +49,7 @@ jobs:
     # 清单上限为 10，分析按标的顺序执行；为满清单预留足够时间。
     timeout-minutes: 240
     permissions:
+      actions: write
       contents: write
     env:
       PYTHONIOENCODING: utf-8
@@ -199,9 +200,17 @@ jobs:
           python scripts/run_daily.py
 
       - name: Persist reports to main
+        id: persist_reports
         if: ${{ always() }}
         run: |
           bash scripts/persist_reports.sh "chore(data): 更新分析报告 $(date -u +%F)"
+
+      - name: Trigger Cloudflare Pages deployment
+        if: ${{ always() && steps.persist_reports.outcome == 'success' }}
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh workflow run deploy-workbench.yml --ref main
 
       - name: Fail when analysis failed
         if: ${{ steps.analysis.outcome == 'failure' }}

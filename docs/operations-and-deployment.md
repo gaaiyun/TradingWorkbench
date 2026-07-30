@@ -240,6 +240,8 @@ if ($pagesHealth.deployment.deployedAt -eq "unknown") {
 
 `deploy-workbench` 缺 Cloudflare 凭据时直接失败，不再跳过。发布前用同一个 `DEPLOYED_AT` 生成静态 manifest；`pages deploy` 成功后才参数化 UPSERT 到 D1 `deployment_metadata`，失败的发布不会覆盖当前线上身份。随后 workflow 最多等待约两分钟，直到生产域名 `/api/health` 回读到目标 SHA 和合法 `deployedAt`。Health 优先信任当前 immutable deployment 的静态 manifest，只有它缺失、被 SPA fallback 替换或 SHA 不一致时才有界查询 D1，且仍要求记录 SHA 等于 `CF_PAGES_COMMIT_SHA`。超时或不一致都视为发布失败。`CF_PAGES_URL` 保留不可变 deployment URL，便于核对生产 alias 的传播。
 
+每日分析的报告提交由 Actions 自带 `GITHUB_TOKEN` 完成。机器人 push 可能因 GitHub 递归保护不触发其它 `on: push` workflow，所以 `daily-analysis.yml` 在 `Persist reports to main` 成功后显式运行 `gh workflow run deploy-workbench.yml --ref main`。该 job 只增加 `actions: write`，继续使用 `github.token`，不需要新建 PAT；报告持久化失败时不会触发部署。真实验收必须同时记录 daily run、其生成的数据 commit、随后独立的 deploy-workbench run，并确认生产 `/api/health` 的完整 SHA 等于该数据 commit 或其后的最新 `main`。
+
 2026-07-28 现场用 Wrangler 回读 `tradingagents-board` 的 Git Provider 为 `No`，因此项目不存在 Cloudflare Git integration 竞争发布。曾出现的同 SHA 重复部署来自 GitHub workflow 之外的 Wrangler/ad-hoc 发布；这类发布若没有同步生成静态 manifest 和持久化 D1 identity，会被 `/api/health` 正确标成 `deployment_manifest=invalid_metadata`。禁止把无身份的手工发布当成最终交付；若紧急排障确需手工发布，必须按下段补齐 manifest 与 D1 identity，并立即再跑一次权威 `deploy-workbench` 收口。
 
 手工 Pages 发布若要保留同等可观测性，必须先应用 migration 0017，并用与 manifest 相同的 SHA/UTC 时间更新 `deployment_metadata`；否则只允许作为临时排障，不能作为最终交付路径。权威生产发布仍是 GitHub `deploy-workbench`。

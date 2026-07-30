@@ -479,6 +479,8 @@ Workbench Pages `/api/health` 另返回：
 
 `deploy-workbench.yml` 在发布前生成 `public/data/deployment.json`，将实际 checkout SHA、构建时 UTC 时间和 branch 随静态站一起发布。Pages health 只在该 manifest SHA 与 `CF_PAGES_COMMIT_SHA` 一致时显示 `deployedAt`，随后 workflow 从生产域名回读 SHA 和时间；因此 Pages 与 Worker 都具有可外部验证的版本闭环。
 
+报告产物由 `daily-analysis.yml` 内的 `GITHUB_TOKEN` 提交到 `main`。GitHub 对机器人 push 有工作流递归保护，不能把 `deploy-workbench.yml` 的 `on: push` 当作可靠级联路径。因此同一 job 在报告持久化成功后以 `actions: write` 的最小权限显式执行 `workflow_dispatch`。部署 job 自己重新检出运行时最新 `main`，并受 `cloudflare-workbench` 并发锁保护；这既覆盖报告数据提交，也避免引入额外 PAT。若持久化失败则不 dispatch，若 dispatch 失败则日报 job 失败。
+
 ## 14. 保留的契约
 
 回归测试保护以下能力：

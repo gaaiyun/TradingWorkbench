@@ -116,7 +116,7 @@ _NON_CLAIM_NUMERIC_CONTEXT = (
         r"(?i)(?<!\d)\d+\s*(?:日|天|周|月)?\s*"
         r"(?=(?:均线|EMA|SMA|MA|ATR|RSI|MACD|KDJ|布林|"
         r"移动平均线|指数移动平均线|简单移动平均线|"
-        r"已实现波动率|realized\s*volatility))",
+        r"已实现波动率|波动率|realized\s*volatility|volatility))",
     ),
     re.compile(r"(?i)(?<!\d)\d+\s*(?:EMA|SMA|MA|ATR)\b"),
     re.compile(r"(?i)\b(?:RSI|ATR)\s*\(\s*\d+\s*\)"),
@@ -126,7 +126,10 @@ _NON_CLAIM_NUMERIC_CONTEXT = (
         r"(?:RSI|ATR|ADX|KDJ|MA|SMA|EMA|realizedVolatility)\d+"
         r"(?![A-Za-z0-9])"
     ),
-    re.compile(r"(?<=已实现波动率)\d+(?![A-Za-z0-9])"),
+    re.compile(r"(?<=波动率)\d+(?![A-Za-z0-9.%])"),
+    re.compile(
+        r"(?i)\b(?:realized\s*)?volatility\d+(?![A-Za-z0-9.%])",
+    ),
 )
 _PRICE_TARGET_RE = re.compile(
     rf"{_PRICE_TARGET_TERM_PATTERN}{_CLAIM_GAP_PATTERN}"
