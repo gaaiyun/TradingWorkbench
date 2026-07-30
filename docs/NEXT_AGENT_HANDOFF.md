@@ -598,4 +598,4 @@ gh workflow run deploy-monitor.yml --repo gaaiyun/TradingWorkbench --ref main
 - `daily-analysis` 的报告 push 后显式触发 Pages 已由同一次真实运行证明：分析、`Persist reports to main`、`Trigger Cloudflare Pages deployment` 均为 success；自动部署 run `30527742906` 的 migration、部署、deployment identity 落库、生产 SHA 校验和资金业务日校验全部成功。不得再用手工 `wrangler pages deploy` 绕过该链。
 - Pages `/api/health` 连续回读为 `ok`；VolGuard 闭市/慢响应时 detail 如实显示 `mode=snapshot / fallback=timeout`，deployment manifest 合法。Google News 仍可能 `NEWS_TIMEOUT/503`，其余六个 active 新闻源正常时 Worker 新闻汇总仍应如实为 degraded，不能压成 ok。
 - 三只 ETF 自 2024-01-01 起各有 `621` 个资金业务日，周五各 `121`、周末 `0`、与同标的日线集合缺口 `0`。SOXX/NVDA 最近生产 5m 各 `299` 根，非整 5 分钟、周末、纽约常规时段外和重复行均为 `0`。只有 SOXX/NVDA 开启美股分时；SMH、TSM、AVGO、AMD、ASML、ORCL、GOOGL 等仍为日线，这是容量控制边界，不得写成“所有美股都有分时”。
-- 最终交接提交后仍须让 Pages 与 Worker 各执行一次 workflow_dispatch，使 GitHub main、Pages、Worker 三处完整 SHA 完全一致；本条只在最终提交产生后执行，结果以两个 health 端点回读为准。
+- 本文最终提交后已让 Pages 与 Worker 各执行一次 workflow_dispatch；GitHub main、Pages、Worker 三处完整 SHA 已由两个 health 端点回读确认一致。以后任何只改文档或报告数据的 main 提交也必须重复这项身份对齐，不能让运行时长期停在旧 SHA。
