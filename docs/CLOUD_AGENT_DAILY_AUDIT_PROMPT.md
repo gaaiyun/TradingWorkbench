@@ -119,7 +119,14 @@ SOXX、NVDA 另外检查 `5m / 15m / 1h`。当前只有这两只美股配置生�
 7. 原始 Agent 分卷可在 GitHub 为开发审计保留；claim validation 失败时，网页标签页和带身份的报告 API 只能返回 fail-closed `complete_report.md`，不能公开原始角色分卷，也不能进入最新观点或问答上下文；
 8. 报告中的基金名称、管理人、日期、拆分、涨跌幅和技术指标逐项与证据核对；
 9. `verified=0` 可以是正确的 fail-closed 结果，不得放宽门禁凑 verified；
-10. “主题观察”是确定性资金规则输出，不等同于研究报告结论。
+10. 不要因段落“有 Evidence ID”就判正确：逐段复算涨跌幅、比例、均线偏离和交易日
+    数；任何派生数字必须已经存在于 cited ledger，不能由模型临时计算；
+11. 单时点 MACD/RSI/波动率只能描述当前值，不能声称“仍在扩张、尚未收敛、正在
+    加速”；空头排列必须满足 `close < MA20 < MA60`，多头排列必须满足
+    `close > MA20 > MA60`；
+12. 同时请求无 selector 与带 `profile=cn-semi-comms` 的 `/api/latest`，两者都不得
+    返回 `report-audit` 已标 invalidated 的路径；
+13. “主题观察”是确定性资金规则输出，不等同于研究报告结论。
 
 ### 七、检查 VolGuard 和问答
 
