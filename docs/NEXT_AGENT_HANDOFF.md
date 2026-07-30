@@ -1,10 +1,10 @@
 # Trading Workbench 下一 Agent 交接
 
-更新日期：2026-07-30（全局运行、数据、图形、分析与报告质量收口进行中）
+更新日期：2026-07-30（全局运行、数据、图形、分析与报告质量收口完成）
 
 实现基线：`main`。不要依赖本文中的旧提交号；接手时同时执行 `git rev-parse HEAD`、`git rev-parse origin/main`，并读取 Pages 与 Worker health 的 commit SHA。
 
-工作分支：`feat/fund-flow`；权威发布分支：`main`。功能提交 `b6d8a88` 已推送到 `origin/main`，并完成 GitHub、Pages、Worker 三方 SHA 回读。后续纯文档提交会生成新的运行时 SHA，仍以当前 `origin/main` 和两个 health 端点为准。
+工作分支：`feat/fund-flow`；权威发布分支：`main`。本轮代码、报告数据和本文均直接同步到 `origin/main`；接手时不得沿用本文中的短 SHA，应以当前 `origin/main` 和 Pages/Worker 两个 health 端点的完整 SHA 为准。
 
 ## 0. 本文的地位与维护方式
 
@@ -24,7 +24,7 @@
 
 本轮还补齐日报到生产的自动部署链：`daily-analysis` 的 `GITHUB_TOKEN` 数据 push 受 GitHub 递归保护，不能依赖它级联触发 `on: push`。报告持久化成功后现在用 job 自带的最小 `actions: write` 权限和 `github.token` 显式 dispatch `deploy-workbench.yml`，无需新增 PAT；持久化失败不触发部署。提示词同时明确禁止用“估算/约为/本段临时计算”等免责声明绕过派生数字门禁，只能引用已有 `D#` 或改成无数字的定性表达。
 
-人工回读 v7 后发现审计索引仍把旧 v5/v6 三份语义越界评级当作 verified。当前索引已精确失效 `515880.SS 2026-07-30-v5/v6` 与 `512480.SS 2026-07-30-v6`，并加入通用规则：历史 bundle 若声称 rated/verified 但 `omittedUnsafeParagraphs > 0`，直接判 `invalidated`。重建后的索引为 `77 successful / 0 verified / 14 invalidated / 63 legacy_unverified / 7 invalid_record`；`/api/latest?profile=cn-semi-comms` 不再回退到旧 Sell/Underweight。Workbench health 现在检查与用户路由一致的 VolGuard live→snapshot 链，预算为 5 秒 + 3 秒，并在 detail 中保留真实 mode/fallback；snapshot 可用时不误报全站故障，也不冒充 live。
+人工回读 v7 后发现审计索引仍把旧 v5/v6 三份语义越界评级当作 verified。当前索引已精确失效 `515880.SS 2026-07-30-v5/v6` 与 `512480.SS 2026-07-30-v6`，并加入通用规则：历史 bundle 若声称 rated/verified 但 `omittedUnsafeParagraphs > 0`，直接判 `invalidated`。最终真实单标的 v9 重跑后的索引为 `80 successful / 0 verified / 14 invalidated / 66 legacy_unverified / 7 invalid_record`；`/api/latest?profile=cn-semi-comms` 不再回退到旧 Sell/Underweight。Workbench health 现在检查与用户路由一致的 VolGuard live→snapshot 链，预算为 5 秒 + 3 秒，并在 detail 中保留真实 mode/fallback；snapshot 可用时不误报全站故障，也不冒充 live。
 
 第一次真实重跑暴露了校验器把中文“20日已实现波动率”的数值整数部分误当周期、并把“不满足空头排列/关注是否形成多头排列”误当正向主张；两处已按语义修正，8 日窗口长度也进入 D 行。第二次真实重跑让 `515880.SS` 首次生成 `verified` 报告、`512480.SS` 只剩上述误判；但人工逐句复核又发现 `515880.SS 2026-07-30-v3` 把高成交量写成“更可能反映抛压”。即使标成“假设”也超出 OHLCV 证据边界，因此该报告已精确 invalidated，校验器新增 `UNSUPPORTED_ACTOR_OR_FLOW_ATTRIBUTION`，不能把该 v3 当质量基线。
 
@@ -32,7 +32,7 @@ GitHub 自动部署链已恢复。仓库主人在 2026-07-27 配置了 `CLOUDFLA
 
 同日终审又修复了三个用户可见回归：旧版无 identity 的 43 份 `legacy_unverified` 报告恢复只读展示、同一新闻按 cluster/原文聚合关联标的、交易时钟按沪深与纽约时区及周末判断。历史未验证报告仍不能进入问答，4 份 `invalidated` 报告仍只在“历史审计”中显示。
 
-`cn-semi-comms` 已在 2026-07-28 再生成 `515880.SS`、`512480.SS` 的 profile-scoped 报告及角色分卷；两份仍被引用门禁判为 `insufficient_evidence / legacy_unverified / Not Rated`，没有进入最新观点或问答。当前审计索引共 `60` 条：`49 legacy_unverified`、`4 invalidated`、`7 invalid_record`、`0 verified`。
+`cn-semi-comms` 在 2026-07-28 再生成 `515880.SS`、`512480.SS` 的 profile-scoped 报告及角色分卷；两份被引用门禁判为 `insufficient_evidence / legacy_unverified / Not Rated`，没有进入最新观点或问答。该段的 `60` 条旧快照已被后续真实重跑取代，当前数字统一以本节上方的最终 `80 / 0 / 14 / 66 / 7` 为准。
 
 资讯刷新回归已经定位并修复：浏览器原本每 60 秒轮询，但 Worker 的上游采集错误地只挂在交易日 08:25 盘前任务下。现在每个 profile 可独立配置 15/30/60 分钟全天采集，默认 15 分钟；周日 20:00、20:10 与 20:15 的真实批次已让 `cn-semi-comms` 新闻从 146 条增至 162 条，最新 `fetchedAt=2026-07-26T12:15:06.874Z`。来源部分失败会保留成功结果并记录 `NEWS_COLLECTION_PARTIAL`，不会用旧数据伪装全部成功。`market_events` 仍只在真实行情、公告或信号发生时生成，不为周末伪造事件。
 
@@ -562,7 +562,7 @@ gh workflow run deploy-monitor.yml --repo gaaiyun/TradingWorkbench --ref main
 | 2026-07-29 | 全面纠正资金观察状态与叙事：按逻辑序列判断 freshness，区分卡片与近 5 日分位口径，按正负确定资金方向，补齐全历史回填并证明 UTC 周日为上海周一；深市份额明确仅快照 | 功能提交 `b6d8a88`；CI `30379749679`、Pages `30379749744`、Monitor `30379750103` 全绿；backfill `30378437748` 更新 21471 条；三方 SHA 一致；三只 ETF 自身两融 `1638 / 1580 / 1522` 条、上海周末为 0、`/api/flows=ok`；1440px/390px 生产切换标的验收无溢出和控制台错误 |
 | 2026-07-29 | 修复用户截图红框：标的专属隔夜驱动篮子、精确日涨跌、无 verified 报告时的规则化主题观察；Evidence 与问答门禁不变 | 功能提交 `328cda9`；CI `30383472709`、Pages `30383472699`、Monitor `30383498898` 全绿；三方 SHA 对齐；1440px/390px 生产实测 512480 左侧、标题、叙事均为 -7.38%，主题观察显示资金偏弱，0 溢出和控制台错误 |
 | 2026-07-29 | 证伪 UTC 截断造成的伪周末结论；增加显式 `trade_date` 与生产业务日门禁；补齐 SOXX/NVDA 独立美股 5m 采集、纽约时段/DST、东财北京时间降级和未完成柱过滤 | 功能提交 `64934de`；CI `30387614133`、Pages `30387770552`、Monitor `30387613679` 全绿；三只资金序列周末 0、日线缺口 0；SOXX/NVDA 各 370 根且非整 5 分钟行 0；首次两条临时柱已精确删除 |
-| 2026-07-30 | 全局运行、数据、图形、分析和报告正文复审：修复 Worker CPU 工作单元与积压收口、收盘聚合伪 K 线、SOXX/NVDA 分时 UI、新闻层级可见性、任务状态误导、报告未来截止与拆分污染、无效报告仍显示建议等问题；新增云端 Agent 每日全局审查提示词 | 本地前端 118/118、Functions 381/1 skip、Python 654/2 skip、Ruff 与语法检查通过；生产部署与最终运行证据须以本轮提交后的 GitHub/Pages/Worker 三方 SHA 和 §1.6 记录为准 |
+| 2026-07-30 | 全局运行、数据、图形、分析和报告正文复审：修复 Worker CPU 工作单元与积压收口、收盘聚合伪 K 线、SOXX/NVDA 分时 UI、新闻层级可见性、任务状态误导、报告未来截止与拆分污染、无效报告仍显示建议等问题；新增云端 Agent 每日全局审查提示词；补齐日报提交后的显式 Pages 部署、波动率周期语义、临时算术提示词约束、历史不安全评级失效和 VolGuard live→snapshot 健康判定 | 本地前端 `120/120`、Functions `419 passed / 1 skipped`、Python `694 passed / 2 skipped`（Windows 使用 `PYTHONUTF8=1`）、Ruff 全绿；代码 CI `30526207092` 全绿；真实单标的 daily-analysis `30526506641` 的分析、持久化和部署 dispatch 均成功，自动 Pages run `30527742906` 的迁移、部署、身份落库、SHA 与资金业务日校验全部成功；最终生产证据见 §1.6 |
 
 ## 1.6 2026-07-30 全局质量复审
 
@@ -592,4 +592,10 @@ gh workflow run deploy-monitor.yml --repo gaaiyun/TradingWorkbench --ref main
 - 2026-07-30 新报告仍因自行计算派生比例而被 `UNSUPPORTED_DERIVED_NUMERIC_CLAIM` 降为 Not Rated；这是门禁正常工作，不是可用结论。生产资讯发现碳酸锂、海外个案、投资日历和宽基 ETF 文章会因摘要碰词误路由，现将 A 股通信、半导体与政策 discovery 统一为标题优先：前两类必须在标题命中行业词；政策类只有在标题同时命中政策机关与政策动作时才允许摘要补充行业词。采集与 `/api/news` 两层执行同一规则，旧误入库记录无需等过期即从页面隐藏；
 - 新增 [云端 Agent 每日全局审查提示词](CLOUD_AGENT_DAILY_AUDIT_PROMPT.md)，覆盖部署、调度、行情、图形、资金、新闻、报告、VolGuard 和问答。
 
-生产尚须本轮提交后复验：免费 Worker 在一任务/三请求上限下是否仍 `exceededCpu`，积压是否真实前移，落后的美股日线是否补齐，当日分析是否恢复，以及 Pages/Worker/GitHub SHA 是否一致。任何一项未通过都必须保留为“未解决”，不能用本地测试替代。
+最终复验结论：
+
+- 真实 monitor 分析 run `30524023076` 成功，随后真实单标的 daily-analysis `30526506641` 也成功；后者生成 `515880.SS 2026-07-30-v9`，报告因 `FILTERED_UNSAFE_PUBLIC_CLAIM / MISSING_EVIDENCE_CITATION / UNSUPPORTED_CAUSAL_OR_PATH_CLAIM / UNSUPPORTED_DERIVED_NUMERIC_CLAIM` 保持 `Not Rated`，方向、仓位和交易建议未公开。最终审计为 `80 successful / 0 verified / 14 invalidated / 66 legacy_unverified / 7 invalid_record`，零 verified 是 fail-closed 真值。
+- `daily-analysis` 的报告 push 后显式触发 Pages 已由同一次真实运行证明：分析、`Persist reports to main`、`Trigger Cloudflare Pages deployment` 均为 success；自动部署 run `30527742906` 的 migration、部署、deployment identity 落库、生产 SHA 校验和资金业务日校验全部成功。不得再用手工 `wrangler pages deploy` 绕过该链。
+- Pages `/api/health` 连续回读为 `ok`；VolGuard 闭市/慢响应时 detail 如实显示 `mode=snapshot / fallback=timeout`，deployment manifest 合法。Google News 仍可能 `NEWS_TIMEOUT/503`，其余六个 active 新闻源正常时 Worker 新闻汇总仍应如实为 degraded，不能压成 ok。
+- 三只 ETF 自 2024-01-01 起各有 `621` 个资金业务日，周五各 `121`、周末 `0`、与同标的日线集合缺口 `0`。SOXX/NVDA 最近生产 5m 各 `299` 根，非整 5 分钟、周末、纽约常规时段外和重复行均为 `0`。只有 SOXX/NVDA 开启美股分时；SMH、TSM、AVGO、AMD、ASML、ORCL、GOOGL 等仍为日线，这是容量控制边界，不得写成“所有美股都有分时”。
+- 最终交接提交后仍须让 Pages 与 Worker 各执行一次 workflow_dispatch，使 GitHub main、Pages、Worker 三处完整 SHA 完全一致；本条只在最终提交产生后执行，结果以两个 health 端点回读为准。
