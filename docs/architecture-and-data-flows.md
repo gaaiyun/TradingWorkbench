@@ -409,7 +409,7 @@ Web 满足阈值时记录 `sent / WEB_EVENT_PERSISTED`，含义是网页可见�
 | `/api/market` | GET | `profile + symbol + timeframe` |
 | `/api/flows` | GET | `profile + symbol + type + period`；仅显式 ETF allow-list |
 | `/api/news`、`/api/events` | GET | profile |
-| `/api/monitor-status` | GET | profile，返回来源健康和提醒状态；显式 `capacity=1` 时附有界 D1 容量快照 |
+| `/api/monitor-status` | GET | profile，返回来源健康和提醒状态；显式 `capacity=1` 时附有界 D1 容量快照（默认 3000ms、硬上限 5000ms，不重试） |
 | `/api/analyze` | POST | profile manual 或 adhoc |
 | `/api/runs`、`/api/history`、`/api/latest` | GET | profile 或 requestId |
 | `/api/report`、`/api/report-audit` | GET | profile 或 requestId |
@@ -513,6 +513,6 @@ Monitor Worker 的生产 direct 模式运行在 Cloudflare 免费 CPU 预算内�
 
 新闻读取层支持 `tier=evidence|discovery`。前端分别取两层各 200 条后聚合，来源筛选仍保留层级。`source_health` 对外带稳定错误码、最近成功时间、连续失败次数和暂停时间；`market_events` freshness 在读取时按四天重算。5 分钟行情使用独立的 session-aware freshness：上海午休、收盘、周末冻结在最近完成的合法 5 分钟端点，纽约按 `America/New_York` 的 DST 与常规时段处理。腾讯把正在形成的 A 股柱标到区间结束时刻，读取层仅容忍不超过一个 5 分钟步长且属于合法会话端点的前置标签，避免状态每五分钟规律性闪烁；更远未来、非整 5 分钟、时段外端点和日线健康记录不会被误洗成 fresh。
 
-报告生成只有一个精确市场数值真源：存在 EvidencePacket 时，Market Analyst 不再额外调用另一套行情工具。Evidence `asOf` 取交易日结束和当前时点中较早者，禁止未来截止时间；官方“份额拆分”公告只形成带日期、标题、来源和 URL 的公司行动通知，不猜测比例或除权日。确定性派生层将窗口交易日数、窗口/最新收盘涨跌、ATR 占最新收盘、最新收盘距 MA20/MA60、严格均线排列及 RSI 30/50/70 固定惯例写成 `D#` ledger；每行保存方法、窗口和输入 Evidence ID。Risk debate 与 Portfolio Manager 把上游辩论视为不可信文本，只能引用 ledger 已有数字，禁止临时计算，也禁止从价量推断承接盘、资金流或具体主体。公开汇总不再拼接全部 Agent 草稿：它逐段复用 claim validator，剔除无引用定性叙事、未预计算的窗口极值/排名、面值判断、价量路径因果和“相互独立指标”等越界段落，并清理失去正文的标题；安全段落仍可与 Evidence Snapshot 一起发布。Manifest 记录引用结果与 `omittedUnsafeParagraphs`，原始角色分卷仍只供 GitHub 开发审计；若剩余正文仍不通过则只输出 Snapshot、`Not Rated` 和失败码。
+报告生成只有一个精确市场数值真源：存在 EvidencePacket 时，Market Analyst 不再额外调用另一套行情工具。Evidence `asOf` 取交易日结束和当前时点中较早者，禁止未来截止时间；官方“份额拆分”公告只形成带日期、标题、来源和 URL 的公司行动通知，不猜测比例或除权日。确定性派生层将窗口交易日数、窗口/最新收盘涨跌、ATR 占最新收盘、最新收盘距 MA20/MA60、严格均线排列及 RSI 30/50/70 固定惯例写成 `D#` ledger；每行保存方法、窗口和输入 Evidence ID。Risk debate 与 Portfolio Manager 把上游辩论视为不可信文本，只能引用 ledger 已有数字，禁止临时计算，也禁止从价量推断承接盘、资金流或具体主体。公开汇总不再拼接全部 Agent 草稿：它逐段复用 claim validator，剔除无引用定性叙事、未预计算的窗口极值/排名、面值判断、价量路径因果和“相互独立指标”等越界段落，并清理失去正文的标题；安全段落仍可与 Evidence Snapshot 一起发布。结构识别只接受受控 Rating/Time Horizon 格式，Markdown 标题或 Rating 尾随文字不能逃过引用检查；只剩评级、引用残片、条件句或下一步观察时触发 `NO_SUBSTANTIVE_SUPPORTED_CONCLUSION`。资金归因的否定按局部从句判定，泛化的 N#/CA# 引用不授权无关因果或连续路径。Manifest 记录引用结果与 `omittedUnsafeParagraphs`，原始角色分卷仍只供 GitHub 开发审计；若剩余正文仍不通过则只输出 Snapshot、`Not Rated` 和失败码。
 
 界面分时能力由真实采集能力决定：A 股核心标的和 `SOXX / NVDA` 可选分时，其他美股/港股锁定日线。15m/1h 聚合在当地 session close 时把终点柱并入前一桶，避免收盘瞬间生成单点零成交伪 K 线。任务看板未接入任务级结果时统一显示 `unknown / 未验证`。

@@ -6,6 +6,11 @@ import * as eventsApi from "../functions/api/events.js";
 import * as marketApi from "../functions/api/market.js";
 import * as monitorApi from "../functions/api/monitor-status.js";
 import * as newsApi from "../functions/api/news.js";
+import {
+  CAPACITY_DEFAULT_TIMEOUT_MS,
+  CAPACITY_MAX_TIMEOUT_MS,
+  capacityTimeoutMs,
+} from "../functions/api/_d1_repository.mjs";
 import { FakeD1 } from "./helpers/fake_d1.mjs";
 import { SqliteD1 } from "./helpers/sqlite_d1.mjs";
 
@@ -1118,6 +1123,13 @@ test("monitor status adds profile-scoped safe notification state and cursor", as
 });
 
 test("monitor status exposes bounded D1 capacity only when explicitly requested", async () => {
+  assert.equal(CAPACITY_DEFAULT_TIMEOUT_MS, 3000);
+  assert.equal(CAPACITY_MAX_TIMEOUT_MS, 5000);
+  assert.equal(capacityTimeoutMs(), 3000);
+  assert.equal(capacityTimeoutMs("invalid"), 3000);
+  assert.equal(capacityTimeoutMs(10), 25);
+  assert.equal(capacityTimeoutMs(3000), 3000);
+  assert.equal(capacityTimeoutMs(9000), 5000);
   const calls = [];
   const rows = {
     market_bars: 100001,

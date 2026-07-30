@@ -458,6 +458,12 @@ Invoke-RestMethod `
   "https://tradingagents-board.pages.dev/api/monitor-status?profile=cn-semi-comms&capacity=1"
 ```
 
+`capacity=1` 是手工运维探针，不在页面轮询中执行。其默认查询预算为 3000ms，
+`D1_CAPACITY_TIMEOUT_MS` 最低 25ms、硬上限 5000ms；超时返回
+`capacity.reason=query_timeout`，同时保留 health/notifications，不自动重试已经开始的
+D1 扫描。上线后至少连续请求 10 次，要求全部 `capacity.status=ok`；若数据增长后再次
+触顶，应改为缓存或写入时维护计数，不继续抬高超时。
+
 确认：
 
 - 本轮 `fetchedAt` 已更新；
@@ -645,4 +651,4 @@ DAILY_RECOVERY_ENABLED = "true"
 4. `intradayCollect / intradaySignal / newsCollect / usIntradayCollect` 超过 30 分钟仍未执行时应以 `STALE_SLOT_EXPIRED` 收口；一次性日线和完整分析不得被该规则取消。
 5. 定时 5 分钟 provider 单标的最多返回 96 根给写入层；确认这只是单轮工作量限制，D1 既有 90 天历史没有被删除。
 
-新报告验收还要读取 `evidence_packet.json` 的 `derivedEvidence`：每个 `D#` 必须包含 `method / window / inputEvidenceIds`。公开 Portfolio Decision 会逐段剔除未支持的自算比例、窗口极值/排名、面值、持续路径、因果或主体归因，并在 manifest 的 `omittedUnsafeParagraphs` 留痕；剩余文本仍须整体通过 claim gate。否定与不确定性边界要人工抽查：“既非严格空头排列”和“卖压是否释放无法确认”不能被误报成正向结论。旧 raw agent 分卷即使保留 Underweight/Sell 等字样，也不等于公开 verified 结论。
+新报告验收还要读取 `evidence_packet.json` 的 `derivedEvidence`：每个 `D#` 必须包含 `method / window / inputEvidenceIds`。公开 Portfolio Decision 会逐段剔除未支持的自算比例、窗口极值/排名、面值、持续路径、因果或主体归因，并在 manifest 的 `omittedUnsafeParagraphs` 留痕；剩余文本仍须整体通过 claim gate。Markdown 标题和 Rating 尾随理由不能豁免引用；纯引用、免责声明、条件句或“下一步观察”不能单独构成 verified 结论。普通 N#/CA# 不能替无关因果背书；没有阈值、历史分位或统计检验时，也不能把数值写成“极端/极高/显著”、把单日变化称为“无信号/噪音”，或从单点波动率推导反弹与清仓风险。否定词只保护真正否定归因的局部从句，“不能忽视/无法否认主力流出”仍应被拒；“既非严格空头排列”和“卖压是否释放无法确认”则不能被误报成正向结论。旧 raw agent 分卷即使保留 Underweight/Sell 等字样，也不等于公开 verified 结论。

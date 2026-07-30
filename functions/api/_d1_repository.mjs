@@ -3,6 +3,8 @@ export function d1Binding(env) {
 }
 
 const CAPACITY_ROW_LIMIT = 100_001;
+export const CAPACITY_DEFAULT_TIMEOUT_MS = 3000;
+export const CAPACITY_MAX_TIMEOUT_MS = 5000;
 const CAPACITY_TABLES = Object.freeze([
   "market_bars",
   "news_items",
@@ -29,16 +31,23 @@ function safeInteger(value) {
   return Number.isSafeInteger(number) && number >= 0 ? number : null;
 }
 
+export function capacityTimeoutMs(configuredTimeoutMs) {
+  return Math.min(
+    CAPACITY_MAX_TIMEOUT_MS,
+    Math.max(
+      25,
+      Number(configuredTimeoutMs) || CAPACITY_DEFAULT_TIMEOUT_MS,
+    ),
+  );
+}
+
 export async function queryD1Capacity(
   db,
-  configuredTimeoutMs = 1500,
+  configuredTimeoutMs = CAPACITY_DEFAULT_TIMEOUT_MS,
   measuredAt = new Date(),
 ) {
   if (!db?.prepare) return unavailableCapacity("no_binding");
-  const timeoutMs = Math.min(
-    3000,
-    Math.max(25, Number(configuredTimeoutMs) || 1500),
-  );
+  const timeoutMs = capacityTimeoutMs(configuredTimeoutMs);
   const timedOut = Symbol("capacity-query-timeout");
   let timer;
   const aliases = CAPACITY_TABLES.map((table) => (

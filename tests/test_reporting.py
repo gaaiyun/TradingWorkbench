@@ -212,6 +212,143 @@ def test_public_report_omits_semantic_claim_violations_and_keeps_safe_conclusion
 
 
 @pytest.mark.unit
+def test_public_report_rejects_claims_disguised_as_structure_and_empty_shell(
+    tmp_path,
+):
+    packet = build_evidence_packet(
+        ticker="512480.SS",
+        asset_type="cn_etf",
+        as_of="2026-07-23T08:00:00Z",
+        bars=[{"ts": "2026-07-23T07:00:00Z", "close": 180}],
+        sources=[{"source": "exchange", "sourceTier": "evidence"}],
+        generated_at="2026-07-23T08:05:00Z",
+    )
+    disguised_state = {
+        **_state(),
+        "risk_debate_state": {
+            "judge_decision": (
+                "**Rating**: Sell because macro headwinds will continue\n\n"
+                "**宏观逆风将继续压制该ETF**\n\n"
+                "The verified close is 180 [M1]."
+            ),
+        },
+        "trade_date": "2026-07-23",
+        "analysis_status": "rated",
+        "evidence_packet": packet,
+    }
+
+    disguised = write_report_tree(
+        disguised_state,
+        "512480.SS",
+        tmp_path / "disguised",
+    )
+    disguised_manifest = __import__("json").loads(
+        (tmp_path / "disguised" / "report_manifest.json").read_text()
+    )
+    disguised_complete = disguised.read_text(encoding="utf-8")
+    assert disguised_manifest["auditStatus"] == "verified"
+    assert "macro headwinds" not in disguised_complete
+    assert "宏观逆风" not in disguised_complete
+    assert "The verified close is 180 [M1]." in disguised_complete
+
+    empty_state = {
+        **_state(),
+        "risk_debate_state": {
+            "judge_decision": "**Rating**: Hold\n\n[M1]",
+        },
+        "trade_date": "2026-07-23",
+        "analysis_status": "rated",
+        "evidence_packet": packet,
+    }
+    write_report_tree(empty_state, "512480.SS", tmp_path / "empty")
+    empty_manifest = __import__("json").loads(
+        (tmp_path / "empty" / "report_manifest.json").read_text()
+    )
+    assert empty_manifest["analysisStatus"] == "insufficient_evidence"
+    assert empty_manifest["auditStatus"] == "legacy_unverified"
+    assert (
+        "NO_SUBSTANTIVE_SUPPORTED_CONCLUSION"
+        in empty_manifest["claimValidation"]["errorCodes"]
+    )
+
+    observation_state = {
+        **_state(),
+        "risk_debate_state": {
+            "judge_decision": (
+                "**Rating**: Underweight\n\n"
+                "**下一步观察：**\n"
+                "- 若价格低于已验证收盘价，需要重新评估 [M1]。"
+            ),
+        },
+        "trade_date": "2026-07-23",
+        "analysis_status": "rated",
+        "evidence_packet": packet,
+    }
+    write_report_tree(observation_state, "512480.SS", tmp_path / "observation")
+    observation_manifest = __import__("json").loads(
+        (tmp_path / "observation" / "report_manifest.json").read_text()
+    )
+    assert observation_manifest["analysisStatus"] == "insufficient_evidence"
+    assert (
+        "NO_SUBSTANTIVE_SUPPORTED_CONCLUSION"
+        in observation_manifest["claimValidation"]["errorCodes"]
+    )
+
+    bare_condition_state = {
+        **_state(),
+        "risk_debate_state": {
+            "judge_decision": (
+                "**Rating**: Underweight\n\n"
+                "若价格低于已验证收盘价，需要重新评估 [M1]。"
+            ),
+        },
+        "trade_date": "2026-07-23",
+        "analysis_status": "rated",
+        "evidence_packet": packet,
+    }
+    write_report_tree(bare_condition_state, "512480.SS", tmp_path / "bare-condition")
+    bare_condition_manifest = __import__("json").loads(
+        (tmp_path / "bare-condition" / "report_manifest.json").read_text()
+    )
+    assert bare_condition_manifest["analysisStatus"] == "insufficient_evidence"
+    assert (
+        "NO_SUBSTANTIVE_SUPPORTED_CONCLUSION"
+        in bare_condition_manifest["claimValidation"]["errorCodes"]
+    )
+
+    for index, next_step_only in enumerate((
+        "届时若价格低于已验证收盘价，需要重新评估 [M1]。",
+        "作为下一步，优先获取季报正文 [S1]。",
+        "观察价格是否企稳 [M1]。",
+        "监测成交量变化 [M1]。",
+        "跟踪下一交易日表现 [M1]。",
+        "静候下一次指标快照 [S1]。",
+    )):
+        variant_state = {
+            **_state(),
+            "risk_debate_state": {
+                "judge_decision": f"**Rating**: Underweight\n\n{next_step_only}",
+            },
+            "trade_date": "2026-07-23",
+            "analysis_status": "rated",
+            "evidence_packet": packet,
+        }
+        write_report_tree(
+            variant_state,
+            "512480.SS",
+            tmp_path / f"next-step-variant-{index}",
+        )
+        variant_manifest = __import__("json").loads(
+            (
+                tmp_path
+                / f"next-step-variant-{index}"
+                / "report_manifest.json"
+            ).read_text()
+        )
+        assert variant_manifest["analysisStatus"] == "insufficient_evidence"
+
+
+@pytest.mark.unit
 def test_claim_validation_accepts_grouped_and_range_evidence_citations():
     packet = build_evidence_packet(
         ticker="GOOGL",
@@ -463,14 +600,73 @@ def test_price_and_volume_cannot_be_relabelled_as_flow_or_selling_pressure():
         "成交量仅证明交易活跃，不能据此推断资金流出或抛压 [M1]。\n\n"
         "卖压是否已经释放无法从单一快照确认 [M1]。"
     )
+    misleading_prefix = "不能忽视风险，主力资金正在流出 [M1]。"
+    misleading_suffix = "主力资金正在流出，但是否持续无法确认 [M1]。"
+    misleading_inline = "不能忽视主力资金正在流出 [M1]。"
+    misleading_denial = "无法否认主力资金正在流出 [M1]。"
+    misleading_rebuttal = "没有证据反驳主力资金正在流出 [M1]。"
+    misleading_second_actor = "无法确认资金流出——但主力资金正在流出 [M1]。"
+    misleading_ellipsis_actor = "无法确认资金流出……主力资金正在流出 [M1]。"
+    misleading_english_actor = (
+        "Cannot identify fund outflow. Institutional buying is evident [M1]."
+    )
 
     invented_result = validate_report_claims(invented, packet)
     bounded_result = validate_report_claims(bounded, packet)
+    misleading_prefix_result = validate_report_claims(misleading_prefix, packet)
+    misleading_suffix_result = validate_report_claims(misleading_suffix, packet)
+    misleading_inline_result = validate_report_claims(misleading_inline, packet)
+    misleading_denial_result = validate_report_claims(misleading_denial, packet)
+    misleading_rebuttal_result = validate_report_claims(misleading_rebuttal, packet)
+    misleading_second_actor_result = validate_report_claims(
+        misleading_second_actor,
+        packet,
+    )
+    misleading_ellipsis_actor_result = validate_report_claims(
+        misleading_ellipsis_actor,
+        packet,
+    )
+    misleading_english_actor_result = validate_report_claims(
+        misleading_english_actor,
+        packet,
+    )
 
     assert "UNSUPPORTED_ACTOR_OR_FLOW_ATTRIBUTION" in invented_result["errorCodes"]
     assert invented_result["unsupportedActorOrFlowAttributionParagraphs"] == 1
     assert bounded_result["status"] == "passed"
     assert bounded_result["unsupportedActorOrFlowAttributionParagraphs"] == 0
+    assert (
+        "UNSUPPORTED_ACTOR_OR_FLOW_ATTRIBUTION"
+        in misleading_prefix_result["errorCodes"]
+    )
+    assert (
+        "UNSUPPORTED_ACTOR_OR_FLOW_ATTRIBUTION"
+        in misleading_suffix_result["errorCodes"]
+    )
+    assert (
+        "UNSUPPORTED_ACTOR_OR_FLOW_ATTRIBUTION"
+        in misleading_inline_result["errorCodes"]
+    )
+    assert (
+        "UNSUPPORTED_ACTOR_OR_FLOW_ATTRIBUTION"
+        in misleading_denial_result["errorCodes"]
+    )
+    assert (
+        "UNSUPPORTED_ACTOR_OR_FLOW_ATTRIBUTION"
+        in misleading_rebuttal_result["errorCodes"]
+    )
+    assert (
+        "UNSUPPORTED_ACTOR_OR_FLOW_ATTRIBUTION"
+        in misleading_second_actor_result["errorCodes"]
+    )
+    assert (
+        "UNSUPPORTED_ACTOR_OR_FLOW_ATTRIBUTION"
+        in misleading_ellipsis_actor_result["errorCodes"]
+    )
+    assert (
+        "UNSUPPORTED_ACTOR_OR_FLOW_ATTRIBUTION"
+        in misleading_english_actor_result["errorCodes"]
+    )
 
 
 @pytest.mark.unit
@@ -504,15 +700,76 @@ def test_window_rank_face_value_and_price_only_causality_fail_closed():
         packet,
     )
     conditional = validate_report_claims(
-        "若后续收盘价创新低，需要重新评估 [M2]。",
+        "若价格持续下跌，需要重新评估 [M2]。",
         packet,
     )
+    packet_with_news = {
+        **packet,
+        "news": [{
+            "evidenceId": "N1",
+            "title": "Unrelated Q2 filing",
+            "publishedAt": "2026-07-23T06:00:00Z",
+        }],
+    }
+    unrelated_news = validate_report_claims(
+        "价格持续回落证明估值恶化 [M1-M2, N1]。",
+        packet_with_news,
+    )
+    hypothetical_smuggle = validate_report_claims(
+        "若后续价格下跌，当前波动已证明估值恶化 [M1-M2, N1]。",
+        packet_with_news,
+    )
+    colon_smuggle = validate_report_claims(
+        "若后续价格下跌：当前波动已证明估值恶化 [M1-M2, N1]。",
+        packet_with_news,
+    )
+    dash_smuggle = validate_report_claims(
+        "如果波动继续——高波动已制造短期反弹机会 [M1-M2, N1]。",
+        packet_with_news,
+    )
+    english_period_smuggle = validate_report_claims(
+        "If prices fall. This proves valuation deterioration [M1-M2, N1].",
+        packet_with_news,
+    )
+    unsupported_path = validate_report_claims(
+        "高波动环境存在短期反弹的路径可能 [M1-M2]。",
+        packet,
+    )
+    qualitative_overreach = [
+        "价格处于极端偏离状态 [M2]。",
+        "已实现波动率处于极高水平 [M2]。",
+        "最新涨幅不具备信号意义 [M2]。",
+        "方向一致性本身提高了判断置信度 [M1-M2]。",
+        "高波动意味着双向风险均显著 [M2]。",
+        "份额拆分为中性技术操作且不改变持有人权益比例 [M2]。",
+        "价格偏离在历史经验中偶尔伴随技术反弹 [M2]。",
+        "完全清仓面临错失急速反转的风险 [M2]。",
+        "企稳升幅在当前环境下只是噪音 [M2]。",
+        "该ETF理论上受成分股表现驱动 [M2]。",
+    ]
+    overreach_results = [
+        validate_report_claims(text, packet)
+        for text in qualitative_overreach
+    ]
 
     assert "UNSUPPORTED_WINDOW_RANK_CLAIM" in rank["errorCodes"]
     assert "UNSUPPORTED_FACE_VALUE_CLAIM" in face_value["errorCodes"]
     assert "UNSUPPORTED_CAUSAL_OR_PATH_CLAIM" in path["errorCodes"]
     assert "UNSUPPORTED_CAUSAL_OR_PATH_CLAIM" in independence["errorCodes"]
     assert conditional["status"] == "passed"
+    assert "UNSUPPORTED_CAUSAL_OR_PATH_CLAIM" in unrelated_news["errorCodes"]
+    assert "UNSUPPORTED_CAUSAL_OR_PATH_CLAIM" in hypothetical_smuggle["errorCodes"]
+    assert "UNSUPPORTED_CAUSAL_OR_PATH_CLAIM" in colon_smuggle["errorCodes"]
+    assert "UNSUPPORTED_CAUSAL_OR_PATH_CLAIM" in dash_smuggle["errorCodes"]
+    assert (
+        "UNSUPPORTED_CAUSAL_OR_PATH_CLAIM"
+        in english_period_smuggle["errorCodes"]
+    )
+    assert "UNSUPPORTED_CAUSAL_OR_PATH_CLAIM" in unsupported_path["errorCodes"]
+    assert all(
+        "UNSUPPORTED_CAUSAL_OR_PATH_CLAIM" in result["errorCodes"]
+        for result in overreach_results
+    )
 
 
 @pytest.mark.unit

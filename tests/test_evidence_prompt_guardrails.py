@@ -36,3 +36,6 @@ def test_final_guardrail_distrusts_history_and_forbids_numeric_or_flow_invention
     assert "Do not invent a window rank or extremum" in source
     assert "not independent evidence" in source
     assert "Qualitative factual claims also require a citation" in source
+    assert "generic news or corporate-action citation does not establish" in source
+    assert "Do not hide a claim in a" in source
+    assert "future observations is insufficient" in source

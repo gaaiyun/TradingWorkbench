@@ -127,8 +127,13 @@ FINAL EVIDENCE CHECK — this overrides any conflicting upstream text:
 - Do not invent a window rank or extremum (lowest, highest, second-highest,
   new high, or new low), a par-value/face-value comparison, a continuous path,
   or a causal conclusion unless one cited ledger row explicitly contains that
-  exact fact. Multiple indicators calculated from the same OHLCV history are
-  not independent evidence. Qualitative factual claims also require a citation.
+  exact fact. A generic news or corporate-action citation does not establish an
+  unrelated causal or continuous-price-path claim. Multiple indicators calculated
+  from the same OHLCV history are not independent evidence.
+- Qualitative factual claims also require a citation. Do not hide a claim in a
+  Markdown heading or attach an explanation to the Rating field. Include at
+  least one evidence-backed current conclusion; a rating followed only by
+  citations, disclaimers, conditions, or future observations is insufficient.
 - Use unnumbered bullets instead of numeric outline labels. Before responding,
   remove every unsupported number and every unsupported actor attribution.
 """

@@ -181,8 +181,17 @@ _ACTOR_OR_FLOW_ATTRIBUTION_RE = re.compile(
     re.IGNORECASE,
 )
 _ATTRIBUTION_NEGATION_RE = re.compile(
-    r"(?:不能|不可|无法|不应|不得|并非|不是|不等同于|没有证据|"
-    r"未能证明|不足以证明|不可据此|不能据此)"
+    r"(?:"
+    r"(?:不能|不可|无法|不应|不得|未能|不足以)"
+    r"(?:从[^，,。；;]{0,24})?(?:据此)?"
+    r"(?:确认|判断|证明|推断|识别|归因|说明|得出)|"
+    r"(?:没有|缺乏)(?:直接|充分|足够)?证据"
+    r"(?:显示|表明|证明|支持)|"
+    r"(?:并非|不是|不等同于)|"
+    r"(?:cannot|can't|does\s+not|doesn't)\s+"
+    r"(?:prove|show|identify|infer)"
+    r")\s*$",
+    re.IGNORECASE,
 )
 _ATTRIBUTION_POST_NEGATION_RE = re.compile(
     r"(?:是否|能否).{0,80}?(?:不能|不可|无法|未能|不足以)"
@@ -204,6 +213,18 @@ _HYPOTHETICAL_PREFIX_RE = re.compile(
 _CAUSAL_OR_PATH_RE = re.compile(
     r"(?:持续回落|持续下跌|持续上涨|连续走低|连续走高|"
     r"已证明|证明了|导致|造成|引发|"
+    r"确定性(?:最高|最强)|最可靠|趋势方向清晰|"
+    r"(?:极端|深度|显著|极高|极低).{0,16}?(?:偏离|水平|风险|波动)|"
+    r"(?:双向|下行|上行)?风险.{0,12}?(?:显著|客观存在)|"
+    r"(?:不具备|具备).{0,12}?(?:信号意义|方向性意义)|"
+    r"方向一致性.{0,24}?(?:提高|增强).{0,12}?置信|"
+    r"(?:中性)?技术操作|不改变.{0,16}?(?:权益|持有人)|"
+    r"历史经验.{0,36}?(?:反弹|回归)|错失.{0,12}?反转|"
+    r"(?:企稳|升幅).{0,20}?(?:噪音|信号)|"
+    r"理论上.{0,28}?驱动|意味着.{0,24}?(?:风险|反弹|下行|上行)|"
+    r"(?:短期)?(?:反弹|下跌|上涨|回落)(?:的)?路径|"
+    r"路径.{0,12}?(?:剧烈|显著|明显)|"
+    r"波动.{0,20}?(?:制造|带来|创造).{0,12}?机会|"
     r"多重独立指标|相互独立(?:的)?指标|"
     r"continued?\s+(?:decline|rise|fall)|"
     r"(?:proves?|demonstrates?|causes?|drives?|triggers?)\b|"
@@ -217,10 +238,15 @@ _FACE_VALUE_RE = re.compile(
 )
 _STRUCTURAL_FINAL_PARAGRAPH_RE = re.compile(
     r"^(?:"
-    r"\*\*(?:Rating|Time\s+Horizon)\*\*\s*:\s*[^\n]{1,80}|"
-    r"#{1,6}\s+[^\n]{1,120}|"
-    r"\*\*[^*\n]{1,100}\*\*\s*:?"
-    r"(?:\s*\*\*[^*\n]{1,100}\*\*)?"
+    r"\*\*Rating\*\*\s*:\s*"
+    r"(?:Strong\s+)?(?:Buy|Sell)|"
+    r"\*\*Rating\*\*\s*:\s*"
+    r"(?:Hold|Neutral|Overweight|Underweight|Not\s+Rated)|"
+    r"\*\*Rating\*\*\s*:\s*(?:买入|增持|持有|中性|减持|卖出|未评级)|"
+    r"\*\*Time\s+Horizon\*\*\s*:\s*"
+    r"(?:null|N/?A|short(?:[-\s]?term)?|medium(?:[-\s]?term)?|"
+    r"long(?:[-\s]?term)?|短期|中期|长期)"
+    r"(?:\s*\([^)\n]{1,40}\))?"
     r")$",
     re.IGNORECASE,
 )
@@ -228,6 +254,25 @@ _RATING_OR_HORIZON_RE = re.compile(
     r"^\*\*(?:Rating|Time\s+Horizon)\*\*\s*:",
     re.IGNORECASE,
 )
+_OBSERVATION_ONLY_HEADING_RE = re.compile(
+    r"^(?:#{1,6}\s*|\*\*)"
+    r"(?:下一步|后续|未来|待获取|观察|监测|Next\s+Steps?|Watchlist)",
+    re.IGNORECASE,
+)
+_CLAUSE_SPLIT_RE = re.compile(
+    r"[。！？；;，,:：—–.!?…/\n]+|(?:但|不过|然而|\bbut\b|\bhowever\b)",
+    re.IGNORECASE,
+)
+_NON_CONCLUSION_MARKER_RE = re.compile(
+    r"(?:若|如果|一旦|届时|作为下一步|下一步|后续|未来|"
+    r"关注是否|观察|监测|跟踪|静候|等待|待获取|优先获取|"
+    r"(?:需要|需|建议)(?:关注|获取|等待|重新评估)|重新评估|"
+    r"\bif\b|\bwhen\b|\bwatch\b|\bwait\b|\bmonitor\b|\bnext\s+step\b)",
+    re.IGNORECASE,
+)
+_BLOCKING_PUBLIC_FILTER_ERRORS = frozenset({
+    "NO_SUBSTANTIVE_SUPPORTED_CONCLUSION",
+})
 
 
 def _packet_evidence_ids(packet: dict) -> set[str]:
@@ -367,13 +412,14 @@ def _moving_average_alignment_is_contradicted(paragraph: str, packet: dict) -> b
 
 def _has_unsupported_actor_or_flow_attribution(paragraph: str) -> bool:
     """Reject price/volume narratives that invent actors or fund flows."""
-    for sentence in re.split(r"[。！？；;\n]+", str(paragraph or "")):
-        matches = list(_ACTOR_OR_FLOW_ATTRIBUTION_RE.finditer(sentence))
+    clauses = _CLAUSE_SPLIT_RE.split(str(paragraph or ""))
+    for clause in clauses:
+        matches = list(_ACTOR_OR_FLOW_ATTRIBUTION_RE.finditer(clause))
         if not matches:
             continue
-        first_start = matches[0].start()
-        prefix = sentence[:first_start]
-        suffix = sentence[first_start:]
+        first_match = matches[0]
+        prefix = clause[:first_match.start()]
+        suffix = clause[first_match.start():]
         if (
             _ATTRIBUTION_NEGATION_RE.search(prefix)
             or _ATTRIBUTION_POST_NEGATION_RE.search(suffix)
@@ -388,7 +434,7 @@ def _has_unsupported_window_rank(
     packet_rows: dict[str, dict],
     paragraph_ids: set[str],
 ) -> bool:
-    for sentence in re.split(r"[。！？；;\n]+", str(paragraph or "")):
+    for sentence in _CLAUSE_SPLIT_RE.split(str(paragraph or "")):
         match = _WINDOW_RANK_RE.search(sentence)
         if not match:
             continue
@@ -412,12 +458,13 @@ def _has_unsupported_causal_or_path_claim(
     paragraph: str,
     paragraph_ids: set[str],
 ) -> bool:
-    if not _CAUSAL_OR_PATH_RE.search(str(paragraph or "")):
-        return False
-    return not any(
-        evidence_id.startswith(("N", "CA"))
-        for evidence_id in paragraph_ids
-    )
+    del paragraph_ids  # Generic news/action citations do not prove causality.
+    for sentence in _CLAUSE_SPLIT_RE.split(str(paragraph or "")):
+        for match in _CAUSAL_OR_PATH_RE.finditer(sentence):
+            if _HYPOTHETICAL_PREFIX_RE.search(sentence[:match.start()]):
+                continue
+            return True
+    return False
 
 
 def _is_structural_final_paragraph(paragraph: str) -> bool:
@@ -439,6 +486,31 @@ def _is_numeric_recommendation_disclaimer(paragraph: str) -> bool:
     remainder = _NUMERIC_RECOMMENDATION_DISCLAIMER_RE.sub("", original)
     remainder = re.sub(r"(?i)\bthis\s+report\b|本报告", "", remainder)
     return not _has_substantive_claim_text(remainder)
+
+
+def _is_substantive_supported_conclusion(
+    paragraph: str,
+    known_ids: set[str],
+) -> bool:
+    paragraph_ids, _invalid = _scan_evidence_citations(paragraph)
+    if not paragraph_ids.intersection(known_ids):
+        return False
+    if _is_structural_final_paragraph(paragraph):
+        return False
+    if _OBSERVATION_ONLY_HEADING_RE.match(str(paragraph or "").strip()):
+        return False
+    for raw_line in str(paragraph or "").splitlines():
+        line = re.sub(r"^\s*(?:[-*+]\s+|\d+[.)]\s+)", "", raw_line).strip()
+        if re.fullmatch(r"(?:#{1,6}\s+.+|\*\*[^*\n]+\*\*\s*:?)", line):
+            continue
+        for clause in _CLAUSE_SPLIT_RE.split(line):
+            claim_text = _claim_scan_text(clause)
+            if not _has_substantive_claim_text(claim_text):
+                continue
+            if _NON_CONCLUSION_MARKER_RE.search(claim_text):
+                continue
+            return True
+    return False
 
 
 def _parse_evidence_citation(body: str) -> frozenset[str] | None:
@@ -781,11 +853,17 @@ def _filter_public_final_decision(text: str, packet: dict) -> tuple[str, int, se
             and not _is_structural_final_paragraph(paragraph)
             and not _is_numeric_recommendation_disclaimer(paragraph)
         )
+        has_empty_evidence_fragment = bool(
+            known_paragraph_ids
+            and not _has_substantive_claim_text(claim_text)
+            and not _is_structural_final_paragraph(paragraph)
+        )
         if (
             unknown_ids
             or invalid_citations
             or has_uncited_numeric
             or has_missing_qualitative_citation
+            or has_empty_evidence_fragment
             or has_price_target
             or has_allocation
             or has_unsupported_derived_numeric
@@ -805,6 +883,8 @@ def _filter_public_final_decision(text: str, packet: dict) -> tuple[str, int, se
                 omitted_error_codes.add("UNCITED_NUMERIC_CLAIM")
             if has_missing_qualitative_citation:
                 omitted_error_codes.add("MISSING_EVIDENCE_CITATION")
+            if has_empty_evidence_fragment:
+                omitted_error_codes.add("EMPTY_EVIDENCE_FRAGMENT")
             if has_price_target:
                 omitted_error_codes.add("UNSUPPORTED_PRICE_TARGET")
             if has_allocation:
@@ -841,6 +921,12 @@ def _filter_public_final_decision(text: str, packet: dict) -> tuple[str, int, se
             omitted_error_codes.add("ORPHAN_HEADING")
             continue
         kept.append(paragraph)
+    has_substantive_supported_conclusion = any(
+        _is_substantive_supported_conclusion(paragraph, known_ids)
+        for paragraph in kept
+    )
+    if not has_substantive_supported_conclusion:
+        omitted_error_codes.add("NO_SUBSTANTIVE_SUPPORTED_CONCLUSION")
     return "\n\n".join(kept), omitted, omitted_error_codes
 
 
@@ -1129,6 +1215,14 @@ def write_report_tree(
     )
     if packet:
         claim_validation["omittedUnsafeParagraphs"] = omitted_unsafe_paragraphs
+        blocking_filter_errors = (
+            omitted_error_codes.intersection(_BLOCKING_PUBLIC_FILTER_ERRORS)
+        )
+        for error_code in sorted(blocking_filter_errors):
+            if error_code not in claim_validation["errorCodes"]:
+                claim_validation["errorCodes"].append(error_code)
+        if blocking_filter_errors:
+            claim_validation["status"] = "failed"
         if "MISSING_EVIDENCE_CITATION" in claim_validation["errorCodes"]:
             for error_code in sorted(omitted_error_codes):
                 if error_code not in claim_validation["errorCodes"]:

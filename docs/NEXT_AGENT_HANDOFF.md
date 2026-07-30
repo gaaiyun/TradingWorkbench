@@ -20,6 +20,8 @@
 
 2026-07-30 本轮全局审查新增四个收口：定时 5 分钟采集每标的只处理最近 96 根而不删除 D1 的 90 天历史；超过 30 分钟仍未执行的高频 slot 以 `STALE_SLOT_EXPIRED` 收口，真实 staging 唯一键冲突单独计入 `conflicted`；5 分钟 freshness 改为上海/纽约会话感知，午休、收盘和周末不再误报 stale，开盘期真实延迟仍保留；EvidencePacket 增加带方法、窗口和输入引用的 `D#` 派生证据，Risk/Portfolio 最终提示禁止自行算数及从 OHLCV 归因主力、机构、承接盘、卖压或资金流。旧的 2026-07-30 原始决策仍被门禁拒绝，受控 D 引用样例通过；本轮没有降低 verified 标准。
 
+同轮独立终审继续封堵公开报告绕过：结构豁免只接受受控 Rating/Time Horizon 值，标题与 Rating 尾随理由不能夹带结论；纯引用、免责声明、条件句和“下一步观察”不能单独构成 verified 报告；普通 N#/CA# 不替无关因果或连续价格路径背书；资金归因的否定按局部从句生效，“不能忽视/无法否认主力流出”仍会被拒。没有阈值、历史分位或统计检验时，“极端/极高/显著”“无信号/噪音”以及由单点波动率推出的反弹或清仓风险同样剔除。真实 v4 重放中，`515880.SS` 仍保留可核对的实质段落，`512480.SS` 过滤后只剩评级和观察项，因此按 `NO_SUBSTANTIVE_SUPPORTED_CONCLUSION` 降为 `Not Rated`；对 v5 复放后，`515880.SS` 九段中六段因上述过度结论被剔除，剩余仅评级与观察项，也必须降级，不为凑结论放宽门禁。
+
 第一次真实重跑暴露了校验器把中文“20日已实现波动率”的数值整数部分误当周期、并把“不满足空头排列/关注是否形成多头排列”误当正向主张；两处已按语义修正，8 日窗口长度也进入 D 行。第二次真实重跑让 `515880.SS` 首次生成 `verified` 报告、`512480.SS` 只剩上述误判；但人工逐句复核又发现 `515880.SS 2026-07-30-v3` 把高成交量写成“更可能反映抛压”。即使标成“假设”也超出 OHLCV 证据边界，因此该报告已精确 invalidated，校验器新增 `UNSUPPORTED_ACTOR_OR_FLOW_ATTRIBUTION`，不能把该 v3 当质量基线。
 
 GitHub 自动部署链已恢复。仓库主人在 2026-07-27 配置了 `CLOUDFLARE_API_TOKEN`，同时补齐 `MONITOR_WORKER_URL`；Pages 自动部署 run `30279626692` 成功，Monitor 在修复生产别名传播等待后 run `30280008338` 成功，CI run `30280007660` 全绿。童装 Agent 使用同一 Cloudflare token 的 production 部署 run `30279633026` 也已从凭据校验、D1 migration、Worker/Pages 发布走到生产冒烟全绿。token 只保存在 GitHub secret，未写入仓库、日志或本文。
@@ -32,7 +34,7 @@ GitHub 自动部署链已恢复。仓库主人在 2026-07-27 配置了 `CLOUDFLA
 
 2026-07-27 的官方源验收已证明 SEC 修复生效：GOOGL 有真实 `sec.gov/Archives` 8-K evidence；ORCL 最近 8-K 早于 30 天窗口，因此 evidence 为 0 是正确行为，禁止为了凑数放宽窗口。2026-07-28 已删除失效的工信部反爬端点并发布中国政府网政策库。上交所会拒绝 Cloudflare 出口，因此最终改由两小时 GitHub Actions 从可用出口查询并写 D1；首轮生产 run `30290500176` 写入 `515880.SS=4`、`512480.SS=3`，包括二季报和份额拆分原始 PDF。首份 `verified` 报告仍未生成，报告门禁没有放宽。
 
-第四轮还修复了运维可观测性：Worker `/health.newsProviders.reason` 现在区分 `no_binding / query_timeout / empty_table / query_error`，默认 1500ms、冷启动仅重试一次；Pages 发布生成与运行时 SHA 交叉校验的 deployment manifest，`/api/health.deployment` 增加真实 `deployedAt`；`/api/monitor-status?capacity=1` 可按需读取有界 D1 行数和存储估算，默认页面轮询不执行容量查询。
+第四轮还修复了运维可观测性：Worker `/health.newsProviders.reason` 现在区分 `no_binding / query_timeout / empty_table / query_error`，默认 1500ms、冷启动仅重试一次；Pages 发布生成与运行时 SHA 交叉校验的 deployment manifest，`/api/health.deployment` 增加真实 `deployedAt`；`/api/monitor-status?capacity=1` 可按需读取有界 D1 行数和存储估算，默认页面轮询不执行容量查询。本轮生产尾延迟复核后，容量探针自身的默认/硬上限改为 3000/5000ms，不做无法取消的超时重试；这不改变 Worker `/health` 的 1500ms 独立预算。
 
 2026-07-28 又完成 ETF 日频资金面：新增纯追加 migration `0016_fund_flows.sql`、`/api/flows`、独立 GitHub Actions 采集器和市场监控内嵌面板。生产 backfill run `30295062725` 写入 `19636` 条，业务自然键重复为 0；三个 ETF 的融资历史分别为 `1637 / 1579 / 1521` 个交易日，两只沪市 ETF 各有 `1354` 条推导份额，三只均有当前份额快照。daily run `30295641181` 成功处理 `491` 条更新、失败源为 0；工作日北京时间 20:17 已启用自动日更。随后用 `0017_deployment_metadata.sql` 修复同 SHA 后续 Pages 部署遮盖静态 manifest 时 `deployedAt=unknown` 的竞态。最终运行时代码为 `e66def33e034b41e63b8ecd4b930a42a38e7c0bc`：Pages run `30297566846`、Worker run `30297566845`、CI run `30297566980` 全绿；Pages `deployedAt=2026-07-27T19:17:32Z`，Worker `deployedAt=2026-07-27T19:18:37Z`。该数据当前不进入 Evidence/报告，报告门禁与 `0 verified` 状态没有改变。
 
