@@ -1,7 +1,7 @@
 {
   "version": 1,
   "status": "ok",
-  "generated_at": "2026-07-30T13:02:01+08:00",
+  "generated_at": "2026-07-30T13:26:13+08:00",
   "trade_date": "2026-07-30",
   "global": {
     "status": "ok",
@@ -9,15 +9,35 @@
     "ticker": null,
     "start_date": "2026-07-23",
     "end_date": "2026-07-30",
-    "fetched_at": "2026-07-30T05:02:02Z",
+    "fetched_at": "2026-07-30T05:26:14Z",
     "items": [
+      {
+        "title": "Oil prices slip and Asian shares are mostly lower as investors sell chipmaker stocks",
+        "summary": "",
+        "url": "https://finance.yahoo.com/markets/articles/oil-prices-slip-asian-shares-050950736.html",
+        "source": "Associated Press",
+        "published_at": "2026-07-30T05:09:50Z",
+        "fetched_at": "2026-07-30T05:26:14Z",
+        "ticker": null,
+        "source_tier": "aggregator"
+      },
+      {
+        "title": "BofA just turned on Exxon in favor of Chevron",
+        "summary": "",
+        "url": "https://finance.yahoo.com/m/b2d26461-c630-35bb-a1b0-6f914492c115/bofa-just-turned-on-exxon-in.html",
+        "source": "TheStreet",
+        "published_at": "2026-07-30T05:07:00Z",
+        "fetched_at": "2026-07-30T05:26:14Z",
+        "ticker": null,
+        "source_tier": "aggregator"
+      },
       {
         "title": "Oil slips as markets look for cues on Gulf supplies",
         "summary": "",
         "url": "https://finance.yahoo.com/news/oil-prices-slip-tankers-continue-003657966.html",
         "source": "Reuters",
         "published_at": "2026-07-30T04:22:03Z",
-        "fetched_at": "2026-07-30T05:02:02Z",
+        "fetched_at": "2026-07-30T05:26:14Z",
         "ticker": null,
         "source_tier": "aggregator"
       },
@@ -27,7 +47,7 @@
         "url": "https://finance.yahoo.com/video/trump-says-british-pm-told-040643899.html",
         "source": "Reuters Videos",
         "published_at": "2026-07-30T04:06:43Z",
-        "fetched_at": "2026-07-30T05:02:02Z",
+        "fetched_at": "2026-07-30T05:26:14Z",
         "ticker": null,
         "source_tier": "aggregator"
       },
@@ -37,7 +57,7 @@
         "url": "https://finance.yahoo.com/m/7b38b11b-2954-3bb5-b379-69f29082468a/hudbay-minerals-q2-earnings.html",
         "source": "MarketBeat",
         "published_at": "2026-07-30T04:03:55Z",
-        "fetched_at": "2026-07-30T05:02:02Z",
+        "fetched_at": "2026-07-30T05:26:14Z",
         "ticker": null,
         "source_tier": "aggregator"
       },
@@ -47,27 +67,27 @@
         "url": "https://finance.yahoo.com/energy/articles/oil-prices-slip-despite-attacks-040109065.html",
         "source": "Oilprice.com",
         "published_at": "2026-07-30T04:01:09Z",
-        "fetched_at": "2026-07-30T05:02:02Z",
+        "fetched_at": "2026-07-30T05:26:14Z",
         "ticker": null,
         "source_tier": "aggregator"
       },
       {
-        "title": "AP Top Financial News at 12:34 a.m. EDT",
+        "title": "AP Top Financial News at 1:01 a.m. EDT",
         "summary": "",
         "url": "https://finance.yahoo.com/markets/stocks/articles/ap-top-financial-news-12-040000457.html",
         "source": "Associated Press",
         "published_at": "2026-07-30T04:00:00Z",
-        "fetched_at": "2026-07-30T05:02:02Z",
+        "fetched_at": "2026-07-30T05:26:14Z",
         "ticker": null,
         "source_tier": "aggregator"
       },
       {
-        "title": "AP Top Extended Financial Headlines at 12:34 a.m. EDT",
+        "title": "AP Top Extended Financial Headlines at 1:01 a.m. EDT",
         "summary": "",
         "url": "https://finance.yahoo.com/economy/articles/ap-top-extended-financial-headlines-040000790.html",
         "source": "Associated Press",
         "published_at": "2026-07-30T04:00:00Z",
-        "fetched_at": "2026-07-30T05:02:02Z",
+        "fetched_at": "2026-07-30T05:26:14Z",
         "ticker": null,
         "source_tier": "aggregator"
       },
@@ -77,7 +97,7 @@
         "url": "https://finance.yahoo.com/markets/stocks/articles/asian-stocks-choppy-rout-fed-014549754.html",
         "source": "Reuters",
         "published_at": "2026-07-30T03:43:11Z",
-        "fetched_at": "2026-07-30T05:02:02Z",
+        "fetched_at": "2026-07-30T05:26:14Z",
         "ticker": null,
         "source_tier": "aggregator"
       },
@@ -87,27 +107,7 @@
         "url": "https://finance.yahoo.com/m/faa2f4e9-ca72-3a49-ab5f-8717378359fe/aramco-just-shut-major.html",
         "source": "TheStreet",
         "published_at": "2026-07-30T03:17:00Z",
-        "fetched_at": "2026-07-30T05:02:02Z",
-        "ticker": null,
-        "source_tier": "aggregator"
-      },
-      {
-        "title": "The Fed Decided to Do Nothing and That Decision Backfired: Here’s Why",
-        "summary": "",
-        "url": "https://finance.yahoo.com/m/f2072284-e7ef-3501-a135-6032f95c6f21/the-fed-decided-to-do-nothing.html",
-        "source": "BeInCrypto",
-        "published_at": "2026-07-30T03:10:41Z",
-        "fetched_at": "2026-07-30T05:02:02Z",
-        "ticker": null,
-        "source_tier": "aggregator"
-      },
-      {
-        "title": "Dow Jones Futures Rise; Microsoft, Meta Lead Big Earnings After Market Tumbles, Oil Prices Soar",
-        "summary": "",
-        "url": "https://finance.yahoo.com/m/58bee05c-df37-343b-b099-b9d3d5fa6440/dow-jones-futures-rise%3B.html",
-        "source": "Investor's Business Daily",
-        "published_at": "2026-07-30T03:07:36Z",
-        "fetched_at": "2026-07-30T05:02:02Z",
+        "fetched_at": "2026-07-30T05:26:14Z",
         "ticker": null,
         "source_tier": "aggregator"
       }
@@ -127,34 +127,13 @@
   },
   "tickers": {
     "515880.SS": {
-      "status": "ok",
+      "status": "empty",
       "query_type": "ticker",
       "ticker": "515880.SS",
       "start_date": "2026-07-30",
       "end_date": "2026-07-30",
-      "fetched_at": "2026-07-30T05:02:04Z",
-      "items": [
-        {
-          "title": "通信ETF国泰（515880）开盘跌1.50%，重仓股新易盛跌2.61%，中际旭创跌3.36%",
-          "summary": "通信ETF国泰（515880）开盘跌1.50%，重仓股新易盛跌2.61%，中际旭创跌3.36% 新浪网",
-          "url": "https://news.google.com/rss/articles/CBMimAFBVV95cUxQbzlvSlZSVUhjeEVjZGNCMHcxZVdRQVdaclF0Z29XZVh2VVNKSGVQbW5UQUNnLUZEU2F1bFVtb0tfeFdEM2ZfVHZuOGNwZ1RUSFhsYU5vcUk2TkNlY1BFTW1MWGNZTmVRVi1FeGdiTjlCY3pBbF9BMjFrSGNTT012UzBhQnE4a2JBNkhhRkpoMk5HbnZlaTk0Yw?oc=5",
-          "source": "Google News / 新浪网",
-          "published_at": "2026-07-30T01:30:00Z",
-          "fetched_at": "2026-07-30T05:02:04Z",
-          "ticker": "515880.SS",
-          "source_tier": "aggregator"
-        },
-        {
-          "title": "7月29日通信ETF国泰（515880）份额减少7.52亿份，最新份额685.50亿份，最新规模413.36亿元",
-          "summary": "7月29日通信ETF国泰（515880）份额减少7.52亿份，最新份额685.50亿份，最新规模413.36亿元 新浪网",
-          "url": "https://news.google.com/rss/articles/CBMimwFBVV95cUxNbElPcXlFMFRDNHV6cXhXOXgxXzk5MHVaazNjdzhHaVEyR2lFeTNmYzcyQlZ5Sk4zTUlvbW5aLV9uc0tHcFM0S3VDdzZKZ25zY2VYZzRjZmNqN1d6Y0RIMm9VM3VCVWdldDRVejNjbFdfVVYtdF9pSDFfLXlqQWswOEk3OXdGNHpIQ21nM01vaTZ2WEpMR3ZRdFh4Zw?oc=5",
-          "source": "Google News / 新浪网",
-          "published_at": "2026-07-30T01:00:00Z",
-          "fetched_at": "2026-07-30T05:02:04Z",
-          "ticker": "515880.SS",
-          "source_tier": "aggregator"
-        }
-      ],
+      "fetched_at": "2026-07-30T05:26:15Z",
+      "items": [],
       "source_statuses": [
         {
           "source": "Yahoo Finance",
@@ -163,8 +142,8 @@
         },
         {
           "source": "Google News RSS",
-          "status": "ok",
-          "item_count": 2
+          "status": "empty",
+          "item_count": 0
         },
         {
           "source": "SEC EDGAR",
@@ -174,24 +153,13 @@
       ]
     },
     "512480.SS": {
-      "status": "ok",
+      "status": "empty",
       "query_type": "ticker",
       "ticker": "512480.SS",
       "start_date": "2026-07-30",
       "end_date": "2026-07-30",
-      "fetched_at": "2026-07-30T05:02:07Z",
-      "items": [
-        {
-          "title": "7月29日半导体ETF国联安（512480）份额增加2.92亿份，最新份额193.50亿份，最新规模198.38亿元",
-          "summary": "7月29日半导体ETF国联安（512480）份额增加2.92亿份，最新份额193.50亿份，最新规模198.38亿元 新浪网",
-          "url": "https://news.google.com/rss/articles/CBMimwFBVV95cUxQU3lMTVJ2Q2dkVXpMTWtxLXNIYXppODBXcFlDU1RudVowZ2hCQXppOE9NQzVrd0tiTjJTQmJJQ3pwbWZGYzdoVE1CRkF5ZktJSWhKa1V1TjZFMTlYLTBfUkoteDBVbU51enVlcnhPdzZxeEY5YjZtQ0VZbS1fR3A5Qm91ejlHTmtuYjB1aWNBQWc0X0Zzay03QW5UZw?oc=5",
-          "source": "Google News / 新浪网",
-          "published_at": "2026-07-30T01:00:00Z",
-          "fetched_at": "2026-07-30T05:02:07Z",
-          "ticker": "512480.SS",
-          "source_tier": "aggregator"
-        }
-      ],
+      "fetched_at": "2026-07-30T05:26:31Z",
+      "items": [],
       "source_statuses": [
         {
           "source": "Yahoo Finance",
@@ -200,8 +168,8 @@
         },
         {
           "source": "Google News RSS",
-          "status": "ok",
-          "item_count": 1
+          "status": "empty",
+          "item_count": 0
         },
         {
           "source": "SEC EDGAR",
@@ -213,12 +181,32 @@
   },
   "items": [
     {
+      "title": "Oil prices slip and Asian shares are mostly lower as investors sell chipmaker stocks",
+      "summary": "",
+      "url": "https://finance.yahoo.com/markets/articles/oil-prices-slip-asian-shares-050950736.html",
+      "source": "Associated Press",
+      "published_at": "2026-07-30T05:09:50Z",
+      "fetched_at": "2026-07-30T05:26:14Z",
+      "ticker": null,
+      "source_tier": "aggregator"
+    },
+    {
+      "title": "BofA just turned on Exxon in favor of Chevron",
+      "summary": "",
+      "url": "https://finance.yahoo.com/m/b2d26461-c630-35bb-a1b0-6f914492c115/bofa-just-turned-on-exxon-in.html",
+      "source": "TheStreet",
+      "published_at": "2026-07-30T05:07:00Z",
+      "fetched_at": "2026-07-30T05:26:14Z",
+      "ticker": null,
+      "source_tier": "aggregator"
+    },
+    {
       "title": "Oil slips as markets look for cues on Gulf supplies",
       "summary": "",
       "url": "https://finance.yahoo.com/news/oil-prices-slip-tankers-continue-003657966.html",
       "source": "Reuters",
       "published_at": "2026-07-30T04:22:03Z",
-      "fetched_at": "2026-07-30T05:02:02Z",
+      "fetched_at": "2026-07-30T05:26:14Z",
       "ticker": null,
       "source_tier": "aggregator"
     },
@@ -228,7 +216,7 @@
       "url": "https://finance.yahoo.com/video/trump-says-british-pm-told-040643899.html",
       "source": "Reuters Videos",
       "published_at": "2026-07-30T04:06:43Z",
-      "fetched_at": "2026-07-30T05:02:02Z",
+      "fetched_at": "2026-07-30T05:26:14Z",
       "ticker": null,
       "source_tier": "aggregator"
     },
@@ -238,7 +226,7 @@
       "url": "https://finance.yahoo.com/m/7b38b11b-2954-3bb5-b379-69f29082468a/hudbay-minerals-q2-earnings.html",
       "source": "MarketBeat",
       "published_at": "2026-07-30T04:03:55Z",
-      "fetched_at": "2026-07-30T05:02:02Z",
+      "fetched_at": "2026-07-30T05:26:14Z",
       "ticker": null,
       "source_tier": "aggregator"
     },
@@ -248,27 +236,27 @@
       "url": "https://finance.yahoo.com/energy/articles/oil-prices-slip-despite-attacks-040109065.html",
       "source": "Oilprice.com",
       "published_at": "2026-07-30T04:01:09Z",
-      "fetched_at": "2026-07-30T05:02:02Z",
+      "fetched_at": "2026-07-30T05:26:14Z",
       "ticker": null,
       "source_tier": "aggregator"
     },
     {
-      "title": "AP Top Financial News at 12:34 a.m. EDT",
+      "title": "AP Top Financial News at 1:01 a.m. EDT",
       "summary": "",
       "url": "https://finance.yahoo.com/markets/stocks/articles/ap-top-financial-news-12-040000457.html",
       "source": "Associated Press",
       "published_at": "2026-07-30T04:00:00Z",
-      "fetched_at": "2026-07-30T05:02:02Z",
+      "fetched_at": "2026-07-30T05:26:14Z",
       "ticker": null,
       "source_tier": "aggregator"
     },
     {
-      "title": "AP Top Extended Financial Headlines at 12:34 a.m. EDT",
+      "title": "AP Top Extended Financial Headlines at 1:01 a.m. EDT",
       "summary": "",
       "url": "https://finance.yahoo.com/economy/articles/ap-top-extended-financial-headlines-040000790.html",
       "source": "Associated Press",
       "published_at": "2026-07-30T04:00:00Z",
-      "fetched_at": "2026-07-30T05:02:02Z",
+      "fetched_at": "2026-07-30T05:26:14Z",
       "ticker": null,
       "source_tier": "aggregator"
     },
@@ -278,7 +266,7 @@
       "url": "https://finance.yahoo.com/markets/stocks/articles/asian-stocks-choppy-rout-fed-014549754.html",
       "source": "Reuters",
       "published_at": "2026-07-30T03:43:11Z",
-      "fetched_at": "2026-07-30T05:02:02Z",
+      "fetched_at": "2026-07-30T05:26:14Z",
       "ticker": null,
       "source_tier": "aggregator"
     },
@@ -288,58 +276,8 @@
       "url": "https://finance.yahoo.com/m/faa2f4e9-ca72-3a49-ab5f-8717378359fe/aramco-just-shut-major.html",
       "source": "TheStreet",
       "published_at": "2026-07-30T03:17:00Z",
-      "fetched_at": "2026-07-30T05:02:02Z",
+      "fetched_at": "2026-07-30T05:26:14Z",
       "ticker": null,
-      "source_tier": "aggregator"
-    },
-    {
-      "title": "The Fed Decided to Do Nothing and That Decision Backfired: Here’s Why",
-      "summary": "",
-      "url": "https://finance.yahoo.com/m/f2072284-e7ef-3501-a135-6032f95c6f21/the-fed-decided-to-do-nothing.html",
-      "source": "BeInCrypto",
-      "published_at": "2026-07-30T03:10:41Z",
-      "fetched_at": "2026-07-30T05:02:02Z",
-      "ticker": null,
-      "source_tier": "aggregator"
-    },
-    {
-      "title": "Dow Jones Futures Rise; Microsoft, Meta Lead Big Earnings After Market Tumbles, Oil Prices Soar",
-      "summary": "",
-      "url": "https://finance.yahoo.com/m/58bee05c-df37-343b-b099-b9d3d5fa6440/dow-jones-futures-rise%3B.html",
-      "source": "Investor's Business Daily",
-      "published_at": "2026-07-30T03:07:36Z",
-      "fetched_at": "2026-07-30T05:02:02Z",
-      "ticker": null,
-      "source_tier": "aggregator"
-    },
-    {
-      "title": "通信ETF国泰（515880）开盘跌1.50%，重仓股新易盛跌2.61%，中际旭创跌3.36%",
-      "summary": "通信ETF国泰（515880）开盘跌1.50%，重仓股新易盛跌2.61%，中际旭创跌3.36% 新浪网",
-      "url": "https://news.google.com/rss/articles/CBMimAFBVV95cUxQbzlvSlZSVUhjeEVjZGNCMHcxZVdRQVdaclF0Z29XZVh2VVNKSGVQbW5UQUNnLUZEU2F1bFVtb0tfeFdEM2ZfVHZuOGNwZ1RUSFhsYU5vcUk2TkNlY1BFTW1MWGNZTmVRVi1FeGdiTjlCY3pBbF9BMjFrSGNTT012UzBhQnE4a2JBNkhhRkpoMk5HbnZlaTk0Yw?oc=5",
-      "source": "Google News / 新浪网",
-      "published_at": "2026-07-30T01:30:00Z",
-      "fetched_at": "2026-07-30T05:02:04Z",
-      "ticker": "515880.SS",
-      "source_tier": "aggregator"
-    },
-    {
-      "title": "7月29日通信ETF国泰（515880）份额减少7.52亿份，最新份额685.50亿份，最新规模413.36亿元",
-      "summary": "7月29日通信ETF国泰（515880）份额减少7.52亿份，最新份额685.50亿份，最新规模413.36亿元 新浪网",
-      "url": "https://news.google.com/rss/articles/CBMimwFBVV95cUxNbElPcXlFMFRDNHV6cXhXOXgxXzk5MHVaazNjdzhHaVEyR2lFeTNmYzcyQlZ5Sk4zTUlvbW5aLV9uc0tHcFM0S3VDdzZKZ25zY2VYZzRjZmNqN1d6Y0RIMm9VM3VCVWdldDRVejNjbFdfVVYtdF9pSDFfLXlqQWswOEk3OXdGNHpIQ21nM01vaTZ2WEpMR3ZRdFh4Zw?oc=5",
-      "source": "Google News / 新浪网",
-      "published_at": "2026-07-30T01:00:00Z",
-      "fetched_at": "2026-07-30T05:02:04Z",
-      "ticker": "515880.SS",
-      "source_tier": "aggregator"
-    },
-    {
-      "title": "7月29日半导体ETF国联安（512480）份额增加2.92亿份，最新份额193.50亿份，最新规模198.38亿元",
-      "summary": "7月29日半导体ETF国联安（512480）份额增加2.92亿份，最新份额193.50亿份，最新规模198.38亿元 新浪网",
-      "url": "https://news.google.com/rss/articles/CBMimwFBVV95cUxQU3lMTVJ2Q2dkVXpMTWtxLXNIYXppODBXcFlDU1RudVowZ2hCQXppOE9NQzVrd0tiTjJTQmJJQ3pwbWZGYzdoVE1CRkF5ZktJSWhKa1V1TjZFMTlYLTBfUkoteDBVbU51enVlcnhPdzZxeEY5YjZtQ0VZbS1fR3A5Qm91ejlHTmtuYjB1aWNBQWc0X0Zzay03QW5UZw?oc=5",
-      "source": "Google News / 新浪网",
-      "published_at": "2026-07-30T01:00:00Z",
-      "fetched_at": "2026-07-30T05:02:07Z",
-      "ticker": "512480.SS",
       "source_tier": "aggregator"
     }
   ]
