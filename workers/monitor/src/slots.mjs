@@ -1,6 +1,7 @@
 const MAX_ATTEMPTS = 3;
 const LEASE_MS = 4 * 60 * 1000;
 const RETRY_DELAY_MS = 5 * 60 * 1000;
+const STALE_SLOT_MAX_AGE_MS = 30 * 60 * 1000;
 
 function asDate(value) {
   return value instanceof Date ? value : new Date(value);
@@ -83,14 +84,37 @@ export async function stageScheduledSlot(db, input) {
   return row ? claimedSlot(row) : null;
 }
 
+async function existingScheduledIdentities(db, inputs) {
+  if (inputs.length === 0) return new Set();
+  const result = await db.prepare(`
+    SELECT id
+    FROM scheduled_slots
+    WHERE id IN (
+      SELECT value
+      FROM json_each(?)
+    )
+  `).bind(JSON.stringify(inputs.map(({ id }) => id))).all();
+  return new Set((result?.results ?? []).map(({ id }) => id));
+}
+
 export async function stageScheduledSlots(db, inputs) {
-  if (!Array.isArray(inputs) || inputs.length === 0) return { staged: 0 };
+  if (!Array.isArray(inputs) || inputs.length === 0) {
+    return { discovered: 0, staged: 0, conflicted: 0 };
+  }
+  const discovered = inputs.length;
   if (typeof db.batch !== "function") {
     let staged = 0;
+    const unchanged = [];
     for (const input of inputs) {
-      if (await stageScheduledSlot(db, input)) staged += 1;
+      if (await stageScheduledSlot(db, input)) {
+        staged += 1;
+      } else {
+        unchanged.push(input);
+      }
     }
-    return { staged };
+    const existing = await existingScheduledIdentities(db, unchanged);
+    const conflicted = unchanged.filter(({ id }) => !existing.has(id)).length;
+    return { discovered, staged, conflicted };
   }
   const statements = inputs.map((input) => {
     const now = asDate(input.now);
@@ -123,11 +147,17 @@ export async function stageScheduledSlots(db, inputs) {
     );
   });
   const results = await db.batch(statements);
+  const unchanged = inputs.filter((_, index) =>
+    Number(results[index]?.meta?.changes ?? 0) === 0);
+  const existing = await existingScheduledIdentities(db, unchanged);
+  const conflicted = unchanged.filter(({ id }) => !existing.has(id)).length;
   return {
+    discovered,
     staged: results.reduce(
       (count, result) => count + Number(result?.meta?.changes ?? 0),
       0,
     ),
+    conflicted,
   };
 }
 
@@ -294,6 +324,39 @@ export async function cancelSupersededScheduledSlots(db, now) {
           AND newer.status != 'cancelled'
       )
   `).bind(timestamp, timestamp, timestamp).run();
+  return { changed: Number(result?.meta?.changes ?? 0) };
+}
+
+export async function cancelExpiredScheduledSlots(
+  db,
+  now,
+  maxAgeMs = STALE_SLOT_MAX_AGE_MS,
+) {
+  const current = asDate(now);
+  const timestamp = current.toISOString();
+  const cutoff = new Date(
+    current.valueOf() - Math.max(0, Number(maxAgeMs) || 0),
+  ).toISOString();
+  const result = await db.prepare(`
+    UPDATE scheduled_slots
+    SET status = 'cancelled',
+        completed_at = ?,
+        last_error_code = 'STALE_SLOT_EXPIRED',
+        updated_at = ?,
+        lease_until = NULL,
+        next_attempt_at = NULL
+    WHERE slot_type IN (
+        'intradayCollect', 'intradaySignal', 'newsCollect', 'usIntradayCollect'
+      )
+      AND scheduled_for < ?
+      AND (
+        status IN ('pending', 'queued', 'failed')
+        OR (
+          status = 'claimed'
+          AND lease_until <= ?
+        )
+      )
+  `).bind(timestamp, timestamp, cutoff, timestamp).run();
   return { changed: Number(result?.meta?.changes ?? 0) };
 }
 

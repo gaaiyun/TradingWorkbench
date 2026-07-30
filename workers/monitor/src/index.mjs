@@ -23,6 +23,7 @@ import {
   taskFromScheduledSlot,
 } from "./scheduler.mjs";
 import {
+  cancelExpiredScheduledSlots,
   cancelSupersededScheduledSlots,
   cancelStaleScheduledSlots,
   claimScheduledSlot,
@@ -584,8 +585,7 @@ async function stageDiscoveredSlots({
       });
     }
   }
-  await stageScheduledSlots(env.DB, discovered);
-  return discovered.length;
+  return stageScheduledSlots(env.DB, discovered);
 }
 
 function workFromRows(rows) {
@@ -709,6 +709,9 @@ function successfulSummary(mode) {
     backlog: 0,
     capped: 0,
     oversized: 0,
+    discovered: 0,
+    staged: 0,
+    conflicted: 0,
   };
 }
 
@@ -817,7 +820,7 @@ export async function runScheduled(scheduledTime, env, deps = {}) {
       now,
     );
     summary.cancelled = cancelled.changed;
-    summary.discovered = await stageDiscoveredSlots({
+    const stage = await stageDiscoveredSlots({
       scheduledTime,
       env,
       deps,
@@ -828,8 +831,17 @@ export async function runScheduled(scheduledTime, env, deps = {}) {
         ? MAX_SCHEDULED_EXTERNAL_REQUESTS
         : configuredDirectTaskRequestLimit(env.DIRECT_TASK_REQUEST_LIMIT),
     });
+    summary.discovered = stage.discovered;
+    summary.staged = stage.staged;
+    summary.conflicted = stage.conflicted;
+    if (stage.conflicted > 0) {
+      summary.status = "degraded";
+      summary.errorCode = "SCHEDULER_STAGE_CONFLICT";
+    }
     const superseded = await cancelSupersededScheduledSlots(env.DB, now);
     summary.cancelled += superseded.changed;
+    const expired = await cancelExpiredScheduledSlots(env.DB, now);
+    summary.cancelled += expired.changed;
     const exhausted = await finalizeExhaustedScheduledSlots(env.DB, now);
     summary.cancelled += exhausted.changed;
   } catch {

@@ -178,6 +178,14 @@ class WorkerD1 {
             return null;
           },
           async all() {
+            if (/SELECT\s+id[\s\S]+json_each/i.test(sql)) {
+              const ids = new Set(JSON.parse(params[0]));
+              return {
+                results: [...db.slots.values()]
+                  .filter(({ id }) => ids.has(id))
+                  .map(({ id }) => ({ id })),
+              };
+            }
             if (/FROM\s+monitor_bootstrap_targets/i.test(sql)) {
               if (db.barCount > 0 && db.bootstrapRows.length === 0 && db.settings) {
                 for (const profile of db.settings.profiles) {
@@ -371,6 +379,41 @@ test("core scheduled run reads D1 settings, executes due tasks, and is awaitable
     [...db.slots.values()].map((row) => row.status).sort(),
     ["completed", "pending"],
   );
+});
+
+test("scheduler surfaces staging conflicts and degrades the run summary", async () => {
+  const { runScheduled } = await import(workerUrl);
+  const settings = monitorSettings();
+  const db = sqliteWorkerD1(settings);
+  await markBootstrapComplete(db, settings);
+  db.sqlite.prepare(`
+    INSERT INTO scheduled_slots (
+      id, profile_id, slot_type, scheduled_for, status, expires_at,
+      attempt_count, updated_at, next_attempt_at, profile_revision,
+      payload_json, payload_hash, local_date
+    ) VALUES (
+      'legacy-conflict', 'etf-main', 'intradayCollect',
+      '2026-07-23T01:30:00.000Z', 'pending',
+      '2026-10-01T00:00:00.000Z', 0,
+      '2026-07-23T01:30:00.000Z', '2026-07-23T01:30:00.000Z',
+      'legacy-revision', '{}', 'legacy-hash', '2026-07-23'
+    )
+  `).run();
+
+  const result = await runScheduled(
+    Date.parse("2026-07-23T01:30:00.000Z"),
+    { DB: db },
+    {
+      executeTask: async () => ({ status: "completed" }),
+      now: () => new Date("2026-07-23T01:30:00.000Z"),
+    },
+  );
+
+  assert.equal(result.discovered, 2);
+  assert.equal(result.staged, 1);
+  assert.equal(result.conflicted, 1);
+  assert.equal(result.status, "degraded");
+  assert.equal(result.errorCode, "SCHEDULER_STAGE_CONFLICT");
 });
 
 test("fourteen-target collection shards drain without duplicate target writes or permanent backlog", async () => {
@@ -1298,6 +1341,8 @@ test("monitor wrangler config uses five-minute cron and the same deployed D1 bin
   assert.match(monitor, /database_name\s*=\s*"tradingagents-workbench"/);
   assert.match(monitor, /GITHUB_REPOSITORY\s*=\s*"gaaiyun\/TradingWorkbench"/);
   assert.match(monitor, /GITHUB_WORKFLOW_ID\s*=\s*"daily-analysis\.yml"/);
+  assert.match(monitor, /DIRECT_MAX_TASKS\s*=\s*"1"/);
+  assert.match(monitor, /DIRECT_TASK_REQUEST_LIMIT\s*=\s*"3"/);
   const monitorDatabaseId = /database_id\s*=\s*"([^"]+)"/.exec(monitor)[1];
   const pagesDatabaseId = /database_id\s*=\s*"([^"]+)"/.exec(pages)[1];
   assert.match(monitorDatabaseId, /^[0-9a-f-]{36}$/);

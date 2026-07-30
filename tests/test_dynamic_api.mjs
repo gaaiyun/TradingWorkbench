@@ -180,6 +180,36 @@ test("market API marks an old intraday series and its source stale at read time"
   assert.equal(payload.data[0].freshness, "fresh");
 });
 
+test("market API keeps the A-share morning close fresh during the lunch break", async (t) => {
+  t.mock.method(Date, "now", () => Date.parse("2026-07-30T04:39:00Z"));
+  const row = {
+    symbol: "515880.SS",
+    profile_id: "cn-semi-comms",
+    timeframe: "5m",
+    ts: "2026-07-30T03:30:00Z",
+    open: 0.544,
+    high: 0.545,
+    low: 0.542,
+    close: 0.543,
+    volume: 2815808,
+    source: "tencent",
+    as_of: "2026-07-30T03:30:00Z",
+    fetched_at: "2026-07-30T04:30:00Z",
+    freshness: "stale",
+    adjustment: "none",
+    quality: "good",
+  };
+  const response = await marketApi.onRequestGet({
+    request: request("/api/market?symbol=515880.SS&profile=cn-semi-comms&timeframe=5m"),
+    env: { DB: new FakeD1({ rows: { market_bars: [row] } }) },
+  });
+  const payload = await response.json();
+
+  assert.equal(payload.status, "ok");
+  assert.equal(payload.sources[0].freshness, "fresh");
+  assert.equal(payload.data[0].freshness, "stale");
+});
+
 test("market API aggregates stored 5m bars for a requested 15m timeframe", async () => {
   const base = {
     symbol: "515880.SS",
@@ -825,6 +855,182 @@ test("monitor status returns source health in the same envelope", async () => {
   assert.equal(DB.calls[0].params[0], "wire");
   assert.equal(typeof DB.calls[0].params[1], "string");
   assert.equal(DB.calls[0].params[2], 10);
+});
+
+test("monitor status reclassifies the A-share lunch and closed-session endpoints", async (t) => {
+  const cases = [
+    {
+      name: "lunch",
+      now: "2026-07-30T04:39:00Z",
+      asOf: "2026-07-30T03:30:00Z",
+      fetchedAt: "2026-07-30T04:30:00Z",
+    },
+    {
+      name: "after close",
+      now: "2026-07-30T08:30:00Z",
+      asOf: "2026-07-30T07:00:00Z",
+      fetchedAt: "2026-07-30T08:25:00Z",
+    },
+    {
+      name: "weekend",
+      now: "2026-08-01T04:00:00Z",
+      asOf: "2026-07-31T07:00:00Z",
+      fetchedAt: "2026-08-01T03:55:00Z",
+    },
+  ];
+
+  for (const fixture of cases) {
+    await t.test(fixture.name, async (subtest) => {
+      subtest.mock.method(Date, "now", () => Date.parse(fixture.now));
+      const health = {
+        source: "tencent",
+        status: "stale",
+        as_of: fixture.asOf,
+        fetched_at: fixture.fetchedAt,
+        freshness: "stale",
+        adjustment: "none",
+        quality: "good",
+        last_error_code: null,
+        last_success_at: fixture.fetchedAt,
+        consecutive_failures: 0,
+        paused_until: null,
+      };
+      const response = await monitorApi.onRequestGet({
+        request: request("/api/monitor-status?profile=cn-semi-comms"),
+        env: { DB: new FakeD1({ rows: { source_health: [health] } }) },
+      });
+      const payload = await response.json();
+
+      assert.equal(payload.status, "ok");
+      assert.equal(payload.data[0].status, "ok");
+      assert.equal(payload.data[0].freshness, "fresh");
+      assert.equal(payload.sources[0].freshness, "fresh");
+    });
+  }
+});
+
+test("monitor status leaves a tencent daily snapshot health row unchanged", async (t) => {
+  t.mock.method(Date, "now", () => Date.parse("2026-07-30T04:39:00Z"));
+  const health = {
+    source: "tencent",
+    status: "ok",
+    as_of: "2026-07-29T16:00:00Z",
+    fetched_at: "2026-07-30T04:30:00Z",
+    freshness: "fresh",
+    adjustment: "none",
+    quality: "good",
+    last_error_code: null,
+    last_success_at: "2026-07-30T04:30:00Z",
+    consecutive_failures: 0,
+    paused_until: null,
+  };
+  const response = await monitorApi.onRequestGet({
+    request: request("/api/monitor-status?profile=cn-semi-comms"),
+    env: { DB: new FakeD1({ rows: { source_health: [health] } }) },
+  });
+  const payload = await response.json();
+
+  assert.equal(payload.status, "ok");
+  assert.equal(payload.data[0].status, "ok");
+  assert.equal(payload.data[0].freshness, "fresh");
+});
+
+test("monitor status uses New York regular-session endpoints across DST", async (t) => {
+  const cases = [
+    {
+      name: "summer EDT",
+      now: "2026-07-30T00:30:00Z",
+      asOf: "2026-07-29T19:55:00Z",
+      fetchedAt: "2026-07-30T00:25:00Z",
+    },
+    {
+      name: "winter EST",
+      now: "2026-01-15T21:30:00Z",
+      asOf: "2026-01-15T20:55:00Z",
+      fetchedAt: "2026-01-15T21:25:00Z",
+    },
+    {
+      name: "summer weekend",
+      now: "2026-08-01T16:00:00Z",
+      asOf: "2026-07-31T19:55:00Z",
+      fetchedAt: "2026-08-01T15:55:00Z",
+    },
+  ];
+
+  for (const fixture of cases) {
+    await t.test(fixture.name, async (subtest) => {
+      subtest.mock.method(Date, "now", () => Date.parse(fixture.now));
+      const health = {
+        source: "yahoo-us-intraday",
+        status: "stale",
+        as_of: fixture.asOf,
+        fetched_at: fixture.fetchedAt,
+        freshness: "stale",
+        adjustment: "none",
+        quality: "good",
+        last_error_code: null,
+        last_success_at: fixture.fetchedAt,
+        consecutive_failures: 0,
+        paused_until: null,
+      };
+      const response = await monitorApi.onRequestGet({
+        request: request("/api/monitor-status?profile=cn-semi-comms"),
+        env: { DB: new FakeD1({ rows: { source_health: [health] } }) },
+      });
+      const payload = await response.json();
+
+      assert.equal(payload.status, "ok");
+      assert.equal(payload.data[0].status, "ok");
+      assert.equal(payload.data[0].freshness, "fresh");
+    });
+  }
+});
+
+test("monitor status does not hide genuine intraday delays while markets are open", async (t) => {
+  const cases = [
+    {
+      name: "A-share morning",
+      source: "tencent",
+      now: "2026-07-30T02:30:00Z",
+      asOf: "2026-07-30T01:35:00Z",
+      fetchedAt: "2026-07-30T02:25:00Z",
+    },
+    {
+      name: "US summer session",
+      source: "yahoo-us-intraday",
+      now: "2026-07-29T19:30:00Z",
+      asOf: "2026-07-29T18:30:00Z",
+      fetchedAt: "2026-07-29T19:25:00Z",
+    },
+  ];
+
+  for (const fixture of cases) {
+    await t.test(fixture.name, async (subtest) => {
+      subtest.mock.method(Date, "now", () => Date.parse(fixture.now));
+      const health = {
+        source: fixture.source,
+        status: "stale",
+        as_of: fixture.asOf,
+        fetched_at: fixture.fetchedAt,
+        freshness: "stale",
+        adjustment: "none",
+        quality: "good",
+        last_error_code: null,
+        last_success_at: fixture.fetchedAt,
+        consecutive_failures: 0,
+        paused_until: null,
+      };
+      const response = await monitorApi.onRequestGet({
+        request: request("/api/monitor-status?profile=cn-semi-comms"),
+        env: { DB: new FakeD1({ rows: { source_health: [health] } }) },
+      });
+      const payload = await response.json();
+
+      assert.equal(payload.status, "stale");
+      assert.equal(payload.data[0].status, "stale");
+      assert.equal(payload.data[0].freshness, "stale");
+    });
+  }
 });
 
 test("monitor status adds profile-scoped safe notification state and cursor", async () => {

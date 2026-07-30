@@ -6,6 +6,7 @@ import {
 } from "./_dynamic_api.mjs";
 import { d1Binding, queryMarketBars } from "./_d1_repository.mjs";
 import { calculateTechnicalSnapshot } from "./_indicators.mjs";
+import { marketForSeries, sessionAwareFreshness } from "./_market_freshness.mjs";
 import { json } from "./_util.js";
 
 const PERIODS_PER_YEAR = {
@@ -113,13 +114,24 @@ function marketEnvelope(rows, timeframe, now = Date.now()) {
   );
   const maxAge = INTRADAY_FRESHNESS_MAX_AGE_MS[timeframe];
   const timestamp = Date.parse(latest?.as_of ?? latest?.ts ?? "");
-  const effectivelyStale = Number.isFinite(maxAge) && (
-    !Number.isFinite(timestamp) ||
-    now < timestamp ||
-    now - timestamp > maxAge
-  );
-  const statusRow = latest && effectivelyStale
-    ? { ...latest, freshness: "stale" }
+  const market = timeframe === "5m" ? marketForSeries(latest) : null;
+  const sessionFreshness = market
+    ? sessionAwareFreshness({
+      asOf: latest?.as_of ?? latest?.ts,
+      market,
+      now,
+      maxAgeMs: maxAge,
+    })
+    : null;
+  const effectivelyStale = sessionFreshness
+    ? sessionFreshness === "stale"
+    : Number.isFinite(maxAge) && (
+      !Number.isFinite(timestamp)
+      || now < timestamp
+      || now - timestamp > maxAge
+    );
+  const statusRow = latest && (sessionFreshness || effectivelyStale)
+    ? { ...latest, freshness: sessionFreshness || "stale" }
     : latest;
   const envelope = dynamicEnvelope(statusRow ? [statusRow] : []);
   return { ...envelope, data: rows };

@@ -290,6 +290,53 @@ test("Yahoo drops timestamp-aligned null points but rejects an entirely bad seri
   );
 });
 
+test("Yahoo US intraday requests one session and parses only the latest bounded window", async () => {
+  let requestedUrl;
+  const timestamps = Array.from(
+    { length: 120 },
+    (_, index) => Date.UTC(2026, 6, 28, 10, index * 5) / 1000,
+  );
+  const payload = {
+    chart: {
+      result: [{
+        timestamp: timestamps,
+        indicators: {
+          quote: [{
+            open: timestamps.map(() => 170),
+            high: timestamps.map(() => 172),
+            low: timestamps.map(() => 169),
+            close: timestamps.map(() => 171),
+            volume: timestamps.map(() => 1000),
+          }],
+        },
+      }],
+      error: null,
+    },
+  };
+  const adapters = createAdapters({
+    fetch: async (url) => {
+      requestedUrl = String(url);
+      return jsonResponse(payload);
+    },
+    timeoutMs: 100,
+  });
+
+  const bars = await adapters["yahoo-us-intraday"]({
+    symbol: "NVDA",
+    market: "US",
+    timeframe: "5m",
+    limit: 96,
+  }, {
+    ...runtime,
+    fetchedAt: "2026-07-28T20:05:00.000Z",
+    now: new Date("2026-07-28T20:05:00.000Z"),
+  });
+
+  assert.match(requestedUrl, /[?&]range=1d(?:&|$)/);
+  assert.equal(bars.length, 96);
+  assert.equal(bars[0].timestamp, new Date(timestamps[24] * 1000).toISOString());
+});
+
 test("Yahoo daily retries query2 as the same source when query1 fails", async () => {
   const urls = [];
   const payload = fixture("yahoo-515880-null-points");

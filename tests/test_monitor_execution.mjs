@@ -80,8 +80,8 @@ test("US intraday collection is isolated to SOXX and NVDA at 5m", async () => {
     now: new Date("2026-07-28T13:35:00.000Z"),
   });
   assert.deepEqual(calls, [
-    { symbol: "SOXX", market: "US", timeframe: "5m" },
-    { symbol: "NVDA", market: "US", timeframe: "5m" },
+    { symbol: "SOXX", market: "US", timeframe: "5m", limit: 96 },
+    { symbol: "NVDA", market: "US", timeframe: "5m", limit: 96 },
   ]);
   assert.equal(writes.length, 2);
   assert.equal(result.status, "completed");
@@ -96,7 +96,15 @@ test("intraday uses only CN core/comparison targets at 5m and keeps partial succ
     taskType: "intradayCollect",
     profile: monitorSettings().profiles[0],
     registry: registryWith(
-      { "159995.SZ": "unavailable" },
+      {
+        "515880.SS": {
+          bars: Array.from({ length: 120 }, (_, index) => ({
+            symbol: "515880.SS",
+            index,
+          })),
+        },
+        "159995.SZ": "unavailable",
+      },
       calls,
     ),
     writeBars: async (_db, payload) => writes.push(payload),
@@ -104,10 +112,12 @@ test("intraday uses only CN core/comparison targets at 5m and keeps partial succ
     now: new Date("2026-07-23T01:30:00.000Z"),
   });
   assert.deepEqual(calls, [
-    { symbol: "515880.SS", market: "CN", timeframe: "5m" },
-    { symbol: "159995.SZ", market: "CN", timeframe: "5m" },
+    { symbol: "515880.SS", market: "CN", timeframe: "5m", limit: 96 },
+    { symbol: "159995.SZ", market: "CN", timeframe: "5m", limit: 96 },
   ]);
   assert.equal(writes.length, 1);
+  assert.equal(writes[0].bars.length, 96);
+  assert.equal(writes[0].bars[0].index, 24);
   assert.equal(result.status, "degraded");
   assert.deepEqual(result.counts, { targets: 2, succeeded: 1, failed: 1 });
   assert.equal(result.sources.some((source) => source.reason === "UPSTREAM"), true);

@@ -10,6 +10,7 @@ import {
   queryNotificationStatus,
   querySourceHealth,
 } from "./_d1_repository.mjs";
+import { effectiveIntradayHealth } from "./_market_freshness.mjs";
 import { json } from "./_util.js";
 
 export async function onRequestGet({ request, env }) {
@@ -72,8 +73,9 @@ export async function onRequestGet({ request, env }) {
         : null,
     ]);
     const cursorRow = query.after ? notifications.at(-1) : notifications[0];
+    const effectiveHealth = effectiveIntradayHealth(health);
     return json({
-      ...dynamicEnvelope(health, { health: true }),
+      ...dynamicEnvelope(effectiveHealth, { health: true }),
       notifications,
       cursor: cursorRow
         ? JSON.stringify([

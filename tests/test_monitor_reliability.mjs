@@ -516,6 +516,119 @@ test("direct fallback uses real upper bounds, clamps at forty, and shards fourte
   assert.notEqual(first.selected[0].profile.id, second.selected[0].profile.id);
 });
 
+test("us close snapshot shards coexist under the legacy scheduled slot unique key", async () => {
+  const {
+    scheduledPayloadForTask,
+    splitTaskWithinRequestLimit,
+  } = await import(schedulerUrl);
+  const { stageScheduledSlots } = await import(slotsUrl);
+  const profile = structuredClone(monitorSettings().profiles[0]);
+  profile.targets = [
+    ...["SOXX", "SMH", "NVDA", "TSM", "AVGO", "AMD", "ASML", "ORCL", "GOOGL"]
+      .map((symbol) => ({
+        symbol,
+        name: symbol,
+        market: "US",
+        role: "driver",
+        analysis: "signal",
+      })),
+    {
+      symbol: "3887.HK",
+      name: "HashKey Holdings",
+      market: "HK",
+      role: "driver",
+      analysis: "signal",
+    },
+  ];
+  const baseTask = {
+    type: "usCloseSnapshot",
+    schedule: "usCloseSnapshot",
+    localSlot: "2026-07-30T05:35",
+    scheduledFor: "2026-07-29T21:35:00.000Z",
+  };
+  const shards = splitTaskWithinRequestLimit(profile, baseTask, 32);
+  assert.equal(shards.length, 2);
+  assert.equal(new Set(shards.map(({ scheduledFor }) => scheduledFor)).size, 2);
+
+  const sqlite = reliabilityDatabase();
+  const result = await stageScheduledSlots(
+    d1(sqlite),
+    await Promise.all(shards.map(async (shard, index) => ({
+      id: `us-close-shard-${index}`,
+      profileId: profile.id,
+      slotType: shard.type,
+      scheduledFor: shard.scheduledFor,
+      localDate: "2026-07-30",
+      ...await scheduledPayloadForTask(profile, shard, "r1"),
+      now: new Date("2026-07-29T21:35:00.000Z"),
+    }))),
+  );
+
+  assert.deepEqual(result, { discovered: 2, staged: 2, conflicted: 0 });
+  assert.equal(
+    sqlite.prepare("SELECT COUNT(*) AS count FROM scheduled_slots").get().count,
+    2,
+  );
+});
+
+test("slot staging distinguishes a true unique collision from an idempotent duplicate", async () => {
+  const { stageScheduledSlots } = await import(slotsUrl);
+  const sqlite = reliabilityDatabase();
+  const sqliteD1 = d1(sqlite);
+  let identityQueries = 0;
+  const db = {
+    prepare(sql) {
+      if (/json_each/i.test(sql)) identityQueries += 1;
+      return sqliteD1.prepare(sql);
+    },
+  };
+  const common = {
+    profileId: "profile-a",
+    slotType: "usCloseSnapshot",
+    scheduledFor: "2026-07-29T21:35:00.000Z",
+    localDate: "2026-07-30",
+    profileRevision: "r1",
+    now: new Date("2026-07-29T21:35:00.000Z"),
+  };
+  const inputs = [
+    {
+      ...common,
+      id: "slot-first",
+      payloadJson: '{"profile":{"id":"profile-a"},"task":{"type":"usCloseSnapshot","part":1}}',
+      payloadHash: "hash-first",
+    },
+    {
+      ...common,
+      id: "slot-colliding",
+      payloadJson: '{"profile":{"id":"profile-a"},"task":{"type":"usCloseSnapshot","part":2}}',
+      payloadHash: "hash-colliding",
+    },
+    {
+      ...common,
+      id: "slot-colliding-2",
+      payloadJson: '{"profile":{"id":"profile-a"},"task":{"type":"usCloseSnapshot","part":3}}',
+      payloadHash: "hash-colliding-2",
+    },
+    {
+      ...common,
+      id: "slot-colliding-3",
+      payloadJson: '{"profile":{"id":"profile-a"},"task":{"type":"usCloseSnapshot","part":4}}',
+      payloadHash: "hash-colliding-3",
+    },
+  ];
+
+  assert.deepEqual(
+    await stageScheduledSlots(db, inputs),
+    { discovered: 4, staged: 1, conflicted: 3 },
+  );
+  assert.equal(identityQueries, 1);
+  assert.deepEqual(
+    await stageScheduledSlots(db, [inputs[0]]),
+    { discovered: 1, staged: 0, conflicted: 0 },
+  );
+  assert.equal(identityQueries, 2);
+});
+
 test("selector budgets signal D1 work and caps two hundred zero-fetch tasks fairly", async () => {
   const {
     estimateTaskExternalRequests,
@@ -811,6 +924,59 @@ test("superseded high-frequency backlog is cancelled while the newest slot remai
   assert.equal(states["old-news"].status, "cancelled");
   assert.equal(states["new-market"].status, "pending");
   assert.equal(states["new-news"].status, "pending");
+  assert.equal(states.daily.status, "pending");
+});
+
+test("stale high-frequency slots expire even when no newer slot was discovered", async () => {
+  const { cancelExpiredScheduledSlots } = await import(slotsUrl);
+  const sqlite = reliabilityDatabase();
+  const insert = sqlite.prepare(`
+    INSERT INTO scheduled_slots (
+      id, profile_id, slot_type, scheduled_for, status, expires_at,
+      attempt_count, updated_at, lease_until, next_attempt_at,
+      profile_revision, payload_json, payload_hash, local_date
+    ) VALUES (?, 'profile-a', ?, ?, ?, '2026-10-01T00:00:00.000Z',
+      ?, ?, ?, ?, 'r1', '{}', ?, '2026-07-23')
+  `);
+  const rows = [
+    ["old-cn", "intradayCollect", "2026-07-23T13:00:00.000Z", "pending", 0, null],
+    ["old-signal", "intradaySignal", "2026-07-23T13:00:00.000Z", "failed", 1, null],
+    ["old-us", "usIntradayCollect", "2026-07-23T13:00:00.000Z", "queued", 0, null],
+    ["old-news", "newsCollect", "2026-07-23T13:00:00.000Z", "claimed", 1, "2026-07-23T13:20:00.000Z"],
+    ["fresh-news", "newsCollect", "2026-07-23T13:50:00.000Z", "pending", 0, null],
+    ["daily", "usCloseSnapshot", "2026-07-23T13:00:00.000Z", "pending", 0, null],
+  ];
+  for (const [id, type, scheduledFor, status, attempts, leaseUntil] of rows) {
+    insert.run(
+      id,
+      type,
+      scheduledFor,
+      status,
+      attempts,
+      scheduledFor,
+      leaseUntil,
+      scheduledFor,
+      `hash-${id}`,
+    );
+  }
+
+  const result = await cancelExpiredScheduledSlots(
+    d1(sqlite),
+    new Date("2026-07-23T14:00:00.000Z"),
+  );
+  assert.equal(result.changed, 4);
+  const states = Object.fromEntries(
+    sqlite.prepare(`
+      SELECT id, status, last_error_code
+      FROM scheduled_slots
+      ORDER BY id
+    `).all().map((row) => [row.id, row]),
+  );
+  for (const id of ["old-cn", "old-signal", "old-us", "old-news"]) {
+    assert.equal(states[id].status, "cancelled");
+    assert.equal(states[id].last_error_code, "STALE_SLOT_EXPIRED");
+  }
+  assert.equal(states["fresh-news"].status, "pending");
   assert.equal(states.daily.status, "pending");
 });
 

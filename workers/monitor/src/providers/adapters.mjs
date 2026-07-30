@@ -230,7 +230,9 @@ function parseEastmoney(payload, request) {
 function yahooUrl(request, host = "query1") {
   const symbol = encodeURIComponent(mapProviderSymbol("yahoo", request.symbol));
   const interval = request.timeframe === "5m" ? "5m" : "1d";
-  const range = request.timeframe === "5m" ? "5d" : "5y";
+  const range = request.timeframe === "5m"
+    ? (request.market === "US" ? "1d" : "5d")
+    : "5y";
   return `https://${host}.finance.yahoo.com/v8/finance/chart/${symbol}?interval=${interval}&range=${range}&events=history`;
 }
 
@@ -260,14 +262,21 @@ function parseYahoo(payload, request) {
   const result = payload?.chart?.result?.[0];
   const quote = result?.indicators?.quote?.[0];
   if (!result || !quote || !Array.isArray(result.timestamp)) return null;
-  return result.timestamp.map((timestamp, index) => ({
-    timestamp: utcTimestamp(timestamp),
-    open: quote.open?.[index],
-    high: quote.high?.[index],
-    low: quote.low?.[index],
-    close: quote.close?.[index],
-    volume: quote.volume?.[index],
-  })).filter((row) =>
+  const limit = Number.isSafeInteger(request.limit)
+    ? request.limit
+    : result.timestamp.length;
+  const start = Math.max(0, result.timestamp.length - limit);
+  return result.timestamp.slice(start).map((timestamp, offset) => {
+    const index = start + offset;
+    return {
+      timestamp: utcTimestamp(timestamp),
+      open: quote.open?.[index],
+      high: quote.high?.[index],
+      low: quote.low?.[index],
+      close: quote.close?.[index],
+      volume: quote.volume?.[index],
+    };
+  }).filter((row) =>
     row.timestamp &&
     [row.open, row.high, row.low, row.close, row.volume]
       .every((value) => value !== null && value !== undefined)
