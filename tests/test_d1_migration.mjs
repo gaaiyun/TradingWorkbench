@@ -47,6 +47,10 @@ const fundFlowTradeDateMigrationUrl = new URL(
   "../migrations/0018_fund_flow_trade_date.sql",
   import.meta.url,
 );
+const cnIntradayCleanupMigrationUrl = new URL(
+  "../migrations/0019_remove_invalid_cn_intraday_bars.sql",
+  import.meta.url,
+);
 
 test("D1 migration defines every dynamic workbench table and its lookup indexes", () => {
   const sql = readFileSync(migrationUrl, "utf8");
@@ -508,4 +512,57 @@ test("fund-flow trade-date migration makes the Shanghai business date explicit",
     db.prepare("SELECT trade_date FROM fund_flows WHERE id = 'flow-friday'").get().trade_date,
     "2026-07-24",
   );
+});
+
+test("CN intraday cleanup removes only Yahoo lunch and flat close sentinels", async (t) => {
+  const sql = readFileSync(cnIntradayCleanupMigrationUrl, "utf8");
+  assert.match(sql, /DELETE\s+FROM\s+market_bars/i);
+  assert.match(sql, /timeframe\s*=\s*'5m'/i);
+  assert.match(sql, /source\s*=\s*'yahoo'/i);
+  assert.match(sql, /symbol\s+LIKE\s+'%\.SS'/i);
+  assert.match(sql, /symbol\s+LIKE\s+'%\.SZ'/i);
+  assert.match(sql, /datetime\s*\(\s*ts\s*,\s*'\+8 hours'\s*\)/i);
+  assert.doesNotMatch(sql, /\b(?:DROP|ALTER)\b/i);
+
+  let DatabaseSync;
+  try {
+    ({ DatabaseSync } = await import("node:sqlite"));
+  } catch {
+    t.skip("node:sqlite is unavailable on this Node version");
+    return;
+  }
+
+  const db = new DatabaseSync(":memory:");
+  db.exec(readFileSync(migrationUrl, "utf8"));
+  const insert = db.prepare(`
+    INSERT INTO market_bars (
+      profile_id, symbol, timeframe, ts, open, high, low, close, volume,
+      source, as_of, fetched_at, freshness, adjustment, quality, expires_at
+    ) VALUES ('cn-semi-comms', ?, '5m', ?, ?, ?, ?, ?, ?, ?,
+      '2026-07-24T07:00:00.000Z', '2026-07-24T07:01:00.000Z',
+      'fresh', 'none', ?, '2099-01-01T00:00:00.000Z')
+  `);
+  const rows = [
+    ["159995.SZ", "2026-07-24T01:30:00.000Z", 1, 1.1, 1, 1.1, 100, "yahoo", "keep-yahoo-morning"],
+    ["159995.SZ", "2026-07-24T03:35:00.000Z", 1.1, 1.1, 1.1, 1.1, 0, "yahoo", "delete-yahoo-lunch"],
+    ["512480.SS", "2026-07-24T07:00:00.000Z", 1.2, 1.2, 1.2, 1.2, 0, "yahoo", "delete-yahoo-close-sentinel"],
+    ["515880.SS", "2026-07-24T07:00:00.000Z", 1.2, 1.3, 1.2, 1.3, 300, "yahoo", "keep-yahoo-real-close"],
+    ["159995.SZ", "2026-07-24T03:35:00.000Z", 1.1, 1.1, 1.1, 1.1, 0, "tencent", "keep-tencent-lunch-shaped"],
+    ["SOXX", "2026-07-24T03:35:00.000Z", 200, 200, 200, 200, 0, "yahoo", "keep-us-yahoo"],
+    ["159995.SZ", "2026-07-24T16:00:00.000Z", 1, 1.1, 1, 1.1, 100, "yahoo", "keep-daily-yahoo"],
+  ];
+  for (const row of rows) {
+    insert.run(...row);
+  }
+  db.prepare("UPDATE market_bars SET timeframe = '1d' WHERE quality = 'keep-daily-yahoo'").run();
+
+  db.exec(sql);
+  const remaining = db.prepare("SELECT quality FROM market_bars ORDER BY quality").all().map((row) => row.quality);
+  assert.deepEqual(remaining, [
+    "keep-daily-yahoo",
+    "keep-tencent-lunch-shaped",
+    "keep-us-yahoo",
+    "keep-yahoo-morning",
+    "keep-yahoo-real-close",
+  ]);
 });

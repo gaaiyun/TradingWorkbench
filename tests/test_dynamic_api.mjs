@@ -481,6 +481,80 @@ test("market API returns distinct timestamps when provider fallbacks overlap", a
   assert.equal(payload.sources[0].freshness, "fresh");
 });
 
+test("A-share intraday uses one canonical source and removes lunch placeholders", async () => {
+  const base = {
+    symbol: "159995.SZ",
+    profile_id: "cn-semi-comms",
+    timeframe: "5m",
+    open: 1.2,
+    high: 1.21,
+    low: 1.19,
+    close: 1.2,
+    volume: 1000,
+    as_of: "2026-07-21T05:05:00Z",
+    freshness: "fresh",
+    adjustment: "none",
+    quality: "good",
+  };
+  const rows = [
+    { ...base, ts: "2026-07-21T01:35:00Z", source: "tencent", fetched_at: "2026-07-21T07:05:00Z" },
+    { ...base, ts: "2026-07-21T01:40:00Z", source: "tencent", fetched_at: "2026-07-21T07:05:00Z" },
+    { ...base, ts: "2026-07-21T05:05:00Z", source: "tencent", fetched_at: "2026-07-21T07:05:00Z" },
+    { ...base, ts: "2026-07-21T01:30:00Z", source: "yahoo", fetched_at: "2026-07-21T06:00:00Z" },
+    { ...base, ts: "2026-07-21T03:35:00Z", source: "yahoo", fetched_at: "2026-07-21T06:00:00Z", open: 1.25, high: 1.25, low: 1.25, close: 1.25, volume: 0 },
+    { ...base, ts: "2026-07-21T05:00:00Z", source: "yahoo", fetched_at: "2026-07-21T06:00:00Z" },
+  ];
+  const response = await marketApi.onRequestGet({
+    request: request("/api/market?symbol=159995.SZ&profile=cn-semi-comms&timeframe=5m&limit=300"),
+    env: { DB: new FakeD1({ rows: { market_bars: rows } }) },
+  });
+  const payload = await response.json();
+
+  assert.deepEqual(payload.data.map(({ ts }) => ts), [
+    "2026-07-21T05:05:00Z",
+    "2026-07-21T01:40:00Z",
+    "2026-07-21T01:35:00Z",
+  ]);
+  assert.deepEqual([...new Set(payload.data.map(({ source }) => source))], ["tencent"]);
+});
+
+test("A-share intraday keeps provider priority when a fallback has extra sentinels", async () => {
+  const base = {
+    symbol: "515880.SS",
+    profile_id: "cn-semi-comms",
+    timeframe: "5m",
+    open: 0.6,
+    high: 0.61,
+    low: 0.59,
+    close: 0.6,
+    volume: 1000,
+    as_of: "2026-07-21T03:30:00Z",
+    freshness: "fresh",
+    adjustment: "none",
+    quality: "good",
+  };
+  const tencent = Array.from({ length: 24 }, (_, index) => ({
+    ...base,
+    ts: new Date(Date.parse("2026-07-21T01:35:00Z") + index * 300_000).toISOString(),
+    source: "tencent",
+    fetched_at: "2026-07-21T04:00:00Z",
+  }));
+  const yahoo = Array.from({ length: 25 }, (_, index) => ({
+    ...base,
+    ts: new Date(Date.parse("2026-07-21T01:30:00Z") + index * 300_000).toISOString(),
+    source: "yahoo",
+    fetched_at: "2026-07-21T03:40:00Z",
+  }));
+  const response = await marketApi.onRequestGet({
+    request: request("/api/market?symbol=515880.SS&profile=cn-semi-comms&timeframe=5m&limit=300"),
+    env: { DB: new FakeD1({ rows: { market_bars: [...tencent, ...yahoo] } }) },
+  });
+  const payload = await response.json();
+
+  assert.equal(payload.data.length, 24);
+  assert.deepEqual([...new Set(payload.data.map(({ source }) => source))], ["tencent"]);
+});
+
 test("daily market API keeps one provider bar per trading date", async () => {
   const base = {
     symbol: "SOXX",

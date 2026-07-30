@@ -9,6 +9,7 @@ on:
       - "migrations/**"
       - "package.json"
       - "scripts/deployment-metadata.mjs"
+      - "scripts/prepare-pages-public.mjs"
       - "wrangler.toml"
       - ".github/workflows/deploy-workbench.yml"
   workflow_dispatch:
@@ -77,17 +78,44 @@ jobs:
           DEPLOYED_AT: ${{ steps.revision.outputs.deployed_at }}
         run: node scripts/deployment-metadata.mjs
 
+      - name: Prepare policy-filtered Pages artifact
+        run: node scripts/prepare-pages-public.mjs public build/pages-public
+
       - name: Deploy workbench and Pages Functions
         env:
           CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID || vars.CLOUDFLARE_ACCOUNT_ID }}
           DEPLOY_SHA: ${{ steps.revision.outputs.sha }}
         run: >-
-          npx --yes wrangler@4.113.0 pages deploy public
+          npx --yes wrangler@4.113.0 pages deploy build/pages-public
           --project-name "$CLOUDFLARE_PAGES_PROJECT"
           --branch main
           --commit-hash "$DEPLOY_SHA"
           --commit-dirty=false
+
+      - name: Verify deployed static manifest
+        env:
+          DEPLOY_SHA: ${{ steps.revision.outputs.sha }}
+        shell: bash
+        run: |
+          manifest_url="https://${CLOUDFLARE_PAGES_PROJECT}.pages.dev/data/deployment.json"
+          for attempt in $(seq 1 12); do
+            manifest_json="$(curl --fail --silent --show-error "${manifest_url}?attempt=${attempt}" || true)"
+            if MANIFEST_JSON="$manifest_json" DEPLOY_SHA="$DEPLOY_SHA" node --input-type=module -e '
+              const manifest = JSON.parse(process.env.MANIFEST_JSON || "{}");
+              process.exit(
+                manifest?.commitSha === process.env.DEPLOY_SHA
+                && typeof manifest?.deployedAt === "string"
+                && Number.isFinite(Date.parse(manifest.deployedAt))
+                ? 0 : 1
+              );
+            '; then
+              exit 0
+            fi
+            sleep 10
+          done
+          echo "::error::Pages production alias did not expose the static deployment manifest."
+          exit 1
 
       - name: Persist deployment identity
         env:

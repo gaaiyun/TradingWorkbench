@@ -37,6 +37,20 @@ const INTRADAY_FRESHNESS_MAX_AGE_MS = {
 };
 // 春节、国庆等合法休市可能超过一周；只有超过一个半月的断口才按旧种子处理。
 const DAILY_MAX_CONTIGUOUS_GAP_MS = 45 * 24 * 60 * 60 * 1000;
+const CN_INTRADAY_SOURCE_PRIORITY = new Map([
+  ["tencent", 0],
+  ["eastmoney", 1],
+  ["yahoo", 2],
+]);
+const SHANGHAI_INTRADAY_FORMATTER = new Intl.DateTimeFormat("en-CA", {
+  timeZone: "Asia/Shanghai",
+  year: "numeric",
+  month: "2-digit",
+  day: "2-digit",
+  hour: "2-digit",
+  minute: "2-digit",
+  hourCycle: "h23",
+});
 
 function laterTimestamp(left, right) {
   return String(left || "") >= String(right || "") ? left : right;
@@ -80,6 +94,77 @@ function distinctMarketBars(rows, limit, daily = false) {
   return [...byTimestamp.values()]
     .sort((left, right) => right.ts.localeCompare(left.ts))
     .slice(0, limit);
+}
+
+function shanghaiIntradayParts(timestamp) {
+  const date = new Date(timestamp);
+  if (!Number.isFinite(date.valueOf())) return null;
+  return Object.fromEntries(
+    SHANGHAI_INTRADAY_FORMATTER.formatToParts(date)
+      .filter(({ type }) => type !== "literal")
+      .map(({ type, value }) => [type, value]),
+  );
+}
+
+function cnIntradaySessionRow(row) {
+  const symbol = String(row?.symbol || "").toUpperCase();
+  if (!symbol.endsWith(".SS") && !symbol.endsWith(".SZ")) return true;
+  const parts = shanghaiIntradayParts(row?.ts);
+  if (!parts) return false;
+  const minutes = Number(parts.hour) * 60 + Number(parts.minute);
+  return (
+    (minutes >= 9 * 60 + 30 && minutes <= 11 * 60 + 30)
+    || (minutes >= 13 * 60 && minutes <= 15 * 60)
+  );
+}
+
+function canonicalCnIntradayRows(rows, timeframe) {
+  if (timeframe !== "5m") return rows;
+  const validRows = rows.filter(cnIntradaySessionRow);
+  const byTradingDay = new Map();
+  for (const row of validRows) {
+    const symbol = String(row?.symbol || "").toUpperCase();
+    if (!symbol.endsWith(".SS") && !symbol.endsWith(".SZ")) return rows;
+    const parts = shanghaiIntradayParts(row.ts);
+    if (!parts) continue;
+    const day = `${parts.year}-${parts.month}-${parts.day}`;
+    const sourceRows = byTradingDay.get(day) || new Map();
+    const source = String(row.source || "unknown");
+    const group = sourceRows.get(source) || [];
+    group.push(row);
+    sourceRows.set(source, group);
+    byTradingDay.set(day, sourceRows);
+  }
+  const selected = [];
+  for (const sourceRows of byTradingDay.values()) {
+    const candidates = [...sourceRows.entries()].map(([source, sourceGroup]) => ({
+      source,
+      rows: sourceGroup,
+      count: sourceGroup.length,
+      latestFetch: sourceGroup.reduce(
+        (latest, row) => String(row.fetched_at || "") > latest
+          ? String(row.fetched_at || "")
+          : latest,
+        "",
+      ),
+      priority: CN_INTRADAY_SOURCE_PRIORITY.get(source) ?? 99,
+    }));
+    const complete = candidates.filter(({ count }) => count >= 24);
+    const ranked = complete.length ? complete : candidates;
+    ranked.sort((left, right) => {
+      if (complete.length && left.priority !== right.priority) {
+        return left.priority - right.priority;
+      }
+      if (complete.length && left.count !== right.count) return right.count - left.count;
+      if (!complete.length && left.latestFetch !== right.latestFetch) {
+        return right.latestFetch.localeCompare(left.latestFetch);
+      }
+      if (left.priority !== right.priority) return left.priority - right.priority;
+      return right.count - left.count;
+    });
+    if (ranked[0]) selected.push(...ranked[0].rows);
+  }
+  return selected;
 }
 
 function contiguousDailyBars(rows) {
@@ -213,9 +298,13 @@ export async function onRequestGet({ request, env }) {
         limit: query.limit * SOURCE_OVERLAP_FACTOR,
       };
     const queriedRows = await queryMarketBars(db, storedQuery);
+    const canonicalQueriedRows = canonicalCnIntradayRows(
+      queriedRows,
+      storedQuery.timeframe,
+    );
     const sourceLimit = derived ? query.limit * derived.factor : query.limit;
     const distinctRows = distinctMarketBars(
-      queriedRows,
+      canonicalQueriedRows,
       sourceLimit,
       query.timeframe === "1d",
     );

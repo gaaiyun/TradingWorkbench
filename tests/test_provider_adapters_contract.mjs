@@ -290,6 +290,47 @@ test("Yahoo drops timestamp-aligned null points but rejects an entirely bad seri
   );
 });
 
+test("Yahoo CN intraday rejects flat zero-volume lunch placeholders", async () => {
+  const timestamps = [
+    Date.parse("2026-07-21T01:30:00Z") / 1000,
+    Date.parse("2026-07-21T03:30:00Z") / 1000,
+    Date.parse("2026-07-21T03:35:00Z") / 1000,
+    Date.parse("2026-07-21T04:00:00Z") / 1000,
+    Date.parse("2026-07-21T05:00:00Z") / 1000,
+    Date.parse("2026-07-21T07:00:00Z") / 1000,
+  ];
+  const payload = {
+    chart: {
+      result: [{
+        timestamp: timestamps,
+        indicators: { quote: [{
+          open: [1.21, 1.29, 1.29, 1.29, 1.30, 1.30],
+          high: [1.22, 1.29, 1.29, 1.29, 1.31, 1.30],
+          low: [1.20, 1.29, 1.29, 1.29, 1.29, 1.30],
+          close: [1.21, 1.29, 1.29, 1.29, 1.30, 1.30],
+          volume: [1000, 0, 0, 0, 2000, 0],
+        }] },
+      }],
+      error: null,
+    },
+  };
+  const adapters = createAdapters({
+    fetch: async () => jsonResponse(payload),
+    timeoutMs: 100,
+  });
+
+  const bars = await adapters.yahoo({
+    symbol: "159995.SZ",
+    market: "CN",
+    timeframe: "5m",
+  }, runtime);
+
+  assert.deepEqual(bars.map(({ timestamp }) => timestamp), [
+    "2026-07-21T01:30:00.000Z",
+    "2026-07-21T05:00:00.000Z",
+  ]);
+});
+
 test("Yahoo US intraday requests one session and parses only the latest bounded window", async () => {
   let requestedUrl;
   const timestamps = Array.from(

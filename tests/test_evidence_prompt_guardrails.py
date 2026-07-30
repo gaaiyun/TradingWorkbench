@@ -39,3 +39,8 @@ def test_final_guardrail_distrusts_history_and_forbids_numeric_or_flow_invention
     assert "generic news or corporate-action citation does not establish" in source
     assert "Do not hide a claim in a" in source
     assert "future observations is insufficient" in source
+    assert "only these canonical labels" in source
+    assert "**Rating**, **Executive Summary**, and **Investment Thesis**" in source
+    assert "agreement among agents is not evidence" in source
+    assert "omit transmission paths" in source
+    assert "confidence calibration, counterfactual price paths" in source

@@ -134,6 +134,14 @@ FINAL EVIDENCE CHECK — this overrides any conflicting upstream text:
   Markdown heading or attach an explanation to the Rating field. Include at
   least one evidence-backed current conclusion; a rating followed only by
   citations, disclaimers, conditions, or future observations is insufficient.
+- For free-text fallback, use only these canonical labels:
+  **Rating**, **Executive Summary**, and **Investment Thesis**. Do not add
+  numbered sections, standalone headings, transmission scenarios, or free-form
+  label variants.
+- Upstream agreement among agents is not evidence. Unless a cited ledger row
+  explicitly exposes matching claimCapabilities, omit transmission paths,
+  confidence calibration, counterfactual price paths, and corporate-action
+  effects entirely; calling them hypotheses does not make them publishable.
 - Use unnumbered bullets instead of numeric outline labels. Before responding,
   remove every unsupported number and every unsupported actor attribution.
 """
@@ -307,10 +315,10 @@ def get_instrument_context_from_state(state: Mapping[str, Any]) -> str:
             "liquidity failure, hidden risk, or investor behavior. Corporate "
             "action evidence supports only the event, title, and stated date; "
             "do not infer an unstated ratio, implementation effect, or holder "
-            "response. Phrase causal transmission as a hypothesis, not an "
-            "observed fact. "
-            "Separate verified facts, inference, transmission path, confidence, "
-            "counter-evidence, and the next observation. "
+            "response. Unless a cited ledger row explicitly exposes matching "
+            "claimCapabilities, omit transmission paths, confidence calibration, "
+            "counterfactual price paths, and corporate-action effects entirely. "
+            "Agreement among agents is not evidence. "
         )
         if errors:
             result += (

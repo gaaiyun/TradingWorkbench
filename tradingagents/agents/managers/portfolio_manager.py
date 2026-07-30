@@ -69,7 +69,11 @@ Non-negotiable evidence rules:
   prescribe a numeric portfolio allocation, forced liquidation, entry level, or stop loss.
 - Leave the optional price target fields empty unless method, inputs, range, scenario probabilities,
   and matching Evidence IDs are all present.
-- Separate verified fact, inference, confidence, counter-evidence, and the next observation.
+- In free-text fallback, use only **Rating**, **Executive Summary**, and
+  **Investment Thesis** labels; do not add numbered sections or custom headings.
+- Unless a cited ledger row explicitly exposes matching claimCapabilities, omit
+  transmission paths, confidence calibration, counterfactual price paths, and
+  corporate-action effects. Agreement among agents is not evidence.
 
 Be decisive only within those evidence limits.{get_language_instruction()}
 {get_final_evidence_guardrail()}"""

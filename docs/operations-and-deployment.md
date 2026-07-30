@@ -103,6 +103,8 @@ Python 全量测试和浏览器测试在 Windows 上串行执行。交接文档�
 | `0015_notification_deliveries.sql` | event provenance、通知 shadow 账本 |
 | `0016_fund_flows.sql` | 资金流 long-form 表、自然键和查询索引 |
 | `0017_deployment_metadata.sql` | Pages 发布身份 D1 兜底，避免同 SHA 后续部署遮盖静态 manifest 后 `deployedAt=unknown` |
+| `0018_fund_flow_trade_date.sql` | 明示并索引 Asia/Shanghai 资金业务日 |
+| `0019_remove_invalid_cn_intraday_bars.sql` | 精确清理 Yahoo A 股 5m 午休占位与零成交平盘端点 |
 
 本地：
 
@@ -128,6 +130,8 @@ npx --yes wrangler@4.113.0 d1 execute tradingagents-workbench `
 ```
 
 不要改写已经发布的 migration，也不要在生产 D1 执行未进入 migration 的写 SQL。
+
+`0019` 只删除 Yahoo A 股 5m 中午休区间记录，以及 `11:30 / 15:00` 的零成交平盘哨兵。应用前后应按来源、周期、市场和上海本地时刻核对行数，确认真实成交的收盘柱、腾讯/东方财富、美股与非 5m 数据未受影响；只通过 migration 执行，不用临时生产 DELETE 代替。
 
 ## 5. 部署顺序
 
@@ -221,7 +225,9 @@ $env:DEPLOY_SHA = $pagesCommit
 $env:DEPLOY_BRANCH = "main"
 node scripts/deployment-metadata.mjs
 
-npx --yes wrangler@4.113.0 pages deploy public `
+node scripts/prepare-pages-public.mjs public build/pages-public
+
+npx --yes wrangler@4.113.0 pages deploy build/pages-public `
   --project-name tradingagents-board `
   --branch main `
   --commit-hash $pagesCommit `
@@ -238,7 +244,9 @@ if ($pagesHealth.deployment.deployedAt -eq "unknown") {
 }
 ```
 
-`deploy-workbench` 缺 Cloudflare 凭据时直接失败，不再跳过。发布前用同一个 `DEPLOYED_AT` 生成静态 manifest；`pages deploy` 成功后才参数化 UPSERT 到 D1 `deployment_metadata`，失败的发布不会覆盖当前线上身份。随后 workflow 最多等待约两分钟，直到生产域名 `/api/health` 回读到目标 SHA 和合法 `deployedAt`。Health 优先信任当前 immutable deployment 的静态 manifest，只有它缺失、被 SPA fallback 替换或 SHA 不一致时才有界查询 D1，且仍要求记录 SHA 等于 `CF_PAGES_COMMIT_SHA`。超时或不一致都视为发布失败。`CF_PAGES_URL` 保留不可变 deployment URL，便于核对生产 alias 的传播。
+`deploy-workbench` 缺 Cloudflare 凭据时直接失败，不再跳过。发布前用同一个 `DEPLOYED_AT` 生成静态 manifest，再生成策略过滤后的 `build/pages-public`；禁止直接部署 `public`。verified 报告完整发布，未验证报告只保留 Manifest、EvidencePacket 和 fail-closed `complete_report.md`，角色分卷不得进入 artifact。`pages deploy` 成功后，workflow 先直接读取 `/data/deployment.json` 验证静态 manifest，再参数化 UPSERT 到 D1 `deployment_metadata`，最后从 `/api/health` 回读目标 SHA 和合法 `deployedAt`。失败的发布不会覆盖当前线上身份。Health 只有在静态 manifest 缺失、被 SPA fallback 替换或 SHA 不一致时才有界查询 D1，且仍要求记录 SHA 等于 `CF_PAGES_COMMIT_SHA`。超时或不一致都视为发布失败。`CF_PAGES_URL` 保留不可变 deployment URL，便于核对生产 alias 的传播。
+
+发布前必须抽查至少一份未验证报告：`build/pages-public` 中不得存在 `1_analysts` 至 `5_portfolio`；发布后直接 GET 相同 Pages raw 路径应不可读取，`/api/report` 无 selector 与带 selector 的 raw 请求都必须 fail-closed。不能用“网页没有显示标签页”替代静态文件和 API 两条路径的检查。
 
 每日分析的报告提交由 Actions 自带 `GITHUB_TOKEN` 完成。机器人 push 可能因 GitHub 递归保护不触发其它 `on: push` workflow，所以 `daily-analysis.yml` 在 `Persist reports to main` 成功后显式运行 `gh workflow run deploy-workbench.yml --ref main`。该 job 只增加 `actions: write`，继续使用 `github.token`，不需要新建 PAT；报告持久化失败时不会触发部署。真实验收必须同时记录 daily run、其生成的数据 commit、随后独立的 deploy-workbench run，并确认生产 `/api/health` 的完整 SHA 等于该数据 commit 或其后的最新 `main`。
 
@@ -251,6 +259,8 @@ manifest 故障。
 2026-07-28 现场用 Wrangler 回读 `tradingagents-board` 的 Git Provider 为 `No`，因此项目不存在 Cloudflare Git integration 竞争发布。曾出现的同 SHA 重复部署来自 GitHub workflow 之外的 Wrangler/ad-hoc 发布；这类发布若没有同步生成静态 manifest 和持久化 D1 identity，会被 `/api/health` 正确标成 `deployment_manifest=invalid_metadata`。禁止把无身份的手工发布当成最终交付；若紧急排障确需手工发布，必须按下段补齐 manifest 与 D1 identity，并立即再跑一次权威 `deploy-workbench` 收口。
 
 手工 Pages 发布若要保留同等可观测性，必须先应用 migration 0017，并用与 manifest 相同的 SHA/UTC 时间更新 `deployment_metadata`；否则只允许作为临时排障，不能作为最终交付路径。权威生产发布仍是 GitHub `deploy-workbench`。
+
+Hermes 每天 08:30 的任务只读取生产行情、资金、新闻、图形口径与已通过门禁的报告，输出盘前投资简报；它不执行 migration、代码审查、浏览器矩阵或根因判定。完整工程审计必须人工触发，并继续遵守默认只读边界；修复和发布需要用户另行授权。两种任务不得共用名称、模板或完成标准。
 
 ### 5.4 VolGuard
 

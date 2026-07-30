@@ -156,13 +156,16 @@ jobs:
         with:
           ref: main
 
+      - name: Prepare policy-filtered Pages artifact
+        run: node scripts/prepare-pages-public.mjs public build/pages-public
+
       - name: Setup Pages
         uses: actions/configure-pages@v5
 
       - name: Upload site artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: public
+          path: build/pages-public
 
       - name: Deploy to GitHub Pages
         id: deployment

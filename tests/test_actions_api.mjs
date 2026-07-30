@@ -547,21 +547,26 @@ test("latest, report audit, and report honor adhoc requestId selectors", async (
     })),
   };
   const manifestPayload = {
+    ticker: "MSFT",
+    tradeDate: "2026-07-26",
+    auditStatus: "verified",
+    analysisStatus: "rated",
+    claimValidation: { status: "passed" },
     identity: historyPayload[0].identity,
   };
   const originalFetch = globalThis.fetch;
   globalThis.fetch = async (url) => {
     const path = String(url);
-    if (path.endsWith("/data/history.json")) {
+    if (path.includes("/data/history.json")) {
       return Response.json(historyPayload);
     }
-    if (path.endsWith("/data/report-audit.json")) {
+    if (path.includes("/data/report-audit.json")) {
       return Response.json(auditPayload);
     }
-    if (path.endsWith("/reports/MSFT/2026-07-26/report_manifest.json")) {
+    if (path.includes("/reports/MSFT/2026-07-26/report_manifest.json")) {
       return Response.json(manifestPayload);
     }
-    if (path.endsWith("/reports/MSFT/2026-07-26/complete_report.md")) {
+    if (path.includes("/reports/MSFT/2026-07-26/complete_report.md")) {
       return new Response("# MSFT");
     }
     return new Response("not found", { status: 404 });
@@ -726,10 +731,12 @@ test("profile-scoped report reads require a matching manifest and keep nested re
   const fetched = [];
   globalThis.fetch = async (url) => {
     fetched.push(String(url));
-    if (String(url).endsWith("/reports/SPY/2026-07-25/report_manifest.json")) {
+    if (String(url).includes("/reports/SPY/2026-07-25/report_manifest.json")) {
       return Response.json({
         ticker: "SPY",
         tradeDate: "2026-07-25",
+        auditStatus: "verified",
+        analysisStatus: "rated",
         claimValidation: { status: "passed", errorCodes: [] },
         identity: {
           scope: "profile",
@@ -741,7 +748,17 @@ test("profile-scoped report reads require a matching manifest and keep nested re
         },
       });
     }
-    if (String(url).endsWith(`/${reportPath}`)) {
+    if (String(url).includes("/data/report-audit.json")) {
+      return Response.json({
+        reports: [{
+          report: "reports/SPY/2026-07-25/complete_report.md",
+          auditStatus: "verified",
+          analysisStatus: "rated",
+          claimValidation: { status: "passed", omittedUnsafeParagraphs: 0 },
+        }],
+      });
+    }
+    if (String(url).includes(`/${reportPath}`)) {
       return new Response("market report", { status: 200 });
     }
     return new Response(null, { status: 404 });
@@ -770,7 +787,7 @@ test("profile-scoped report reads require a matching manifest and keep nested re
       ),
     });
     assert.equal(legacy.status, 200);
-    assert.equal(fetched.some((url) => url.endsWith("report_manifest.json")), false);
+    assert.equal(fetched.some((url) => url.includes("report_manifest.json")), true);
   } finally {
     globalThis.fetch = originalFetch;
   }
@@ -784,7 +801,7 @@ test("profile-scoped claim-failed reports keep raw agent sections off the public
   const fetched = [];
   globalThis.fetch = async (url) => {
     fetched.push(String(url));
-    if (String(url).endsWith(`/${base}/report_manifest.json`)) {
+    if (String(url).includes(`/${base}/report_manifest.json`)) {
       return Response.json({
         ticker: "515880.SS",
         tradeDate: "2026-07-29",
@@ -802,10 +819,24 @@ test("profile-scoped claim-failed reports keep raw agent sections off the public
         },
       });
     }
-    if (String(url).endsWith(`/${rawPath}`)) {
+    if (String(url).includes("/data/report-audit.json")) {
+      return Response.json({
+        reports: [{
+          report: completePath,
+          auditStatus: "legacy_unverified",
+          analysisStatus: "insufficient_evidence",
+          claimValidation: {
+            status: "failed",
+            errorCodes: ["UNCITED_NUMERIC_CLAIM"],
+            omittedUnsafeParagraphs: 1,
+          },
+        }],
+      });
+    }
+    if (String(url).includes(`/${rawPath}`)) {
       return new Response("unsafe raw section", { status: 200 });
     }
-    if (String(url).endsWith(`/${completePath}`)) {
+    if (String(url).includes(`/${completePath}`)) {
       return new Response("Not Rated", { status: 200 });
     }
     return new Response(null, { status: 404 });
@@ -828,7 +859,116 @@ test("profile-scoped claim-failed reports keep raw agent sections off the public
       ),
     });
     assert.equal(consolidated.status, 200);
-    assert.equal(await consolidated.text(), "Not Rated");
+    assert.match(await consolidated.text(), /Not Rated/);
+    assert.equal(
+      fetched.some((url) => url.endsWith(`/${completePath}`)),
+      false,
+    );
+
+    fetched.length = 0;
+    const unscopedDenied = await getReport({
+      request: new Request(
+        `https://workbench.test/api/report?path=${encodeURIComponent(rawPath)}`,
+      ),
+    });
+    assert.equal(unscopedDenied.status, 409);
+    assert.equal(
+      fetched.some((url) => url.endsWith(`/${rawPath}`)),
+      false,
+    );
+  } finally {
+    globalThis.fetch = originalFetch;
+  }
+});
+
+test("report API rejects stale verified manifests invalidated by the current audit index", async () => {
+  const originalFetch = globalThis.fetch;
+  const base = "reports/515880.SS/2026-07-30-v6";
+  const rawPath = `${base}/5_portfolio/decision.md`;
+  globalThis.fetch = async (url) => {
+    const value = String(url);
+    if (value.includes(`/${base}/report_manifest.json`)) {
+      return Response.json({
+        ticker: "515880.SS",
+        tradeDate: "2026-07-30",
+        auditStatus: "verified",
+        analysisStatus: "rated",
+        claimValidation: { status: "passed", omittedUnsafeParagraphs: 0 },
+      });
+    }
+    if (value.includes("/data/report-audit.json")) {
+      return Response.json({
+        reports: [{
+          report: `${base}/complete_report.md`,
+          auditStatus: "invalidated",
+          analysisStatus: "rated",
+          claimValidation: { status: "passed", omittedUnsafeParagraphs: 0 },
+        }],
+      });
+    }
+    if (value.includes(`/${rawPath}`)) {
+      return new Response("评级：卖出", { status: 200 });
+    }
+    return new Response(null, { status: 404 });
+  };
+  try {
+    const response = await getReport({
+      request: new Request(
+        `https://workbench.test/api/report?path=${encodeURIComponent(rawPath)}`,
+      ),
+    });
+    assert.equal(response.status, 409);
+  } finally {
+    globalThis.fetch = originalFetch;
+  }
+});
+
+test("report API rechecks invalidation without serving a cached verified raw response", async () => {
+  const originalFetch = globalThis.fetch;
+  const base = "reports/515880.SS/2026-07-30-v7";
+  const rawPath = `${base}/5_portfolio/decision.md`;
+  let invalidated = false;
+  const auditRequests = [];
+  globalThis.fetch = async (url, init = {}) => {
+    const value = String(url);
+    if (value.includes(`/${base}/report_manifest.json`)) {
+      return Response.json({
+        ticker: "515880.SS",
+        tradeDate: "2026-07-30",
+        auditStatus: "verified",
+        analysisStatus: "rated",
+        claimValidation: { status: "passed", omittedUnsafeParagraphs: 0 },
+      });
+    }
+    if (value.includes("/data/report-audit.json")) {
+      auditRequests.push({ value, init });
+      return Response.json({
+        reports: [{
+          report: `${base}/complete_report.md`,
+          auditStatus: invalidated ? "invalidated" : "verified",
+          analysisStatus: "rated",
+          claimValidation: { status: "passed", omittedUnsafeParagraphs: 0 },
+        }],
+      });
+    }
+    if (value.includes(`/${rawPath}`)) {
+      return new Response("评级：持有", { status: 200 });
+    }
+    return new Response(null, { status: 404 });
+  };
+  try {
+    const requestUrl = `https://workbench.test/api/report?path=${encodeURIComponent(rawPath)}`;
+    const allowed = await getReport({ request: new Request(requestUrl) });
+    assert.equal(allowed.status, 200);
+    assert.equal(allowed.headers.get("cache-control"), "no-store");
+
+    invalidated = true;
+    const denied = await getReport({ request: new Request(requestUrl) });
+    assert.equal(denied.status, 409);
+    assert.equal(auditRequests.length, 2);
+    assert.ok(auditRequests.every(({ value }) => value.includes("__tw_no_cache=")));
+    assert.ok(auditRequests.every(({ init }) => init.cache === "no-store"));
+    assert.ok(auditRequests.every(({ init }) => init.cf?.cacheTtl === 0));
   } finally {
     globalThis.fetch = originalFetch;
   }

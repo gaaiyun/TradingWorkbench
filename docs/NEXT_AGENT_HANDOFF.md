@@ -1,6 +1,6 @@
 # Trading Workbench 下一 Agent 交接
 
-更新日期：2026-07-30（全局运行、数据、图形、分析与报告质量收口完成）
+更新日期：2026-07-31（发布边界、A 股分时业务不变量与 Hermes 职责分离）
 
 实现基线：`main`。不要依赖本文中的旧提交号；接手时同时执行 `git rev-parse HEAD`、`git rev-parse origin/main`，并读取 Pages 与 Worker health 的 commit SHA。
 
@@ -15,6 +15,8 @@
 **维护约定**：任何 agent 做完一轮工作后，必须回到本文更新三处——§1 当前结论、§1.5 生产状态、§15 更新日志。发现本文与代码或生产不符时，**在同一提交里修正本文**，不要另开新的交接文档。数字和状态必须来自实际执行的命令，不要沿用上一轮的结论。
 
 ## 1. 当前结论
+
+2026-07-31 本轮发布修复包含：Pages 以 `public/data/report-audit.json` 为权威 allowlist 生成 `build/pages-public`，旧 Manifest 即使仍写 verified、但当前索引已 invalidated，也不能发布角色分卷；未验证报告始终生成统一 `Not Rated`，不再用正文 marker 判断安全。`/api/report` 无 selector 和带 selector 都逐请求校验 Manifest 与当前审计索引，门禁和 raw 响应均为 `no-store`，未验证 raw 返回 409。A 股 5m 在采集层拒绝 Yahoo 午休/零成交平盘端点，读取层按交易日选单一来源，migration `0019` 精确清理既有脏行。报告校验补齐“实现波动率”和中文跨月日期的结构数字识别，最终提示词不再诱导无 capability 的传导路径、置信度或公司行动效果。Hermes 原 Job `8dc0823402e7` 已从工程审计原地切换为 08:30 盘前投资简报；旧工程审计 Skill 保留为手工排障，不新建重复 cron。上线真相仍须按 §1.5 的 GitHub、Pages、Worker 三方完整 SHA 和生产端点实时回读，不以本文中的旧短 SHA替代。
 
 多 profile、运行身份隔离、Chat/Evidence owner、调度可靠性、提醒 shadow 账本、Worker/Pages 部署指纹，以及独立的全天资讯采集任务均已合入 `main`。
 
@@ -290,6 +292,10 @@ workflow 校验互斥和字段完整性。history、Manifest、Evidence、run ti
 | `0013_monitor_reliability.sql` | slot snapshot、预算、outbox/receipt、bootstrap、公平轮转、新闻健康 |
 | `0014_chat_evidence_scope.sql` | Chat/Evidence/Manifest scope 和 owner |
 | `0015_notification_deliveries.sql` | event provenance、提醒 shadow 账本 |
+| `0016_fund_flows.sql` | 资金流 long-form 表、自然键和查询索引 |
+| `0017_deployment_metadata.sql` | Pages 部署身份 D1 兜底 |
+| `0018_fund_flow_trade_date.sql` | Asia/Shanghai 资金业务日 |
+| `0019_remove_invalid_cn_intraday_bars.sql` | Yahoo A 股 5m 午休与零成交平盘端点精确清理 |
 
 migration 只向前保留。回退代码时不要删除新表或列。
 
@@ -312,6 +318,7 @@ migration 只向前保留。回退代码时不要删除新表或列。
 - Worker `/health` 已实现回读运行时 SHA 和部署时间；
 - Pages `/api/health` 已增加 commit SHA、deployedAt、branch 和不可变 deployment URL；deployedAt 来自随部署发布且 SHA 匹配的 manifest；
 - 部署 workflow 均写成缺凭据即失败，发布后回读目标 SHA。
+- Pages 和可选 GitHub Pages workflow 均只上传 `build/pages-public`；当前审计索引未明确 verified 的报告不含 raw 分卷。
 
 ### 生产层已验证
 

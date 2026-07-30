@@ -258,6 +258,31 @@ function yahooSessionCloseSentinel(row, request) {
   return Number(parts.hour) === 16 && Number(parts.minute) === 0;
 }
 
+function yahooCnIntradaySessionRow(row, request) {
+  if (request?.timeframe !== "5m" || request?.market !== "CN") return true;
+  const parts = Object.fromEntries(
+    new Intl.DateTimeFormat("en-US", {
+      timeZone: "Asia/Shanghai",
+      hour: "2-digit",
+      minute: "2-digit",
+      hourCycle: "h23",
+    }).formatToParts(new Date(row.timestamp))
+      .map(({ type, value }) => [type, value]),
+  );
+  const minutes = Number(parts.hour) * 60 + Number(parts.minute);
+  const flatZero = Number(row.volume) === 0
+    && [row.high, row.low, row.close].every(
+      (value) => Number(value) === Number(row.open),
+    );
+  if (flatZero && (minutes === 11 * 60 + 30 || minutes === 15 * 60)) {
+    return false;
+  }
+  return (
+    (minutes >= 9 * 60 + 30 && minutes <= 11 * 60 + 30)
+    || (minutes >= 13 * 60 && minutes <= 15 * 60)
+  );
+}
+
 function parseYahoo(payload, request) {
   const result = payload?.chart?.result?.[0];
   const quote = result?.indicators?.quote?.[0];
@@ -284,6 +309,7 @@ function parseYahoo(payload, request) {
       request?.timeframe !== "5m"
       || Math.floor(Date.parse(row.timestamp) / 1000) % 300 === 0
     )
+    && yahooCnIntradaySessionRow(row, request)
     && !yahooSessionCloseSentinel(row, request)
   );
 }

@@ -67,8 +67,17 @@ export async function readJsonBody(request, { maxBytes = 16 * 1024 } = {}) {
 
 // 代理 GitHub raw 上随 commit 更新的数据文件（比静态部署快照新鲜）。
 export async function proxyRaw(path, { cacheSeconds = 60 } = {}) {
-  const upstream = `${RAW_BASE}/${path}`;
-  const resp = await fetch(upstream, { cf: { cacheTtl: cacheSeconds, cacheEverything: true } });
+  const noStore = cacheSeconds <= 0;
+  const nonce = noStore
+    ? `?__tw_no_cache=${Date.now()}-${Math.random().toString(36).slice(2)}`
+    : "";
+  const upstream = `${RAW_BASE}/${path}${nonce}`;
+  const resp = await fetch(upstream, noStore
+    ? {
+        cache: "no-store",
+        cf: { cacheTtl: 0, cacheEverything: false },
+      }
+    : { cf: { cacheTtl: cacheSeconds, cacheEverything: true } });
   if (!resp.ok) {
     return json({ error: `upstream ${resp.status}` }, resp.status === 404 ? 404 : 502);
   }
@@ -78,6 +87,9 @@ export async function proxyRaw(path, { cacheSeconds = 60 } = {}) {
     : "text/plain; charset=utf-8";
   return new Response(body, {
     status: 200,
-    headers: { "content-type": type, "cache-control": `public, max-age=${cacheSeconds}` },
+    headers: {
+      "content-type": type,
+      "cache-control": noStore ? "no-store" : `public, max-age=${cacheSeconds}`,
+    },
   });
 }

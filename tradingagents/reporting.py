@@ -96,6 +96,10 @@ _NON_CLAIM_NUMERIC_CONTEXT = (
     re.compile(
         r"(?<!\d)(?:19|20)\d{2}年\s*\d{1,2}月(?:\s*\d{1,2}日)?",
     ),
+    re.compile(
+        r"(?<!\d)(?:19|20)\d{2}年\s*\d{1,2}\s*(?:月\s*)?"
+        r"[-–—~至]\s*\d{1,2}月",
+    ),
     re.compile(r"(?<!\d)\d{1,2}月\s*\d{1,2}日"),
     re.compile(
         r"(?i)(?<!\d)(?:19|20)\d{2}\s*(?:年\s*)?"
@@ -116,7 +120,7 @@ _NON_CLAIM_NUMERIC_CONTEXT = (
         r"(?i)(?<!\d)\d+\s*(?:日|天|周|月)?\s*"
         r"(?=(?:均线|EMA|SMA|MA|ATR|RSI|MACD|KDJ|布林|"
         r"移动平均线|指数移动平均线|简单移动平均线|"
-        r"已实现波动率|波动率|realized\s*volatility|volatility))",
+        r"(?:已)?实现波动率|波动率|realized\s*volatility|volatility))",
     ),
     re.compile(r"(?i)(?<!\d)\d+\s*(?:EMA|SMA|MA|ATR)\b"),
     re.compile(r"(?i)\b(?:RSI|ATR)\s*\(\s*\d+\s*\)"),

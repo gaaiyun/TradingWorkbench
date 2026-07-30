@@ -1412,12 +1412,15 @@ test("Pages and monitor deployments serialize migrations before publishing runti
   assert.doesNotMatch(pages, /available=(?:true|false)|steps\.cloudflare\.outputs\.available/);
   assert.match(pages, /migrations\/\*\*/);
   const migration = pages.indexOf("d1 migrations apply");
-  const deployment = pages.indexOf("pages deploy public");
+  const preparation = pages.indexOf("prepare-pages-public.mjs public build/pages-public");
+  const deployment = pages.indexOf("pages deploy build/pages-public");
   const persistedIdentity = pages.indexOf("Persist deployment identity");
   const verification = pages.indexOf("Verify deployed Pages identity");
   assert.notEqual(migration, -1);
+  assert.notEqual(preparation, -1);
   assert.notEqual(deployment, -1);
-  assert.equal(migration < deployment, true);
+  assert.equal(migration < preparation, true);
+  assert.equal(preparation < deployment, true);
   assert.equal(deployment < persistedIdentity, true);
   assert.equal(persistedIdentity < verification, true);
   assert.match(pages, /Persist deployment identity/);

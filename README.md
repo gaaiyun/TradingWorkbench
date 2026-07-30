@@ -92,6 +92,8 @@ Worker 不运行 pandas、LangGraph、GARCH、BSADF 或长历史回测。VolGuar
 
 所有动态记录带 `source`、`asOf`、`fetchedAt`、`freshness`、`quality` 和 `adjustment`。连续失败三次的来源暂停十五分钟。
 
+A 股 5m 只接受上海时区 `09:30–11:30 / 13:00–15:00` 的合法会话记录。Yahoo 午休占位行以及 `11:30 / 15:00` 的零成交平盘哨兵在采集层拒绝；读取层再按交易日选择单一规范来源，完整候选按腾讯 → 东方财富 → Yahoo 排序，避免同一交易日混合 provider 或把午休平柱聚合进 15m/1h。
+
 前端请求使用 `cache: no-store`；资讯和行情在页面可见时每 60 秒轮询，期权快层每 30 秒轮询。`scripts/asset-version.mjs` 用 CSS+JS 内容哈希生成缓存版本，CI 的 `npm run check:asset-version` 会阻止静态资源改动后忘记更新 HTML。
 
 复权口径不能互换：
@@ -201,7 +203,9 @@ Worker 为每个理论任务生成稳定 `slotId`，并在首次入库时冻结 
 只能使用 packet ledger；ETF 基本面缺少持仓、费率、NAV 或跟踪误差时必须写
 “不可用”，不能用上市公司财报或模型常识补数。若最终 claim validation 失败，
 网站只展示 fail-closed 的 `complete_report.md`；带幻觉或无引用数字的角色分卷仍保留在
-GitHub 供审计，但不再作为网页报告标签页或 profile 报告 API 输出。
+GitHub 供开发审计，但不随 Pages 发布，也不再作为网页报告标签页或任何 selector
+形式的报告 API 输出。`/api/report` 无论是否带 profile/requestId 都先读取 Manifest；
+未验证 raw 返回 409，未验证完整报告只返回统一 `Not Rated` 安全正文。
 
 `evidence_packet` 与 `analysis_status` 是 LangGraph `AgentState` 的显式字段，不能只在
 初始字典中临时附加；否则编译后的图会丢弃两者，Agent 将在没有 Evidence ledger 的
@@ -305,13 +309,13 @@ MCP 只提供设置、监控、行情、新闻和研究历史查询，不接收�
 
 部署顺序为 D1 migration → Monitor Worker → Workbench Pages → VolGuard → 生产验收。
 
-`deploy-monitor` 缺少 Cloudflare 凭据或 `MONITOR_WORKER_URL` 时直接失败。部署后 workflow 请求 Worker `/health`，并要求 `deployment.commitSha` 等于本次 GitHub SHA。`deploy-workbench` 还生成随静态站发布的 deployment manifest；Pages health 只有在 manifest SHA 与运行时 SHA 一致时才显示真实 `deployedAt`。绿色 workflow 仍需核对 migration、deploy 和 SHA 验证步骤都执行成功。
+`deploy-monitor` 缺少 Cloudflare 凭据或 `MONITOR_WORKER_URL` 时直接失败。部署后 workflow 请求 Worker `/health`，并要求 `deployment.commitSha` 等于本次 GitHub SHA。`deploy-workbench` 先用 `scripts/prepare-pages-public.mjs` 把 `public` 生成策略过滤后的 `build/pages-public`，只发布该目录；随后分别验证静态 deployment manifest 与 `/api/health` 的完整 SHA。禁止直接 `pages deploy public`，否则会绕过未验证报告的静态发布边界。绿色 workflow 仍需核对 migration、deploy 和两项 SHA 验证步骤都执行成功。
 
 `daily-analysis` 用 `GITHUB_TOKEN` 把报告产物提交回 `main`；这类机器人 push 不会可靠级联触发其它 `on: push` workflow。因此持久化成功后，它使用同一个 job 的最小 `actions: write` 权限显式 dispatch `deploy-workbench.yml`，不依赖 PAT，也不允许用缺少 manifest/D1 身份写入的手工 Wrangler 发布代替。日报验收必须同时看到报告数据提交、独立 Pages deploy run，以及生产 `/api/health.deployment.commitSha` 与最新 `main` 完整 SHA 一致。
 
 `/api/health` 检查与用户实际 `/api/volguard` 相同的 live→snapshot 降级链，使用 5 秒 live + 3 秒 snapshot 的总有界预算；detail 明示实际 `mode` 和 fallback 原因，snapshot 可用时不再把整个工作台误报为故障，也不会冒充 live。期权链、慢指标和两个独立时钟仍需从 `/api/volguard` 正文核验。
 
-本轮发布依赖 migrations `0013_monitor_reliability.sql`、`0014_chat_evidence_scope.sql`、`0015_notification_deliveries.sql`、纯新增的 `0016_fund_flows.sql`、`0017_deployment_metadata.sql` 与 `0018_fund_flow_trade_date.sql`。0017 让 Pages 在静态 manifest 被后续同 SHA 部署遮盖时，仍能从 D1 回读可信 `deployedAt`；0018 明示并索引资金业务交易日。
+本轮发布依赖 migrations `0013_monitor_reliability.sql`、`0014_chat_evidence_scope.sql`、`0015_notification_deliveries.sql`、纯新增的 `0016_fund_flows.sql`、`0017_deployment_metadata.sql`、`0018_fund_flow_trade_date.sql` 与 `0019_remove_invalid_cn_intraday_bars.sql`。0017 提供 Pages 身份的 D1 兜底；0018 明示并索引资金业务交易日；0019 只清理 Yahoo A 股 5m 的午休占位与零成交平盘端点，不影响真实成交收盘柱、其它来源、其它周期或美股。
 
 2026-07-26 已完成 D1 `0013`–`0015`、Monitor Worker 和 Workbench Pages 的生产发布与冒烟。Pages `/api/health` 和 Worker `/health` 都返回运行时 commit SHA；发布 workflow 必须在生产域名回读到目标 SHA 才算成功。2026-07-27 的外审已确认 SEC provider 能取得 GOOGL 官方 8-K；ORCL 最近 8-K 超出 30 天窗口，零条 evidence 是正确结果。旧工信部反爬端点已从代码中移除，改为中国政府网政策库。上交所因 Cloudflare 出口 403 改由两小时 GitHub Actions 采集；首轮生产任务写入 `515880.SS` 4 条、`512480.SS` 3 条原始公告 evidence，包含二季报和份额拆分。部分来源失败时批次会写入可用结果并标记 `NEWS_COLLECTION_PARTIAL`，而不是让整页空白。完整记录、验证协议和回退流程见 [部署与运维](docs/operations-and-deployment.md)。
 
@@ -335,7 +339,7 @@ MCP 只提供设置、监控、行情、新闻和研究历史查询，不接收�
 
 - [架构、接口与数据流](docs/architecture-and-data-flows.md)
 - [部署、验收与回退](docs/operations-and-deployment.md)
-- [云端 Agent 每日全局审查提示词](docs/CLOUD_AGENT_DAILY_AUDIT_PROMPT.md)
+- [云端 Agent 手工工程审计提示词](docs/CLOUD_AGENT_DAILY_AUDIT_PROMPT.md)
 - [产品回归与迁移](docs/regression-and-migration.md)
 - [报告质量审计](docs/REPORT_QUALITY_AUDIT.md)
 - [下一 Agent 交接](docs/NEXT_AGENT_HANDOFF.md)
@@ -350,10 +354,11 @@ MCP 只提供设置、监控、行情、新闻和研究历史查询，不接收�
 - 高频行情、信号、新闻和美股分时 slot 超过 30 分钟仍未执行会以 `STALE_SLOT_EXPIRED` 收口；调度器把真实唯一键冲突单独计为 `conflicted`，不再与幂等重复混为一谈。
 - evidence 与 discovery 新闻分别查询后合并展示，官方证据不会再被前 200 条发现层资讯挤出。
 - Evidence claim validation 失败时，用户可见的汇总报告只显示 `Not Rated` 和失败原因，不再保留方向、仓位或交易指令；原始角色分卷仅作审计。
+- Pages 发布产物只完整包含 `auditStatus=verified` 的报告目录；未验证目录只保留 Manifest、EvidencePacket 和 fail-closed `complete_report.md`，不包含 `1_analysts` 至 `5_portfolio`。原始分卷仍可在 GitHub 开发审计记录中存在，因此这里的保证是“不经 Pages/API 对用户发布”，不是删除审计证据。
 - 可复算的窗口涨跌、ATR/收盘比、均线距离和 RSI 固定阈值先写入 `D#` 派生证据；最终决策只能逐字引用 ledger 中已有数字。价量本身不能被叙述为主力、机构、承接盘、卖压或资金流。
 - 公开报告按段落复用同一 Evidence validator：无引用的定性叙事、未预计算的窗口排名/极值、“跌破面值”、仅由价量推出的持续路径或因果关系，以及把同源技术指标称为“相互独立”，都会计入 `omittedUnsafeParagraphs`；只要最终稿有一段被过滤，整份方向性结论即降为 `Not Rated`，禁止删掉坏段后继续保留 Sell/Underweight 等评级。原始 Agent 文本只留在审计分卷。被否定的表述（如“既非空头排列”“卖压是否释放无法确认”）不会误判为正向事实。
 - 标题伪装、Rating 尾随理由、纯引用残片和只有条件/后续观察的空壳报告不能成为 verified；泛化的新闻或公司行动引用不证明无关因果，否定判断按局部从句生效。
 - 没有专门阈值、历史分位、统计检验或显式 `claimCapabilities` 时，不得用“极端/异常/罕见”等同义词评价程度，不得把单日变化称为“随机/无信号/噪音”或用指标一致性抬高置信度，也不得用波动率推导反弹路径、用公司行动标题推导持有人经济效果。
 - `512480.SS / 515880.SS` 的 2026-07-28 报告把份额拆分误判为价格崩跌，已列入 invalidated 清单，不能进入最新观点或问答。
 
-每日云端审查应同时验证运行、数据、图形、分析正文和报告门禁，不能只检查 health。可直接使用上面的[每日审查提示词](docs/CLOUD_AGENT_DAILY_AUDIT_PROMPT.md)。
+Hermes 每天 08:30 的定时任务只生成只读盘前投资简报，读取行情、资金、新闻与已通过门禁的结论，不承担代码审查或修复。完整工程审计只在人工触发时运行，用于发布验收、事故排查或专项复审，可使用上面的[手工工程审计提示词](docs/CLOUD_AGENT_DAILY_AUDIT_PROMPT.md)；两者不得共用任务名称、输出模板或完成标准。
