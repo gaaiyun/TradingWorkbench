@@ -278,6 +278,63 @@ test("market API aggregates stored 5m bars for a requested 15m timeframe", async
   assert.equal(DB.calls[0].params[2], "5m");
 });
 
+test("derived intraday freshness follows the latest completed endpoint", async (t) => {
+  t.mock.method(Date, "now", () => Date.parse("2026-07-30T06:16:00Z"));
+  const base = {
+    symbol: "515880.SS",
+    profile_id: "cn-semi-comms",
+    timeframe: "5m",
+    source: "tencent",
+    fetched_at: "2026-07-30T06:15:58Z",
+    adjustment: "none",
+    quality: "good",
+  };
+  const rows = [
+    {
+      ...base,
+      ts: "2026-07-30T06:05:00Z",
+      as_of: "2026-07-30T06:05:00Z",
+      open: 0.540,
+      high: 0.542,
+      low: 0.539,
+      close: 0.541,
+      volume: 100,
+      freshness: "stale",
+    },
+    {
+      ...base,
+      ts: "2026-07-30T06:10:00Z",
+      as_of: "2026-07-30T06:10:00Z",
+      open: 0.541,
+      high: 0.544,
+      low: 0.540,
+      close: 0.543,
+      volume: 200,
+      freshness: "stale",
+    },
+    {
+      ...base,
+      ts: "2026-07-30T06:15:00Z",
+      as_of: "2026-07-30T06:15:00Z",
+      open: 0.543,
+      high: 0.545,
+      low: 0.542,
+      close: 0.544,
+      volume: 300,
+      freshness: "fresh",
+    },
+  ];
+  const response = await marketApi.onRequestGet({
+    request: request("/api/market?symbol=515880.SS&profile=cn-semi-comms&timeframe=15m&limit=1"),
+    env: { DB: new FakeD1({ rows: { market_bars: rows } }) },
+  });
+  const payload = await response.json();
+
+  assert.equal(payload.status, "ok");
+  assert.equal(payload.sources[0].freshness, "fresh");
+  assert.equal(payload.data[0].freshness, "fresh");
+});
+
 test("market API folds a session-close endpoint into the preceding aggregate bucket", async () => {
   const base = {
     profile_id: "cn-semi-comms",

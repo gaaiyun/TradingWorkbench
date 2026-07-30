@@ -125,7 +125,7 @@ def test_uncited_numeric_claims_are_saved_as_not_rated(tmp_path):
 
 
 @pytest.mark.unit
-def test_public_report_omits_unsafe_final_paragraphs_but_keeps_cited_conclusion(
+def test_public_report_fails_closed_when_any_final_paragraph_is_unsafe(
     tmp_path,
 ):
     packet = build_evidence_packet(
@@ -155,10 +155,12 @@ def test_public_report_omits_unsafe_final_paragraphs_but_keeps_cited_conclusion(
     manifest = __import__("json").loads((tmp_path / "report_manifest.json").read_text())
     complete = out.read_text()
 
-    assert manifest["analysisStatus"] == "rated"
-    assert manifest["auditStatus"] == "verified"
+    assert manifest["analysisStatus"] == "insufficient_evidence"
+    assert manifest["auditStatus"] == "legacy_unverified"
     assert manifest["claimValidation"]["omittedUnsafeParagraphs"] == 1
-    assert "The verified close is 180 [M1]." in complete
+    assert "FILTERED_UNSAFE_PUBLIC_CLAIM" in manifest["claimValidation"]["errorCodes"]
+    assert "The verified close is 180 [M1]." not in complete
+    assert "Not Rated" in complete
     assert "close is 999" not in complete
     assert "Internal draft close 999" not in complete
     assert "Internal draft close 999" in (
@@ -167,7 +169,7 @@ def test_public_report_omits_unsafe_final_paragraphs_but_keeps_cited_conclusion(
 
 
 @pytest.mark.unit
-def test_public_report_omits_semantic_claim_violations_and_keeps_safe_conclusion(
+def test_public_report_rejects_semantic_claim_violations_without_salvaging_rating(
     tmp_path,
 ):
     packet = build_evidence_packet(
@@ -201,11 +203,13 @@ def test_public_report_omits_semantic_claim_violations_and_keeps_safe_conclusion
     manifest = __import__("json").loads((tmp_path / "report_manifest.json").read_text())
     complete = out.read_text()
 
-    assert manifest["analysisStatus"] == "rated"
-    assert manifest["auditStatus"] == "verified"
+    assert manifest["analysisStatus"] == "insufficient_evidence"
+    assert manifest["auditStatus"] == "legacy_unverified"
     assert manifest["claimValidation"]["omittedUnsafeParagraphs"] == 3
-    assert manifest["claimValidation"]["status"] == "passed"
-    assert "The verified close is 180 [M2]." in complete
+    assert manifest["claimValidation"]["status"] == "failed"
+    assert "FILTERED_UNSAFE_PUBLIC_CLAIM" in manifest["claimValidation"]["errorCodes"]
+    assert "The verified close is 180 [M2]." not in complete
+    assert "Not Rated" in complete
     assert "2.86%" not in complete
     assert "主力资金正在流出" not in complete
     assert "宏观逆风" not in complete
@@ -246,10 +250,12 @@ def test_public_report_rejects_claims_disguised_as_structure_and_empty_shell(
         (tmp_path / "disguised" / "report_manifest.json").read_text()
     )
     disguised_complete = disguised.read_text(encoding="utf-8")
-    assert disguised_manifest["auditStatus"] == "verified"
+    assert disguised_manifest["auditStatus"] == "legacy_unverified"
+    assert disguised_manifest["analysisStatus"] == "insufficient_evidence"
     assert "macro headwinds" not in disguised_complete
     assert "宏观逆风" not in disguised_complete
-    assert "The verified close is 180 [M1]." in disguised_complete
+    assert "The verified close is 180 [M1]." not in disguised_complete
+    assert "Not Rated" in disguised_complete
 
     empty_state = {
         **_state(),
@@ -746,6 +752,17 @@ def test_window_rank_face_value_and_price_only_causality_fail_closed():
         "完全清仓面临错失急速反转的风险 [M2]。",
         "企稳升幅在当前环境下只是噪音 [M2]。",
         "该ETF理论上受成分股表现驱动 [M2]。",
+        "价格偏离幅度异常大 [M2]。",
+        "已实现波动率处于罕见区间 [M2]。",
+        "最新涨幅只是随机波动 [M1-M2]。",
+        "方向一致性让这一判断更加可信 [M1-M2]。",
+        "高波动环境下急剧反弹并不意外 [M2]。",
+        "份额拆分不会损害持有人利益 [M2]。",
+        "当前波动率远超常态 [M2]。",
+        "这次上涨只是偶然扰动 [M1-M2]。",
+        "多个方向相同的指标使结论更有把握 [M1-M2]。",
+        "剧烈波动可能孕育反转 [M2]。",
+        "份额拆分不会稀释投资者持有份额的价值 [M2]。",
     ]
     overreach_results = [
         validate_report_claims(text, packet)
@@ -770,6 +787,18 @@ def test_window_rank_face_value_and_price_only_causality_fail_closed():
         "UNSUPPORTED_CAUSAL_OR_PATH_CLAIM" in result["errorCodes"]
         for result in overreach_results
     )
+    capability_packet = {
+        **packet,
+        "bars": [dict(row) for row in packet["bars"]],
+    }
+    capability_packet["bars"][-1]["claimCapabilities"] = [
+        "distribution_degree",
+    ]
+    supported_degree = validate_report_claims(
+        "价格偏离幅度异常大 [M2]。",
+        capability_packet,
+    )
+    assert supported_degree["status"] == "passed"
 
 
 @pytest.mark.unit
@@ -793,6 +822,47 @@ def test_july_30_production_raw_decisions_remain_fail_closed(ticker):
 
     assert result["status"] == "failed"
     assert "UNSUPPORTED_DERIVED_NUMERIC_CLAIM" in result["errorCodes"]
+
+
+@pytest.mark.unit
+@pytest.mark.parametrize("ticker", ["515880.SS", "512480.SS"])
+def test_july_30_v6_decisions_cannot_keep_a_rating_after_filtering(
+    ticker,
+    tmp_path,
+):
+    report_dir = (
+        Path(__file__).resolve().parents[1]
+        / "public"
+        / "reports"
+        / ticker
+        / "2026-07-30-v6"
+    )
+    packet = __import__("json").loads(
+        (report_dir / "evidence_packet.json").read_text(encoding="utf-8")
+    )
+    raw_decision = (report_dir / "5_portfolio" / "decision.md").read_text(
+        encoding="utf-8"
+    )
+    state = {
+        **_state(),
+        "risk_debate_state": {"judge_decision": raw_decision},
+        "trade_date": "2026-07-30",
+        "analysis_status": "rated",
+        "evidence_packet": packet,
+    }
+
+    write_report_tree(state, ticker, tmp_path / ticker)
+    manifest = __import__("json").loads(
+        (tmp_path / ticker / "report_manifest.json").read_text(encoding="utf-8")
+    )
+
+    assert manifest["analysisStatus"] == "insufficient_evidence"
+    assert manifest["auditStatus"] == "legacy_unverified"
+    assert manifest["claimValidation"]["omittedUnsafeParagraphs"] > 0
+    assert (
+        "FILTERED_UNSAFE_PUBLIC_CLAIM"
+        in manifest["claimValidation"]["errorCodes"]
+    )
 
 
 @pytest.mark.unit
@@ -931,10 +1001,12 @@ def test_public_report_omits_invalid_citation_containers(tmp_path):
     manifest = __import__("json").loads((tmp_path / "report_manifest.json").read_text())
     complete = out.read_text()
 
-    assert manifest["analysisStatus"] == "rated"
-    assert manifest["auditStatus"] == "verified"
+    assert manifest["analysisStatus"] == "insufficient_evidence"
+    assert manifest["auditStatus"] == "legacy_unverified"
     assert manifest["claimValidation"]["omittedUnsafeParagraphs"] == 3
-    assert "Verified close is 180 [M2]." in complete
+    assert "FILTERED_UNSAFE_PUBLIC_CLAIM" in manifest["claimValidation"]["errorCodes"]
+    assert "Verified close is 180 [M2]." not in complete
+    assert "Not Rated" in complete
     assert "Invalid prefix assertion" not in complete
     assert "Cross-prefix range assertion" not in complete
     assert "Descending range assertion" not in complete

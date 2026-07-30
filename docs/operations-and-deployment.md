@@ -647,6 +647,7 @@ DAILY_RECOVERY_ENABLED = "true"
 
 1. A 股午休、收盘后和周末的 5 分钟序列应停在最近合法上海会话端点，不得仅因自然时间流逝变成 stale；美股按纽约常规时段和 DST 做同样核对。
 2. 在真实开盘时段制造或读取一个超过 30 分钟未更新的合法端点，仍必须是 stale。腾讯当前形成柱可以使用最多一个 5 分钟步长后的合法区间结束标签；超过该步长的未来时间、非整 5 分钟和时段外端点不得被 freshness 修正掩盖。
+3. 同一标的分别请求 5m、15m 和 1h：只要最新完成端点相同且未过期，三者顶层状态必须一致为 `ok`；聚合桶内较早记录曾标为 stale 不能拖累当前周期。将最新端点改成真实延迟后，三个周期仍应共同转为 `stale`。
 3. 检查 cron 摘要的 `discovered / staged / conflicted`。幂等重复不计冲突；真实唯一键冲突必须产生 `SCHEDULER_STAGE_CONFLICT`。
 4. `intradayCollect / intradaySignal / newsCollect / usIntradayCollect` 超过 30 分钟仍未执行时应以 `STALE_SLOT_EXPIRED` 收口；一次性日线和完整分析不得被该规则取消。
 5. 定时 5 分钟 provider 单标的最多返回 96 根给写入层；确认这只是单轮工作量限制，D1 既有 90 天历史没有被删除。

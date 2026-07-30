@@ -26,12 +26,6 @@ const DERIVED_TIMEFRAMES = {
   "4h": { source: "5m", milliseconds: 4 * 60 * 60 * 1000, factor: 48 },
 };
 
-const FRESHNESS_RANK = {
-  fresh: 0,
-  stale: 1,
-  unknown: 2,
-};
-
 const SOURCE_OVERLAP_FACTOR = 6;
 const INTRADAY_FRESHNESS_MAX_AGE_MS = {
   "1m": 26 * 60 * 1000,
@@ -53,12 +47,6 @@ function aggregateGroup(group, timeframe, bucketTimestamp) {
   const first = sorted[0];
   const last = sorted.at(-1);
   const adjustments = new Set(sorted.map(({ adjustment }) => adjustment).filter(Boolean));
-  const freshness = sorted.reduce((worst, row) => (
-    (FRESHNESS_RANK[row.freshness] ?? FRESHNESS_RANK.unknown)
-      > (FRESHNESS_RANK[worst] ?? FRESHNESS_RANK.unknown)
-      ? row.freshness
-      : worst
-  ), "fresh");
   return {
     symbol: last.symbol,
     profile_id: last.profile_id,
@@ -72,7 +60,7 @@ function aggregateGroup(group, timeframe, bucketTimestamp) {
     source: last.source,
     as_of: sorted.reduce((latest, row) => laterTimestamp(latest, row.as_of), null),
     fetched_at: sorted.reduce((latest, row) => laterTimestamp(latest, row.fetched_at), null),
-    freshness,
+    freshness: last.freshness,
     adjustment: adjustments.size === 1 ? [...adjustments][0] : "unknown",
     quality: sorted.every(({ quality }) => quality === "good") ? "good" : "partial",
   };
@@ -114,7 +102,7 @@ function marketEnvelope(rows, timeframe, now = Date.now()) {
   );
   const maxAge = INTRADAY_FRESHNESS_MAX_AGE_MS[timeframe];
   const timestamp = Date.parse(latest?.as_of ?? latest?.ts ?? "");
-  const market = timeframe === "5m" ? marketForSeries(latest) : null;
+  const market = maxAge ? marketForSeries(latest) : null;
   const sessionFreshness = market
     ? sessionAwareFreshness({
       asOf: latest?.as_of ?? latest?.ts,

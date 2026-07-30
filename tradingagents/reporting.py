@@ -231,6 +231,52 @@ _CAUSAL_OR_PATH_RE = re.compile(
     r"independent\s+indicators?)",
     re.IGNORECASE,
 )
+_QUALITATIVE_INFERENCE_CLASSIFIERS = {
+    "distribution_degree": re.compile(
+        r"(?:(?:价格|收盘|涨幅|跌幅|偏离|波动率|风险|水平|区间)"
+        r".{0,24}?(?:异常(?:大|高|低)?|罕见|少见|极端|极高|极低|显著|"
+        r"远超常态|超出常态|偏离常态)|"
+        r"(?:异常(?:大|高|低)?|罕见|少见|极端|极高|极低|显著|"
+        r"远超常态|超出常态|偏离常态)"
+        r".{0,24}?(?:价格|收盘|涨幅|跌幅|偏离|波动率|风险|水平|区间)|"
+        r"(?:unusual(?:ly)?|rare|extreme|exceptional|significant(?:ly)?)"
+        r".{0,24}?(?:price|return|deviation|volatility|risk|level|range))",
+        re.IGNORECASE,
+    ),
+    "randomness_test": re.compile(
+        r"(?:随机波动|随机噪声|只是随机|只是噪音|只是噪声|"
+        r"(?:只是)?偶然(?:扰动|波动)|偶发(?:扰动|波动)|"
+        r"不具备.{0,12}?(?:信号|方向性)|"
+        r"\b(?:random(?:\s+move)?|noise|no\s+signal)\b)",
+        re.IGNORECASE,
+    ),
+    "confidence_calibration": re.compile(
+        r"(?:(?:方向|指标|信号).{0,12}?(?:一致|相同|同向)"
+        r".{0,28}?(?:可信|置信|可靠|确信)|"
+        r"(?:多个|多项).{0,16}?(?:方向相同|同向).{0,28}?"
+        r"(?:有把握|可信|可靠)|"
+        r"(?:一致性|confirmation).{0,28}?"
+        r"(?:confidence|credible|reliable|可信|置信|可靠))",
+        re.IGNORECASE,
+    ),
+    "volatility_path": re.compile(
+        r"(?:(?:波动率|高波动|剧烈波动|大幅波动|波动环境|volatility)"
+        r".{0,40}?(?:孕育|暗示|预示|伴随|带来|产生|反弹|反转|"
+        r"清仓|上涨|下跌|上行|下行|"
+        r"rebound|reversal|rally|selloff|risk)|"
+        r"(?:反弹|反转|上涨|下跌|rebound|reversal)"
+        r".{0,24}?(?:并不意外|可预期|来自|源于)"
+        r".{0,16}?(?:波动|volatility)?)",
+        re.IGNORECASE,
+    ),
+    "corporate_action_effect": re.compile(
+        r"(?:(?:份额)?拆分|分红|除权|公司行动|corporate\s+action|split)"
+        r".{0,48}?(?:中性|不(?:会)?(?:损害|影响|改变|稀释)|"
+        r"稀释|权益|利益|持有份额的价值|"
+        r"neutral|dilut|does\s+not\s+(?:harm|affect|change))",
+        re.IGNORECASE,
+    ),
+}
 _FACE_VALUE_RE = re.compile(
     r"(?:击穿|跌破|低于|高于|突破|below|above|breach(?:ed)?)"
     r".{0,32}?(?:面值|票面价值|par\s+value)",
@@ -270,11 +316,6 @@ _NON_CONCLUSION_MARKER_RE = re.compile(
     r"\bif\b|\bwhen\b|\bwatch\b|\bwait\b|\bmonitor\b|\bnext\s+step\b)",
     re.IGNORECASE,
 )
-_BLOCKING_PUBLIC_FILTER_ERRORS = frozenset({
-    "NO_SUBSTANTIVE_SUPPORTED_CONCLUSION",
-})
-
-
 def _packet_evidence_ids(packet: dict) -> set[str]:
     ids = set()
     for key in (
@@ -456,11 +497,25 @@ def _has_unsupported_window_rank(
 
 def _has_unsupported_causal_or_path_claim(
     paragraph: str,
+    packet_rows: dict[str, dict],
     paragraph_ids: set[str],
 ) -> bool:
-    del paragraph_ids  # Generic news/action citations do not prove causality.
+    capabilities: set[str] = set()
+    for evidence_id in paragraph_ids:
+        raw = (packet_rows.get(evidence_id) or {}).get("claimCapabilities") or []
+        if isinstance(raw, str):
+            raw = [raw]
+        if isinstance(raw, (list, tuple, set)):
+            capabilities.update(str(value).strip() for value in raw if str(value).strip())
     for sentence in _CLAUSE_SPLIT_RE.split(str(paragraph or "")):
         for match in _CAUSAL_OR_PATH_RE.finditer(sentence):
+            if _HYPOTHETICAL_PREFIX_RE.search(sentence[:match.start()]):
+                continue
+            return True
+        for capability, classifier in _QUALITATIVE_INFERENCE_CLASSIFIERS.items():
+            match = classifier.search(sentence)
+            if not match or capability in capabilities:
+                continue
             if _HYPOTHETICAL_PREFIX_RE.search(sentence[:match.start()]):
                 continue
             return True
@@ -721,6 +776,7 @@ def validate_report_claims(text: str, packet: dict) -> dict:
             known_paragraph_ids
             and _has_unsupported_causal_or_path_claim(
                 claim_text,
+                packet_rows,
                 known_paragraph_ids,
             )
         ):
@@ -841,6 +897,7 @@ def _filter_public_final_decision(text: str, packet: dict) -> tuple[str, int, se
             known_paragraph_ids
             and _has_unsupported_causal_or_path_claim(
                 claim_text,
+                packet_rows,
                 known_paragraph_ids,
             )
         )
@@ -1215,9 +1272,9 @@ def write_report_tree(
     )
     if packet:
         claim_validation["omittedUnsafeParagraphs"] = omitted_unsafe_paragraphs
-        blocking_filter_errors = (
-            omitted_error_codes.intersection(_BLOCKING_PUBLIC_FILTER_ERRORS)
-        )
+        blocking_filter_errors = set(omitted_error_codes)
+        if omitted_unsafe_paragraphs:
+            blocking_filter_errors.add("FILTERED_UNSAFE_PUBLIC_CLAIM")
         for error_code in sorted(blocking_filter_errors):
             if error_code not in claim_validation["errorCodes"]:
                 claim_validation["errorCodes"].append(error_code)
