@@ -1,0 +1,46 @@
+{
+  "schemaVersion": 1,
+  "ticker": "515880.SS",
+  "tradeDate": "2026-07-30",
+  "generatedAt": "2026-07-30T06:00:02.096903+00:00",
+  "analysisStatus": "insufficient_evidence",
+  "auditStatus": "legacy_unverified",
+  "claimValidation": {
+    "status": "failed",
+    "errorCodes": [
+      "UNSUPPORTED_DERIVED_NUMERIC_CLAIM"
+    ],
+    "citationCount": 24,
+    "unknownEvidenceIds": [],
+    "invalidEvidenceCitations": [],
+    "uncitedNumericParagraphs": 0,
+    "unsupportedDerivedNumericParagraphs": 3,
+    "unsupportedSingleSnapshotTrendParagraphs": 0,
+    "contradictedMovingAverageAlignmentParagraphs": 0,
+    "unsupportedActorOrFlowAttributionParagraphs": 0,
+    "omittedUnsafeParagraphs": 0
+  },
+  "evidence": {
+    "schemaVersion": "EvidencePacketV1",
+    "asOf": "2026-07-30T05:50:45Z",
+    "contentHash": "ae78c3e871bb955e08e2b82090bc78d5247e48b0a8a3faa6ac99f33fb01a0ecf",
+    "packetFileHash": "070d41f68e6cfd1df804b6bab7bf89eb7e349476becb1839f8e4d6be0d5eb1a4",
+    "status": "ok",
+    "marketHistory": {
+      "source": "tencent",
+      "adjustment": "qfq",
+      "barCount": 644,
+      "startAt": "2023-11-29T16:00:00Z",
+      "endAt": "2026-07-28T16:00:00Z"
+    }
+  },
+  "identity": {
+    "scope": "profile",
+    "kind": "manual",
+    "runId": "30517735865",
+    "profileId": "cn-semi-comms",
+    "requestId": null,
+    "slotId": null,
+    "scheduledFor": null
+  }
+}
