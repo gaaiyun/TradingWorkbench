@@ -583,6 +583,7 @@ def test_numeric_validation_ignores_structural_dates_and_indicator_parameters():
     text = (
         "# 1. GOOGL 2026-07-23\n\n"
         "Generated: 2026-07-26T05:39:49.782261+00:00\n\n"
+        "The short-form trade date is 07-29.\n\n"
         "RSI(14)、MACD 12-26-9 和 50日指数移动平均线是指标参数。\n\n"
         "The close was 180 without a citation.\n\n"
         "The verified close was 180 [M1]."
