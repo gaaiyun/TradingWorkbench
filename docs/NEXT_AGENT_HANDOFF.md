@@ -16,7 +16,7 @@
 
 ## 1. 当前结论
 
-2026-07-31 本轮发布修复包含：Pages 以 `public/data/report-audit.json` 为权威 allowlist 生成 `build/pages-public`，旧 Manifest 即使仍写 verified、但当前索引已 invalidated，也不能发布角色分卷；未验证报告的完整正文和原 raw 同名路径始终生成统一 `Not Rated` 安全内容，以覆盖旧部署/CDN 可能缓存的历史评级，不再用正文 marker 判断安全。`/api/report` 无 selector 和带 selector 都逐请求校验 Manifest 与当前审计索引，门禁和 raw 响应均为 `no-store`，未验证 raw 返回 409。A 股 5m 在采集层拒绝 Yahoo 午休/零成交平盘端点，读取层按交易日选单一来源，migration `0019` 精确清理既有脏行。报告校验补齐“实现波动率”和中文跨月日期的结构数字识别，最终提示词不再诱导无 capability 的传导路径、置信度或公司行动效果。Hermes 原 Job `8dc0823402e7` 已从工程审计原地切换为 08:30 盘前投资简报；旧工程审计 Skill 保留为手工排障，不新建重复 cron。上线真相仍须按 §1.5 的 GitHub、Pages、Worker 三方完整 SHA 和生产端点实时回读，不以本文中的旧短 SHA替代。
+2026-07-31 本轮发布修复包含：Pages 以 `public/data/report-audit.json` 为权威 allowlist 生成 `build/pages-public`，旧 Manifest 即使仍写 verified、但当前索引已 invalidated，也不能发布角色分卷；invalidated、insufficient-evidence、claim-failed 及其它未验证报告的完整正文和原 raw 同名路径生成统一 `Not Rated` 安全内容，以覆盖旧部署/CDN 可能缓存的历史评级。历史兼容例外严格限定为审计索引按完整路径登记且未失败的 `legacy_unverified`：即使 identity 上线前没有 Manifest，完整报告与各原始分卷仍可在持久“历史未验证”警告下只读，不能进入 latest、Chat 或 Evidence。`/api/report` 的门禁和 raw 响应均为 `no-store`。A 股 5m 在采集层拒绝 Yahoo 午休/零成交平盘端点，读取层按交易日选单一来源，migration `0019` 精确清理既有脏行。报告校验补齐“实现波动率”和中文跨月日期的结构数字识别，最终提示词不再诱导无 capability 的传导路径、置信度或公司行动效果。Hermes 原 Job `8dc0823402e7` 已从工程审计原地切换为 08:30 盘前投资简报；旧工程审计 Skill 保留为手工排障，不新建重复 cron。上线真相仍须按 §1.5 的 GitHub、Pages、Worker 三方完整 SHA 和生产端点实时回读，不以本文中的旧短 SHA替代。
 
 多 profile、运行身份隔离、Chat/Evidence owner、调度可靠性、提醒 shadow 账本、Worker/Pages 部署指纹，以及独立的全天资讯采集任务均已合入 `main`。
 
@@ -570,6 +570,7 @@ gh workflow run deploy-monitor.yml --repo gaaiyun/TradingWorkbench --ref main
 | 2026-07-29 | 修复用户截图红框：标的专属隔夜驱动篮子、精确日涨跌、无 verified 报告时的规则化主题观察；Evidence 与问答门禁不变 | 功能提交 `328cda9`；CI `30383472709`、Pages `30383472699`、Monitor `30383498898` 全绿；三方 SHA 对齐；1440px/390px 生产实测 512480 左侧、标题、叙事均为 -7.38%，主题观察显示资金偏弱，0 溢出和控制台错误 |
 | 2026-07-29 | 证伪 UTC 截断造成的伪周末结论；增加显式 `trade_date` 与生产业务日门禁；补齐 SOXX/NVDA 独立美股 5m 采集、纽约时段/DST、东财北京时间降级和未完成柱过滤 | 功能提交 `64934de`；CI `30387614133`、Pages `30387770552`、Monitor `30387613679` 全绿；三只资金序列周末 0、日线缺口 0；SOXX/NVDA 各 370 根且非整 5 分钟行 0；首次两条临时柱已精确删除 |
 | 2026-07-30 | 全局运行、数据、图形、分析和报告正文复审：修复 Worker CPU 工作单元与积压收口、收盘聚合伪 K 线、SOXX/NVDA 分时 UI、新闻层级可见性、任务状态误导、报告未来截止与拆分污染、无效报告仍显示建议等问题；新增云端 Agent 每日全局审查提示词；补齐日报提交后的显式 Pages 部署、波动率周期语义、临时算术提示词约束、历史不安全评级失效和 VolGuard live→snapshot 健康判定 | 本地前端 `120/120`、Functions `419 passed / 1 skipped`、Python `694 passed / 2 skipped`（Windows 使用 `PYTHONUTF8=1`）、Ruff 全绿；代码 CI `30526207092` 全绿；真实单标的 daily-analysis `30526506641` 的分析、持久化和部署 dispatch 均成功，自动 Pages run `30527742906` 的迁移、部署、身份落库、SHA 与资金业务日校验全部成功；最终生产证据见 §1.6 |
+| 2026-07-31 | 修复发布过滤收紧后无 Manifest 的 legacy 档案 404 回归：仅按审计索引完整路径恢复 `legacy_unverified` 原文只读并加持久警告；invalidated、insufficient-evidence 和 claim-failed raw 继续封闭 | RED 复现 API 404 与 Pages 产物缺失；定向边界 `3/3`、Functions `431 passed / 1 skipped`、frontend `120/120`；生产 commit、run 与 API 证据待本次部署后回填 |
 
 ## 1.6 2026-07-30 全局质量复审
 

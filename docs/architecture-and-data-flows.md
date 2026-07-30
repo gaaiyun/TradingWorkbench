@@ -325,13 +325,13 @@ flowchart TD
 - workflow run name 编码 identity；
 - Python 把 identity 写入 history、Manifest 和 Evidence；
 - `/api/history`、`/api/latest`、`/api/runs`、`/api/report-audit` 和 `/api/report` 使用 `profile` 或 `requestId` 过滤；`/api/latest` 无论是否带 selector 都会再以 `report-audit.json` 做 verified-only 交叉门禁，后续被 invalidated 的报告不能继续沿历史批次冒充“最新已验证观点”；
-- identity 上线前生成的报告只作为显式 `legacy` 数据源读取；`legacy_unverified` 可以带警告阅读，`invalidated` 只在历史审计出现，两者都不能进入问答；
-- 报告正文请求带 selector 时，服务端读取相邻 Manifest 并校验 identity。
+- identity 上线前生成的报告只作为显式 `legacy` 数据源读取；只有 `report-audit.json` 按完整报告根路径登记、且非 `invalidated / insufficient_evidence / claim-failed` 的 `legacy_unverified` 可以带持久警告只读原文，即使没有相邻 Manifest；`invalidated` 只在历史审计出现，两者都不能进入 latest、问答或 Evidence；
+- 非 legacy 报告正文请求带 selector 时，服务端读取相邻 Manifest 并校验 identity；legacy selector 只与审计条目的显式 `legacy` identity 匹配，不猜 profile。
 - 最终结论的派生数字必须先成为 Evidence ledger 的确定性字段；Agent 不能在正文临时
   计算收益率、比例、均线偏离或交易日数量。单个指标快照不能支持“扩张/收敛/加速”
   等时间趋势，均线排列还要由最新收盘、MA20、MA60 的实际顺序做确定性校验。
 
-旧报告可以继续阅读，但服务端不会为缺失 identity 的历史数据猜 profile。
+符合上述审计 allowlist 的旧报告可以继续阅读，但服务端不会为缺失 identity 的历史数据猜 profile，也不会因“缺 Manifest”泛化放行未登记目录。
 
 ## 9. Chat 和 Evidence scope
 
@@ -481,7 +481,7 @@ Workbench Pages `/api/health` 另返回：
 }
 ```
 
-`deploy-workbench.yml` 在发布前生成 `public/data/deployment.json`，再由 `scripts/prepare-pages-public.mjs` 生成独立的 `build/pages-public` 发布目录。verified 报告完整复制；未验证报告只复制 Manifest、EvidencePacket 和 fail-closed `complete_report.md`，角色分卷不进入 Pages artifact。workflow 只部署该构建目录，并先直接读取 `/data/deployment.json` 验证静态 manifest，再读取 `/api/health` 验证运行时 SHA 与时间；因此静态发布边界、Pages Functions 与 Worker 都具有可外部验证的版本闭环。
+`deploy-workbench.yml` 在发布前生成 `public/data/deployment.json`，再由 `scripts/prepare-pages-public.mjs` 生成独立的 `build/pages-public` 发布目录。verified 报告完整复制；审计索引按完整路径登记且未失败的 `legacy_unverified` 历史目录复制原文并给每个 Markdown 加只读历史未验证警告；invalidated、insufficient-evidence、claim-failed 及其它未验证报告只复制安全元数据与 fail-closed `complete_report.md`，角色分卷写成 `Not Rated` 墓碑。workflow 只部署该构建目录，并先直接读取 `/data/deployment.json` 验证静态 manifest，再读取 `/api/health` 验证运行时 SHA 与时间；因此静态发布边界、Pages Functions 与 Worker 都具有可外部验证的版本闭环。
 
 报告产物由 `daily-analysis.yml` 内的 `GITHUB_TOKEN` 提交到 `main`。GitHub 对机器人 push 有工作流递归保护，不能把 `deploy-workbench.yml` 的 `on: push` 当作可靠级联路径。因此同一 job 在报告持久化成功后以 `actions: write` 的最小权限显式执行 `workflow_dispatch`。部署 job 自己重新检出运行时最新 `main`，并受 `cloudflare-workbench` 并发锁保护；这既覆盖报告数据提交，也避免引入额外 PAT。若持久化失败则不 dispatch，若 dispatch 失败则日报 job 失败。
 

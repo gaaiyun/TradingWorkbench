@@ -19,8 +19,10 @@ function writeReport(publicDir, name, manifest, completeReport) {
   const reportDir = path.join(publicDir, "reports", name);
   fs.mkdirSync(path.join(reportDir, "1_analysts"), { recursive: true });
   fs.mkdirSync(path.join(reportDir, "5_portfolio"), { recursive: true });
-  writeJson(path.join(reportDir, "report_manifest.json"), manifest);
-  writeJson(path.join(reportDir, "evidence_packet.json"), { status: "ok" });
+  if (manifest) {
+    writeJson(path.join(reportDir, "report_manifest.json"), manifest);
+    writeJson(path.join(reportDir, "evidence_packet.json"), { status: "ok" });
+  }
   fs.writeFileSync(path.join(reportDir, "complete_report.md"), completeReport, "utf8");
   fs.writeFileSync(path.join(reportDir, "1_analysts", "market.md"), "raw analyst direction", "utf8");
   fs.writeFileSync(path.join(reportDir, "5_portfolio", "decision.md"), "评级：Underweight", "utf8");
@@ -72,6 +74,18 @@ test("Pages deployment artifact replaces raw sections of unverified reports with
     { auditStatus: "legacy_unverified", analysisStatus: "insufficient_evidence" },
     "**Not Rated**\n\nThe generated analysis did not pass the evidence claim gate, so the consolidated report intentionally withholds directional, allocation, and trading conclusions.\n\n**Sell**\n",
   );
+  writeReport(
+    publicDir,
+    path.join("510050.SS", "2026-07-10"),
+    null,
+    "# 上证50ETF历史报告\n\n历史评级：Hold\n",
+  );
+  writeReport(
+    publicDir,
+    path.join("BLOCKED-LEGACY", "2026-07-29"),
+    null,
+    "# Unsafe incomplete report\n\n评级：Sell\n",
+  );
   writeJson(path.join(publicDir, "data", "report-audit.json"), {
     reports: [
       {
@@ -85,6 +99,22 @@ test("Pages deployment artifact replaces raw sections of unverified reports with
         auditStatus: "invalidated",
         analysisStatus: "rated",
         claimValidation: { status: "passed", omittedUnsafeParagraphs: 0 },
+      },
+      {
+        ticker: "510050.SS",
+        tradeDate: "2026-07-10",
+        report: "reports/510050.SS/2026-07-10/complete_report.md",
+        auditStatus: "legacy_unverified",
+        analysisStatus: null,
+        claimValidation: null,
+      },
+      {
+        ticker: "BLOCKED-LEGACY",
+        tradeDate: "2026-07-29",
+        report: "reports/BLOCKED-LEGACY/2026-07-29/complete_report.md",
+        auditStatus: "legacy_unverified",
+        analysisStatus: "insufficient_evidence",
+        claimValidation: { status: "failed", omittedUnsafeParagraphs: 1 },
       },
     ],
   });
@@ -135,6 +165,24 @@ test("Pages deployment artifact replaces raw sections of unverified reports with
   );
   assert.match(smuggled, /Not Rated/);
   assert.doesNotMatch(smuggled, /Sell/);
+
+  const legacyDir = path.join(outputDir, "reports", "510050.SS", "2026-07-10");
+  const legacyComplete = fs.readFileSync(path.join(legacyDir, "complete_report.md"), "utf8");
+  const legacyRaw = fs.readFileSync(path.join(legacyDir, "1_analysts", "market.md"), "utf8");
+  assert.match(legacyComplete, /Historical unverified report/i);
+  assert.match(legacyComplete, /历史评级：Hold/);
+  assert.match(legacyRaw, /Historical unverified report/i);
+  assert.match(legacyRaw, /raw analyst direction/);
+
+  const blockedLegacyDir = path.join(outputDir, "reports", "BLOCKED-LEGACY", "2026-07-29");
+  assert.match(
+    fs.readFileSync(path.join(blockedLegacyDir, "complete_report.md"), "utf8"),
+    /Not Rated/,
+  );
+  assert.doesNotMatch(
+    fs.readFileSync(path.join(blockedLegacyDir, "1_analysts", "market.md"), "utf8"),
+    /raw analyst direction/,
+  );
 });
 
 test("deploy workflow publishes the filtered artifact instead of public", () => {

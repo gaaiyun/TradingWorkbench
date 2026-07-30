@@ -793,6 +793,136 @@ test("profile-scoped report reads require a matching manifest and keep nested re
   }
 });
 
+test("legacy unverified 510050 archive remains readable without a manifest and is prominently labeled", async () => {
+  const originalFetch = globalThis.fetch;
+  const base = "reports/510050.SS/2026-07-10";
+  const rawPath = `${base}/1_analysts/market.md`;
+  const completePath = `${base}/complete_report.md`;
+  const fetched = [];
+  globalThis.fetch = async (url) => {
+    const value = String(url);
+    fetched.push(value);
+    if (value.includes("/data/report-audit.json")) {
+      return Response.json({
+        reports: [{
+          ticker: "510050.SS",
+          tradeDate: "2026-07-10",
+          report: completePath,
+          auditStatus: "legacy_unverified",
+          analysisStatus: null,
+          claimValidation: null,
+          identity: {
+            scope: "legacy",
+            kind: "legacy",
+            runId: null,
+            profileId: null,
+            requestId: null,
+            slotId: null,
+            scheduledFor: null,
+          },
+        }],
+      });
+    }
+    if (value.includes("/report_manifest.json")) {
+      return new Response(null, { status: 404 });
+    }
+    if (value.includes(`/${rawPath}`)) {
+      return new Response("历史市场分析原文", { status: 200 });
+    }
+    if (value.includes(`/${completePath}`)) {
+      return new Response("历史完整报告原文", { status: 200 });
+    }
+    return new Response(null, { status: 404 });
+  };
+  try {
+    for (const [reportPath, originalText] of [
+      [completePath, "历史完整报告原文"],
+      [rawPath, "历史市场分析原文"],
+    ]) {
+      const response = await getReport({
+        request: new Request(
+          `https://workbench.test/api/report?path=${encodeURIComponent(reportPath)}`,
+        ),
+      });
+      assert.equal(response.status, 200);
+      assert.equal(response.headers.get("cache-control"), "no-store");
+      assert.equal(response.headers.get("x-report-audit-status"), "legacy_unverified");
+      const body = await response.text();
+      assert.match(body, /Historical unverified report/i);
+      assert.match(body, new RegExp(originalText));
+    }
+    assert.equal(fetched.some((url) => url.includes("/report_manifest.json")), false);
+  } finally {
+    globalThis.fetch = originalFetch;
+  }
+});
+
+test("missing manifests do not reopen invalidated or claim-failed legacy raw reports", async () => {
+  const originalFetch = globalThis.fetch;
+  const cases = [
+    {
+      base: "reports/515880.SS/2026-07-30-v9",
+      auditStatus: "invalidated",
+      analysisStatus: "rated",
+      claimValidation: { status: "passed", omittedUnsafeParagraphs: 0 },
+    },
+    {
+      base: "reports/515880.SS/2026-07-29",
+      auditStatus: "legacy_unverified",
+      analysisStatus: "insufficient_evidence",
+      claimValidation: { status: "failed", omittedUnsafeParagraphs: 1 },
+    },
+  ];
+  try {
+    for (const item of cases) {
+      const rawPath = `${item.base}/1_analysts/market.md`;
+      const completePath = `${item.base}/complete_report.md`;
+      let rawFetched = false;
+      globalThis.fetch = async (url) => {
+        const value = String(url);
+        if (value.includes("/data/report-audit.json")) {
+          return Response.json({
+            reports: [{
+              ticker: "515880.SS",
+              tradeDate: "2026-07-30",
+              report: completePath,
+              auditStatus: item.auditStatus,
+              analysisStatus: item.analysisStatus,
+              claimValidation: item.claimValidation,
+            }],
+          });
+        }
+        if (value.includes("/report_manifest.json")) {
+          return new Response(null, { status: 404 });
+        }
+        if (value.includes(`/${rawPath}`)) {
+          rawFetched = true;
+          return new Response("unsafe raw section", { status: 200 });
+        }
+        return new Response(null, { status: 404 });
+      };
+
+      const raw = await getReport({
+        request: new Request(
+          `https://workbench.test/api/report?path=${encodeURIComponent(rawPath)}`,
+        ),
+      });
+      assert.equal(raw.status, 409);
+      assert.equal(rawFetched, false);
+
+      const complete = await getReport({
+        request: new Request(
+          `https://workbench.test/api/report?path=${encodeURIComponent(completePath)}`,
+        ),
+      });
+      assert.equal(complete.status, 200);
+      assert.match(await complete.text(), /Not Rated/);
+    }
+  } finally {
+    globalThis.fetch = originalFetch;
+  }
+});
+
 test("profile-scoped claim-failed reports keep raw agent sections off the public report API", async () => {
   const originalFetch = globalThis.fetch;
   const base = "reports/515880.SS/2026-07-29";

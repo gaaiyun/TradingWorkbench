@@ -34,6 +34,39 @@ function claimGatePassed(claimValidation) {
     && Number(claimValidation?.omittedUnsafeParagraphs || 0) === 0;
 }
 
+function readableLegacyArchive(auditEntry, completeReportPath) {
+  return auditEntry?.report === completeReportPath
+    && auditEntry?.auditStatus === "legacy_unverified"
+    && auditEntry?.analysisStatus !== "insufficient_evidence"
+    && auditEntry?.claimValidation?.status !== "failed";
+}
+
+function legacyArchiveBanner(auditEntry) {
+  const ticker = /^[A-Za-z0-9._-]+$/.test(String(auditEntry?.ticker || ""))
+    ? String(auditEntry.ticker)
+    : "Unknown";
+  const tradeDate = /^\d{4}-\d{2}-\d{2}$/.test(String(auditEntry?.tradeDate || ""))
+    ? String(auditEntry.tradeDate)
+    : "unknown";
+  return "# Historical unverified report\n\n"
+    + `> **Archive notice:** ${ticker} · ${tradeDate}. This is read-only historical output `
+    + "that has not passed the current evidence gate. It is not current research or a "
+    + "trading recommendation.\n\n---\n\n";
+}
+
+async function serveLegacyArchive(path, auditEntry) {
+  const response = await proxyRaw(path, { cacheSeconds: 0 });
+  if (!response.ok) return response;
+  return new Response(`${legacyArchiveBanner(auditEntry)}${await response.text()}`, {
+    status: 200,
+    headers: {
+      "Content-Type": "text/markdown; charset=utf-8",
+      "Cache-Control": "no-store",
+      "X-Report-Audit-Status": "legacy_unverified",
+    },
+  });
+}
+
 // GET /api/report?path=reports/NVDA/2026-07-10/complete_report.md
 // 只允许 reports/ 下的 .md，防任意路径代理。
 export async function onRequestGet({ request }) {
@@ -50,22 +83,6 @@ export async function onRequestGet({ request }) {
   }
   const parts = path.split("/");
   if (parts.length < 4) return json({ error: "报告不存在" }, 404);
-  const manifestPath = `${parts.slice(0, 3).join("/")}/report_manifest.json`;
-  const manifestResponse = await proxyRaw(manifestPath, { cacheSeconds: 0 });
-  if (!manifestResponse.ok) {
-    return manifestResponse.status === 404
-      ? json({ error: "报告不存在" }, 404)
-      : manifestResponse;
-  }
-  let manifest;
-  try {
-    manifest = await manifestResponse.json();
-  } catch {
-    return json({ error: "报告不存在" }, 404);
-  }
-  if (selectors.hasSelector && !identityMatches(manifest?.identity, selectors)) {
-    return json({ error: "报告不存在" }, 404);
-  }
   const completeReportPath = `${parts.slice(0, 3).join("/")}/complete_report.md`;
   // 门禁状态必须逐请求读取；报告失效后不能继续命中旧的 verified 缓存。
   const auditResponse = await proxyRaw("data/report-audit.json", { cacheSeconds: 0 });
@@ -79,6 +96,36 @@ export async function onRequestGet({ request }) {
     } catch {
       auditEntry = null;
     }
+  }
+  if (readableLegacyArchive(auditEntry, completeReportPath)) {
+    if (selectors.hasSelector && !identityMatches(auditEntry?.identity, selectors)) {
+      return json({ error: "报告不存在" }, 404);
+    }
+    return serveLegacyArchive(path, auditEntry);
+  }
+
+  const manifestPath = `${parts.slice(0, 3).join("/")}/report_manifest.json`;
+  const manifestResponse = await proxyRaw(manifestPath, { cacheSeconds: 0 });
+  if (!manifestResponse.ok) {
+    if (auditEntry) {
+      return path.endsWith("/complete_report.md")
+        ? safeFailClosedReport(auditEntry)
+        : json({
+          error: "报告未通过证据门禁，仅可读取完整的 Not Rated 报告",
+        }, 409);
+    }
+    return manifestResponse.status === 404
+      ? json({ error: "报告不存在" }, 404)
+      : manifestResponse;
+  }
+  let manifest;
+  try {
+    manifest = await manifestResponse.json();
+  } catch {
+    return json({ error: "报告不存在" }, 404);
+  }
+  if (selectors.hasSelector && !identityMatches(manifest?.identity, selectors)) {
+    return json({ error: "报告不存在" }, 404);
   }
   const verified = auditEntry?.auditStatus === "verified"
     && auditEntry?.analysisStatus === "rated"

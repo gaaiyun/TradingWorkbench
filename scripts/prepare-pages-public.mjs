@@ -66,6 +66,41 @@ function claimGatePassed(claimValidation) {
     && Number(claimValidation?.omittedUnsafeParagraphs || 0) === 0;
 }
 
+function readableLegacyArchive(auditEntry, completePath) {
+  return auditEntry?.report === completePath
+    && auditEntry?.auditStatus === "legacy_unverified"
+    && auditEntry?.analysisStatus !== "insufficient_evidence"
+    && auditEntry?.claimValidation?.status !== "failed";
+}
+
+function legacyArchiveBanner(auditEntry, reportDir) {
+  const { ticker, tradeDate } = safeReportIdentity(auditEntry, reportDir);
+  return "# Historical unverified report\n\n"
+    + `> **Archive notice:** ${ticker} · ${tradeDate}. This is read-only historical output `
+    + "that has not passed the current evidence gate. It is not current research or a "
+    + "trading recommendation.\n\n---\n\n";
+}
+
+function copyLegacyArchive(sourceDir, targetDir, auditEntry) {
+  const banner = legacyArchiveBanner(auditEntry, sourceDir);
+  fs.cpSync(sourceDir, targetDir, { recursive: true });
+  for (const entry of fs.readdirSync(sourceDir, { withFileTypes: true })) {
+    const sourcePath = path.join(sourceDir, entry.name);
+    const targetPath = path.join(targetDir, entry.name);
+    if (entry.isDirectory()) {
+      copyLegacyArchive(sourcePath, targetPath, auditEntry);
+      continue;
+    }
+    if (entry.isFile() && entry.name.endsWith(".md")) {
+      fs.writeFileSync(
+        targetPath,
+        `${banner}${fs.readFileSync(sourcePath, "utf8")}`,
+        "utf8",
+      );
+    }
+  }
+}
+
 function reportIsCurrentlyVerified(manifest, auditEntry, completePath) {
   return auditEntry?.report === completePath
     && auditEntry?.auditStatus === "verified"
@@ -112,11 +147,15 @@ export function preparePagesPublic(sourceDir, outputDir) {
     const targetDir = path.join(output, relative);
     const manifestPath = path.join(reportDir, "report_manifest.json");
     const manifest = readJson(manifestPath);
-    if (!manifest) continue;
+    const auditEntry = auditIndex.get(completeReportPath);
+    if (readableLegacyArchive(auditEntry, completeReportPath)) {
+      copyLegacyArchive(reportDir, targetDir, auditEntry);
+      continue;
+    }
 
-    if (reportIsCurrentlyVerified(
+    if (manifest && reportIsCurrentlyVerified(
       manifest,
-      auditIndex.get(completeReportPath),
+      auditEntry,
       completeReportPath,
     )) {
       fs.cpSync(reportDir, targetDir, { recursive: true });
@@ -131,7 +170,7 @@ export function preparePagesPublic(sourceDir, outputDir) {
     );
     fs.writeFileSync(
       path.join(targetDir, "complete_report.md"),
-      failClosedPlaceholder(manifest, reportDir),
+      failClosedPlaceholder(manifest || auditEntry, reportDir),
       "utf8",
     );
     // 同路径安全墓碑会覆盖旧部署/CDN 中可能残留的 raw Markdown；

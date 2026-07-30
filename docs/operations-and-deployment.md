@@ -244,9 +244,9 @@ if ($pagesHealth.deployment.deployedAt -eq "unknown") {
 }
 ```
 
-`deploy-workbench` 缺 Cloudflare 凭据时直接失败，不再跳过。发布前用同一个 `DEPLOYED_AT` 生成静态 manifest，再生成策略过滤后的 `build/pages-public`；禁止直接部署 `public`。verified 报告完整发布，未验证报告只保留 Manifest、EvidencePacket 和 fail-closed `complete_report.md`，角色分卷不得进入 artifact。`pages deploy` 成功后，workflow 先直接读取 `/data/deployment.json` 验证静态 manifest，再参数化 UPSERT 到 D1 `deployment_metadata`，最后从 `/api/health` 回读目标 SHA 和合法 `deployedAt`。失败的发布不会覆盖当前线上身份。Health 只有在静态 manifest 缺失、被 SPA fallback 替换或 SHA 不一致时才有界查询 D1，且仍要求记录 SHA 等于 `CF_PAGES_COMMIT_SHA`。超时或不一致都视为发布失败。`CF_PAGES_URL` 保留不可变 deployment URL，便于核对生产 alias 的传播。
+`deploy-workbench` 缺 Cloudflare 凭据时直接失败，不再跳过。发布前用同一个 `DEPLOYED_AT` 生成静态 manifest，再生成策略过滤后的 `build/pages-public`；禁止直接部署 `public`。verified 报告完整发布；只有 `report-audit.json` 按完整路径登记且未失败的 `legacy_unverified` 档案允许无 Manifest 只读发布，并在每个 Markdown 前写入历史未验证警告；invalidated、insufficient-evidence、claim-failed 及其它未验证分卷继续写成 `Not Rated` 墓碑。`pages deploy` 成功后，workflow 先直接读取 `/data/deployment.json` 验证静态 manifest，再参数化 UPSERT 到 D1 `deployment_metadata`，最后从 `/api/health` 回读目标 SHA 和合法 `deployedAt`。失败的发布不会覆盖当前线上身份。Health 只有在静态 manifest 缺失、被 SPA fallback 替换或 SHA 不一致时才有界查询 D1，且仍要求记录 SHA 等于 `CF_PAGES_COMMIT_SHA`。超时或不一致都视为发布失败。`CF_PAGES_URL` 保留不可变 deployment URL，便于核对生产 alias 的传播。
 
-发布前必须抽查至少一份未验证报告：`build/pages-public` 中 `1_analysts` 至 `5_portfolio` 的同名 Markdown 必须是统一 `Not Rated` 安全墓碑，不能含原始正文；这样既不发布 raw，也会覆盖旧部署/CDN 可能缓存的历史评级。发布后直接 GET 相同 Pages raw 路径只能读到安全墓碑，`/api/report` 无 selector 与带 selector 的 raw 请求都必须 fail-closed。不能用“网页没有显示标签页”替代静态文件和 API 两条路径的检查。
+发布前必须同时抽查两类报告：`510050.SS/2026-07-10` 这类审计登记的 `legacy_unverified` 无 Manifest 档案，其完整报告和角色分卷应包含历史未验证警告并保留原文；`515880.SS/2026-07-30-v9` 这类 claim-failed 报告的角色分卷必须是统一 `Not Rated` 墓碑，不能含原始正文。发布后分别验证 Pages raw 路径和 `/api/report`：前者 legacy 可读、后者 blocked raw 返回 409；invalidated 同样不得放行。不能用“网页没有显示标签页”替代静态文件和 API 两条路径的检查。
 
 每日分析的报告提交由 Actions 自带 `GITHUB_TOKEN` 完成。机器人 push 可能因 GitHub 递归保护不触发其它 `on: push` workflow，所以 `daily-analysis.yml` 在 `Persist reports to main` 成功后显式运行 `gh workflow run deploy-workbench.yml --ref main`。该 job 只增加 `actions: write`，继续使用 `github.token`，不需要新建 PAT；报告持久化失败时不会触发部署。真实验收必须同时记录 daily run、其生成的数据 commit、随后独立的 deploy-workbench run，并确认生产 `/api/health` 的完整 SHA 等于该数据 commit 或其后的最新 `main`。
 
