@@ -1,7 +1,7 @@
 {
   "status": "ok",
-  "generated_at": "2026-07-30T16:28:45+08:00",
-  "trade_date": "2026-07-30",
+  "generated_at": "2026-07-31T15:46:46+08:00",
+  "trade_date": "2026-07-31",
   "provider": "openai_compatible",
   "analysts": [
     "market",
@@ -16,22 +16,22 @@
       "fundamentals"
     ],
     "researchDepth": "standard",
-    "kind": "legacy"
+    "kind": "monitor"
   },
   "run": {
-    "id": "30526506641",
+    "id": "30613950179",
     "attempt": "1",
     "workflow": "daily-analysis",
-    "url": "https://github.com/gaaiyun/TradingWorkbench/actions/runs/30526506641"
+    "url": "https://github.com/gaaiyun/TradingWorkbench/actions/runs/30613950179"
   },
   "identity": {
-    "scope": "legacy",
-    "kind": "legacy",
-    "runId": "30526506641",
-    "profileId": null,
+    "scope": "profile",
+    "kind": "monitor",
+    "runId": "30613950179",
+    "profileId": "cn-semi-comms",
     "requestId": null,
-    "slotId": null,
-    "scheduledFor": null
+    "slotId": "slot-dcaab7570c1ad1ed63fb458a29117082ab2623178bccc3c738b49665a43d73d1",
+    "scheduledFor": "2026-07-31T07:20:00.000Z"
   },
   "rating_tiers": [
     "Sell",
@@ -44,22 +44,21 @@
     {
       "ticker": "515880.SS",
       "rating": "Not Rated",
-      "report": "reports/515880.SS/2026-07-30-v9/complete_report.md",
+      "report": "reports/515880.SS/2026-07-31/complete_report.md",
       "files": {
-        "fundamentals": "reports/515880.SS/2026-07-30-v9/1_analysts/fundamentals.md",
-        "market": "reports/515880.SS/2026-07-30-v9/1_analysts/market.md",
-        "news": "reports/515880.SS/2026-07-30-v9/1_analysts/news.md",
-        "bear": "reports/515880.SS/2026-07-30-v9/2_research/bear.md",
-        "bull": "reports/515880.SS/2026-07-30-v9/2_research/bull.md",
-        "manager": "reports/515880.SS/2026-07-30-v9/2_research/manager.md",
-        "trader": "reports/515880.SS/2026-07-30-v9/3_trading/trader.md",
-        "aggressive": "reports/515880.SS/2026-07-30-v9/4_risk/aggressive.md",
-        "conservative": "reports/515880.SS/2026-07-30-v9/4_risk/conservative.md",
-        "neutral": "reports/515880.SS/2026-07-30-v9/4_risk/neutral.md",
-        "decision": "reports/515880.SS/2026-07-30-v9/5_portfolio/decision.md",
-        "complete_report": "reports/515880.SS/2026-07-30-v9/complete_report.md"
+        "fundamentals": "reports/515880.SS/2026-07-31/1_analysts/fundamentals.md",
+        "market": "reports/515880.SS/2026-07-31/1_analysts/market.md",
+        "news": "reports/515880.SS/2026-07-31/1_analysts/news.md",
+        "bear": "reports/515880.SS/2026-07-31/2_research/bear.md",
+        "bull": "reports/515880.SS/2026-07-31/2_research/bull.md",
+        "manager": "reports/515880.SS/2026-07-31/2_research/manager.md",
+        "trader": "reports/515880.SS/2026-07-31/3_trading/trader.md",
+        "aggressive": "reports/515880.SS/2026-07-31/4_risk/aggressive.md",
+        "conservative": "reports/515880.SS/2026-07-31/4_risk/conservative.md",
+        "neutral": "reports/515880.SS/2026-07-31/4_risk/neutral.md",
+        "complete_report": "reports/515880.SS/2026-07-31/complete_report.md"
       },
-      "decision_excerpt": "# 组合经理最终交易决策 — 515880.SS\n\n**评级：卖出**\n\n---\n\n## 一、已验证事实\n\n- 过去8个交易日内，515880.SS收盘价从0.701 [M638]跌至0.56 [M645]，区间变动为-20.11412268% [D2]。\n- 最新交易日（2026-07-30）单日变动为-6.97674419% [D3]，当日开盘0.59、最高0.60、最低0.54、收盘0.56、成交量110,354,509 [M645]。\n- 严格空头均线排列已确认：收盘0.56 [M645] < MA20=0.7041 [I5] < MA60=0.7771 [I6] [D7]。\n- 收盘相对MA20偏离-20.46584292% [D5]，相对MA60偏离-27.93720242% [D6]。\n- MACD=-0.05586732 [I7]，信号线=-0.04181137 [I9]，",
+      "decision_excerpt": "",
       "analysis_status": "insufficient_evidence",
       "audit_status": "legacy_unverified",
       "evidence_publish": {
@@ -69,9 +68,42 @@
       "marketHistory": {
         "source": "tencent",
         "adjustment": "qfq",
-        "barCount": 645,
+        "barCount": 646,
         "startAt": "2023-11-29T16:00:00Z",
-        "endAt": "2026-07-29T16:00:00Z"
+        "endAt": "2026-07-30T16:00:00Z"
+      },
+      "error": null
+    },
+    {
+      "ticker": "512480.SS",
+      "rating": "Not Rated",
+      "report": "reports/512480.SS/2026-07-31/complete_report.md",
+      "files": {
+        "fundamentals": "reports/512480.SS/2026-07-31/1_analysts/fundamentals.md",
+        "news": "reports/512480.SS/2026-07-31/1_analysts/news.md",
+        "bear": "reports/512480.SS/2026-07-31/2_research/bear.md",
+        "bull": "reports/512480.SS/2026-07-31/2_research/bull.md",
+        "manager": "reports/512480.SS/2026-07-31/2_research/manager.md",
+        "trader": "reports/512480.SS/2026-07-31/3_trading/trader.md",
+        "aggressive": "reports/512480.SS/2026-07-31/4_risk/aggressive.md",
+        "conservative": "reports/512480.SS/2026-07-31/4_risk/conservative.md",
+        "neutral": "reports/512480.SS/2026-07-31/4_risk/neutral.md",
+        "decision": "reports/512480.SS/2026-07-31/5_portfolio/decision.md",
+        "complete_report": "reports/512480.SS/2026-07-31/complete_report.md"
+      },
+      "decision_excerpt": "**Rating**: Underweight\n\n**Executive Summary**: 512480.SS 在过去8个交易日内累计收盘变动 -14.0625% [D2]，最新收盘价 0.99 [M646] 同时低于 MA20（1.18025 [I5]）与 MA60（1.16061667 [I6]），偏离幅度分别达 -16.11946621% [D5] 和 -14.70051865% [D6]。MACD、信号线、柱状图三者全部为负 [I7][I8][I9]，20日已实现波动率高达 81.88901855 [I10]，ATR占收盘价比 8.79819697% [D4]，持仓下行风险被极端放大。最新交易日虽反弹 +3.34029228% [D3] 且成交量为窗口最高 29,187,095 [M646]，但此前7月24日 [M641] 与7月27日 [M642] 的反弹均被后续更深跌幅吞没",
+      "analysis_status": "insufficient_evidence",
+      "audit_status": "legacy_unverified",
+      "evidence_publish": {
+        "published": true,
+        "status": 201
+      },
+      "marketHistory": {
+        "source": "tencent",
+        "adjustment": "qfq",
+        "barCount": 646,
+        "startAt": "2023-11-29T16:00:00Z",
+        "endAt": "2026-07-30T16:00:00Z"
       },
       "error": null
     }
