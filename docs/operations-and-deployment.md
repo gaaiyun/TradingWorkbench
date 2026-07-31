@@ -248,6 +248,10 @@ if ($pagesHealth.deployment.deployedAt -eq "unknown") {
 
 发布前必须同时抽查两类报告：`510050.SS/2026-07-10` 这类审计登记的 `legacy_unverified` 无 Manifest 档案，其完整报告和角色分卷应包含历史未验证警告并保留原文；`515880.SS/2026-07-30-v9` 这类 claim-failed 报告的角色分卷必须是统一 `Not Rated` 墓碑，不能含原始正文。发布后分别验证 Pages raw 路径和 `/api/report`：前者 legacy 可读、后者 blocked raw 返回 409；invalidated 同样不得放行。不能用“网页没有显示标签页”替代静态文件和 API 两条路径的检查。
 
+浏览器验收还必须逐条点击档案：claim-failed 条目只能出现“完整报告”页签且首次请求为
+200；未失败的 `legacy_unverified` 可以按原目录显示分卷。若列表默认打开组合决策后
+得到 409，说明审计的 `claimValidation` 在档案模型中丢失，不能判为后端正常。
+
 每日分析的报告提交由 Actions 自带 `GITHUB_TOKEN` 完成。机器人 push 可能因 GitHub 递归保护不触发其它 `on: push` workflow，所以 `daily-analysis.yml` 在 `Persist reports to main` 成功后显式运行 `gh workflow run deploy-workbench.yml --ref main`。该 job 只增加 `actions: write`，继续使用 `github.token`，不需要新建 PAT；报告持久化失败时不会触发部署。真实验收必须同时记录 daily run、其生成的数据 commit、随后独立的 deploy-workbench run，并确认生产 `/api/health` 的完整 SHA 等于该数据 commit 或其后的最新 `main`。
 
 Workbench `/api/health` 检查与 `/api/volguard` 一致的 live→snapshot 降级链，

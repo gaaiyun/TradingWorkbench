@@ -384,6 +384,49 @@ test("claim-failed reports expose only the fail-closed consolidated report in th
   );
 });
 
+test("archive entries preserve claim validation from the audit index before choosing a tab", () => {
+  const identity = {
+    scope: "profile",
+    kind: "monitor",
+    profileId: "cn-semi-comms",
+    requestId: null,
+  };
+  const report = "reports/515880.SS/2026-07-30-v8/complete_report.md";
+  const [entry] = buildArchiveEntries([{
+    trade_date: "2026-07-30",
+    identity,
+    results: [{
+      ticker: "515880.SS",
+      rating: "Not Rated",
+      report,
+      files: {
+        decision: "reports/515880.SS/2026-07-30-v8/5_portfolio/decision.md",
+        complete_report: report,
+      },
+    }],
+  }], {
+    reports: [{
+      report,
+      auditStatus: "legacy_unverified",
+      claimValidation: {
+        status: "failed",
+        errorCodes: ["MISSING_EVIDENCE_CITATION"],
+      },
+      identity,
+    }],
+  });
+
+  assert.deepEqual(entry.claimValidation, {
+    status: "failed",
+    errorCodes: ["MISSING_EVIDENCE_CITATION"],
+  });
+  assert.deepEqual(
+    research.buildArchiveFileTabs(entry).map(({ id }) => id),
+    ["complete_report"],
+  );
+  assert.equal(research.defaultArchiveFileTab(research.buildArchiveFileTabs(entry)).id, "complete_report");
+});
+
 test("research module participates in the browser cache version", () => {
   assert.match(
     workbenchScript,

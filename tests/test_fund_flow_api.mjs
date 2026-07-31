@@ -122,7 +122,12 @@ test("fund-flow feature accepts the boolean true used by local bindings", async 
 test("fund-flow endpoint parameterizes every supported filter", async () => {
   if (!flowsApi) return;
   const source = "exchange-cn";
-  const DB = new FakeD1({ rows: { fund_flows: [flow({ source })] } });
+  const row = flow({
+    source,
+    as_of: new Date().toISOString(),
+    fetched_at: new Date().toISOString(),
+  });
+  const DB = new FakeD1({ rows: { fund_flows: [row] } });
   const response = await flowsApi.onRequestGet({
     request: request(`/api/flows?symbol=515880.ss&profile=cn-semi&type=margin_balance&period=1d&source=${source}&from=2026-07-26&to=2026-07-28&limit=25`),
     env: { DB, FUND_FLOW_ENABLED: "true" },
@@ -130,7 +135,7 @@ test("fund-flow endpoint parameterizes every supported filter", async () => {
   const payload = await response.json();
   assert.equal(response.status, 200);
   assert.equal(payload.status, "ok");
-  assert.deepEqual(payload.data, [flow({ source })]);
+  assert.deepEqual(payload.data, [row]);
   assert.deepEqual(payload.capabilities, ALL_CAPABILITIES);
   const [{ sql, params }] = DB.calls;
   assert.equal(sql.includes(source), false);

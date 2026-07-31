@@ -29,7 +29,7 @@ import {
   isFundFlowUiEnabled,
   marketPercentageChange,
   selectFundFlowEventAnchors,
-} from "./workbench-fundflow.mjs?v=b0157ed31412";
+} from "./workbench-fundflow.mjs?v=9650fb3e8d02";
 import {
   CandlestickSeries,
   ColorType,
@@ -81,7 +81,7 @@ import {
   legacyHistoryEntries,
   researchRunForRequest,
   researchTickerLimit,
-} from "./workbench-research.mjs?v=b0157ed31412";
+} from "./workbench-research.mjs?v=9650fb3e8d02";
 
 (() => {
   "use strict";

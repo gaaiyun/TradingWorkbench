@@ -208,7 +208,9 @@ GitHub 供开发审计，但不随 Pages 发布，也不再作为网页报告标
 `invalidated`、`insufficient_evidence` 也非 claim-failed 的 `legacy_unverified`
 档案：它可以在醒目的“历史未验证”警告下只读原文，即使 identity 上线前没有
 Manifest；它仍不能进入 latest、Chat 或 Evidence。其余未验证 raw 返回 409，完整报告
-只返回统一 `Not Rated` 安全正文。
+只返回统一 `Not Rated` 安全正文。档案列表必须把审计索引中的 `claimValidation`
+带到页签选择层；状态为 `failed` 时只显示并默认打开安全的“完整报告”，不能先请求
+会被 API 拒绝的角色分卷。
 
 `evidence_packet` 与 `analysis_status` 是 LangGraph `AgentState` 的显式字段，不能只在
 初始字典中临时附加；否则编译后的图会丢弃两者，Agent 将在没有 Evidence ledger 的

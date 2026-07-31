@@ -201,6 +201,14 @@ export function buildArchiveEntries(history, auditIndex = null, { includeInvalid
             : null,
           auditStatus: audit?.auditStatus || "unverified",
           problemCodes: Array.isArray(audit?.problemCodes) ? audit.problemCodes : [],
+          claimValidation: audit?.claimValidation && typeof audit.claimValidation === "object"
+            ? {
+              ...audit.claimValidation,
+              errorCodes: Array.isArray(audit.claimValidation.errorCodes)
+                ? [...audit.claimValidation.errorCodes]
+                : [],
+            }
+            : null,
         };
       })
       .filter((entry) => (

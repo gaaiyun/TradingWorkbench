@@ -234,7 +234,9 @@ EvidencePacket 存在时，Market、News、Fundamentals 三个分析节点全部
 模式，关闭各自的行情、聚合新闻、宏观/预测市场和上市公司财务平行工具。ETF 公告标题
 只能证明公告存在，不能推断未读取正文中的拆分比例、持仓、费率或 NAV。claim validation
 失败后，`complete_report.md` 是唯一可公开读取的报告页；角色分卷继续进 GitHub 归档供
-开发审计，但前端不生成标签页，带 profile/request 身份的报告 API 也拒绝返回。
+开发审计，但前端不生成标签页，带 profile/request 身份的报告 API 也拒绝返回。前端
+档案模型必须从审计索引继承 `claimValidation`，并在构造页签前执行同一门禁；
+`status=failed` 时只生成 `complete_report` 页签，避免 UI 与 API 的读取边界分叉。
 
 `AgentState` 必须声明 `evidence_packet` 与 `analysis_status`。LangGraph 会按状态 schema
 过滤未声明字段；只在初始字典附加会让运行时节点看不到 Evidence ledger。packet 模式的

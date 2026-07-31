@@ -571,6 +571,7 @@ gh workflow run deploy-monitor.yml --repo gaaiyun/TradingWorkbench --ref main
 | 2026-07-29 | 证伪 UTC 截断造成的伪周末结论；增加显式 `trade_date` 与生产业务日门禁；补齐 SOXX/NVDA 独立美股 5m 采集、纽约时段/DST、东财北京时间降级和未完成柱过滤 | 功能提交 `64934de`；CI `30387614133`、Pages `30387770552`、Monitor `30387613679` 全绿；三只资金序列周末 0、日线缺口 0；SOXX/NVDA 各 370 根且非整 5 分钟行 0；首次两条临时柱已精确删除 |
 | 2026-07-30 | 全局运行、数据、图形、分析和报告正文复审：修复 Worker CPU 工作单元与积压收口、收盘聚合伪 K 线、SOXX/NVDA 分时 UI、新闻层级可见性、任务状态误导、报告未来截止与拆分污染、无效报告仍显示建议等问题；新增云端 Agent 每日全局审查提示词；补齐日报提交后的显式 Pages 部署、波动率周期语义、临时算术提示词约束、历史不安全评级失效和 VolGuard live→snapshot 健康判定 | 本地前端 `120/120`、Functions `419 passed / 1 skipped`、Python `694 passed / 2 skipped`（Windows 使用 `PYTHONUTF8=1`）、Ruff 全绿；代码 CI `30526207092` 全绿；真实单标的 daily-analysis `30526506641` 的分析、持久化和部署 dispatch 均成功，自动 Pages run `30527742906` 的迁移、部署、身份落库、SHA 与资金业务日校验全部成功；最终生产证据见 §1.6 |
 | 2026-07-31 | 修复发布过滤收紧后无 Manifest 的 legacy 档案 404 回归：仅按审计索引完整路径恢复 `legacy_unverified` 原文只读并加持久警告；invalidated、insufficient-evidence 和 claim-failed raw 继续封闭 | RED 复现 API 404 与 Pages 产物缺失；定向边界 `3/3`、Functions `431 passed / 1 skipped`、frontend `120/120`；生产 commit、run 与 API 证据待本次部署后回填 |
+| 2026-07-31 | 修复档案 UI 丢失 `claimValidation` 后默认请求受阻角色分卷的回归：门禁失败条目只显示并打开安全完整报告，未失败 legacy 原文仍可读 | 生产全量点击复现 66 份中 33 份首次请求 409；新增档案模型回归测试，部署后须复跑 66 份首次点击并确认 0 个读取失败 |
 
 ## 1.6 2026-07-30 全局质量复审
 
