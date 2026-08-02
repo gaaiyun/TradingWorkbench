@@ -1,6 +1,6 @@
 # Trading Workbench 下一 Agent 交接
 
-更新日期：2026-07-31（发布边界、A 股分时业务不变量与 Hermes 职责分离）
+更新日期：2026-08-02（健康检查并发化、公告采集按标的隔离失败）
 
 实现基线：`main`。不要依赖本文中的旧提交号；接手时同时执行 `git rev-parse HEAD`、`git rev-parse origin/main`，并读取 Pages 与 Worker health 的 commit SHA。
 
@@ -15,6 +15,15 @@
 **维护约定**：任何 agent 做完一轮工作后，必须回到本文更新三处——§1 当前结论、§1.5 生产状态、§15 更新日志。发现本文与代码或生产不符时，**在同一提交里修正本文**，不要另开新的交接文档。数字和状态必须来自实际执行的命令，不要沿用上一轮的结论。
 
 ## 1. 当前结论
+
+### 2026-08-02 健康检查并发化与公告采集隔离（本轮，Claude 直接实现）
+
+本轮由 Claude 直接改代码（此前几轮是 Claude 审查、Codex 执行），起因是用户报告"每天报告都不成功、美股行情很久没更新"。复核发现美股数据其实正常（此前审查用了不存在的 `global-tech` profile id 测试，是审查者自己的错误），但顺着排查挖出两个此前未记录的真实问题：
+
+1. **`/api/health` 长期误报 degraded**：根因是 `functions/api/health.js` 的 `onRequestGet` 把静态 manifest fetch（`checkDeploymentManifest`）和 D1 回退查询（`checkDeploymentState`）做成顺序执行——先 `await Promise.all([...四个检查])`，只有 manifest 检查失败才**之后**再 `await checkDeploymentState(...)`。生产的 `/data/deployment.json` 实测长期返回 SPA 兜底 `text/html`（响应头与真正不存在的路径完全一致，怀疑是 CF Pages 对新近才出现的静态文件与该 Pages 项目的资源服务存在某种不一致，未能定位到 CF 侧根因），导致每次都要走 D1 回退；而顺序执行让两次探测的延迟叠加，稳定撞满 `checkDeploymentState` 原本 1000ms 的独立超时预算，即使 D1 里的部署身份数据完全正确也回报 `degraded`。修复：两个检查改为与其它检查一起并发发起，manifest 成功则用 manifest 结果，否则用 D1 结果；同时把 D1 查询自身超时预算从 1000ms 放宽到 2500ms 作为余量。新增用例 `onRequestGet falls back to D1 deployment state concurrently...` 直接量化验证：修复前 432ms（顺序）、修复后 207ms（并发）。生产复验：连续 3 次 `/api/health` 请求 `deployment_manifest.ok=true`、`latency_ms` 稳定在 22–46ms，`status=ok`。**未解决**：`/data/deployment.json` 本身为什么在生产返回 HTML 仍未查明根因，只是让健康检查不再依赖它——如果之后要真正修好这个静态文件本身的可达性，需要 Cloudflare 侧的更多信息（dashboard/analytics），当前只能在这里如实记录未解决。
+2. **官方公告采集器（`scripts/collect-sse-fund-news.mjs`）没有按标的隔离失败**：`SYMBOLS = [515880, 512480]` 用顺序 for 循环处理，此前一个标的重试耗尽直接抛出异常会让整个 `collectSseFundNews()` 中断，导致排在后面的标的**完全不会被请求**。3.5 天里 33 次运行失败 13 次，全部是 515880 的 403/响应无效/网络错误——但由于没有隔离，512480 在这些轮次里也从未被尝试。修复：改为逐标的 `try/catch`，返回结果新增 `counts: {targets,succeeded,failed}` 与 `failures: [{symbol,code,error}]`；沿用 `news-collector.mjs` 里 `NEWS_COLLECTION_PARTIAL` 的既有命名惯例（`status:"degraded"` + `errorCode`），而不是发明新词汇；CLI 入口在有任一标的失败时把 `process.exitCode` 置 1，让 workflow 仍然可见失败，但不再因此丢弃已成功标的的数据。新增 3 条用例覆盖：单标的重试耗尽仍隔离、单标的 4xx 仍隔离、全部标的失败时不 throw 而是整体上报 `failed`。生产复验：手工 `workflow_dispatch` 后输出 `written:5, symbols:{515880:3,512480:2}, counts:{succeeded:2,failed:0}`——512480 确实被独立尝试并成功，不再被 515880 拖累。
+   - **重要更正（自我纠错）**：Claude 在诊断阶段曾直接查 D1 `MAX(published_at)`，两只基金都是 `2026-07-20T16:00:00.000Z`，据此判断"官方公告已停滞 13 天"。这个结论是**审查者自己的时区读数错误**：`parseSseFundAnnouncements()` 把公告日期一律转成"该日期北京时间 00:00"再转 ISO，`2026-07-21` 北京 00:00 换算 UTC 正是 `2026-07-20T16:00:00.000Z`——直接拿 UTC 字符串当日历日期看，会把北京日期系统性地读早一天。直接查 SSE 原始接口确认：515880/512480 各自最新一条真实公告确实是 `2026-07-21`（二季报），采集器**在隔离修复前就已经正确抓到并写入**，不是数据丢失，只是审查者读错了时间戳。隔离修复本身仍然成立且必要（512480 被 515880 拖累不被尝试是可复现的真实代码缺陷），但不应引用"停滞 13 天"这个具体说法。
+   - **由此发现但本轮未处理的疑点**：`news_items.published_at` 用北京日期 00:00 转 UTC 存储，与本项目之前为 `fund_flows` 单独加 `trade_date` 列（migration `0018`）解决的是同一类问题——任何下游如果直接对 `published_at` 做 UTC 日期切片展示，都会把公告日期系统性地显示早一天。`news_items` 目前没有对应的显式业务日期列。本轮没有验证是否有实际展示层受影响，只记录疑点，不建议在没有先确认真实影响面前就动 schema。
 
 2026-07-31 本轮发布修复包含：Pages 以 `public/data/report-audit.json` 为权威 allowlist 生成 `build/pages-public`，旧 Manifest 即使仍写 verified、但当前索引已 invalidated，也不能发布角色分卷；invalidated、insufficient-evidence、claim-failed 及其它未验证报告的完整正文和原 raw 同名路径生成统一 `Not Rated` 安全内容，以覆盖旧部署/CDN 可能缓存的历史评级。历史兼容例外严格限定为审计索引按完整路径登记且未失败的 `legacy_unverified`：即使 identity 上线前没有 Manifest，完整报告与各原始分卷仍可在持久“历史未验证”警告下只读，不能进入 latest、Chat 或 Evidence。`/api/report` 的门禁和 raw 响应均为 `no-store`。A 股 5m 在采集层拒绝 Yahoo 午休/零成交平盘端点，读取层按交易日选单一来源，migration `0019` 精确清理既有脏行。报告校验补齐“实现波动率”和中文跨月日期的结构数字识别，最终提示词不再诱导无 capability 的传导路径、置信度或公司行动效果。Hermes 原 Job `8dc0823402e7` 已从工程审计原地切换为 08:30 盘前投资简报；旧工程审计 Skill 保留为手工排障，不新建重复 cron。上线真相仍须按 §1.5 的 GitHub、Pages、Worker 三方完整 SHA 和生产端点实时回读，不以本文中的旧短 SHA替代。
 
@@ -120,9 +129,13 @@ GitHub 自动部署链已恢复。仓库主人在 2026-07-27 配置了 `CLOUDFLA
   的 Python 3.10–3.13 矩阵为准；本机 C 盘满且系统 Python 的可选依赖不完整，不能用
   本机 import 失败冒充代码回归。
 
-## 1.5 生产状态真相（2026-07-29 独立核查）
+## 1.5 生产状态真相（2026-07-29 独立核查，2026-08-02 补充）
 
 以下每条都由实际执行的命令或 HTTP 请求得出，不是从上一轮文档抄来的。已完成项也保留，便于下一个 agent 区分“代码未做”与“生产依赖未满足”。
+
+### 🟡 2026-08-02 补充：deploy-workbench 手动触发时最后一步失败，不代表部署失败
+
+`gh workflow run deploy-workbench.yml --ref main` 手工触发的运行中，「Deploy workbench and Pages Functions」「Verify deployed static manifest」「Persist deployment identity」「Verify deployed Pages identity」四步均成功，只有最后一步「Verify production fund-flow business dates」失败，报错 `PRODUCTION_DATA_UNAVAILABLE:515880.SS:stale:ok`——`/api/flows` 返回 `status:"stale"`。直接查生产 `/api/flows?symbol=515880.SS&type=margin_net_buy` 确认最新一行 `asOf=2026-07-29T16:00:00Z`（对应两融数据固有的 T+1 披露时差），当天是周日、`FUND_FLOW_FRESHNESS_MAX_AGE_MS`（4 天）阈值卡在周末+披露时差叠加的边界上。这看起来是"披露时差 + 周末无采集"叠加导致的时间性边界情况，不是数据管道故障，但**本轮未做充分验证去 100% 排除是真实回归**，也没有像 `expectedReportDate()` 对 `reports` 检查那样给这个校验加周末感知。下一个 agent 如果在周中看到同样失败，才需要真正当回归查；如果只在周末出现，先按此处的假设理解，不要重复排查。同时确认：`deploy-workbench` 这最后一步失败**不影响**已经成功的部署本身——Pages 生产别名已经在跑新代码，`/api/health` 当场验证过 `commitSha` 匹配、`status:ok`。
 
 ### ✅ 已完成：Cloudflare 自动部署凭据与流水线
 
@@ -458,6 +471,7 @@ Codex 根 task ID：`019f8943-9db3-7c52-88de-0cb3773977ba`
 | 9 | **`sec-edgar-8k` 是死代码** | `workers/monitor/src/news-collector.mjs:276-304` | `parseSecEdgarAtom()` 完整实现且在 `EVIDENCE_PROVIDERS` 里声明，但 `providerCandidates()` 从不产出该 source。实际只用 `sec-edgar-submissions`。会让人误以为有两条 SEC 通道 |
 | 10 | ~~**前端缓存靠手工版本号**~~ **已修复** | `scripts/asset-version.mjs`、`public/index.html` | 版本号改为 CSS+JS 内容哈希；`npm run check:asset-version` 在 CI 阻止漏更新，`npm run update:asset-version` 负责同步 |
 | 11 | **行情与新闻的 provider 重名** | `providers/adapters.mjs` vs `news-collector.mjs` | `eastmoney`/`yahoo` 在两套体系里各有一份独立实现，健康状态分别记在 `source_health` 和 `monitor_news_provider_health` 两张表。排障时容易把"行情东财挂了"和"新闻东财挂了"搞混 |
+| 12 | **`news_items.published_at` 用北京日期 00:00 转 UTC 存储，没有独立业务日期列** | `workers/monitor/src/news-collector.mjs` `parseSseFundAnnouncements()` | 与 `fund_flows` 曾经的 bug（已用 migration `0018` 加 `trade_date` 列解决）同一类问题：北京 `2026-07-21` 00:00 转 UTC 是 `2026-07-20T16:00:00.000Z`，任何下游直接对 `published_at` 做 UTC 日期切片，都会把公告日期系统性显示早一天。2026-08-02 核查时曾因此误判"官方公告停滞 13 天"，后经比对 SSE 原始接口证实是读数错误、数据本身正确。本轮**未验证**是否有实际展示层受影响，也未加 `trade_date` 列——先确认真实影响面，不要照抄 `fund_flows` 的方案直接动 schema |
 
 ### 12.2 文档陈旧项
 
@@ -572,6 +586,7 @@ gh workflow run deploy-monitor.yml --repo gaaiyun/TradingWorkbench --ref main
 | 2026-07-30 | 全局运行、数据、图形、分析和报告正文复审：修复 Worker CPU 工作单元与积压收口、收盘聚合伪 K 线、SOXX/NVDA 分时 UI、新闻层级可见性、任务状态误导、报告未来截止与拆分污染、无效报告仍显示建议等问题；新增云端 Agent 每日全局审查提示词；补齐日报提交后的显式 Pages 部署、波动率周期语义、临时算术提示词约束、历史不安全评级失效和 VolGuard live→snapshot 健康判定 | 本地前端 `120/120`、Functions `419 passed / 1 skipped`、Python `694 passed / 2 skipped`（Windows 使用 `PYTHONUTF8=1`）、Ruff 全绿；代码 CI `30526207092` 全绿；真实单标的 daily-analysis `30526506641` 的分析、持久化和部署 dispatch 均成功，自动 Pages run `30527742906` 的迁移、部署、身份落库、SHA 与资金业务日校验全部成功；最终生产证据见 §1.6 |
 | 2026-07-31 | 修复发布过滤收紧后无 Manifest 的 legacy 档案 404 回归：仅按审计索引完整路径恢复 `legacy_unverified` 原文只读并加持久警告；invalidated、insufficient-evidence 和 claim-failed raw 继续封闭 | RED 复现 API 404 与 Pages 产物缺失；定向边界 `3/3`、Functions `431 passed / 1 skipped`、frontend `120/120`；生产 commit、run 与 API 证据待本次部署后回填 |
 | 2026-07-31 | 修复档案 UI 丢失 `claimValidation` 后默认请求受阻角色分卷的回归：门禁失败条目只显示并打开安全完整报告，未失败 legacy 原文仍可读 | 生产全量点击复现 66 份中 33 份首次请求 409；新增档案模型回归测试，部署后须复跑 66 份首次点击并确认 0 个读取失败 |
+| 2026-08-02 | Claude 直接实现（非审查-Codex执行模式）：`/api/health` 的 manifest fetch 与 D1 回退改并发，修复顺序执行导致的稳定 1000ms 超时误报 degraded；`collect-sse-fund-news.mjs` 改按标的隔离失败，515880 重试耗尽不再阻断 512480；顺带修复被这两处改动暴露出的、与本身无关的 `test_fund_flow_api.mjs` 固定日历日期腐化问题 | 新增 4 条用例（health 并发计时、official-news 隔离×3）+ 全量回归 Functions `434/1 skip`、frontend `121/121`；提交 `b0354d8`/`d18799d`；生产复验：连续 3 次 `/api/health` 稳定 `ok`+22-46ms；手工 official-news 输出 `written:5,counts:{succeeded:2,failed:0}`；deploy-workbench 手动触发时最后一步资金流校验失败（见 §1.5），但部署本身已生效，`/api/health` 当场确认 commitSha 匹配 |
 
 ## 1.6 2026-07-30 全局质量复审
 
