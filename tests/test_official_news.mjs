@@ -192,13 +192,14 @@ test("official SSE collector retries a transient exchange timeout without hiding
   assert.equal(attempts.get("512480"), 1);
 });
 
-test("official SSE collector exhausts transient retries with a stable error", async () => {
-  let sseAttempts = 0;
+test("official SSE collector isolates exhausted retries to one target and still collects the other", async () => {
+  let sseAttempts515880 = 0;
   const settings = {
     version: 2,
     profiles: [profile("both", true, ["515880.SS", "512480.SS"])],
   };
-  const error = await collectSseFundNews({
+  const d1Calls = [];
+  const result = await collectSseFundNews({
     apiToken: API_TOKEN,
     accountId: ACCOUNT_ID,
     now: NOW,
@@ -207,6 +208,7 @@ test("official SSE collector exhausts transient retries with a stable error", as
       const url = new URL(String(input));
       if (url.hostname === "api.cloudflare.com") {
         const body = JSON.parse(init.body);
+        d1Calls.push(body);
         return Response.json({
           success: true,
           result: [{
@@ -216,23 +218,36 @@ test("official SSE collector exhausts transient retries with a stable error", as
           }],
         });
       }
-      sseAttempts += 1;
-      throw new TypeError("fetch failed with internal network details");
+      const code = url.searchParams.get("keyword");
+      if (code === "515880") {
+        sseAttempts515880 += 1;
+        throw new TypeError("fetch failed with internal network details");
+      }
+      return new Response(ssePayload(code), { status: 200 });
     },
-  }).then(() => null, (reason) => reason);
+  });
 
-  assert.equal(sseAttempts, 3);
-  assert.equal(error.message, "SSE_NETWORK_ERROR_515880");
-  assert.equal(error.message.includes(API_TOKEN), false);
+  assert.equal(sseAttempts515880, 3);
+  assert.equal(result.status, "degraded");
+  assert.equal(result.errorCode, "NEWS_COLLECTION_PARTIAL");
+  assert.deepEqual(result.counts, { targets: 2, succeeded: 1, failed: 1 });
+  assert.deepEqual(result.failures, [
+    { symbol: "515880.SS", code: "515880", error: "SSE_NETWORK_ERROR_515880" },
+  ]);
+  assert.equal(result.symbols["512480.SS"], 1);
+  assert.equal(result.symbols["515880.SS"], 0);
+  assert.equal(result.written, 1);
+  const writeCall = d1Calls.find((body) => /FROM json_each/.test(body.sql));
+  assert.ok(writeCall, "512480 rows must still reach D1 even though 515880 failed");
 });
 
-test("official SSE collector does not retry a non-retryable 4xx", async () => {
-  let sseAttempts = 0;
+test("official SSE collector isolates a non-retryable 4xx to one target and still collects the other", async () => {
+  let sseAttempts515880 = 0;
   const settings = {
     version: 2,
     profiles: [profile("both", true, ["515880.SS", "512480.SS"])],
   };
-  const error = await collectSseFundNews({
+  const result = await collectSseFundNews({
     apiToken: API_TOKEN,
     accountId: ACCOUNT_ID,
     now: NOW,
@@ -250,13 +265,58 @@ test("official SSE collector does not retry a non-retryable 4xx", async () => {
           }],
         });
       }
-      sseAttempts += 1;
+      const code = url.searchParams.get("keyword");
+      if (code === "515880") {
+        sseAttempts515880 += 1;
+        return new Response("blocked", { status: 403 });
+      }
+      return new Response(ssePayload(code), { status: 200 });
+    },
+  });
+
+  assert.equal(sseAttempts515880, 1);
+  assert.equal(result.status, "degraded");
+  assert.equal(result.errorCode, "NEWS_COLLECTION_PARTIAL");
+  assert.deepEqual(result.failures, [
+    { symbol: "515880.SS", code: "515880", error: "SSE_HTTP_403_515880" },
+  ]);
+  assert.equal(result.symbols["512480.SS"], 1);
+});
+
+test("official SSE collector reports every target as failed instead of throwing when all targets fail", async () => {
+  const settings = {
+    version: 2,
+    profiles: [profile("both", true, ["515880.SS", "512480.SS"])],
+  };
+  const result = await collectSseFundNews({
+    apiToken: API_TOKEN,
+    accountId: ACCOUNT_ID,
+    now: NOW,
+    sleepImpl: async () => {},
+    fetchImpl: async (input, init = {}) => {
+      const url = new URL(String(input));
+      if (url.hostname === "api.cloudflare.com") {
+        const body = JSON.parse(init.body);
+        return Response.json({
+          success: true,
+          result: [{
+            results: /SELECT settings_json/.test(body.sql)
+              ? [{ settings_json: JSON.stringify(settings) }]
+              : [],
+          }],
+        });
+      }
       return new Response("blocked", { status: 403 });
     },
-  }).then(() => null, (reason) => reason);
+  });
 
-  assert.equal(sseAttempts, 1);
-  assert.equal(error.message, "SSE_HTTP_403_515880");
+  assert.equal(result.status, "degraded");
+  assert.equal(result.written, 0);
+  assert.deepEqual(result.counts, { targets: 2, succeeded: 0, failed: 2 });
+  assert.deepEqual(
+    result.failures.map(({ symbol }) => symbol).sort(),
+    ["512480.SS", "515880.SS"],
+  );
 });
 
 test("D1 failures expose only the status code, never the API token", async () => {

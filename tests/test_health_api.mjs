@@ -8,6 +8,7 @@ import {
   checkDeploymentState,
   checkJson,
 } from "../functions/api/_health.mjs";
+import { onRequestGet } from "../functions/api/health.js";
 
 test("checkJson reports upstream status and freshness without leaking the body", async () => {
   const result = await checkJson(
@@ -273,4 +274,77 @@ test("health reports a missed scheduled research date instead of staying green",
   assert.equal(checks[0].error, "report_lag");
   assert.equal(checks[0].detail.expected_trade_date, "2026-07-29");
   assert.equal(checks[0].detail.freshness, "stale");
+});
+
+test("onRequestGet falls back to D1 deployment state concurrently instead of after the static manifest fetch", async () => {
+  const sha = "208edf3c4afa84fc9f5d00bdadad5b83df3a0d50";
+  const CHECK_DELAY_MS = 200;
+  const db = {
+    prepare(sql) {
+      return {
+        bind: () => ({
+          async first() {
+            await new Promise((resolve) => setTimeout(resolve, CHECK_DELAY_MS));
+            return {
+              commit_sha: sha,
+              deployed_at: "2026-07-31T08:09:51Z",
+              branch: "main",
+              url: null,
+            };
+          },
+        }),
+      };
+    },
+  };
+  const env = {
+    CF_PAGES_COMMIT_SHA: sha,
+    CF_PAGES_BRANCH: "main",
+    CF_PAGES_URL: "https://test.tradingagents-board.pages.dev",
+    DB: db,
+  };
+  const originalFetch = globalThis.fetch;
+  globalThis.fetch = async (input) => {
+    const url = new URL(String(input));
+    if (url.hostname === "raw.githubusercontent.com") {
+      return Response.json({ generated_at: "2026-07-31T08:00:00Z", trade_date: "2026-07-31", status: "ok" });
+    }
+    if (url.hostname === "api.github.com") {
+      return Response.json([]);
+    }
+    if (url.hostname === "sh50-volguard.pages.dev") {
+      return Response.json({});
+    }
+    if (url.pathname === "/data/deployment.json") {
+      // 复现生产实测的真实故障：该路径返回 SPA 兜底 HTML，不是 JSON manifest。
+      await new Promise((resolve) => setTimeout(resolve, CHECK_DELAY_MS));
+      return new Response("<!doctype html><html></html>", {
+        status: 200,
+        headers: { "content-type": "text/html; charset=utf-8" },
+      });
+    }
+    throw new Error(`unexpected fetch: ${url.href}`);
+  };
+
+  try {
+    const startedAt = Date.now();
+    const response = await onRequestGet({
+      env,
+      request: { url: "https://test.tradingagents-board.pages.dev/api/health" },
+    });
+    const elapsedMs = Date.now() - startedAt;
+    const payload = await response.json();
+
+    assert.ok(
+      elapsedMs < CHECK_DELAY_MS * 2 - 50,
+      `expected the manifest fetch and D1 fallback to run concurrently `
+      + `(elapsed ${elapsedMs}ms should be well under ${CHECK_DELAY_MS * 2}ms)`,
+    );
+    const deploymentCheck = payload.checks.find(({ name }) => name === "deployment_manifest");
+    assert.equal(deploymentCheck.ok, true);
+    assert.equal(deploymentCheck.detail.source, "d1");
+    assert.equal(deploymentCheck.detail.commitSha, sha);
+    assert.equal(payload.status, "ok");
+  } finally {
+    globalThis.fetch = originalFetch;
+  }
 });

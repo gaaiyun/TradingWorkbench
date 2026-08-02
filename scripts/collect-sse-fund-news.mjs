@@ -158,19 +158,28 @@ export async function collectSseFundNews({
   const fetchedAt = now.toISOString();
   const expiresAt = new Date(now.valueOf() + 180 * DAY_MS).toISOString();
   const parsedBySymbol = new Map();
+  const failures = [];
   for (const target of SYMBOLS) {
     const request = sseSearchUrl(target.code, now);
-    const content = await fetchSseDocument({
-      target,
-      request,
-      fetchImpl,
-      sleepImpl,
-    });
-    parsedBySymbol.set(target.symbol, parseSseFundAnnouncements(
-      content,
-      target.code,
-      { begin: request.begin, end: request.end, now, targetSymbol: target.symbol },
-    ));
+    try {
+      const content = await fetchSseDocument({
+        target,
+        request,
+        fetchImpl,
+        sleepImpl,
+      });
+      parsedBySymbol.set(target.symbol, parseSseFundAnnouncements(
+        content,
+        target.code,
+        { begin: request.begin, end: request.end, now, targetSymbol: target.symbol },
+      ));
+    } catch (error) {
+      failures.push({
+        symbol: target.symbol,
+        code: target.code,
+        error: String(error?.message || error),
+      });
+    }
   }
 
   const rows = [];
@@ -214,13 +223,20 @@ export async function collectSseFundNews({
   };
   if (rows.length) await writeNewsItems(db, { items: rows });
   return {
-    status: "completed",
+    status: failures.length ? "degraded" : "completed",
+    ...(failures.length ? { errorCode: "NEWS_COLLECTION_PARTIAL" } : {}),
     fetchedAt,
     written: rows.length,
     symbols: Object.fromEntries(SYMBOLS.map(({ symbol }) => [
       symbol,
       (parsedBySymbol.get(symbol) || []).length,
     ])),
+    counts: {
+      targets: SYMBOLS.length,
+      succeeded: SYMBOLS.length - failures.length,
+      failed: failures.length,
+    },
+    ...(failures.length ? { failures } : {}),
   };
 }
 
@@ -230,4 +246,5 @@ if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) 
     accountId: process.env.CLOUDFLARE_ACCOUNT_ID,
   });
   process.stdout.write(`${JSON.stringify(result)}\n`);
+  if (result.failures?.length) process.exitCode = 1;
 }

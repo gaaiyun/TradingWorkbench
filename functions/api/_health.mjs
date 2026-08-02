@@ -167,7 +167,7 @@ export async function checkDeploymentManifest(
 export async function checkDeploymentState(
   db,
   expectedCommitSha,
-  { timeoutMs = 1000 } = {},
+  { timeoutMs = 2500 } = {},
 ) {
   const started = Date.now();
   const expected = String(expectedCommitSha || "").trim().toLowerCase();

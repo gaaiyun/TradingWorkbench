@@ -61,7 +61,13 @@ export async function onRequestGet({ env, request }) {
       // The health payload reports missing deployment metadata below.
     }
   }
-  const checks = await Promise.all([
+  const [
+    reportsCheck,
+    actionsCheck,
+    volguardCheck,
+    manifestCheck,
+    stateCheck,
+  ] = await Promise.all([
     checkJson("reports", `${RAW_BASE}/data/latest.json?ts=${Date.now()}`),
     checkJson("actions", `https://api.github.com/repos/${REPO}/actions/runs?per_page=1`, {
       headers: ghHeaders(env),
@@ -71,13 +77,16 @@ export async function onRequestGet({ env, request }) {
       deploymentManifestUrl,
       env.CF_PAGES_COMMIT_SHA,
     ),
+    // 与静态 manifest fetch 同时发起，不等它失败后才顺序回退——
+    // 生产实测过顺序回退会把两次探测的延迟叠加，稳定撞满 D1 独立预算。
+    checkDeploymentState(env.DB, env.CF_PAGES_COMMIT_SHA),
   ]);
-  if (!checks.at(-1)?.ok) {
-    checks[checks.length - 1] = await checkDeploymentState(
-      env.DB,
-      env.CF_PAGES_COMMIT_SHA,
-    );
-  }
+  const checks = [
+    reportsCheck,
+    actionsCheck,
+    volguardCheck,
+    manifestCheck.ok ? manifestCheck : stateCheck,
+  ];
 
   return json(
     buildHealthPayload(env, checks),
