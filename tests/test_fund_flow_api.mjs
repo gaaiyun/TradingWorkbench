@@ -176,11 +176,14 @@ test("constituent partial coverage is visible as degraded at envelope level", as
 
 test("fund-flow freshness follows the latest as-of row instead of historical rows", async () => {
   if (!flowsApi) return;
+  // 用相对"现在"的时间戳，避免固定日历日期随真实时间推移超过
+  // FUND_FLOW_FRESHNESS_MAX_AGE_MS(4 天)阈值后把这条 fixture 判成 stale。
+  const recentAsOf = new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString();
   const latest = flow({
     id: "latest",
     flow_type: "margin_net_buy",
-    ts: "2026-07-27T16:00:00.000Z",
-    as_of: "2026-07-27T16:00:00.000Z",
+    ts: recentAsOf,
+    as_of: recentAsOf,
     freshness: "fresh",
   });
   const historical = flow({
