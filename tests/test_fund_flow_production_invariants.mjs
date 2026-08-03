@@ -1,7 +1,10 @@
 import assert from "node:assert/strict";
 import test from "node:test";
 
-import { verifyTradeDates } from "../scripts/verify-fund-flow-production.mjs";
+import {
+  verifyProduction,
+  verifyTradeDates,
+} from "../scripts/verify-fund-flow-production.mjs";
 
 function weekdays(start, count) {
   const rows = [];
@@ -39,4 +42,29 @@ test("production fund-flow invariant rejects UTC-sliced weekend ghosts and off-c
     ], marketRows.filter(({ ts }) => !ts.startsWith("2026-04-20"))),
     /FUND_FLOW_NOT_MARKET_DAY/,
   );
+});
+
+test("production verification accepts weekend-stale flows after business-day invariants pass", async () => {
+  const dates = weekdays("2026-01-01", 80);
+  const originalFetch = globalThis.fetch;
+  globalThis.fetch = async (input) => {
+    const url = new URL(input);
+    const payload = url.pathname === "/api/flows"
+      ? {
+        status: "stale",
+        data: dates.map((trade_date) => ({ trade_date })),
+      }
+      : {
+        status: "ok",
+        data: dates.map((date) => ({ ts: `${date}T00:00:00Z` })),
+      };
+    return Response.json(payload);
+  };
+  try {
+    const result = await verifyProduction("https://workbench.test");
+    assert.equal(result.length, 3);
+    assert.equal(result.every(({ missingMarketDays }) => missingMarketDays === 0), true);
+  } finally {
+    globalThis.fetch = originalFetch;
+  }
 });

@@ -389,6 +389,11 @@ npx --yes wrangler@4.113.0 d1 execute tradingagents-workbench `
 
 验收脚本按三个标的逐一要求：`trade_date` 全部存在、周末为 0、周五非 0，并在同标的日线覆盖区间内验证 `fund_flows.trade_date ⊆ market_bars`。`/api/flows?limit=2000` 的 limit 是返回总行数而不是“交易日数”；同时请求多种 flow type 时不能据此判断回填深度。
 
+`/api/flows` 在周末、周一盘前或交易所披露尚未推进时可以合法返回 `stale`；发布门禁对
+`ok / stale / degraded` 都继续执行上述业务日不变量，只有数据缺失、周末业务日、周五缺失
+或越出同标的日线集合才失败。不能只凭信封 freshness 阻断一次已经完成的 Pages 发布，
+`unavailable` 仍保持 fail-closed。
+
 ## 12. 2026-07-27 周一 08:25 外审协议
 
 时区：`Asia/Shanghai`。理论计划时间为 `2026-07-27T08:25:00+08:00`，即 `2026-07-27T00:25:00Z`。

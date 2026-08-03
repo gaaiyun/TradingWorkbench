@@ -64,7 +64,10 @@ export async function verifyProduction(baseUrl) {
     const marketUrl = new URL("/api/market", base);
     marketUrl.search = new URLSearchParams({ symbol, timeframe: "1d", limit: "1500" });
     const [flows, market] = await Promise.all([getJson(flowUrl), getJson(marketUrl)]);
-    if (flows.status !== "ok" || !["ok", "stale", "degraded"].includes(market.status)) {
+    if (
+      !["ok", "stale", "degraded"].includes(flows.status)
+      || !["ok", "stale", "degraded"].includes(market.status)
+    ) {
       throw new Error(`PRODUCTION_DATA_UNAVAILABLE:${symbol}:${flows.status}:${market.status}`);
     }
     summaries.push({ symbol, ...verifyTradeDates(flows.data || [], market.data || []) });

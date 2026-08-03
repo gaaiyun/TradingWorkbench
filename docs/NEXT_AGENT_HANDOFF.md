@@ -133,9 +133,24 @@ GitHub 自动部署链已恢复。仓库主人在 2026-07-27 配置了 `CLOUDFLA
 
 以下每条都由实际执行的命令或 HTTP 请求得出，不是从上一轮文档抄来的。已完成项也保留，便于下一个 agent 区分“代码未做”与“生产依赖未满足”。
 
-### 🟡 2026-08-02 补充：deploy-workbench 手动触发时最后一步失败，不代表部署失败
+### ✅ 2026-08-03 复核解决：发布门禁不再把周末或盘前 `stale` 误判为数据故障
 
-`gh workflow run deploy-workbench.yml --ref main` 手工触发的运行中，「Deploy workbench and Pages Functions」「Verify deployed static manifest」「Persist deployment identity」「Verify deployed Pages identity」四步均成功，只有最后一步「Verify production fund-flow business dates」失败，报错 `PRODUCTION_DATA_UNAVAILABLE:515880.SS:stale:ok`——`/api/flows` 返回 `status:"stale"`。直接查生产 `/api/flows?symbol=515880.SS&type=margin_net_buy` 确认最新一行 `asOf=2026-07-29T16:00:00Z`（对应两融数据固有的 T+1 披露时差），当天是周日、`FUND_FLOW_FRESHNESS_MAX_AGE_MS`（4 天）阈值卡在周末+披露时差叠加的边界上。这看起来是"披露时差 + 周末无采集"叠加导致的时间性边界情况，不是数据管道故障，但**本轮未做充分验证去 100% 排除是真实回归**，也没有像 `expectedReportDate()` 对 `reports` 检查那样给这个校验加周末感知。下一个 agent 如果在周中看到同样失败，才需要真正当回归查；如果只在周末出现，先按此处的假设理解，不要重复排查。同时确认：`deploy-workbench` 这最后一步失败**不影响**已经成功的部署本身——Pages 生产别名已经在跑新代码，`/api/health` 当场验证过 `commitSha` 匹配、`status:ok`。
+8 月 2 日 `deploy-workbench` 的最后一步失败已被真实生产数据和自动测试共同定位：三只
+ETF 的资金历史均满足业务日不变量，但脚本在调用 `verifyTradeDates()` 前硬性要求
+`flows.status=ok`，把披露时差与周末叠加形成的合法 `stale` 提前拒绝。现在
+`ok / stale / degraded` 都会继续接受交易日、周五和日线子集校验；`unavailable`、空数据、
+周末业务日或越出市场日线仍失败。生产复跑为三标的各 `623` 行、周五各 `121`、周末
+`0`、日线缺口 `0`。新增测试先稳定复现 `PRODUCTION_DATA_UNAVAILABLE:*:stale:ok`，再验证
+修复后通过，未降低业务日门禁。
+
+同一次周一 08:25 外审确认：`newsCollect` 持续完成且无重复理论槽，`premarketBrief`
+以既有明确原因 `HOOK_NOT_IMPLEMENTED` deferred、attempt=1，没有产生分析 dispatch；公开
+news API 的 URL 与 cluster 均无重复。GOOGL 有 1 条 `sec.gov/Archives/edgar/data` 的 8-K
+evidence；ORCL 最近 30 天没有新 8-K，`sec-edgar-submissions` 查询成功，因此 0 条合法。
+工信部旧接口仍保持退役，当前 `gov-policy-library` 查询成功但本轮没有命中新政策原文；
+515880/512480 分别保留 4/3 条上交所 evidence。三只 A 股 ETF 日线各 `646` 根、来源
+Tencent、口径 qfq、上海周末与重复时间戳均为 0，`512480` 拆分区间连续。Google News
+单源为 `NEWS_HTTP_503`，其余六个 active 新闻源成功，汇总 degraded 是真实部分降级。
 
 ### ✅ 已完成：Cloudflare 自动部署凭据与流水线
 
@@ -587,6 +602,7 @@ gh workflow run deploy-monitor.yml --repo gaaiyun/TradingWorkbench --ref main
 | 2026-07-31 | 修复发布过滤收紧后无 Manifest 的 legacy 档案 404 回归：仅按审计索引完整路径恢复 `legacy_unverified` 原文只读并加持久警告；invalidated、insufficient-evidence 和 claim-failed raw 继续封闭 | RED 复现 API 404 与 Pages 产物缺失；定向边界 `3/3`、Functions `431 passed / 1 skipped`、frontend `120/120`；生产 commit、run 与 API 证据待本次部署后回填 |
 | 2026-07-31 | 修复档案 UI 丢失 `claimValidation` 后默认请求受阻角色分卷的回归：门禁失败条目只显示并打开安全完整报告，未失败 legacy 原文仍可读 | 生产全量点击复现 66 份中 33 份首次请求 409；新增档案模型回归测试，部署后须复跑 66 份首次点击并确认 0 个读取失败 |
 | 2026-08-02 | Claude 直接实现（非审查-Codex执行模式）：`/api/health` 的 manifest fetch 与 D1 回退改并发，修复顺序执行导致的稳定 1000ms 超时误报 degraded；`collect-sse-fund-news.mjs` 改按标的隔离失败，515880 重试耗尽不再阻断 512480；顺带修复被这两处改动暴露出的、与本身无关的 `test_fund_flow_api.mjs` 固定日历日期腐化问题 | 新增 4 条用例（health 并发计时、official-news 隔离×3）+ 全量回归 Functions `434/1 skip`、frontend `121/121`；提交 `b0354d8`/`d18799d`；生产复验：连续 3 次 `/api/health` 稳定 `ok`+22-46ms；手工 official-news 输出 `written:5,counts:{succeeded:2,failed:0}`；deploy-workbench 手动触发时最后一步资金流校验失败（见 §1.5），但部署本身已生效，`/api/health` 当场确认 commitSha 匹配 |
+| 2026-08-03 | 周一 08:25 生产验收并修复发布门禁误报：资金流 `stale` 仍执行完整业务日不变量，不再仅凭 freshness 阻断部署；SEC、政策、上交所、slot、news、dispatch 与 qfq 连续性逐项复核 | RED 用例复现 `stale:ok` 被拒，GREEN 后生产脚本三标的各 `623` 行、周五 `121`、周末/日线缺口 `0`；Functions `434/1 skip`、frontend `121/121`、Python `694/2 skip`、Ruff 全绿；最终 GitHub/Pages/Worker SHA 以本轮发布后实时 health 为准 |
 
 ## 1.6 2026-07-30 全局质量复审
 
