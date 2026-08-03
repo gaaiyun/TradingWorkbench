@@ -1,6 +1,6 @@
 # Trading Workbench 下一 Agent 交接
 
-更新日期：2026-08-02（健康检查并发化、公告采集按标的隔离失败）
+更新日期：2026-08-03（修复自身引入的测试腐化，曾真实阻断 08-03 日报上线）
 
 实现基线：`main`。不要依赖本文中的旧提交号；接手时同时执行 `git rev-parse HEAD`、`git rev-parse origin/main`，并读取 Pages 与 Worker health 的 commit SHA。
 
@@ -24,6 +24,14 @@
 2. **官方公告采集器（`scripts/collect-sse-fund-news.mjs`）没有按标的隔离失败**：`SYMBOLS = [515880, 512480]` 用顺序 for 循环处理，此前一个标的重试耗尽直接抛出异常会让整个 `collectSseFundNews()` 中断，导致排在后面的标的**完全不会被请求**。3.5 天里 33 次运行失败 13 次，全部是 515880 的 403/响应无效/网络错误——但由于没有隔离，512480 在这些轮次里也从未被尝试。修复：改为逐标的 `try/catch`，返回结果新增 `counts: {targets,succeeded,failed}` 与 `failures: [{symbol,code,error}]`；沿用 `news-collector.mjs` 里 `NEWS_COLLECTION_PARTIAL` 的既有命名惯例（`status:"degraded"` + `errorCode`），而不是发明新词汇；CLI 入口在有任一标的失败时把 `process.exitCode` 置 1，让 workflow 仍然可见失败，但不再因此丢弃已成功标的的数据。新增 3 条用例覆盖：单标的重试耗尽仍隔离、单标的 4xx 仍隔离、全部标的失败时不 throw 而是整体上报 `failed`。生产复验：手工 `workflow_dispatch` 后输出 `written:5, symbols:{515880:3,512480:2}, counts:{succeeded:2,failed:0}`——512480 确实被独立尝试并成功，不再被 515880 拖累。
    - **重要更正（自我纠错）**：Claude 在诊断阶段曾直接查 D1 `MAX(published_at)`，两只基金都是 `2026-07-20T16:00:00.000Z`，据此判断"官方公告已停滞 13 天"。这个结论是**审查者自己的时区读数错误**：`parseSseFundAnnouncements()` 把公告日期一律转成"该日期北京时间 00:00"再转 ISO，`2026-07-21` 北京 00:00 换算 UTC 正是 `2026-07-20T16:00:00.000Z`——直接拿 UTC 字符串当日历日期看，会把北京日期系统性地读早一天。直接查 SSE 原始接口确认：515880/512480 各自最新一条真实公告确实是 `2026-07-21`（二季报），采集器**在隔离修复前就已经正确抓到并写入**，不是数据丢失，只是审查者读错了时间戳。隔离修复本身仍然成立且必要（512480 被 515880 拖累不被尝试是可复现的真实代码缺陷），但不应引用"停滞 13 天"这个具体说法。
    - **由此发现但本轮未处理的疑点**：`news_items.published_at` 用北京日期 00:00 转 UTC 存储，与本项目之前为 `fund_flows` 单独加 `trade_date` 列（migration `0018`）解决的是同一类问题——任何下游如果直接对 `published_at` 做 UTC 日期切片展示，都会把公告日期系统性地显示早一天。`news_items` 目前没有对应的显式业务日期列。本轮没有验证是否有实际展示层受影响，只记录疑点，不建议在没有先确认真实影响面前就动 schema。
+
+### 2026-08-03 复核：Codex 已修复资金流校验边界，同时抓到 Claude 自己引入的一个真实回归
+
+用户要求"检查review修改完善，特别是执行情况"后的复核，重点看实际运行结果而不是只看代码 diff：
+
+1. **Codex 的 `23eb26b` fix(部署) 已验证有效**：把 `scripts/verify-fund-flow-production.mjs` 对 `flows.status` 的判定从只接受 `ok` 放宽到 `ok/stale/degraded`（与 `market.status` 一致），但**没有**放松 `verifyTradeDates()` 本身的业务日不变量（周末仍必须为 0、周五仍必须存在、日期仍必须落在同标的日线集合内）。独立重跑 `node scripts/verify-fund-flow-production.mjs` 确认生产三只 ETF 各 `623` 行、周五 `121`、周末 `0`、缺口 `0`；新增测试本地通过。这是对 §1.5 中 2026-08-02 那条"未 100% 排除是回归"的记录的确认关闭，不是新增问题。
+2. **Claude 自己在上一轮引入了一个真实回归，已修复**：上一轮新增的 `onRequestGet falls back to D1 deployment state concurrently...` 用例，把 `reports` 检查的 mock 响应硬编码成 `trade_date: "2026-07-31"`。这条用例本身没问题，但 `buildHealthPayload` 的 `report_lag` 判定用的是真实 `Date.now()`（`onRequestGet` 不接受可注入时钟），真实时间推移到 2026-08-03 后这条 fixture 被判成滞后，把整条用例的 `payload.status` 断言从 `"ok"` 变成 `"degraded"`，导致这条测试本身开始失败。**这不只是"CI 显示红"——`daily-analysis` 在 08-03 07:46 生成报告并 dispatch `deploy-workbench` 后，这条测试失败让「Test Pages Functions contracts」步骤失败，整个部署在到达「Deploy workbench and Pages Functions」之前就被拦下，08-03 的报告数据因此没有上线**：`curl .../data/report-audit.json` 在此期间仍返回 `generatedAt: 2026-07-31...`。修复方式和之前修 `test_fund_flow_api.mjs` 那次一样——改成运行时按 `Asia/Shanghai` 取"今天"而不是写死日历日期（用与 `expectedReportDate()` 相同的时区口径，保证恒不早于其计算结果）。修复后本地连续跑 3 次 + 完整 Functions 回归确认不再复发；手动 `workflow_dispatch` 触发 `deploy-workbench` 后 14 个步骤全部成功，`report-audit.json` 确认更新为 `generatedAt: 2026-08-03T08:07:50...`，`/api/health` 确认 `status:ok`、`commitSha` 匹配、`deployment_manifest.ok=true`（这次是 manifest fetch 本身成功，197ms，不是走 D1 回退——说明 §1 第 1 条里"生产 `/data/deployment.json` 长期返回 HTML"这件事至少不是每次都发生，具体触发条件仍未查明）。
+   - **教训记录**：这是本人（Claude）连续第二次在同一类问题上栽跟头——先是发现 `test_fund_flow_api.mjs` 有硬编码日历日期腐化并修复，紧接着自己新写的测试又犯了一模一样的错误。任何测试如果要断言依赖 `Date.now()`/真实时钟的业务逻辑（新鲜度、滞后判定、过期判断），日期类 fixture 一律用相对当前时间计算，不要写绝对日历日期，即使是"看起来还有好几个月才会腐化"的日期。本轮未对全仓库其余测试文件做地毯式排查（`grep` 命中 12 个文件但多数是回显型 fixture、非新鲜度比较），如果之后还有类似 CI 红，用同样的相对日期手法处理即可，不必每次都当新回归深挖。
 
 2026-07-31 本轮发布修复包含：Pages 以 `public/data/report-audit.json` 为权威 allowlist 生成 `build/pages-public`，旧 Manifest 即使仍写 verified、但当前索引已 invalidated，也不能发布角色分卷；invalidated、insufficient-evidence、claim-failed 及其它未验证报告的完整正文和原 raw 同名路径生成统一 `Not Rated` 安全内容，以覆盖旧部署/CDN 可能缓存的历史评级。历史兼容例外严格限定为审计索引按完整路径登记且未失败的 `legacy_unverified`：即使 identity 上线前没有 Manifest，完整报告与各原始分卷仍可在持久“历史未验证”警告下只读，不能进入 latest、Chat 或 Evidence。`/api/report` 的门禁和 raw 响应均为 `no-store`。A 股 5m 在采集层拒绝 Yahoo 午休/零成交平盘端点，读取层按交易日选单一来源，migration `0019` 精确清理既有脏行。报告校验补齐“实现波动率”和中文跨月日期的结构数字识别，最终提示词不再诱导无 capability 的传导路径、置信度或公司行动效果。Hermes 原 Job `8dc0823402e7` 已从工程审计原地切换为 08:30 盘前投资简报；旧工程审计 Skill 保留为手工排障，不新建重复 cron。上线真相仍须按 §1.5 的 GitHub、Pages、Worker 三方完整 SHA 和生产端点实时回读，不以本文中的旧短 SHA替代。
 
@@ -603,6 +611,7 @@ gh workflow run deploy-monitor.yml --repo gaaiyun/TradingWorkbench --ref main
 | 2026-07-31 | 修复档案 UI 丢失 `claimValidation` 后默认请求受阻角色分卷的回归：门禁失败条目只显示并打开安全完整报告，未失败 legacy 原文仍可读 | 生产全量点击复现 66 份中 33 份首次请求 409；新增档案模型回归测试，部署后须复跑 66 份首次点击并确认 0 个读取失败 |
 | 2026-08-02 | Claude 直接实现（非审查-Codex执行模式）：`/api/health` 的 manifest fetch 与 D1 回退改并发，修复顺序执行导致的稳定 1000ms 超时误报 degraded；`collect-sse-fund-news.mjs` 改按标的隔离失败，515880 重试耗尽不再阻断 512480；顺带修复被这两处改动暴露出的、与本身无关的 `test_fund_flow_api.mjs` 固定日历日期腐化问题 | 新增 4 条用例（health 并发计时、official-news 隔离×3）+ 全量回归 Functions `434/1 skip`、frontend `121/121`；提交 `b0354d8`/`d18799d`；生产复验：连续 3 次 `/api/health` 稳定 `ok`+22-46ms；手工 official-news 输出 `written:5,counts:{succeeded:2,failed:0}`；deploy-workbench 手动触发时最后一步资金流校验失败（见 §1.5），但部署本身已生效，`/api/health` 当场确认 commitSha 匹配 |
 | 2026-08-03 | 周一 08:25 生产验收并修复发布门禁误报：资金流 `stale` 仍执行完整业务日不变量，不再仅凭 freshness 阻断部署；SEC、政策、上交所、slot、news、dispatch 与 qfq 连续性逐项复核 | RED 用例复现 `stale:ok` 被拒，GREEN 后生产脚本三标的各 `623` 行、周五 `121`、周末/日线缺口 `0`；Functions `434/1 skip`、frontend `121/121`、Python `694/2 skip`、Ruff 全绿；最终 GitHub/Pages/Worker SHA 以本轮发布后实时 health 为准 |
+| 2026-08-03 | 用户要求复核"执行情况"后发现：Claude 上一轮新增的健康检查并发测试硬编码了 `trade_date:"2026-07-31"`，真实时间推移后触发 `report_lag`，导致这条测试本身失败——而这条失败在 `daily-analysis` 于 07:46 dispatch `deploy-workbench` 时拦下了整条部署流水线，08-03 的日报数据因此未能上线（不只是 CI 显示红）。改成按 `Asia/Shanghai` 取运行时"今天"，与之前修 `test_fund_flow_api.mjs` 用的是同一手法 | 本地连续 3 次 + 完整 Functions 回归确认不再复发；提交 `c59c479`；手动 `workflow_dispatch` 触发 `deploy-workbench` 14 步全部成功；`report-audit.json` 确认更新为 `generatedAt:2026-08-03T08:07:50`；`/api/health` 确认 `status:ok`、`commitSha` 匹配、`deployment_manifest` 本次为 manifest fetch 直接成功（197ms，非 D1 回退）。同时独立复核确认 Codex 的 `23eb26b` 资金流校验修复生产有效 |
 
 ## 1.6 2026-07-30 全局质量复审
 
