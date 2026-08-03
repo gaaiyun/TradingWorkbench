@@ -303,10 +303,24 @@ test("onRequestGet falls back to D1 deployment state concurrently instead of aft
     DB: db,
   };
   const originalFetch = globalThis.fetch;
+  // buildHealthPayload 用真实 Date.now() 判断 report_lag（onRequestGet 不接受可注入的
+  // 时钟），报告日期必须跟随运行时的"上海今天"，否则会像 2026-08-02 那次 CI 一样，随真实
+  // 时间推移把这条 fixture 判成滞后，把整个 payload.status 拖成 degraded。用与
+  // expectedReportDate() 相同的时区口径，保证 trade_date 恒不早于它的计算结果。
+  const todayIso = new Intl.DateTimeFormat("en-CA", {
+    timeZone: "Asia/Shanghai",
+    year: "numeric",
+    month: "2-digit",
+    day: "2-digit",
+  }).format(new Date());
   globalThis.fetch = async (input) => {
     const url = new URL(String(input));
     if (url.hostname === "raw.githubusercontent.com") {
-      return Response.json({ generated_at: "2026-07-31T08:00:00Z", trade_date: "2026-07-31", status: "ok" });
+      return Response.json({
+        generated_at: `${todayIso}T08:00:00Z`,
+        trade_date: todayIso,
+        status: "ok",
+      });
     }
     if (url.hostname === "api.github.com") {
       return Response.json([]);
