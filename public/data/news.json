@@ -1,113 +1,113 @@
 {
   "version": 1,
   "status": "ok",
-  "generated_at": "2026-07-31T15:46:46+08:00",
-  "trade_date": "2026-07-31",
+  "generated_at": "2026-08-03T15:47:17+08:00",
+  "trade_date": "2026-08-03",
   "global": {
     "status": "ok",
     "query_type": "global",
     "ticker": null,
-    "start_date": "2026-07-24",
-    "end_date": "2026-07-31",
-    "fetched_at": "2026-07-31T07:46:47Z",
+    "start_date": "2026-07-27",
+    "end_date": "2026-08-03",
+    "fetched_at": "2026-08-03T07:47:18Z",
     "items": [
       {
-        "title": "Tech shares power Europe's STOXX 600 to record high",
+        "title": "European shares start August higher on US-Iran diplomacy hopes",
         "summary": "",
-        "url": "https://finance.yahoo.com/markets/world-indices/articles/tech-shares-power-europes-stoxx-071854089.html",
+        "url": "https://finance.yahoo.com/markets/world-indices/articles/european-shares-start-august-higher-072727232.html",
         "source": "Reuters",
-        "published_at": "2026-07-31T07:18:54Z",
-        "fetched_at": "2026-07-31T07:46:47Z",
+        "published_at": "2026-08-03T07:27:27Z",
+        "fetched_at": "2026-08-03T07:47:18Z",
         "ticker": null,
         "source_tier": "aggregator"
       },
       {
-        "title": "̌DIS Stock Eyes Three-Month Losing Streak: Analysts Dial Back Expectations Ahead Of Earnings, But See Plenty Of Upside Left",
+        "title": "Dow, S&P 500, Nasdaq Futures Climb As Markets Gear Up For Another Key Earnings Week: USO, PLTR, CRML, IONQ Stocks In Focus",
         "summary": "",
-        "url": "https://finance.yahoo.com/m/40adbd67-dbef-327e-a695-d2cbd6167d35/%CC%8Cdis-stock-eyes-three-month.html",
+        "url": "https://finance.yahoo.com/m/1f96d7e5-748b-31b2-9281-59c238f18834/dow%2C-s%26p-500%2C-nasdaq-futures.html",
         "source": "Stocktwits",
-        "published_at": "2026-07-31T07:17:57Z",
-        "fetched_at": "2026-07-31T07:46:47Z",
+        "published_at": "2026-08-03T06:50:46Z",
+        "fetched_at": "2026-08-03T07:47:18Z",
         "ticker": null,
         "source_tier": "aggregator"
       },
       {
-        "title": "Oil falls more than $1 on greater flows despite US-Iran war",
+        "title": "BP Sells North Sea Oil Business as UK PM Eyes New Drilling",
         "summary": "",
-        "url": "https://finance.yahoo.com/news/oil-falls-more-1-greater-030001809.html",
-        "source": "Reuters",
-        "published_at": "2026-07-31T07:07:41Z",
-        "fetched_at": "2026-07-31T07:46:47Z",
+        "url": "https://finance.yahoo.com/m/82525e0a-949d-3b72-b47f-e85844f6c1ee/bp-sells-north-sea-oil.html",
+        "source": "BeInCrypto",
+        "published_at": "2026-08-03T06:33:14Z",
+        "fetched_at": "2026-08-03T07:47:18Z",
         "ticker": null,
         "source_tier": "aggregator"
       },
       {
-        "title": "BP Puts U.K. North Sea Business Up for Sale",
+        "title": "FTSE 100 Live: Blue-chips start down as AstraZeneca and oil giants sink",
         "summary": "",
-        "url": "https://finance.yahoo.com/m/d32f192d-30eb-3f0e-a38e-14dff0a9579b/bp-puts-u.k.-north-sea.html",
+        "url": "https://finance.yahoo.com/m/13eb8131-e3c0-3c8a-8d67-7622742fe826/ftse-100-live%3A-blue-chips.html",
+        "source": "Proactive",
+        "published_at": "2026-08-03T06:17:00Z",
+        "fetched_at": "2026-08-03T07:47:18Z",
+        "ticker": null,
+        "source_tier": "aggregator"
+      },
+      {
+        "title": "Intervention Unlikely to Impact Yen Meaningfully",
+        "summary": "",
+        "url": "https://finance.yahoo.com/m/45cd468b-3fe9-37e7-896d-22fc97d71875/intervention-unlikely-to.html",
         "source": "The Wall Street Journal",
-        "published_at": "2026-07-31T06:42:00Z",
-        "fetched_at": "2026-07-31T07:46:47Z",
+        "published_at": "2026-08-03T05:59:00Z",
+        "fetched_at": "2026-08-03T07:47:18Z",
         "ticker": null,
         "source_tier": "aggregator"
       },
       {
-        "title": "U.S. Treasury Yields Edge Lower, Reverse Thursday’s Jumps",
+        "title": "CMB.TECH fleet update",
         "summary": "",
-        "url": "https://finance.yahoo.com/m/e66c7d97-49c9-344e-b908-89416815571b/u.s.-treasury-yields-edge.html",
-        "source": "The Wall Street Journal",
-        "published_at": "2026-07-31T06:07:00Z",
-        "fetched_at": "2026-07-31T07:46:47Z",
-        "ticker": null,
-        "source_tier": "aggregator"
-      },
-      {
-        "title": "Eesti Energia Group Unaudited Results for Q2 2026",
-        "summary": "",
-        "url": "https://finance.yahoo.com/energy/articles/eesti-energia-group-unaudited-results-060000696.html",
+        "url": "https://finance.yahoo.com/markets/stocks/articles/cmb-tech-fleet-055900854.html",
         "source": "GlobeNewswire",
-        "published_at": "2026-07-31T06:00:00Z",
-        "fetched_at": "2026-07-31T07:46:47Z",
+        "published_at": "2026-08-03T05:59:00Z",
+        "fetched_at": "2026-08-03T07:47:18Z",
         "ticker": null,
         "source_tier": "aggregator"
       },
       {
-        "title": "Capstone Copper Corp (CSCCF) (Q2 2026) Earnings Call Highlights: Record EBITDA and Strategic ...",
+        "title": "Oil prices lower on Middle East hopes and as OPEC+ boosts production",
         "summary": "",
-        "url": "https://finance.yahoo.com/markets/stocks/articles/capstone-copper-corp-csccf-q2-050040067.html",
-        "source": "GuruFocus.com",
-        "published_at": "2026-07-31T05:00:40Z",
-        "fetched_at": "2026-07-31T07:46:47Z",
+        "url": "https://finance.yahoo.com/m/f247c0b8-7c65-339e-8465-754a14b366f4/oil-prices-lower-on-middle.html",
+        "source": "Euronews",
+        "published_at": "2026-08-03T05:50:51Z",
+        "fetched_at": "2026-08-03T07:47:18Z",
         "ticker": null,
         "source_tier": "aggregator"
       },
       {
-        "title": "Ivanhoe Mines (TSX:IVN) Stock Still Trades At A Premium After A 34% Fall",
+        "title": "Oil slumps on hopes of Iran deal, yen firms after intervention",
         "summary": "",
-        "url": "https://finance.yahoo.com/markets/stocks/articles/ivanhoe-mines-tsx-ivn-stock-042859952.html",
-        "source": "Simply Wall St.",
-        "published_at": "2026-07-31T04:28:59Z",
-        "fetched_at": "2026-07-31T07:46:47Z",
+        "url": "https://finance.yahoo.com/markets/currencies/articles/oil-slumps-hopes-iran-deal-010323774.html",
+        "source": "Reuters",
+        "published_at": "2026-08-03T05:43:32Z",
+        "fetched_at": "2026-08-03T07:47:18Z",
         "ticker": null,
         "source_tier": "aggregator"
       },
       {
-        "title": "Bank of Japan Stands Pat, Continues to See Inflation Around 2%",
+        "title": "U.S. Treasury Yields Slide as Oil Falls Sharply, Mideast Diplomacy Returns",
         "summary": "",
-        "url": "https://finance.yahoo.com/m/28713913-2768-332c-98eb-a9fd0b9ae2ca/bank-of-japan-stands-pat%2C.html",
+        "url": "https://finance.yahoo.com/m/0d4069d2-a842-301f-967e-c3991e29e3e1/u.s.-treasury-yields-slide-as.html",
         "source": "The Wall Street Journal",
-        "published_at": "2026-07-31T03:55:00Z",
-        "fetched_at": "2026-07-31T07:46:47Z",
+        "published_at": "2026-08-03T05:35:00Z",
+        "fetched_at": "2026-08-03T07:47:18Z",
         "ticker": null,
         "source_tier": "aggregator"
       },
       {
-        "title": "Walmart’s stock buybacks: How its massive new repurchase program could affect shareholder returns",
+        "title": "DIS Stock Rises Overnight As ‘Spider-Man: Brand New Day’ Nearly Breaks ‘Avengers: Endgame’ Opening Record",
         "summary": "",
-        "url": "https://finance.yahoo.com/m/abd08578-d4d7-3063-806b-b9cf0fb83c2b/walmart%E2%80%99s-stock-buybacks%3A-how.html",
-        "source": "TheStreet",
-        "published_at": "2026-07-31T01:42:36Z",
-        "fetched_at": "2026-07-31T07:46:47Z",
+        "url": "https://finance.yahoo.com/m/e2801e1e-d450-3732-b265-98453a9f66ec/dis-stock-rises-overnight-as.html",
+        "source": "Stocktwits",
+        "published_at": "2026-08-03T04:54:06Z",
+        "fetched_at": "2026-08-03T07:47:18Z",
         "ticker": null,
         "source_tier": "aggregator"
       }
@@ -116,35 +116,24 @@
       {
         "source": "Yahoo Finance",
         "status": "ok",
-        "item_count": 48
+        "item_count": 39
       },
       {
         "source": "Federal Reserve",
         "status": "ok",
-        "item_count": 3
+        "item_count": 5
       }
     ]
   },
   "tickers": {
     "515880.SS": {
-      "status": "ok",
+      "status": "empty",
       "query_type": "ticker",
       "ticker": "515880.SS",
-      "start_date": "2026-07-31",
-      "end_date": "2026-07-31",
-      "fetched_at": "2026-07-31T07:46:49Z",
-      "items": [
-        {
-          "title": "通信ETF国泰（515880）涨停！美股大反攻验证AI叙事持续",
-          "summary": "通信ETF国泰（515880）涨停！美股大反攻验证AI叙事持续 SOHU",
-          "url": "https://news.google.com/rss/articles/CBMiiAFBVV95cUxOZnhVWFA3d2NiSTVPVV9jX19WRENJRlFvd1F1ZjZXXzlubU1GVzF3MzM2eWlQV2R1ZnBQZ0xUZHF5MV9OeXlQcEc4UWkyNWVoaEJLeXIybXlRRk9nUC1CbGJOSjhoYVIzaDlVRy1hV1E0aFl4NUxJdUtUN1pubEFsN2pWQ0t2eUh0?oc=5",
-          "source": "Google News / SOHU",
-          "published_at": "2026-07-31T02:15:00Z",
-          "fetched_at": "2026-07-31T07:46:49Z",
-          "ticker": "515880.SS",
-          "source_tier": "aggregator"
-        }
-      ],
+      "start_date": "2026-08-03",
+      "end_date": "2026-08-03",
+      "fetched_at": "2026-08-03T07:47:19Z",
+      "items": [],
       "source_statuses": [
         {
           "source": "Yahoo Finance",
@@ -153,8 +142,8 @@
         },
         {
           "source": "Google News RSS",
-          "status": "ok",
-          "item_count": 1
+          "status": "empty",
+          "item_count": 0
         },
         {
           "source": "SEC EDGAR",
@@ -167,9 +156,9 @@
       "status": "empty",
       "query_type": "ticker",
       "ticker": "512480.SS",
-      "start_date": "2026-07-31",
-      "end_date": "2026-07-31",
-      "fetched_at": "2026-07-31T07:46:51Z",
+      "start_date": "2026-08-03",
+      "end_date": "2026-08-03",
+      "fetched_at": "2026-08-03T07:47:21Z",
       "items": [],
       "source_statuses": [
         {
@@ -192,112 +181,102 @@
   },
   "items": [
     {
-      "title": "Tech shares power Europe's STOXX 600 to record high",
+      "title": "European shares start August higher on US-Iran diplomacy hopes",
       "summary": "",
-      "url": "https://finance.yahoo.com/markets/world-indices/articles/tech-shares-power-europes-stoxx-071854089.html",
+      "url": "https://finance.yahoo.com/markets/world-indices/articles/european-shares-start-august-higher-072727232.html",
       "source": "Reuters",
-      "published_at": "2026-07-31T07:18:54Z",
-      "fetched_at": "2026-07-31T07:46:47Z",
+      "published_at": "2026-08-03T07:27:27Z",
+      "fetched_at": "2026-08-03T07:47:18Z",
       "ticker": null,
       "source_tier": "aggregator"
     },
     {
-      "title": "̌DIS Stock Eyes Three-Month Losing Streak: Analysts Dial Back Expectations Ahead Of Earnings, But See Plenty Of Upside Left",
+      "title": "Dow, S&P 500, Nasdaq Futures Climb As Markets Gear Up For Another Key Earnings Week: USO, PLTR, CRML, IONQ Stocks In Focus",
       "summary": "",
-      "url": "https://finance.yahoo.com/m/40adbd67-dbef-327e-a695-d2cbd6167d35/%CC%8Cdis-stock-eyes-three-month.html",
+      "url": "https://finance.yahoo.com/m/1f96d7e5-748b-31b2-9281-59c238f18834/dow%2C-s%26p-500%2C-nasdaq-futures.html",
       "source": "Stocktwits",
-      "published_at": "2026-07-31T07:17:57Z",
-      "fetched_at": "2026-07-31T07:46:47Z",
+      "published_at": "2026-08-03T06:50:46Z",
+      "fetched_at": "2026-08-03T07:47:18Z",
       "ticker": null,
       "source_tier": "aggregator"
     },
     {
-      "title": "Oil falls more than $1 on greater flows despite US-Iran war",
+      "title": "BP Sells North Sea Oil Business as UK PM Eyes New Drilling",
       "summary": "",
-      "url": "https://finance.yahoo.com/news/oil-falls-more-1-greater-030001809.html",
-      "source": "Reuters",
-      "published_at": "2026-07-31T07:07:41Z",
-      "fetched_at": "2026-07-31T07:46:47Z",
+      "url": "https://finance.yahoo.com/m/82525e0a-949d-3b72-b47f-e85844f6c1ee/bp-sells-north-sea-oil.html",
+      "source": "BeInCrypto",
+      "published_at": "2026-08-03T06:33:14Z",
+      "fetched_at": "2026-08-03T07:47:18Z",
       "ticker": null,
       "source_tier": "aggregator"
     },
     {
-      "title": "BP Puts U.K. North Sea Business Up for Sale",
+      "title": "FTSE 100 Live: Blue-chips start down as AstraZeneca and oil giants sink",
       "summary": "",
-      "url": "https://finance.yahoo.com/m/d32f192d-30eb-3f0e-a38e-14dff0a9579b/bp-puts-u.k.-north-sea.html",
+      "url": "https://finance.yahoo.com/m/13eb8131-e3c0-3c8a-8d67-7622742fe826/ftse-100-live%3A-blue-chips.html",
+      "source": "Proactive",
+      "published_at": "2026-08-03T06:17:00Z",
+      "fetched_at": "2026-08-03T07:47:18Z",
+      "ticker": null,
+      "source_tier": "aggregator"
+    },
+    {
+      "title": "Intervention Unlikely to Impact Yen Meaningfully",
+      "summary": "",
+      "url": "https://finance.yahoo.com/m/45cd468b-3fe9-37e7-896d-22fc97d71875/intervention-unlikely-to.html",
       "source": "The Wall Street Journal",
-      "published_at": "2026-07-31T06:42:00Z",
-      "fetched_at": "2026-07-31T07:46:47Z",
+      "published_at": "2026-08-03T05:59:00Z",
+      "fetched_at": "2026-08-03T07:47:18Z",
       "ticker": null,
       "source_tier": "aggregator"
     },
     {
-      "title": "U.S. Treasury Yields Edge Lower, Reverse Thursday’s Jumps",
+      "title": "CMB.TECH fleet update",
       "summary": "",
-      "url": "https://finance.yahoo.com/m/e66c7d97-49c9-344e-b908-89416815571b/u.s.-treasury-yields-edge.html",
-      "source": "The Wall Street Journal",
-      "published_at": "2026-07-31T06:07:00Z",
-      "fetched_at": "2026-07-31T07:46:47Z",
-      "ticker": null,
-      "source_tier": "aggregator"
-    },
-    {
-      "title": "Eesti Energia Group Unaudited Results for Q2 2026",
-      "summary": "",
-      "url": "https://finance.yahoo.com/energy/articles/eesti-energia-group-unaudited-results-060000696.html",
+      "url": "https://finance.yahoo.com/markets/stocks/articles/cmb-tech-fleet-055900854.html",
       "source": "GlobeNewswire",
-      "published_at": "2026-07-31T06:00:00Z",
-      "fetched_at": "2026-07-31T07:46:47Z",
+      "published_at": "2026-08-03T05:59:00Z",
+      "fetched_at": "2026-08-03T07:47:18Z",
       "ticker": null,
       "source_tier": "aggregator"
     },
     {
-      "title": "Capstone Copper Corp (CSCCF) (Q2 2026) Earnings Call Highlights: Record EBITDA and Strategic ...",
+      "title": "Oil prices lower on Middle East hopes and as OPEC+ boosts production",
       "summary": "",
-      "url": "https://finance.yahoo.com/markets/stocks/articles/capstone-copper-corp-csccf-q2-050040067.html",
-      "source": "GuruFocus.com",
-      "published_at": "2026-07-31T05:00:40Z",
-      "fetched_at": "2026-07-31T07:46:47Z",
+      "url": "https://finance.yahoo.com/m/f247c0b8-7c65-339e-8465-754a14b366f4/oil-prices-lower-on-middle.html",
+      "source": "Euronews",
+      "published_at": "2026-08-03T05:50:51Z",
+      "fetched_at": "2026-08-03T07:47:18Z",
       "ticker": null,
       "source_tier": "aggregator"
     },
     {
-      "title": "Ivanhoe Mines (TSX:IVN) Stock Still Trades At A Premium After A 34% Fall",
+      "title": "Oil slumps on hopes of Iran deal, yen firms after intervention",
       "summary": "",
-      "url": "https://finance.yahoo.com/markets/stocks/articles/ivanhoe-mines-tsx-ivn-stock-042859952.html",
-      "source": "Simply Wall St.",
-      "published_at": "2026-07-31T04:28:59Z",
-      "fetched_at": "2026-07-31T07:46:47Z",
+      "url": "https://finance.yahoo.com/markets/currencies/articles/oil-slumps-hopes-iran-deal-010323774.html",
+      "source": "Reuters",
+      "published_at": "2026-08-03T05:43:32Z",
+      "fetched_at": "2026-08-03T07:47:18Z",
       "ticker": null,
       "source_tier": "aggregator"
     },
     {
-      "title": "Bank of Japan Stands Pat, Continues to See Inflation Around 2%",
+      "title": "U.S. Treasury Yields Slide as Oil Falls Sharply, Mideast Diplomacy Returns",
       "summary": "",
-      "url": "https://finance.yahoo.com/m/28713913-2768-332c-98eb-a9fd0b9ae2ca/bank-of-japan-stands-pat%2C.html",
+      "url": "https://finance.yahoo.com/m/0d4069d2-a842-301f-967e-c3991e29e3e1/u.s.-treasury-yields-slide-as.html",
       "source": "The Wall Street Journal",
-      "published_at": "2026-07-31T03:55:00Z",
-      "fetched_at": "2026-07-31T07:46:47Z",
+      "published_at": "2026-08-03T05:35:00Z",
+      "fetched_at": "2026-08-03T07:47:18Z",
       "ticker": null,
       "source_tier": "aggregator"
     },
     {
-      "title": "通信ETF国泰（515880）涨停！美股大反攻验证AI叙事持续",
-      "summary": "通信ETF国泰（515880）涨停！美股大反攻验证AI叙事持续 SOHU",
-      "url": "https://news.google.com/rss/articles/CBMiiAFBVV95cUxOZnhVWFA3d2NiSTVPVV9jX19WRENJRlFvd1F1ZjZXXzlubU1GVzF3MzM2eWlQV2R1ZnBQZ0xUZHF5MV9OeXlQcEc4UWkyNWVoaEJLeXIybXlRRk9nUC1CbGJOSjhoYVIzaDlVRy1hV1E0aFl4NUxJdUtUN1pubEFsN2pWQ0t2eUh0?oc=5",
-      "source": "Google News / SOHU",
-      "published_at": "2026-07-31T02:15:00Z",
-      "fetched_at": "2026-07-31T07:46:49Z",
-      "ticker": "515880.SS",
-      "source_tier": "aggregator"
-    },
-    {
-      "title": "Walmart’s stock buybacks: How its massive new repurchase program could affect shareholder returns",
+      "title": "DIS Stock Rises Overnight As ‘Spider-Man: Brand New Day’ Nearly Breaks ‘Avengers: Endgame’ Opening Record",
       "summary": "",
-      "url": "https://finance.yahoo.com/m/abd08578-d4d7-3063-806b-b9cf0fb83c2b/walmart%E2%80%99s-stock-buybacks%3A-how.html",
-      "source": "TheStreet",
-      "published_at": "2026-07-31T01:42:36Z",
-      "fetched_at": "2026-07-31T07:46:47Z",
+      "url": "https://finance.yahoo.com/m/e2801e1e-d450-3732-b265-98453a9f66ec/dis-stock-rises-overnight-as.html",
+      "source": "Stocktwits",
+      "published_at": "2026-08-03T04:54:06Z",
+      "fetched_at": "2026-08-03T07:47:18Z",
       "ticker": null,
       "source_tier": "aggregator"
     }
