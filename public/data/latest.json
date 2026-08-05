@@ -1,7 +1,7 @@
 {
   "status": "ok",
-  "generated_at": "2026-08-04T16:06:55+08:00",
-  "trade_date": "2026-08-04",
+  "generated_at": "2026-08-05T15:46:55+08:00",
+  "trade_date": "2026-08-05",
   "provider": "openai_compatible",
   "analysts": [
     "market",
@@ -19,19 +19,19 @@
     "kind": "monitor"
   },
   "run": {
-    "id": "30890519694",
+    "id": "30986291033",
     "attempt": "1",
     "workflow": "daily-analysis",
-    "url": "https://github.com/gaaiyun/TradingWorkbench/actions/runs/30890519694"
+    "url": "https://github.com/gaaiyun/TradingWorkbench/actions/runs/30986291033"
   },
   "identity": {
     "scope": "profile",
     "kind": "monitor",
-    "runId": "30890519694",
+    "runId": "30986291033",
     "profileId": "cn-semi-comms",
     "requestId": null,
-    "slotId": "slot-24a59d324fce0efdead721fdf4a8f10350bdbce704b7d41d45163f4b4b37d9cf",
-    "scheduledFor": "2026-08-04T07:20:00.000Z"
+    "slotId": "slot-b5a0997e42a6ca0cf2408023fccf268195e84564b99cea357e256ef6d1c0f2da",
+    "scheduledFor": "2026-08-05T07:20:00.000Z"
   },
   "rating_tiers": [
     "Sell",
@@ -44,22 +44,21 @@
     {
       "ticker": "515880.SS",
       "rating": "Not Rated",
-      "report": "reports/515880.SS/2026-08-04/complete_report.md",
+      "report": "reports/515880.SS/2026-08-05/complete_report.md",
       "files": {
-        "fundamentals": "reports/515880.SS/2026-08-04/1_analysts/fundamentals.md",
-        "market": "reports/515880.SS/2026-08-04/1_analysts/market.md",
-        "news": "reports/515880.SS/2026-08-04/1_analysts/news.md",
-        "bear": "reports/515880.SS/2026-08-04/2_research/bear.md",
-        "bull": "reports/515880.SS/2026-08-04/2_research/bull.md",
-        "manager": "reports/515880.SS/2026-08-04/2_research/manager.md",
-        "trader": "reports/515880.SS/2026-08-04/3_trading/trader.md",
-        "aggressive": "reports/515880.SS/2026-08-04/4_risk/aggressive.md",
-        "conservative": "reports/515880.SS/2026-08-04/4_risk/conservative.md",
-        "neutral": "reports/515880.SS/2026-08-04/4_risk/neutral.md",
-        "decision": "reports/515880.SS/2026-08-04/5_portfolio/decision.md",
-        "complete_report": "reports/515880.SS/2026-08-04/complete_report.md"
+        "fundamentals": "reports/515880.SS/2026-08-05/1_analysts/fundamentals.md",
+        "market": "reports/515880.SS/2026-08-05/1_analysts/market.md",
+        "news": "reports/515880.SS/2026-08-05/1_analysts/news.md",
+        "bear": "reports/515880.SS/2026-08-05/2_research/bear.md",
+        "bull": "reports/515880.SS/2026-08-05/2_research/bull.md",
+        "manager": "reports/515880.SS/2026-08-05/2_research/manager.md",
+        "trader": "reports/515880.SS/2026-08-05/3_trading/trader.md",
+        "aggressive": "reports/515880.SS/2026-08-05/4_risk/aggressive.md",
+        "conservative": "reports/515880.SS/2026-08-05/4_risk/conservative.md",
+        "neutral": "reports/515880.SS/2026-08-05/4_risk/neutral.md",
+        "complete_report": "reports/515880.SS/2026-08-05/complete_report.md"
       },
-      "decision_excerpt": "**Rating**: Hold\n\n**Executive Summary**: 515880.SS在经历8个交易日的剧烈波动后，最新交易日（2026-08-04）出现+9.96563574% [D3]的单日反弹，成交量从46,569,718 [M647]放大至93,309,241 [M648]。然而严格均线排列仍判定为bearish [D7]，收盘价0.640 [M648]低于MA20=0.67865 [I5]和MA60=0.77101667 [I6]，动量指标快照全面偏空且截至2026-08-03 [I2]未反映当日涨幅，ETF关键数据（NAV/折溢价、跟踪误差、持仓集中度、费率）全面unavailable。在结构性弱势框架未被打破且信息盲区显著的情况下，建议维持现有头寸、不追加暴露，以收盘价站上MA20 [I5]作为趋势改善的观察基准。\n\n**Investment Thesis**:",
+      "decision_excerpt": "",
       "analysis_status": "insufficient_evidence",
       "audit_status": "legacy_unverified",
       "evidence_publish": {
@@ -69,33 +68,33 @@
       "marketHistory": {
         "source": "tencent",
         "adjustment": "qfq",
-        "barCount": 648,
+        "barCount": 649,
         "startAt": "2023-11-29T16:00:00Z",
-        "endAt": "2026-08-03T16:00:00Z"
+        "endAt": "2026-08-04T16:00:00Z"
       },
       "error": null
     },
     {
       "ticker": "512480.SS",
-      "rating": "Not Rated",
-      "report": "reports/512480.SS/2026-08-04/complete_report.md",
+      "rating": "Underweight",
+      "report": "reports/512480.SS/2026-08-05/complete_report.md",
       "files": {
-        "fundamentals": "reports/512480.SS/2026-08-04/1_analysts/fundamentals.md",
-        "market": "reports/512480.SS/2026-08-04/1_analysts/market.md",
-        "news": "reports/512480.SS/2026-08-04/1_analysts/news.md",
-        "bear": "reports/512480.SS/2026-08-04/2_research/bear.md",
-        "bull": "reports/512480.SS/2026-08-04/2_research/bull.md",
-        "manager": "reports/512480.SS/2026-08-04/2_research/manager.md",
-        "trader": "reports/512480.SS/2026-08-04/3_trading/trader.md",
-        "aggressive": "reports/512480.SS/2026-08-04/4_risk/aggressive.md",
-        "conservative": "reports/512480.SS/2026-08-04/4_risk/conservative.md",
-        "neutral": "reports/512480.SS/2026-08-04/4_risk/neutral.md",
-        "decision": "reports/512480.SS/2026-08-04/5_portfolio/decision.md",
-        "complete_report": "reports/512480.SS/2026-08-04/complete_report.md"
+        "fundamentals": "reports/512480.SS/2026-08-05/1_analysts/fundamentals.md",
+        "market": "reports/512480.SS/2026-08-05/1_analysts/market.md",
+        "news": "reports/512480.SS/2026-08-05/1_analysts/news.md",
+        "bear": "reports/512480.SS/2026-08-05/2_research/bear.md",
+        "bull": "reports/512480.SS/2026-08-05/2_research/bull.md",
+        "manager": "reports/512480.SS/2026-08-05/2_research/manager.md",
+        "trader": "reports/512480.SS/2026-08-05/3_trading/trader.md",
+        "aggressive": "reports/512480.SS/2026-08-05/4_risk/aggressive.md",
+        "conservative": "reports/512480.SS/2026-08-05/4_risk/conservative.md",
+        "neutral": "reports/512480.SS/2026-08-05/4_risk/neutral.md",
+        "decision": "reports/512480.SS/2026-08-05/5_portfolio/decision.md",
+        "complete_report": "reports/512480.SS/2026-08-05/complete_report.md"
       },
-      "decision_excerpt": "**Rating**: Underweight\n\n**Executive Summary**: 512480.SS当前均线严格空头排列 [D7]、MACD三项均为负值 [I7][I8][I9]、20日实现波动率处于极端水平 [I10]，近8个交易日累计跌幅显著 [D2]，8月4日单日反弹 [D3] 不足以改变下行结构。建议削减敞口而非完全清仓——最新交易日收盘价远离日内低点 [M648] 且RSI14处于弱势但尚未极端的区间 [I11]，保留在条件变化时重新评估的灵活性。ETF关键结构数据（NAV/溢价折价、跟踪误差、持仓集中度）全部unavailable，限制了完整结构面评估，但数据缺失不等同于结构性风险的确认。\n\n**Investment Thesis**: 核心技术结构明确偏空。收盘价0.97 [M648] 低于MA20（1.1414 [I5]）达-15.01664622% [D5]",
-      "analysis_status": "insufficient_evidence",
-      "audit_status": "legacy_unverified",
+      "decision_excerpt": "**Rating**: Underweight\n\n**Executive Summary**\n综合激进、保守与中性三位风险分析师的辩论，当前512480.SS的技术面证据明确偏空，高波动环境叠加ETF关键产品数据缺失，支持削减敞口的决策。技术面呈现严格空头排列 [D7]，最新收盘价1.03 [M649]同时低于MA20的1.1259 [I5]和MA60的1.15976667 [I6]。最新单日反弹缺乏成交量配合且处于高波动背景下，不构成趋势反转依据。鉴于各方对“有序削减敞口”的共识，最终决定维持",
+      "analysis_status": "rated",
+      "audit_status": "verified",
       "evidence_publish": {
         "published": true,
         "status": 201
@@ -103,9 +102,9 @@
       "marketHistory": {
         "source": "tencent",
         "adjustment": "qfq",
-        "barCount": 648,
+        "barCount": 649,
         "startAt": "2023-11-29T16:00:00Z",
-        "endAt": "2026-08-03T16:00:00Z"
+        "endAt": "2026-08-04T16:00:00Z"
       },
       "error": null
     }
