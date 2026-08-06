@@ -1,7 +1,7 @@
 {
   "status": "ok",
-  "generated_at": "2026-08-05T15:46:55+08:00",
-  "trade_date": "2026-08-05",
+  "generated_at": "2026-08-06T15:46:39+08:00",
+  "trade_date": "2026-08-06",
   "provider": "openai_compatible",
   "analysts": [
     "market",
@@ -19,19 +19,19 @@
     "kind": "monitor"
   },
   "run": {
-    "id": "30986291033",
+    "id": "31082170156",
     "attempt": "1",
     "workflow": "daily-analysis",
-    "url": "https://github.com/gaaiyun/TradingWorkbench/actions/runs/30986291033"
+    "url": "https://github.com/gaaiyun/TradingWorkbench/actions/runs/31082170156"
   },
   "identity": {
     "scope": "profile",
     "kind": "monitor",
-    "runId": "30986291033",
+    "runId": "31082170156",
     "profileId": "cn-semi-comms",
     "requestId": null,
-    "slotId": "slot-b5a0997e42a6ca0cf2408023fccf268195e84564b99cea357e256ef6d1c0f2da",
-    "scheduledFor": "2026-08-05T07:20:00.000Z"
+    "slotId": "slot-a04534fabdbaf71967e15c0737d3fc2e41cab9cf3385df24735a89e3fcef09f9",
+    "scheduledFor": "2026-08-06T07:20:00.000Z"
   },
   "rating_tiers": [
     "Sell",
@@ -44,21 +44,22 @@
     {
       "ticker": "515880.SS",
       "rating": "Not Rated",
-      "report": "reports/515880.SS/2026-08-05/complete_report.md",
+      "report": "reports/515880.SS/2026-08-06/complete_report.md",
       "files": {
-        "fundamentals": "reports/515880.SS/2026-08-05/1_analysts/fundamentals.md",
-        "market": "reports/515880.SS/2026-08-05/1_analysts/market.md",
-        "news": "reports/515880.SS/2026-08-05/1_analysts/news.md",
-        "bear": "reports/515880.SS/2026-08-05/2_research/bear.md",
-        "bull": "reports/515880.SS/2026-08-05/2_research/bull.md",
-        "manager": "reports/515880.SS/2026-08-05/2_research/manager.md",
-        "trader": "reports/515880.SS/2026-08-05/3_trading/trader.md",
-        "aggressive": "reports/515880.SS/2026-08-05/4_risk/aggressive.md",
-        "conservative": "reports/515880.SS/2026-08-05/4_risk/conservative.md",
-        "neutral": "reports/515880.SS/2026-08-05/4_risk/neutral.md",
-        "complete_report": "reports/515880.SS/2026-08-05/complete_report.md"
+        "fundamentals": "reports/515880.SS/2026-08-06/1_analysts/fundamentals.md",
+        "market": "reports/515880.SS/2026-08-06/1_analysts/market.md",
+        "news": "reports/515880.SS/2026-08-06/1_analysts/news.md",
+        "bear": "reports/515880.SS/2026-08-06/2_research/bear.md",
+        "bull": "reports/515880.SS/2026-08-06/2_research/bull.md",
+        "manager": "reports/515880.SS/2026-08-06/2_research/manager.md",
+        "trader": "reports/515880.SS/2026-08-06/3_trading/trader.md",
+        "aggressive": "reports/515880.SS/2026-08-06/4_risk/aggressive.md",
+        "conservative": "reports/515880.SS/2026-08-06/4_risk/conservative.md",
+        "neutral": "reports/515880.SS/2026-08-06/4_risk/neutral.md",
+        "decision": "reports/515880.SS/2026-08-06/5_portfolio/decision.md",
+        "complete_report": "reports/515880.SS/2026-08-06/complete_report.md"
       },
-      "decision_excerpt": "",
+      "decision_excerpt": "**Rating**: Underweight\n\n**Executive Summary**: 515880.SS截至2026-08-05T16:00:00Z维持严格空头均线排列[D7]，收盘0.650低于MA20(0.6649)及MA60(0.767)[I5][I6]，RSI14低于中位线[I11]，MACD深陷负值区域[I7]，结构性弱势信号未解除。近8日虽录得+8.33333333%反弹[D2]，但实现波动率87.86534196[I10]及ATR占收盘比7.49526923%[D4]的极端高波动环境使该反弹不构成趋势反转的可靠依据。ETF核心评估数据（NAV/IOPV、跟踪误差、持仓集中度、费率、AUM）全部不可获取，无法从基本面层面对冲技术面弱势。建议降低风险敞口，但近期价格确有企稳迹象且距MA20不远，尚未构成加速下行信号，故评级为Underweight而非Sell。\n\n**I",
       "analysis_status": "insufficient_evidence",
       "audit_status": "legacy_unverified",
       "evidence_publish": {
@@ -68,33 +69,33 @@
       "marketHistory": {
         "source": "tencent",
         "adjustment": "qfq",
-        "barCount": 649,
+        "barCount": 650,
         "startAt": "2023-11-29T16:00:00Z",
-        "endAt": "2026-08-04T16:00:00Z"
+        "endAt": "2026-08-05T16:00:00Z"
       },
       "error": null
     },
     {
       "ticker": "512480.SS",
-      "rating": "Underweight",
-      "report": "reports/512480.SS/2026-08-05/complete_report.md",
+      "rating": "Not Rated",
+      "report": "reports/512480.SS/2026-08-06/complete_report.md",
       "files": {
-        "fundamentals": "reports/512480.SS/2026-08-05/1_analysts/fundamentals.md",
-        "market": "reports/512480.SS/2026-08-05/1_analysts/market.md",
-        "news": "reports/512480.SS/2026-08-05/1_analysts/news.md",
-        "bear": "reports/512480.SS/2026-08-05/2_research/bear.md",
-        "bull": "reports/512480.SS/2026-08-05/2_research/bull.md",
-        "manager": "reports/512480.SS/2026-08-05/2_research/manager.md",
-        "trader": "reports/512480.SS/2026-08-05/3_trading/trader.md",
-        "aggressive": "reports/512480.SS/2026-08-05/4_risk/aggressive.md",
-        "conservative": "reports/512480.SS/2026-08-05/4_risk/conservative.md",
-        "neutral": "reports/512480.SS/2026-08-05/4_risk/neutral.md",
-        "decision": "reports/512480.SS/2026-08-05/5_portfolio/decision.md",
-        "complete_report": "reports/512480.SS/2026-08-05/complete_report.md"
+        "fundamentals": "reports/512480.SS/2026-08-06/1_analysts/fundamentals.md",
+        "market": "reports/512480.SS/2026-08-06/1_analysts/market.md",
+        "news": "reports/512480.SS/2026-08-06/1_analysts/news.md",
+        "bear": "reports/512480.SS/2026-08-06/2_research/bear.md",
+        "bull": "reports/512480.SS/2026-08-06/2_research/bull.md",
+        "manager": "reports/512480.SS/2026-08-06/2_research/manager.md",
+        "trader": "reports/512480.SS/2026-08-06/3_trading/trader.md",
+        "aggressive": "reports/512480.SS/2026-08-06/4_risk/aggressive.md",
+        "conservative": "reports/512480.SS/2026-08-06/4_risk/conservative.md",
+        "neutral": "reports/512480.SS/2026-08-06/4_risk/neutral.md",
+        "decision": "reports/512480.SS/2026-08-06/5_portfolio/decision.md",
+        "complete_report": "reports/512480.SS/2026-08-06/complete_report.md"
       },
-      "decision_excerpt": "**Rating**: Underweight\n\n**Executive Summary**\n综合激进、保守与中性三位风险分析师的辩论，当前512480.SS的技术面证据明确偏空，高波动环境叠加ETF关键产品数据缺失，支持削减敞口的决策。技术面呈现严格空头排列 [D7]，最新收盘价1.03 [M649]同时低于MA20的1.1259 [I5]和MA60的1.15976667 [I6]。最新单日反弹缺乏成交量配合且处于高波动背景下，不构成趋势反转依据。鉴于各方对“有序削减敞口”的共识，最终决定维持",
-      "analysis_status": "rated",
-      "audit_status": "verified",
+      "decision_excerpt": "**Rating**: Underweight\n\n**Executive Summary**: 512480.SS（国联安中证全指半导体产品与设备ETF）当前处于严格空头排列 [D7]，收盘价 1.050 [M650] 低于 MA20 1.105 [I5] 达 -4.97737557% [D5]、低于 MA60 1.15991667 [I6] 达 -9.47625574% [D6]，趋势结构明确偏空。尽管 M648 至 M650 连续三日收高且最新单日变化 +1.64569216% [D3] 为正，但 8 日窗口净变化仅 +0.86455331% [D2]，反弹力度不足以挑战均线体系。在 MACD 三线全负 [I7][I8][I9]、RSI 低于中线 [I11][D9] 以及高波动环境 [I10][D4] 下，建议降低敞口，在收盘价有效突破 MA20 之前维持减仓倾向。ETF 结构性数据均",
+      "analysis_status": "insufficient_evidence",
+      "audit_status": "legacy_unverified",
       "evidence_publish": {
         "published": true,
         "status": 201
@@ -102,9 +103,9 @@
       "marketHistory": {
         "source": "tencent",
         "adjustment": "qfq",
-        "barCount": 649,
+        "barCount": 650,
         "startAt": "2023-11-29T16:00:00Z",
-        "endAt": "2026-08-04T16:00:00Z"
+        "endAt": "2026-08-05T16:00:00Z"
       },
       "error": null
     }
