@@ -1,113 +1,113 @@
 {
   "version": 1,
   "status": "ok",
-  "generated_at": "2026-08-06T15:46:39+08:00",
-  "trade_date": "2026-08-06",
+  "generated_at": "2026-08-07T15:46:42+08:00",
+  "trade_date": "2026-08-07",
   "global": {
     "status": "ok",
     "query_type": "global",
     "ticker": null,
-    "start_date": "2026-07-30",
-    "end_date": "2026-08-06",
-    "fetched_at": "2026-08-06T07:46:40Z",
+    "start_date": "2026-07-31",
+    "end_date": "2026-08-07",
+    "fetched_at": "2026-08-07T07:46:43Z",
     "items": [
       {
-        "title": "Valeura Energy Inc.: Record Operational and Financial Performance in Q2 2026",
+        "title": "Oil extends gains and stocks mostly down on fresh Hormuz worries",
         "summary": "",
-        "url": "https://finance.yahoo.com/energy/articles/valeura-energy-inc-record-operational-070500690.html",
-        "source": "GlobeNewswire",
-        "published_at": "2026-08-06T07:05:00Z",
-        "fetched_at": "2026-08-06T07:46:40Z",
+        "url": "https://finance.yahoo.com/energy/articles/oil-extends-gains-stocks-fall-024841858.html",
+        "source": "AFP",
+        "published_at": "2026-08-07T07:37:05Z",
+        "fetched_at": "2026-08-07T07:46:43Z",
         "ticker": null,
         "source_tier": "aggregator"
       },
       {
-        "title": "Tocvan Drills Significant Discovery On Mezquite Trend Gran Pilar 215M Of 0.6 G/T AU, From 36.6M Downhole",
+        "title": "Global equity funds draw inflows for 11th week as upbeat earnings lift sentiment",
         "summary": "",
-        "url": "https://finance.yahoo.com/markets/commodities/articles/tocvan-drills-significant-discovery-mezquite-060500286.html",
-        "source": "ACCESS Newswire",
-        "published_at": "2026-08-06T06:05:00Z",
-        "fetched_at": "2026-08-06T07:46:40Z",
-        "ticker": null,
-        "source_tier": "aggregator"
-      },
-      {
-        "title": "Symbotic Q3 Earnings Call Highlights",
-        "summary": "",
-        "url": "https://finance.yahoo.com/m/8d68e468-60c9-3e4f-859a-b6163afabbd8/symbotic-q3-earnings-call.html",
-        "source": "MarketBeat",
-        "published_at": "2026-08-06T06:03:55Z",
-        "fetched_at": "2026-08-06T07:46:40Z",
-        "ticker": null,
-        "source_tier": "aggregator"
-      },
-      {
-        "title": "U.S. Treasury Yields Little Changed; Focus on Middle East, Payrolls",
-        "summary": "",
-        "url": "https://finance.yahoo.com/m/f56b0c8f-81cd-37b8-9e3b-c49045dde022/u.s.-treasury-yields-little.html",
-        "source": "The Wall Street Journal",
-        "published_at": "2026-08-06T06:03:00Z",
-        "fetched_at": "2026-08-06T07:46:40Z",
-        "ticker": null,
-        "source_tier": "aggregator"
-      },
-      {
-        "title": "Asia shares fall on tech pullback, oil stable as Iran talks stay in focus",
-        "summary": "",
-        "url": "https://finance.yahoo.com/markets/world-indices/articles/asia-shares-ease-tech-pullback-012838047.html",
+        "url": "https://finance.yahoo.com/news/global-equity-funds-draw-inflows-072641363.html",
         "source": "Reuters",
-        "published_at": "2026-08-06T05:52:49Z",
-        "fetched_at": "2026-08-06T07:46:40Z",
+        "published_at": "2026-08-07T07:26:41Z",
+        "fetched_at": "2026-08-07T07:46:43Z",
         "ticker": null,
         "source_tier": "aggregator"
       },
       {
-        "title": "Maurel & Prom: Half Year 2026 Results",
+        "title": "Amrize slides in extended trading on Q2 profit miss, EBITDA guide cut",
         "summary": "",
-        "url": "https://finance.yahoo.com/energy/articles/maurel-prom-half-2026-results-053000476.html",
-        "source": "Business Wire",
-        "published_at": "2026-08-06T05:30:00Z",
-        "fetched_at": "2026-08-06T07:46:40Z",
+        "url": "https://finance.yahoo.com/markets/stocks/articles/amrize-slides-extended-trading-q2-072235726.html",
+        "source": "Investing.com",
+        "published_at": "2026-08-07T07:22:35Z",
+        "fetched_at": "2026-08-07T07:46:43Z",
         "ticker": null,
         "source_tier": "aggregator"
       },
       {
-        "title": "Nippon Light Metal Holdings Company (TSE:5703) Lifted Guidance, Is It Still A Bargain?",
+        "title": "Oil rises on concerns over Strait of Hormuz reopening plans",
         "summary": "",
-        "url": "https://finance.yahoo.com/markets/stocks/articles/nippon-light-metal-holdings-company-051114578.html",
-        "source": "Simply Wall St.",
-        "published_at": "2026-08-06T05:11:14Z",
-        "fetched_at": "2026-08-06T07:46:40Z",
+        "url": "https://finance.yahoo.com/energy/articles/oil-rises-concerns-over-strait-004641480.html",
+        "source": "Reuters",
+        "published_at": "2026-08-07T07:00:24Z",
+        "fetched_at": "2026-08-07T07:46:43Z",
         "ticker": null,
         "source_tier": "aggregator"
       },
       {
-        "title": "Asian shares are mostly lower as Kospi falls 4% and tech giants decline on Wall Street",
+        "title": "Asian shares are mixed after US stocks fall back while oil rebounds",
         "summary": "",
-        "url": "https://finance.yahoo.com/markets/world-indices/articles/asian-shares-mostly-lower-kospi-050837691.html",
+        "url": "https://finance.yahoo.com/markets/world-indices/articles/asian-shares-mixed-us-stocks-062902244.html",
         "source": "Associated Press",
-        "published_at": "2026-08-06T05:08:37Z",
-        "fetched_at": "2026-08-06T07:46:40Z",
+        "published_at": "2026-08-07T06:29:02Z",
+        "fetched_at": "2026-08-07T07:46:43Z",
         "ticker": null,
         "source_tier": "aggregator"
       },
       {
-        "title": "Pattern Group Inc (PTRN) (Q2 2026) Earnings Call Highlights: Record Revenue and NRR Fuel Raised ...",
+        "title": "Arrow Exploration production now exceeds 5,000 barrels a day as well roll-out continues",
         "summary": "",
-        "url": "https://finance.yahoo.com/markets/stocks/articles/pattern-group-inc-ptrn-q2-050543099.html",
+        "url": "https://finance.yahoo.com/m/b09590a6-1a30-3d4f-9146-c2012d51dbea/arrow-exploration-production.html",
+        "source": "Proactive",
+        "published_at": "2026-08-07T06:17:00Z",
+        "fetched_at": "2026-08-07T07:46:43Z",
+        "ticker": null,
+        "source_tier": "aggregator"
+      },
+      {
+        "title": "Scout drilling commences at the high-impact Minturn project, Northwest Greenland",
+        "summary": "",
+        "url": "https://finance.yahoo.com/energy/articles/scout-drilling-commences-high-impact-060000256.html",
+        "source": "GlobeNewswire",
+        "published_at": "2026-08-07T06:00:00Z",
+        "fetched_at": "2026-08-07T07:46:43Z",
+        "ticker": null,
+        "source_tier": "aggregator"
+      },
+      {
+        "title": "Oil Prices Jump as Houthi Attacks Raise Saudi Supply Risks",
+        "summary": "",
+        "url": "https://finance.yahoo.com/energy/articles/oil-prices-jump-houthi-attacks-054020316.html",
+        "source": "Oilprice.com",
+        "published_at": "2026-08-07T05:40:20Z",
+        "fetched_at": "2026-08-07T07:46:43Z",
+        "ticker": null,
+        "source_tier": "aggregator"
+      },
+      {
+        "title": "BARK Inc (BARK) (Q1 2027) Earnings Call Highlights: Subscriber Retention Surges 170bps as ...",
+        "summary": "",
+        "url": "https://finance.yahoo.com/markets/stocks/articles/bark-inc-bark-q1-2027-050745001.html",
         "source": "GuruFocus.com",
-        "published_at": "2026-08-06T05:05:43Z",
-        "fetched_at": "2026-08-06T07:46:40Z",
+        "published_at": "2026-08-07T05:07:45Z",
+        "fetched_at": "2026-08-07T07:46:43Z",
         "ticker": null,
         "source_tier": "aggregator"
       },
       {
-        "title": "NTT DOCOMO BUSINESS and Chile’s State-owned Copper Company CODELCO Launch a Study and Proof of Concept Aimed at Improving the Efficiency of Remote Copper Mine Operations Using IOWN® APN",
+        "title": "Warner Bros. Discovery Says Disney Bundle Is Delivering: ‘Proof Is in the Data’ as Churn Falls, Subscriber Growth Improves",
         "summary": "",
-        "url": "https://finance.yahoo.com/energy/articles/ntt-docomo-business-chile-state-043000638.html",
-        "source": "Business Wire",
-        "published_at": "2026-08-06T04:30:00Z",
-        "fetched_at": "2026-08-06T07:46:40Z",
+        "url": "https://finance.yahoo.com/media-advertising/articles/warner-bros-discovery-says-disney-044230739.html",
+        "source": "Benzinga",
+        "published_at": "2026-08-07T04:42:30Z",
+        "fetched_at": "2026-08-07T07:46:43Z",
         "ticker": null,
         "source_tier": "aggregator"
       }
@@ -116,24 +116,35 @@
       {
         "source": "Yahoo Finance",
         "status": "ok",
-        "item_count": 41
+        "item_count": 43
       },
       {
         "source": "Federal Reserve",
         "status": "ok",
-        "item_count": 7
+        "item_count": 5
       }
     ]
   },
   "tickers": {
     "515880.SS": {
-      "status": "empty",
+      "status": "ok",
       "query_type": "ticker",
       "ticker": "515880.SS",
-      "start_date": "2026-08-06",
-      "end_date": "2026-08-06",
-      "fetched_at": "2026-08-06T07:46:41Z",
-      "items": [],
+      "start_date": "2026-08-07",
+      "end_date": "2026-08-07",
+      "fetched_at": "2026-08-07T07:46:45Z",
+      "items": [
+        {
+          "title": "FCC“光模块禁令”系误读，通信ETF国泰（515880）大涨3%，光模块占比超50%",
+          "summary": "FCC“光模块禁令”系误读，通信ETF国泰（515880）大涨3%，光模块占比超50% 东方财富",
+          "url": "https://news.google.com/rss/articles/CBMiYEFVX3lxTE10emUyVWc1eTdRel9KQjNsMVhkUjZLZkpjWTBqRzBzVks5cTFYd01ZV2I5X2hLWVRSZFVzRTVLeEcxVWxyYUpMOWYta0NJSU1IcE0xS1oxM2FnbE9ockdQag?oc=5",
+          "source": "Google News / 东方财富",
+          "published_at": "2026-08-07T04:18:45Z",
+          "fetched_at": "2026-08-07T07:46:45Z",
+          "ticker": "515880.SS",
+          "source_tier": "aggregator"
+        }
+      ],
       "source_statuses": [
         {
           "source": "Yahoo Finance",
@@ -142,8 +153,8 @@
         },
         {
           "source": "Google News RSS",
-          "status": "empty",
-          "item_count": 0
+          "status": "ok",
+          "item_count": 1
         },
         {
           "source": "SEC EDGAR",
@@ -153,13 +164,24 @@
       ]
     },
     "512480.SS": {
-      "status": "empty",
+      "status": "ok",
       "query_type": "ticker",
       "ticker": "512480.SS",
-      "start_date": "2026-08-06",
-      "end_date": "2026-08-06",
-      "fetched_at": "2026-08-06T07:46:44Z",
-      "items": [],
+      "start_date": "2026-08-07",
+      "end_date": "2026-08-07",
+      "fetched_at": "2026-08-07T07:46:48Z",
+      "items": [
+        {
+          "title": "聚焦半导体芯片最强主线行情！科创芯片设计ETF国联安（588780）、半导体ETF国联安（512480）双双升超3%，同类中涨幅领先",
+          "summary": "聚焦半导体芯片最强主线行情！科创芯片设计ETF国联安（588780）、半导体ETF国联安（512480）双双升超3%，同类中涨幅领先 搜狐网",
+          "url": "https://news.google.com/rss/articles/CBMiiAFBVV95cUxQbW93aXEyam55bUJEaGpBQk9ETVpYcE9PNEdhaUlkUDBYOW5hc0t1TmM2Z05yTzBkZy1ZQlBXMmpuSWhWMHpfcm5nMU12NEpQQi0ybTNibUttX0JIWFduTTZhbGV5TFNpTjNzRWxKTUsxbTdYZkdrbkUyMFJHQlFMUXZydU9ZMHM4?oc=5",
+          "source": "Google News / 搜狐网",
+          "published_at": "2026-08-07T06:46:54Z",
+          "fetched_at": "2026-08-07T07:46:48Z",
+          "ticker": "512480.SS",
+          "source_tier": "aggregator"
+        }
+      ],
       "source_statuses": [
         {
           "source": "Yahoo Finance",
@@ -168,8 +190,8 @@
         },
         {
           "source": "Google News RSS",
-          "status": "empty",
-          "item_count": 0
+          "status": "ok",
+          "item_count": 1
         },
         {
           "source": "SEC EDGAR",
@@ -181,103 +203,123 @@
   },
   "items": [
     {
-      "title": "Valeura Energy Inc.: Record Operational and Financial Performance in Q2 2026",
+      "title": "Oil extends gains and stocks mostly down on fresh Hormuz worries",
       "summary": "",
-      "url": "https://finance.yahoo.com/energy/articles/valeura-energy-inc-record-operational-070500690.html",
-      "source": "GlobeNewswire",
-      "published_at": "2026-08-06T07:05:00Z",
-      "fetched_at": "2026-08-06T07:46:40Z",
+      "url": "https://finance.yahoo.com/energy/articles/oil-extends-gains-stocks-fall-024841858.html",
+      "source": "AFP",
+      "published_at": "2026-08-07T07:37:05Z",
+      "fetched_at": "2026-08-07T07:46:43Z",
       "ticker": null,
       "source_tier": "aggregator"
     },
     {
-      "title": "Tocvan Drills Significant Discovery On Mezquite Trend Gran Pilar 215M Of 0.6 G/T AU, From 36.6M Downhole",
+      "title": "Global equity funds draw inflows for 11th week as upbeat earnings lift sentiment",
       "summary": "",
-      "url": "https://finance.yahoo.com/markets/commodities/articles/tocvan-drills-significant-discovery-mezquite-060500286.html",
-      "source": "ACCESS Newswire",
-      "published_at": "2026-08-06T06:05:00Z",
-      "fetched_at": "2026-08-06T07:46:40Z",
-      "ticker": null,
-      "source_tier": "aggregator"
-    },
-    {
-      "title": "Symbotic Q3 Earnings Call Highlights",
-      "summary": "",
-      "url": "https://finance.yahoo.com/m/8d68e468-60c9-3e4f-859a-b6163afabbd8/symbotic-q3-earnings-call.html",
-      "source": "MarketBeat",
-      "published_at": "2026-08-06T06:03:55Z",
-      "fetched_at": "2026-08-06T07:46:40Z",
-      "ticker": null,
-      "source_tier": "aggregator"
-    },
-    {
-      "title": "U.S. Treasury Yields Little Changed; Focus on Middle East, Payrolls",
-      "summary": "",
-      "url": "https://finance.yahoo.com/m/f56b0c8f-81cd-37b8-9e3b-c49045dde022/u.s.-treasury-yields-little.html",
-      "source": "The Wall Street Journal",
-      "published_at": "2026-08-06T06:03:00Z",
-      "fetched_at": "2026-08-06T07:46:40Z",
-      "ticker": null,
-      "source_tier": "aggregator"
-    },
-    {
-      "title": "Asia shares fall on tech pullback, oil stable as Iran talks stay in focus",
-      "summary": "",
-      "url": "https://finance.yahoo.com/markets/world-indices/articles/asia-shares-ease-tech-pullback-012838047.html",
+      "url": "https://finance.yahoo.com/news/global-equity-funds-draw-inflows-072641363.html",
       "source": "Reuters",
-      "published_at": "2026-08-06T05:52:49Z",
-      "fetched_at": "2026-08-06T07:46:40Z",
+      "published_at": "2026-08-07T07:26:41Z",
+      "fetched_at": "2026-08-07T07:46:43Z",
       "ticker": null,
       "source_tier": "aggregator"
     },
     {
-      "title": "Maurel & Prom: Half Year 2026 Results",
+      "title": "Amrize slides in extended trading on Q2 profit miss, EBITDA guide cut",
       "summary": "",
-      "url": "https://finance.yahoo.com/energy/articles/maurel-prom-half-2026-results-053000476.html",
-      "source": "Business Wire",
-      "published_at": "2026-08-06T05:30:00Z",
-      "fetched_at": "2026-08-06T07:46:40Z",
+      "url": "https://finance.yahoo.com/markets/stocks/articles/amrize-slides-extended-trading-q2-072235726.html",
+      "source": "Investing.com",
+      "published_at": "2026-08-07T07:22:35Z",
+      "fetched_at": "2026-08-07T07:46:43Z",
       "ticker": null,
       "source_tier": "aggregator"
     },
     {
-      "title": "Nippon Light Metal Holdings Company (TSE:5703) Lifted Guidance, Is It Still A Bargain?",
+      "title": "Oil rises on concerns over Strait of Hormuz reopening plans",
       "summary": "",
-      "url": "https://finance.yahoo.com/markets/stocks/articles/nippon-light-metal-holdings-company-051114578.html",
-      "source": "Simply Wall St.",
-      "published_at": "2026-08-06T05:11:14Z",
-      "fetched_at": "2026-08-06T07:46:40Z",
+      "url": "https://finance.yahoo.com/energy/articles/oil-rises-concerns-over-strait-004641480.html",
+      "source": "Reuters",
+      "published_at": "2026-08-07T07:00:24Z",
+      "fetched_at": "2026-08-07T07:46:43Z",
       "ticker": null,
       "source_tier": "aggregator"
     },
     {
-      "title": "Asian shares are mostly lower as Kospi falls 4% and tech giants decline on Wall Street",
+      "title": "聚焦半导体芯片最强主线行情！科创芯片设计ETF国联安（588780）、半导体ETF国联安（512480）双双升超3%，同类中涨幅领先",
+      "summary": "聚焦半导体芯片最强主线行情！科创芯片设计ETF国联安（588780）、半导体ETF国联安（512480）双双升超3%，同类中涨幅领先 搜狐网",
+      "url": "https://news.google.com/rss/articles/CBMiiAFBVV95cUxQbW93aXEyam55bUJEaGpBQk9ETVpYcE9PNEdhaUlkUDBYOW5hc0t1TmM2Z05yTzBkZy1ZQlBXMmpuSWhWMHpfcm5nMU12NEpQQi0ybTNibUttX0JIWFduTTZhbGV5TFNpTjNzRWxKTUsxbTdYZkdrbkUyMFJHQlFMUXZydU9ZMHM4?oc=5",
+      "source": "Google News / 搜狐网",
+      "published_at": "2026-08-07T06:46:54Z",
+      "fetched_at": "2026-08-07T07:46:48Z",
+      "ticker": "512480.SS",
+      "source_tier": "aggregator"
+    },
+    {
+      "title": "Asian shares are mixed after US stocks fall back while oil rebounds",
       "summary": "",
-      "url": "https://finance.yahoo.com/markets/world-indices/articles/asian-shares-mostly-lower-kospi-050837691.html",
+      "url": "https://finance.yahoo.com/markets/world-indices/articles/asian-shares-mixed-us-stocks-062902244.html",
       "source": "Associated Press",
-      "published_at": "2026-08-06T05:08:37Z",
-      "fetched_at": "2026-08-06T07:46:40Z",
+      "published_at": "2026-08-07T06:29:02Z",
+      "fetched_at": "2026-08-07T07:46:43Z",
       "ticker": null,
       "source_tier": "aggregator"
     },
     {
-      "title": "Pattern Group Inc (PTRN) (Q2 2026) Earnings Call Highlights: Record Revenue and NRR Fuel Raised ...",
+      "title": "Arrow Exploration production now exceeds 5,000 barrels a day as well roll-out continues",
       "summary": "",
-      "url": "https://finance.yahoo.com/markets/stocks/articles/pattern-group-inc-ptrn-q2-050543099.html",
+      "url": "https://finance.yahoo.com/m/b09590a6-1a30-3d4f-9146-c2012d51dbea/arrow-exploration-production.html",
+      "source": "Proactive",
+      "published_at": "2026-08-07T06:17:00Z",
+      "fetched_at": "2026-08-07T07:46:43Z",
+      "ticker": null,
+      "source_tier": "aggregator"
+    },
+    {
+      "title": "Scout drilling commences at the high-impact Minturn project, Northwest Greenland",
+      "summary": "",
+      "url": "https://finance.yahoo.com/energy/articles/scout-drilling-commences-high-impact-060000256.html",
+      "source": "GlobeNewswire",
+      "published_at": "2026-08-07T06:00:00Z",
+      "fetched_at": "2026-08-07T07:46:43Z",
+      "ticker": null,
+      "source_tier": "aggregator"
+    },
+    {
+      "title": "Oil Prices Jump as Houthi Attacks Raise Saudi Supply Risks",
+      "summary": "",
+      "url": "https://finance.yahoo.com/energy/articles/oil-prices-jump-houthi-attacks-054020316.html",
+      "source": "Oilprice.com",
+      "published_at": "2026-08-07T05:40:20Z",
+      "fetched_at": "2026-08-07T07:46:43Z",
+      "ticker": null,
+      "source_tier": "aggregator"
+    },
+    {
+      "title": "BARK Inc (BARK) (Q1 2027) Earnings Call Highlights: Subscriber Retention Surges 170bps as ...",
+      "summary": "",
+      "url": "https://finance.yahoo.com/markets/stocks/articles/bark-inc-bark-q1-2027-050745001.html",
       "source": "GuruFocus.com",
-      "published_at": "2026-08-06T05:05:43Z",
-      "fetched_at": "2026-08-06T07:46:40Z",
+      "published_at": "2026-08-07T05:07:45Z",
+      "fetched_at": "2026-08-07T07:46:43Z",
       "ticker": null,
       "source_tier": "aggregator"
     },
     {
-      "title": "NTT DOCOMO BUSINESS and Chile’s State-owned Copper Company CODELCO Launch a Study and Proof of Concept Aimed at Improving the Efficiency of Remote Copper Mine Operations Using IOWN® APN",
+      "title": "Warner Bros. Discovery Says Disney Bundle Is Delivering: ‘Proof Is in the Data’ as Churn Falls, Subscriber Growth Improves",
       "summary": "",
-      "url": "https://finance.yahoo.com/energy/articles/ntt-docomo-business-chile-state-043000638.html",
-      "source": "Business Wire",
-      "published_at": "2026-08-06T04:30:00Z",
-      "fetched_at": "2026-08-06T07:46:40Z",
+      "url": "https://finance.yahoo.com/media-advertising/articles/warner-bros-discovery-says-disney-044230739.html",
+      "source": "Benzinga",
+      "published_at": "2026-08-07T04:42:30Z",
+      "fetched_at": "2026-08-07T07:46:43Z",
       "ticker": null,
+      "source_tier": "aggregator"
+    },
+    {
+      "title": "FCC“光模块禁令”系误读，通信ETF国泰（515880）大涨3%，光模块占比超50%",
+      "summary": "FCC“光模块禁令”系误读，通信ETF国泰（515880）大涨3%，光模块占比超50% 东方财富",
+      "url": "https://news.google.com/rss/articles/CBMiYEFVX3lxTE10emUyVWc1eTdRel9KQjNsMVhkUjZLZkpjWTBqRzBzVks5cTFYd01ZV2I5X2hLWVRSZFVzRTVLeEcxVWxyYUpMOWYta0NJSU1IcE0xS1oxM2FnbE9ockdQag?oc=5",
+      "source": "Google News / 东方财富",
+      "published_at": "2026-08-07T04:18:45Z",
+      "fetched_at": "2026-08-07T07:46:45Z",
+      "ticker": "515880.SS",
       "source_tier": "aggregator"
     }
   ]
