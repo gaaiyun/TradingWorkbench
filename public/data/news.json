@@ -1,113 +1,113 @@
 {
   "version": 1,
   "status": "ok",
-  "generated_at": "2026-08-07T15:46:42+08:00",
-  "trade_date": "2026-08-07",
+  "generated_at": "2026-08-10T15:46:25+08:00",
+  "trade_date": "2026-08-10",
   "global": {
     "status": "ok",
     "query_type": "global",
     "ticker": null,
-    "start_date": "2026-07-31",
-    "end_date": "2026-08-07",
-    "fetched_at": "2026-08-07T07:46:43Z",
+    "start_date": "2026-08-03",
+    "end_date": "2026-08-10",
+    "fetched_at": "2026-08-10T07:46:26Z",
     "items": [
       {
-        "title": "Oil extends gains and stocks mostly down on fresh Hormuz worries",
+        "title": "European stocks steady as investors weigh Hormuz risks, data calendar",
         "summary": "",
-        "url": "https://finance.yahoo.com/energy/articles/oil-extends-gains-stocks-fall-024841858.html",
-        "source": "AFP",
-        "published_at": "2026-08-07T07:37:05Z",
-        "fetched_at": "2026-08-07T07:46:43Z",
-        "ticker": null,
-        "source_tier": "aggregator"
-      },
-      {
-        "title": "Global equity funds draw inflows for 11th week as upbeat earnings lift sentiment",
-        "summary": "",
-        "url": "https://finance.yahoo.com/news/global-equity-funds-draw-inflows-072641363.html",
+        "url": "https://finance.yahoo.com/markets/world-indices/articles/european-stocks-steady-investors-weigh-073154426.html",
         "source": "Reuters",
-        "published_at": "2026-08-07T07:26:41Z",
-        "fetched_at": "2026-08-07T07:46:43Z",
+        "published_at": "2026-08-10T07:31:54Z",
+        "fetched_at": "2026-08-10T07:46:26Z",
         "ticker": null,
         "source_tier": "aggregator"
       },
       {
-        "title": "Amrize slides in extended trading on Q2 profit miss, EBITDA guide cut",
+        "title": "Oil steady as Iran tempers hopes for swift Hormuz reopening",
         "summary": "",
-        "url": "https://finance.yahoo.com/markets/stocks/articles/amrize-slides-extended-trading-q2-072235726.html",
-        "source": "Investing.com",
-        "published_at": "2026-08-07T07:22:35Z",
-        "fetched_at": "2026-08-07T07:46:43Z",
-        "ticker": null,
-        "source_tier": "aggregator"
-      },
-      {
-        "title": "Oil rises on concerns over Strait of Hormuz reopening plans",
-        "summary": "",
-        "url": "https://finance.yahoo.com/energy/articles/oil-rises-concerns-over-strait-004641480.html",
+        "url": "https://finance.yahoo.com/energy/articles/oil-rises-uncertainty-over-reopening-005834869.html",
         "source": "Reuters",
-        "published_at": "2026-08-07T07:00:24Z",
-        "fetched_at": "2026-08-07T07:46:43Z",
+        "published_at": "2026-08-10T06:55:07Z",
+        "fetched_at": "2026-08-10T07:46:26Z",
         "ticker": null,
         "source_tier": "aggregator"
       },
       {
-        "title": "Asian shares are mixed after US stocks fall back while oil rebounds",
+        "title": "BKV Q2 Deep Dive: Power, Upstream, and Carbon Capture Drive Integrated Growth",
         "summary": "",
-        "url": "https://finance.yahoo.com/markets/world-indices/articles/asian-shares-mixed-us-stocks-062902244.html",
+        "url": "https://finance.yahoo.com/energy/articles/bkv-q2-deep-dive-power-064522519.html",
+        "source": "StockStory",
+        "published_at": "2026-08-10T06:45:22Z",
+        "fetched_at": "2026-08-10T07:46:26Z",
+        "ticker": null,
+        "source_tier": "aggregator"
+      },
+      {
+        "title": "Asian shares track Wall Street gains, while oil prices bounce higher",
+        "summary": "",
+        "url": "https://finance.yahoo.com/markets/world-indices/articles/asian-shares-mixed-gains-wall-062649152.html",
         "source": "Associated Press",
-        "published_at": "2026-08-07T06:29:02Z",
-        "fetched_at": "2026-08-07T07:46:43Z",
+        "published_at": "2026-08-10T06:26:49Z",
+        "fetched_at": "2026-08-10T07:46:26Z",
         "ticker": null,
         "source_tier": "aggregator"
       },
       {
-        "title": "Arrow Exploration production now exceeds 5,000 barrels a day as well roll-out continues",
+        "title": "Tertiary Minerals sees more high grades at Mushima North project",
         "summary": "",
-        "url": "https://finance.yahoo.com/m/b09590a6-1a30-3d4f-9146-c2012d51dbea/arrow-exploration-production.html",
+        "url": "https://finance.yahoo.com/m/1c13bdf0-6e32-3a55-bcb2-0291153d7a53/tertiary-minerals-sees-more.html",
         "source": "Proactive",
-        "published_at": "2026-08-07T06:17:00Z",
-        "fetched_at": "2026-08-07T07:46:43Z",
+        "published_at": "2026-08-10T06:18:00Z",
+        "fetched_at": "2026-08-10T07:46:26Z",
         "ticker": null,
         "source_tier": "aggregator"
       },
       {
-        "title": "Scout drilling commences at the high-impact Minturn project, Northwest Greenland",
+        "title": "Galantas Gold Expands Indiana Drill Program to 12,500 Metres",
         "summary": "",
-        "url": "https://finance.yahoo.com/energy/articles/scout-drilling-commences-high-impact-060000256.html",
-        "source": "GlobeNewswire",
-        "published_at": "2026-08-07T06:00:00Z",
-        "fetched_at": "2026-08-07T07:46:43Z",
+        "url": "https://finance.yahoo.com/markets/commodities/articles/galantas-gold-expands-indiana-drill-060000452.html",
+        "source": "ACCESS Newswire",
+        "published_at": "2026-08-10T06:00:00Z",
+        "fetched_at": "2026-08-10T07:46:26Z",
         "ticker": null,
         "source_tier": "aggregator"
       },
       {
-        "title": "Oil Prices Jump as Houthi Attacks Raise Saudi Supply Risks",
+        "title": "Iran Tensions Highlight Defense Supply Gaps Poised to Lift 2 Stocks",
         "summary": "",
-        "url": "https://finance.yahoo.com/energy/articles/oil-prices-jump-houthi-attacks-054020316.html",
+        "url": "https://finance.yahoo.com/m/bb48b4f9-6291-3f28-9aeb-5584546af1e2/iran-tensions-highlight.html",
+        "source": "Motley Fool",
+        "published_at": "2026-08-10T05:50:00Z",
+        "fetched_at": "2026-08-10T07:46:26Z",
+        "ticker": null,
+        "source_tier": "aggregator"
+      },
+      {
+        "title": "Oil prices rise as traders assess US-Iran talks on Strait of Hormuz deal",
+        "summary": "",
+        "url": "https://finance.yahoo.com/m/8ac96855-9c43-30ff-a106-848e2cc16d23/oil-prices-rise-as-traders.html",
+        "source": "Euronews",
+        "published_at": "2026-08-10T05:43:49Z",
+        "fetched_at": "2026-08-10T07:46:26Z",
+        "ticker": null,
+        "source_tier": "aggregator"
+      },
+      {
+        "title": "Oil Prices Rise as Iran Hardens Hormuz Demands",
+        "summary": "",
+        "url": "https://finance.yahoo.com/energy/articles/oil-prices-rise-iran-hardens-053000723.html",
         "source": "Oilprice.com",
-        "published_at": "2026-08-07T05:40:20Z",
-        "fetched_at": "2026-08-07T07:46:43Z",
+        "published_at": "2026-08-10T05:30:00Z",
+        "fetched_at": "2026-08-10T07:46:26Z",
         "ticker": null,
         "source_tier": "aggregator"
       },
       {
-        "title": "BARK Inc (BARK) (Q1 2027) Earnings Call Highlights: Subscriber Retention Surges 170bps as ...",
+        "title": "Asia stocks firm; oil edges up on Gulf morass",
         "summary": "",
-        "url": "https://finance.yahoo.com/markets/stocks/articles/bark-inc-bark-q1-2027-050745001.html",
-        "source": "GuruFocus.com",
-        "published_at": "2026-08-07T05:07:45Z",
-        "fetched_at": "2026-08-07T07:46:43Z",
-        "ticker": null,
-        "source_tier": "aggregator"
-      },
-      {
-        "title": "Warner Bros. Discovery Says Disney Bundle Is Delivering: ‘Proof Is in the Data’ as Churn Falls, Subscriber Growth Improves",
-        "summary": "",
-        "url": "https://finance.yahoo.com/media-advertising/articles/warner-bros-discovery-says-disney-044230739.html",
-        "source": "Benzinga",
-        "published_at": "2026-08-07T04:42:30Z",
-        "fetched_at": "2026-08-07T07:46:43Z",
+        "url": "https://finance.yahoo.com/news/asia-stocks-edge-higher-oil-002532883.html",
+        "source": "Reuters",
+        "published_at": "2026-08-10T05:25:32Z",
+        "fetched_at": "2026-08-10T07:46:26Z",
         "ticker": null,
         "source_tier": "aggregator"
       }
@@ -116,12 +116,12 @@
       {
         "source": "Yahoo Finance",
         "status": "ok",
-        "item_count": 43
+        "item_count": 39
       },
       {
         "source": "Federal Reserve",
         "status": "ok",
-        "item_count": 5
+        "item_count": 3
       }
     ]
   },
@@ -130,17 +130,27 @@
       "status": "ok",
       "query_type": "ticker",
       "ticker": "515880.SS",
-      "start_date": "2026-08-07",
-      "end_date": "2026-08-07",
-      "fetched_at": "2026-08-07T07:46:45Z",
+      "start_date": "2026-08-10",
+      "end_date": "2026-08-10",
+      "fetched_at": "2026-08-10T07:46:27Z",
       "items": [
         {
-          "title": "FCC“光模块禁令”系误读，通信ETF国泰（515880）大涨3%，光模块占比超50%",
-          "summary": "FCC“光模块禁令”系误读，通信ETF国泰（515880）大涨3%，光模块占比超50% 东方财富",
-          "url": "https://news.google.com/rss/articles/CBMiYEFVX3lxTE10emUyVWc1eTdRel9KQjNsMVhkUjZLZkpjWTBqRzBzVks5cTFYd01ZV2I5X2hLWVRSZFVzRTVLeEcxVWxyYUpMOWYta0NJSU1IcE0xS1oxM2FnbE9ockdQag?oc=5",
-          "source": "Google News / 东方财富",
-          "published_at": "2026-08-07T04:18:45Z",
-          "fetched_at": "2026-08-07T07:46:45Z",
+          "title": "通信ETF国泰（515880）开盘涨0.15%，重仓股新易盛跌0.21%，中际旭创跌0.20%",
+          "summary": "通信ETF国泰（515880）开盘涨0.15%，重仓股新易盛跌0.21%，中际旭创跌0.20% 新浪财经",
+          "url": "https://news.google.com/rss/articles/CBMimAFBVV95cUxQMW1MMkZ6ZXVsOWxNcGNFYXpVTTk0NHVaYzYteEZFbWh6NTIwSUZQT0JNMGZRRXNtcGRRUXF1cnZ5ZElkbzRRalpJam0zWlBoSUpWbHRqR1cyMW9lUXFKNS1GeTRFdE1CVGRMT0RULU96cDhhdjQxWmU5ZnZtNkdqQTRBYXEzcmkwaUo1MjFjdmRGdXpKaEFGZw?oc=5",
+          "source": "Google News / 新浪财经",
+          "published_at": "2026-08-10T01:30:00Z",
+          "fetched_at": "2026-08-10T07:46:27Z",
+          "ticker": "515880.SS",
+          "source_tier": "aggregator"
+        },
+        {
+          "title": "8月7日通信ETF国泰（515880）份额减少6.60亿份，最新份额615.94亿份，最新规模406.21亿元",
+          "summary": "8月7日通信ETF国泰（515880）份额减少6.60亿份，最新份额615.94亿份，最新规模406.21亿元 手机新浪网",
+          "url": "https://news.google.com/rss/articles/CBMiYkFVX3lxTFBpU0dCZzFoQVpYMzNJaTQ5YW83YjhVT1BwVXVwcmk5XzBBQnFmZ1pRUkhxa2syZmd3a05UVTU5YnlBMmhmSk0yZlpsczRmQVNINnF5WDRTWVFRcmIzNG1OOWxB?oc=5",
+          "source": "Google News / 手机新浪网",
+          "published_at": "2026-08-10T01:01:00Z",
+          "fetched_at": "2026-08-10T07:46:27Z",
           "ticker": "515880.SS",
           "source_tier": "aggregator"
         }
@@ -154,7 +164,7 @@
         {
           "source": "Google News RSS",
           "status": "ok",
-          "item_count": 1
+          "item_count": 2
         },
         {
           "source": "SEC EDGAR",
@@ -164,24 +174,13 @@
       ]
     },
     "512480.SS": {
-      "status": "ok",
+      "status": "empty",
       "query_type": "ticker",
       "ticker": "512480.SS",
-      "start_date": "2026-08-07",
-      "end_date": "2026-08-07",
-      "fetched_at": "2026-08-07T07:46:48Z",
-      "items": [
-        {
-          "title": "聚焦半导体芯片最强主线行情！科创芯片设计ETF国联安（588780）、半导体ETF国联安（512480）双双升超3%，同类中涨幅领先",
-          "summary": "聚焦半导体芯片最强主线行情！科创芯片设计ETF国联安（588780）、半导体ETF国联安（512480）双双升超3%，同类中涨幅领先 搜狐网",
-          "url": "https://news.google.com/rss/articles/CBMiiAFBVV95cUxQbW93aXEyam55bUJEaGpBQk9ETVpYcE9PNEdhaUlkUDBYOW5hc0t1TmM2Z05yTzBkZy1ZQlBXMmpuSWhWMHpfcm5nMU12NEpQQi0ybTNibUttX0JIWFduTTZhbGV5TFNpTjNzRWxKTUsxbTdYZkdrbkUyMFJHQlFMUXZydU9ZMHM4?oc=5",
-          "source": "Google News / 搜狐网",
-          "published_at": "2026-08-07T06:46:54Z",
-          "fetched_at": "2026-08-07T07:46:48Z",
-          "ticker": "512480.SS",
-          "source_tier": "aggregator"
-        }
-      ],
+      "start_date": "2026-08-10",
+      "end_date": "2026-08-10",
+      "fetched_at": "2026-08-10T07:46:32Z",
+      "items": [],
       "source_statuses": [
         {
           "source": "Yahoo Finance",
@@ -190,8 +189,8 @@
         },
         {
           "source": "Google News RSS",
-          "status": "ok",
-          "item_count": 1
+          "status": "empty",
+          "item_count": 0
         },
         {
           "source": "SEC EDGAR",
@@ -203,122 +202,122 @@
   },
   "items": [
     {
-      "title": "Oil extends gains and stocks mostly down on fresh Hormuz worries",
+      "title": "European stocks steady as investors weigh Hormuz risks, data calendar",
       "summary": "",
-      "url": "https://finance.yahoo.com/energy/articles/oil-extends-gains-stocks-fall-024841858.html",
-      "source": "AFP",
-      "published_at": "2026-08-07T07:37:05Z",
-      "fetched_at": "2026-08-07T07:46:43Z",
-      "ticker": null,
-      "source_tier": "aggregator"
-    },
-    {
-      "title": "Global equity funds draw inflows for 11th week as upbeat earnings lift sentiment",
-      "summary": "",
-      "url": "https://finance.yahoo.com/news/global-equity-funds-draw-inflows-072641363.html",
+      "url": "https://finance.yahoo.com/markets/world-indices/articles/european-stocks-steady-investors-weigh-073154426.html",
       "source": "Reuters",
-      "published_at": "2026-08-07T07:26:41Z",
-      "fetched_at": "2026-08-07T07:46:43Z",
+      "published_at": "2026-08-10T07:31:54Z",
+      "fetched_at": "2026-08-10T07:46:26Z",
       "ticker": null,
       "source_tier": "aggregator"
     },
     {
-      "title": "Amrize slides in extended trading on Q2 profit miss, EBITDA guide cut",
+      "title": "Oil steady as Iran tempers hopes for swift Hormuz reopening",
       "summary": "",
-      "url": "https://finance.yahoo.com/markets/stocks/articles/amrize-slides-extended-trading-q2-072235726.html",
-      "source": "Investing.com",
-      "published_at": "2026-08-07T07:22:35Z",
-      "fetched_at": "2026-08-07T07:46:43Z",
-      "ticker": null,
-      "source_tier": "aggregator"
-    },
-    {
-      "title": "Oil rises on concerns over Strait of Hormuz reopening plans",
-      "summary": "",
-      "url": "https://finance.yahoo.com/energy/articles/oil-rises-concerns-over-strait-004641480.html",
+      "url": "https://finance.yahoo.com/energy/articles/oil-rises-uncertainty-over-reopening-005834869.html",
       "source": "Reuters",
-      "published_at": "2026-08-07T07:00:24Z",
-      "fetched_at": "2026-08-07T07:46:43Z",
+      "published_at": "2026-08-10T06:55:07Z",
+      "fetched_at": "2026-08-10T07:46:26Z",
       "ticker": null,
       "source_tier": "aggregator"
     },
     {
-      "title": "聚焦半导体芯片最强主线行情！科创芯片设计ETF国联安（588780）、半导体ETF国联安（512480）双双升超3%，同类中涨幅领先",
-      "summary": "聚焦半导体芯片最强主线行情！科创芯片设计ETF国联安（588780）、半导体ETF国联安（512480）双双升超3%，同类中涨幅领先 搜狐网",
-      "url": "https://news.google.com/rss/articles/CBMiiAFBVV95cUxQbW93aXEyam55bUJEaGpBQk9ETVpYcE9PNEdhaUlkUDBYOW5hc0t1TmM2Z05yTzBkZy1ZQlBXMmpuSWhWMHpfcm5nMU12NEpQQi0ybTNibUttX0JIWFduTTZhbGV5TFNpTjNzRWxKTUsxbTdYZkdrbkUyMFJHQlFMUXZydU9ZMHM4?oc=5",
-      "source": "Google News / 搜狐网",
-      "published_at": "2026-08-07T06:46:54Z",
-      "fetched_at": "2026-08-07T07:46:48Z",
-      "ticker": "512480.SS",
+      "title": "BKV Q2 Deep Dive: Power, Upstream, and Carbon Capture Drive Integrated Growth",
+      "summary": "",
+      "url": "https://finance.yahoo.com/energy/articles/bkv-q2-deep-dive-power-064522519.html",
+      "source": "StockStory",
+      "published_at": "2026-08-10T06:45:22Z",
+      "fetched_at": "2026-08-10T07:46:26Z",
+      "ticker": null,
       "source_tier": "aggregator"
     },
     {
-      "title": "Asian shares are mixed after US stocks fall back while oil rebounds",
+      "title": "Asian shares track Wall Street gains, while oil prices bounce higher",
       "summary": "",
-      "url": "https://finance.yahoo.com/markets/world-indices/articles/asian-shares-mixed-us-stocks-062902244.html",
+      "url": "https://finance.yahoo.com/markets/world-indices/articles/asian-shares-mixed-gains-wall-062649152.html",
       "source": "Associated Press",
-      "published_at": "2026-08-07T06:29:02Z",
-      "fetched_at": "2026-08-07T07:46:43Z",
+      "published_at": "2026-08-10T06:26:49Z",
+      "fetched_at": "2026-08-10T07:46:26Z",
       "ticker": null,
       "source_tier": "aggregator"
     },
     {
-      "title": "Arrow Exploration production now exceeds 5,000 barrels a day as well roll-out continues",
+      "title": "Tertiary Minerals sees more high grades at Mushima North project",
       "summary": "",
-      "url": "https://finance.yahoo.com/m/b09590a6-1a30-3d4f-9146-c2012d51dbea/arrow-exploration-production.html",
+      "url": "https://finance.yahoo.com/m/1c13bdf0-6e32-3a55-bcb2-0291153d7a53/tertiary-minerals-sees-more.html",
       "source": "Proactive",
-      "published_at": "2026-08-07T06:17:00Z",
-      "fetched_at": "2026-08-07T07:46:43Z",
+      "published_at": "2026-08-10T06:18:00Z",
+      "fetched_at": "2026-08-10T07:46:26Z",
       "ticker": null,
       "source_tier": "aggregator"
     },
     {
-      "title": "Scout drilling commences at the high-impact Minturn project, Northwest Greenland",
+      "title": "Galantas Gold Expands Indiana Drill Program to 12,500 Metres",
       "summary": "",
-      "url": "https://finance.yahoo.com/energy/articles/scout-drilling-commences-high-impact-060000256.html",
-      "source": "GlobeNewswire",
-      "published_at": "2026-08-07T06:00:00Z",
-      "fetched_at": "2026-08-07T07:46:43Z",
+      "url": "https://finance.yahoo.com/markets/commodities/articles/galantas-gold-expands-indiana-drill-060000452.html",
+      "source": "ACCESS Newswire",
+      "published_at": "2026-08-10T06:00:00Z",
+      "fetched_at": "2026-08-10T07:46:26Z",
       "ticker": null,
       "source_tier": "aggregator"
     },
     {
-      "title": "Oil Prices Jump as Houthi Attacks Raise Saudi Supply Risks",
+      "title": "Iran Tensions Highlight Defense Supply Gaps Poised to Lift 2 Stocks",
       "summary": "",
-      "url": "https://finance.yahoo.com/energy/articles/oil-prices-jump-houthi-attacks-054020316.html",
+      "url": "https://finance.yahoo.com/m/bb48b4f9-6291-3f28-9aeb-5584546af1e2/iran-tensions-highlight.html",
+      "source": "Motley Fool",
+      "published_at": "2026-08-10T05:50:00Z",
+      "fetched_at": "2026-08-10T07:46:26Z",
+      "ticker": null,
+      "source_tier": "aggregator"
+    },
+    {
+      "title": "Oil prices rise as traders assess US-Iran talks on Strait of Hormuz deal",
+      "summary": "",
+      "url": "https://finance.yahoo.com/m/8ac96855-9c43-30ff-a106-848e2cc16d23/oil-prices-rise-as-traders.html",
+      "source": "Euronews",
+      "published_at": "2026-08-10T05:43:49Z",
+      "fetched_at": "2026-08-10T07:46:26Z",
+      "ticker": null,
+      "source_tier": "aggregator"
+    },
+    {
+      "title": "Oil Prices Rise as Iran Hardens Hormuz Demands",
+      "summary": "",
+      "url": "https://finance.yahoo.com/energy/articles/oil-prices-rise-iran-hardens-053000723.html",
       "source": "Oilprice.com",
-      "published_at": "2026-08-07T05:40:20Z",
-      "fetched_at": "2026-08-07T07:46:43Z",
+      "published_at": "2026-08-10T05:30:00Z",
+      "fetched_at": "2026-08-10T07:46:26Z",
       "ticker": null,
       "source_tier": "aggregator"
     },
     {
-      "title": "BARK Inc (BARK) (Q1 2027) Earnings Call Highlights: Subscriber Retention Surges 170bps as ...",
+      "title": "Asia stocks firm; oil edges up on Gulf morass",
       "summary": "",
-      "url": "https://finance.yahoo.com/markets/stocks/articles/bark-inc-bark-q1-2027-050745001.html",
-      "source": "GuruFocus.com",
-      "published_at": "2026-08-07T05:07:45Z",
-      "fetched_at": "2026-08-07T07:46:43Z",
+      "url": "https://finance.yahoo.com/news/asia-stocks-edge-higher-oil-002532883.html",
+      "source": "Reuters",
+      "published_at": "2026-08-10T05:25:32Z",
+      "fetched_at": "2026-08-10T07:46:26Z",
       "ticker": null,
       "source_tier": "aggregator"
     },
     {
-      "title": "Warner Bros. Discovery Says Disney Bundle Is Delivering: ‘Proof Is in the Data’ as Churn Falls, Subscriber Growth Improves",
-      "summary": "",
-      "url": "https://finance.yahoo.com/media-advertising/articles/warner-bros-discovery-says-disney-044230739.html",
-      "source": "Benzinga",
-      "published_at": "2026-08-07T04:42:30Z",
-      "fetched_at": "2026-08-07T07:46:43Z",
-      "ticker": null,
+      "title": "通信ETF国泰（515880）开盘涨0.15%，重仓股新易盛跌0.21%，中际旭创跌0.20%",
+      "summary": "通信ETF国泰（515880）开盘涨0.15%，重仓股新易盛跌0.21%，中际旭创跌0.20% 新浪财经",
+      "url": "https://news.google.com/rss/articles/CBMimAFBVV95cUxQMW1MMkZ6ZXVsOWxNcGNFYXpVTTk0NHVaYzYteEZFbWh6NTIwSUZQT0JNMGZRRXNtcGRRUXF1cnZ5ZElkbzRRalpJam0zWlBoSUpWbHRqR1cyMW9lUXFKNS1GeTRFdE1CVGRMT0RULU96cDhhdjQxWmU5ZnZtNkdqQTRBYXEzcmkwaUo1MjFjdmRGdXpKaEFGZw?oc=5",
+      "source": "Google News / 新浪财经",
+      "published_at": "2026-08-10T01:30:00Z",
+      "fetched_at": "2026-08-10T07:46:27Z",
+      "ticker": "515880.SS",
       "source_tier": "aggregator"
     },
     {
-      "title": "FCC“光模块禁令”系误读，通信ETF国泰（515880）大涨3%，光模块占比超50%",
-      "summary": "FCC“光模块禁令”系误读，通信ETF国泰（515880）大涨3%，光模块占比超50% 东方财富",
-      "url": "https://news.google.com/rss/articles/CBMiYEFVX3lxTE10emUyVWc1eTdRel9KQjNsMVhkUjZLZkpjWTBqRzBzVks5cTFYd01ZV2I5X2hLWVRSZFVzRTVLeEcxVWxyYUpMOWYta0NJSU1IcE0xS1oxM2FnbE9ockdQag?oc=5",
-      "source": "Google News / 东方财富",
-      "published_at": "2026-08-07T04:18:45Z",
-      "fetched_at": "2026-08-07T07:46:45Z",
+      "title": "8月7日通信ETF国泰（515880）份额减少6.60亿份，最新份额615.94亿份，最新规模406.21亿元",
+      "summary": "8月7日通信ETF国泰（515880）份额减少6.60亿份，最新份额615.94亿份，最新规模406.21亿元 手机新浪网",
+      "url": "https://news.google.com/rss/articles/CBMiYkFVX3lxTFBpU0dCZzFoQVpYMzNJaTQ5YW83YjhVT1BwVXVwcmk5XzBBQnFmZ1pRUkhxa2syZmd3a05UVTU5YnlBMmhmSk0yZlpsczRmQVNINnF5WDRTWVFRcmIzNG1OOWxB?oc=5",
+      "source": "Google News / 手机新浪网",
+      "published_at": "2026-08-10T01:01:00Z",
+      "fetched_at": "2026-08-10T07:46:27Z",
       "ticker": "515880.SS",
       "source_tier": "aggregator"
     }
