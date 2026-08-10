@@ -1,6 +1,6 @@
 # Trading Workbench 下一 Agent 交接
 
-更新日期：2026-08-10（周一盘前生产验收并修复 HashKey 官方源迁移）
+更新日期：2026-08-11（修复结构化输出回退无完整性校验，追溯失效首份 verified 报告）
 
 实现基线：`main`。不要依赖本文中的旧提交号；接手时同时执行 `git rev-parse HEAD`、`git rev-parse origin/main`，并读取 Pages 与 Worker health 的 commit SHA。
 
@@ -15,6 +15,17 @@
 **维护约定**：任何 agent 做完一轮工作后，必须回到本文更新三处——§1 当前结论、§1.5 生产状态、§15 更新日志。发现本文与代码或生产不符时，**在同一提交里修正本文**，不要另开新的交接文档。数字和状态必须来自实际执行的命令，不要沿用上一轮的结论。
 
 ## 1. 当前结论
+
+### 2026-08-10/11 复核首份 verified 报告，发现并修复结构化输出回退无完整性校验
+
+用户要求"查看运行日志和数据情况，继续完善迭代修复"后的复核。生产审计首次出现 `verifiedReports: 1`（`512480.SS 2026-08-05`, Underweight），逐句核对其证据引用和派生数字（[D3] latestCloseChangePct 6.2951% 与 M648→M649 收盘价手工复算一致，[D7] strictMovingAverageAlignment bearish 与 close/MA20/MA60 大小关系一致）确认引用和算术本身没问题，**但正文本身在"最终决定维持"处戛然而止，整个 Investment Thesis 段落缺失**。追到 git 历史里的原始 `5_portfolio/decision.md`，源头 markdown 本身就在这里截断，不是发布流水线裁剪的——说明 claim validation 通过 ≠ 报告完整。
+
+- **根因**：`tradingagents/agents/utils/structured.py` 的 `invoke_structured_or_freetext()` 在结构化输出调用失败后，无条件回退到 `plain_llm.invoke(prompt)` 并直接返回 `response.content`，**没有任何完整性校验**。结构化路径本身受 Pydantic 必填字段保护（JSON 截断通常直接解析失败，被现有 `except Exception` 兜住），但 free-text 回退路径完全没有防护，一次被 token 上限或连接中断截断的响应会被原样存成"最终决策"。
+- **修复范围有意收窄到 Portfolio Manager 一处**：这个共享工具函数被 4 个 agent 调用（`portfolio_manager.py`／`trader.py`／`research_manager.py`／`sentiment_analyst.py`），本想统一加保护，但逐一读 4 份 prompt 后发现**只有 Portfolio Manager 的 prompt 明确告诉模型"free-text 回退时只用 `**Rating**`/`**Executive Summary**`/`**Investment Thesis**` 这三个 label"**；另外三个 prompt 都没有这个格式承诺。给没有格式承诺的 agent 强制校验 label 存在，会把"输出完整但格式不同"的正常情况错判成截断——这在开发过程中已经被两条既有单测的真实失败挡住了（`test_falls_back_to_freetext_when_structured_unavailable` for Trader/Sentiment，两者的既有 fallback fixture 都不严格符合各自 render 函数的 label 格式，说明这些 prompt 从未对该格式做出保证）。因此只给 `portfolio_manager.py` 传 `required_labels=("**Rating**", "**Executive Summary**", "**Investment Thesis**")`，另外三处保留默认（不校验），并在各自调用点加注释说明原因。
+- **机制**：新增 `IncompleteAgentOutputError`；free-text 回退文本缺 label 时先重试一次（可能只是瞬时截断），仍缺则抛出该异常。`run_daily.py` 的 `main()` 已有逐 ticker `try/except`（第 1159-1167 行），单个 ticker 抛异常只会让该 ticker 记为失败、不影响同批次其它标的——这条隔离路径本来就存在且已被生产验证过（审计索引里 `analysisExecutionFailures` 计数早已非零），不需要额外新建。
+- **已追溯失效已发布的那份报告**：`scripts/report-audit.mjs` 的 `INVALIDATED_REPORTS` 加入 `reports/512480.SS/2026-08-05/complete_report.md`，`INVALIDATION_CODE_BY_REPORT` 给它 `TRUNCATED_AGENT_OUTPUT`。本地重跑 `node scripts/report-audit.mjs` 确认该报告 `auditStatus` 变回 `invalidated`、`verifiedReports` 归零；发布后 `prepare-pages-public.mjs` 会自动把公开正文换成安全墓碑，不需要手工改写原始 markdown（篡改历史产物本身不是本项目的做法，一律用失效名单 + 安全墓碑覆盖）。
+- **已知残余缺口，本轮未处理**：`_looks_complete()` 只检查"必需 label 是否存在"，不检查"label 存在但其后内容本身被截断"（比如 Investment Thesis 标题出现了、但内容写到一半没了）——这种情况检测不到。这是相对当前已证实的缺陷类型（整段缺失）做的最小化修复，不是完备方案；如果之后要覆盖内容级截断，得再想一个不会误伤合法长文本的启发式，别急着上。
+- **本地验证**：新增 5 条 `tests/test_structured_agents.py` 用例 + 1 条 `tests/test_memory_log.py` 用例（含"重试后仍不完整会 raise"、"重试后完整会正常返回"、"结构化路径同样受保护"、"未传 required_labels 时保持旧行为不变"）；同时修了两条既有 fallback 测试的 fixture（trader/sentiment 缺陷的两个是真·格式误判，pm 那条 fixture 本身就在验证"来者不拒"的旧行为，已改成验证新的正确行为并新增一条"截断后 raise"用例）。全量 Python 回归 **在本机必须带 `PYTHONUTF8=1`**（缺这个环境变量会在 `test_reporting.py`/`test_report_market_history.py` 里对着 UTF-8 报告内容用 GBK 解码报 9 个 `UnicodeDecodeError`，纯粹是 Windows 本地化噪音，与本轮改动无关，CI 的 Ubuntu/UTF-8 环境不会复现，之前已有报告记录用了这个环境变量，本轮只是重新踩了一遍确认过程）。
 
 ### 2026-08-10 周一 08:25 后生产验收
 

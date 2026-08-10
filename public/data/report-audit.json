@@ -1,10 +1,10 @@
 {
   "version": 1,
-  "generatedAt": "2026-08-10T08:05:08.646Z",
+  "generatedAt": "2026-08-10T18:05:09.472Z",
   "summary": {
     "successfulReports": 94,
-    "verifiedReports": 1,
-    "invalidatedReports": 14,
+    "verifiedReports": 0,
+    "invalidatedReports": 15,
     "legacyUnverifiedReports": 79,
     "invalidRecords": 7,
     "evidenceValidationFailures": 4,
@@ -471,9 +471,10 @@
       "rating": "Underweight",
       "analysisStatus": "rated",
       "report": "reports/512480.SS/2026-08-05/complete_report.md",
-      "auditStatus": "verified",
+      "auditStatus": "invalidated",
       "failureClass": null,
       "problemCodes": [
+        "TRUNCATED_AGENT_OUTPUT",
         "ETF_TEMPLATE_MISMATCH",
         "MISSING_PUBLICATION_TIME"
       ],
@@ -1355,7 +1356,7 @@
         "slotId": null,
         "scheduledFor": null
       },
-      "supersededBy": "reports/512480.SS/2026-08-05/complete_report.md"
+      "supersededBy": null
     },
     {
       "ticker": "515880.SS",
@@ -1990,7 +1991,7 @@
         "slotId": null,
         "scheduledFor": null
       },
-      "supersededBy": "reports/512480.SS/2026-08-05/complete_report.md"
+      "supersededBy": null
     },
     {
       "ticker": "515880.SS",
@@ -2098,7 +2099,7 @@
         "slotId": null,
         "scheduledFor": null
       },
-      "supersededBy": "reports/512480.SS/2026-08-05/complete_report.md"
+      "supersededBy": null
     },
     {
       "ticker": "515880.SS",
@@ -2581,7 +2582,7 @@
         "slotId": "slot-60509113eaa7d4f54994f4bb62d3ab2cbd6813408b484fdfc9bcc21fa51c72d6",
         "scheduledFor": "2026-07-28T07:20:00.000Z"
       },
-      "supersededBy": "reports/512480.SS/2026-08-05/complete_report.md"
+      "supersededBy": null
     },
     {
       "ticker": "515880.SS",
@@ -3788,7 +3789,7 @@
         "slotId": null,
         "scheduledFor": null
       },
-      "supersededBy": "reports/512480.SS/2026-08-05/complete_report.md"
+      "supersededBy": null
     },
     {
       "ticker": "512480.SS",
@@ -3824,7 +3825,7 @@
         "slotId": null,
         "scheduledFor": null
       },
-      "supersededBy": "reports/512480.SS/2026-08-05/complete_report.md"
+      "supersededBy": null
     },
     {
       "ticker": "NVDA",

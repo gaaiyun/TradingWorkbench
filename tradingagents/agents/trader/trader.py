@@ -51,6 +51,10 @@ def create_trader(llm):
             },
         ]
 
+        # required_labels is intentionally not set: unlike the Portfolio
+        # Manager, this prompt never tells a free-text fallback which labels
+        # to use, so enforcing them here would reject legitimately complete
+        # output that just isn't formatted like render_trader_proposal's.
         trader_plan = invoke_structured_or_freetext(
             structured_llm,
             llm,

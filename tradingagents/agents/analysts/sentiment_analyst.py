@@ -101,6 +101,10 @@ def create_sentiment_analyst(llm):
         # data is already in the prompt.
         formatted_messages = prompt.format_messages(messages=state["messages"])
 
+        # required_labels is intentionally not set: this prompt describes
+        # output fields by schema name (overall_band, confidence, ...), not
+        # the markdown labels render_sentiment_report uses, so a free-text
+        # fallback has no reliable format to check against.
         report_text = invoke_structured_or_freetext(
             structured_llm,
             llm,

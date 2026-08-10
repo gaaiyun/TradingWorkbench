@@ -191,6 +191,119 @@ def test_invoke_structured_falls_back_when_result_is_none():
 
 
 @pytest.mark.unit
+class TestIncompleteOutputDetection:
+    """The first report to ever pass claim validation (512480.SS 2026-08-05)
+    had its Investment Thesis section missing entirely: the structured call
+    failed, the free-text fallback was itself truncated, and
+    ``invoke_structured_or_freetext`` returned it verbatim with no check.
+    ``required_labels`` closes that gap."""
+
+    def test_truncated_freetext_is_retried_then_raises_if_still_incomplete(self):
+        from tradingagents.agents.utils.structured import (
+            IncompleteAgentOutputError,
+            invoke_structured_or_freetext,
+        )
+
+        structured = MagicMock()
+        structured.invoke.side_effect = ValueError("bad JSON from model")
+        plain = MagicMock()
+        # Both the first attempt and the retry are missing Investment Thesis,
+        # matching the real production failure mode.
+        plain.invoke.return_value = MagicMock(
+            content="**Rating**: Underweight\n\n**Executive Summary**: cut exposure.",
+        )
+
+        with pytest.raises(IncompleteAgentOutputError):
+            invoke_structured_or_freetext(
+                structured, plain, "prompt", render=lambda r: r,
+                agent_name="Portfolio Manager",
+                required_labels=("**Rating**", "**Executive Summary**", "**Investment Thesis**"),
+            )
+        assert plain.invoke.call_count == 2
+
+    def test_truncated_freetext_succeeds_on_retry(self):
+        from tradingagents.agents.utils.structured import invoke_structured_or_freetext
+
+        structured = MagicMock()
+        structured.invoke.side_effect = ValueError("bad JSON from model")
+        plain = MagicMock()
+        complete = (
+            "**Rating**: Underweight\n\n**Executive Summary**: cut exposure.\n\n"
+            "**Investment Thesis**: technicals are bearish."
+        )
+        plain.invoke.side_effect = [
+            MagicMock(content="**Rating**: Underweight\n\n**Executive Summary**: cut exposure."),
+            MagicMock(content=complete),
+        ]
+
+        out = invoke_structured_or_freetext(
+            structured, plain, "prompt", render=lambda r: r,
+            agent_name="Portfolio Manager",
+            required_labels=("**Rating**", "**Executive Summary**", "**Investment Thesis**"),
+        )
+        assert out == complete
+        assert plain.invoke.call_count == 2
+
+    def test_complete_freetext_is_not_retried(self):
+        from tradingagents.agents.utils.structured import invoke_structured_or_freetext
+
+        structured = MagicMock()
+        structured.invoke.side_effect = ValueError("bad JSON from model")
+        plain = MagicMock()
+        complete = "**Action**: Hold\n\n**Reasoning**: balanced.\n\nFINAL TRANSACTION PROPOSAL: **HOLD**"
+        plain.invoke.return_value = MagicMock(content=complete)
+
+        out = invoke_structured_or_freetext(
+            structured, plain, "prompt", render=lambda r: r,
+            agent_name="Trader",
+            required_labels=("**Action**", "**Reasoning**", "FINAL TRANSACTION PROPOSAL"),
+        )
+        assert out == complete
+        plain.invoke.assert_called_once()
+
+    def test_structured_result_missing_a_required_section_falls_back_to_freetext(self):
+        """Pydantic accepts an empty-but-present string field; the label check
+        is the only thing that catches a technically-valid-but-truncated
+        structured result."""
+        from tradingagents.agents.utils.structured import invoke_structured_or_freetext
+
+        structured = MagicMock()
+        structured.invoke.return_value = "incomplete-marker"
+        plain = MagicMock()
+        complete = "**Rating**: Hold\n\n**Executive Summary**: s.\n\n**Investment Thesis**: t."
+        plain.invoke.return_value = MagicMock(content=complete)
+
+        def render(marker):
+            if marker == "incomplete-marker":
+                return "**Rating**: Hold\n\n**Executive Summary**: s."
+            return complete
+
+        out = invoke_structured_or_freetext(
+            structured, plain, "prompt", render=render,
+            agent_name="Portfolio Manager",
+            required_labels=("**Rating**", "**Executive Summary**", "**Investment Thesis**"),
+        )
+        assert out == complete
+        plain.invoke.assert_called_once()
+
+    def test_no_required_labels_skips_the_check_entirely(self):
+        """Backward compatible: callers that don't opt in keep today's
+        no-validation behavior."""
+        from tradingagents.agents.utils.structured import invoke_structured_or_freetext
+
+        structured = MagicMock()
+        structured.invoke.side_effect = ValueError("bad JSON")
+        plain = MagicMock()
+        plain.invoke.return_value = MagicMock(content="anything, even truncated mid")
+
+        out = invoke_structured_or_freetext(
+            structured, plain, "prompt", render=lambda r: r, agent_name="x",
+        )
+        assert out == "anything, even truncated mid"
+        plain.invoke.assert_called_once()
+
+
+@pytest.mark.unit
 class TestTraderAgent:
     def test_structured_path_produces_rendered_markdown(self):
         captured = {}

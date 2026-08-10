@@ -84,6 +84,7 @@ Be decisive only within those evidence limits.{get_language_instruction()}
             prompt,
             render_pm_decision,
             "Portfolio Manager",
+            required_labels=("**Rating**", "**Executive Summary**", "**Investment Thesis**"),
         )
 
         new_risk_debate_state = {

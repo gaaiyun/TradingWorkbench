@@ -18,6 +18,7 @@ export const INVALIDATED_REPORTS = new Set([
   "reports/515880.SS/2026-07-30-v5/complete_report.md",
   "reports/515880.SS/2026-07-30-v6/complete_report.md",
   "reports/512480.SS/2026-07-30-v6/complete_report.md",
+  "reports/512480.SS/2026-08-05/complete_report.md",
 ]);
 
 const INVALIDATION_CODE_BY_REPORT = new Map([
@@ -36,6 +37,18 @@ const INVALIDATION_CODE_BY_REPORT = new Map([
   [
     "reports/512480.SS/2026-07-30-v6/complete_report.md",
     "FILTERED_UNSAFE_PUBLIC_CLAIM",
+  ],
+  [
+    // The first report ever to pass claim validation. Its raw Portfolio
+    // Manager decision cut off mid-sentence ("...最终决定维持") with the
+    // entire Investment Thesis section missing: the structured-output call
+    // failed and the free-text fallback was itself truncated, and
+    // invoke_structured_or_freetext returned it verbatim with no
+    // completeness check. Fixed by required_labels in
+    // tradingagents/agents/utils/structured.py; this entry only retracts
+    // the one report generated before that fix existed.
+    "reports/512480.SS/2026-08-05/complete_report.md",
+    "TRUNCATED_AGENT_OUTPUT",
   ],
 ]);
 

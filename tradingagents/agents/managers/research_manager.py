@@ -49,6 +49,11 @@ Non-negotiable evidence rules:
 - When evidence is missing or contradictory, say what is unresolved instead of inventing a value.
 """ + get_language_instruction()
 
+        # required_labels is intentionally not set: this prompt never tells a
+        # free-text fallback which labels to use (unlike the Portfolio
+        # Manager's explicit instruction), so enforcing them would reject
+        # legitimately complete output that isn't formatted like
+        # render_research_plan's.
         investment_plan = invoke_structured_or_freetext(
             structured_llm,
             llm,

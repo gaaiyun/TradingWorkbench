@@ -733,15 +733,34 @@ class TestPortfolioManagerInjection:
 
     def test_pm_falls_back_to_freetext_when_structured_unavailable(self):
         """If a provider does not support with_structured_output, the agent
-        falls back to a plain invoke and returns whatever prose the model
-        produced, so the pipeline never blocks."""
-        plain_response = "**Rating**: Sell\n\nExit ahead of guidance."
+        falls back to a plain invoke; a complete response is used as-is so
+        the pipeline never blocks just because the provider lacks structured
+        output support."""
+        plain_response = (
+            "**Rating**: Sell\n\n**Executive Summary**: Exit ahead of guidance.\n\n"
+            "**Investment Thesis**: Margin compression risk outweighs the setup."
+        )
         llm = MagicMock()
         llm.with_structured_output.side_effect = NotImplementedError("provider unsupported")
         llm.invoke.return_value = MagicMock(content=plain_response)
         pm_node = create_portfolio_manager(llm)
         result = pm_node(_make_pm_state())
         assert result["final_trade_decision"] == plain_response
+
+    def test_pm_raises_when_freetext_fallback_is_truncated_after_retry(self):
+        """A free-text fallback missing a required section (#1183: the first
+        report ever to pass claim validation had its entire Investment
+        Thesis section missing) must not be saved as a finished report."""
+        from tradingagents.agents.utils.structured import IncompleteAgentOutputError
+
+        truncated = "**Rating**: Underweight\n\n**Executive Summary**: cut exposure."
+        llm = MagicMock()
+        llm.with_structured_output.side_effect = NotImplementedError("provider unsupported")
+        llm.invoke.return_value = MagicMock(content=truncated)
+        pm_node = create_portfolio_manager(llm)
+        with pytest.raises(IncompleteAgentOutputError):
+            pm_node(_make_pm_state())
+        assert llm.invoke.call_count == 2  # original attempt + one retry
 
     # get_past_context ordering and limits
 
