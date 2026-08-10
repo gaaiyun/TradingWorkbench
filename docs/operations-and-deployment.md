@@ -453,6 +453,8 @@ slot 应进入 completed、degraded 或带明确原因的 deferred/failed。检�
 
 HashKey 官方源使用 `https://group.hashkey.com/category/blog/news/feed/`。该地址是公司官网 WordPress RSS；验收要求 HTTP 200、RSS/channel 结构合法、文章链接仍为 `https://group.hashkey.com/...`，并标记 `sourceTier=evidence`。旧 `/en/news/categories/announcement-1` 已于 2026-08-10 实测返回 404，不得恢复使用；解析器暂时保留旧嵌入式页面格式兼容，但生产主路径以 RSS 为准。
 
+官网迁移可能让同一公告同时存在旧 `/en/newsroom/...` 与新根路径 URL。D1 保留来源轨迹，`/api/news` 在同一标的内按 `cluster_id` 合并，优先返回 `fetched_at` 更新的记录；不同标的对同一主题文章的合法映射继续保留，由前端聚合显示。
+
 ### 12.5 中国政府网与上交所具体检查
 
 对 A 股通信和芯片主题分别检查：

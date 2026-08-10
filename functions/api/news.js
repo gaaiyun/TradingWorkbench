@@ -30,7 +30,21 @@ async function queryRelevantNewsItems(db, filters) {
     ...filters,
     limit: Math.min(MAX_NEWS_LIMIT, requestedLimit * 4),
   });
-  return rows.filter(isRelevantAShareDiscovery).slice(0, requestedLimit);
+  const selected = new Map();
+  for (const row of rows.filter(isRelevantAShareDiscovery)) {
+    const cluster = String(row?.cluster_id || "").trim();
+    const key = cluster
+      ? `${String(row?.symbol || "")}\n${cluster}`
+      : String(row?.id || row?.url || "");
+    const current = selected.get(key);
+    if (
+      !current
+      || Date.parse(row?.fetched_at || "") > Date.parse(current?.fetched_at || "")
+    ) {
+      selected.set(key, row);
+    }
+  }
+  return [...selected.values()].slice(0, requestedLimit);
 }
 
 export function onRequestGet(context) {

@@ -783,6 +783,64 @@ test("news envelope freshness follows the newest article instead of the oldest r
   assert.equal(payload.data.length, 2);
 });
 
+test("news API collapses one cluster per symbol and keeps the latest fetched canonical link", async () => {
+  const base = {
+    profile_id: "cn-semi-comms",
+    topic: "hashkey",
+    title: "HashKey Holdings investor update",
+    source: "HashKey Investor Relations",
+    source_tier: "evidence",
+    as_of: "2026-08-05T02:00:02Z",
+    freshness: "stale",
+    adjustment: null,
+    quality: "evidence",
+    cluster_id: "cluster-hashkey-update",
+  };
+  const DB = new FakeD1({
+    rows: {
+      news_items: [
+        {
+          ...base,
+          id: "news-legacy",
+          symbol: "3887.HK",
+          url: "https://group.hashkey.com/en/newsroom/hashkey-update",
+          published_at: "2026-08-05T02:00:02Z",
+          fetched_at: "2026-08-08T02:00:00Z",
+        },
+        {
+          ...base,
+          id: "news-current",
+          symbol: "3887.HK",
+          url: "https://group.hashkey.com/hashkey-update/",
+          published_at: "2026-08-05T02:00:00Z",
+          fetched_at: "2026-08-10T00:50:00Z",
+        },
+        {
+          ...base,
+          id: "news-other-symbol",
+          symbol: "GOOGL",
+          url: "https://group.hashkey.com/hashkey-update/",
+          published_at: "2026-08-05T02:00:00Z",
+          fetched_at: "2026-08-10T00:50:00Z",
+        },
+      ],
+    },
+  });
+
+  const response = await newsApi.onRequestGet({
+    request: request("/api/news?profile=cn-semi-comms&limit=20"),
+    env: { DB },
+  });
+  const payload = await response.json();
+
+  assert.equal(payload.data.length, 2);
+  assert.equal(
+    payload.data.find(({ symbol }) => symbol === "3887.HK").url,
+    "https://group.hashkey.com/hashkey-update/",
+  );
+  assert.equal(payload.data.some(({ symbol }) => symbol === "GOOGL"), true);
+});
+
 test("news API hides stored A-share discovery false positives before applying the response limit", async () => {
   const base = {
     symbol: "512480.SS",
