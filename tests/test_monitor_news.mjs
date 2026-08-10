@@ -843,6 +843,42 @@ test("HashKey investor page parser extracts the embedded official post feed", as
   }]);
 });
 
+test("HashKey investor feed accepts the current WordPress RSS endpoint", async () => {
+  const { collectNewsForProfile } = await import(newsUrl);
+  const calls = [];
+  const writes = [];
+  const rss = `<?xml version="1.0"?><rss><channel>
+    <item><title>HashKey Holdings publishes an investor update</title><link>https://group.hashkey.com/hashkey-investor-update/</link><pubDate>Wed, 05 Aug 2026 02:02:02 GMT</pubDate><description>Official company update.</description></item>
+  </channel></rss>`;
+  const result = await collectNewsForProfile({
+    profile: {
+      ...monitorSettings().profiles[0],
+      targets: [{ symbol: "3887.HK" }],
+    },
+    db: {},
+    fetcher: async (url) => {
+      calls.push(String(url));
+      return new Response(rss, {
+        status: 200,
+        headers: { "content-type": "application/rss+xml; charset=UTF-8" },
+      });
+    },
+    writeItems: async (_db, payload) => writes.push(payload),
+    now: new Date("2026-08-10T00:25:00.000Z"),
+  });
+  const item = writes.flatMap(({ items }) => items)[0];
+  assert.equal(result.status, "completed");
+  assert.equal(calls.length, 1);
+  assert.equal(
+    calls[0],
+    "https://group.hashkey.com/category/blog/news/feed/",
+  );
+  assert.equal(item.symbol, "3887.HK");
+  assert.equal(item.source, "HashKey Investor Relations");
+  assert.equal(item.sourceTier, "evidence");
+  assert.equal(item.url, "https://group.hashkey.com/hashkey-investor-update/");
+});
+
 test("news collection writes relevant discovery items and rejects bare SMH false positives", async () => {
   const { collectNewsForProfile } = await import(newsUrl);
   const writes = [];
@@ -978,7 +1014,7 @@ test("HashKey news prefers the official investor feed before discovery providers
   const item = writes.flatMap(({ items }) => items)[0];
   assert.equal(result.status, "completed");
   assert.equal(calls.length, 1);
-  assert.equal(calls[0], "https://group.hashkey.com/en/news/categories/announcement-1");
+  assert.equal(calls[0], "https://group.hashkey.com/category/blog/news/feed/");
   assert.equal(item.symbol, "3887.HK");
   assert.equal(item.source, "HashKey Investor Relations");
   assert.equal(item.sourceTier, "evidence");

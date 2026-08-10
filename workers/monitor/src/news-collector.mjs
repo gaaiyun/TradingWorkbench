@@ -15,7 +15,7 @@ const GOV_POLICY_CATEGORIES = Object.freeze({
   gongbao: "evidence",
   otherfile: "discovery",
 });
-const HASHKEY_IR_URL = "https://group.hashkey.com/en/news/categories/announcement-1";
+const HASHKEY_IR_URL = "https://group.hashkey.com/category/blog/news/feed/";
 const FEDERAL_RESERVE_RSS_URL =
   "https://www.federalreserve.gov/feeds/press_all.xml";
 const SEC_EDGAR_CIK = {
@@ -507,6 +507,22 @@ export function parseFederalReserveRss(xml) {
 
 export function parseHashKeyFeedPage(html) {
   const value = String(html || "");
+  if (/<rss(?:\s[^>]*)?>/i.test(value) && /<channel(?:\s[^>]*)?>/i.test(value)) {
+    return parseRssItems(value, RSS_SCAN_LIMIT).flatMap((item) => {
+      try {
+        const url = new URL(item.url);
+        if (
+          url.protocol !== "https:"
+          || url.hostname.toLocaleLowerCase() !== "group.hashkey.com"
+        ) {
+          return [];
+        }
+        return [{ ...item, publisher: "HashKey Holdings" }];
+      } catch {
+        return [];
+      }
+    }).slice(0, RSS_LIMIT_PER_QUERY);
+  }
   const marker = '\\"posts\\":{\\"posts\\":';
   const start = value.indexOf(marker);
   if (start < 0) return [];
@@ -1037,7 +1053,7 @@ async function fetchContent(candidate, fetcher, requestConfig = {}) {
     }
     const contentType = response.headers.get("content-type") || "";
     const supported = candidate.format === "hashkey-feed"
-      ? /text\/html/i.test(contentType)
+      ? /(?:text\/html|xml|rss)/i.test(contentType)
       : candidate.format === "eastmoney-jsonp"
         ? /(?:javascript|json|text\/plain)/i.test(contentType)
       : candidate.format === "gov-policy-json"
@@ -1125,7 +1141,9 @@ function validateEvidenceEnvelope(candidate, content) {
   } else if (candidate.format === "hashkey-feed") {
     const start = value.indexOf('\\"posts\\":{\\"posts\\":');
     const end = value.indexOf('],\\"metaData\\":', Math.max(start, 0));
-    if (start < 0 || end < start) {
+    const rss = /<rss(?:\s[^>]*)?>/i.test(value);
+    const channel = /<channel(?:\s[^>]*)?>/i.test(value);
+    if ((start < 0 || end < start) && (!rss || !channel)) {
       throw new NewsFetchError("NEWS_MALFORMED_RESPONSE");
     }
   }
