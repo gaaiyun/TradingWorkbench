@@ -1,6 +1,6 @@
 # Trading Workbench 下一 Agent 交接
 
-更新日期：2026-08-11（修复结构化输出回退无完整性校验，追溯失效首份 verified 报告）
+更新日期：2026-08-11（用户提醒火山引擎 key 即将到期；再次发现手动 wrangler deploy 绕过身份落库）
 
 实现基线：`main`。不要依赖本文中的旧提交号；接手时同时执行 `git rev-parse HEAD`、`git rev-parse origin/main`，并读取 Pages 与 Worker health 的 commit SHA。
 
@@ -15,6 +15,47 @@
 **维护约定**：任何 agent 做完一轮工作后，必须回到本文更新三处——§1 当前结论、§1.5 生产状态、§15 更新日志。发现本文与代码或生产不符时，**在同一提交里修正本文**，不要另开新的交接文档。数字和状态必须来自实际执行的命令，不要沿用上一轮的结论。
 
 ## 1. 当前结论
+
+### 2026-08-11 生产实证：Portfolio Manager 完整性校验上线首日即真实拦截一次截断
+
+08-11 07:20 slot 的 daily-analysis（run `31470313995`）日志显示 `515880.SS` 的 Portfolio Manager
+结构化输出调用失败（"returned no parsed result"）→ 回退纯文本 → 重试一次仍缺 `**Investment
+Thesis**` → 正确抛出 `IncompleteAgentOutputError` → 被 `run_daily.py` 逐 ticker try/except
+捕获，该 ticker 标记 `[FAIL]`，`report-audit.json` 相应记为 `invalid_record` /
+`analysisExecutionFailures` +1。**关键：同一轮的 `512480.SS` 完全不受影响，正常生成了一份完整、
+未截断的报告**（三段齐全、结尾是完整的后续观察段落，人工通读确认无截断）——证明隔离修复同样按
+预期工作，不是"一个 ticker 出问题、整轮全崩"。这是这项修复自上线以来第一次在真实生产数据上被
+触发，如果没有这次修复，`515880.SS` 这次的截断输出很可能会被原样存成又一份问题报告。
+
+### 2026-08-11 用户预警：火山引擎 key 即将到期；再次发现手动 wrangler deploy 绕过身份落库
+
+用户主动告知："这个火山引擎的 key 快过期了，到时候要换"——**这把 key 就是 GitHub repo secret
+`OPENAI_COMPATIBLE_API_KEY`**，仓库变量确认 `TRADINGAGENTS_LLM_BACKEND_URL=https://ark.cn-beijing.volces.com/api/coding/v3`、
+`TRADINGAGENTS_LLM_PROVIDER=openai_compatible`、模型 `glm-5.2`。**它同时驱动 `daily-analysis.yml`
+（生产每日报告的全部 LLM 调用，没有例外）和 `course-model-benchmark.yml`（另一个课程作业仓库的
+多模型实验）**——过期会让两者同时停摆，daily-analysis 会在每个 ticker 上抛认证异常，被
+`run_daily.py` 逐 ticker try/except 兜住标记 `ANALYSIS_EXECUTION_FAILED`，不会污染数据但当天
+不会产出新报告。已存 Claude 侧 memory `project_tradingworkbench.md`。**用户换新 key 后只需要
+`gh secret set OPENAI_COMPATIBLE_API_KEY --repo gaaiyun/TradingWorkbench`，不需要改代码。**
+2026-08-10 复核 daily-analysis 近 10 次运行全部 success，无任何认证报错迹象，当前不是故障，
+只是预警。
+
+同一轮"确保正常运行"复查中，**再次实测到手动 `wrangler pages deploy` 绕开 `deploy-workbench.yml`
+的情况**（第二次，上一次记录见 2026-08-02 那次事故，之后没有真正根治，只是重新走了一次正规部署）：
+纯文档提交 `45f10f2`（只改 `docs/NEXT_AGENT_HANDOFF.md`，不匹配 deploy-workbench.yml 的 paths
+过滤器，`gh run list` 确认没有对应的 deploy-workbench 运行）却在 `wrangler pages deployment list`
+里显示已经是 Production、"16 minutes ago"。内容本身无害（docs 不进 Pages 产物，实际服务内容和
+`9dfdfd2` 那次网关部署完全一致），但 D1 的 `deployment_metadata` 没被同步更新，导致
+`/api/health` 又变回 `degraded`（这次是 `invalid_metadata`，不是超时——证明本轮 2026-08-02 的并发
+修复仍然有效，是另一个新鲜的手动部署，不是回归）。已用 `gh workflow run deploy-workbench.yml`
+重新走正规流程修复，`/api/health` 确认恢复 `status:ok`。**没有查到是谁/什么触发的这次手动部署**
+——大概率是 Codex 在自己的验证流程里手动跑的 `wrangler pages deploy`，这个 worktree 一直有另一个
+agent 并行工作。**这是同一类问题第二次复现，说明"文档写清楚不要手动部署"这条约定没有被稳定遵守**。
+如果之后还要再复现，值得考虑一个技术性根治方案而不是继续口头约定：比如给
+`official-news.yml`（本来就每 2 小时跑一次）加一步，调用 Cloudflare API 读取当前 Production
+部署的真实 commit hash，如果和 D1 记录不一致就直接更新 D1——这样无论部署是怎么发生的，
+健康检查最多 2 小时内会自愈，不需要人工发现+手动补triggerdeploy-workbench。本轮没有实现，
+只是记录方向，因为这是新基础设施、需要先设计好触发条件避免和现有 D1 写入竞态。
 
 ### 2026-08-10/11 复核首份 verified 报告，发现并修复结构化输出回退无完整性校验
 
@@ -633,6 +674,7 @@ gh workflow run deploy-monitor.yml --repo gaaiyun/TradingWorkbench --ref main
 | 2026-08-03 | 用户要求复核"执行情况"后发现：Claude 上一轮新增的健康检查并发测试硬编码了 `trade_date:"2026-07-31"`，真实时间推移后触发 `report_lag`，导致这条测试本身失败——而这条失败在 `daily-analysis` 于 07:46 dispatch `deploy-workbench` 时拦下了整条部署流水线，08-03 的日报数据因此未能上线（不只是 CI 显示红）。改成按 `Asia/Shanghai` 取运行时"今天"，与之前修 `test_fund_flow_api.mjs` 用的是同一手法 | 本地连续 3 次 + 完整 Functions 回归确认不再复发；提交 `c59c479`；手动 `workflow_dispatch` 触发 `deploy-workbench` 14 步全部成功；`report-audit.json` 确认更新为 `generatedAt:2026-08-03T08:07:50`；`/api/health` 确认 `status:ok`、`commitSha` 匹配、`deployment_manifest` 本次为 manifest fetch 直接成功（197ms，非 D1 回退）。同时独立复核确认 Codex 的 `23eb26b` 资金流校验修复生产有效 |
 | 2026-08-10 | 周一 08:25 后生产验收；修复 HashKey 官网迁移导致官方源持续 404，改用官方 WordPress RSS 并保留 evidence 与域名门禁；同标的 cluster 优先最新采集链接 | 真实 RSS 200 且解析最新公告；Functions `436/1 skip`、frontend `121/121`、Python `694/2 skip`、Ruff 全绿；SEC、政策、上交所、新闻去重、dispatch 与 A 股 qfq 连续性按本节现场证据复核 |
 | 2026-08-11 | 修复结构化输出 free-text 回退无完整性校验（`invoke_structured_or_freetext`）：仅在 Portfolio Manager 启用 `required_labels`（唯一在 prompt 里承诺回退格式的调用点），缺 label 重试一次仍缺则抛 `IncompleteAgentOutputError`，由既有逐 ticker try/except 兜底；追溯失效首份 verified 报告 `512480.SS 2026-08-05`（`TRUNCATED_AGENT_OUTPUT`，正文在"最终决定维持"处截断、缺失 Investment Thesis 整段）；顺带确认 HashKey/新闻去重两处上周修复生产有效（`hashkey-ir=ok`、0 组重复 cluster）、VolGuard 94/94 合约无上游错误 | 新增 6 条单测（含"重试后仍不完整会 raise"）；提交 `9dfdfd2`；Functions `436/1 skip`、frontend `121/121`、Python `700/2 skip`（本机需 `PYTHONUTF8=1`，缺失会有 9 个与本轮改动无关的 GBK 本地化假失败）、Ruff 全绿；CI `31417813422`、deploy-workbench `31417813672` 均成功；生产 `/api/health` 回读 `commitSha=9dfdfd2e7f`、`deployedAt=2026-08-10T18:11:48Z`、`status:ok`；`report-audit.json` 确认该报告 `auditStatus=invalidated`、`verifiedReports=0` |
+| 2026-08-11 | 用户预警火山引擎 key 即将到期（driving 全部 daily-analysis LLM 调用 + course-model-benchmark），已存 memory 并记录续期操作步骤；再次实测到手动 `wrangler pages deploy` 绕开 deploy-workbench.yml（纯 docs 提交 `45f10f2` 却已是 Production），D1 身份记录再次不同步导致 `/api/health` 变回 degraded（这次是 `invalid_metadata`，证明 08-02 的并发修复未回归，是新的手动部署事件）| `gh run list` 确认无对应 deploy-workbench 运行，`wrangler pages deployment list` 确认 Cloudflare 侧确有该部署；用 `gh workflow run deploy-workbench.yml` 补一次正规部署后 `/api/health` 恢复 `status:ok`、`deployment_manifest.ok=true`、`latency_ms=284`；daily-analysis 近 10 次运行 100% success，无认证报错迹象 |
 
 ## 1.6 2026-07-30 全局质量复审
 
