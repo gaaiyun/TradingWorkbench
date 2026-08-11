@@ -1,7 +1,7 @@
 {
   "status": "ok",
-  "generated_at": "2026-08-10T15:46:25+08:00",
-  "trade_date": "2026-08-10",
+  "generated_at": "2026-08-11T15:46:51+08:00",
+  "trade_date": "2026-08-11",
   "provider": "openai_compatible",
   "analysts": [
     "market",
@@ -19,19 +19,19 @@
     "kind": "monitor"
   },
   "run": {
-    "id": "31367140568",
+    "id": "31470313995",
     "attempt": "1",
     "workflow": "daily-analysis",
-    "url": "https://github.com/gaaiyun/TradingWorkbench/actions/runs/31367140568"
+    "url": "https://github.com/gaaiyun/TradingWorkbench/actions/runs/31470313995"
   },
   "identity": {
     "scope": "profile",
     "kind": "monitor",
-    "runId": "31367140568",
+    "runId": "31470313995",
     "profileId": "cn-semi-comms",
     "requestId": null,
-    "slotId": "slot-d126c4ba45ad49b031db391169fbb3389b1aee2da5bcfefd2f30baddb1fc65e2",
-    "scheduledFor": "2026-08-10T07:20:00.000Z"
+    "slotId": "slot-6d57f8fc8b124e0f3b4fe7e71a2b811063584aa801942723d6caee5f880470bb",
+    "scheduledFor": "2026-08-11T07:20:00.000Z"
   },
   "rating_tiers": [
     "Sell",
@@ -43,57 +43,30 @@
   "results": [
     {
       "ticker": "515880.SS",
-      "rating": "Not Rated",
-      "report": "reports/515880.SS/2026-08-10/complete_report.md",
-      "files": {
-        "fundamentals": "reports/515880.SS/2026-08-10/1_analysts/fundamentals.md",
-        "market": "reports/515880.SS/2026-08-10/1_analysts/market.md",
-        "news": "reports/515880.SS/2026-08-10/1_analysts/news.md",
-        "bear": "reports/515880.SS/2026-08-10/2_research/bear.md",
-        "bull": "reports/515880.SS/2026-08-10/2_research/bull.md",
-        "manager": "reports/515880.SS/2026-08-10/2_research/manager.md",
-        "trader": "reports/515880.SS/2026-08-10/3_trading/trader.md",
-        "aggressive": "reports/515880.SS/2026-08-10/4_risk/aggressive.md",
-        "conservative": "reports/515880.SS/2026-08-10/4_risk/conservative.md",
-        "neutral": "reports/515880.SS/2026-08-10/4_risk/neutral.md",
-        "decision": "reports/515880.SS/2026-08-10/5_portfolio/decision.md",
-        "complete_report": "reports/515880.SS/2026-08-10/complete_report.md"
-      },
-      "decision_excerpt": "**Rating**: Underweight\n\n**Executive Summary**: 515880.SS 当前处于严格空头排列（close < MA20 < MA60），中期下行趋势明确。最新交易日出现回撤且低点抬升序列断裂，反弹动能不足；叠加极高波动率环境与 ETF 层面关键数据全面缺失，风险收益特征不利于多头。建议逐步降低敞口而非一次性清仓，因短期反弹确实存在且部分动能指标尚未进入极端区域。\n\n**Investment Thesis**: 515880.SS 最新收盘价 0.640 [M652] 处于严格空头排列 close < MA20 < MA60 [D7] 之中，收盘价低于 MA20（0.65415）[I5] 达 -2.16311244% [D5]，低于 MA60（0.76333333）[I6] 达 -16.15720487% [D6]，趋势结构偏空且截至最新交易日未被",
-      "analysis_status": "insufficient_evidence",
-      "audit_status": "legacy_unverified",
-      "evidence_publish": {
-        "published": true,
-        "status": 201
-      },
-      "marketHistory": {
-        "source": "tencent",
-        "adjustment": "qfq",
-        "barCount": 652,
-        "startAt": "2023-11-29T16:00:00Z",
-        "endAt": "2026-08-09T16:00:00Z"
-      },
-      "error": null
+      "rating": null,
+      "report": null,
+      "decision_excerpt": "",
+      "error": "IncompleteAgentOutputError: Portfolio Manager: LLM response still missing required sections ('**Rating**', '**Executive Summary**', '**Investment Thesis**') after retry"
     },
     {
       "ticker": "512480.SS",
       "rating": "Not Rated",
-      "report": "reports/512480.SS/2026-08-10/complete_report.md",
+      "report": "reports/512480.SS/2026-08-11/complete_report.md",
       "files": {
-        "fundamentals": "reports/512480.SS/2026-08-10/1_analysts/fundamentals.md",
-        "market": "reports/512480.SS/2026-08-10/1_analysts/market.md",
-        "news": "reports/512480.SS/2026-08-10/1_analysts/news.md",
-        "bear": "reports/512480.SS/2026-08-10/2_research/bear.md",
-        "bull": "reports/512480.SS/2026-08-10/2_research/bull.md",
-        "manager": "reports/512480.SS/2026-08-10/2_research/manager.md",
-        "trader": "reports/512480.SS/2026-08-10/3_trading/trader.md",
-        "aggressive": "reports/512480.SS/2026-08-10/4_risk/aggressive.md",
-        "conservative": "reports/512480.SS/2026-08-10/4_risk/conservative.md",
-        "neutral": "reports/512480.SS/2026-08-10/4_risk/neutral.md",
-        "decision": "reports/512480.SS/2026-08-10/5_portfolio/decision.md",
-        "complete_report": "reports/512480.SS/2026-08-10/complete_report.md"
+        "fundamentals": "reports/512480.SS/2026-08-11/1_analysts/fundamentals.md",
+        "market": "reports/512480.SS/2026-08-11/1_analysts/market.md",
+        "news": "reports/512480.SS/2026-08-11/1_analysts/news.md",
+        "bear": "reports/512480.SS/2026-08-11/2_research/bear.md",
+        "bull": "reports/512480.SS/2026-08-11/2_research/bull.md",
+        "manager": "reports/512480.SS/2026-08-11/2_research/manager.md",
+        "trader": "reports/512480.SS/2026-08-11/3_trading/trader.md",
+        "aggressive": "reports/512480.SS/2026-08-11/4_risk/aggressive.md",
+        "conservative": "reports/512480.SS/2026-08-11/4_risk/conservative.md",
+        "neutral": "reports/512480.SS/2026-08-11/4_risk/neutral.md",
+        "decision": "reports/512480.SS/2026-08-11/5_portfolio/decision.md",
+        "complete_report": "reports/512480.SS/2026-08-11/complete_report.md"
       },
-      "decision_excerpt": "**Rating**: Underweight\n\n**Executive Summary**: 512480.SS 近8个交易日反弹+12.7348643% [D2]，但该涨幅发生在20日已实现波动率81.12581252% [I10]的极端波动环境中，且最新交易日收盘1.08 [M652]低于开盘1.09 [M652]，日跌幅-0.27700831% [D3]，反弹已现停滞迹象。收盘价虽略高于MA20（偏离仅+0.00462984% [D5]），但仍低于MA60达-7.05013295% [D6]，严格均线排列为\"none\" [D7]，无法提取方向性信号。RSI为47.51028516 [I11]，低于中轴50 [D9]；MACD值-0.0498076 [I7]与信号线-0.053948 [I9]均处负值区域。ETF核心运作数据全面缺失，在极端波动与信息真空叠加的条件下，建议逐步降低风险",
+      "decision_excerpt": "**Rating**: Underweight\n\n**Executive Summary**: 综合三方分析师辩论与证据账本核查，最终决策为 Underweight。512480.SS 在8个交易日内实现了+7.86290323%[D2]的反弹，但中期趋势结构未被破坏——MA20（1.0681）[I5]仍低于MA60（1.16261667）[I6]，严格均线排列判定为none[D7]。最新收盘价1.070[M653]仅高于MA20 +0.17788597%[D5]，而ATR占收盘价比达6.96995981%[D4]，缓冲空间极薄。最近三个交易日成交量递减[16,505,992[M651]、14,992,795[M652]、12,942,907[M653]]且最新交易日收盘下跌-1.01757632%[D3]，价格与成交量行为的组合不支持反弹已具备持续性的结论。MACD为-0.0449232",
       "analysis_status": "insufficient_evidence",
       "audit_status": "legacy_unverified",
       "evidence_publish": {
@@ -103,9 +76,9 @@
       "marketHistory": {
         "source": "tencent",
         "adjustment": "qfq",
-        "barCount": 652,
+        "barCount": 653,
         "startAt": "2023-11-29T16:00:00Z",
-        "endAt": "2026-08-09T16:00:00Z"
+        "endAt": "2026-08-10T16:00:00Z"
       },
       "error": null
     }
