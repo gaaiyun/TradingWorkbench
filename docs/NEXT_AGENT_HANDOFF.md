@@ -34,6 +34,10 @@
   误报为聊天或 key 故障，也不得在没有新日报证据时宣布整条日报链恢复。
 - 本轮没有人工触发 `daily-analysis`、课程 benchmark 或飞书外发。迁移后的下一次定时
   日报及飞书实际收件仍须在计划运行后复核；这是尚待生产证据，不是已完成结论。
+- 推送前完整本地门禁：Python `700 passed / 2 skipped / 69 subtests passed`，Functions
+  `436 passed / 1 skipped`，Frontend `121 passed`，Ruff、workbench syntax、asset version
+  与全部 workflow YAML 解析均通过。Functions 中一条旧行情 freshness 测试原先依赖
+  执行时恰好处于美股盘中，已固定测试时钟；只修测试确定性，不改变生产 freshness 逻辑。
 
 ### 2026-08-11 生产实证：Portfolio Manager 完整性校验上线首日即真实拦截一次截断
 
