@@ -1,7 +1,7 @@
 {
   "version": 1,
   "status": "ok",
-  "generated_at": "2026-08-12T15:46:01+08:00",
+  "generated_at": "2026-08-13T06:24:25+08:00",
   "trade_date": "2026-08-12",
   "global": {
     "status": "ok",
@@ -9,105 +9,105 @@
     "ticker": null,
     "start_date": "2026-08-05",
     "end_date": "2026-08-12",
-    "fetched_at": "2026-08-12T07:46:02Z",
+    "fetched_at": "2026-08-12T22:24:27Z",
     "items": [
       {
-        "title": "Oil prices rise, stocks mixed ahead of crucial US inflation data",
+        "title": "Oil prices climb again, as global stocks gain",
         "summary": "",
-        "url": "https://finance.yahoo.com/markets/articles/oil-prices-rise-stocks-mixed-022830134.html",
-        "source": "AFP",
-        "published_at": "2026-08-12T07:31:08Z",
-        "fetched_at": "2026-08-12T07:46:02Z",
-        "ticker": null,
-        "source_tier": "aggregator"
-      },
-      {
-        "title": "Boliden's mining concession for Laver maintained as appeals rejected",
-        "summary": "",
-        "url": "https://finance.yahoo.com/markets/commodities/articles/bolidens-mining-concession-laver-maintained-072600774.html",
-        "source": "PR Newswire",
-        "published_at": "2026-08-12T07:26:00Z",
-        "fetched_at": "2026-08-12T07:46:02Z",
-        "ticker": null,
-        "source_tier": "aggregator"
-      },
-      {
-        "title": "World markets mixed as oil and gold rise ahead of US inflation data",
-        "summary": "",
-        "url": "https://finance.yahoo.com/m/dc0b3f23-e8eb-3373-8b2d-c650a195db80/world-markets-mixed-as-oil.html",
-        "source": "Euronews",
-        "published_at": "2026-08-12T06:34:38Z",
-        "fetched_at": "2026-08-12T07:46:02Z",
-        "ticker": null,
-        "source_tier": "aggregator"
-      },
-      {
-        "title": "Oil rises as doubts over US-Iran deal heighten supply concerns",
-        "summary": "",
-        "url": "https://finance.yahoo.com/news/oil-rises-doubts-over-us-063114070.html",
+        "url": "https://finance.yahoo.com/markets/articles/stocks-inch-oil-dips-traders-163401004.html",
         "source": "Reuters",
-        "published_at": "2026-08-12T06:31:14Z",
-        "fetched_at": "2026-08-12T07:46:02Z",
+        "published_at": "2026-08-12T21:32:45Z",
+        "fetched_at": "2026-08-12T22:24:27Z",
         "ticker": null,
         "source_tier": "aggregator"
       },
       {
-        "title": "Southern Energy Corp. Announces Spudding of Cotton Valley Test Well at Williamsburg and Appointment of Market Maker",
+        "title": "Avino Silver & Gold Mines Ltd. Q2 2026 Earnings Call Summary",
         "summary": "",
-        "url": "https://finance.yahoo.com/energy/articles/southern-energy-corp-announces-spudding-060200359.html",
-        "source": "ACCESS Newswire",
-        "published_at": "2026-08-12T06:02:00Z",
-        "fetched_at": "2026-08-12T07:46:02Z",
+        "url": "https://finance.yahoo.com/m/390f73f0-3738-398f-acad-5a457ae84645/avino-silver-%26-gold-mines.html",
+        "source": "Moby",
+        "published_at": "2026-08-12T21:20:45Z",
+        "fetched_at": "2026-08-12T22:24:27Z",
         "ticker": null,
         "source_tier": "aggregator"
       },
       {
-        "title": "Shares are mostly higher in Asia, with Kospi up 4%, while oil prices gain",
+        "title": "Pan American Silver Reports Second Quarter 2026 Financial Results",
         "summary": "",
-        "url": "https://finance.yahoo.com/markets/world-indices/articles/shares-mostly-higher-asia-kospi-052056331.html",
-        "source": "Associated Press",
-        "published_at": "2026-08-12T05:20:56Z",
-        "fetched_at": "2026-08-12T07:46:02Z",
+        "url": "https://finance.yahoo.com/markets/commodities/articles/pan-american-silver-reports-second-211700173.html",
+        "source": "Business Wire",
+        "published_at": "2026-08-12T21:17:00Z",
+        "fetched_at": "2026-08-12T22:24:27Z",
         "ticker": null,
         "source_tier": "aggregator"
       },
       {
-        "title": "Argus launches first ship-to-ship Gulf of Oman prices for Abu Dhabi crude",
+        "title": "U.S. Stocks Mixed After Inflation Data, AI Earnings",
         "summary": "",
-        "url": "https://finance.yahoo.com/energy/articles/argus-launches-first-ship-ship-050800615.html",
+        "url": "https://finance.yahoo.com/m/39ad81f5-bb02-3190-bd61-d23b145101fd/u.s.-stocks-mixed-after.html",
+        "source": "The Wall Street Journal",
+        "published_at": "2026-08-12T21:08:00Z",
+        "fetched_at": "2026-08-12T22:24:27Z",
+        "ticker": null,
+        "source_tier": "aggregator"
+      },
+      {
+        "title": "Mexco Energy Corporation Reports Financial Results for First Quarter",
+        "summary": "",
+        "url": "https://finance.yahoo.com/energy/articles/mexco-energy-corporation-reports-financial-205800819.html",
+        "source": "GlobeNewswire",
+        "published_at": "2026-08-12T20:58:00Z",
+        "fetched_at": "2026-08-12T22:24:27Z",
+        "ticker": null,
+        "source_tier": "aggregator"
+      },
+      {
+        "title": "TSX Closer: Index Closes at Fresh Record High as Financials Gain, Air Canada Surges",
+        "summary": "",
+        "url": "https://finance.yahoo.com/markets/world-indices/articles/tsx-closer-index-closes-fresh-203059625.html",
+        "source": "MT Newswires",
+        "published_at": "2026-08-12T20:30:59Z",
+        "fetched_at": "2026-08-12T22:24:27Z",
+        "ticker": null,
+        "source_tier": "aggregator"
+      },
+      {
+        "title": "Sunshine Silver Mining & Refining Reports Second Quarter 2026 Results",
+        "summary": "",
+        "url": "https://finance.yahoo.com/markets/commodities/articles/sunshine-silver-mining-refining-reports-202300997.html",
         "source": "PR Newswire",
-        "published_at": "2026-08-12T05:08:00Z",
-        "fetched_at": "2026-08-12T07:46:02Z",
+        "published_at": "2026-08-12T20:23:00Z",
+        "fetched_at": "2026-08-12T22:24:27Z",
         "ticker": null,
         "source_tier": "aggregator"
       },
       {
-        "title": "Armanino Foods of Distinction Inc (AMNF) (Q2 2026) Earnings Call Highlights: Record Sales and ...",
+        "title": "Stock Market Today: Nasdaq Charges Higher On Inflation Report; Nvidia Partner CoreWeave Soars (Live Coverage)",
         "summary": "",
-        "url": "https://finance.yahoo.com/markets/stocks/articles/armanino-foods-distinction-inc-amnf-050248102.html",
-        "source": "GuruFocus.com",
-        "published_at": "2026-08-12T05:02:48Z",
-        "fetched_at": "2026-08-12T07:46:02Z",
+        "url": "https://finance.yahoo.com/m/14192882-2d0d-3020-8314-bc5352b1fdcf/stock-market-today%3A-nasdaq.html",
+        "source": "Investor's Business Daily",
+        "published_at": "2026-08-12T20:22:31Z",
+        "fetched_at": "2026-08-12T22:24:27Z",
         "ticker": null,
         "source_tier": "aggregator"
       },
       {
-        "title": "Morning Bid: Hot spots sizzle, CPI looms",
+        "title": "US Equity Markets End Mixed Amid Tech Stock Gains, Lower Inflation Data",
         "summary": "",
-        "url": "https://finance.yahoo.com/markets/articles/morning-bid-hot-spots-sizzle-043154590.html",
-        "source": "Reuters",
-        "published_at": "2026-08-12T04:31:54Z",
-        "fetched_at": "2026-08-12T07:46:02Z",
+        "url": "https://finance.yahoo.com/markets/stocks/articles/us-equity-markets-end-mixed-201441316.html",
+        "source": "MT Newswires",
+        "published_at": "2026-08-12T20:14:41Z",
+        "fetched_at": "2026-08-12T22:24:27Z",
         "ticker": null,
         "source_tier": "aggregator"
       },
       {
-        "title": "AP Top Financial News at 3:05 a.m. EDT",
+        "title": "Sector Update: Energy Stocks Edge Higher",
         "summary": "",
-        "url": "https://finance.yahoo.com/markets/world-indices/articles/ap-top-financial-news-1-040000004.html",
-        "source": "Associated Press",
-        "published_at": "2026-08-12T04:00:00Z",
-        "fetched_at": "2026-08-12T07:46:02Z",
+        "url": "https://finance.yahoo.com/energy/articles/sector-energy-stocks-edge-higher-201124832.html",
+        "source": "MT Newswires",
+        "published_at": "2026-08-12T20:11:24Z",
+        "fetched_at": "2026-08-12T22:24:27Z",
         "ticker": null,
         "source_tier": "aggregator"
       }
@@ -126,40 +126,25 @@
     ]
   },
   "tickers": {
-    "515880.SS": {
-      "status": "empty",
-      "query_type": "ticker",
-      "ticker": "515880.SS",
-      "start_date": "2026-08-12",
-      "end_date": "2026-08-12",
-      "fetched_at": "2026-08-12T07:46:03Z",
-      "items": [],
-      "source_statuses": [
-        {
-          "source": "Yahoo Finance",
-          "status": "empty",
-          "item_count": 0
-        },
-        {
-          "source": "Google News RSS",
-          "status": "empty",
-          "item_count": 0
-        },
-        {
-          "source": "SEC EDGAR",
-          "status": "empty",
-          "item_count": 0
-        }
-      ]
-    },
     "512480.SS": {
-      "status": "empty",
+      "status": "ok",
       "query_type": "ticker",
       "ticker": "512480.SS",
       "start_date": "2026-08-12",
       "end_date": "2026-08-12",
-      "fetched_at": "2026-08-12T07:46:05Z",
-      "items": [],
+      "fetched_at": "2026-08-12T22:24:28Z",
+      "items": [
+        {
+          "title": "半导体ETF国联安：8月11日融资买入8431.35万元，融资融券余额5.35亿元",
+          "summary": "半导体ETF国联安：8月11日融资买入8431.35万元，融资融券余额5.35亿元 Sohu",
+          "url": "https://news.google.com/rss/articles/CBMiiAFBVV95cUxQbzQ5TEFxcEJSNGJEMm02dDlOdS03d3k5dURla0xNMEV2OEpOMkQ3X1JjWDB0LUtJNTFUanh4VzNaTlZESkduSDV2OElsb2RXanBZUTc4Z0RUN2VYdEkxLWFSUW9EcXFETnFXcVBEbmMzTHVVbnUxOXFDX3VlMGJUYWRsSEpGTGxI?oc=5",
+          "source": "Google News / Sohu",
+          "published_at": "2026-08-12T04:09:11Z",
+          "fetched_at": "2026-08-12T22:24:28Z",
+          "ticker": "512480.SS",
+          "source_tier": "aggregator"
+        }
+      ],
       "source_statuses": [
         {
           "source": "Yahoo Finance",
@@ -168,8 +153,8 @@
         },
         {
           "source": "Google News RSS",
-          "status": "empty",
-          "item_count": 0
+          "status": "ok",
+          "item_count": 1
         },
         {
           "source": "SEC EDGAR",
@@ -181,103 +166,113 @@
   },
   "items": [
     {
-      "title": "Oil prices rise, stocks mixed ahead of crucial US inflation data",
+      "title": "Oil prices climb again, as global stocks gain",
       "summary": "",
-      "url": "https://finance.yahoo.com/markets/articles/oil-prices-rise-stocks-mixed-022830134.html",
-      "source": "AFP",
-      "published_at": "2026-08-12T07:31:08Z",
-      "fetched_at": "2026-08-12T07:46:02Z",
-      "ticker": null,
-      "source_tier": "aggregator"
-    },
-    {
-      "title": "Boliden's mining concession for Laver maintained as appeals rejected",
-      "summary": "",
-      "url": "https://finance.yahoo.com/markets/commodities/articles/bolidens-mining-concession-laver-maintained-072600774.html",
-      "source": "PR Newswire",
-      "published_at": "2026-08-12T07:26:00Z",
-      "fetched_at": "2026-08-12T07:46:02Z",
-      "ticker": null,
-      "source_tier": "aggregator"
-    },
-    {
-      "title": "World markets mixed as oil and gold rise ahead of US inflation data",
-      "summary": "",
-      "url": "https://finance.yahoo.com/m/dc0b3f23-e8eb-3373-8b2d-c650a195db80/world-markets-mixed-as-oil.html",
-      "source": "Euronews",
-      "published_at": "2026-08-12T06:34:38Z",
-      "fetched_at": "2026-08-12T07:46:02Z",
-      "ticker": null,
-      "source_tier": "aggregator"
-    },
-    {
-      "title": "Oil rises as doubts over US-Iran deal heighten supply concerns",
-      "summary": "",
-      "url": "https://finance.yahoo.com/news/oil-rises-doubts-over-us-063114070.html",
+      "url": "https://finance.yahoo.com/markets/articles/stocks-inch-oil-dips-traders-163401004.html",
       "source": "Reuters",
-      "published_at": "2026-08-12T06:31:14Z",
-      "fetched_at": "2026-08-12T07:46:02Z",
+      "published_at": "2026-08-12T21:32:45Z",
+      "fetched_at": "2026-08-12T22:24:27Z",
       "ticker": null,
       "source_tier": "aggregator"
     },
     {
-      "title": "Southern Energy Corp. Announces Spudding of Cotton Valley Test Well at Williamsburg and Appointment of Market Maker",
+      "title": "Avino Silver & Gold Mines Ltd. Q2 2026 Earnings Call Summary",
       "summary": "",
-      "url": "https://finance.yahoo.com/energy/articles/southern-energy-corp-announces-spudding-060200359.html",
-      "source": "ACCESS Newswire",
-      "published_at": "2026-08-12T06:02:00Z",
-      "fetched_at": "2026-08-12T07:46:02Z",
+      "url": "https://finance.yahoo.com/m/390f73f0-3738-398f-acad-5a457ae84645/avino-silver-%26-gold-mines.html",
+      "source": "Moby",
+      "published_at": "2026-08-12T21:20:45Z",
+      "fetched_at": "2026-08-12T22:24:27Z",
       "ticker": null,
       "source_tier": "aggregator"
     },
     {
-      "title": "Shares are mostly higher in Asia, with Kospi up 4%, while oil prices gain",
+      "title": "Pan American Silver Reports Second Quarter 2026 Financial Results",
       "summary": "",
-      "url": "https://finance.yahoo.com/markets/world-indices/articles/shares-mostly-higher-asia-kospi-052056331.html",
-      "source": "Associated Press",
-      "published_at": "2026-08-12T05:20:56Z",
-      "fetched_at": "2026-08-12T07:46:02Z",
+      "url": "https://finance.yahoo.com/markets/commodities/articles/pan-american-silver-reports-second-211700173.html",
+      "source": "Business Wire",
+      "published_at": "2026-08-12T21:17:00Z",
+      "fetched_at": "2026-08-12T22:24:27Z",
       "ticker": null,
       "source_tier": "aggregator"
     },
     {
-      "title": "Argus launches first ship-to-ship Gulf of Oman prices for Abu Dhabi crude",
+      "title": "U.S. Stocks Mixed After Inflation Data, AI Earnings",
       "summary": "",
-      "url": "https://finance.yahoo.com/energy/articles/argus-launches-first-ship-ship-050800615.html",
+      "url": "https://finance.yahoo.com/m/39ad81f5-bb02-3190-bd61-d23b145101fd/u.s.-stocks-mixed-after.html",
+      "source": "The Wall Street Journal",
+      "published_at": "2026-08-12T21:08:00Z",
+      "fetched_at": "2026-08-12T22:24:27Z",
+      "ticker": null,
+      "source_tier": "aggregator"
+    },
+    {
+      "title": "Mexco Energy Corporation Reports Financial Results for First Quarter",
+      "summary": "",
+      "url": "https://finance.yahoo.com/energy/articles/mexco-energy-corporation-reports-financial-205800819.html",
+      "source": "GlobeNewswire",
+      "published_at": "2026-08-12T20:58:00Z",
+      "fetched_at": "2026-08-12T22:24:27Z",
+      "ticker": null,
+      "source_tier": "aggregator"
+    },
+    {
+      "title": "TSX Closer: Index Closes at Fresh Record High as Financials Gain, Air Canada Surges",
+      "summary": "",
+      "url": "https://finance.yahoo.com/markets/world-indices/articles/tsx-closer-index-closes-fresh-203059625.html",
+      "source": "MT Newswires",
+      "published_at": "2026-08-12T20:30:59Z",
+      "fetched_at": "2026-08-12T22:24:27Z",
+      "ticker": null,
+      "source_tier": "aggregator"
+    },
+    {
+      "title": "Sunshine Silver Mining & Refining Reports Second Quarter 2026 Results",
+      "summary": "",
+      "url": "https://finance.yahoo.com/markets/commodities/articles/sunshine-silver-mining-refining-reports-202300997.html",
       "source": "PR Newswire",
-      "published_at": "2026-08-12T05:08:00Z",
-      "fetched_at": "2026-08-12T07:46:02Z",
+      "published_at": "2026-08-12T20:23:00Z",
+      "fetched_at": "2026-08-12T22:24:27Z",
       "ticker": null,
       "source_tier": "aggregator"
     },
     {
-      "title": "Armanino Foods of Distinction Inc (AMNF) (Q2 2026) Earnings Call Highlights: Record Sales and ...",
+      "title": "Stock Market Today: Nasdaq Charges Higher On Inflation Report; Nvidia Partner CoreWeave Soars (Live Coverage)",
       "summary": "",
-      "url": "https://finance.yahoo.com/markets/stocks/articles/armanino-foods-distinction-inc-amnf-050248102.html",
-      "source": "GuruFocus.com",
-      "published_at": "2026-08-12T05:02:48Z",
-      "fetched_at": "2026-08-12T07:46:02Z",
+      "url": "https://finance.yahoo.com/m/14192882-2d0d-3020-8314-bc5352b1fdcf/stock-market-today%3A-nasdaq.html",
+      "source": "Investor's Business Daily",
+      "published_at": "2026-08-12T20:22:31Z",
+      "fetched_at": "2026-08-12T22:24:27Z",
       "ticker": null,
       "source_tier": "aggregator"
     },
     {
-      "title": "Morning Bid: Hot spots sizzle, CPI looms",
+      "title": "US Equity Markets End Mixed Amid Tech Stock Gains, Lower Inflation Data",
       "summary": "",
-      "url": "https://finance.yahoo.com/markets/articles/morning-bid-hot-spots-sizzle-043154590.html",
-      "source": "Reuters",
-      "published_at": "2026-08-12T04:31:54Z",
-      "fetched_at": "2026-08-12T07:46:02Z",
+      "url": "https://finance.yahoo.com/markets/stocks/articles/us-equity-markets-end-mixed-201441316.html",
+      "source": "MT Newswires",
+      "published_at": "2026-08-12T20:14:41Z",
+      "fetched_at": "2026-08-12T22:24:27Z",
       "ticker": null,
       "source_tier": "aggregator"
     },
     {
-      "title": "AP Top Financial News at 3:05 a.m. EDT",
+      "title": "Sector Update: Energy Stocks Edge Higher",
       "summary": "",
-      "url": "https://finance.yahoo.com/markets/world-indices/articles/ap-top-financial-news-1-040000004.html",
-      "source": "Associated Press",
-      "published_at": "2026-08-12T04:00:00Z",
-      "fetched_at": "2026-08-12T07:46:02Z",
+      "url": "https://finance.yahoo.com/energy/articles/sector-energy-stocks-edge-higher-201124832.html",
+      "source": "MT Newswires",
+      "published_at": "2026-08-12T20:11:24Z",
+      "fetched_at": "2026-08-12T22:24:27Z",
       "ticker": null,
+      "source_tier": "aggregator"
+    },
+    {
+      "title": "半导体ETF国联安：8月11日融资买入8431.35万元，融资融券余额5.35亿元",
+      "summary": "半导体ETF国联安：8月11日融资买入8431.35万元，融资融券余额5.35亿元 Sohu",
+      "url": "https://news.google.com/rss/articles/CBMiiAFBVV95cUxQbzQ5TEFxcEJSNGJEMm02dDlOdS03d3k5dURla0xNMEV2OEpOMkQ3X1JjWDB0LUtJNTFUanh4VzNaTlZESkduSDV2OElsb2RXanBZUTc4Z0RUN2VYdEkxLWFSUW9EcXFETnFXcVBEbmMzTHVVbnUxOXFDX3VlMGJUYWRsSEpGTGxI?oc=5",
+      "source": "Google News / Sohu",
+      "published_at": "2026-08-12T04:09:11Z",
+      "fetched_at": "2026-08-12T22:24:28Z",
+      "ticker": "512480.SS",
       "source_tier": "aggregator"
     }
   ]

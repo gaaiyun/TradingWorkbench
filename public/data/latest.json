@@ -1,6 +1,6 @@
 {
-  "status": "failed",
-  "generated_at": "2026-08-12T15:46:01+08:00",
+  "status": "ok",
+  "generated_at": "2026-08-13T06:24:25+08:00",
   "trade_date": "2026-08-12",
   "provider": "openai_compatible",
   "analysts": [
@@ -16,22 +16,22 @@
       "fundamentals"
     ],
     "researchDepth": "standard",
-    "kind": "monitor"
+    "kind": "manual"
   },
   "run": {
-    "id": "31575300604",
+    "id": "31646745586",
     "attempt": "1",
     "workflow": "daily-analysis",
-    "url": "https://github.com/gaaiyun/TradingWorkbench/actions/runs/31575300604"
+    "url": "https://github.com/gaaiyun/TradingWorkbench/actions/runs/31646745586"
   },
   "identity": {
     "scope": "profile",
-    "kind": "monitor",
-    "runId": "31575300604",
+    "kind": "manual",
+    "runId": "31646745586",
     "profileId": "cn-semi-comms",
     "requestId": null,
-    "slotId": "slot-0c3c408af74c43c8fc54a37e2cc17a8a1d4ac9bc2eb353171c62df7e1d3f8358",
-    "scheduledFor": "2026-08-12T07:20:00.000Z"
+    "slotId": null,
+    "scheduledFor": null
   },
   "rating_tiers": [
     "Sell",
@@ -42,18 +42,38 @@
   ],
   "results": [
     {
-      "ticker": "515880.SS",
-      "rating": null,
-      "report": null,
-      "decision_excerpt": "",
-      "error": "BadRequestError: Error code: 400 - {'error': {'code': 'InvalidSubscription', 'message': 'Your account (2106114173) does not have a valid CodingPlan subscription, or your subscription has expired. Please visit https://console.volcengine.com/ark/region:ark+cn-beijing/openManagement?OpenModelVisible=false&tab=CodingPlan to review your subscription status or complete the subscription or renewal process.  Request id: 021786520773722c65202e590747a44f6b901a7b0655cff34d8ee', 'param': '', 'type': 'Bad Request'}}"
-    },
-    {
       "ticker": "512480.SS",
-      "rating": null,
-      "report": null,
-      "decision_excerpt": "",
-      "error": "BadRequestError: Error code: 400 - {'error': {'code': 'InvalidSubscription', 'message': 'Your account (2106114173) does not have a valid CodingPlan subscription, or your subscription has expired. Please visit https://console.volcengine.com/ark/region:ark+cn-beijing/openManagement?OpenModelVisible=false&tab=CodingPlan to review your subscription status or complete the subscription or renewal process.  Request id: 021786520775664c65202e590747a44f6b901a7b0655cff9999f3', 'param': '', 'type': 'Bad Request'}}"
+      "rating": "Not Rated",
+      "report": "reports/512480.SS/2026-08-12/complete_report.md",
+      "files": {
+        "fundamentals": "reports/512480.SS/2026-08-12/1_analysts/fundamentals.md",
+        "market": "reports/512480.SS/2026-08-12/1_analysts/market.md",
+        "news": "reports/512480.SS/2026-08-12/1_analysts/news.md",
+        "bear": "reports/512480.SS/2026-08-12/2_research/bear.md",
+        "bull": "reports/512480.SS/2026-08-12/2_research/bull.md",
+        "manager": "reports/512480.SS/2026-08-12/2_research/manager.md",
+        "trader": "reports/512480.SS/2026-08-12/3_trading/trader.md",
+        "aggressive": "reports/512480.SS/2026-08-12/4_risk/aggressive.md",
+        "conservative": "reports/512480.SS/2026-08-12/4_risk/conservative.md",
+        "neutral": "reports/512480.SS/2026-08-12/4_risk/neutral.md",
+        "decision": "reports/512480.SS/2026-08-12/5_portfolio/decision.md",
+        "complete_report": "reports/512480.SS/2026-08-12/complete_report.md"
+      },
+      "decision_excerpt": "**Rating** Overweight  \n**Executive Summary** 风险分析师辩论中，激进分析师强调过去8个交易日收盘变化率18.34961998% [D2]、收盘价高于MA20的2.7332705% [D5]、MACD柱状图0.01046302 [I8]显示动量改善，以及集成电路布图设计保护条例 [N1]、季度报告 [N2]和份额拆分公告 [CA1][CA2]带来的流动性改善，持有仓位通过跟踪MA20 [I5]、MA60 [I6]和MACD柱状图 [I8]确认趋势。保守分析师重点指出高波动率79.11019688 [I10]、MA对齐状态none [D7]及MACD整体为-0.0390515 [I7]的负值信号，但不可用指标（如基金持仓、NAV、溢折价、费用、跟踪误差、集中度）无法作为风险证据。根据EvidencePacketV1，不可用数据不构成负面证据；中立分",
+      "analysis_status": "insufficient_evidence",
+      "audit_status": "legacy_unverified",
+      "evidence_publish": {
+        "published": true,
+        "status": 201
+      },
+      "marketHistory": {
+        "source": "tencent",
+        "adjustment": "qfq",
+        "barCount": 654,
+        "startAt": "2023-11-29T16:00:00Z",
+        "endAt": "2026-08-11T16:00:00Z"
+      },
+      "error": null
     }
   ]
 }
