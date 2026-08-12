@@ -1,6 +1,6 @@
 # Trading Workbench 下一 Agent 交接
 
-更新日期：2026-08-11（用户提醒火山引擎 key 即将到期；再次发现手动 wrangler deploy 绕过身份落库）
+更新日期：2026-08-13（LLM 统一迁移至 OpenAI-compatible Grok；Pages 与 Actions 配置复核）
 
 实现基线：`main`。不要依赖本文中的旧提交号；接手时同时执行 `git rev-parse HEAD`、`git rev-parse origin/main`，并读取 Pages 与 Worker health 的 commit SHA。
 
@@ -15,6 +15,25 @@
 **维护约定**：任何 agent 做完一轮工作后，必须回到本文更新三处——§1 当前结论、§1.5 生产状态、§15 更新日志。发现本文与代码或生产不符时，**在同一提交里修正本文**，不要另开新的交接文档。数字和状态必须来自实际执行的命令，不要沿用上一轮的结论。
 
 ## 1. 当前结论
+
+### 2026-08-13 · LLM 统一迁移与当前验收边界
+
+- GitHub Variables 已统一为 `openai_compatible`、`https://sub.anzhiyu.com/v1`、
+  `grok-4.5`；GitHub Secret 继续使用通用名 `OPENAI_COMPATIBLE_API_KEY`，值不进入
+  仓库、日志或文档。`daily-analysis` 与 `analysis-request` 的代码默认值也已同步，
+  不再在 Variables 缺失时回退 DeepSeek。
+- Pages Chat 的默认 endpoint/model 已改为同一 Grok 接口；生产 `GET /api/chat`
+  返回 `ready=true`，endpoint、model、key 与 access code 均显示已配置，响应不包含
+  key。聊天定向测试为 24/24 通过。
+- `course-model-benchmark` 原默认分支已不存在，且外部课程脚本仍默认请求五个旧模型。
+  工作流现改为检出实际存在的 `main`，显式运行 `grok-4.5`、`grok-4.3`、
+  `grok-build-0.1`、`grok-composer-2.5-fast`。环境变量 `ARK_API_KEY` / `ARK_BASE_URL`
+  只是外部课程脚本尚未改名的兼容契约，实际端点与 key 均为当前 Grok 中转站。
+- 当前 Pages `/api/health` 为 `degraded`，来源是最新报告记录的 `status=failed`；
+  chat、Pages Functions、deployment manifest 与 options_live 检查均正常。不得把这一状态
+  误报为聊天或 key 故障，也不得在没有新日报证据时宣布整条日报链恢复。
+- 本轮没有人工触发 `daily-analysis`、课程 benchmark 或飞书外发。迁移后的下一次定时
+  日报及飞书实际收件仍须在计划运行后复核；这是尚待生产证据，不是已完成结论。
 
 ### 2026-08-11 生产实证：Portfolio Manager 完整性校验上线首日即真实拦截一次截断
 
