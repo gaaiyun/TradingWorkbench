@@ -1,6 +1,6 @@
 {
   "status": "ok",
-  "generated_at": "2026-08-13T06:24:25+08:00",
+  "generated_at": "2026-08-13T06:45:22+08:00",
   "trade_date": "2026-08-12",
   "provider": "openai_compatible",
   "analysts": [
@@ -16,19 +16,19 @@
       "fundamentals"
     ],
     "researchDepth": "standard",
-    "kind": "manual"
+    "kind": "legacy"
   },
   "run": {
-    "id": "31646745586",
+    "id": "31648209934",
     "attempt": "1",
     "workflow": "daily-analysis",
-    "url": "https://github.com/gaaiyun/TradingWorkbench/actions/runs/31646745586"
+    "url": "https://github.com/gaaiyun/TradingWorkbench/actions/runs/31648209934"
   },
   "identity": {
-    "scope": "profile",
-    "kind": "manual",
-    "runId": "31646745586",
-    "profileId": "cn-semi-comms",
+    "scope": "legacy",
+    "kind": "legacy",
+    "runId": "31648209934",
+    "profileId": null,
     "requestId": null,
     "slotId": null,
     "scheduledFor": null
@@ -44,22 +44,22 @@
     {
       "ticker": "512480.SS",
       "rating": "Not Rated",
-      "report": "reports/512480.SS/2026-08-12/complete_report.md",
+      "report": "reports/512480.SS/2026-08-12-v2/complete_report.md",
       "files": {
-        "fundamentals": "reports/512480.SS/2026-08-12/1_analysts/fundamentals.md",
-        "market": "reports/512480.SS/2026-08-12/1_analysts/market.md",
-        "news": "reports/512480.SS/2026-08-12/1_analysts/news.md",
-        "bear": "reports/512480.SS/2026-08-12/2_research/bear.md",
-        "bull": "reports/512480.SS/2026-08-12/2_research/bull.md",
-        "manager": "reports/512480.SS/2026-08-12/2_research/manager.md",
-        "trader": "reports/512480.SS/2026-08-12/3_trading/trader.md",
-        "aggressive": "reports/512480.SS/2026-08-12/4_risk/aggressive.md",
-        "conservative": "reports/512480.SS/2026-08-12/4_risk/conservative.md",
-        "neutral": "reports/512480.SS/2026-08-12/4_risk/neutral.md",
-        "decision": "reports/512480.SS/2026-08-12/5_portfolio/decision.md",
-        "complete_report": "reports/512480.SS/2026-08-12/complete_report.md"
+        "fundamentals": "reports/512480.SS/2026-08-12-v2/1_analysts/fundamentals.md",
+        "market": "reports/512480.SS/2026-08-12-v2/1_analysts/market.md",
+        "news": "reports/512480.SS/2026-08-12-v2/1_analysts/news.md",
+        "bear": "reports/512480.SS/2026-08-12-v2/2_research/bear.md",
+        "bull": "reports/512480.SS/2026-08-12-v2/2_research/bull.md",
+        "manager": "reports/512480.SS/2026-08-12-v2/2_research/manager.md",
+        "trader": "reports/512480.SS/2026-08-12-v2/3_trading/trader.md",
+        "aggressive": "reports/512480.SS/2026-08-12-v2/4_risk/aggressive.md",
+        "conservative": "reports/512480.SS/2026-08-12-v2/4_risk/conservative.md",
+        "neutral": "reports/512480.SS/2026-08-12-v2/4_risk/neutral.md",
+        "decision": "reports/512480.SS/2026-08-12-v2/5_portfolio/decision.md",
+        "complete_report": "reports/512480.SS/2026-08-12-v2/complete_report.md"
       },
-      "decision_excerpt": "**Rating** Overweight  \n**Executive Summary** 风险分析师辩论中，激进分析师强调过去8个交易日收盘变化率18.34961998% [D2]、收盘价高于MA20的2.7332705% [D5]、MACD柱状图0.01046302 [I8]显示动量改善，以及集成电路布图设计保护条例 [N1]、季度报告 [N2]和份额拆分公告 [CA1][CA2]带来的流动性改善，持有仓位通过跟踪MA20 [I5]、MA60 [I6]和MACD柱状图 [I8]确认趋势。保守分析师重点指出高波动率79.11019688 [I10]、MA对齐状态none [D7]及MACD整体为-0.0390515 [I7]的负值信号，但不可用指标（如基金持仓、NAV、溢折价、费用、跟踪误差、集中度）无法作为风险证据。根据EvidencePacketV1，不可用数据不构成负面证据；中立分",
+      "decision_excerpt": "**Rating**: Hold\n\n**Executive Summary**: 风险分析师辩论中，激进分析师强调过去8个交易日的收盘价变化率18.34961998% [D2]、收盘较MA20上涨2.7332705% [D5]以及MACD柱状图0.01046302 [I8]的动量改善，结合集成电路布图设计保护条例 [N1]和2026年第2季度报告 [N2]，认为短期动能积极；保守分析师则指出高波动性20日实现波动率79.11019688 [I10]、14日ATR 0.07126173 [I3]以及收盘较MA60下降-6.27821354% [D6]，强调不可用NAV/溢折价/费用率/跟踪误差数据限制全面风险评估；中性分析师则平衡两者观点，认为短期涨幅与长期均线压力并存，政策支持与份额拆分 [CA1][CA2]为正面行政事件但无法证明价格效应。综合辩论证据，短期反弹势头有限且长期结构不确定性",
       "analysis_status": "insufficient_evidence",
       "audit_status": "legacy_unverified",
       "evidence_publish": {

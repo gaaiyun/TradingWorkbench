@@ -1,7 +1,7 @@
 {
   "version": 1,
   "status": "ok",
-  "generated_at": "2026-08-13T06:24:25+08:00",
+  "generated_at": "2026-08-13T06:45:22+08:00",
   "trade_date": "2026-08-12",
   "global": {
     "status": "ok",
@@ -9,7 +9,7 @@
     "ticker": null,
     "start_date": "2026-08-05",
     "end_date": "2026-08-12",
-    "fetched_at": "2026-08-12T22:24:27Z",
+    "fetched_at": "2026-08-12T22:45:23Z",
     "items": [
       {
         "title": "Oil prices climb again, as global stocks gain",
@@ -17,7 +17,7 @@
         "url": "https://finance.yahoo.com/markets/articles/stocks-inch-oil-dips-traders-163401004.html",
         "source": "Reuters",
         "published_at": "2026-08-12T21:32:45Z",
-        "fetched_at": "2026-08-12T22:24:27Z",
+        "fetched_at": "2026-08-12T22:45:23Z",
         "ticker": null,
         "source_tier": "aggregator"
       },
@@ -27,7 +27,7 @@
         "url": "https://finance.yahoo.com/m/390f73f0-3738-398f-acad-5a457ae84645/avino-silver-%26-gold-mines.html",
         "source": "Moby",
         "published_at": "2026-08-12T21:20:45Z",
-        "fetched_at": "2026-08-12T22:24:27Z",
+        "fetched_at": "2026-08-12T22:45:23Z",
         "ticker": null,
         "source_tier": "aggregator"
       },
@@ -37,7 +37,7 @@
         "url": "https://finance.yahoo.com/markets/commodities/articles/pan-american-silver-reports-second-211700173.html",
         "source": "Business Wire",
         "published_at": "2026-08-12T21:17:00Z",
-        "fetched_at": "2026-08-12T22:24:27Z",
+        "fetched_at": "2026-08-12T22:45:23Z",
         "ticker": null,
         "source_tier": "aggregator"
       },
@@ -47,7 +47,7 @@
         "url": "https://finance.yahoo.com/m/39ad81f5-bb02-3190-bd61-d23b145101fd/u.s.-stocks-mixed-after.html",
         "source": "The Wall Street Journal",
         "published_at": "2026-08-12T21:08:00Z",
-        "fetched_at": "2026-08-12T22:24:27Z",
+        "fetched_at": "2026-08-12T22:45:23Z",
         "ticker": null,
         "source_tier": "aggregator"
       },
@@ -57,7 +57,7 @@
         "url": "https://finance.yahoo.com/energy/articles/mexco-energy-corporation-reports-financial-205800819.html",
         "source": "GlobeNewswire",
         "published_at": "2026-08-12T20:58:00Z",
-        "fetched_at": "2026-08-12T22:24:27Z",
+        "fetched_at": "2026-08-12T22:45:23Z",
         "ticker": null,
         "source_tier": "aggregator"
       },
@@ -67,7 +67,7 @@
         "url": "https://finance.yahoo.com/markets/world-indices/articles/tsx-closer-index-closes-fresh-203059625.html",
         "source": "MT Newswires",
         "published_at": "2026-08-12T20:30:59Z",
-        "fetched_at": "2026-08-12T22:24:27Z",
+        "fetched_at": "2026-08-12T22:45:23Z",
         "ticker": null,
         "source_tier": "aggregator"
       },
@@ -77,7 +77,7 @@
         "url": "https://finance.yahoo.com/markets/commodities/articles/sunshine-silver-mining-refining-reports-202300997.html",
         "source": "PR Newswire",
         "published_at": "2026-08-12T20:23:00Z",
-        "fetched_at": "2026-08-12T22:24:27Z",
+        "fetched_at": "2026-08-12T22:45:23Z",
         "ticker": null,
         "source_tier": "aggregator"
       },
@@ -87,7 +87,7 @@
         "url": "https://finance.yahoo.com/m/14192882-2d0d-3020-8314-bc5352b1fdcf/stock-market-today%3A-nasdaq.html",
         "source": "Investor's Business Daily",
         "published_at": "2026-08-12T20:22:31Z",
-        "fetched_at": "2026-08-12T22:24:27Z",
+        "fetched_at": "2026-08-12T22:45:23Z",
         "ticker": null,
         "source_tier": "aggregator"
       },
@@ -97,7 +97,7 @@
         "url": "https://finance.yahoo.com/markets/stocks/articles/us-equity-markets-end-mixed-201441316.html",
         "source": "MT Newswires",
         "published_at": "2026-08-12T20:14:41Z",
-        "fetched_at": "2026-08-12T22:24:27Z",
+        "fetched_at": "2026-08-12T22:45:23Z",
         "ticker": null,
         "source_tier": "aggregator"
       },
@@ -107,7 +107,7 @@
         "url": "https://finance.yahoo.com/energy/articles/sector-energy-stocks-edge-higher-201124832.html",
         "source": "MT Newswires",
         "published_at": "2026-08-12T20:11:24Z",
-        "fetched_at": "2026-08-12T22:24:27Z",
+        "fetched_at": "2026-08-12T22:45:23Z",
         "ticker": null,
         "source_tier": "aggregator"
       }
@@ -132,7 +132,7 @@
       "ticker": "512480.SS",
       "start_date": "2026-08-12",
       "end_date": "2026-08-12",
-      "fetched_at": "2026-08-12T22:24:28Z",
+      "fetched_at": "2026-08-12T22:45:25Z",
       "items": [
         {
           "title": "半导体ETF国联安：8月11日融资买入8431.35万元，融资融券余额5.35亿元",
@@ -140,7 +140,7 @@
           "url": "https://news.google.com/rss/articles/CBMiiAFBVV95cUxQbzQ5TEFxcEJSNGJEMm02dDlOdS03d3k5dURla0xNMEV2OEpOMkQ3X1JjWDB0LUtJNTFUanh4VzNaTlZESkduSDV2OElsb2RXanBZUTc4Z0RUN2VYdEkxLWFSUW9EcXFETnFXcVBEbmMzTHVVbnUxOXFDX3VlMGJUYWRsSEpGTGxI?oc=5",
           "source": "Google News / Sohu",
           "published_at": "2026-08-12T04:09:11Z",
-          "fetched_at": "2026-08-12T22:24:28Z",
+          "fetched_at": "2026-08-12T22:45:25Z",
           "ticker": "512480.SS",
           "source_tier": "aggregator"
         }
@@ -171,7 +171,7 @@
       "url": "https://finance.yahoo.com/markets/articles/stocks-inch-oil-dips-traders-163401004.html",
       "source": "Reuters",
       "published_at": "2026-08-12T21:32:45Z",
-      "fetched_at": "2026-08-12T22:24:27Z",
+      "fetched_at": "2026-08-12T22:45:23Z",
       "ticker": null,
       "source_tier": "aggregator"
     },
@@ -181,7 +181,7 @@
       "url": "https://finance.yahoo.com/m/390f73f0-3738-398f-acad-5a457ae84645/avino-silver-%26-gold-mines.html",
       "source": "Moby",
       "published_at": "2026-08-12T21:20:45Z",
-      "fetched_at": "2026-08-12T22:24:27Z",
+      "fetched_at": "2026-08-12T22:45:23Z",
       "ticker": null,
       "source_tier": "aggregator"
     },
@@ -191,7 +191,7 @@
       "url": "https://finance.yahoo.com/markets/commodities/articles/pan-american-silver-reports-second-211700173.html",
       "source": "Business Wire",
       "published_at": "2026-08-12T21:17:00Z",
-      "fetched_at": "2026-08-12T22:24:27Z",
+      "fetched_at": "2026-08-12T22:45:23Z",
       "ticker": null,
       "source_tier": "aggregator"
     },
@@ -201,7 +201,7 @@
       "url": "https://finance.yahoo.com/m/39ad81f5-bb02-3190-bd61-d23b145101fd/u.s.-stocks-mixed-after.html",
       "source": "The Wall Street Journal",
       "published_at": "2026-08-12T21:08:00Z",
-      "fetched_at": "2026-08-12T22:24:27Z",
+      "fetched_at": "2026-08-12T22:45:23Z",
       "ticker": null,
       "source_tier": "aggregator"
     },
@@ -211,7 +211,7 @@
       "url": "https://finance.yahoo.com/energy/articles/mexco-energy-corporation-reports-financial-205800819.html",
       "source": "GlobeNewswire",
       "published_at": "2026-08-12T20:58:00Z",
-      "fetched_at": "2026-08-12T22:24:27Z",
+      "fetched_at": "2026-08-12T22:45:23Z",
       "ticker": null,
       "source_tier": "aggregator"
     },
@@ -221,7 +221,7 @@
       "url": "https://finance.yahoo.com/markets/world-indices/articles/tsx-closer-index-closes-fresh-203059625.html",
       "source": "MT Newswires",
       "published_at": "2026-08-12T20:30:59Z",
-      "fetched_at": "2026-08-12T22:24:27Z",
+      "fetched_at": "2026-08-12T22:45:23Z",
       "ticker": null,
       "source_tier": "aggregator"
     },
@@ -231,7 +231,7 @@
       "url": "https://finance.yahoo.com/markets/commodities/articles/sunshine-silver-mining-refining-reports-202300997.html",
       "source": "PR Newswire",
       "published_at": "2026-08-12T20:23:00Z",
-      "fetched_at": "2026-08-12T22:24:27Z",
+      "fetched_at": "2026-08-12T22:45:23Z",
       "ticker": null,
       "source_tier": "aggregator"
     },
@@ -241,7 +241,7 @@
       "url": "https://finance.yahoo.com/m/14192882-2d0d-3020-8314-bc5352b1fdcf/stock-market-today%3A-nasdaq.html",
       "source": "Investor's Business Daily",
       "published_at": "2026-08-12T20:22:31Z",
-      "fetched_at": "2026-08-12T22:24:27Z",
+      "fetched_at": "2026-08-12T22:45:23Z",
       "ticker": null,
       "source_tier": "aggregator"
     },
@@ -251,7 +251,7 @@
       "url": "https://finance.yahoo.com/markets/stocks/articles/us-equity-markets-end-mixed-201441316.html",
       "source": "MT Newswires",
       "published_at": "2026-08-12T20:14:41Z",
-      "fetched_at": "2026-08-12T22:24:27Z",
+      "fetched_at": "2026-08-12T22:45:23Z",
       "ticker": null,
       "source_tier": "aggregator"
     },
@@ -261,7 +261,7 @@
       "url": "https://finance.yahoo.com/energy/articles/sector-energy-stocks-edge-higher-201124832.html",
       "source": "MT Newswires",
       "published_at": "2026-08-12T20:11:24Z",
-      "fetched_at": "2026-08-12T22:24:27Z",
+      "fetched_at": "2026-08-12T22:45:23Z",
       "ticker": null,
       "source_tier": "aggregator"
     },
@@ -271,7 +271,7 @@
       "url": "https://news.google.com/rss/articles/CBMiiAFBVV95cUxQbzQ5TEFxcEJSNGJEMm02dDlOdS03d3k5dURla0xNMEV2OEpOMkQ3X1JjWDB0LUtJNTFUanh4VzNaTlZESkduSDV2OElsb2RXanBZUTc4Z0RUN2VYdEkxLWFSUW9EcXFETnFXcVBEbmMzTHVVbnUxOXFDX3VlMGJUYWRsSEpGTGxI?oc=5",
       "source": "Google News / Sohu",
       "published_at": "2026-08-12T04:09:11Z",
-      "fetched_at": "2026-08-12T22:24:28Z",
+      "fetched_at": "2026-08-12T22:45:25Z",
       "ticker": "512480.SS",
       "source_tier": "aggregator"
     }

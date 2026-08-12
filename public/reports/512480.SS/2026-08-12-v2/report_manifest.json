@@ -1,0 +1,50 @@
+{
+  "schemaVersion": 1,
+  "ticker": "512480.SS",
+  "tradeDate": "2026-08-12",
+  "generatedAt": "2026-08-12T22:54:17.474972+00:00",
+  "analysisStatus": "insufficient_evidence",
+  "auditStatus": "legacy_unverified",
+  "claimValidation": {
+    "status": "failed",
+    "errorCodes": [
+      "FILTERED_UNSAFE_PUBLIC_CLAIM",
+      "UNSUPPORTED_DERIVED_NUMERIC_CLAIM"
+    ],
+    "citationCount": 10,
+    "unknownEvidenceIds": [],
+    "invalidEvidenceCitations": [],
+    "uncitedNumericParagraphs": 0,
+    "unsupportedDerivedNumericParagraphs": 0,
+    "unsupportedSingleSnapshotTrendParagraphs": 0,
+    "contradictedMovingAverageAlignmentParagraphs": 0,
+    "unsupportedActorOrFlowAttributionParagraphs": 0,
+    "unsupportedWindowRankParagraphs": 0,
+    "unsupportedCausalOrPathParagraphs": 0,
+    "unsupportedFaceValueParagraphs": 0,
+    "omittedUnsafeParagraphs": 1
+  },
+  "evidence": {
+    "schemaVersion": "EvidencePacketV1",
+    "asOf": "2026-08-12T22:45:28Z",
+    "contentHash": "68217db7809b66af221e4f0649ff1f241e9dd686135de4bd7e81a537a83b92ba",
+    "packetFileHash": "d1b1f3bf7c9b8b62ce014664441820a380a67fb863655b237729f632a310fae3",
+    "status": "ok",
+    "marketHistory": {
+      "source": "tencent",
+      "adjustment": "qfq",
+      "barCount": 654,
+      "startAt": "2023-11-29T16:00:00Z",
+      "endAt": "2026-08-11T16:00:00Z"
+    }
+  },
+  "identity": {
+    "scope": "legacy",
+    "kind": "legacy",
+    "runId": "31648209934",
+    "profileId": null,
+    "requestId": null,
+    "slotId": null,
+    "scheduledFor": null
+  }
+}
