@@ -1,17 +1,87 @@
 {
   "version": 1,
-  "generatedAt": "2026-08-11T13:06:20.694Z",
+  "generatedAt": "2026-08-12T07:46:18.190Z",
   "summary": {
     "successfulReports": 95,
     "verifiedReports": 0,
     "invalidatedReports": 15,
     "legacyUnverifiedReports": 80,
-    "invalidRecords": 8,
+    "invalidRecords": 10,
     "evidenceValidationFailures": 4,
-    "analysisExecutionFailures": 3,
+    "analysisExecutionFailures": 5,
     "invalidInputs": 1
   },
   "reports": [
+    {
+      "ticker": "515880.SS",
+      "tradeDate": "2026-08-12",
+      "generatedAt": "2026-08-12T15:46:01+08:00",
+      "provider": "openai_compatible",
+      "rating": null,
+      "analysisStatus": null,
+      "report": null,
+      "auditStatus": "invalid_record",
+      "failureClass": "analysis_execution",
+      "problemCodes": [
+        "ANALYSIS_EXECUTION_FAILED"
+      ],
+      "evidence": {
+        "urlCount": 0,
+        "claimCitationCount": 0,
+        "finalProposalMarkers": 0,
+        "priceTargetCount": 0,
+        "valuationMethodCount": 0,
+        "publishedMarkerCount": 0
+      },
+      "claimValidation": null,
+      "evidencePacket": null,
+      "evidencePublish": null,
+      "identity": {
+        "scope": "profile",
+        "kind": "monitor",
+        "runId": "31575300604",
+        "profileId": "cn-semi-comms",
+        "requestId": null,
+        "slotId": "slot-0c3c408af74c43c8fc54a37e2cc17a8a1d4ac9bc2eb353171c62df7e1d3f8358",
+        "scheduledFor": "2026-08-12T07:20:00.000Z"
+      },
+      "supersededBy": null
+    },
+    {
+      "ticker": "512480.SS",
+      "tradeDate": "2026-08-12",
+      "generatedAt": "2026-08-12T15:46:01+08:00",
+      "provider": "openai_compatible",
+      "rating": null,
+      "analysisStatus": null,
+      "report": null,
+      "auditStatus": "invalid_record",
+      "failureClass": "analysis_execution",
+      "problemCodes": [
+        "ANALYSIS_EXECUTION_FAILED"
+      ],
+      "evidence": {
+        "urlCount": 0,
+        "claimCitationCount": 0,
+        "finalProposalMarkers": 0,
+        "priceTargetCount": 0,
+        "valuationMethodCount": 0,
+        "publishedMarkerCount": 0
+      },
+      "claimValidation": null,
+      "evidencePacket": null,
+      "evidencePublish": null,
+      "identity": {
+        "scope": "profile",
+        "kind": "monitor",
+        "runId": "31575300604",
+        "profileId": "cn-semi-comms",
+        "requestId": null,
+        "slotId": "slot-0c3c408af74c43c8fc54a37e2cc17a8a1d4ac9bc2eb353171c62df7e1d3f8358",
+        "scheduledFor": "2026-08-12T07:20:00.000Z"
+      },
+      "supersededBy": null
+    },
     {
       "ticker": "515880.SS",
       "tradeDate": "2026-08-11",
