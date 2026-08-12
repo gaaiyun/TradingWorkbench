@@ -20,6 +20,7 @@ from tradingagents.agents.utils.structured import (
     bind_structured,
     invoke_structured_or_freetext,
 )
+from tradingagents.reporting import validate_report_claims
 
 
 def create_portfolio_manager(llm):
@@ -64,6 +65,8 @@ def create_portfolio_manager(llm):
 
 Non-negotiable evidence rules:
 - Every numerical claim must carry an exact bracketed Evidence ID from the packet.
+- Copy every cited numerical value exactly as it appears in the Evidence ledger; do not add digits,
+  round, reformat, or recompute it.
 - Write one evidence-backed claim per paragraph or bullet. Every substantive paragraph or bullet must include
   at least one exact bracketed Evidence ID. Do not compress the entire Executive Summary or Investment Thesis
   into one long paragraph: an unsupported clause would otherwise invalidate unrelated supported claims.
@@ -91,6 +94,36 @@ Be decisive only within those evidence limits.{get_language_instruction()}
             "Portfolio Manager",
             required_labels=("**Rating**", "**Executive Summary**", "**Investment Thesis**"),
         )
+
+        packet = state.get("evidence_packet")
+        if isinstance(packet, dict):
+            validation = validate_report_claims(final_trade_decision, packet)
+            if validation["status"] != "passed":
+                error_codes = ", ".join(validation["errorCodes"])
+                revision_prompt = f"""{prompt}
+
+---
+
+Your previous draft failed the deterministic Evidence claim gate with these stable error codes:
+{error_codes}
+
+Previous draft:
+{final_trade_decision}
+
+Revise the draft once. Preserve the three required labels, but remove every unsupported claim and
+copy every numerical value exactly from its cited ledger row. Split reasoning into short paragraphs
+or bullets with an exact Evidence ID in each substantive paragraph. Do not explain the validation
+process or repeat these error codes in the answer."""
+                revised = llm.invoke(revision_prompt).content
+                if all(
+                    label in revised
+                    for label in (
+                        "**Rating**",
+                        "**Executive Summary**",
+                        "**Investment Thesis**",
+                    )
+                ):
+                    final_trade_decision = revised
 
         new_risk_debate_state = {
             "judge_decision": final_trade_decision,

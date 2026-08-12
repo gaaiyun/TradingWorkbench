@@ -80,6 +80,11 @@ Secret 的 `updatedAt` 只能证明配置被保存，不能证明日报链可用
    LLM 调用失败；`Not Rated` 加 claim-validation 错误码属于内容证据门禁，二者不得混报；
 5. 若是门禁失败，修正生成端的原子段落、引用或能力边界，不得为了显示评级放宽校验器。
 
+Portfolio Manager 会在首稿未通过同一确定性 claim validator 时，将稳定错误码反馈给
+模型做一次有界修订；重点纠正数字精度改写和多个 claim 混入同段。只允许一次，不做
+循环自愈；第二稿仍不合规则继续 `Not Rated`。运维验收必须查看最终 Manifest，不能把
+“分析 workflow success”误报成“报告通过 Evidence 门禁”。
+
 页面仍显示换 key 前的旧失败时，先比较失败 run 的开始时间与 secret/variables 更新时间，
 再检查是否已有新报告覆盖；不能把历史失败直接归因于当前 key。
 
