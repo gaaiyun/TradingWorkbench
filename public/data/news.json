@@ -1,7 +1,7 @@
 {
   "version": 1,
   "status": "ok",
-  "generated_at": "2026-08-13T06:45:22+08:00",
+  "generated_at": "2026-08-13T07:50:35+08:00",
   "trade_date": "2026-08-12",
   "global": {
     "status": "ok",
@@ -9,15 +9,75 @@
     "ticker": null,
     "start_date": "2026-08-05",
     "end_date": "2026-08-12",
-    "fetched_at": "2026-08-12T22:45:23Z",
+    "fetched_at": "2026-08-12T23:50:36Z",
     "items": [
+      {
+        "title": "Suzano Reports Adjusted EBITDA of R$4.7 Billion in the Second Quarter of 2026",
+        "summary": "",
+        "url": "https://finance.yahoo.com/markets/stocks/articles/suzano-reports-adjusted-ebitda-r-232700332.html",
+        "source": "Business Wire",
+        "published_at": "2026-08-12T23:27:00Z",
+        "fetched_at": "2026-08-12T23:50:36Z",
+        "ticker": null,
+        "source_tier": "aggregator"
+      },
+      {
+        "title": "What HD Holders Got Paid While The Stock Fell Behind",
+        "summary": "",
+        "url": "https://finance.yahoo.com/m/5ba1e94a-edf0-3cee-ae20-4f59511e5d25/what-hd-holders-got-paid.html",
+        "source": "Trefis",
+        "published_at": "2026-08-12T23:21:15Z",
+        "fetched_at": "2026-08-12T23:50:36Z",
+        "ticker": null,
+        "source_tier": "aggregator"
+      },
+      {
+        "title": "Market Chatter: Codelco Expects Lower Copper Output This Year",
+        "summary": "",
+        "url": "https://finance.yahoo.com/markets/commodities/articles/market-chatter-codelco-expects-lower-230719030.html",
+        "source": "MT Newswires",
+        "published_at": "2026-08-12T23:07:19Z",
+        "fetched_at": "2026-08-12T23:50:36Z",
+        "ticker": null,
+        "source_tier": "aggregator"
+      },
+      {
+        "title": "Talos Energy (TALO) Just Reshaped Its Map, So What’s The Catch?",
+        "summary": "",
+        "url": "https://finance.yahoo.com/energy/articles/talos-energy-talo-just-reshaped-225135261.html",
+        "source": "Insider Monkey",
+        "published_at": "2026-08-12T22:51:35Z",
+        "fetched_at": "2026-08-12T23:50:36Z",
+        "ticker": null,
+        "source_tier": "aggregator"
+      },
+      {
+        "title": "Vale Base Metals to Proceed with Coarse Particle Flotation at Salobo Increasing and Accelerating Projected Copper Production",
+        "summary": "",
+        "url": "https://finance.yahoo.com/energy/articles/vale-metals-proceed-coarse-particle-224700848.html",
+        "source": "PR Newswire",
+        "published_at": "2026-08-12T22:47:00Z",
+        "fetched_at": "2026-08-12T23:50:36Z",
+        "ticker": null,
+        "source_tier": "aggregator"
+      },
+      {
+        "title": "Walmart (WMT) Rises Higher Than Market: Key Facts",
+        "summary": "",
+        "url": "https://finance.yahoo.com/markets/stocks/articles/walmart-wmt-rises-higher-market-214503738.html",
+        "source": "Zacks",
+        "published_at": "2026-08-12T21:45:03Z",
+        "fetched_at": "2026-08-12T23:50:36Z",
+        "ticker": null,
+        "source_tier": "aggregator"
+      },
       {
         "title": "Oil prices climb again, as global stocks gain",
         "summary": "",
         "url": "https://finance.yahoo.com/markets/articles/stocks-inch-oil-dips-traders-163401004.html",
         "source": "Reuters",
         "published_at": "2026-08-12T21:32:45Z",
-        "fetched_at": "2026-08-12T22:45:23Z",
+        "fetched_at": "2026-08-12T23:50:36Z",
         "ticker": null,
         "source_tier": "aggregator"
       },
@@ -27,7 +87,7 @@
         "url": "https://finance.yahoo.com/m/390f73f0-3738-398f-acad-5a457ae84645/avino-silver-%26-gold-mines.html",
         "source": "Moby",
         "published_at": "2026-08-12T21:20:45Z",
-        "fetched_at": "2026-08-12T22:45:23Z",
+        "fetched_at": "2026-08-12T23:50:36Z",
         "ticker": null,
         "source_tier": "aggregator"
       },
@@ -37,7 +97,7 @@
         "url": "https://finance.yahoo.com/markets/commodities/articles/pan-american-silver-reports-second-211700173.html",
         "source": "Business Wire",
         "published_at": "2026-08-12T21:17:00Z",
-        "fetched_at": "2026-08-12T22:45:23Z",
+        "fetched_at": "2026-08-12T23:50:36Z",
         "ticker": null,
         "source_tier": "aggregator"
       },
@@ -47,67 +107,7 @@
         "url": "https://finance.yahoo.com/m/39ad81f5-bb02-3190-bd61-d23b145101fd/u.s.-stocks-mixed-after.html",
         "source": "The Wall Street Journal",
         "published_at": "2026-08-12T21:08:00Z",
-        "fetched_at": "2026-08-12T22:45:23Z",
-        "ticker": null,
-        "source_tier": "aggregator"
-      },
-      {
-        "title": "Mexco Energy Corporation Reports Financial Results for First Quarter",
-        "summary": "",
-        "url": "https://finance.yahoo.com/energy/articles/mexco-energy-corporation-reports-financial-205800819.html",
-        "source": "GlobeNewswire",
-        "published_at": "2026-08-12T20:58:00Z",
-        "fetched_at": "2026-08-12T22:45:23Z",
-        "ticker": null,
-        "source_tier": "aggregator"
-      },
-      {
-        "title": "TSX Closer: Index Closes at Fresh Record High as Financials Gain, Air Canada Surges",
-        "summary": "",
-        "url": "https://finance.yahoo.com/markets/world-indices/articles/tsx-closer-index-closes-fresh-203059625.html",
-        "source": "MT Newswires",
-        "published_at": "2026-08-12T20:30:59Z",
-        "fetched_at": "2026-08-12T22:45:23Z",
-        "ticker": null,
-        "source_tier": "aggregator"
-      },
-      {
-        "title": "Sunshine Silver Mining & Refining Reports Second Quarter 2026 Results",
-        "summary": "",
-        "url": "https://finance.yahoo.com/markets/commodities/articles/sunshine-silver-mining-refining-reports-202300997.html",
-        "source": "PR Newswire",
-        "published_at": "2026-08-12T20:23:00Z",
-        "fetched_at": "2026-08-12T22:45:23Z",
-        "ticker": null,
-        "source_tier": "aggregator"
-      },
-      {
-        "title": "Stock Market Today: Nasdaq Charges Higher On Inflation Report; Nvidia Partner CoreWeave Soars (Live Coverage)",
-        "summary": "",
-        "url": "https://finance.yahoo.com/m/14192882-2d0d-3020-8314-bc5352b1fdcf/stock-market-today%3A-nasdaq.html",
-        "source": "Investor's Business Daily",
-        "published_at": "2026-08-12T20:22:31Z",
-        "fetched_at": "2026-08-12T22:45:23Z",
-        "ticker": null,
-        "source_tier": "aggregator"
-      },
-      {
-        "title": "US Equity Markets End Mixed Amid Tech Stock Gains, Lower Inflation Data",
-        "summary": "",
-        "url": "https://finance.yahoo.com/markets/stocks/articles/us-equity-markets-end-mixed-201441316.html",
-        "source": "MT Newswires",
-        "published_at": "2026-08-12T20:14:41Z",
-        "fetched_at": "2026-08-12T22:45:23Z",
-        "ticker": null,
-        "source_tier": "aggregator"
-      },
-      {
-        "title": "Sector Update: Energy Stocks Edge Higher",
-        "summary": "",
-        "url": "https://finance.yahoo.com/energy/articles/sector-energy-stocks-edge-higher-201124832.html",
-        "source": "MT Newswires",
-        "published_at": "2026-08-12T20:11:24Z",
-        "fetched_at": "2026-08-12T22:45:23Z",
+        "fetched_at": "2026-08-12T23:50:36Z",
         "ticker": null,
         "source_tier": "aggregator"
       }
@@ -132,7 +132,7 @@
       "ticker": "512480.SS",
       "start_date": "2026-08-12",
       "end_date": "2026-08-12",
-      "fetched_at": "2026-08-12T22:45:25Z",
+      "fetched_at": "2026-08-12T23:50:37Z",
       "items": [
         {
           "title": "半导体ETF国联安：8月11日融资买入8431.35万元，融资融券余额5.35亿元",
@@ -140,7 +140,7 @@
           "url": "https://news.google.com/rss/articles/CBMiiAFBVV95cUxQbzQ5TEFxcEJSNGJEMm02dDlOdS03d3k5dURla0xNMEV2OEpOMkQ3X1JjWDB0LUtJNTFUanh4VzNaTlZESkduSDV2OElsb2RXanBZUTc4Z0RUN2VYdEkxLWFSUW9EcXFETnFXcVBEbmMzTHVVbnUxOXFDX3VlMGJUYWRsSEpGTGxI?oc=5",
           "source": "Google News / Sohu",
           "published_at": "2026-08-12T04:09:11Z",
-          "fetched_at": "2026-08-12T22:45:25Z",
+          "fetched_at": "2026-08-12T23:50:37Z",
           "ticker": "512480.SS",
           "source_tier": "aggregator"
         }
@@ -166,12 +166,72 @@
   },
   "items": [
     {
+      "title": "Suzano Reports Adjusted EBITDA of R$4.7 Billion in the Second Quarter of 2026",
+      "summary": "",
+      "url": "https://finance.yahoo.com/markets/stocks/articles/suzano-reports-adjusted-ebitda-r-232700332.html",
+      "source": "Business Wire",
+      "published_at": "2026-08-12T23:27:00Z",
+      "fetched_at": "2026-08-12T23:50:36Z",
+      "ticker": null,
+      "source_tier": "aggregator"
+    },
+    {
+      "title": "What HD Holders Got Paid While The Stock Fell Behind",
+      "summary": "",
+      "url": "https://finance.yahoo.com/m/5ba1e94a-edf0-3cee-ae20-4f59511e5d25/what-hd-holders-got-paid.html",
+      "source": "Trefis",
+      "published_at": "2026-08-12T23:21:15Z",
+      "fetched_at": "2026-08-12T23:50:36Z",
+      "ticker": null,
+      "source_tier": "aggregator"
+    },
+    {
+      "title": "Market Chatter: Codelco Expects Lower Copper Output This Year",
+      "summary": "",
+      "url": "https://finance.yahoo.com/markets/commodities/articles/market-chatter-codelco-expects-lower-230719030.html",
+      "source": "MT Newswires",
+      "published_at": "2026-08-12T23:07:19Z",
+      "fetched_at": "2026-08-12T23:50:36Z",
+      "ticker": null,
+      "source_tier": "aggregator"
+    },
+    {
+      "title": "Talos Energy (TALO) Just Reshaped Its Map, So What’s The Catch?",
+      "summary": "",
+      "url": "https://finance.yahoo.com/energy/articles/talos-energy-talo-just-reshaped-225135261.html",
+      "source": "Insider Monkey",
+      "published_at": "2026-08-12T22:51:35Z",
+      "fetched_at": "2026-08-12T23:50:36Z",
+      "ticker": null,
+      "source_tier": "aggregator"
+    },
+    {
+      "title": "Vale Base Metals to Proceed with Coarse Particle Flotation at Salobo Increasing and Accelerating Projected Copper Production",
+      "summary": "",
+      "url": "https://finance.yahoo.com/energy/articles/vale-metals-proceed-coarse-particle-224700848.html",
+      "source": "PR Newswire",
+      "published_at": "2026-08-12T22:47:00Z",
+      "fetched_at": "2026-08-12T23:50:36Z",
+      "ticker": null,
+      "source_tier": "aggregator"
+    },
+    {
+      "title": "Walmart (WMT) Rises Higher Than Market: Key Facts",
+      "summary": "",
+      "url": "https://finance.yahoo.com/markets/stocks/articles/walmart-wmt-rises-higher-market-214503738.html",
+      "source": "Zacks",
+      "published_at": "2026-08-12T21:45:03Z",
+      "fetched_at": "2026-08-12T23:50:36Z",
+      "ticker": null,
+      "source_tier": "aggregator"
+    },
+    {
       "title": "Oil prices climb again, as global stocks gain",
       "summary": "",
       "url": "https://finance.yahoo.com/markets/articles/stocks-inch-oil-dips-traders-163401004.html",
       "source": "Reuters",
       "published_at": "2026-08-12T21:32:45Z",
-      "fetched_at": "2026-08-12T22:45:23Z",
+      "fetched_at": "2026-08-12T23:50:36Z",
       "ticker": null,
       "source_tier": "aggregator"
     },
@@ -181,7 +241,7 @@
       "url": "https://finance.yahoo.com/m/390f73f0-3738-398f-acad-5a457ae84645/avino-silver-%26-gold-mines.html",
       "source": "Moby",
       "published_at": "2026-08-12T21:20:45Z",
-      "fetched_at": "2026-08-12T22:45:23Z",
+      "fetched_at": "2026-08-12T23:50:36Z",
       "ticker": null,
       "source_tier": "aggregator"
     },
@@ -191,7 +251,7 @@
       "url": "https://finance.yahoo.com/markets/commodities/articles/pan-american-silver-reports-second-211700173.html",
       "source": "Business Wire",
       "published_at": "2026-08-12T21:17:00Z",
-      "fetched_at": "2026-08-12T22:45:23Z",
+      "fetched_at": "2026-08-12T23:50:36Z",
       "ticker": null,
       "source_tier": "aggregator"
     },
@@ -201,67 +261,7 @@
       "url": "https://finance.yahoo.com/m/39ad81f5-bb02-3190-bd61-d23b145101fd/u.s.-stocks-mixed-after.html",
       "source": "The Wall Street Journal",
       "published_at": "2026-08-12T21:08:00Z",
-      "fetched_at": "2026-08-12T22:45:23Z",
-      "ticker": null,
-      "source_tier": "aggregator"
-    },
-    {
-      "title": "Mexco Energy Corporation Reports Financial Results for First Quarter",
-      "summary": "",
-      "url": "https://finance.yahoo.com/energy/articles/mexco-energy-corporation-reports-financial-205800819.html",
-      "source": "GlobeNewswire",
-      "published_at": "2026-08-12T20:58:00Z",
-      "fetched_at": "2026-08-12T22:45:23Z",
-      "ticker": null,
-      "source_tier": "aggregator"
-    },
-    {
-      "title": "TSX Closer: Index Closes at Fresh Record High as Financials Gain, Air Canada Surges",
-      "summary": "",
-      "url": "https://finance.yahoo.com/markets/world-indices/articles/tsx-closer-index-closes-fresh-203059625.html",
-      "source": "MT Newswires",
-      "published_at": "2026-08-12T20:30:59Z",
-      "fetched_at": "2026-08-12T22:45:23Z",
-      "ticker": null,
-      "source_tier": "aggregator"
-    },
-    {
-      "title": "Sunshine Silver Mining & Refining Reports Second Quarter 2026 Results",
-      "summary": "",
-      "url": "https://finance.yahoo.com/markets/commodities/articles/sunshine-silver-mining-refining-reports-202300997.html",
-      "source": "PR Newswire",
-      "published_at": "2026-08-12T20:23:00Z",
-      "fetched_at": "2026-08-12T22:45:23Z",
-      "ticker": null,
-      "source_tier": "aggregator"
-    },
-    {
-      "title": "Stock Market Today: Nasdaq Charges Higher On Inflation Report; Nvidia Partner CoreWeave Soars (Live Coverage)",
-      "summary": "",
-      "url": "https://finance.yahoo.com/m/14192882-2d0d-3020-8314-bc5352b1fdcf/stock-market-today%3A-nasdaq.html",
-      "source": "Investor's Business Daily",
-      "published_at": "2026-08-12T20:22:31Z",
-      "fetched_at": "2026-08-12T22:45:23Z",
-      "ticker": null,
-      "source_tier": "aggregator"
-    },
-    {
-      "title": "US Equity Markets End Mixed Amid Tech Stock Gains, Lower Inflation Data",
-      "summary": "",
-      "url": "https://finance.yahoo.com/markets/stocks/articles/us-equity-markets-end-mixed-201441316.html",
-      "source": "MT Newswires",
-      "published_at": "2026-08-12T20:14:41Z",
-      "fetched_at": "2026-08-12T22:45:23Z",
-      "ticker": null,
-      "source_tier": "aggregator"
-    },
-    {
-      "title": "Sector Update: Energy Stocks Edge Higher",
-      "summary": "",
-      "url": "https://finance.yahoo.com/energy/articles/sector-energy-stocks-edge-higher-201124832.html",
-      "source": "MT Newswires",
-      "published_at": "2026-08-12T20:11:24Z",
-      "fetched_at": "2026-08-12T22:45:23Z",
+      "fetched_at": "2026-08-12T23:50:36Z",
       "ticker": null,
       "source_tier": "aggregator"
     },
@@ -271,7 +271,7 @@
       "url": "https://news.google.com/rss/articles/CBMiiAFBVV95cUxQbzQ5TEFxcEJSNGJEMm02dDlOdS03d3k5dURla0xNMEV2OEpOMkQ3X1JjWDB0LUtJNTFUanh4VzNaTlZESkduSDV2OElsb2RXanBZUTc4Z0RUN2VYdEkxLWFSUW9EcXFETnFXcVBEbmMzTHVVbnUxOXFDX3VlMGJUYWRsSEpGTGxI?oc=5",
       "source": "Google News / Sohu",
       "published_at": "2026-08-12T04:09:11Z",
-      "fetched_at": "2026-08-12T22:45:25Z",
+      "fetched_at": "2026-08-12T23:50:37Z",
       "ticker": "512480.SS",
       "source_tier": "aggregator"
     }
