@@ -60,10 +60,10 @@ jobs:
       TRADINGAGENTS_MAX_DEBATE_ROUNDS: ${{ inputs.researchDepth == 'deep' && '2' || '1' }}
       TRADINGAGENTS_MAX_RISK_ROUNDS: ${{ inputs.researchDepth == 'deep' && '2' || '1' }}
       # ── LLM 后端（仓库 Variables 可覆盖）─────────────────────────
-      TRADINGAGENTS_LLM_PROVIDER: ${{ vars.TRADINGAGENTS_LLM_PROVIDER || 'deepseek' }}
-      TRADINGAGENTS_DEEP_THINK_LLM: ${{ vars.TRADINGAGENTS_DEEP_THINK_LLM || 'deepseek-v4-pro' }}
-      TRADINGAGENTS_QUICK_THINK_LLM: ${{ vars.TRADINGAGENTS_QUICK_THINK_LLM || 'deepseek-v4-flash' }}
-      TRADINGAGENTS_LLM_BACKEND_URL: ${{ vars.TRADINGAGENTS_LLM_BACKEND_URL }}
+      TRADINGAGENTS_LLM_PROVIDER: ${{ vars.TRADINGAGENTS_LLM_PROVIDER || 'openai_compatible' }}
+      TRADINGAGENTS_DEEP_THINK_LLM: ${{ vars.TRADINGAGENTS_DEEP_THINK_LLM || 'grok-4.5' }}
+      TRADINGAGENTS_QUICK_THINK_LLM: ${{ vars.TRADINGAGENTS_QUICK_THINK_LLM || 'grok-4.5' }}
+      TRADINGAGENTS_LLM_BACKEND_URL: ${{ vars.TRADINGAGENTS_LLM_BACKEND_URL || 'https://sub.anzhiyu.com/v1' }}
       TRADINGAGENTS_OUTPUT_LANGUAGE: ${{ vars.TRADINGAGENTS_OUTPUT_LANGUAGE || '中文' }}
       PAGES_URL: https://tradingagents-board.pages.dev/
     steps:

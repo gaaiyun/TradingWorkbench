@@ -1,6 +1,6 @@
 const DEFAULT_CHAT_ENDPOINT =
-  "https://ark.cn-beijing.volces.com/api/coding/v3/chat/completions";
-const DEFAULT_CHAT_MODEL = "glm-5.2";
+  "https://sub.anzhiyu.com/v1/chat/completions";
+const DEFAULT_CHAT_MODEL = "grok-4.5";
 
 const DEFAULT_LIMITS = Object.freeze({
   contextChars: 22000,

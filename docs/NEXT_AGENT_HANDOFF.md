@@ -30,8 +30,8 @@ Thesis**` → 正确抛出 `IncompleteAgentOutputError` → 被 `run_daily.py` �
 ### 2026-08-11 用户预警：火山引擎 key 即将到期；再次发现手动 wrangler deploy 绕过身份落库
 
 用户主动告知："这个火山引擎的 key 快过期了，到时候要换"——**这把 key 就是 GitHub repo secret
-`OPENAI_COMPATIBLE_API_KEY`**，仓库变量确认 `TRADINGAGENTS_LLM_BACKEND_URL=https://ark.cn-beijing.volces.com/api/coding/v3`、
-`TRADINGAGENTS_LLM_PROVIDER=openai_compatible`、模型 `glm-5.2`。**它同时驱动 `daily-analysis.yml`
+`OPENAI_COMPATIBLE_API_KEY`**。2026-08-12 已迁移为 `TRADINGAGENTS_LLM_BACKEND_URL=https://sub.anzhiyu.com/v1`、
+`TRADINGAGENTS_LLM_PROVIDER=openai_compatible`、模型 `grok-4.5`。**它同时驱动 `daily-analysis.yml`
 （生产每日报告的全部 LLM 调用，没有例外）和 `course-model-benchmark.yml`（另一个课程作业仓库的
 多模型实验）**——过期会让两者同时停摆，daily-analysis 会在每个 ticker 上抛认证异常，被
 `run_daily.py` 逐 ticker try/except 兜住标记 `ANALYSIS_EXECUTION_FAILED`，不会污染数据但当天

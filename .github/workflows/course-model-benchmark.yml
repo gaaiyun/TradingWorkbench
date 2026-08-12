@@ -18,7 +18,7 @@ jobs:
     env:
       PYTHONIOENCODING: utf-8
       ARK_API_KEY: ${{ secrets.OPENAI_COMPATIBLE_API_KEY }}
-      ARK_BASE_URL: https://ark.cn-beijing.volces.com/api/coding/v3
+      ARK_BASE_URL: https://sub.anzhiyu.com/v1
     steps:
       - name: Checkout workflow owner
         uses: actions/checkout@v4

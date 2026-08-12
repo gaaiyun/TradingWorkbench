@@ -41,12 +41,12 @@ function jsonResponse(data, status = 200) {
   });
 }
 
-test("默认配置保持 Ark 和 glm-5.2，并支持 endpoint/model/key binding 覆盖", () => {
+test("默认配置使用 OpenAI-compatible Grok，并支持 endpoint/model/key binding 覆盖", () => {
   const defaults = resolveChatConfig(BASE_ENV);
   assert.equal(defaults.endpoint, CHAT_DEFAULTS.endpoint);
-  assert.equal(defaults.model, "glm-5.2");
+  assert.equal(defaults.model, "grok-4.5");
   assert.equal(defaults.apiKey, "api-secret");
-  assert.equal(defaults.thinkingType, "disabled");
+  assert.equal(defaults.thinkingType, "");
   assert.equal(defaults.ready, true);
 
   const configured = resolveChatConfig({
@@ -628,7 +628,7 @@ test("stream=true 将 OpenAI SSE 标准化为 meta/delta/done", async (t) => {
   assert.equal(response.status, 200);
   assert.match(response.headers.get("content-type"), /^text\/event-stream/);
   assert.equal(llmPayload.stream, true);
-  assert.deepEqual(llmPayload.thinking, { type: "disabled" });
+  assert.equal("thinking" in llmPayload, false);
   assert.match(text, /event: meta/);
   assert.match(text, /event: delta\ndata: {"content":"第一"}/);
   assert.match(text, /event: delta\ndata: {"content":"段"}/);
