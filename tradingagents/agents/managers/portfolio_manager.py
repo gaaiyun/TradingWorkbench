@@ -64,6 +64,9 @@ def create_portfolio_manager(llm):
 
 Non-negotiable evidence rules:
 - Every numerical claim must carry an exact bracketed Evidence ID from the packet.
+- Write one evidence-backed claim per paragraph or bullet. Every substantive paragraph or bullet must include
+  at least one exact bracketed Evidence ID. Do not compress the entire Executive Summary or Investment Thesis
+  into one long paragraph: an unsupported clause would otherwise invalidate unrelated supported claims.
 - A statement from an earlier agent without an Evidence ID is not a verified fact.
 - No user holdings, cost basis, time horizon, or risk budget were supplied in this run. Do not
   prescribe a numeric portfolio allocation, forced liquidation, entry level, or stop loss.
@@ -74,6 +77,8 @@ Non-negotiable evidence rules:
 - Unless a cited ledger row explicitly exposes matching claimCapabilities, omit
   transmission paths, confidence calibration, counterfactual price paths, and
   corporate-action effects. Agreement among agents is not evidence.
+- Policy documents and corporate actions prove only that the event occurred. Unless the ledger explicitly
+  provides the effect, do not call an event a catalyst, benefit, liquidity improvement, or price effect.
 
 Be decisive only within those evidence limits.{get_language_instruction()}
 {get_final_evidence_guardrail()}"""

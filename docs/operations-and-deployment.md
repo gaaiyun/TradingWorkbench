@@ -66,6 +66,23 @@ GitHub repository variables：
 
 GitHub Actions 的 Python 深度研究另需 secret `TRADINGAGENTS_SEC_CONTACT_EMAIL`。它只用于构造 SEC EDGAR 的合规 User-Agent，不会写入报告、D1 或日志；缺失时 SEC 仍按失败轨迹降级到发现层。
 
+### 2.1 更换 LLM key 后的真实验收
+
+Secret 的 `updatedAt` 只能证明配置被保存，不能证明日报链可用。更换
+`OPENAI_COMPATIBLE_API_KEY` 或 endpoint/model 后，必须手工触发一个核心 ETF 的
+`daily-analysis`，并依次确认：
+
+1. workflow 日志显示预期 provider、endpoint host 和 model，但不打印 secret；
+2. Market Analyst、研究/风险辩论、Trader 与 Portfolio Manager 全部执行完成，日志为
+   `1/1 tickers ok`，而不是只确认首次模型调用返回；
+3. 报告产物提交到 `main`，随后独立的 `deploy-workbench` 被显式触发并成功；
+4. 读取该报告的 `report_manifest.json`。`ANALYSIS_EXECUTION_FAILED`、认证/订阅错误属于
+   LLM 调用失败；`Not Rated` 加 claim-validation 错误码属于内容证据门禁，二者不得混报；
+5. 若是门禁失败，修正生成端的原子段落、引用或能力边界，不得为了显示评级放宽校验器。
+
+页面仍显示换 key 前的旧失败时，先比较失败 run 的开始时间与 secret/variables 更新时间，
+再检查是否已有新报告覆盖；不能把历史失败直接归因于当前 key。
+
 当前 PushPlus 只运行 shadow 策略。即使环境中存在 `PUSHPLUS_TOKEN`，现有信号写入路径也不会 live 发送。
 
 ## 3. 发布前检查

@@ -705,6 +705,19 @@ class TestPortfolioManagerInjection:
         pm_node(state)
         assert "Lessons from prior decisions" not in captured["prompt"]
 
+    def test_pm_prompt_requires_atomic_cited_paragraphs_and_forbids_event_effects(self):
+        captured = {}
+        llm = _structured_pm_llm(captured)
+        pm_node = create_portfolio_manager(llm)
+        pm_node(_make_pm_state())
+        prompt = captured["prompt"]
+
+        assert "one evidence-backed claim per paragraph or bullet" in prompt
+        assert "Every substantive paragraph or bullet must include" in prompt
+        assert "Do not compress the entire Executive Summary or Investment Thesis" in prompt
+        assert "Policy documents and corporate actions prove only that the event occurred" in prompt
+        assert "catalyst, benefit, liquidity improvement, or price effect" in prompt
+
     def test_pm_returns_rendered_markdown_with_rating(self):
         """The structured PortfolioDecision is rendered to markdown that
         downstream consumers (memory log, signal processor, CLI display)

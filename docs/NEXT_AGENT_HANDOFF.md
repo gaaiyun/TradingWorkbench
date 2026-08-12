@@ -16,6 +16,27 @@
 
 ## 1. 当前结论
 
+### 2026-08-13 · 新 LLM key 已真实跑通；当前 `Not Rated` 是证据门禁，不是认证失败
+
+- 2026-08-12 07:45 UTC 的失败 run `31575300604` 发生在换 key 之前，运行环境仍指向
+  火山 CodingPlan（`ark.cn-beijing.volces.com/api/coding/v3`、`glm-5.2`），两只 ETF
+  都因 `InvalidSubscription` 在 Market Analyst 首次调用处失败。新 secret/variables
+  约在 14:19 UTC 才更新，因此页面上的旧失败不能用于判断新 key 是否有效。
+- 换 key 后已用 `512480.SS` 真实触发完整 `daily-analysis` run `31646745586`：
+  `openai_compatible`、`https://sub.anzhiyu.com/v1`、`grok-4.5` 完整走过分析师、研究辩论、
+  Trader、风险辩论和 Portfolio Manager，日志为 `[DONE] 1/1 tickers ok`；报告提交
+  `b97d6e5` 和后续 Pages deploy dispatch 均成功。这是新 key 可用的端到端证据。
+- 该报告最终仍显示 `Not Rated`，原因不是 LLM 调用失败，而是 Portfolio Manager 把
+  有引用事实与“政策催化、份额拆分改善流动性”等无 ledger 支持的效果叙述压在两个
+  超长段落中。段落级 fail-closed 门禁移除不安全段后得到 `citationCount=0`，错误码为
+  `MISSING_EVIDENCE_CITATION / FILTERED_UNSAFE_PUBLIC_CLAIM /
+  NO_SUBSTANTIVE_SUPPORTED_CONCLUSION / UNSUPPORTED_CAUSAL_OR_PATH_CLAIM`。
+- 本轮只收紧 Portfolio Manager 输出契约：每个段落或 bullet 只写一个可引证 claim，
+  每个实质段落必须带 Evidence ID；政策和公司行动只能证明事件发生，ledger 未明确给出
+  效果时不得称为 catalyst、benefit、liquidity improvement 或 price effect。Evidence
+  校验器未放宽。发布后必须再跑一次真实单标的分析，以新的 Manifest 和公开正文判断
+  该输出契约是否有效；不能仅凭 prompt 单测宣布报告已通过门禁。
+
 ### 2026-08-13 · LLM 统一迁移与当前验收边界
 
 - GitHub Variables 已统一为 `openai_compatible`、`https://sub.anzhiyu.com/v1`、
@@ -32,9 +53,9 @@
 - 当前 Pages `/api/health` 为 `degraded`，来源是最新报告记录的 `status=failed`；
   chat、Pages Functions、deployment manifest 与 options_live 检查均正常。不得把这一状态
   误报为聊天或 key 故障，也不得在没有新日报证据时宣布整条日报链恢复。
-- 本轮没有人工触发 `daily-analysis`、课程 benchmark 或飞书外发。迁移后的下一次定时
-  日报及飞书实际收件仍须在计划运行后复核；这是尚待生产证据，不是已完成结论。
-- 推送前完整本地门禁：Python `700 passed / 2 skipped / 69 subtests passed`，Functions
+- 迁移后已人工触发单标的 `daily-analysis`（run `31646745586`）并完成报告持久化与
+  Pages dispatch；课程 benchmark 和飞书实际收件仍未在本轮复核。
+- 推送前完整本地门禁：Python `701 passed / 2 skipped / 69 subtests passed`，Functions
   `436 passed / 1 skipped`，Frontend `121 passed`，Ruff、workbench syntax、asset version
   与全部 workflow YAML 解析均通过。Functions 中一条旧行情 freshness 测试原先依赖
   执行时恰好处于美股盘中，已固定测试时钟；只修测试确定性，不改变生产 freshness 逻辑。
@@ -698,6 +719,7 @@ gh workflow run deploy-monitor.yml --repo gaaiyun/TradingWorkbench --ref main
 | 2026-08-10 | 周一 08:25 后生产验收；修复 HashKey 官网迁移导致官方源持续 404，改用官方 WordPress RSS 并保留 evidence 与域名门禁；同标的 cluster 优先最新采集链接 | 真实 RSS 200 且解析最新公告；Functions `436/1 skip`、frontend `121/121`、Python `694/2 skip`、Ruff 全绿；SEC、政策、上交所、新闻去重、dispatch 与 A 股 qfq 连续性按本节现场证据复核 |
 | 2026-08-11 | 修复结构化输出 free-text 回退无完整性校验（`invoke_structured_or_freetext`）：仅在 Portfolio Manager 启用 `required_labels`（唯一在 prompt 里承诺回退格式的调用点），缺 label 重试一次仍缺则抛 `IncompleteAgentOutputError`，由既有逐 ticker try/except 兜底；追溯失效首份 verified 报告 `512480.SS 2026-08-05`（`TRUNCATED_AGENT_OUTPUT`，正文在"最终决定维持"处截断、缺失 Investment Thesis 整段）；顺带确认 HashKey/新闻去重两处上周修复生产有效（`hashkey-ir=ok`、0 组重复 cluster）、VolGuard 94/94 合约无上游错误 | 新增 6 条单测（含"重试后仍不完整会 raise"）；提交 `9dfdfd2`；Functions `436/1 skip`、frontend `121/121`、Python `700/2 skip`（本机需 `PYTHONUTF8=1`，缺失会有 9 个与本轮改动无关的 GBK 本地化假失败）、Ruff 全绿；CI `31417813422`、deploy-workbench `31417813672` 均成功；生产 `/api/health` 回读 `commitSha=9dfdfd2e7f`、`deployedAt=2026-08-10T18:11:48Z`、`status:ok`；`report-audit.json` 确认该报告 `auditStatus=invalidated`、`verifiedReports=0` |
 | 2026-08-11 | 用户预警火山引擎 key 即将到期（driving 全部 daily-analysis LLM 调用 + course-model-benchmark），已存 memory 并记录续期操作步骤；再次实测到手动 `wrangler pages deploy` 绕开 deploy-workbench.yml（纯 docs 提交 `45f10f2` 却已是 Production），D1 身份记录再次不同步导致 `/api/health` 变回 degraded（这次是 `invalid_metadata`，证明 08-02 的并发修复未回归，是新的手动部署事件）| `gh run list` 确认无对应 deploy-workbench 运行，`wrangler pages deployment list` 确认 Cloudflare 侧确有该部署；用 `gh workflow run deploy-workbench.yml` 补一次正规部署后 `/api/health` 恢复 `status:ok`、`deployment_manifest.ok=true`、`latency_ms=284`；daily-analysis 近 10 次运行 100% success，无认证报错迹象 |
+| 2026-08-13 | 区分旧 key 调用失败与新 key 下的 Evidence 门禁失败；新 key 已由单标的完整决策链验证。Portfolio Manager 改为原子化带引用段落，并禁止从政策/公司行动虚构催化与流动性效果；校验器保持 fail-closed | 旧失败 run `31575300604` 使用火山 `glm-5.2` 并报 `InvalidSubscription`；新配置 run `31646745586` 为 `1/1 tickers ok`、提交 `b97d6e5`。本地 Python `701/2 skip/69 subtests`、Functions `436/1 skip`、frontend `121/121`、Ruff、语法和资源版本全绿；新提示生产复验待本轮发布后回填 |
 
 ## 1.6 2026-07-30 全局质量复审
 
