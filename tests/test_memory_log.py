@@ -766,6 +766,40 @@ class TestPortfolioManagerInjection:
         assert "UNSUPPORTED_DERIVED_NUMERIC_CLAIM" in revision_prompt
         assert "Revise the draft once" in revision_prompt
 
+    def test_pm_rechecks_a_revision_and_never_accepts_evidence_family_placeholders(self):
+        invalid_number = (
+            "**Rating**: Hold\n\n"
+            "**Executive Summary**: Latest close is 1.091 [M1].\n\n"
+            "**Investment Thesis**: Wait for more evidence [M1]."
+        )
+        invalid_placeholder = (
+            "**Rating**: Hold\n\n"
+            "**Executive Summary**: Latest close is 1.09 [M1].\n\n"
+            "**Investment Thesis**: Monitor [M] market evidence."
+        )
+        valid = (
+            "**Rating**: Hold\n\n"
+            "**Executive Summary**: Latest close is 1.09 [M1].\n\n"
+            "**Investment Thesis**: Monitor the cited market evidence [M1]."
+        )
+        llm = MagicMock()
+        llm.with_structured_output.side_effect = NotImplementedError("unsupported")
+        llm.invoke.side_effect = [
+            MagicMock(content=invalid_number),
+            MagicMock(content=invalid_placeholder),
+            MagicMock(content=valid),
+        ]
+        state = _make_pm_state()
+        state["evidence_packet"] = _make_pm_evidence_packet()
+
+        result = create_portfolio_manager(llm)(state)
+
+        assert result["final_trade_decision"] == valid
+        assert llm.invoke.call_count == 3
+        second_revision_prompt = llm.invoke.call_args_list[2].args[0]
+        assert "MISSING_EVIDENCE_CITATION" in second_revision_prompt
+        assert "[M], [I], [D], [CA], [N], or [S]" in second_revision_prompt
+
     def test_pm_returns_rendered_markdown_with_rating(self):
         """The structured PortfolioDecision is rendered to markdown that
         downstream consumers (memory log, signal processor, CLI display)

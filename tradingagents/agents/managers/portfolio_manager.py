@@ -20,7 +20,7 @@ from tradingagents.agents.utils.structured import (
     bind_structured,
     invoke_structured_or_freetext,
 )
-from tradingagents.reporting import validate_report_claims
+from tradingagents.reporting import _filter_public_final_decision
 
 
 def create_portfolio_manager(llm):
@@ -97,9 +97,14 @@ Be decisive only within those evidence limits.{get_language_instruction()}
 
         packet = state.get("evidence_packet")
         if isinstance(packet, dict):
-            validation = validate_report_claims(final_trade_decision, packet)
-            if validation["status"] != "passed":
-                error_codes = ", ".join(validation["errorCodes"])
+            for revision_number in range(1, 3):
+                _, omitted, error_codes_set = _filter_public_final_decision(
+                    final_trade_decision,
+                    packet,
+                )
+                if omitted == 0:
+                    break
+                error_codes = ", ".join(sorted(error_codes_set))
                 revision_prompt = f"""{prompt}
 
 ---
@@ -110,10 +115,12 @@ Your previous draft failed the deterministic Evidence claim gate with these stab
 Previous draft:
 {final_trade_decision}
 
-Revise the draft once. Preserve the three required labels, but remove every unsupported claim and
+Revise the draft once (bounded revision {revision_number} of 2). Preserve the three required labels,
+but remove every unsupported claim and
 copy every numerical value exactly from its cited ledger row. Split reasoning into short paragraphs
-or bullets with an exact Evidence ID in each substantive paragraph. Do not explain the validation
-process or repeat these error codes in the answer."""
+or bullets with an exact Evidence ID in each substantive paragraph. Never use an Evidence family
+placeholder such as [M], [I], [D], [CA], [N], or [S]; every citation requires its numeric suffix,
+for example [M654] or [D2]. Do not explain the validation process or repeat these error codes in the answer."""
                 revised = llm.invoke(revision_prompt).content
                 if all(
                     label in revised
@@ -124,6 +131,8 @@ process or repeat these error codes in the answer."""
                     )
                 ):
                     final_trade_decision = revised
+                else:
+                    break
 
         new_risk_debate_state = {
             "judge_decision": final_trade_decision,
