@@ -1,7 +1,7 @@
 {
   "version": 1,
   "status": "ok",
-  "generated_at": "2026-08-14T00:53:21+08:00",
+  "generated_at": "2026-08-14T04:17:58+08:00",
   "trade_date": "2026-08-13",
   "global": {
     "status": "ok",
@@ -9,105 +9,105 @@
     "ticker": null,
     "start_date": "2026-08-06",
     "end_date": "2026-08-13",
-    "fetched_at": "2026-08-13T16:53:22Z",
+    "fetched_at": "2026-08-13T20:17:59Z",
     "items": [
       {
-        "title": "Oil pares losses after reports Houthis attacked Saudi Aramco refinery",
+        "title": "Calumet (CLMT) Could Be 22% Overvalued On Strait Of Hormuz Oil Jitters",
+        "summary": "",
+        "url": "https://finance.yahoo.com/markets/stocks/articles/calumet-clmt-could-22-overvalued-200937463.html",
+        "source": "Simply Wall St.",
+        "published_at": "2026-08-13T20:09:37Z",
+        "fetched_at": "2026-08-13T20:17:59Z",
+        "ticker": null,
+        "source_tier": "aggregator"
+      },
+      {
+        "title": "Freeport McMoRan (FCX) Stock Looks Stretched As Fresh Copper Discovery News Emerges",
+        "summary": "",
+        "url": "https://finance.yahoo.com/markets/stocks/articles/freeport-mcmoran-fcx-stock-looks-200839772.html",
+        "source": "Simply Wall St.",
+        "published_at": "2026-08-13T20:08:39Z",
+        "fetched_at": "2026-08-13T20:17:59Z",
+        "ticker": null,
+        "source_tier": "aggregator"
+      },
+      {
+        "title": "US Equity Markets End Higher Amid Weak Producer Inflation Print, Drop in Crude Oil Prices",
+        "summary": "",
+        "url": "https://finance.yahoo.com/markets/stocks/articles/us-equity-markets-end-higher-200001560.html",
+        "source": "MT Newswires",
+        "published_at": "2026-08-13T20:00:01Z",
+        "fetched_at": "2026-08-13T20:17:59Z",
+        "ticker": null,
+        "source_tier": "aggregator"
+      },
+      {
+        "title": "Update: S&P 500 Scales New Peak as Weak Wholesale Inflation Report Lifts Odds of Fed's Policy-Pause Extension",
+        "summary": "",
+        "url": "https://finance.yahoo.com/markets/stocks/articles/p-500-scales-peak-weak-195619614.html",
+        "source": "MT Newswires",
+        "published_at": "2026-08-13T19:56:19Z",
+        "fetched_at": "2026-08-13T20:17:59Z",
+        "ticker": null,
+        "source_tier": "aggregator"
+      },
+      {
+        "title": "Sector Update: Energy Stocks Edge Lower Late Afternoon",
+        "summary": "",
+        "url": "https://finance.yahoo.com/energy/articles/sector-energy-stocks-edge-lower-194912275.html",
+        "source": "MT Newswires",
+        "published_at": "2026-08-13T19:49:12Z",
+        "fetched_at": "2026-08-13T20:17:59Z",
+        "ticker": null,
+        "source_tier": "aggregator"
+      },
+      {
+        "title": "Oil settles down 2% on weak demand outlook, hefty US crude build",
         "summary": "",
         "url": "https://finance.yahoo.com/news/oil-eases-weaker-demand-outlook-045929013.html",
         "source": "Reuters",
-        "published_at": "2026-08-13T16:45:21Z",
-        "fetched_at": "2026-08-13T16:53:22Z",
+        "published_at": "2026-08-13T19:37:25Z",
+        "fetched_at": "2026-08-13T20:17:59Z",
         "ticker": null,
         "source_tier": "aggregator"
       },
       {
-        "title": "Argo Gold Oil Production Falls Month-Over-Month",
+        "title": "Sector Update: Energy",
         "summary": "",
-        "url": "https://finance.yahoo.com/energy/articles/argo-gold-oil-production-falls-163159565.html",
+        "url": "https://finance.yahoo.com/energy/articles/sector-energy-192337186.html",
         "source": "MT Newswires",
-        "published_at": "2026-08-13T16:31:59Z",
-        "fetched_at": "2026-08-13T16:53:22Z",
+        "published_at": "2026-08-13T19:23:37Z",
+        "fetched_at": "2026-08-13T20:17:59Z",
         "ticker": null,
         "source_tier": "aggregator"
       },
       {
-        "title": "Tech stocks power S&P 500 to record high as oil prices, producer inflation ease",
+        "title": "S&P 500 Hits Record as Cooling Inflation Boosts Rate-Cut Hopes",
         "summary": "",
-        "url": "https://finance.yahoo.com/markets/stocks/articles/wall-st-futures-tick-higher-102006057.html",
-        "source": "Reuters",
-        "published_at": "2026-08-13T16:23:55Z",
-        "fetched_at": "2026-08-13T16:53:22Z",
+        "url": "https://finance.yahoo.com/markets/stocks/articles/p-500-hits-record-cooling-191629396.html",
+        "source": "GuruFocus.com",
+        "published_at": "2026-08-13T19:16:29Z",
+        "fetched_at": "2026-08-13T20:17:59Z",
         "ticker": null,
         "source_tier": "aggregator"
       },
       {
-        "title": "European shares subdued ahead of euro zone inflation data; focus on Middle East",
+        "title": "Jim Cramer says Nvidia now signals something much bigger",
         "summary": "",
-        "url": "https://finance.yahoo.com/markets/world-indices/articles/european-shares-inch-lower-crude-071956648.html",
-        "source": "Reuters",
-        "published_at": "2026-08-13T16:17:36Z",
-        "fetched_at": "2026-08-13T16:53:22Z",
+        "url": "https://finance.yahoo.com/m/63ebef23-2573-39d0-ad1a-f1a218c4fae4/jim-cramer-says-nvidia-now.html",
+        "source": "TheStreet",
+        "published_at": "2026-08-13T19:13:00Z",
+        "fetched_at": "2026-08-13T20:17:59Z",
         "ticker": null,
         "source_tier": "aggregator"
       },
       {
-        "title": "Prediction: MercadoLibre Will Join Amazon, Walmart, and Costco in the $100 Billion Revenue Club by 2029",
+        "title": "Telephone And Data Systems (TDS) Stock Looks Fully Priced Despite Strong Fiber Growth",
         "summary": "",
-        "url": "https://finance.yahoo.com/m/4e3adc0f-4971-3c17-a070-1ea8bd1556cb/prediction%3A-mercadolibre-will.html",
-        "source": "Motley Fool",
-        "published_at": "2026-08-13T16:13:00Z",
-        "fetched_at": "2026-08-13T16:53:22Z",
-        "ticker": null,
-        "source_tier": "aggregator"
-      },
-      {
-        "title": "Stocks steady as US inflation worries ease, oil slips",
-        "summary": "",
-        "url": "https://finance.yahoo.com/markets/world-indices/articles/seoul-tech-leads-asian-stock-023817725.html",
-        "source": "AFP",
-        "published_at": "2026-08-13T16:12:29Z",
-        "fetched_at": "2026-08-13T16:53:22Z",
-        "ticker": null,
-        "source_tier": "aggregator"
-      },
-      {
-        "title": "Epsilon Energy Q2 Earnings Call Highlights",
-        "summary": "",
-        "url": "https://finance.yahoo.com/m/920a14b4-308b-3576-a5b2-d200a92f70e8/epsilon-energy-q2-earnings.html",
-        "source": "MarketBeat",
-        "published_at": "2026-08-13T16:04:40Z",
-        "fetched_at": "2026-08-13T16:53:22Z",
-        "ticker": null,
-        "source_tier": "aggregator"
-      },
-      {
-        "title": "Loading Up on Amazon: The Market Digests, I Invest",
-        "summary": "",
-        "url": "https://finance.yahoo.com/m/361875cf-afc6-3da6-8b52-e4931fb7c743/loading-up-on-amazon%3A-the.html",
-        "source": "24/7 Wall St.",
-        "published_at": "2026-08-13T16:02:04Z",
-        "fetched_at": "2026-08-13T16:53:22Z",
-        "ticker": null,
-        "source_tier": "aggregator"
-      },
-      {
-        "title": "2 of Wall Street’s Favorite Stocks to Own for Decades and 1 Facing Headwinds",
-        "summary": "",
-        "url": "https://finance.yahoo.com/markets/stocks/articles/2-wall-street-favorite-stocks-152500433.html",
-        "source": "StockStory",
-        "published_at": "2026-08-13T15:25:00Z",
-        "fetched_at": "2026-08-13T16:53:22Z",
-        "ticker": null,
-        "source_tier": "aggregator"
-      },
-      {
-        "title": "Stock Market Today: Dow's Gain Vanishes; Credo Technology Approaches New Entry (Live Coverage)",
-        "summary": "",
-        "url": "https://finance.yahoo.com/m/a86837ac-df8a-3747-8923-5f2f47063c11/stock-market-today%3A-dow%27s.html",
-        "source": "Investor's Business Daily",
-        "published_at": "2026-08-13T15:24:53Z",
-        "fetched_at": "2026-08-13T16:53:22Z",
+        "url": "https://finance.yahoo.com/markets/stocks/articles/telephone-data-systems-tds-stock-191211546.html",
+        "source": "Simply Wall St.",
+        "published_at": "2026-08-13T19:12:11Z",
+        "fetched_at": "2026-08-13T20:17:59Z",
         "ticker": null,
         "source_tier": "aggregator"
       }
@@ -116,7 +116,7 @@
       {
         "source": "Yahoo Finance",
         "status": "ok",
-        "item_count": 40
+        "item_count": 39
       },
       {
         "source": "Federal Reserve",
@@ -132,13 +132,13 @@
       "ticker": "512480.SS",
       "start_date": "2026-08-13",
       "end_date": "2026-08-13",
-      "fetched_at": "2026-08-13T16:53:24Z",
+      "fetched_at": "2026-08-13T20:18:00Z",
       "items": [],
       "source_statuses": [
         {
           "source": "Yahoo Finance",
-          "status": "ok",
-          "item_count": 1
+          "status": "empty",
+          "item_count": 0
         },
         {
           "source": "Google News RSS",
@@ -155,102 +155,102 @@
   },
   "items": [
     {
-      "title": "Oil pares losses after reports Houthis attacked Saudi Aramco refinery",
+      "title": "Calumet (CLMT) Could Be 22% Overvalued On Strait Of Hormuz Oil Jitters",
+      "summary": "",
+      "url": "https://finance.yahoo.com/markets/stocks/articles/calumet-clmt-could-22-overvalued-200937463.html",
+      "source": "Simply Wall St.",
+      "published_at": "2026-08-13T20:09:37Z",
+      "fetched_at": "2026-08-13T20:17:59Z",
+      "ticker": null,
+      "source_tier": "aggregator"
+    },
+    {
+      "title": "Freeport McMoRan (FCX) Stock Looks Stretched As Fresh Copper Discovery News Emerges",
+      "summary": "",
+      "url": "https://finance.yahoo.com/markets/stocks/articles/freeport-mcmoran-fcx-stock-looks-200839772.html",
+      "source": "Simply Wall St.",
+      "published_at": "2026-08-13T20:08:39Z",
+      "fetched_at": "2026-08-13T20:17:59Z",
+      "ticker": null,
+      "source_tier": "aggregator"
+    },
+    {
+      "title": "US Equity Markets End Higher Amid Weak Producer Inflation Print, Drop in Crude Oil Prices",
+      "summary": "",
+      "url": "https://finance.yahoo.com/markets/stocks/articles/us-equity-markets-end-higher-200001560.html",
+      "source": "MT Newswires",
+      "published_at": "2026-08-13T20:00:01Z",
+      "fetched_at": "2026-08-13T20:17:59Z",
+      "ticker": null,
+      "source_tier": "aggregator"
+    },
+    {
+      "title": "Update: S&P 500 Scales New Peak as Weak Wholesale Inflation Report Lifts Odds of Fed's Policy-Pause Extension",
+      "summary": "",
+      "url": "https://finance.yahoo.com/markets/stocks/articles/p-500-scales-peak-weak-195619614.html",
+      "source": "MT Newswires",
+      "published_at": "2026-08-13T19:56:19Z",
+      "fetched_at": "2026-08-13T20:17:59Z",
+      "ticker": null,
+      "source_tier": "aggregator"
+    },
+    {
+      "title": "Sector Update: Energy Stocks Edge Lower Late Afternoon",
+      "summary": "",
+      "url": "https://finance.yahoo.com/energy/articles/sector-energy-stocks-edge-lower-194912275.html",
+      "source": "MT Newswires",
+      "published_at": "2026-08-13T19:49:12Z",
+      "fetched_at": "2026-08-13T20:17:59Z",
+      "ticker": null,
+      "source_tier": "aggregator"
+    },
+    {
+      "title": "Oil settles down 2% on weak demand outlook, hefty US crude build",
       "summary": "",
       "url": "https://finance.yahoo.com/news/oil-eases-weaker-demand-outlook-045929013.html",
       "source": "Reuters",
-      "published_at": "2026-08-13T16:45:21Z",
-      "fetched_at": "2026-08-13T16:53:22Z",
+      "published_at": "2026-08-13T19:37:25Z",
+      "fetched_at": "2026-08-13T20:17:59Z",
       "ticker": null,
       "source_tier": "aggregator"
     },
     {
-      "title": "Argo Gold Oil Production Falls Month-Over-Month",
+      "title": "Sector Update: Energy",
       "summary": "",
-      "url": "https://finance.yahoo.com/energy/articles/argo-gold-oil-production-falls-163159565.html",
+      "url": "https://finance.yahoo.com/energy/articles/sector-energy-192337186.html",
       "source": "MT Newswires",
-      "published_at": "2026-08-13T16:31:59Z",
-      "fetched_at": "2026-08-13T16:53:22Z",
+      "published_at": "2026-08-13T19:23:37Z",
+      "fetched_at": "2026-08-13T20:17:59Z",
       "ticker": null,
       "source_tier": "aggregator"
     },
     {
-      "title": "Tech stocks power S&P 500 to record high as oil prices, producer inflation ease",
+      "title": "S&P 500 Hits Record as Cooling Inflation Boosts Rate-Cut Hopes",
       "summary": "",
-      "url": "https://finance.yahoo.com/markets/stocks/articles/wall-st-futures-tick-higher-102006057.html",
-      "source": "Reuters",
-      "published_at": "2026-08-13T16:23:55Z",
-      "fetched_at": "2026-08-13T16:53:22Z",
+      "url": "https://finance.yahoo.com/markets/stocks/articles/p-500-hits-record-cooling-191629396.html",
+      "source": "GuruFocus.com",
+      "published_at": "2026-08-13T19:16:29Z",
+      "fetched_at": "2026-08-13T20:17:59Z",
       "ticker": null,
       "source_tier": "aggregator"
     },
     {
-      "title": "European shares subdued ahead of euro zone inflation data; focus on Middle East",
+      "title": "Jim Cramer says Nvidia now signals something much bigger",
       "summary": "",
-      "url": "https://finance.yahoo.com/markets/world-indices/articles/european-shares-inch-lower-crude-071956648.html",
-      "source": "Reuters",
-      "published_at": "2026-08-13T16:17:36Z",
-      "fetched_at": "2026-08-13T16:53:22Z",
+      "url": "https://finance.yahoo.com/m/63ebef23-2573-39d0-ad1a-f1a218c4fae4/jim-cramer-says-nvidia-now.html",
+      "source": "TheStreet",
+      "published_at": "2026-08-13T19:13:00Z",
+      "fetched_at": "2026-08-13T20:17:59Z",
       "ticker": null,
       "source_tier": "aggregator"
     },
     {
-      "title": "Prediction: MercadoLibre Will Join Amazon, Walmart, and Costco in the $100 Billion Revenue Club by 2029",
+      "title": "Telephone And Data Systems (TDS) Stock Looks Fully Priced Despite Strong Fiber Growth",
       "summary": "",
-      "url": "https://finance.yahoo.com/m/4e3adc0f-4971-3c17-a070-1ea8bd1556cb/prediction%3A-mercadolibre-will.html",
-      "source": "Motley Fool",
-      "published_at": "2026-08-13T16:13:00Z",
-      "fetched_at": "2026-08-13T16:53:22Z",
-      "ticker": null,
-      "source_tier": "aggregator"
-    },
-    {
-      "title": "Stocks steady as US inflation worries ease, oil slips",
-      "summary": "",
-      "url": "https://finance.yahoo.com/markets/world-indices/articles/seoul-tech-leads-asian-stock-023817725.html",
-      "source": "AFP",
-      "published_at": "2026-08-13T16:12:29Z",
-      "fetched_at": "2026-08-13T16:53:22Z",
-      "ticker": null,
-      "source_tier": "aggregator"
-    },
-    {
-      "title": "Epsilon Energy Q2 Earnings Call Highlights",
-      "summary": "",
-      "url": "https://finance.yahoo.com/m/920a14b4-308b-3576-a5b2-d200a92f70e8/epsilon-energy-q2-earnings.html",
-      "source": "MarketBeat",
-      "published_at": "2026-08-13T16:04:40Z",
-      "fetched_at": "2026-08-13T16:53:22Z",
-      "ticker": null,
-      "source_tier": "aggregator"
-    },
-    {
-      "title": "Loading Up on Amazon: The Market Digests, I Invest",
-      "summary": "",
-      "url": "https://finance.yahoo.com/m/361875cf-afc6-3da6-8b52-e4931fb7c743/loading-up-on-amazon%3A-the.html",
-      "source": "24/7 Wall St.",
-      "published_at": "2026-08-13T16:02:04Z",
-      "fetched_at": "2026-08-13T16:53:22Z",
-      "ticker": null,
-      "source_tier": "aggregator"
-    },
-    {
-      "title": "2 of Wall Street’s Favorite Stocks to Own for Decades and 1 Facing Headwinds",
-      "summary": "",
-      "url": "https://finance.yahoo.com/markets/stocks/articles/2-wall-street-favorite-stocks-152500433.html",
-      "source": "StockStory",
-      "published_at": "2026-08-13T15:25:00Z",
-      "fetched_at": "2026-08-13T16:53:22Z",
-      "ticker": null,
-      "source_tier": "aggregator"
-    },
-    {
-      "title": "Stock Market Today: Dow's Gain Vanishes; Credo Technology Approaches New Entry (Live Coverage)",
-      "summary": "",
-      "url": "https://finance.yahoo.com/m/a86837ac-df8a-3747-8923-5f2f47063c11/stock-market-today%3A-dow%27s.html",
-      "source": "Investor's Business Daily",
-      "published_at": "2026-08-13T15:24:53Z",
-      "fetched_at": "2026-08-13T16:53:22Z",
+      "url": "https://finance.yahoo.com/markets/stocks/articles/telephone-data-systems-tds-stock-191211546.html",
+      "source": "Simply Wall St.",
+      "published_at": "2026-08-13T19:12:11Z",
+      "fetched_at": "2026-08-13T20:17:59Z",
       "ticker": null,
       "source_tier": "aggregator"
     }
