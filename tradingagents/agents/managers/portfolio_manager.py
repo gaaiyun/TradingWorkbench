@@ -10,6 +10,8 @@ back gracefully to free-text generation.
 
 from __future__ import annotations
 
+import re
+
 from tradingagents.agents.schemas import PortfolioDecision, render_pm_decision
 from tradingagents.agents.utils.agent_utils import (
     get_final_evidence_guardrail,
@@ -95,6 +97,12 @@ Be decisive only within those evidence limits.{get_language_instruction()}
             required_labels=("**Rating**", "**Executive Summary**", "**Investment Thesis**"),
         )
 
+        final_trade_decision = re.sub(
+            r"(?m)^(\*\*(?:Rating|Executive Summary|Investment Thesis)\*\*)\s*\n\s*",
+            r"\1: ",
+            final_trade_decision,
+        )
+
         packet = state.get("evidence_packet")
         if isinstance(packet, dict):
             for revision_number in range(1, 3):
@@ -130,7 +138,11 @@ for example [M654] or [D2]. Do not explain the validation process or repeat thes
                         "**Investment Thesis**",
                     )
                 ):
-                    final_trade_decision = revised
+                    final_trade_decision = re.sub(
+                        r"(?m)^(\*\*(?:Rating|Executive Summary|Investment Thesis)\*\*)\s*\n\s*",
+                        r"\1: ",
+                        revised,
+                    )
                 else:
                     break
 

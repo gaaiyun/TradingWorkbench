@@ -85,6 +85,10 @@ Portfolio Manager 会在首稿未通过同一确定性公开段落过滤器时�
 无编号 Evidence 占位符。不做无界循环；第三稿仍不合规则继续 `Not Rated`。运维验收必须查看最终 Manifest，不能把
 “分析 workflow success”误报成“报告通过 Evidence 门禁”。
 
+OpenAI-compatible free-text 回退若把 `Rating / Executive Summary / Investment Thesis`
+标签与正文分成相邻两行，生成端会将这三个固定标签规范为 `**Label**: value`；该步骤不改
+正文、数字、Evidence ID 或评级值。除此之外不得用字符串清洗修补 claim。
+
 页面仍显示换 key 前的旧失败时，先比较失败 run 的开始时间与 secret/variables 更新时间，
 再检查是否已有新报告覆盖；不能把历史失败直接归因于当前 key。
 

@@ -800,6 +800,25 @@ class TestPortfolioManagerInjection:
         assert "MISSING_EVIDENCE_CITATION" in second_revision_prompt
         assert "[M], [I], [D], [CA], [N], or [S]" in second_revision_prompt
 
+    def test_pm_canonicalizes_newline_labels_without_changing_claim_text(self):
+        response = (
+            "**Rating**\nHold\n\n"
+            "**Executive Summary**\nLatest close is 1.09 [M1].\n\n"
+            "**Investment Thesis**\nMonitor the cited market evidence [M1]."
+        )
+        llm = MagicMock()
+        llm.with_structured_output.side_effect = NotImplementedError("unsupported")
+        llm.invoke.return_value = MagicMock(content=response)
+        state = _make_pm_state()
+        state["evidence_packet"] = _make_pm_evidence_packet()
+
+        result = create_portfolio_manager(llm)(state)["final_trade_decision"]
+
+        assert result.startswith("**Rating**: Hold")
+        assert "**Executive Summary**: Latest close is 1.09 [M1]." in result
+        assert "**Investment Thesis**: Monitor the cited market evidence [M1]." in result
+        assert llm.invoke.call_count == 1
+
     def test_pm_returns_rendered_markdown_with_rating(self):
         """The structured PortfolioDecision is rendered to markdown that
         downstream consumers (memory log, signal processor, CLI display)
