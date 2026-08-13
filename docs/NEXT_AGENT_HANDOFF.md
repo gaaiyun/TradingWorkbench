@@ -46,7 +46,14 @@
 - 最终复验 run `31653398672` 已把数字和具体引用全部修正（`citationCount=18`），唯一
   剩余过滤段是 Grok 将 `**Rating**: Hold` 输出为两行 `**Rating**` / `Hold`。代码现在只对
   三个受控 label 做确定性换行规范化，不改任何 claim。用该生产 decision 与 packet 原样
-  重放公开过滤器，结果为 `omitted=0`、错误码空；下一次真实日报应直接通过这项格式门禁。
+  重放公开过滤器，结果为 `omitted=0`、错误码空。
+- 标签修复后的最终生产 run `31654427261` 仍为 `Not Rated`，但这是新生成内容的语义
+  越界，不是标签回归：Grok 又写出“政策驱动的增长潜力”，并把部分派生值表述成 ledger
+  未提供的口径；Manifest 为 `citationCount=2`、`omittedUnsafeParagraphs=2`，错误码
+  `FILTERED_UNSAFE_PUBLIC_CLAIM / MISSING_EVIDENCE_CITATION /
+  UNSUPPORTED_DERIVED_NUMERIC_CLAIM`。连续真实复验证明：新 key 与全链可用，但当前
+  `grok-4.5` 中转在 structured output 返回空、转入 free-text 后，不能稳定满足严格 Evidence
+  合约。当前实现已经用最多两次有界修订提升成功概率；不能继续无限重跑或放宽门禁。
 
 ### 2026-08-13 · LLM 统一迁移与当前验收边界
 
@@ -61,9 +68,9 @@
   工作流现改为检出实际存在的 `main`，显式运行 `grok-4.5`、`grok-4.3`、
   `grok-build-0.1`、`grok-composer-2.5-fast`。环境变量 `ARK_API_KEY` / `ARK_BASE_URL`
   只是外部课程脚本尚未改名的兼容契约，实际端点与 key 均为当前 Grok 中转站。
-- 当前 Pages `/api/health` 为 `degraded`，来源是最新报告记录的 `status=failed`；
-  chat、Pages Functions、deployment manifest 与 options_live 检查均正常。不得把这一状态
-  误报为聊天或 key 故障，也不得在没有新日报证据时宣布整条日报链恢复。
+- 当前 Pages `/api/health` 为 `ok`；生产 SHA `e669c0d64625f980b86516db8e9332ecaff6af3c`，
+  `deployment_manifest.ok=true`。最新单标的分析 workflow 成功，但报告内容仍因上述 Evidence
+  门禁保持 `Not Rated`；不得把 health ok 误报为报告已经通过门禁。
 - 迁移后已人工触发单标的 `daily-analysis`（run `31646745586`）并完成报告持久化与
   Pages dispatch；课程 benchmark 和飞书实际收件仍未在本轮复核。
 - 推送前完整本地门禁：Python `701 passed / 2 skipped / 69 subtests passed`，Functions
