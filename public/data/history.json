@@ -1,6 +1,58 @@
 [
   {
     "trade_date": "2026-08-13",
+    "generated_at": "2026-08-13T16:01:26+08:00",
+    "provider": "openai_compatible",
+    "results": [
+      {
+        "ticker": "515880.SS",
+        "rating": null,
+        "report": null,
+        "files": {},
+        "error": true,
+        "analysis_status": null,
+        "audit_status": null,
+        "evidence_publish": null
+      },
+      {
+        "ticker": "512480.SS",
+        "rating": null,
+        "report": null,
+        "files": {},
+        "error": true,
+        "analysis_status": null,
+        "audit_status": null,
+        "evidence_publish": null
+      }
+    ],
+    "request": {
+      "requestId": null,
+      "analysts": [
+        "market",
+        "news",
+        "fundamentals"
+      ],
+      "researchDepth": "standard",
+      "kind": "monitor"
+    },
+    "run": {
+      "id": "31680176206",
+      "attempt": "1",
+      "workflow": "daily-analysis",
+      "url": "https://github.com/gaaiyun/TradingWorkbench/actions/runs/31680176206"
+    },
+    "identity": {
+      "scope": "profile",
+      "kind": "monitor",
+      "runId": "31680176206",
+      "profileId": "cn-semi-comms",
+      "requestId": null,
+      "slotId": "slot-9a4bd2a048a7134fa0f3432ed7efd04db5547c64f72472dfc133bee26a32d81f",
+      "scheduledFor": "2026-08-13T07:20:00.000Z"
+    }
+  },
+  {
+    "trade_date": "2026-08-13",
     "generated_at": "2026-08-13T08:27:22+08:00",
     "provider": "openai_compatible",
     "results": [

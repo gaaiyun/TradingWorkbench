@@ -1,7 +1,7 @@
 {
   "version": 1,
   "status": "ok",
-  "generated_at": "2026-08-13T08:27:22+08:00",
+  "generated_at": "2026-08-13T16:01:26+08:00",
   "trade_date": "2026-08-13",
   "global": {
     "status": "ok",
@@ -9,105 +9,105 @@
     "ticker": null,
     "start_date": "2026-08-06",
     "end_date": "2026-08-13",
-    "fetched_at": "2026-08-13T00:27:23Z",
+    "fetched_at": "2026-08-13T08:01:26Z",
     "items": [
       {
-        "title": "Vale Base Metals to Proceed with Coarse Particle Flotation at Salobo Increasing and Accelerating Projected Copper Production",
+        "title": "Tech stocks enjoy rebound after US inflation on mixed day for markets",
         "summary": "",
-        "url": "https://finance.yahoo.com/energy/articles/vale-metals-proceed-coarse-particle-235600807.html",
-        "source": "PR Newswire",
-        "published_at": "2026-08-12T23:56:00Z",
-        "fetched_at": "2026-08-13T00:27:23Z",
+        "url": "https://finance.yahoo.com/markets/world-indices/articles/seoul-tech-leads-asian-stock-023817725.html",
+        "source": "AFP",
+        "published_at": "2026-08-13T07:33:09Z",
+        "fetched_at": "2026-08-13T08:01:26Z",
         "ticker": null,
         "source_tier": "aggregator"
       },
       {
-        "title": "The Small Cap Watch: Solis contiunes drilling, Nova Minerals operating around the clock, SportsHero deal and more...",
+        "title": "European shares inch up as lower crude offsets geopolitical unease",
         "summary": "",
-        "url": "https://finance.yahoo.com/m/c1f8374d-041f-3531-9cf9-3c08ad85c5e7/the-small-cap-watch%3A-solis.html",
-        "source": "Proactive",
-        "published_at": "2026-08-12T23:49:00Z",
-        "fetched_at": "2026-08-13T00:27:23Z",
-        "ticker": null,
-        "source_tier": "aggregator"
-      },
-      {
-        "title": "Solis Minerals advances Mandacaru lithium drilling as Cinto copper campaign set to begin",
-        "summary": "",
-        "url": "https://finance.yahoo.com/m/1da8e428-60e2-3a05-ac1a-1a0268b145bf/solis-minerals-advances.html",
-        "source": "Proactive",
-        "published_at": "2026-08-12T23:45:00Z",
-        "fetched_at": "2026-08-13T00:27:23Z",
-        "ticker": null,
-        "source_tier": "aggregator"
-      },
-      {
-        "title": "Suzano Reports Adjusted EBITDA of R$4.7 Billion in the Second Quarter of 2026",
-        "summary": "",
-        "url": "https://finance.yahoo.com/markets/stocks/articles/suzano-reports-adjusted-ebitda-r-232700332.html",
-        "source": "Business Wire",
-        "published_at": "2026-08-12T23:27:00Z",
-        "fetched_at": "2026-08-13T00:27:23Z",
-        "ticker": null,
-        "source_tier": "aggregator"
-      },
-      {
-        "title": "What HD Holders Got Paid While The Stock Fell Behind",
-        "summary": "",
-        "url": "https://finance.yahoo.com/m/5ba1e94a-edf0-3cee-ae20-4f59511e5d25/what-hd-holders-got-paid.html",
-        "source": "Trefis",
-        "published_at": "2026-08-12T23:21:15Z",
-        "fetched_at": "2026-08-13T00:27:23Z",
-        "ticker": null,
-        "source_tier": "aggregator"
-      },
-      {
-        "title": "Market Chatter: Codelco Expects Lower Copper Output This Year",
-        "summary": "",
-        "url": "https://finance.yahoo.com/markets/commodities/articles/market-chatter-codelco-expects-lower-230719030.html",
-        "source": "MT Newswires",
-        "published_at": "2026-08-12T23:07:19Z",
-        "fetched_at": "2026-08-13T00:27:23Z",
-        "ticker": null,
-        "source_tier": "aggregator"
-      },
-      {
-        "title": "Talos Energy (TALO) Just Reshaped Its Map, So What’s The Catch?",
-        "summary": "",
-        "url": "https://finance.yahoo.com/energy/articles/talos-energy-talo-just-reshaped-225135261.html",
-        "source": "Insider Monkey",
-        "published_at": "2026-08-12T22:51:35Z",
-        "fetched_at": "2026-08-13T00:27:23Z",
-        "ticker": null,
-        "source_tier": "aggregator"
-      },
-      {
-        "title": "Walmart (WMT) Rises Higher Than Market: Key Facts",
-        "summary": "",
-        "url": "https://finance.yahoo.com/markets/stocks/articles/walmart-wmt-rises-higher-market-214503738.html",
-        "source": "Zacks",
-        "published_at": "2026-08-12T21:45:03Z",
-        "fetched_at": "2026-08-13T00:27:23Z",
-        "ticker": null,
-        "source_tier": "aggregator"
-      },
-      {
-        "title": "Oil prices climb again, as global stocks gain",
-        "summary": "",
-        "url": "https://finance.yahoo.com/markets/articles/stocks-inch-oil-dips-traders-163401004.html",
+        "url": "https://finance.yahoo.com/markets/world-indices/articles/european-shares-inch-lower-crude-071956648.html",
         "source": "Reuters",
-        "published_at": "2026-08-12T21:32:45Z",
-        "fetched_at": "2026-08-13T00:27:23Z",
+        "published_at": "2026-08-13T07:19:56Z",
+        "fetched_at": "2026-08-13T08:01:26Z",
         "ticker": null,
         "source_tier": "aggregator"
       },
       {
-        "title": "Avino Silver & Gold Mines Ltd. Q2 2026 Earnings Call Summary",
+        "title": "Antofagasta H1 Earnings Call Highlights",
         "summary": "",
-        "url": "https://finance.yahoo.com/m/390f73f0-3738-398f-acad-5a457ae84645/avino-silver-%26-gold-mines.html",
-        "source": "Moby",
-        "published_at": "2026-08-12T21:20:45Z",
-        "fetched_at": "2026-08-13T00:27:23Z",
+        "url": "https://finance.yahoo.com/m/9faafc8b-ba08-3a2b-84ab-7d3141f5d4d2/antofagasta-h1-earnings-call.html",
+        "source": "MarketBeat",
+        "published_at": "2026-08-13T07:02:09Z",
+        "fetched_at": "2026-08-13T08:01:26Z",
+        "ticker": null,
+        "source_tier": "aggregator"
+      },
+      {
+        "title": "UAE Reportedly Released Iran’s Frozen Assets Worth Billions of Dollars, Bitcoin Rebounds",
+        "summary": "",
+        "url": "https://finance.yahoo.com/m/89d91e6f-b9cb-31b5-90ed-7761f154b3ca/uae-reportedly-released.html",
+        "source": "CoinGape",
+        "published_at": "2026-08-13T06:17:29Z",
+        "fetched_at": "2026-08-13T08:01:26Z",
+        "ticker": null,
+        "source_tier": "aggregator"
+      },
+      {
+        "title": "Oil Prices Fall as OPEC and IEA Slash 2026 Demand Outlooks",
+        "summary": "",
+        "url": "https://finance.yahoo.com/energy/articles/oil-prices-fall-opec-iea-052500802.html",
+        "source": "Oilprice.com",
+        "published_at": "2026-08-13T05:25:00Z",
+        "fetched_at": "2026-08-13T08:01:26Z",
+        "ticker": null,
+        "source_tier": "aggregator"
+      },
+      {
+        "title": "UACJ (TSE:5741) Lifted Dividend Guidance, Is The Upside Already Priced In?",
+        "summary": "",
+        "url": "https://finance.yahoo.com/markets/stocks/articles/uacj-tse-5741-lifted-dividend-051503791.html",
+        "source": "Simply Wall St.",
+        "published_at": "2026-08-13T05:15:03Z",
+        "fetched_at": "2026-08-13T08:01:26Z",
+        "ticker": null,
+        "source_tier": "aggregator"
+      },
+      {
+        "title": "Trump Reverts to Economic Squeeze of Iranian Regime",
+        "summary": "",
+        "url": "https://finance.yahoo.com/video/trump-reverts-economic-squeeze-iranian-043953425.html",
+        "source": "Bloomberg",
+        "published_at": "2026-08-13T04:39:53Z",
+        "fetched_at": "2026-08-13T08:01:26Z",
+        "ticker": null,
+        "source_tier": "aggregator"
+      },
+      {
+        "title": "Norsk Hydro (OB:NHY) Cuts Alunorte Output, Is It Still 33% Undervalued?",
+        "summary": "",
+        "url": "https://finance.yahoo.com/markets/stocks/articles/norsk-hydro-ob-nhy-cuts-043214097.html",
+        "source": "Simply Wall St.",
+        "published_at": "2026-08-13T04:32:14Z",
+        "fetched_at": "2026-08-13T08:01:26Z",
+        "ticker": null,
+        "source_tier": "aggregator"
+      },
+      {
+        "title": "Okeanis Eco Tankers Corp. – Ex Dividend Date",
+        "summary": "",
+        "url": "https://finance.yahoo.com/markets/stocks/articles/okeanis-eco-tankers-corp-ex-040000555.html",
+        "source": "GlobeNewswire",
+        "published_at": "2026-08-13T04:00:00Z",
+        "fetched_at": "2026-08-13T08:01:26Z",
+        "ticker": null,
+        "source_tier": "aggregator"
+      },
+      {
+        "title": "Asian shares mostly rise after buying of AI-related shares leads a rally on Wall Street",
+        "summary": "",
+        "url": "https://finance.yahoo.com/markets/world-indices/articles/asian-shares-mostly-rise-ai-033327003.html",
+        "source": "Associated Press",
+        "published_at": "2026-08-13T03:33:27Z",
+        "fetched_at": "2026-08-13T08:01:26Z",
         "ticker": null,
         "source_tier": "aggregator"
       }
@@ -116,7 +116,7 @@
       {
         "source": "Yahoo Finance",
         "status": "ok",
-        "item_count": 29
+        "item_count": 39
       },
       {
         "source": "Federal Reserve",
@@ -126,13 +126,50 @@
     ]
   },
   "tickers": {
+    "515880.SS": {
+      "status": "ok",
+      "query_type": "ticker",
+      "ticker": "515880.SS",
+      "start_date": "2026-08-13",
+      "end_date": "2026-08-13",
+      "fetched_at": "2026-08-13T08:01:28Z",
+      "items": [
+        {
+          "title": "通信ETF国泰：8月12日融券卖出13.22万股，融资融券余额10.59亿元",
+          "summary": "通信ETF国泰：8月12日融券卖出13.22万股，融资融券余额10.59亿元 Sohu",
+          "url": "https://news.google.com/rss/articles/CBMiiAFBVV95cUxPQnppdUFoRXl1ZDJqWHl0Z1hnRjhfV2FZLU56N0FleHVJTDhxanZXZlJxRnhETVpwdjY5em9sN0ZCY0dESld1dVJBbkV3VXRHb0J6Mk9ZbUI1eHd3TE9YTm8yWnY5dHNlWEpLN093RWJRdFBzWEJOSENNUVFvY0VvTzVCSzJqSFho?oc=5",
+          "source": "Google News / Sohu",
+          "published_at": "2026-08-13T04:24:24Z",
+          "fetched_at": "2026-08-13T08:01:28Z",
+          "ticker": "515880.SS",
+          "source_tier": "aggregator"
+        }
+      ],
+      "source_statuses": [
+        {
+          "source": "Yahoo Finance",
+          "status": "empty",
+          "item_count": 0
+        },
+        {
+          "source": "Google News RSS",
+          "status": "ok",
+          "item_count": 1
+        },
+        {
+          "source": "SEC EDGAR",
+          "status": "empty",
+          "item_count": 0
+        }
+      ]
+    },
     "512480.SS": {
       "status": "empty",
       "query_type": "ticker",
       "ticker": "512480.SS",
       "start_date": "2026-08-13",
       "end_date": "2026-08-13",
-      "fetched_at": "2026-08-13T00:27:25Z",
+      "fetched_at": "2026-08-13T08:01:31Z",
       "items": [],
       "source_statuses": [
         {
@@ -155,102 +192,112 @@
   },
   "items": [
     {
-      "title": "Vale Base Metals to Proceed with Coarse Particle Flotation at Salobo Increasing and Accelerating Projected Copper Production",
+      "title": "Tech stocks enjoy rebound after US inflation on mixed day for markets",
       "summary": "",
-      "url": "https://finance.yahoo.com/energy/articles/vale-metals-proceed-coarse-particle-235600807.html",
-      "source": "PR Newswire",
-      "published_at": "2026-08-12T23:56:00Z",
-      "fetched_at": "2026-08-13T00:27:23Z",
+      "url": "https://finance.yahoo.com/markets/world-indices/articles/seoul-tech-leads-asian-stock-023817725.html",
+      "source": "AFP",
+      "published_at": "2026-08-13T07:33:09Z",
+      "fetched_at": "2026-08-13T08:01:26Z",
       "ticker": null,
       "source_tier": "aggregator"
     },
     {
-      "title": "The Small Cap Watch: Solis contiunes drilling, Nova Minerals operating around the clock, SportsHero deal and more...",
+      "title": "European shares inch up as lower crude offsets geopolitical unease",
       "summary": "",
-      "url": "https://finance.yahoo.com/m/c1f8374d-041f-3531-9cf9-3c08ad85c5e7/the-small-cap-watch%3A-solis.html",
-      "source": "Proactive",
-      "published_at": "2026-08-12T23:49:00Z",
-      "fetched_at": "2026-08-13T00:27:23Z",
-      "ticker": null,
-      "source_tier": "aggregator"
-    },
-    {
-      "title": "Solis Minerals advances Mandacaru lithium drilling as Cinto copper campaign set to begin",
-      "summary": "",
-      "url": "https://finance.yahoo.com/m/1da8e428-60e2-3a05-ac1a-1a0268b145bf/solis-minerals-advances.html",
-      "source": "Proactive",
-      "published_at": "2026-08-12T23:45:00Z",
-      "fetched_at": "2026-08-13T00:27:23Z",
-      "ticker": null,
-      "source_tier": "aggregator"
-    },
-    {
-      "title": "Suzano Reports Adjusted EBITDA of R$4.7 Billion in the Second Quarter of 2026",
-      "summary": "",
-      "url": "https://finance.yahoo.com/markets/stocks/articles/suzano-reports-adjusted-ebitda-r-232700332.html",
-      "source": "Business Wire",
-      "published_at": "2026-08-12T23:27:00Z",
-      "fetched_at": "2026-08-13T00:27:23Z",
-      "ticker": null,
-      "source_tier": "aggregator"
-    },
-    {
-      "title": "What HD Holders Got Paid While The Stock Fell Behind",
-      "summary": "",
-      "url": "https://finance.yahoo.com/m/5ba1e94a-edf0-3cee-ae20-4f59511e5d25/what-hd-holders-got-paid.html",
-      "source": "Trefis",
-      "published_at": "2026-08-12T23:21:15Z",
-      "fetched_at": "2026-08-13T00:27:23Z",
-      "ticker": null,
-      "source_tier": "aggregator"
-    },
-    {
-      "title": "Market Chatter: Codelco Expects Lower Copper Output This Year",
-      "summary": "",
-      "url": "https://finance.yahoo.com/markets/commodities/articles/market-chatter-codelco-expects-lower-230719030.html",
-      "source": "MT Newswires",
-      "published_at": "2026-08-12T23:07:19Z",
-      "fetched_at": "2026-08-13T00:27:23Z",
-      "ticker": null,
-      "source_tier": "aggregator"
-    },
-    {
-      "title": "Talos Energy (TALO) Just Reshaped Its Map, So What’s The Catch?",
-      "summary": "",
-      "url": "https://finance.yahoo.com/energy/articles/talos-energy-talo-just-reshaped-225135261.html",
-      "source": "Insider Monkey",
-      "published_at": "2026-08-12T22:51:35Z",
-      "fetched_at": "2026-08-13T00:27:23Z",
-      "ticker": null,
-      "source_tier": "aggregator"
-    },
-    {
-      "title": "Walmart (WMT) Rises Higher Than Market: Key Facts",
-      "summary": "",
-      "url": "https://finance.yahoo.com/markets/stocks/articles/walmart-wmt-rises-higher-market-214503738.html",
-      "source": "Zacks",
-      "published_at": "2026-08-12T21:45:03Z",
-      "fetched_at": "2026-08-13T00:27:23Z",
-      "ticker": null,
-      "source_tier": "aggregator"
-    },
-    {
-      "title": "Oil prices climb again, as global stocks gain",
-      "summary": "",
-      "url": "https://finance.yahoo.com/markets/articles/stocks-inch-oil-dips-traders-163401004.html",
+      "url": "https://finance.yahoo.com/markets/world-indices/articles/european-shares-inch-lower-crude-071956648.html",
       "source": "Reuters",
-      "published_at": "2026-08-12T21:32:45Z",
-      "fetched_at": "2026-08-13T00:27:23Z",
+      "published_at": "2026-08-13T07:19:56Z",
+      "fetched_at": "2026-08-13T08:01:26Z",
       "ticker": null,
       "source_tier": "aggregator"
     },
     {
-      "title": "Avino Silver & Gold Mines Ltd. Q2 2026 Earnings Call Summary",
+      "title": "Antofagasta H1 Earnings Call Highlights",
       "summary": "",
-      "url": "https://finance.yahoo.com/m/390f73f0-3738-398f-acad-5a457ae84645/avino-silver-%26-gold-mines.html",
-      "source": "Moby",
-      "published_at": "2026-08-12T21:20:45Z",
-      "fetched_at": "2026-08-13T00:27:23Z",
+      "url": "https://finance.yahoo.com/m/9faafc8b-ba08-3a2b-84ab-7d3141f5d4d2/antofagasta-h1-earnings-call.html",
+      "source": "MarketBeat",
+      "published_at": "2026-08-13T07:02:09Z",
+      "fetched_at": "2026-08-13T08:01:26Z",
+      "ticker": null,
+      "source_tier": "aggregator"
+    },
+    {
+      "title": "UAE Reportedly Released Iran’s Frozen Assets Worth Billions of Dollars, Bitcoin Rebounds",
+      "summary": "",
+      "url": "https://finance.yahoo.com/m/89d91e6f-b9cb-31b5-90ed-7761f154b3ca/uae-reportedly-released.html",
+      "source": "CoinGape",
+      "published_at": "2026-08-13T06:17:29Z",
+      "fetched_at": "2026-08-13T08:01:26Z",
+      "ticker": null,
+      "source_tier": "aggregator"
+    },
+    {
+      "title": "Oil Prices Fall as OPEC and IEA Slash 2026 Demand Outlooks",
+      "summary": "",
+      "url": "https://finance.yahoo.com/energy/articles/oil-prices-fall-opec-iea-052500802.html",
+      "source": "Oilprice.com",
+      "published_at": "2026-08-13T05:25:00Z",
+      "fetched_at": "2026-08-13T08:01:26Z",
+      "ticker": null,
+      "source_tier": "aggregator"
+    },
+    {
+      "title": "UACJ (TSE:5741) Lifted Dividend Guidance, Is The Upside Already Priced In?",
+      "summary": "",
+      "url": "https://finance.yahoo.com/markets/stocks/articles/uacj-tse-5741-lifted-dividend-051503791.html",
+      "source": "Simply Wall St.",
+      "published_at": "2026-08-13T05:15:03Z",
+      "fetched_at": "2026-08-13T08:01:26Z",
+      "ticker": null,
+      "source_tier": "aggregator"
+    },
+    {
+      "title": "Trump Reverts to Economic Squeeze of Iranian Regime",
+      "summary": "",
+      "url": "https://finance.yahoo.com/video/trump-reverts-economic-squeeze-iranian-043953425.html",
+      "source": "Bloomberg",
+      "published_at": "2026-08-13T04:39:53Z",
+      "fetched_at": "2026-08-13T08:01:26Z",
+      "ticker": null,
+      "source_tier": "aggregator"
+    },
+    {
+      "title": "Norsk Hydro (OB:NHY) Cuts Alunorte Output, Is It Still 33% Undervalued?",
+      "summary": "",
+      "url": "https://finance.yahoo.com/markets/stocks/articles/norsk-hydro-ob-nhy-cuts-043214097.html",
+      "source": "Simply Wall St.",
+      "published_at": "2026-08-13T04:32:14Z",
+      "fetched_at": "2026-08-13T08:01:26Z",
+      "ticker": null,
+      "source_tier": "aggregator"
+    },
+    {
+      "title": "通信ETF国泰：8月12日融券卖出13.22万股，融资融券余额10.59亿元",
+      "summary": "通信ETF国泰：8月12日融券卖出13.22万股，融资融券余额10.59亿元 Sohu",
+      "url": "https://news.google.com/rss/articles/CBMiiAFBVV95cUxPQnppdUFoRXl1ZDJqWHl0Z1hnRjhfV2FZLU56N0FleHVJTDhxanZXZlJxRnhETVpwdjY5em9sN0ZCY0dESld1dVJBbkV3VXRHb0J6Mk9ZbUI1eHd3TE9YTm8yWnY5dHNlWEpLN093RWJRdFBzWEJOSENNUVFvY0VvTzVCSzJqSFho?oc=5",
+      "source": "Google News / Sohu",
+      "published_at": "2026-08-13T04:24:24Z",
+      "fetched_at": "2026-08-13T08:01:28Z",
+      "ticker": "515880.SS",
+      "source_tier": "aggregator"
+    },
+    {
+      "title": "Okeanis Eco Tankers Corp. – Ex Dividend Date",
+      "summary": "",
+      "url": "https://finance.yahoo.com/markets/stocks/articles/okeanis-eco-tankers-corp-ex-040000555.html",
+      "source": "GlobeNewswire",
+      "published_at": "2026-08-13T04:00:00Z",
+      "fetched_at": "2026-08-13T08:01:26Z",
+      "ticker": null,
+      "source_tier": "aggregator"
+    },
+    {
+      "title": "Asian shares mostly rise after buying of AI-related shares leads a rally on Wall Street",
+      "summary": "",
+      "url": "https://finance.yahoo.com/markets/world-indices/articles/asian-shares-mostly-rise-ai-033327003.html",
+      "source": "Associated Press",
+      "published_at": "2026-08-13T03:33:27Z",
+      "fetched_at": "2026-08-13T08:01:26Z",
       "ticker": null,
       "source_tier": "aggregator"
     }
