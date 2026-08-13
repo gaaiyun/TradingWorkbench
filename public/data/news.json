@@ -1,7 +1,7 @@
 {
   "version": 1,
   "status": "ok",
-  "generated_at": "2026-08-13T08:09:07+08:00",
+  "generated_at": "2026-08-13T08:27:22+08:00",
   "trade_date": "2026-08-13",
   "global": {
     "status": "ok",
@@ -9,7 +9,7 @@
     "ticker": null,
     "start_date": "2026-08-06",
     "end_date": "2026-08-13",
-    "fetched_at": "2026-08-13T00:09:08Z",
+    "fetched_at": "2026-08-13T00:27:23Z",
     "items": [
       {
         "title": "Vale Base Metals to Proceed with Coarse Particle Flotation at Salobo Increasing and Accelerating Projected Copper Production",
@@ -17,7 +17,27 @@
         "url": "https://finance.yahoo.com/energy/articles/vale-metals-proceed-coarse-particle-235600807.html",
         "source": "PR Newswire",
         "published_at": "2026-08-12T23:56:00Z",
-        "fetched_at": "2026-08-13T00:09:08Z",
+        "fetched_at": "2026-08-13T00:27:23Z",
+        "ticker": null,
+        "source_tier": "aggregator"
+      },
+      {
+        "title": "The Small Cap Watch: Solis contiunes drilling, Nova Minerals operating around the clock, SportsHero deal and more...",
+        "summary": "",
+        "url": "https://finance.yahoo.com/m/c1f8374d-041f-3531-9cf9-3c08ad85c5e7/the-small-cap-watch%3A-solis.html",
+        "source": "Proactive",
+        "published_at": "2026-08-12T23:49:00Z",
+        "fetched_at": "2026-08-13T00:27:23Z",
+        "ticker": null,
+        "source_tier": "aggregator"
+      },
+      {
+        "title": "Solis Minerals advances Mandacaru lithium drilling as Cinto copper campaign set to begin",
+        "summary": "",
+        "url": "https://finance.yahoo.com/m/1da8e428-60e2-3a05-ac1a-1a0268b145bf/solis-minerals-advances.html",
+        "source": "Proactive",
+        "published_at": "2026-08-12T23:45:00Z",
+        "fetched_at": "2026-08-13T00:27:23Z",
         "ticker": null,
         "source_tier": "aggregator"
       },
@@ -27,7 +47,7 @@
         "url": "https://finance.yahoo.com/markets/stocks/articles/suzano-reports-adjusted-ebitda-r-232700332.html",
         "source": "Business Wire",
         "published_at": "2026-08-12T23:27:00Z",
-        "fetched_at": "2026-08-13T00:09:08Z",
+        "fetched_at": "2026-08-13T00:27:23Z",
         "ticker": null,
         "source_tier": "aggregator"
       },
@@ -37,7 +57,7 @@
         "url": "https://finance.yahoo.com/m/5ba1e94a-edf0-3cee-ae20-4f59511e5d25/what-hd-holders-got-paid.html",
         "source": "Trefis",
         "published_at": "2026-08-12T23:21:15Z",
-        "fetched_at": "2026-08-13T00:09:08Z",
+        "fetched_at": "2026-08-13T00:27:23Z",
         "ticker": null,
         "source_tier": "aggregator"
       },
@@ -47,7 +67,7 @@
         "url": "https://finance.yahoo.com/markets/commodities/articles/market-chatter-codelco-expects-lower-230719030.html",
         "source": "MT Newswires",
         "published_at": "2026-08-12T23:07:19Z",
-        "fetched_at": "2026-08-13T00:09:08Z",
+        "fetched_at": "2026-08-13T00:27:23Z",
         "ticker": null,
         "source_tier": "aggregator"
       },
@@ -57,7 +77,7 @@
         "url": "https://finance.yahoo.com/energy/articles/talos-energy-talo-just-reshaped-225135261.html",
         "source": "Insider Monkey",
         "published_at": "2026-08-12T22:51:35Z",
-        "fetched_at": "2026-08-13T00:09:08Z",
+        "fetched_at": "2026-08-13T00:27:23Z",
         "ticker": null,
         "source_tier": "aggregator"
       },
@@ -67,7 +87,7 @@
         "url": "https://finance.yahoo.com/markets/stocks/articles/walmart-wmt-rises-higher-market-214503738.html",
         "source": "Zacks",
         "published_at": "2026-08-12T21:45:03Z",
-        "fetched_at": "2026-08-13T00:09:08Z",
+        "fetched_at": "2026-08-13T00:27:23Z",
         "ticker": null,
         "source_tier": "aggregator"
       },
@@ -77,7 +97,7 @@
         "url": "https://finance.yahoo.com/markets/articles/stocks-inch-oil-dips-traders-163401004.html",
         "source": "Reuters",
         "published_at": "2026-08-12T21:32:45Z",
-        "fetched_at": "2026-08-13T00:09:08Z",
+        "fetched_at": "2026-08-13T00:27:23Z",
         "ticker": null,
         "source_tier": "aggregator"
       },
@@ -87,27 +107,7 @@
         "url": "https://finance.yahoo.com/m/390f73f0-3738-398f-acad-5a457ae84645/avino-silver-%26-gold-mines.html",
         "source": "Moby",
         "published_at": "2026-08-12T21:20:45Z",
-        "fetched_at": "2026-08-13T00:09:08Z",
-        "ticker": null,
-        "source_tier": "aggregator"
-      },
-      {
-        "title": "Pan American Silver Reports Second Quarter 2026 Financial Results",
-        "summary": "",
-        "url": "https://finance.yahoo.com/markets/commodities/articles/pan-american-silver-reports-second-211700173.html",
-        "source": "Business Wire",
-        "published_at": "2026-08-12T21:17:00Z",
-        "fetched_at": "2026-08-13T00:09:08Z",
-        "ticker": null,
-        "source_tier": "aggregator"
-      },
-      {
-        "title": "U.S. Stocks Mixed After Inflation Data, AI Earnings",
-        "summary": "",
-        "url": "https://finance.yahoo.com/m/39ad81f5-bb02-3190-bd61-d23b145101fd/u.s.-stocks-mixed-after.html",
-        "source": "The Wall Street Journal",
-        "published_at": "2026-08-12T21:08:00Z",
-        "fetched_at": "2026-08-13T00:09:08Z",
+        "fetched_at": "2026-08-13T00:27:23Z",
         "ticker": null,
         "source_tier": "aggregator"
       }
@@ -116,7 +116,7 @@
       {
         "source": "Yahoo Finance",
         "status": "ok",
-        "item_count": 39
+        "item_count": 29
       },
       {
         "source": "Federal Reserve",
@@ -132,7 +132,7 @@
       "ticker": "512480.SS",
       "start_date": "2026-08-13",
       "end_date": "2026-08-13",
-      "fetched_at": "2026-08-13T00:09:09Z",
+      "fetched_at": "2026-08-13T00:27:25Z",
       "items": [],
       "source_statuses": [
         {
@@ -160,7 +160,27 @@
       "url": "https://finance.yahoo.com/energy/articles/vale-metals-proceed-coarse-particle-235600807.html",
       "source": "PR Newswire",
       "published_at": "2026-08-12T23:56:00Z",
-      "fetched_at": "2026-08-13T00:09:08Z",
+      "fetched_at": "2026-08-13T00:27:23Z",
+      "ticker": null,
+      "source_tier": "aggregator"
+    },
+    {
+      "title": "The Small Cap Watch: Solis contiunes drilling, Nova Minerals operating around the clock, SportsHero deal and more...",
+      "summary": "",
+      "url": "https://finance.yahoo.com/m/c1f8374d-041f-3531-9cf9-3c08ad85c5e7/the-small-cap-watch%3A-solis.html",
+      "source": "Proactive",
+      "published_at": "2026-08-12T23:49:00Z",
+      "fetched_at": "2026-08-13T00:27:23Z",
+      "ticker": null,
+      "source_tier": "aggregator"
+    },
+    {
+      "title": "Solis Minerals advances Mandacaru lithium drilling as Cinto copper campaign set to begin",
+      "summary": "",
+      "url": "https://finance.yahoo.com/m/1da8e428-60e2-3a05-ac1a-1a0268b145bf/solis-minerals-advances.html",
+      "source": "Proactive",
+      "published_at": "2026-08-12T23:45:00Z",
+      "fetched_at": "2026-08-13T00:27:23Z",
       "ticker": null,
       "source_tier": "aggregator"
     },
@@ -170,7 +190,7 @@
       "url": "https://finance.yahoo.com/markets/stocks/articles/suzano-reports-adjusted-ebitda-r-232700332.html",
       "source": "Business Wire",
       "published_at": "2026-08-12T23:27:00Z",
-      "fetched_at": "2026-08-13T00:09:08Z",
+      "fetched_at": "2026-08-13T00:27:23Z",
       "ticker": null,
       "source_tier": "aggregator"
     },
@@ -180,7 +200,7 @@
       "url": "https://finance.yahoo.com/m/5ba1e94a-edf0-3cee-ae20-4f59511e5d25/what-hd-holders-got-paid.html",
       "source": "Trefis",
       "published_at": "2026-08-12T23:21:15Z",
-      "fetched_at": "2026-08-13T00:09:08Z",
+      "fetched_at": "2026-08-13T00:27:23Z",
       "ticker": null,
       "source_tier": "aggregator"
     },
@@ -190,7 +210,7 @@
       "url": "https://finance.yahoo.com/markets/commodities/articles/market-chatter-codelco-expects-lower-230719030.html",
       "source": "MT Newswires",
       "published_at": "2026-08-12T23:07:19Z",
-      "fetched_at": "2026-08-13T00:09:08Z",
+      "fetched_at": "2026-08-13T00:27:23Z",
       "ticker": null,
       "source_tier": "aggregator"
     },
@@ -200,7 +220,7 @@
       "url": "https://finance.yahoo.com/energy/articles/talos-energy-talo-just-reshaped-225135261.html",
       "source": "Insider Monkey",
       "published_at": "2026-08-12T22:51:35Z",
-      "fetched_at": "2026-08-13T00:09:08Z",
+      "fetched_at": "2026-08-13T00:27:23Z",
       "ticker": null,
       "source_tier": "aggregator"
     },
@@ -210,7 +230,7 @@
       "url": "https://finance.yahoo.com/markets/stocks/articles/walmart-wmt-rises-higher-market-214503738.html",
       "source": "Zacks",
       "published_at": "2026-08-12T21:45:03Z",
-      "fetched_at": "2026-08-13T00:09:08Z",
+      "fetched_at": "2026-08-13T00:27:23Z",
       "ticker": null,
       "source_tier": "aggregator"
     },
@@ -220,7 +240,7 @@
       "url": "https://finance.yahoo.com/markets/articles/stocks-inch-oil-dips-traders-163401004.html",
       "source": "Reuters",
       "published_at": "2026-08-12T21:32:45Z",
-      "fetched_at": "2026-08-13T00:09:08Z",
+      "fetched_at": "2026-08-13T00:27:23Z",
       "ticker": null,
       "source_tier": "aggregator"
     },
@@ -230,27 +250,7 @@
       "url": "https://finance.yahoo.com/m/390f73f0-3738-398f-acad-5a457ae84645/avino-silver-%26-gold-mines.html",
       "source": "Moby",
       "published_at": "2026-08-12T21:20:45Z",
-      "fetched_at": "2026-08-13T00:09:08Z",
-      "ticker": null,
-      "source_tier": "aggregator"
-    },
-    {
-      "title": "Pan American Silver Reports Second Quarter 2026 Financial Results",
-      "summary": "",
-      "url": "https://finance.yahoo.com/markets/commodities/articles/pan-american-silver-reports-second-211700173.html",
-      "source": "Business Wire",
-      "published_at": "2026-08-12T21:17:00Z",
-      "fetched_at": "2026-08-13T00:09:08Z",
-      "ticker": null,
-      "source_tier": "aggregator"
-    },
-    {
-      "title": "U.S. Stocks Mixed After Inflation Data, AI Earnings",
-      "summary": "",
-      "url": "https://finance.yahoo.com/m/39ad81f5-bb02-3190-bd61-d23b145101fd/u.s.-stocks-mixed-after.html",
-      "source": "The Wall Street Journal",
-      "published_at": "2026-08-12T21:08:00Z",
-      "fetched_at": "2026-08-13T00:09:08Z",
+      "fetched_at": "2026-08-13T00:27:23Z",
       "ticker": null,
       "source_tier": "aggregator"
     }

@@ -1,6 +1,71 @@
 [
   {
     "trade_date": "2026-08-13",
+    "generated_at": "2026-08-13T08:27:22+08:00",
+    "provider": "openai_compatible",
+    "results": [
+      {
+        "ticker": "512480.SS",
+        "rating": "Not Rated",
+        "report": "reports/512480.SS/2026-08-13-v2/complete_report.md",
+        "files": {
+          "fundamentals": "reports/512480.SS/2026-08-13-v2/1_analysts/fundamentals.md",
+          "market": "reports/512480.SS/2026-08-13-v2/1_analysts/market.md",
+          "news": "reports/512480.SS/2026-08-13-v2/1_analysts/news.md",
+          "bear": "reports/512480.SS/2026-08-13-v2/2_research/bear.md",
+          "bull": "reports/512480.SS/2026-08-13-v2/2_research/bull.md",
+          "manager": "reports/512480.SS/2026-08-13-v2/2_research/manager.md",
+          "trader": "reports/512480.SS/2026-08-13-v2/3_trading/trader.md",
+          "aggressive": "reports/512480.SS/2026-08-13-v2/4_risk/aggressive.md",
+          "conservative": "reports/512480.SS/2026-08-13-v2/4_risk/conservative.md",
+          "neutral": "reports/512480.SS/2026-08-13-v2/4_risk/neutral.md",
+          "decision": "reports/512480.SS/2026-08-13-v2/5_portfolio/decision.md",
+          "complete_report": "reports/512480.SS/2026-08-13-v2/complete_report.md"
+        },
+        "error": false,
+        "analysis_status": "insufficient_evidence",
+        "audit_status": "legacy_unverified",
+        "evidence_publish": {
+          "published": true,
+          "status": 201
+        },
+        "marketHistory": {
+          "source": "tencent",
+          "adjustment": "qfq",
+          "barCount": 654,
+          "startAt": "2023-11-29T16:00:00Z",
+          "endAt": "2026-08-11T16:00:00Z"
+        }
+      }
+    ],
+    "request": {
+      "requestId": null,
+      "analysts": [
+        "market",
+        "news",
+        "fundamentals"
+      ],
+      "researchDepth": "standard",
+      "kind": "legacy"
+    },
+    "run": {
+      "id": "31654427261",
+      "attempt": "1",
+      "workflow": "daily-analysis",
+      "url": "https://github.com/gaaiyun/TradingWorkbench/actions/runs/31654427261"
+    },
+    "identity": {
+      "scope": "legacy",
+      "kind": "legacy",
+      "runId": "31654427261",
+      "profileId": null,
+      "requestId": null,
+      "slotId": null,
+      "scheduledFor": null
+    }
+  },
+  {
+    "trade_date": "2026-08-13",
     "generated_at": "2026-08-13T08:09:07+08:00",
     "provider": "openai_compatible",
     "results": [
