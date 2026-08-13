@@ -6,7 +6,7 @@ on:
       coursework_ref:
         description: "AI-Quant-Research-Lab 分支或提交"
         required: true
-        default: "feature/final-assignment"
+        default: "main"
 
 permissions:
   contents: read
@@ -39,11 +39,13 @@ jobs:
         working-directory: coursework
         run: python src/validate_evidence.py
 
-      - name: Run controlled five-model experiment
+      - name: Run controlled Grok experiment
         id: experiment
         continue-on-error: true
         working-directory: coursework
-        run: python src/run_experiment.py
+        run: >-
+          python src/run_experiment.py
+          --models grok-4.5,grok-4.3,grok-build-0.1,grok-composer-2.5-fast
 
       - name: Score completed responses
         if: always()
@@ -57,7 +59,7 @@ jobs:
           import json, pathlib, os
           root = pathlib.Path("coursework")
           scores = json.loads((root / "data/results/scores.json").read_text(encoding="utf-8"))
-          lines = ["# 512480 多模型受控实验", "", "| 模型 | 状态 | 自动审计分 | 延迟(ms) |", "|---|---:|---:|---:|"]
+          lines = ["# 512480 Grok 多模型受控实验", "", "| 模型 | 状态 | 自动审计分 | 延迟(ms) |", "|---|---:|---:|---:|"]
           for item in scores["results"]:
               lines.append(f"| {item['model']} | {item['status']} | {item.get('total', 0)} | {item.get('latencyMs', '-')} |")
           pathlib.Path(os.environ["GITHUB_STEP_SUMMARY"]).write_text("\n".join(lines), encoding="utf-8")

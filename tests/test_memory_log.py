@@ -8,6 +8,7 @@ import pytest
 from tradingagents.agents.managers.portfolio_manager import create_portfolio_manager
 from tradingagents.agents.schemas import PortfolioDecision, PortfolioRating
 from tradingagents.agents.utils.memory import TradingMemoryLog
+from tradingagents.evidence import build_evidence_packet
 from tradingagents.graph.propagation import Propagator
 from tradingagents.graph.reflection import Reflector
 from tradingagents.graph.trading_graph import TradingAgentsGraph
@@ -82,6 +83,24 @@ def _make_pm_state(past_context=""):
         "investment_plan": "Research plan.",
         "trader_investment_plan": "Trader plan.",
     }
+
+
+def _make_pm_evidence_packet():
+    return build_evidence_packet(
+        ticker="512480.SS",
+        asset_type="cn_etf",
+        as_of="2026-08-12T08:00:00Z",
+        bars=[{
+            "ts": "2026-08-11T16:00:00Z",
+            "open": 1.07,
+            "high": 1.1,
+            "low": 1.07,
+            "close": 1.09,
+            "volume": 11498040,
+        }],
+        sources=[{"source": "tencent", "sourceTier": "evidence"}],
+        generated_at="2026-08-12T08:01:00Z",
+    )
 
 
 def _structured_pm_llm(captured: dict, decision: PortfolioDecision | None = None):
@@ -704,6 +723,101 @@ class TestPortfolioManagerInjection:
         state = _make_pm_state(past_context="")
         pm_node(state)
         assert "Lessons from prior decisions" not in captured["prompt"]
+
+    def test_pm_prompt_requires_atomic_cited_paragraphs_and_forbids_event_effects(self):
+        captured = {}
+        llm = _structured_pm_llm(captured)
+        pm_node = create_portfolio_manager(llm)
+        pm_node(_make_pm_state())
+        prompt = captured["prompt"]
+
+        assert "one evidence-backed claim per paragraph or bullet" in prompt
+        assert "Every substantive paragraph or bullet must include" in prompt
+        assert "Do not compress the entire Executive Summary or Investment Thesis" in prompt
+        assert "Policy documents and corporate actions prove only that the event occurred" in prompt
+        assert "catalyst, benefit, liquidity improvement, or price effect" in prompt
+        assert "Copy every cited numerical value exactly as it appears" in prompt
+
+    def test_pm_revises_once_when_the_first_decision_fails_the_evidence_gate(self):
+        invalid = (
+            "**Rating**: Hold\n\n"
+            "**Executive Summary**: Latest close is 1.091 [M1].\n\n"
+            "**Investment Thesis**: Wait for more evidence [M1]."
+        )
+        valid = (
+            "**Rating**: Hold\n\n"
+            "**Executive Summary**: Latest close is 1.09 [M1].\n\n"
+            "**Investment Thesis**: Current evidence supports monitoring [M1]."
+        )
+        llm = MagicMock()
+        llm.with_structured_output.side_effect = NotImplementedError("unsupported")
+        llm.invoke.side_effect = [
+            MagicMock(content=invalid),
+            MagicMock(content=valid),
+        ]
+        state = _make_pm_state()
+        state["evidence_packet"] = _make_pm_evidence_packet()
+
+        result = create_portfolio_manager(llm)(state)
+
+        assert result["final_trade_decision"] == valid
+        assert llm.invoke.call_count == 2
+        revision_prompt = llm.invoke.call_args_list[1].args[0]
+        assert "UNSUPPORTED_DERIVED_NUMERIC_CLAIM" in revision_prompt
+        assert "Revise the draft once" in revision_prompt
+
+    def test_pm_rechecks_a_revision_and_never_accepts_evidence_family_placeholders(self):
+        invalid_number = (
+            "**Rating**: Hold\n\n"
+            "**Executive Summary**: Latest close is 1.091 [M1].\n\n"
+            "**Investment Thesis**: Wait for more evidence [M1]."
+        )
+        invalid_placeholder = (
+            "**Rating**: Hold\n\n"
+            "**Executive Summary**: Latest close is 1.09 [M1].\n\n"
+            "**Investment Thesis**: Monitor [M] market evidence."
+        )
+        valid = (
+            "**Rating**: Hold\n\n"
+            "**Executive Summary**: Latest close is 1.09 [M1].\n\n"
+            "**Investment Thesis**: Monitor the cited market evidence [M1]."
+        )
+        llm = MagicMock()
+        llm.with_structured_output.side_effect = NotImplementedError("unsupported")
+        llm.invoke.side_effect = [
+            MagicMock(content=invalid_number),
+            MagicMock(content=invalid_placeholder),
+            MagicMock(content=valid),
+        ]
+        state = _make_pm_state()
+        state["evidence_packet"] = _make_pm_evidence_packet()
+
+        result = create_portfolio_manager(llm)(state)
+
+        assert result["final_trade_decision"] == valid
+        assert llm.invoke.call_count == 3
+        second_revision_prompt = llm.invoke.call_args_list[2].args[0]
+        assert "MISSING_EVIDENCE_CITATION" in second_revision_prompt
+        assert "[M], [I], [D], [CA], [N], or [S]" in second_revision_prompt
+
+    def test_pm_canonicalizes_newline_labels_without_changing_claim_text(self):
+        response = (
+            "**Rating**\nHold\n\n"
+            "**Executive Summary**\nLatest close is 1.09 [M1].\n\n"
+            "**Investment Thesis**\nMonitor the cited market evidence [M1]."
+        )
+        llm = MagicMock()
+        llm.with_structured_output.side_effect = NotImplementedError("unsupported")
+        llm.invoke.return_value = MagicMock(content=response)
+        state = _make_pm_state()
+        state["evidence_packet"] = _make_pm_evidence_packet()
+
+        result = create_portfolio_manager(llm)(state)["final_trade_decision"]
+
+        assert result.startswith("**Rating**: Hold")
+        assert "**Executive Summary**: Latest close is 1.09 [M1]." in result
+        assert "**Investment Thesis**: Monitor the cited market evidence [M1]." in result
+        assert llm.invoke.call_count == 1
 
     def test_pm_returns_rendered_markdown_with_rating(self):
         """The structured PortfolioDecision is rendered to markdown that

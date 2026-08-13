@@ -155,7 +155,8 @@ test("market API builds parameterized symbol/profile/timeframe/date filters and 
   assert.equal(params[6], 150);
 });
 
-test("market API marks an old intraday series and its source stale at read time", async () => {
+test("market API marks an old intraday series and its source stale at read time", async (t) => {
+  t.mock.method(Date, "now", () => Date.parse("2026-07-30T16:00:00Z"));
   const old = new Date(Date.now() - 2 * 60 * 60 * 1000).toISOString();
   const row = {
     symbol: "SOXX",

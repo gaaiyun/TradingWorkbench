@@ -1,6 +1,6 @@
 # Trading Workbench 下一 Agent 交接
 
-更新日期：2026-08-11（用户提醒火山引擎 key 即将到期；再次发现手动 wrangler deploy 绕过身份落库）
+更新日期：2026-08-13（LLM 统一迁移至 OpenAI-compatible Grok；Pages 与 Actions 配置复核）
 
 实现基线：`main`。不要依赖本文中的旧提交号；接手时同时执行 `git rev-parse HEAD`、`git rev-parse origin/main`，并读取 Pages 与 Worker health 的 commit SHA。
 
@@ -15,6 +15,68 @@
 **维护约定**：任何 agent 做完一轮工作后，必须回到本文更新三处——§1 当前结论、§1.5 生产状态、§15 更新日志。发现本文与代码或生产不符时，**在同一提交里修正本文**，不要另开新的交接文档。数字和状态必须来自实际执行的命令，不要沿用上一轮的结论。
 
 ## 1. 当前结论
+
+### 2026-08-13 · 新 LLM key 已真实跑通；当前 `Not Rated` 是证据门禁，不是认证失败
+
+- 2026-08-12 07:45 UTC 的失败 run `31575300604` 发生在换 key 之前，运行环境仍指向
+  火山 CodingPlan（`ark.cn-beijing.volces.com/api/coding/v3`、`glm-5.2`），两只 ETF
+  都因 `InvalidSubscription` 在 Market Analyst 首次调用处失败。新 secret/variables
+  约在 14:19 UTC 才更新，因此页面上的旧失败不能用于判断新 key 是否有效。
+- 换 key 后已用 `512480.SS` 真实触发完整 `daily-analysis` run `31646745586`：
+  `openai_compatible`、`https://sub.anzhiyu.com/v1`、`grok-4.5` 完整走过分析师、研究辩论、
+  Trader、风险辩论和 Portfolio Manager，日志为 `[DONE] 1/1 tickers ok`；报告提交
+  `b97d6e5` 和后续 Pages deploy dispatch 均成功。这是新 key 可用的端到端证据。
+- 该报告最终仍显示 `Not Rated`，原因不是 LLM 调用失败，而是 Portfolio Manager 把
+  有引用事实与“政策催化、份额拆分改善流动性”等无 ledger 支持的效果叙述压在两个
+  超长段落中。段落级 fail-closed 门禁移除不安全段后得到 `citationCount=0`，错误码为
+  `MISSING_EVIDENCE_CITATION / FILTERED_UNSAFE_PUBLIC_CLAIM /
+  NO_SUBSTANTIVE_SUPPORTED_CONCLUSION / UNSUPPORTED_CAUSAL_OR_PATH_CLAIM`。
+- 本轮只收紧 Portfolio Manager 输出契约：每个段落或 bullet 只写一个可引证 claim，
+  每个实质段落必须带 Evidence ID；政策和公司行动只能证明事件发生，ledger 未明确给出
+  效果时不得称为 catalyst、benefit、liquidity improvement 或 price effect。Evidence
+  校验器未放宽。发布后必须再跑一次真实单标的分析，以新的 Manifest 和公开正文判断
+  该输出契约是否有效；不能仅凭 prompt 单测宣布报告已通过门禁。
+- 首次发布后的真实复验 run `31648209934` 完整成功并生成 `2026-08-12-v2`，引用数由
+  上一版的 `0` 提升为 `10`，但仍因一个段落被过滤而保持 `Not Rated`。逐 token 定位为
+  Grok 把 ledger 中 MACD `-0.0390515` 改写成 `-0.03905151`，触发
+  `UNSUPPORTED_DERIVED_NUMERIC_CLAIM`。因此第二阶段在生成端加入最多两次有界修订：先用
+  与发布完全相同的段落过滤器检查草稿，只把稳定错误码反馈给 Portfolio Manager；要求
+  数字逐字复制、拆短段，并禁止 `[M]` 这类没有编号的家族占位符。第二次修订后仍失败时
+  仍由原报告门禁拦截，不继续重试、不放宽规则。
+- 最终复验 run `31653398672` 已把数字和具体引用全部修正（`citationCount=18`），唯一
+  剩余过滤段是 Grok 将 `**Rating**: Hold` 输出为两行 `**Rating**` / `Hold`。代码现在只对
+  三个受控 label 做确定性换行规范化，不改任何 claim。用该生产 decision 与 packet 原样
+  重放公开过滤器，结果为 `omitted=0`、错误码空。
+- 标签修复后的最终生产 run `31654427261` 仍为 `Not Rated`，但这是新生成内容的语义
+  越界，不是标签回归：Grok 又写出“政策驱动的增长潜力”，并把部分派生值表述成 ledger
+  未提供的口径；Manifest 为 `citationCount=2`、`omittedUnsafeParagraphs=2`，错误码
+  `FILTERED_UNSAFE_PUBLIC_CLAIM / MISSING_EVIDENCE_CITATION /
+  UNSUPPORTED_DERIVED_NUMERIC_CLAIM`。连续真实复验证明：新 key 与全链可用，但当前
+  `grok-4.5` 中转在 structured output 返回空、转入 free-text 后，不能稳定满足严格 Evidence
+  合约。当前实现已经用最多两次有界修订提升成功概率；不能继续无限重跑或放宽门禁。
+
+### 2026-08-13 · LLM 统一迁移与当前验收边界
+
+- GitHub Variables 已统一为 `openai_compatible`、`https://sub.anzhiyu.com/v1`、
+  `grok-4.5`；GitHub Secret 继续使用通用名 `OPENAI_COMPATIBLE_API_KEY`，值不进入
+  仓库、日志或文档。`daily-analysis` 与 `analysis-request` 的代码默认值也已同步，
+  不再在 Variables 缺失时回退 DeepSeek。
+- Pages Chat 的默认 endpoint/model 已改为同一 Grok 接口；生产 `GET /api/chat`
+  返回 `ready=true`，endpoint、model、key 与 access code 均显示已配置，响应不包含
+  key。聊天定向测试为 24/24 通过。
+- `course-model-benchmark` 原默认分支已不存在，且外部课程脚本仍默认请求五个旧模型。
+  工作流现改为检出实际存在的 `main`，显式运行 `grok-4.5`、`grok-4.3`、
+  `grok-build-0.1`、`grok-composer-2.5-fast`。环境变量 `ARK_API_KEY` / `ARK_BASE_URL`
+  只是外部课程脚本尚未改名的兼容契约，实际端点与 key 均为当前 Grok 中转站。
+- 当前 Pages `/api/health` 为 `ok`；生产 SHA `e669c0d64625f980b86516db8e9332ecaff6af3c`，
+  `deployment_manifest.ok=true`。最新单标的分析 workflow 成功，但报告内容仍因上述 Evidence
+  门禁保持 `Not Rated`；不得把 health ok 误报为报告已经通过门禁。
+- 迁移后已人工触发单标的 `daily-analysis`（run `31646745586`）并完成报告持久化与
+  Pages dispatch；课程 benchmark 和飞书实际收件仍未在本轮复核。
+- 推送前完整本地门禁：Python `701 passed / 2 skipped / 69 subtests passed`，Functions
+  `436 passed / 1 skipped`，Frontend `121 passed`，Ruff、workbench syntax、asset version
+  与全部 workflow YAML 解析均通过。Functions 中一条旧行情 freshness 测试原先依赖
+  执行时恰好处于美股盘中，已固定测试时钟；只修测试确定性，不改变生产 freshness 逻辑。
 
 ### 2026-08-11 生产实证：Portfolio Manager 完整性校验上线首日即真实拦截一次截断
 
@@ -675,6 +737,7 @@ gh workflow run deploy-monitor.yml --repo gaaiyun/TradingWorkbench --ref main
 | 2026-08-10 | 周一 08:25 后生产验收；修复 HashKey 官网迁移导致官方源持续 404，改用官方 WordPress RSS 并保留 evidence 与域名门禁；同标的 cluster 优先最新采集链接 | 真实 RSS 200 且解析最新公告；Functions `436/1 skip`、frontend `121/121`、Python `694/2 skip`、Ruff 全绿；SEC、政策、上交所、新闻去重、dispatch 与 A 股 qfq 连续性按本节现场证据复核 |
 | 2026-08-11 | 修复结构化输出 free-text 回退无完整性校验（`invoke_structured_or_freetext`）：仅在 Portfolio Manager 启用 `required_labels`（唯一在 prompt 里承诺回退格式的调用点），缺 label 重试一次仍缺则抛 `IncompleteAgentOutputError`，由既有逐 ticker try/except 兜底；追溯失效首份 verified 报告 `512480.SS 2026-08-05`（`TRUNCATED_AGENT_OUTPUT`，正文在"最终决定维持"处截断、缺失 Investment Thesis 整段）；顺带确认 HashKey/新闻去重两处上周修复生产有效（`hashkey-ir=ok`、0 组重复 cluster）、VolGuard 94/94 合约无上游错误 | 新增 6 条单测（含"重试后仍不完整会 raise"）；提交 `9dfdfd2`；Functions `436/1 skip`、frontend `121/121`、Python `700/2 skip`（本机需 `PYTHONUTF8=1`，缺失会有 9 个与本轮改动无关的 GBK 本地化假失败）、Ruff 全绿；CI `31417813422`、deploy-workbench `31417813672` 均成功；生产 `/api/health` 回读 `commitSha=9dfdfd2e7f`、`deployedAt=2026-08-10T18:11:48Z`、`status:ok`；`report-audit.json` 确认该报告 `auditStatus=invalidated`、`verifiedReports=0` |
 | 2026-08-11 | 用户预警火山引擎 key 即将到期（driving 全部 daily-analysis LLM 调用 + course-model-benchmark），已存 memory 并记录续期操作步骤；再次实测到手动 `wrangler pages deploy` 绕开 deploy-workbench.yml（纯 docs 提交 `45f10f2` 却已是 Production），D1 身份记录再次不同步导致 `/api/health` 变回 degraded（这次是 `invalid_metadata`，证明 08-02 的并发修复未回归，是新的手动部署事件）| `gh run list` 确认无对应 deploy-workbench 运行，`wrangler pages deployment list` 确认 Cloudflare 侧确有该部署；用 `gh workflow run deploy-workbench.yml` 补一次正规部署后 `/api/health` 恢复 `status:ok`、`deployment_manifest.ok=true`、`latency_ms=284`；daily-analysis 近 10 次运行 100% success，无认证报错迹象 |
+| 2026-08-13 | 区分旧 key 调用失败与新 key 下的 Evidence 门禁失败；新 key 已由单标的完整决策链验证。Portfolio Manager 改为原子化带引用段落，并禁止从政策/公司行动虚构催化与流动性效果；校验器保持 fail-closed | 旧失败 run `31575300604` 使用火山 `glm-5.2` 并报 `InvalidSubscription`；新配置 run `31646745586` 为 `1/1 tickers ok`、提交 `b97d6e5`。首轮修复 CI `31648019104` 全绿，生产复验 `31648209934` 完整成功但因 Grok 多写一位 MACD 小数仍为 `Not Rated`；现增加一次由稳定门禁错误码驱动的有界生成修订，最终生产结果以第二轮复验为准 |
 
 ## 1.6 2026-07-30 全局质量复审
 

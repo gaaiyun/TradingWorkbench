@@ -1,0 +1,5 @@
+**Action**: Hold
+
+**Reasoning**: The analysts' debate shows the Bull side highlights government policy support from the 2026-08-02 integrated circuit design protection ordinance [N1][S2], strong momentum with 18.34961998 percent close change over 8 trading days [D2] from 0.921 [M647] to 1.09 [M654], price 2.7332705 percent above MA20 [D5], and positive MACD histogram 0.01046302 [I8] indicating improving momentum. Share splits on 2026-06-28 [CA2][S5] and 2026-07-02 [CA1][S4] are noted for better accessibility. The Bear side points out price 6.27821354 percent below MA60 [D6], no strict moving average alignment [D7], RSI14 48.61642995 below midline [I11][D9], negative MACD -0.0390515 [I7] and signal -0.04951452 [I9], high realized volatility 79.11019688 [I10]. Critically, NAV, holdings, concentration, fees, tracking error, and corporate action effects remain unavailable, preventing full risk assessment per evidence rules. Unavailable metrics cannot be treated as positive or negative evidence. The balanced debate with unresolved fundamentals and technicals supports maintaining current exposure without new positions.
+
+FINAL TRANSACTION PROPOSAL: **HOLD**
