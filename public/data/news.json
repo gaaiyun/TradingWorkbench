@@ -1,7 +1,7 @@
 {
   "version": 1,
   "status": "ok",
-  "generated_at": "2026-08-13T23:53:36+08:00",
+  "generated_at": "2026-08-14T00:21:05+08:00",
   "trade_date": "2026-08-13",
   "global": {
     "status": "ok",
@@ -9,15 +9,55 @@
     "ticker": null,
     "start_date": "2026-08-06",
     "end_date": "2026-08-13",
-    "fetched_at": "2026-08-13T15:53:37Z",
+    "fetched_at": "2026-08-13T16:21:07Z",
     "items": [
+      {
+        "title": "Prediction: MercadoLibre Will Join Amazon, Walmart, and Costco in the $100 Billion Revenue Club by 2029",
+        "summary": "",
+        "url": "https://finance.yahoo.com/m/4e3adc0f-4971-3c17-a070-1ea8bd1556cb/prediction%3A-mercadolibre-will.html",
+        "source": "Motley Fool",
+        "published_at": "2026-08-13T16:13:00Z",
+        "fetched_at": "2026-08-13T16:21:07Z",
+        "ticker": null,
+        "source_tier": "aggregator"
+      },
+      {
+        "title": "Stocks steady as US inflation worries ease, oil slips",
+        "summary": "",
+        "url": "https://finance.yahoo.com/markets/world-indices/articles/seoul-tech-leads-asian-stock-023817725.html",
+        "source": "AFP",
+        "published_at": "2026-08-13T16:12:29Z",
+        "fetched_at": "2026-08-13T16:21:07Z",
+        "ticker": null,
+        "source_tier": "aggregator"
+      },
+      {
+        "title": "Epsilon Energy Q2 Earnings Call Highlights",
+        "summary": "",
+        "url": "https://finance.yahoo.com/m/920a14b4-308b-3576-a5b2-d200a92f70e8/epsilon-energy-q2-earnings.html",
+        "source": "MarketBeat",
+        "published_at": "2026-08-13T16:04:40Z",
+        "fetched_at": "2026-08-13T16:21:07Z",
+        "ticker": null,
+        "source_tier": "aggregator"
+      },
+      {
+        "title": "Loading Up on Amazon: The Market Digests, I Invest",
+        "summary": "",
+        "url": "https://finance.yahoo.com/m/361875cf-afc6-3da6-8b52-e4931fb7c743/loading-up-on-amazon%3A-the.html",
+        "source": "24/7 Wall St.",
+        "published_at": "2026-08-13T16:02:04Z",
+        "fetched_at": "2026-08-13T16:21:07Z",
+        "ticker": null,
+        "source_tier": "aggregator"
+      },
       {
         "title": "2 of Wall Street’s Favorite Stocks to Own for Decades and 1 Facing Headwinds",
         "summary": "",
         "url": "https://finance.yahoo.com/markets/stocks/articles/2-wall-street-favorite-stocks-152500433.html",
         "source": "StockStory",
         "published_at": "2026-08-13T15:25:00Z",
-        "fetched_at": "2026-08-13T15:53:37Z",
+        "fetched_at": "2026-08-13T16:21:07Z",
         "ticker": null,
         "source_tier": "aggregator"
       },
@@ -27,7 +67,7 @@
         "url": "https://finance.yahoo.com/m/a86837ac-df8a-3747-8923-5f2f47063c11/stock-market-today%3A-dow%27s.html",
         "source": "Investor's Business Daily",
         "published_at": "2026-08-13T15:24:53Z",
-        "fetched_at": "2026-08-13T15:53:37Z",
+        "fetched_at": "2026-08-13T16:21:07Z",
         "ticker": null,
         "source_tier": "aggregator"
       },
@@ -37,7 +77,7 @@
         "url": "https://finance.yahoo.com/markets/world-indices/articles/asian-stocks-rise-us-inflation-010444910.html",
         "source": "Reuters",
         "published_at": "2026-08-13T15:21:08Z",
-        "fetched_at": "2026-08-13T15:53:37Z",
+        "fetched_at": "2026-08-13T16:21:07Z",
         "ticker": null,
         "source_tier": "aggregator"
       },
@@ -47,7 +87,17 @@
         "url": "https://finance.yahoo.com/news/oil-eases-weaker-demand-outlook-045929013.html",
         "source": "Reuters",
         "published_at": "2026-08-13T15:18:56Z",
-        "fetched_at": "2026-08-13T15:53:37Z",
+        "fetched_at": "2026-08-13T16:21:07Z",
+        "ticker": null,
+        "source_tier": "aggregator"
+      },
+      {
+        "title": "3 Reasons to Hold Netflix Stock Despite a 20.9% YTD Decline",
+        "summary": "",
+        "url": "https://finance.yahoo.com/markets/stocks/articles/3-reasons-hold-netflix-stock-150600699.html",
+        "source": "Zacks",
+        "published_at": "2026-08-13T15:06:00Z",
+        "fetched_at": "2026-08-13T16:21:07Z",
         "ticker": null,
         "source_tier": "aggregator"
       },
@@ -57,59 +107,9 @@
         "url": "https://www.federalreserve.gov/newsevents/pressreleases/enforcement20260813a.htm",
         "source": "Federal Reserve",
         "published_at": "2026-08-13T15:00:00Z",
-        "fetched_at": "2026-08-13T15:53:37Z",
+        "fetched_at": "2026-08-13T16:21:07Z",
         "ticker": null,
         "source_tier": "primary"
-      },
-      {
-        "title": "Hormuz Stalemate Raises Risk of $120 Oil",
-        "summary": "",
-        "url": "https://finance.yahoo.com/energy/articles/hormuz-stalemate-raises-risk-120-150000321.html",
-        "source": "Oilprice.com",
-        "published_at": "2026-08-13T15:00:00Z",
-        "fetched_at": "2026-08-13T15:53:37Z",
-        "ticker": null,
-        "source_tier": "aggregator"
-      },
-      {
-        "title": "The Price Is Down, But Is The Story At eBay Stock Still Up?",
-        "summary": "",
-        "url": "https://finance.yahoo.com/m/2cd5432f-2026-3530-9a64-f9b4b9dc847f/the-price-is-down%2C-but-is-the.html",
-        "source": "Trefis",
-        "published_at": "2026-08-13T14:59:50Z",
-        "fetched_at": "2026-08-13T15:53:37Z",
-        "ticker": null,
-        "source_tier": "aggregator"
-      },
-      {
-        "title": "Inflation Falls for 2 Months Straight — Is a Fed September Rate Hike Still on the Table?",
-        "summary": "",
-        "url": "https://finance.yahoo.com/m/35fb65c0-b8b8-3e50-b673-0eb890d6d3f1/inflation-falls-for-2-months.html",
-        "source": "24/7 Wall St.",
-        "published_at": "2026-08-13T14:44:53Z",
-        "fetched_at": "2026-08-13T15:53:37Z",
-        "ticker": null,
-        "source_tier": "aggregator"
-      },
-      {
-        "title": "Why Bob Iger's Lakers could reshape the NBA: 'He has the gravitas'",
-        "summary": "",
-        "url": "https://finance.yahoo.com/video/why-bob-igers-lakers-could-143938802.html",
-        "source": "Yahoo Finance Video",
-        "published_at": "2026-08-13T14:39:38Z",
-        "fetched_at": "2026-08-13T15:53:37Z",
-        "ticker": null,
-        "source_tier": "aggregator"
-      },
-      {
-        "title": "Claims Rise Above Estimates",
-        "summary": "",
-        "url": "https://finance.yahoo.com/economy/policy/articles/claims-rise-above-estimates-142900445.html",
-        "source": "Zacks",
-        "published_at": "2026-08-13T14:29:00Z",
-        "fetched_at": "2026-08-13T15:53:37Z",
-        "ticker": null,
-        "source_tier": "aggregator"
       }
     ],
     "source_statuses": [
@@ -127,24 +127,13 @@
   },
   "tickers": {
     "512480.SS": {
-      "status": "ok",
+      "status": "empty",
       "query_type": "ticker",
       "ticker": "512480.SS",
       "start_date": "2026-08-13",
       "end_date": "2026-08-13",
-      "fetched_at": "2026-08-13T15:53:38Z",
-      "items": [
-        {
-          "title": "Opportunistic Trader ETF Announces Reverse Share Split",
-          "summary": "",
-          "url": "https://finance.yahoo.com/markets/options/articles/opportunistic-trader-etf-announces-reverse-154500341.html",
-          "source": "ACCESS Newswire",
-          "published_at": "2026-08-13T15:45:00Z",
-          "fetched_at": "2026-08-13T15:53:38Z",
-          "ticker": "512480.SS",
-          "source_tier": "aggregator"
-        }
-      ],
+      "fetched_at": "2026-08-13T16:21:08Z",
+      "items": [],
       "source_statuses": [
         {
           "source": "Yahoo Finance",
@@ -166,13 +155,43 @@
   },
   "items": [
     {
-      "title": "Opportunistic Trader ETF Announces Reverse Share Split",
+      "title": "Prediction: MercadoLibre Will Join Amazon, Walmart, and Costco in the $100 Billion Revenue Club by 2029",
       "summary": "",
-      "url": "https://finance.yahoo.com/markets/options/articles/opportunistic-trader-etf-announces-reverse-154500341.html",
-      "source": "ACCESS Newswire",
-      "published_at": "2026-08-13T15:45:00Z",
-      "fetched_at": "2026-08-13T15:53:38Z",
-      "ticker": "512480.SS",
+      "url": "https://finance.yahoo.com/m/4e3adc0f-4971-3c17-a070-1ea8bd1556cb/prediction%3A-mercadolibre-will.html",
+      "source": "Motley Fool",
+      "published_at": "2026-08-13T16:13:00Z",
+      "fetched_at": "2026-08-13T16:21:07Z",
+      "ticker": null,
+      "source_tier": "aggregator"
+    },
+    {
+      "title": "Stocks steady as US inflation worries ease, oil slips",
+      "summary": "",
+      "url": "https://finance.yahoo.com/markets/world-indices/articles/seoul-tech-leads-asian-stock-023817725.html",
+      "source": "AFP",
+      "published_at": "2026-08-13T16:12:29Z",
+      "fetched_at": "2026-08-13T16:21:07Z",
+      "ticker": null,
+      "source_tier": "aggregator"
+    },
+    {
+      "title": "Epsilon Energy Q2 Earnings Call Highlights",
+      "summary": "",
+      "url": "https://finance.yahoo.com/m/920a14b4-308b-3576-a5b2-d200a92f70e8/epsilon-energy-q2-earnings.html",
+      "source": "MarketBeat",
+      "published_at": "2026-08-13T16:04:40Z",
+      "fetched_at": "2026-08-13T16:21:07Z",
+      "ticker": null,
+      "source_tier": "aggregator"
+    },
+    {
+      "title": "Loading Up on Amazon: The Market Digests, I Invest",
+      "summary": "",
+      "url": "https://finance.yahoo.com/m/361875cf-afc6-3da6-8b52-e4931fb7c743/loading-up-on-amazon%3A-the.html",
+      "source": "24/7 Wall St.",
+      "published_at": "2026-08-13T16:02:04Z",
+      "fetched_at": "2026-08-13T16:21:07Z",
+      "ticker": null,
       "source_tier": "aggregator"
     },
     {
@@ -181,7 +200,7 @@
       "url": "https://finance.yahoo.com/markets/stocks/articles/2-wall-street-favorite-stocks-152500433.html",
       "source": "StockStory",
       "published_at": "2026-08-13T15:25:00Z",
-      "fetched_at": "2026-08-13T15:53:37Z",
+      "fetched_at": "2026-08-13T16:21:07Z",
       "ticker": null,
       "source_tier": "aggregator"
     },
@@ -191,7 +210,7 @@
       "url": "https://finance.yahoo.com/m/a86837ac-df8a-3747-8923-5f2f47063c11/stock-market-today%3A-dow%27s.html",
       "source": "Investor's Business Daily",
       "published_at": "2026-08-13T15:24:53Z",
-      "fetched_at": "2026-08-13T15:53:37Z",
+      "fetched_at": "2026-08-13T16:21:07Z",
       "ticker": null,
       "source_tier": "aggregator"
     },
@@ -201,7 +220,7 @@
       "url": "https://finance.yahoo.com/markets/world-indices/articles/asian-stocks-rise-us-inflation-010444910.html",
       "source": "Reuters",
       "published_at": "2026-08-13T15:21:08Z",
-      "fetched_at": "2026-08-13T15:53:37Z",
+      "fetched_at": "2026-08-13T16:21:07Z",
       "ticker": null,
       "source_tier": "aggregator"
     },
@@ -211,7 +230,17 @@
       "url": "https://finance.yahoo.com/news/oil-eases-weaker-demand-outlook-045929013.html",
       "source": "Reuters",
       "published_at": "2026-08-13T15:18:56Z",
-      "fetched_at": "2026-08-13T15:53:37Z",
+      "fetched_at": "2026-08-13T16:21:07Z",
+      "ticker": null,
+      "source_tier": "aggregator"
+    },
+    {
+      "title": "3 Reasons to Hold Netflix Stock Despite a 20.9% YTD Decline",
+      "summary": "",
+      "url": "https://finance.yahoo.com/markets/stocks/articles/3-reasons-hold-netflix-stock-150600699.html",
+      "source": "Zacks",
+      "published_at": "2026-08-13T15:06:00Z",
+      "fetched_at": "2026-08-13T16:21:07Z",
       "ticker": null,
       "source_tier": "aggregator"
     },
@@ -221,59 +250,9 @@
       "url": "https://www.federalreserve.gov/newsevents/pressreleases/enforcement20260813a.htm",
       "source": "Federal Reserve",
       "published_at": "2026-08-13T15:00:00Z",
-      "fetched_at": "2026-08-13T15:53:37Z",
+      "fetched_at": "2026-08-13T16:21:07Z",
       "ticker": null,
       "source_tier": "primary"
-    },
-    {
-      "title": "Hormuz Stalemate Raises Risk of $120 Oil",
-      "summary": "",
-      "url": "https://finance.yahoo.com/energy/articles/hormuz-stalemate-raises-risk-120-150000321.html",
-      "source": "Oilprice.com",
-      "published_at": "2026-08-13T15:00:00Z",
-      "fetched_at": "2026-08-13T15:53:37Z",
-      "ticker": null,
-      "source_tier": "aggregator"
-    },
-    {
-      "title": "The Price Is Down, But Is The Story At eBay Stock Still Up?",
-      "summary": "",
-      "url": "https://finance.yahoo.com/m/2cd5432f-2026-3530-9a64-f9b4b9dc847f/the-price-is-down%2C-but-is-the.html",
-      "source": "Trefis",
-      "published_at": "2026-08-13T14:59:50Z",
-      "fetched_at": "2026-08-13T15:53:37Z",
-      "ticker": null,
-      "source_tier": "aggregator"
-    },
-    {
-      "title": "Inflation Falls for 2 Months Straight — Is a Fed September Rate Hike Still on the Table?",
-      "summary": "",
-      "url": "https://finance.yahoo.com/m/35fb65c0-b8b8-3e50-b673-0eb890d6d3f1/inflation-falls-for-2-months.html",
-      "source": "24/7 Wall St.",
-      "published_at": "2026-08-13T14:44:53Z",
-      "fetched_at": "2026-08-13T15:53:37Z",
-      "ticker": null,
-      "source_tier": "aggregator"
-    },
-    {
-      "title": "Why Bob Iger's Lakers could reshape the NBA: 'He has the gravitas'",
-      "summary": "",
-      "url": "https://finance.yahoo.com/video/why-bob-igers-lakers-could-143938802.html",
-      "source": "Yahoo Finance Video",
-      "published_at": "2026-08-13T14:39:38Z",
-      "fetched_at": "2026-08-13T15:53:37Z",
-      "ticker": null,
-      "source_tier": "aggregator"
-    },
-    {
-      "title": "Claims Rise Above Estimates",
-      "summary": "",
-      "url": "https://finance.yahoo.com/economy/policy/articles/claims-rise-above-estimates-142900445.html",
-      "source": "Zacks",
-      "published_at": "2026-08-13T14:29:00Z",
-      "fetched_at": "2026-08-13T15:53:37Z",
-      "ticker": null,
-      "source_tier": "aggregator"
     }
   ]
 }
