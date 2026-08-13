@@ -32,6 +32,7 @@ from tradingagents.dataflows.config import set_config
 from tradingagents.dataflows.utils import safe_ticker_component
 from tradingagents.default_config import DEFAULT_CONFIG
 from tradingagents.llm_clients import create_llm_client
+from tradingagents.llm_clients.openai_client import is_openai_compatible
 from tradingagents.reporting import write_report_tree
 
 from .checkpointer import checkpoint_step, clear_checkpoint, get_checkpointer, thread_id
@@ -160,7 +161,13 @@ class TradingAgentsGraph:
             if thinking_level:
                 kwargs["thinking_level"] = thinking_level
 
-        elif provider == "openai":
+        elif is_openai_compatible(provider):
+            # Every alias here (openai, openai_compatible, xai, deepseek, ...)
+            # routes through the same OpenAIClient, which already gates the
+            # kwarg per-model via _supports_reasoning_effort — not just native
+            # "openai" (#reasoning-effort-relay-timeout: this check used to be
+            # `provider == "openai"` and silently dropped the config value for
+            # every other alias before it ever reached that gate).
             reasoning_effort = self.config.get("openai_reasoning_effort")
             if reasoning_effort:
                 kwargs["reasoning_effort"] = reasoning_effort

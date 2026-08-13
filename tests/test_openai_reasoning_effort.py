@@ -15,10 +15,24 @@ of sequential calls in one ticker's analysis can exceed the relay's 120s
 Cloudflare proxy timeout (observed in production run 31680176206: both tickers
 failed with repeated ``Error 524`` after the run ran 52 minutes with zero
 completed reports, versus ~10 minutes for equivalent successful runs).
+
+A second, independent gap in the same incident: fixing ``_supports_reasoning_
+effort`` above was not sufficient on its own.
+``TradingAgentsGraph._get_provider_kwargs()`` only forwarded the
+``openai_reasoning_effort`` config value into LLM-client kwargs for the
+literal provider string ``"openai"`` — every other OpenAI-compatible alias
+(``openai_compatible``, ``xai``, ``deepseek``, ...), despite routing through
+the exact same ``OpenAIClient``, never had the kwarg forwarded at all, so it
+never even reached ``_supports_reasoning_effort`` to be filtered. Confirmed via
+two real post-fix verification runs (single ticker, 2026-08-13) that still hit
+transient backend errors (``Error 524`` then ``Error 503``) — the fix at the
+model-recognition layer alone never actually took effect in production because
+this earlier gate silently dropped the kwarg first.
 """
 
 import pytest
 
+from tradingagents.graph.trading_graph import TradingAgentsGraph
 from tradingagents.llm_clients.openai_client import (
     OpenAIClient,
     _supports_reasoning_effort,
@@ -79,3 +93,39 @@ def test_grok_non_reasoning_model_drops_effort_via_openai_compatible_provider(mo
         "grok-chat-fast", monkeypatch,
         provider="openai_compatible", api_key_env="OPENAI_COMPATIBLE_API_KEY",
     ) is None
+
+
+# --- _get_provider_kwargs(): config -> kwargs forwarding, before OpenAIClient
+# ever sees the value (the second, independent gap described in the module
+# docstring). Uses the same object.__new__ bypass as test_llm_max_retries.py
+# so this stays a pure config-in/kwargs-out unit test with no network.
+
+def _bare_graph(config):
+    g = object.__new__(TradingAgentsGraph)
+    g.config = config
+    return g
+
+
+def test_reasoning_effort_not_forwarded_for_native_openai_only_historically():
+    """Documents the pre-fix behavior for the literal "openai" provider,
+    which always worked — the bug was every OTHER openai-compatible alias
+    being silently excluded, not "openai" itself."""
+    kwargs = _bare_graph(
+        {"llm_provider": "openai", "openai_reasoning_effort": "low"}
+    )._get_provider_kwargs()
+    assert kwargs["reasoning_effort"] == "low"
+
+
+@pytest.mark.parametrize("provider", ["openai_compatible", "xai", "deepseek"])
+def test_reasoning_effort_forwarded_for_openai_compatible_aliases(provider):
+    kwargs = _bare_graph(
+        {"llm_provider": provider, "openai_reasoning_effort": "low"}
+    )._get_provider_kwargs()
+    assert kwargs["reasoning_effort"] == "low"
+
+
+def test_reasoning_effort_not_forwarded_when_unset():
+    kwargs = _bare_graph(
+        {"llm_provider": "openai_compatible", "openai_reasoning_effort": None}
+    )._get_provider_kwargs()
+    assert "reasoning_effort" not in kwargs
