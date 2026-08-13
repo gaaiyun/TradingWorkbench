@@ -1,6 +1,6 @@
 # Trading Workbench 下一 Agent 交接
 
-更新日期：2026-08-13（reasoning_effort 两处独立缺口均已修复并推送；下一次真实 run 是叠加验证，见 §1 顶部）
+更新日期：2026-08-13（新增 Grok→GPT 自动故障转移；中转站 completions 端点当天出现过至少 1 小时的持续不稳定，与 reasoning_effort 无关，见 §1 顶部）
 
 实现基线：`main`。不要依赖本文中的旧提交号；接手时同时执行 `git rev-parse HEAD`、`git rev-parse origin/main`，并读取 Pages 与 Worker health 的 commit SHA。
 
@@ -15,6 +15,52 @@
 **维护约定**：任何 agent 做完一轮工作后，必须回到本文更新三处——§1 当前结论、§1.5 生产状态、§15 更新日志。发现本文与代码或生产不符时，**在同一提交里修正本文**，不要另开新的交接文档。数字和状态必须来自实际执行的命令，不要沿用上一轮的结论。
 
 ## 1. 当前结论
+
+### 2026-08-13（再续）· reasoning_effort 两处修复正确生效，但当天中转站本身持续故障；新增 Grok→GPT 自动故障转移
+
+第三次真实单标的复验（run `31722886612`，用户已当面确认"是中转站的 grok 当机了"）
+仍然 `Error 524`，运行 21m22s——即使本地已确认这次 `deep_thinking_llm.reasoning_effort`
+真的是 `"low"`（构造真实 `TradingAgentsGraph` 用生产同款 config 实测，见上一条记录）。
+三次真实 run（524 → 503 → 524）加上一次独立 `curl` 探测（`/v1/models` 健康、
+`/v1/chat/completions` 最小请求连接中断）在约一小时内反复出现，**结论是
+`sub.anzhiyu.com` 的 grok completions 端点当天本身有持续性故障，reasoning_effort
+的两处代码缺口是真实存在且已正确修复的独立问题，但不是今天生产中断的原因**——
+接手时看到这三次失败记录，不要误以为 reasoning_effort 修复无效，两者是并行、
+不冲突的两件事。
+
+用户要求为这种情况准备默认转 GPT 的兜底，且优先用便宜档位。已实现（提交
+`cd2c09d` 功能代码 + `a3e4873`/`33c295a` 工作流接线与 lint 修复，全部已推送）：
+
+- `NormalizedChatOpenAI.invoke()` 捕获 `APIConnectionError`（含 `APITimeoutError`）、
+  `InternalServerError`（5xx，覆盖 524 和 503）、`RateLimitError`（429）——`400`/`401`
+  等客户端错误不触发，避免掩盖真实配置问题。已用真实（非 mock）
+  `with_structured_output`/`bind_tools` 绑定链路验证异常仍会被这层捕获，
+  Portfolio Manager 等结构化输出调用无需改动即可获得保护。
+- `TradingAgentsGraph._build_fallback_llm()`：只需设置 `TRADINGAGENTS_LLM_FALLBACK_MODEL`
+  即可启用，provider/backend_url 默认复用主配置（本项目实际场景是同一中转站的第二把
+  独立 key）；key 单独从 `TRADINGAGENTS_LLM_FALLBACK_API_KEY` 读取，不进入 config dict，
+  与其它 provider key 的既有约定一致。
+- 生产已配置：GitHub secret `TRADINGAGENTS_LLM_FALLBACK_API_KEY`（来源
+  `G:\paimon-runtime\secrets\sub-anzhiyu-gpt\api-key.txt`，SHA-256
+  `9aad1fd8...78b8c`，独立于主 grok key）；Variables
+  `TRADINGAGENTS_LLM_FALLBACK_PROVIDER=openai_compatible`、
+  `TRADINGAGENTS_LLM_FALLBACK_MODEL=gpt-5.4-mini`、
+  `TRADINGAGENTS_LLM_FALLBACK_BACKEND_URL=https://sub.anzhiyu.com/v1`（与主 grok
+  端点同域名，不同 key，`/v1/models` 探测确认该 key 下有 7 个可用模型，
+  `gpt-5.4-mini` 实测 2.3 秒内正确回答，是刻意选的便宜档位而非 `gpt-5.4`/`gpt-5.5`）。
+  已接入 `daily-analysis.yml`、`analysis-request.yml` 两个真实工作流的 env（这次直接
+  一次性把 job 级非密配置和 step 级密钥都接好，没有重复上一条记录里 reasoning_effort
+  漏接工作流 env 的疏漏）。
+- TDD：14 项新测试（`tests/test_llm_fallback.py`）覆盖 4 类瞬时错误触发兜底、2 类
+  客户端错误不触发、structured_output 路径、`_build_fallback_llm` 的默认值与显式
+  覆盖行为。全量回归 `734 passed / 2 skipped`；CI 在 `origin/main` 上绿（含一次
+  ruff SIM117 修复）。
+- **尚未验证**：这是全新功能，还没有一次真实 run 在 grok 失败时实际触发过 GPT
+  兜底并产出完整报告——上面三次失败复验都发生在兜底代码合并、推送、配好 secret/
+  variable 之前。接手时第一件事：查有没有一次部署后的真实 run，如果有，读它的日志
+  确认是否出现 "Primary model ... failed with a transient error; retrying via
+  fallback" 这行 warning，以及最终报告是否成功产出；如果还没有，这是最高优先级的
+  验证项，而不是继续假设 reasoning_effort 或兜底哪个环节还有问题。
 
 ### 2026-08-13（续）· reasoning_effort 有第二处独立缺口：配置从未转发给 openai_compatible
 
@@ -334,6 +380,16 @@ GitHub 自动部署链已恢复。仓库主人在 2026-07-27 配置了 `CLOUDFLA
 ## 1.5 生产状态真相（2026-07-29 独立核查，2026-08-02 补充）
 
 以下每条都由实际执行的命令或 HTTP 请求得出，不是从上一轮文档抄来的。已完成项也保留，便于下一个 agent 区分”代码未做”与”生产依赖未满足”。
+
+### ⚠️ 2026-08-13：中转站 completions 端点当天持续故障超过 1 小时，与代码无关；GPT 兜底已上线但未经真实验证
+
+三次真实单标的 run（`31680176206` 524、`31717768620` 524、`31720148171` 503、
+`31722886612` 524——共四次，跨度约 16:00–17:14 UTC）加一次独立探测，全部指向
+`sub.anzhiyu.com` 的 grok completions 后端本身的问题，不是本仓库代码问题（reasoning_effort
+两处缺口已确认修复且正确生效，详见 §1）。已按用户要求上线 Grok→GPT 自动故障转移
+（provider/model/backend_url/key 均已配置为生产 Variable/Secret），但**部署后还没有
+一次真实 run 验证过兜底实际触发**。接手时先查最新一次 daily-analysis 的日志里有没有
+fallback 触发的 warning 行，这是判断"迁移这件事到此为止"还是"还需要继续跟"的关键证据。
 
 ### ⚠️ 2026-08-13：今日定时 daily-analysis 完全失败；reasoning_effort 有两处独立缺口，均已修复并推送，但还没有一次成功的真实复验
 
@@ -827,6 +883,7 @@ gh workflow run deploy-monitor.yml --repo gaaiyun/TradingWorkbench --ref main
 | 2026-08-13 | 区分旧 key 调用失败与新 key 下的 Evidence 门禁失败；新 key 已由单标的完整决策链验证。Portfolio Manager 改为原子化带引用段落，并禁止从政策/公司行动虚构催化与流动性效果；校验器保持 fail-closed | 旧失败 run `31575300604` 使用火山 `glm-5.2` 并报 `InvalidSubscription`；新配置 run `31646745586` 为 `1/1 tickers ok`、提交 `b97d6e5`。首轮修复 CI `31648019104` 全绿，生产复验 `31648209934` 完整成功但因 Grok 多写一位 MACD 小数仍为 `Not Rated`；现增加一次由稳定门禁错误码驱动的有界生成修订，最终生产结果以第二轮复验为准 |
 | 2026-08-13 | 修复 `_supports_reasoning_effort()` 不识别 Grok 推理模型，导致 `reasoning_effort` 被静默丢弃；同时发现并修复 `TRADINGAGENTS_OPENAI_REASONING_EFFORT` 从未接入 daily-analysis/analysis-request 工作流 env 的缺口；设置该 Variable 为 `low`。审查 Codex 独立完成的 Portfolio Manager 两次有界修订机制（`bf887e1`/`46a03a6`/`a0be301`/`d37838f`）及配套测试，逻辑正确、上限是刻意成本控制，不建议加第三次校验 | 今日 08:00 定时 run `31680176206` 两标的均 `Error code: 524`、52 分钟零产出（对照正常 run ~10 分钟）；`_effort_on()` 实测 grok-4.5 不设置耗 3527 推理 token、`low` 降到 1738 且答案仍正确；RED（6 failed）→ GREEN（23 passed）；全量回归 `715 passed / 2 skipped`；提交 `8880654`，已推送 |
 | 2026-08-13 | 上一条修复推送后两次真实复验仍失败（`Error 524`→`Error 503`），定位到第二处独立缺口：`_get_provider_kwargs()` 转发 `openai_reasoning_effort` 的条件写死 `provider=="openai"`，`openai_compatible`/`xai`/`deepseek` 等全部被排除，配置从未到达上一条修复所在的层——上一条修复在两次复验里其实完全没生效。改用 `is_openai_compatible()` 判定 | 本地用真实 `TradingAgentsGraph` 构造生产同款 config（不发请求）实测 `deep_thinking_llm.reasoning_effort` 从 `None` 修复到 `"low"`；新增 3 项参数化回归测试；全量回归 `720 passed / 2 skipped`；`curl` 探测确认同期中转站 `/v1/chat/completions` 本身也有瞬时不稳定（连接在 60 秒内中断），`/v1/models` 正常；提交 `8f67e2c`，已推送 |
+| 2026-08-13 | 第三次真实复验（两处 reasoning_effort 修复均已正确生效）仍 `Error 524`，确认中转站 completions 端点当天本身持续故障（跨约 1 小时的 4 次真实失败：524/524/503/524），与本仓库代码无关。按用户要求实现 Grok→GPT 自动故障转移：`NormalizedChatOpenAI.invoke()` 捕获连接失败/5xx/429 并重放到 `fallback_llm`（400/401 等客户端错误不触发，避免掩盖真实故障），`TradingAgentsGraph._build_fallback_llm()` 仅需设置 fallback model 即可启用，provider/backend_url 默认复用主配置 | 生产已配置 secret `TRADINGAGENTS_LLM_FALLBACK_API_KEY`（独立 GPT key，SHA-256 已记录）与三个 Variable（`gpt-5.4-mini`，便宜档位，`/v1/models` 探测确认健康、2.3 秒内正确回答）；已接入两个真实工作流 env；14 项新测试覆盖 4 类瞬时错误触发、2 类客户端错误不触发、structured_output 路径；全量回归 `734 passed / 2 skipped`；CI 绿（含一次 ruff 修复）；提交 `cd2c09d`/`a3e4873`/`33c295a`，均已推送；**兜底触发路径尚未经过一次真实 run 验证** |
 
 ## 1.6 2026-07-30 全局质量复审
 
