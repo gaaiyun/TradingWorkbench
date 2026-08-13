@@ -1,7 +1,7 @@
 {
   "status": "ok",
-  "generated_at": "2026-08-13T07:50:35+08:00",
-  "trade_date": "2026-08-12",
+  "generated_at": "2026-08-13T08:09:07+08:00",
+  "trade_date": "2026-08-13",
   "provider": "openai_compatible",
   "analysts": [
     "market",
@@ -19,15 +19,15 @@
     "kind": "legacy"
   },
   "run": {
-    "id": "31652286986",
+    "id": "31653398672",
     "attempt": "1",
     "workflow": "daily-analysis",
-    "url": "https://github.com/gaaiyun/TradingWorkbench/actions/runs/31652286986"
+    "url": "https://github.com/gaaiyun/TradingWorkbench/actions/runs/31653398672"
   },
   "identity": {
     "scope": "legacy",
     "kind": "legacy",
-    "runId": "31652286986",
+    "runId": "31653398672",
     "profileId": null,
     "requestId": null,
     "slotId": null,
@@ -44,22 +44,22 @@
     {
       "ticker": "512480.SS",
       "rating": "Not Rated",
-      "report": "reports/512480.SS/2026-08-12-v3/complete_report.md",
+      "report": "reports/512480.SS/2026-08-13/complete_report.md",
       "files": {
-        "fundamentals": "reports/512480.SS/2026-08-12-v3/1_analysts/fundamentals.md",
-        "market": "reports/512480.SS/2026-08-12-v3/1_analysts/market.md",
-        "news": "reports/512480.SS/2026-08-12-v3/1_analysts/news.md",
-        "bear": "reports/512480.SS/2026-08-12-v3/2_research/bear.md",
-        "bull": "reports/512480.SS/2026-08-12-v3/2_research/bull.md",
-        "manager": "reports/512480.SS/2026-08-12-v3/2_research/manager.md",
-        "trader": "reports/512480.SS/2026-08-12-v3/3_trading/trader.md",
-        "aggressive": "reports/512480.SS/2026-08-12-v3/4_risk/aggressive.md",
-        "conservative": "reports/512480.SS/2026-08-12-v3/4_risk/conservative.md",
-        "neutral": "reports/512480.SS/2026-08-12-v3/4_risk/neutral.md",
-        "decision": "reports/512480.SS/2026-08-12-v3/5_portfolio/decision.md",
-        "complete_report": "reports/512480.SS/2026-08-12-v3/complete_report.md"
+        "fundamentals": "reports/512480.SS/2026-08-13/1_analysts/fundamentals.md",
+        "market": "reports/512480.SS/2026-08-13/1_analysts/market.md",
+        "news": "reports/512480.SS/2026-08-13/1_analysts/news.md",
+        "bear": "reports/512480.SS/2026-08-13/2_research/bear.md",
+        "bull": "reports/512480.SS/2026-08-13/2_research/bull.md",
+        "manager": "reports/512480.SS/2026-08-13/2_research/manager.md",
+        "trader": "reports/512480.SS/2026-08-13/3_trading/trader.md",
+        "aggressive": "reports/512480.SS/2026-08-13/4_risk/aggressive.md",
+        "conservative": "reports/512480.SS/2026-08-13/4_risk/conservative.md",
+        "neutral": "reports/512480.SS/2026-08-13/4_risk/neutral.md",
+        "decision": "reports/512480.SS/2026-08-13/5_portfolio/decision.md",
+        "complete_report": "reports/512480.SS/2026-08-13/complete_report.md"
       },
-      "decision_excerpt": "**Rating**\n持有\n\n**Executive Summary**\n研究经理批判性评估了风险分析师辩论中的牛派与熊派论点。根据EvidencePacketV1，牛派引用[D2]最近8个交易日的收盘价变化百分比18.34961998%和[I8]MACD柱状图0.01046302支持短期动量向上，但熊派指出[M654]收盘价低于MA60[D6]、MACD为负[I7]以及[M647]至[M654]成交量逐步下降。不可用数据如持仓构成、NAV/折溢价、集中度、流动性、费用率和跟踪误差在EvidencePacketV1中均为unavailable，不构成任何风险或投资者行为证据。政策事件[N1]集成电路布图设计保护条例、[N2]2026年第2季度报告以及[CA1]、[CA2]基金份额拆分公告仅提供事件证据，未推断长期效果或价格影响。双方论点部分重叠但未解决点使整体证据处于平衡状态。\n\n**In",
+      "decision_excerpt": "**Rating**\nHold\n\n**Executive Summary**\n集成电路布图设计保护条例在2026-08-02实施 [N1][S2]。\n过去8个交易日收盘价变化18.34961998% [D2] 从 [M647] 的0.921 到 [M654] 的1.09。\n最新收盘价较MA20的2.7332705% [D5]。\nMACD柱状图0.01046302 [I8]。\n份额拆分公告2026-06-28 [CA2][S5] 和2026-07-02 [CA1][S4]。\n收盘价低于MA60的-6.27821354% [D6]。\n无严格移动平均对齐 [D7]。\nRSI14 48.61642995 [I11]低于中线 [D9]。\n负MACD -0.0390515 [I7]和信号-0.04951452 [I9]。\n高 realizedVolatility20 79.11019688 [I10]",
       "analysis_status": "insufficient_evidence",
       "audit_status": "legacy_unverified",
       "evidence_publish": {

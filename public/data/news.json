@@ -1,23 +1,33 @@
 {
   "version": 1,
   "status": "ok",
-  "generated_at": "2026-08-13T07:50:35+08:00",
-  "trade_date": "2026-08-12",
+  "generated_at": "2026-08-13T08:09:07+08:00",
+  "trade_date": "2026-08-13",
   "global": {
     "status": "ok",
     "query_type": "global",
     "ticker": null,
-    "start_date": "2026-08-05",
-    "end_date": "2026-08-12",
-    "fetched_at": "2026-08-12T23:50:36Z",
+    "start_date": "2026-08-06",
+    "end_date": "2026-08-13",
+    "fetched_at": "2026-08-13T00:09:08Z",
     "items": [
+      {
+        "title": "Vale Base Metals to Proceed with Coarse Particle Flotation at Salobo Increasing and Accelerating Projected Copper Production",
+        "summary": "",
+        "url": "https://finance.yahoo.com/energy/articles/vale-metals-proceed-coarse-particle-235600807.html",
+        "source": "PR Newswire",
+        "published_at": "2026-08-12T23:56:00Z",
+        "fetched_at": "2026-08-13T00:09:08Z",
+        "ticker": null,
+        "source_tier": "aggregator"
+      },
       {
         "title": "Suzano Reports Adjusted EBITDA of R$4.7 Billion in the Second Quarter of 2026",
         "summary": "",
         "url": "https://finance.yahoo.com/markets/stocks/articles/suzano-reports-adjusted-ebitda-r-232700332.html",
         "source": "Business Wire",
         "published_at": "2026-08-12T23:27:00Z",
-        "fetched_at": "2026-08-12T23:50:36Z",
+        "fetched_at": "2026-08-13T00:09:08Z",
         "ticker": null,
         "source_tier": "aggregator"
       },
@@ -27,7 +37,7 @@
         "url": "https://finance.yahoo.com/m/5ba1e94a-edf0-3cee-ae20-4f59511e5d25/what-hd-holders-got-paid.html",
         "source": "Trefis",
         "published_at": "2026-08-12T23:21:15Z",
-        "fetched_at": "2026-08-12T23:50:36Z",
+        "fetched_at": "2026-08-13T00:09:08Z",
         "ticker": null,
         "source_tier": "aggregator"
       },
@@ -37,7 +47,7 @@
         "url": "https://finance.yahoo.com/markets/commodities/articles/market-chatter-codelco-expects-lower-230719030.html",
         "source": "MT Newswires",
         "published_at": "2026-08-12T23:07:19Z",
-        "fetched_at": "2026-08-12T23:50:36Z",
+        "fetched_at": "2026-08-13T00:09:08Z",
         "ticker": null,
         "source_tier": "aggregator"
       },
@@ -47,17 +57,7 @@
         "url": "https://finance.yahoo.com/energy/articles/talos-energy-talo-just-reshaped-225135261.html",
         "source": "Insider Monkey",
         "published_at": "2026-08-12T22:51:35Z",
-        "fetched_at": "2026-08-12T23:50:36Z",
-        "ticker": null,
-        "source_tier": "aggregator"
-      },
-      {
-        "title": "Vale Base Metals to Proceed with Coarse Particle Flotation at Salobo Increasing and Accelerating Projected Copper Production",
-        "summary": "",
-        "url": "https://finance.yahoo.com/energy/articles/vale-metals-proceed-coarse-particle-224700848.html",
-        "source": "PR Newswire",
-        "published_at": "2026-08-12T22:47:00Z",
-        "fetched_at": "2026-08-12T23:50:36Z",
+        "fetched_at": "2026-08-13T00:09:08Z",
         "ticker": null,
         "source_tier": "aggregator"
       },
@@ -67,7 +67,7 @@
         "url": "https://finance.yahoo.com/markets/stocks/articles/walmart-wmt-rises-higher-market-214503738.html",
         "source": "Zacks",
         "published_at": "2026-08-12T21:45:03Z",
-        "fetched_at": "2026-08-12T23:50:36Z",
+        "fetched_at": "2026-08-13T00:09:08Z",
         "ticker": null,
         "source_tier": "aggregator"
       },
@@ -77,7 +77,7 @@
         "url": "https://finance.yahoo.com/markets/articles/stocks-inch-oil-dips-traders-163401004.html",
         "source": "Reuters",
         "published_at": "2026-08-12T21:32:45Z",
-        "fetched_at": "2026-08-12T23:50:36Z",
+        "fetched_at": "2026-08-13T00:09:08Z",
         "ticker": null,
         "source_tier": "aggregator"
       },
@@ -87,7 +87,7 @@
         "url": "https://finance.yahoo.com/m/390f73f0-3738-398f-acad-5a457ae84645/avino-silver-%26-gold-mines.html",
         "source": "Moby",
         "published_at": "2026-08-12T21:20:45Z",
-        "fetched_at": "2026-08-12T23:50:36Z",
+        "fetched_at": "2026-08-13T00:09:08Z",
         "ticker": null,
         "source_tier": "aggregator"
       },
@@ -97,7 +97,7 @@
         "url": "https://finance.yahoo.com/markets/commodities/articles/pan-american-silver-reports-second-211700173.html",
         "source": "Business Wire",
         "published_at": "2026-08-12T21:17:00Z",
-        "fetched_at": "2026-08-12T23:50:36Z",
+        "fetched_at": "2026-08-13T00:09:08Z",
         "ticker": null,
         "source_tier": "aggregator"
       },
@@ -107,7 +107,7 @@
         "url": "https://finance.yahoo.com/m/39ad81f5-bb02-3190-bd61-d23b145101fd/u.s.-stocks-mixed-after.html",
         "source": "The Wall Street Journal",
         "published_at": "2026-08-12T21:08:00Z",
-        "fetched_at": "2026-08-12T23:50:36Z",
+        "fetched_at": "2026-08-13T00:09:08Z",
         "ticker": null,
         "source_tier": "aggregator"
       }
@@ -127,24 +127,13 @@
   },
   "tickers": {
     "512480.SS": {
-      "status": "ok",
+      "status": "empty",
       "query_type": "ticker",
       "ticker": "512480.SS",
-      "start_date": "2026-08-12",
-      "end_date": "2026-08-12",
-      "fetched_at": "2026-08-12T23:50:37Z",
-      "items": [
-        {
-          "title": "半导体ETF国联安：8月11日融资买入8431.35万元，融资融券余额5.35亿元",
-          "summary": "半导体ETF国联安：8月11日融资买入8431.35万元，融资融券余额5.35亿元 Sohu",
-          "url": "https://news.google.com/rss/articles/CBMiiAFBVV95cUxQbzQ5TEFxcEJSNGJEMm02dDlOdS03d3k5dURla0xNMEV2OEpOMkQ3X1JjWDB0LUtJNTFUanh4VzNaTlZESkduSDV2OElsb2RXanBZUTc4Z0RUN2VYdEkxLWFSUW9EcXFETnFXcVBEbmMzTHVVbnUxOXFDX3VlMGJUYWRsSEpGTGxI?oc=5",
-          "source": "Google News / Sohu",
-          "published_at": "2026-08-12T04:09:11Z",
-          "fetched_at": "2026-08-12T23:50:37Z",
-          "ticker": "512480.SS",
-          "source_tier": "aggregator"
-        }
-      ],
+      "start_date": "2026-08-13",
+      "end_date": "2026-08-13",
+      "fetched_at": "2026-08-13T00:09:09Z",
+      "items": [],
       "source_statuses": [
         {
           "source": "Yahoo Finance",
@@ -153,8 +142,8 @@
         },
         {
           "source": "Google News RSS",
-          "status": "ok",
-          "item_count": 1
+          "status": "empty",
+          "item_count": 0
         },
         {
           "source": "SEC EDGAR",
@@ -166,12 +155,22 @@
   },
   "items": [
     {
+      "title": "Vale Base Metals to Proceed with Coarse Particle Flotation at Salobo Increasing and Accelerating Projected Copper Production",
+      "summary": "",
+      "url": "https://finance.yahoo.com/energy/articles/vale-metals-proceed-coarse-particle-235600807.html",
+      "source": "PR Newswire",
+      "published_at": "2026-08-12T23:56:00Z",
+      "fetched_at": "2026-08-13T00:09:08Z",
+      "ticker": null,
+      "source_tier": "aggregator"
+    },
+    {
       "title": "Suzano Reports Adjusted EBITDA of R$4.7 Billion in the Second Quarter of 2026",
       "summary": "",
       "url": "https://finance.yahoo.com/markets/stocks/articles/suzano-reports-adjusted-ebitda-r-232700332.html",
       "source": "Business Wire",
       "published_at": "2026-08-12T23:27:00Z",
-      "fetched_at": "2026-08-12T23:50:36Z",
+      "fetched_at": "2026-08-13T00:09:08Z",
       "ticker": null,
       "source_tier": "aggregator"
     },
@@ -181,7 +180,7 @@
       "url": "https://finance.yahoo.com/m/5ba1e94a-edf0-3cee-ae20-4f59511e5d25/what-hd-holders-got-paid.html",
       "source": "Trefis",
       "published_at": "2026-08-12T23:21:15Z",
-      "fetched_at": "2026-08-12T23:50:36Z",
+      "fetched_at": "2026-08-13T00:09:08Z",
       "ticker": null,
       "source_tier": "aggregator"
     },
@@ -191,7 +190,7 @@
       "url": "https://finance.yahoo.com/markets/commodities/articles/market-chatter-codelco-expects-lower-230719030.html",
       "source": "MT Newswires",
       "published_at": "2026-08-12T23:07:19Z",
-      "fetched_at": "2026-08-12T23:50:36Z",
+      "fetched_at": "2026-08-13T00:09:08Z",
       "ticker": null,
       "source_tier": "aggregator"
     },
@@ -201,17 +200,7 @@
       "url": "https://finance.yahoo.com/energy/articles/talos-energy-talo-just-reshaped-225135261.html",
       "source": "Insider Monkey",
       "published_at": "2026-08-12T22:51:35Z",
-      "fetched_at": "2026-08-12T23:50:36Z",
-      "ticker": null,
-      "source_tier": "aggregator"
-    },
-    {
-      "title": "Vale Base Metals to Proceed with Coarse Particle Flotation at Salobo Increasing and Accelerating Projected Copper Production",
-      "summary": "",
-      "url": "https://finance.yahoo.com/energy/articles/vale-metals-proceed-coarse-particle-224700848.html",
-      "source": "PR Newswire",
-      "published_at": "2026-08-12T22:47:00Z",
-      "fetched_at": "2026-08-12T23:50:36Z",
+      "fetched_at": "2026-08-13T00:09:08Z",
       "ticker": null,
       "source_tier": "aggregator"
     },
@@ -221,7 +210,7 @@
       "url": "https://finance.yahoo.com/markets/stocks/articles/walmart-wmt-rises-higher-market-214503738.html",
       "source": "Zacks",
       "published_at": "2026-08-12T21:45:03Z",
-      "fetched_at": "2026-08-12T23:50:36Z",
+      "fetched_at": "2026-08-13T00:09:08Z",
       "ticker": null,
       "source_tier": "aggregator"
     },
@@ -231,7 +220,7 @@
       "url": "https://finance.yahoo.com/markets/articles/stocks-inch-oil-dips-traders-163401004.html",
       "source": "Reuters",
       "published_at": "2026-08-12T21:32:45Z",
-      "fetched_at": "2026-08-12T23:50:36Z",
+      "fetched_at": "2026-08-13T00:09:08Z",
       "ticker": null,
       "source_tier": "aggregator"
     },
@@ -241,7 +230,7 @@
       "url": "https://finance.yahoo.com/m/390f73f0-3738-398f-acad-5a457ae84645/avino-silver-%26-gold-mines.html",
       "source": "Moby",
       "published_at": "2026-08-12T21:20:45Z",
-      "fetched_at": "2026-08-12T23:50:36Z",
+      "fetched_at": "2026-08-13T00:09:08Z",
       "ticker": null,
       "source_tier": "aggregator"
     },
@@ -251,7 +240,7 @@
       "url": "https://finance.yahoo.com/markets/commodities/articles/pan-american-silver-reports-second-211700173.html",
       "source": "Business Wire",
       "published_at": "2026-08-12T21:17:00Z",
-      "fetched_at": "2026-08-12T23:50:36Z",
+      "fetched_at": "2026-08-13T00:09:08Z",
       "ticker": null,
       "source_tier": "aggregator"
     },
@@ -261,18 +250,8 @@
       "url": "https://finance.yahoo.com/m/39ad81f5-bb02-3190-bd61-d23b145101fd/u.s.-stocks-mixed-after.html",
       "source": "The Wall Street Journal",
       "published_at": "2026-08-12T21:08:00Z",
-      "fetched_at": "2026-08-12T23:50:36Z",
+      "fetched_at": "2026-08-13T00:09:08Z",
       "ticker": null,
-      "source_tier": "aggregator"
-    },
-    {
-      "title": "半导体ETF国联安：8月11日融资买入8431.35万元，融资融券余额5.35亿元",
-      "summary": "半导体ETF国联安：8月11日融资买入8431.35万元，融资融券余额5.35亿元 Sohu",
-      "url": "https://news.google.com/rss/articles/CBMiiAFBVV95cUxQbzQ5TEFxcEJSNGJEMm02dDlOdS03d3k5dURla0xNMEV2OEpOMkQ3X1JjWDB0LUtJNTFUanh4VzNaTlZESkduSDV2OElsb2RXanBZUTc4Z0RUN2VYdEkxLWFSUW9EcXFETnFXcVBEbmMzTHVVbnUxOXFDX3VlMGJUYWRsSEpGTGxI?oc=5",
-      "source": "Google News / Sohu",
-      "published_at": "2026-08-12T04:09:11Z",
-      "fetched_at": "2026-08-12T23:50:37Z",
-      "ticker": "512480.SS",
       "source_tier": "aggregator"
     }
   ]
