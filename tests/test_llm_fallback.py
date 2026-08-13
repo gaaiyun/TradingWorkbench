@@ -69,9 +69,8 @@ def test_fallback_llm_defaults_to_none():
 @pytest.mark.unit
 def test_no_fallback_configured_propagates_transient_error():
     llm = _primary()
-    with patch.object(llm, "_generate", side_effect=_connection_error()):
-        with pytest.raises(openai.APIConnectionError):
-            llm.invoke([HumanMessage(content="hi")])
+    with patch.object(llm, "_generate", side_effect=_connection_error()), pytest.raises(openai.APIConnectionError):
+        llm.invoke([HumanMessage(content="hi")])
 
 
 @pytest.mark.unit
@@ -100,9 +99,8 @@ def test_non_transient_error_is_not_masked_by_fallback(error):
     fallback.invoke.return_value = AIMessage(content="should never be returned")
     llm.fallback_llm = fallback
 
-    with patch.object(llm, "_generate", side_effect=error):
-        with pytest.raises(type(error)):
-            llm.invoke([HumanMessage(content="hi")])
+    with patch.object(llm, "_generate", side_effect=error), pytest.raises(type(error)):
+        llm.invoke([HumanMessage(content="hi")])
 
     fallback.invoke.assert_not_called()
 
