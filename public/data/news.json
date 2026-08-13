@@ -1,7 +1,7 @@
 {
   "version": 1,
   "status": "ok",
-  "generated_at": "2026-08-13T16:01:26+08:00",
+  "generated_at": "2026-08-13T23:53:36+08:00",
   "trade_date": "2026-08-13",
   "global": {
     "status": "ok",
@@ -9,105 +9,105 @@
     "ticker": null,
     "start_date": "2026-08-06",
     "end_date": "2026-08-13",
-    "fetched_at": "2026-08-13T08:01:26Z",
+    "fetched_at": "2026-08-13T15:53:37Z",
     "items": [
       {
-        "title": "Tech stocks enjoy rebound after US inflation on mixed day for markets",
+        "title": "2 of Wall Street’s Favorite Stocks to Own for Decades and 1 Facing Headwinds",
         "summary": "",
-        "url": "https://finance.yahoo.com/markets/world-indices/articles/seoul-tech-leads-asian-stock-023817725.html",
-        "source": "AFP",
-        "published_at": "2026-08-13T07:33:09Z",
-        "fetched_at": "2026-08-13T08:01:26Z",
+        "url": "https://finance.yahoo.com/markets/stocks/articles/2-wall-street-favorite-stocks-152500433.html",
+        "source": "StockStory",
+        "published_at": "2026-08-13T15:25:00Z",
+        "fetched_at": "2026-08-13T15:53:37Z",
         "ticker": null,
         "source_tier": "aggregator"
       },
       {
-        "title": "European shares inch up as lower crude offsets geopolitical unease",
+        "title": "Stock Market Today: Dow's Gain Vanishes; Credo Technology Approaches New Entry (Live Coverage)",
         "summary": "",
-        "url": "https://finance.yahoo.com/markets/world-indices/articles/european-shares-inch-lower-crude-071956648.html",
+        "url": "https://finance.yahoo.com/m/a86837ac-df8a-3747-8923-5f2f47063c11/stock-market-today%3A-dow%27s.html",
+        "source": "Investor's Business Daily",
+        "published_at": "2026-08-13T15:24:53Z",
+        "fetched_at": "2026-08-13T15:53:37Z",
+        "ticker": null,
+        "source_tier": "aggregator"
+      },
+      {
+        "title": "Stocks rise as traders reduce rate hike bets, oil prices drop",
+        "summary": "",
+        "url": "https://finance.yahoo.com/markets/world-indices/articles/asian-stocks-rise-us-inflation-010444910.html",
         "source": "Reuters",
-        "published_at": "2026-08-13T07:19:56Z",
-        "fetched_at": "2026-08-13T08:01:26Z",
+        "published_at": "2026-08-13T15:21:08Z",
+        "fetched_at": "2026-08-13T15:53:37Z",
         "ticker": null,
         "source_tier": "aggregator"
       },
       {
-        "title": "Antofagasta H1 Earnings Call Highlights",
+        "title": "Oil falls more than 3% on weaker global demand outlook and US crude buildup",
         "summary": "",
-        "url": "https://finance.yahoo.com/m/9faafc8b-ba08-3a2b-84ab-7d3141f5d4d2/antofagasta-h1-earnings-call.html",
-        "source": "MarketBeat",
-        "published_at": "2026-08-13T07:02:09Z",
-        "fetched_at": "2026-08-13T08:01:26Z",
+        "url": "https://finance.yahoo.com/news/oil-eases-weaker-demand-outlook-045929013.html",
+        "source": "Reuters",
+        "published_at": "2026-08-13T15:18:56Z",
+        "fetched_at": "2026-08-13T15:53:37Z",
         "ticker": null,
         "source_tier": "aggregator"
       },
       {
-        "title": "UAE Reportedly Released Iran’s Frozen Assets Worth Billions of Dollars, Bitcoin Rebounds",
-        "summary": "",
-        "url": "https://finance.yahoo.com/m/89d91e6f-b9cb-31b5-90ed-7761f154b3ca/uae-reportedly-released.html",
-        "source": "CoinGape",
-        "published_at": "2026-08-13T06:17:29Z",
-        "fetched_at": "2026-08-13T08:01:26Z",
+        "title": "Federal Reserve Board issues enforcement action with former employee of Regions Bank",
+        "summary": "Federal Reserve Board issues enforcement action with former employee of Regions Bank",
+        "url": "https://www.federalreserve.gov/newsevents/pressreleases/enforcement20260813a.htm",
+        "source": "Federal Reserve",
+        "published_at": "2026-08-13T15:00:00Z",
+        "fetched_at": "2026-08-13T15:53:37Z",
         "ticker": null,
-        "source_tier": "aggregator"
+        "source_tier": "primary"
       },
       {
-        "title": "Oil Prices Fall as OPEC and IEA Slash 2026 Demand Outlooks",
+        "title": "Hormuz Stalemate Raises Risk of $120 Oil",
         "summary": "",
-        "url": "https://finance.yahoo.com/energy/articles/oil-prices-fall-opec-iea-052500802.html",
+        "url": "https://finance.yahoo.com/energy/articles/hormuz-stalemate-raises-risk-120-150000321.html",
         "source": "Oilprice.com",
-        "published_at": "2026-08-13T05:25:00Z",
-        "fetched_at": "2026-08-13T08:01:26Z",
+        "published_at": "2026-08-13T15:00:00Z",
+        "fetched_at": "2026-08-13T15:53:37Z",
         "ticker": null,
         "source_tier": "aggregator"
       },
       {
-        "title": "UACJ (TSE:5741) Lifted Dividend Guidance, Is The Upside Already Priced In?",
+        "title": "The Price Is Down, But Is The Story At eBay Stock Still Up?",
         "summary": "",
-        "url": "https://finance.yahoo.com/markets/stocks/articles/uacj-tse-5741-lifted-dividend-051503791.html",
-        "source": "Simply Wall St.",
-        "published_at": "2026-08-13T05:15:03Z",
-        "fetched_at": "2026-08-13T08:01:26Z",
+        "url": "https://finance.yahoo.com/m/2cd5432f-2026-3530-9a64-f9b4b9dc847f/the-price-is-down%2C-but-is-the.html",
+        "source": "Trefis",
+        "published_at": "2026-08-13T14:59:50Z",
+        "fetched_at": "2026-08-13T15:53:37Z",
         "ticker": null,
         "source_tier": "aggregator"
       },
       {
-        "title": "Trump Reverts to Economic Squeeze of Iranian Regime",
+        "title": "Inflation Falls for 2 Months Straight — Is a Fed September Rate Hike Still on the Table?",
         "summary": "",
-        "url": "https://finance.yahoo.com/video/trump-reverts-economic-squeeze-iranian-043953425.html",
-        "source": "Bloomberg",
-        "published_at": "2026-08-13T04:39:53Z",
-        "fetched_at": "2026-08-13T08:01:26Z",
+        "url": "https://finance.yahoo.com/m/35fb65c0-b8b8-3e50-b673-0eb890d6d3f1/inflation-falls-for-2-months.html",
+        "source": "24/7 Wall St.",
+        "published_at": "2026-08-13T14:44:53Z",
+        "fetched_at": "2026-08-13T15:53:37Z",
         "ticker": null,
         "source_tier": "aggregator"
       },
       {
-        "title": "Norsk Hydro (OB:NHY) Cuts Alunorte Output, Is It Still 33% Undervalued?",
+        "title": "Why Bob Iger's Lakers could reshape the NBA: 'He has the gravitas'",
         "summary": "",
-        "url": "https://finance.yahoo.com/markets/stocks/articles/norsk-hydro-ob-nhy-cuts-043214097.html",
-        "source": "Simply Wall St.",
-        "published_at": "2026-08-13T04:32:14Z",
-        "fetched_at": "2026-08-13T08:01:26Z",
+        "url": "https://finance.yahoo.com/video/why-bob-igers-lakers-could-143938802.html",
+        "source": "Yahoo Finance Video",
+        "published_at": "2026-08-13T14:39:38Z",
+        "fetched_at": "2026-08-13T15:53:37Z",
         "ticker": null,
         "source_tier": "aggregator"
       },
       {
-        "title": "Okeanis Eco Tankers Corp. – Ex Dividend Date",
+        "title": "Claims Rise Above Estimates",
         "summary": "",
-        "url": "https://finance.yahoo.com/markets/stocks/articles/okeanis-eco-tankers-corp-ex-040000555.html",
-        "source": "GlobeNewswire",
-        "published_at": "2026-08-13T04:00:00Z",
-        "fetched_at": "2026-08-13T08:01:26Z",
-        "ticker": null,
-        "source_tier": "aggregator"
-      },
-      {
-        "title": "Asian shares mostly rise after buying of AI-related shares leads a rally on Wall Street",
-        "summary": "",
-        "url": "https://finance.yahoo.com/markets/world-indices/articles/asian-shares-mostly-rise-ai-033327003.html",
-        "source": "Associated Press",
-        "published_at": "2026-08-13T03:33:27Z",
-        "fetched_at": "2026-08-13T08:01:26Z",
+        "url": "https://finance.yahoo.com/economy/policy/articles/claims-rise-above-estimates-142900445.html",
+        "source": "Zacks",
+        "published_at": "2026-08-13T14:29:00Z",
+        "fetched_at": "2026-08-13T15:53:37Z",
         "ticker": null,
         "source_tier": "aggregator"
       }
@@ -120,62 +120,36 @@
       },
       {
         "source": "Federal Reserve",
-        "status": "empty",
-        "item_count": 0
+        "status": "ok",
+        "item_count": 1
       }
     ]
   },
   "tickers": {
-    "515880.SS": {
+    "512480.SS": {
       "status": "ok",
       "query_type": "ticker",
-      "ticker": "515880.SS",
+      "ticker": "512480.SS",
       "start_date": "2026-08-13",
       "end_date": "2026-08-13",
-      "fetched_at": "2026-08-13T08:01:28Z",
+      "fetched_at": "2026-08-13T15:53:38Z",
       "items": [
         {
-          "title": "通信ETF国泰：8月12日融券卖出13.22万股，融资融券余额10.59亿元",
-          "summary": "通信ETF国泰：8月12日融券卖出13.22万股，融资融券余额10.59亿元 Sohu",
-          "url": "https://news.google.com/rss/articles/CBMiiAFBVV95cUxPQnppdUFoRXl1ZDJqWHl0Z1hnRjhfV2FZLU56N0FleHVJTDhxanZXZlJxRnhETVpwdjY5em9sN0ZCY0dESld1dVJBbkV3VXRHb0J6Mk9ZbUI1eHd3TE9YTm8yWnY5dHNlWEpLN093RWJRdFBzWEJOSENNUVFvY0VvTzVCSzJqSFho?oc=5",
-          "source": "Google News / Sohu",
-          "published_at": "2026-08-13T04:24:24Z",
-          "fetched_at": "2026-08-13T08:01:28Z",
-          "ticker": "515880.SS",
+          "title": "Opportunistic Trader ETF Announces Reverse Share Split",
+          "summary": "",
+          "url": "https://finance.yahoo.com/markets/options/articles/opportunistic-trader-etf-announces-reverse-154500341.html",
+          "source": "ACCESS Newswire",
+          "published_at": "2026-08-13T15:45:00Z",
+          "fetched_at": "2026-08-13T15:53:38Z",
+          "ticker": "512480.SS",
           "source_tier": "aggregator"
         }
       ],
       "source_statuses": [
         {
           "source": "Yahoo Finance",
-          "status": "empty",
-          "item_count": 0
-        },
-        {
-          "source": "Google News RSS",
           "status": "ok",
           "item_count": 1
-        },
-        {
-          "source": "SEC EDGAR",
-          "status": "empty",
-          "item_count": 0
-        }
-      ]
-    },
-    "512480.SS": {
-      "status": "empty",
-      "query_type": "ticker",
-      "ticker": "512480.SS",
-      "start_date": "2026-08-13",
-      "end_date": "2026-08-13",
-      "fetched_at": "2026-08-13T08:01:31Z",
-      "items": [],
-      "source_statuses": [
-        {
-          "source": "Yahoo Finance",
-          "status": "empty",
-          "item_count": 0
         },
         {
           "source": "Google News RSS",
@@ -192,112 +166,112 @@
   },
   "items": [
     {
-      "title": "Tech stocks enjoy rebound after US inflation on mixed day for markets",
+      "title": "Opportunistic Trader ETF Announces Reverse Share Split",
       "summary": "",
-      "url": "https://finance.yahoo.com/markets/world-indices/articles/seoul-tech-leads-asian-stock-023817725.html",
-      "source": "AFP",
-      "published_at": "2026-08-13T07:33:09Z",
-      "fetched_at": "2026-08-13T08:01:26Z",
+      "url": "https://finance.yahoo.com/markets/options/articles/opportunistic-trader-etf-announces-reverse-154500341.html",
+      "source": "ACCESS Newswire",
+      "published_at": "2026-08-13T15:45:00Z",
+      "fetched_at": "2026-08-13T15:53:38Z",
+      "ticker": "512480.SS",
+      "source_tier": "aggregator"
+    },
+    {
+      "title": "2 of Wall Street’s Favorite Stocks to Own for Decades and 1 Facing Headwinds",
+      "summary": "",
+      "url": "https://finance.yahoo.com/markets/stocks/articles/2-wall-street-favorite-stocks-152500433.html",
+      "source": "StockStory",
+      "published_at": "2026-08-13T15:25:00Z",
+      "fetched_at": "2026-08-13T15:53:37Z",
       "ticker": null,
       "source_tier": "aggregator"
     },
     {
-      "title": "European shares inch up as lower crude offsets geopolitical unease",
+      "title": "Stock Market Today: Dow's Gain Vanishes; Credo Technology Approaches New Entry (Live Coverage)",
       "summary": "",
-      "url": "https://finance.yahoo.com/markets/world-indices/articles/european-shares-inch-lower-crude-071956648.html",
+      "url": "https://finance.yahoo.com/m/a86837ac-df8a-3747-8923-5f2f47063c11/stock-market-today%3A-dow%27s.html",
+      "source": "Investor's Business Daily",
+      "published_at": "2026-08-13T15:24:53Z",
+      "fetched_at": "2026-08-13T15:53:37Z",
+      "ticker": null,
+      "source_tier": "aggregator"
+    },
+    {
+      "title": "Stocks rise as traders reduce rate hike bets, oil prices drop",
+      "summary": "",
+      "url": "https://finance.yahoo.com/markets/world-indices/articles/asian-stocks-rise-us-inflation-010444910.html",
       "source": "Reuters",
-      "published_at": "2026-08-13T07:19:56Z",
-      "fetched_at": "2026-08-13T08:01:26Z",
+      "published_at": "2026-08-13T15:21:08Z",
+      "fetched_at": "2026-08-13T15:53:37Z",
       "ticker": null,
       "source_tier": "aggregator"
     },
     {
-      "title": "Antofagasta H1 Earnings Call Highlights",
+      "title": "Oil falls more than 3% on weaker global demand outlook and US crude buildup",
       "summary": "",
-      "url": "https://finance.yahoo.com/m/9faafc8b-ba08-3a2b-84ab-7d3141f5d4d2/antofagasta-h1-earnings-call.html",
-      "source": "MarketBeat",
-      "published_at": "2026-08-13T07:02:09Z",
-      "fetched_at": "2026-08-13T08:01:26Z",
+      "url": "https://finance.yahoo.com/news/oil-eases-weaker-demand-outlook-045929013.html",
+      "source": "Reuters",
+      "published_at": "2026-08-13T15:18:56Z",
+      "fetched_at": "2026-08-13T15:53:37Z",
       "ticker": null,
       "source_tier": "aggregator"
     },
     {
-      "title": "UAE Reportedly Released Iran’s Frozen Assets Worth Billions of Dollars, Bitcoin Rebounds",
-      "summary": "",
-      "url": "https://finance.yahoo.com/m/89d91e6f-b9cb-31b5-90ed-7761f154b3ca/uae-reportedly-released.html",
-      "source": "CoinGape",
-      "published_at": "2026-08-13T06:17:29Z",
-      "fetched_at": "2026-08-13T08:01:26Z",
+      "title": "Federal Reserve Board issues enforcement action with former employee of Regions Bank",
+      "summary": "Federal Reserve Board issues enforcement action with former employee of Regions Bank",
+      "url": "https://www.federalreserve.gov/newsevents/pressreleases/enforcement20260813a.htm",
+      "source": "Federal Reserve",
+      "published_at": "2026-08-13T15:00:00Z",
+      "fetched_at": "2026-08-13T15:53:37Z",
       "ticker": null,
-      "source_tier": "aggregator"
+      "source_tier": "primary"
     },
     {
-      "title": "Oil Prices Fall as OPEC and IEA Slash 2026 Demand Outlooks",
+      "title": "Hormuz Stalemate Raises Risk of $120 Oil",
       "summary": "",
-      "url": "https://finance.yahoo.com/energy/articles/oil-prices-fall-opec-iea-052500802.html",
+      "url": "https://finance.yahoo.com/energy/articles/hormuz-stalemate-raises-risk-120-150000321.html",
       "source": "Oilprice.com",
-      "published_at": "2026-08-13T05:25:00Z",
-      "fetched_at": "2026-08-13T08:01:26Z",
+      "published_at": "2026-08-13T15:00:00Z",
+      "fetched_at": "2026-08-13T15:53:37Z",
       "ticker": null,
       "source_tier": "aggregator"
     },
     {
-      "title": "UACJ (TSE:5741) Lifted Dividend Guidance, Is The Upside Already Priced In?",
+      "title": "The Price Is Down, But Is The Story At eBay Stock Still Up?",
       "summary": "",
-      "url": "https://finance.yahoo.com/markets/stocks/articles/uacj-tse-5741-lifted-dividend-051503791.html",
-      "source": "Simply Wall St.",
-      "published_at": "2026-08-13T05:15:03Z",
-      "fetched_at": "2026-08-13T08:01:26Z",
+      "url": "https://finance.yahoo.com/m/2cd5432f-2026-3530-9a64-f9b4b9dc847f/the-price-is-down%2C-but-is-the.html",
+      "source": "Trefis",
+      "published_at": "2026-08-13T14:59:50Z",
+      "fetched_at": "2026-08-13T15:53:37Z",
       "ticker": null,
       "source_tier": "aggregator"
     },
     {
-      "title": "Trump Reverts to Economic Squeeze of Iranian Regime",
+      "title": "Inflation Falls for 2 Months Straight — Is a Fed September Rate Hike Still on the Table?",
       "summary": "",
-      "url": "https://finance.yahoo.com/video/trump-reverts-economic-squeeze-iranian-043953425.html",
-      "source": "Bloomberg",
-      "published_at": "2026-08-13T04:39:53Z",
-      "fetched_at": "2026-08-13T08:01:26Z",
+      "url": "https://finance.yahoo.com/m/35fb65c0-b8b8-3e50-b673-0eb890d6d3f1/inflation-falls-for-2-months.html",
+      "source": "24/7 Wall St.",
+      "published_at": "2026-08-13T14:44:53Z",
+      "fetched_at": "2026-08-13T15:53:37Z",
       "ticker": null,
       "source_tier": "aggregator"
     },
     {
-      "title": "Norsk Hydro (OB:NHY) Cuts Alunorte Output, Is It Still 33% Undervalued?",
+      "title": "Why Bob Iger's Lakers could reshape the NBA: 'He has the gravitas'",
       "summary": "",
-      "url": "https://finance.yahoo.com/markets/stocks/articles/norsk-hydro-ob-nhy-cuts-043214097.html",
-      "source": "Simply Wall St.",
-      "published_at": "2026-08-13T04:32:14Z",
-      "fetched_at": "2026-08-13T08:01:26Z",
+      "url": "https://finance.yahoo.com/video/why-bob-igers-lakers-could-143938802.html",
+      "source": "Yahoo Finance Video",
+      "published_at": "2026-08-13T14:39:38Z",
+      "fetched_at": "2026-08-13T15:53:37Z",
       "ticker": null,
       "source_tier": "aggregator"
     },
     {
-      "title": "通信ETF国泰：8月12日融券卖出13.22万股，融资融券余额10.59亿元",
-      "summary": "通信ETF国泰：8月12日融券卖出13.22万股，融资融券余额10.59亿元 Sohu",
-      "url": "https://news.google.com/rss/articles/CBMiiAFBVV95cUxPQnppdUFoRXl1ZDJqWHl0Z1hnRjhfV2FZLU56N0FleHVJTDhxanZXZlJxRnhETVpwdjY5em9sN0ZCY0dESld1dVJBbkV3VXRHb0J6Mk9ZbUI1eHd3TE9YTm8yWnY5dHNlWEpLN093RWJRdFBzWEJOSENNUVFvY0VvTzVCSzJqSFho?oc=5",
-      "source": "Google News / Sohu",
-      "published_at": "2026-08-13T04:24:24Z",
-      "fetched_at": "2026-08-13T08:01:28Z",
-      "ticker": "515880.SS",
-      "source_tier": "aggregator"
-    },
-    {
-      "title": "Okeanis Eco Tankers Corp. – Ex Dividend Date",
+      "title": "Claims Rise Above Estimates",
       "summary": "",
-      "url": "https://finance.yahoo.com/markets/stocks/articles/okeanis-eco-tankers-corp-ex-040000555.html",
-      "source": "GlobeNewswire",
-      "published_at": "2026-08-13T04:00:00Z",
-      "fetched_at": "2026-08-13T08:01:26Z",
-      "ticker": null,
-      "source_tier": "aggregator"
-    },
-    {
-      "title": "Asian shares mostly rise after buying of AI-related shares leads a rally on Wall Street",
-      "summary": "",
-      "url": "https://finance.yahoo.com/markets/world-indices/articles/asian-shares-mostly-rise-ai-033327003.html",
-      "source": "Associated Press",
-      "published_at": "2026-08-13T03:33:27Z",
-      "fetched_at": "2026-08-13T08:01:26Z",
+      "url": "https://finance.yahoo.com/economy/policy/articles/claims-rise-above-estimates-142900445.html",
+      "source": "Zacks",
+      "published_at": "2026-08-13T14:29:00Z",
+      "fetched_at": "2026-08-13T15:53:37Z",
       "ticker": null,
       "source_tier": "aggregator"
     }
