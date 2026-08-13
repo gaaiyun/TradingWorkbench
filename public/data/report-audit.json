@@ -1,17 +1,87 @@
 {
   "version": 1,
-  "generatedAt": "2026-08-13T08:52:19.701Z",
+  "generatedAt": "2026-08-13T16:29:38.021Z",
   "summary": {
     "successfulReports": 100,
     "verifiedReports": 0,
     "invalidatedReports": 15,
     "legacyUnverifiedReports": 85,
-    "invalidRecords": 12,
+    "invalidRecords": 14,
     "evidenceValidationFailures": 4,
-    "analysisExecutionFailures": 7,
+    "analysisExecutionFailures": 9,
     "invalidInputs": 1
   },
   "reports": [
+    {
+      "ticker": "512480.SS",
+      "tradeDate": "2026-08-13",
+      "generatedAt": "2026-08-14T00:21:05+08:00",
+      "provider": "openai_compatible",
+      "rating": null,
+      "analysisStatus": null,
+      "report": null,
+      "auditStatus": "invalid_record",
+      "failureClass": "analysis_execution",
+      "problemCodes": [
+        "ANALYSIS_EXECUTION_FAILED"
+      ],
+      "evidence": {
+        "urlCount": 0,
+        "claimCitationCount": 0,
+        "finalProposalMarkers": 0,
+        "priceTargetCount": 0,
+        "valuationMethodCount": 0,
+        "publishedMarkerCount": 0
+      },
+      "claimValidation": null,
+      "evidencePacket": null,
+      "evidencePublish": null,
+      "identity": {
+        "scope": "legacy",
+        "kind": "legacy",
+        "runId": null,
+        "profileId": null,
+        "requestId": null,
+        "slotId": null,
+        "scheduledFor": null
+      },
+      "supersededBy": null
+    },
+    {
+      "ticker": "512480.SS",
+      "tradeDate": "2026-08-13",
+      "generatedAt": "2026-08-13T23:53:36+08:00",
+      "provider": "openai_compatible",
+      "rating": null,
+      "analysisStatus": null,
+      "report": null,
+      "auditStatus": "invalid_record",
+      "failureClass": "analysis_execution",
+      "problemCodes": [
+        "ANALYSIS_EXECUTION_FAILED"
+      ],
+      "evidence": {
+        "urlCount": 0,
+        "claimCitationCount": 0,
+        "finalProposalMarkers": 0,
+        "priceTargetCount": 0,
+        "valuationMethodCount": 0,
+        "publishedMarkerCount": 0
+      },
+      "claimValidation": null,
+      "evidencePacket": null,
+      "evidencePublish": null,
+      "identity": {
+        "scope": "legacy",
+        "kind": "legacy",
+        "runId": null,
+        "profileId": null,
+        "requestId": null,
+        "slotId": null,
+        "scheduledFor": null
+      },
+      "supersededBy": null
+    },
     {
       "ticker": "515880.SS",
       "tradeDate": "2026-08-13",
