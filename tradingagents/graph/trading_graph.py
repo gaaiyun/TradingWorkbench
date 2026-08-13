@@ -99,6 +99,14 @@ class TradingAgentsGraph:
         if self.callbacks:
             llm_kwargs["callbacks"] = self.callbacks
 
+        # Secondary model retried when the primary relay fails transiently
+        # (see NormalizedChatOpenAI.invoke). None when unconfigured — the
+        # generic OpenAI-compatible passthrough ignores unknown kwargs, so
+        # this is a no-op for non-OpenAI-compatible providers too.
+        fallback_llm = self._build_fallback_llm()
+        if fallback_llm is not None:
+            llm_kwargs["fallback_llm"] = fallback_llm
+
         deep_client = create_llm_client(
             provider=self.config["llm_provider"],
             model=self.config["deep_think_llm"],
@@ -191,6 +199,32 @@ class TradingAgentsGraph:
             kwargs["max_retries"] = _coerce_max_retries(max_retries)
 
         return kwargs
+
+    def _build_fallback_llm(self) -> Any:
+        """Build the secondary model retried on a transient primary failure.
+
+        None (default) when ``llm_fallback_model`` is unset — the feature is
+        opt-in and this is a no-op for every existing deployment. When set,
+        provider and backend_url default to the primary's own
+        openai_compatible/backend_url, matching this project's actual setup
+        (a second key on the same relay, routed to a cheaper model) with only
+        one config value required; both stay independently overridable. The
+        API key is read directly from TRADINGAGENTS_LLM_FALLBACK_API_KEY, not
+        threaded through self.config, for the same reason every other
+        provider key bypasses the config dict (see openai_client.get_llm).
+        """
+        model = self.config.get("llm_fallback_model")
+        if not model:
+            return None
+        provider = self.config.get("llm_fallback_provider") or "openai_compatible"
+        base_url = self.config.get("llm_fallback_backend_url") or self.config.get("backend_url")
+        client_kwargs = {}
+        api_key = os.environ.get("TRADINGAGENTS_LLM_FALLBACK_API_KEY")
+        if api_key:
+            client_kwargs["api_key"] = api_key
+        return create_llm_client(
+            provider=provider, model=model, base_url=base_url, **client_kwargs
+        ).get_llm()
 
     def _create_tool_nodes(self) -> dict[str, ToolNode]:
         """Create tool nodes for different data sources using abstract methods."""

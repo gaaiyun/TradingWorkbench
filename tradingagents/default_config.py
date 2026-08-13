@@ -30,6 +30,16 @@ _ENV_OVERRIDES = {
     "TRADINGAGENTS_GOOGLE_THINKING_LEVEL":   "google_thinking_level",
     "TRADINGAGENTS_OPENAI_REASONING_EFFORT": "openai_reasoning_effort",
     "TRADINGAGENTS_ANTHROPIC_EFFORT":        "anthropic_effort",
+    # Secondary OpenAI-compatible model to retry through when the primary
+    # relay fails with a transient error (connection failure, 5xx, 429).
+    # Unset llm_fallback_model (the default) disables the feature entirely.
+    # The fallback's API key is intentionally NOT here: like every other
+    # provider key, it is read directly from an env var
+    # (TRADINGAGENTS_LLM_FALLBACK_API_KEY) at the point of use in
+    # TradingAgentsGraph._build_fallback_llm, never staged in this config dict.
+    "TRADINGAGENTS_LLM_FALLBACK_PROVIDER":     "llm_fallback_provider",
+    "TRADINGAGENTS_LLM_FALLBACK_MODEL":        "llm_fallback_model",
+    "TRADINGAGENTS_LLM_FALLBACK_BACKEND_URL":  "llm_fallback_backend_url",
 }
 
 
@@ -96,6 +106,13 @@ DEFAULT_CONFIG = _apply_env_overrides({
     "google_thinking_level": None,      # "high", "minimal", etc.
     "openai_reasoning_effort": None,    # "medium", "high", "low"
     "anthropic_effort": None,           # "high", "medium", "low"
+    # Fallback model retried when the primary relay fails transiently. None
+    # (default) disables the feature. Provider/backend_url default to the
+    # primary's own openai_compatible/backend_url when unset — the common
+    # case of a second key on the same relay needs only the model set.
+    "llm_fallback_provider": None,
+    "llm_fallback_model": None,
+    "llm_fallback_backend_url": None,
     # Sampling temperature, forwarded to every provider when set. None leaves
     # each provider at its own default. Lower values reduce run-to-run
     # variation on models that honor it; reasoning models largely ignore it

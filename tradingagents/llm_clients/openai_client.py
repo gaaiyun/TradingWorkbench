@@ -1,9 +1,11 @@
+import logging
 import os
 import re
 from dataclasses import dataclass
 from typing import Any
 from urllib.parse import urlparse
 
+import openai
 from langchain_core.messages import AIMessage
 from langchain_openai import ChatOpenAI
 
@@ -11,6 +13,20 @@ from .api_key_env import get_api_key_env
 from .base_client import BaseLLMClient, normalize_content
 from .capabilities import get_capabilities
 from .validators import validate_model
+
+logger = logging.getLogger(__name__)
+
+# Conditions worth retrying against a fallback model (see NormalizedChatOpenAI
+# .fallback_llm): connection failures (incl. APITimeoutError, a subclass),
+# 5xx, and 429. Deliberately excludes 400/401/403/404/422 — those indicate a
+# real bug (malformed request, revoked key) that a different backend would
+# not fix, and silently retrying them would hide the problem instead of
+# failing loudly.
+_FALLBACK_TRANSIENT_ERRORS = (
+    openai.APIConnectionError,
+    openai.InternalServerError,
+    openai.RateLimitError,
+)
 
 
 class NormalizedChatOpenAI(ChatOpenAI):
@@ -30,10 +46,30 @@ class NormalizedChatOpenAI(ChatOpenAI):
     Provider-specific quirks beyond structured-output (e.g. DeepSeek's
     reasoning_content roundtrip) live in subclasses so this base class
     stays small.
+
+    ``fallback_llm``: an optional second chat model to retry through when
+    this one raises a transient error (connection failure, 5xx, 429) — see
+    ``TradingAgentsGraph._build_fallback_llm``. None (the default) preserves
+    prior behavior exactly. Reached identically whether the caller invokes
+    directly or through a with_structured_output/bind_tools-bound chain,
+    since those still route to this instance's ``invoke``.
     """
 
+    fallback_llm: Any = None
+
     def invoke(self, input, config=None, **kwargs):
-        return normalize_content(super().invoke(input, config, **kwargs))
+        try:
+            return normalize_content(super().invoke(input, config, **kwargs))
+        except _FALLBACK_TRANSIENT_ERRORS:
+            if self.fallback_llm is None:
+                raise
+            logger.warning(
+                "Primary model '%s' failed with a transient error; retrying "
+                "via fallback '%s'.",
+                self.model_name,
+                getattr(self.fallback_llm, "model_name", self.fallback_llm),
+            )
+            return normalize_content(self.fallback_llm.invoke(input, config, **kwargs))
 
     def with_structured_output(self, schema, *, method=None, **kwargs):
         caps = get_capabilities(self.model_name)
@@ -166,6 +202,7 @@ class MinimaxChatOpenAI(NormalizedChatOpenAI):
 _PASSTHROUGH_KWARGS = (
     "timeout", "max_retries", "reasoning_effort", "temperature",
     "api_key", "callbacks", "http_client", "http_async_client",
+    "fallback_llm",
 )
 
 # OpenAI's ``reasoning_effort`` is only accepted by reasoning models — the GPT-5
