@@ -1,6 +1,48 @@
 [
   {
     "trade_date": "2026-08-13",
+    "generated_at": "2026-08-14T00:53:21+08:00",
+    "provider": "openai_compatible",
+    "results": [
+      {
+        "ticker": "512480.SS",
+        "rating": null,
+        "report": null,
+        "files": {},
+        "error": true,
+        "analysis_status": null,
+        "audit_status": null,
+        "evidence_publish": null
+      }
+    ],
+    "request": {
+      "requestId": null,
+      "analysts": [
+        "market",
+        "news",
+        "fundamentals"
+      ],
+      "researchDepth": "standard",
+      "kind": "legacy"
+    },
+    "run": {
+      "id": "31722886612",
+      "attempt": "1",
+      "workflow": "daily-analysis",
+      "url": "https://github.com/gaaiyun/TradingWorkbench/actions/runs/31722886612"
+    },
+    "identity": {
+      "scope": "legacy",
+      "kind": "legacy",
+      "runId": "31722886612",
+      "profileId": null,
+      "requestId": null,
+      "slotId": null,
+      "scheduledFor": null
+    }
+  },
+  {
+    "trade_date": "2026-08-13",
     "generated_at": "2026-08-14T00:21:05+08:00",
     "provider": "openai_compatible",
     "results": [

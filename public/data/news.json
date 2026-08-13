@@ -1,7 +1,7 @@
 {
   "version": 1,
   "status": "ok",
-  "generated_at": "2026-08-14T00:21:05+08:00",
+  "generated_at": "2026-08-14T00:53:21+08:00",
   "trade_date": "2026-08-13",
   "global": {
     "status": "ok",
@@ -9,15 +9,55 @@
     "ticker": null,
     "start_date": "2026-08-06",
     "end_date": "2026-08-13",
-    "fetched_at": "2026-08-13T16:21:07Z",
+    "fetched_at": "2026-08-13T16:53:22Z",
     "items": [
+      {
+        "title": "Oil pares losses after reports Houthis attacked Saudi Aramco refinery",
+        "summary": "",
+        "url": "https://finance.yahoo.com/news/oil-eases-weaker-demand-outlook-045929013.html",
+        "source": "Reuters",
+        "published_at": "2026-08-13T16:45:21Z",
+        "fetched_at": "2026-08-13T16:53:22Z",
+        "ticker": null,
+        "source_tier": "aggregator"
+      },
+      {
+        "title": "Argo Gold Oil Production Falls Month-Over-Month",
+        "summary": "",
+        "url": "https://finance.yahoo.com/energy/articles/argo-gold-oil-production-falls-163159565.html",
+        "source": "MT Newswires",
+        "published_at": "2026-08-13T16:31:59Z",
+        "fetched_at": "2026-08-13T16:53:22Z",
+        "ticker": null,
+        "source_tier": "aggregator"
+      },
+      {
+        "title": "Tech stocks power S&P 500 to record high as oil prices, producer inflation ease",
+        "summary": "",
+        "url": "https://finance.yahoo.com/markets/stocks/articles/wall-st-futures-tick-higher-102006057.html",
+        "source": "Reuters",
+        "published_at": "2026-08-13T16:23:55Z",
+        "fetched_at": "2026-08-13T16:53:22Z",
+        "ticker": null,
+        "source_tier": "aggregator"
+      },
+      {
+        "title": "European shares subdued ahead of euro zone inflation data; focus on Middle East",
+        "summary": "",
+        "url": "https://finance.yahoo.com/markets/world-indices/articles/european-shares-inch-lower-crude-071956648.html",
+        "source": "Reuters",
+        "published_at": "2026-08-13T16:17:36Z",
+        "fetched_at": "2026-08-13T16:53:22Z",
+        "ticker": null,
+        "source_tier": "aggregator"
+      },
       {
         "title": "Prediction: MercadoLibre Will Join Amazon, Walmart, and Costco in the $100 Billion Revenue Club by 2029",
         "summary": "",
         "url": "https://finance.yahoo.com/m/4e3adc0f-4971-3c17-a070-1ea8bd1556cb/prediction%3A-mercadolibre-will.html",
         "source": "Motley Fool",
         "published_at": "2026-08-13T16:13:00Z",
-        "fetched_at": "2026-08-13T16:21:07Z",
+        "fetched_at": "2026-08-13T16:53:22Z",
         "ticker": null,
         "source_tier": "aggregator"
       },
@@ -27,7 +67,7 @@
         "url": "https://finance.yahoo.com/markets/world-indices/articles/seoul-tech-leads-asian-stock-023817725.html",
         "source": "AFP",
         "published_at": "2026-08-13T16:12:29Z",
-        "fetched_at": "2026-08-13T16:21:07Z",
+        "fetched_at": "2026-08-13T16:53:22Z",
         "ticker": null,
         "source_tier": "aggregator"
       },
@@ -37,7 +77,7 @@
         "url": "https://finance.yahoo.com/m/920a14b4-308b-3576-a5b2-d200a92f70e8/epsilon-energy-q2-earnings.html",
         "source": "MarketBeat",
         "published_at": "2026-08-13T16:04:40Z",
-        "fetched_at": "2026-08-13T16:21:07Z",
+        "fetched_at": "2026-08-13T16:53:22Z",
         "ticker": null,
         "source_tier": "aggregator"
       },
@@ -47,7 +87,7 @@
         "url": "https://finance.yahoo.com/m/361875cf-afc6-3da6-8b52-e4931fb7c743/loading-up-on-amazon%3A-the.html",
         "source": "24/7 Wall St.",
         "published_at": "2026-08-13T16:02:04Z",
-        "fetched_at": "2026-08-13T16:21:07Z",
+        "fetched_at": "2026-08-13T16:53:22Z",
         "ticker": null,
         "source_tier": "aggregator"
       },
@@ -57,7 +97,7 @@
         "url": "https://finance.yahoo.com/markets/stocks/articles/2-wall-street-favorite-stocks-152500433.html",
         "source": "StockStory",
         "published_at": "2026-08-13T15:25:00Z",
-        "fetched_at": "2026-08-13T16:21:07Z",
+        "fetched_at": "2026-08-13T16:53:22Z",
         "ticker": null,
         "source_tier": "aggregator"
       },
@@ -67,56 +107,16 @@
         "url": "https://finance.yahoo.com/m/a86837ac-df8a-3747-8923-5f2f47063c11/stock-market-today%3A-dow%27s.html",
         "source": "Investor's Business Daily",
         "published_at": "2026-08-13T15:24:53Z",
-        "fetched_at": "2026-08-13T16:21:07Z",
+        "fetched_at": "2026-08-13T16:53:22Z",
         "ticker": null,
         "source_tier": "aggregator"
-      },
-      {
-        "title": "Stocks rise as traders reduce rate hike bets, oil prices drop",
-        "summary": "",
-        "url": "https://finance.yahoo.com/markets/world-indices/articles/asian-stocks-rise-us-inflation-010444910.html",
-        "source": "Reuters",
-        "published_at": "2026-08-13T15:21:08Z",
-        "fetched_at": "2026-08-13T16:21:07Z",
-        "ticker": null,
-        "source_tier": "aggregator"
-      },
-      {
-        "title": "Oil falls more than 3% on weaker global demand outlook and US crude buildup",
-        "summary": "",
-        "url": "https://finance.yahoo.com/news/oil-eases-weaker-demand-outlook-045929013.html",
-        "source": "Reuters",
-        "published_at": "2026-08-13T15:18:56Z",
-        "fetched_at": "2026-08-13T16:21:07Z",
-        "ticker": null,
-        "source_tier": "aggregator"
-      },
-      {
-        "title": "3 Reasons to Hold Netflix Stock Despite a 20.9% YTD Decline",
-        "summary": "",
-        "url": "https://finance.yahoo.com/markets/stocks/articles/3-reasons-hold-netflix-stock-150600699.html",
-        "source": "Zacks",
-        "published_at": "2026-08-13T15:06:00Z",
-        "fetched_at": "2026-08-13T16:21:07Z",
-        "ticker": null,
-        "source_tier": "aggregator"
-      },
-      {
-        "title": "Federal Reserve Board issues enforcement action with former employee of Regions Bank",
-        "summary": "Federal Reserve Board issues enforcement action with former employee of Regions Bank",
-        "url": "https://www.federalreserve.gov/newsevents/pressreleases/enforcement20260813a.htm",
-        "source": "Federal Reserve",
-        "published_at": "2026-08-13T15:00:00Z",
-        "fetched_at": "2026-08-13T16:21:07Z",
-        "ticker": null,
-        "source_tier": "primary"
       }
     ],
     "source_statuses": [
       {
         "source": "Yahoo Finance",
         "status": "ok",
-        "item_count": 39
+        "item_count": 40
       },
       {
         "source": "Federal Reserve",
@@ -132,7 +132,7 @@
       "ticker": "512480.SS",
       "start_date": "2026-08-13",
       "end_date": "2026-08-13",
-      "fetched_at": "2026-08-13T16:21:08Z",
+      "fetched_at": "2026-08-13T16:53:24Z",
       "items": [],
       "source_statuses": [
         {
@@ -155,12 +155,52 @@
   },
   "items": [
     {
+      "title": "Oil pares losses after reports Houthis attacked Saudi Aramco refinery",
+      "summary": "",
+      "url": "https://finance.yahoo.com/news/oil-eases-weaker-demand-outlook-045929013.html",
+      "source": "Reuters",
+      "published_at": "2026-08-13T16:45:21Z",
+      "fetched_at": "2026-08-13T16:53:22Z",
+      "ticker": null,
+      "source_tier": "aggregator"
+    },
+    {
+      "title": "Argo Gold Oil Production Falls Month-Over-Month",
+      "summary": "",
+      "url": "https://finance.yahoo.com/energy/articles/argo-gold-oil-production-falls-163159565.html",
+      "source": "MT Newswires",
+      "published_at": "2026-08-13T16:31:59Z",
+      "fetched_at": "2026-08-13T16:53:22Z",
+      "ticker": null,
+      "source_tier": "aggregator"
+    },
+    {
+      "title": "Tech stocks power S&P 500 to record high as oil prices, producer inflation ease",
+      "summary": "",
+      "url": "https://finance.yahoo.com/markets/stocks/articles/wall-st-futures-tick-higher-102006057.html",
+      "source": "Reuters",
+      "published_at": "2026-08-13T16:23:55Z",
+      "fetched_at": "2026-08-13T16:53:22Z",
+      "ticker": null,
+      "source_tier": "aggregator"
+    },
+    {
+      "title": "European shares subdued ahead of euro zone inflation data; focus on Middle East",
+      "summary": "",
+      "url": "https://finance.yahoo.com/markets/world-indices/articles/european-shares-inch-lower-crude-071956648.html",
+      "source": "Reuters",
+      "published_at": "2026-08-13T16:17:36Z",
+      "fetched_at": "2026-08-13T16:53:22Z",
+      "ticker": null,
+      "source_tier": "aggregator"
+    },
+    {
       "title": "Prediction: MercadoLibre Will Join Amazon, Walmart, and Costco in the $100 Billion Revenue Club by 2029",
       "summary": "",
       "url": "https://finance.yahoo.com/m/4e3adc0f-4971-3c17-a070-1ea8bd1556cb/prediction%3A-mercadolibre-will.html",
       "source": "Motley Fool",
       "published_at": "2026-08-13T16:13:00Z",
-      "fetched_at": "2026-08-13T16:21:07Z",
+      "fetched_at": "2026-08-13T16:53:22Z",
       "ticker": null,
       "source_tier": "aggregator"
     },
@@ -170,7 +210,7 @@
       "url": "https://finance.yahoo.com/markets/world-indices/articles/seoul-tech-leads-asian-stock-023817725.html",
       "source": "AFP",
       "published_at": "2026-08-13T16:12:29Z",
-      "fetched_at": "2026-08-13T16:21:07Z",
+      "fetched_at": "2026-08-13T16:53:22Z",
       "ticker": null,
       "source_tier": "aggregator"
     },
@@ -180,7 +220,7 @@
       "url": "https://finance.yahoo.com/m/920a14b4-308b-3576-a5b2-d200a92f70e8/epsilon-energy-q2-earnings.html",
       "source": "MarketBeat",
       "published_at": "2026-08-13T16:04:40Z",
-      "fetched_at": "2026-08-13T16:21:07Z",
+      "fetched_at": "2026-08-13T16:53:22Z",
       "ticker": null,
       "source_tier": "aggregator"
     },
@@ -190,7 +230,7 @@
       "url": "https://finance.yahoo.com/m/361875cf-afc6-3da6-8b52-e4931fb7c743/loading-up-on-amazon%3A-the.html",
       "source": "24/7 Wall St.",
       "published_at": "2026-08-13T16:02:04Z",
-      "fetched_at": "2026-08-13T16:21:07Z",
+      "fetched_at": "2026-08-13T16:53:22Z",
       "ticker": null,
       "source_tier": "aggregator"
     },
@@ -200,7 +240,7 @@
       "url": "https://finance.yahoo.com/markets/stocks/articles/2-wall-street-favorite-stocks-152500433.html",
       "source": "StockStory",
       "published_at": "2026-08-13T15:25:00Z",
-      "fetched_at": "2026-08-13T16:21:07Z",
+      "fetched_at": "2026-08-13T16:53:22Z",
       "ticker": null,
       "source_tier": "aggregator"
     },
@@ -210,49 +250,9 @@
       "url": "https://finance.yahoo.com/m/a86837ac-df8a-3747-8923-5f2f47063c11/stock-market-today%3A-dow%27s.html",
       "source": "Investor's Business Daily",
       "published_at": "2026-08-13T15:24:53Z",
-      "fetched_at": "2026-08-13T16:21:07Z",
+      "fetched_at": "2026-08-13T16:53:22Z",
       "ticker": null,
       "source_tier": "aggregator"
-    },
-    {
-      "title": "Stocks rise as traders reduce rate hike bets, oil prices drop",
-      "summary": "",
-      "url": "https://finance.yahoo.com/markets/world-indices/articles/asian-stocks-rise-us-inflation-010444910.html",
-      "source": "Reuters",
-      "published_at": "2026-08-13T15:21:08Z",
-      "fetched_at": "2026-08-13T16:21:07Z",
-      "ticker": null,
-      "source_tier": "aggregator"
-    },
-    {
-      "title": "Oil falls more than 3% on weaker global demand outlook and US crude buildup",
-      "summary": "",
-      "url": "https://finance.yahoo.com/news/oil-eases-weaker-demand-outlook-045929013.html",
-      "source": "Reuters",
-      "published_at": "2026-08-13T15:18:56Z",
-      "fetched_at": "2026-08-13T16:21:07Z",
-      "ticker": null,
-      "source_tier": "aggregator"
-    },
-    {
-      "title": "3 Reasons to Hold Netflix Stock Despite a 20.9% YTD Decline",
-      "summary": "",
-      "url": "https://finance.yahoo.com/markets/stocks/articles/3-reasons-hold-netflix-stock-150600699.html",
-      "source": "Zacks",
-      "published_at": "2026-08-13T15:06:00Z",
-      "fetched_at": "2026-08-13T16:21:07Z",
-      "ticker": null,
-      "source_tier": "aggregator"
-    },
-    {
-      "title": "Federal Reserve Board issues enforcement action with former employee of Regions Bank",
-      "summary": "Federal Reserve Board issues enforcement action with former employee of Regions Bank",
-      "url": "https://www.federalreserve.gov/newsevents/pressreleases/enforcement20260813a.htm",
-      "source": "Federal Reserve",
-      "published_at": "2026-08-13T15:00:00Z",
-      "fetched_at": "2026-08-13T16:21:07Z",
-      "ticker": null,
-      "source_tier": "primary"
     }
   ]
 }
