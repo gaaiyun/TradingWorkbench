@@ -174,10 +174,26 @@ _PASSTHROUGH_KWARGS = (
 # Drop the kwarg for those rather than crash the run.
 _OPENAI_REASONING_MODEL = re.compile(r"^(gpt-5|o[1-9])")
 
+# xAI's flagship grok-N(.M) models default to reasoning and accept the same
+# kwarg through the openai_compatible provider (confirmed live against
+# grok-4.5: unset reasoning_effort burned 3527 reasoning tokens on a trivial
+# prompt, "low" burned 1738). Explicit non-reasoning / utility variants
+# (grok-*-non-reasoning, grok-chat-fast, grok-composer-*, grok-build-*) don't
+# start with a version digit right after "grok-" and are excluded by the same
+# match; "-non-reasoning" is excluded explicitly since it does.
+_GROK_REASONING_MODEL = re.compile(r"^grok-\d")
+_GROK_NON_REASONING_SUFFIX = re.compile(r"non-reasoning")
+
 
 def _supports_reasoning_effort(model: str) -> bool:
-    """Whether the (native OpenAI) model accepts ``reasoning_effort``."""
-    return bool(_OPENAI_REASONING_MODEL.match(model.lower().strip()))
+    """Whether `model` accepts an OpenAI-style ``reasoning_effort`` kwarg."""
+    normalized = model.lower().strip()
+    if _OPENAI_REASONING_MODEL.match(normalized):
+        return True
+    return bool(
+        _GROK_REASONING_MODEL.match(normalized)
+        and not _GROK_NON_REASONING_SUFFIX.search(normalized)
+    )
 
 
 @dataclass(frozen=True)
