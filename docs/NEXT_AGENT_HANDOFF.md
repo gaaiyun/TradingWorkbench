@@ -1,6 +1,6 @@
 # Trading Workbench 下一 Agent 交接
 
-更新日期：2026-08-13（修复 Grok 推理模型未接入 reasoning_effort 导致的生产 524 超时；修复已提交但未推送，见 §1 顶部）
+更新日期：2026-08-13（reasoning_effort 两处独立缺口均已修复并推送；下一次真实 run 是叠加验证，见 §1 顶部）
 
 实现基线：`main`。不要依赖本文中的旧提交号；接手时同时执行 `git rev-parse HEAD`、`git rev-parse origin/main`，并读取 Pages 与 Worker health 的 commit SHA。
 
@@ -16,7 +16,33 @@
 
 ## 1. 当前结论
 
-### 2026-08-13 · 修复 Grok 推理模型未识别导致的 reasoning_effort 失效与生产 524 超时（⚠️ 已提交未推送）
+### 2026-08-13（续）· reasoning_effort 有第二处独立缺口：配置从未转发给 openai_compatible
+
+上一条记录的修复（`8880654`）推送后，做了两次真实单标的复验（同一 ticker
+`512480.SS`，前后相隔约 25 分钟）：run `31717768620` 仍报 `Error 524`，run
+`31720148171` 换成了 `Error 503 Service temporarily unavailable`。两次不同的
+瞬时错误类型，一度让人以为是 `sub.anzhiyu.com` 中转站本身当前不稳定（并且
+用 `curl` 单独探测 `/v1/chat/completions` 也确认了这一点：`/v1/models` 200
+且 6.8 秒内响应，但一次仅要求回一个词的最小对话请求在 60 秒左右直接断线）——
+但另一个更根本的原因同时存在：**`TradingAgentsGraph._get_provider_kwargs()`
+转发 `openai_reasoning_effort` 配置的判断条件写死是 `provider == "openai"` 字面量**。
+生产 provider 是 `openai_compatible`，不匹配这个条件，所以配置值从未被塞进
+`kwargs`，从未到达上一个修复所在的 `_supports_reasoning_effort()` 那一层——
+**上一个修复在两次真实复验里其实完全没有生效**，两次复验用的仍是无限制推理
+强度，和修复前一模一样。用真实 `TradingAgentsGraph` 构造生产同款 config（不发
+请求）直接实测 `deep_thinking_llm.reasoning_effort` 为 `None` 时定位到这一点。
+修复：`_get_provider_kwargs()` 改用 `is_openai_compatible()` 判定（覆盖
+`openai_compatible`/`xai`/`deepseek` 等注册表里的全部别名，而不是只认
+`"openai"` 一个字面量）；本地构造同款生产 config 复测，`deep_thinking_llm`/
+`quick_thinking_llm.reasoning_effort` 现在确认为 `"low"`。新增回归测试锁定
+`_get_provider_kwargs()` 在三个不同 openai-compatible 别名下的转发行为。全量
+回归 `720 passed / 2 skipped`。提交 `8f67e2c`，已推送。
+**这次修复之后还没有做过真实验证跑**——中转站在两次复验期间表现出的瞬时不
+稳定（524→503→连接中断）究竟是与推理耗时相关，还是纯粹独立于本次改动的
+后端问题，仍未厘清；接手时如果看到新的失败，先看是不是这个问题第一次真正
+被验证。
+
+### 2026-08-13 · 修复 Grok 推理模型未识别导致的 reasoning_effort 失效与生产 524 超时（已推送）
 
 - 今日 08:00 定时 `daily-analysis`（run `31680176206`）**两只标的全部失败、整轮零产出**：
   `515880.SS` 与 `512480.SS` 均报 `openai.InternalServerError: Error code: 524`
@@ -50,12 +76,9 @@
   并显式设置同名仓库 Variable 为 `low`（基于上面的实测数据，在明显降低 token 消耗的
   同时保持答案正确；对报告质量的实际影响还没有大样本证据，下一个 agent 如果观察到
   Grok 输出质量明显下降，这是第一个该回查的变量）。
-- **⚠️ 阻塞项：修复已提交（commit `8880654`，`fix(模型): 识别Grok推理模型使reasoning_effort生效`）
-  但按用户"不要自动推送"的明确指示尚未 push 到 `origin/main`。** 仓库 Variable 已经
-  是新值，但代码和工作流改动只存在于本 worktree（`feat/fund-flow` 分支）本地——在
-  push 之前，下一次定时 `daily-analysis` 会以完全相同的方式再次 524 超时、零产出。
-  接手时第一件事：确认这个提交是否已经推送（`git log origin/main -3`
-  是否包含 `8880654` 或其等价内容），没有的话这是最高优先级。
+- 提交 `8880654` 已推送到 `origin/main`。**但这条修复单独并不足以让 reasoning_effort
+  在生产生效**——还有第二处独立缺口，见上一条（本节之前那条，时间戳更新）记录；
+  两条修复必须一起看，只看这一条会误以为问题已经解决。
 - 顺带审查了 Codex 在本轮新增的 Portfolio Manager 有界修订机制（`bf887e1` →
   `46a03a6` → `a0be301` → `d37838f`，见下一条记录）与对应的
   `tests/test_memory_log.py` 新增用例：校验逻辑调用的是真实、未削弱的
@@ -312,15 +335,20 @@ GitHub 自动部署链已恢复。仓库主人在 2026-07-27 配置了 `CLOUDFLA
 
 以下每条都由实际执行的命令或 HTTP 请求得出，不是从上一轮文档抄来的。已完成项也保留，便于下一个 agent 区分”代码未做”与”生产依赖未满足”。
 
-### ⚠️ 2026-08-13：今日定时 daily-analysis 完全失败，reasoning_effort 修复未推送前不会自愈
+### ⚠️ 2026-08-13：今日定时 daily-analysis 完全失败；reasoning_effort 有两处独立缺口，均已修复并推送，但还没有一次成功的真实复验
 
 `gh run view 31680176206` 确认 08:00 UTC 定时批次两只标的均以 `Error code: 524`
 失败，`report-audit.json` 本轮没有新增任何 verified/invalidated 记录——不是数据质量
-问题，是请求从未跑完。根因与修复见 §1 顶部条目。`gh variable list --repo
-gaaiyun/TradingWorkbench` 已确认 `TRADINGAGENTS_OPENAI_REASONING_EFFORT=low`
-生效，但代码侧的识别逻辑和工作流 env 接线只在本地提交 `8880654`，`git log
-origin/main -1` 此刻仍是 `d77c019`（不含该提交）。**下一次定时 run 之前如果这个
-提交没有被推送，会以同样方式再次超时。**
+问题，是请求从未跑完。第一处缺口（`_supports_reasoning_effort()` 不认 grok 模型，
+提交 `8880654`）修复推送后，两次真实单标的复验（`31717768620`、`31720148171`）
+分别报 `Error 524`、`Error 503`，仍然失败——因为还有第二处独立缺口
+（`_get_provider_kwargs()` 转发条件写死 `provider=="openai"`，`openai_compatible`
+被排除在外，配置值从未到达第一处修复所在的那层），提交 `8f67e2c` 修复。两处
+修复现在都在 `origin/main` 上（`git log origin/main -1` 应为 `8f67e2c` 或其后）。
+**下一次定时或手动 run 是这两处修复叠加后的第一次真实检验**——如果仍然失败，
+先看是不是中转站当时的瞬时不稳定（`curl /v1/chat/completions` 单独探测过一次，
+确认 `sub.anzhiyu.com` 在两次复验期间连一次最小对话请求都无法在 60 秒内正常
+返回，`/v1/models` 却始终正常），而不是默认怀疑代码又漏了什么。
 
 ### ✅ 2026-08-03 复核解决：发布门禁不再把周末或盘前 `stale` 误判为数据故障
 
@@ -797,7 +825,8 @@ gh workflow run deploy-monitor.yml --repo gaaiyun/TradingWorkbench --ref main
 | 2026-08-11 | 修复结构化输出 free-text 回退无完整性校验（`invoke_structured_or_freetext`）：仅在 Portfolio Manager 启用 `required_labels`（唯一在 prompt 里承诺回退格式的调用点），缺 label 重试一次仍缺则抛 `IncompleteAgentOutputError`，由既有逐 ticker try/except 兜底；追溯失效首份 verified 报告 `512480.SS 2026-08-05`（`TRUNCATED_AGENT_OUTPUT`，正文在"最终决定维持"处截断、缺失 Investment Thesis 整段）；顺带确认 HashKey/新闻去重两处上周修复生产有效（`hashkey-ir=ok`、0 组重复 cluster）、VolGuard 94/94 合约无上游错误 | 新增 6 条单测（含"重试后仍不完整会 raise"）；提交 `9dfdfd2`；Functions `436/1 skip`、frontend `121/121`、Python `700/2 skip`（本机需 `PYTHONUTF8=1`，缺失会有 9 个与本轮改动无关的 GBK 本地化假失败）、Ruff 全绿；CI `31417813422`、deploy-workbench `31417813672` 均成功；生产 `/api/health` 回读 `commitSha=9dfdfd2e7f`、`deployedAt=2026-08-10T18:11:48Z`、`status:ok`；`report-audit.json` 确认该报告 `auditStatus=invalidated`、`verifiedReports=0` |
 | 2026-08-11 | 用户预警火山引擎 key 即将到期（driving 全部 daily-analysis LLM 调用 + course-model-benchmark），已存 memory 并记录续期操作步骤；再次实测到手动 `wrangler pages deploy` 绕开 deploy-workbench.yml（纯 docs 提交 `45f10f2` 却已是 Production），D1 身份记录再次不同步导致 `/api/health` 变回 degraded（这次是 `invalid_metadata`，证明 08-02 的并发修复未回归，是新的手动部署事件）| `gh run list` 确认无对应 deploy-workbench 运行，`wrangler pages deployment list` 确认 Cloudflare 侧确有该部署；用 `gh workflow run deploy-workbench.yml` 补一次正规部署后 `/api/health` 恢复 `status:ok`、`deployment_manifest.ok=true`、`latency_ms=284`；daily-analysis 近 10 次运行 100% success，无认证报错迹象 |
 | 2026-08-13 | 区分旧 key 调用失败与新 key 下的 Evidence 门禁失败；新 key 已由单标的完整决策链验证。Portfolio Manager 改为原子化带引用段落，并禁止从政策/公司行动虚构催化与流动性效果；校验器保持 fail-closed | 旧失败 run `31575300604` 使用火山 `glm-5.2` 并报 `InvalidSubscription`；新配置 run `31646745586` 为 `1/1 tickers ok`、提交 `b97d6e5`。首轮修复 CI `31648019104` 全绿，生产复验 `31648209934` 完整成功但因 Grok 多写一位 MACD 小数仍为 `Not Rated`；现增加一次由稳定门禁错误码驱动的有界生成修订，最终生产结果以第二轮复验为准 |
-| 2026-08-13 | 修复 `_supports_reasoning_effort()` 不识别 Grok 推理模型，导致 `reasoning_effort` 被静默丢弃；同时发现并修复 `TRADINGAGENTS_OPENAI_REASONING_EFFORT` 从未接入 daily-analysis/analysis-request 工作流 env 的缺口；设置该 Variable 为 `low`。审查 Codex 独立完成的 Portfolio Manager 两次有界修订机制（`bf887e1`/`46a03a6`/`a0be301`/`d37838f`）及配套测试，逻辑正确、上限是刻意成本控制，不建议加第三次校验 | 今日 08:00 定时 run `31680176206` 两标的均 `Error code: 524`、52 分钟零产出（对照正常 run ~10 分钟）；`_effort_on()` 实测 grok-4.5 不设置耗 3527 推理 token、`low` 降到 1738 且答案仍正确；RED（6 failed）→ GREEN（23 passed）；全量回归 `715 passed / 2 skipped`；提交 `8880654`；**⚠️ 按用户指示未推送 origin/main，见 §1 顶部** |
+| 2026-08-13 | 修复 `_supports_reasoning_effort()` 不识别 Grok 推理模型，导致 `reasoning_effort` 被静默丢弃；同时发现并修复 `TRADINGAGENTS_OPENAI_REASONING_EFFORT` 从未接入 daily-analysis/analysis-request 工作流 env 的缺口；设置该 Variable 为 `low`。审查 Codex 独立完成的 Portfolio Manager 两次有界修订机制（`bf887e1`/`46a03a6`/`a0be301`/`d37838f`）及配套测试，逻辑正确、上限是刻意成本控制，不建议加第三次校验 | 今日 08:00 定时 run `31680176206` 两标的均 `Error code: 524`、52 分钟零产出（对照正常 run ~10 分钟）；`_effort_on()` 实测 grok-4.5 不设置耗 3527 推理 token、`low` 降到 1738 且答案仍正确；RED（6 failed）→ GREEN（23 passed）；全量回归 `715 passed / 2 skipped`；提交 `8880654`，已推送 |
+| 2026-08-13 | 上一条修复推送后两次真实复验仍失败（`Error 524`→`Error 503`），定位到第二处独立缺口：`_get_provider_kwargs()` 转发 `openai_reasoning_effort` 的条件写死 `provider=="openai"`，`openai_compatible`/`xai`/`deepseek` 等全部被排除，配置从未到达上一条修复所在的层——上一条修复在两次复验里其实完全没生效。改用 `is_openai_compatible()` 判定 | 本地用真实 `TradingAgentsGraph` 构造生产同款 config（不发请求）实测 `deep_thinking_llm.reasoning_effort` 从 `None` 修复到 `"low"`；新增 3 项参数化回归测试；全量回归 `720 passed / 2 skipped`；`curl` 探测确认同期中转站 `/v1/chat/completions` 本身也有瞬时不稳定（连接在 60 秒内中断），`/v1/models` 正常；提交 `8f67e2c`，已推送 |
 
 ## 1.6 2026-07-30 全局质量复审
 
