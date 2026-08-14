@@ -1,7 +1,7 @@
 {
   "status": "ok",
-  "generated_at": "2026-08-14T04:17:58+08:00",
-  "trade_date": "2026-08-13",
+  "generated_at": "2026-08-14T15:46:37+08:00",
+  "trade_date": "2026-08-14",
   "provider": "openai_compatible",
   "analysts": [
     "market",
@@ -16,22 +16,22 @@
       "fundamentals"
     ],
     "researchDepth": "standard",
-    "kind": "legacy"
+    "kind": "monitor"
   },
   "run": {
-    "id": "31740098198",
+    "id": "31781198465",
     "attempt": "1",
     "workflow": "daily-analysis",
-    "url": "https://github.com/gaaiyun/TradingWorkbench/actions/runs/31740098198"
+    "url": "https://github.com/gaaiyun/TradingWorkbench/actions/runs/31781198465"
   },
   "identity": {
-    "scope": "legacy",
-    "kind": "legacy",
-    "runId": "31740098198",
-    "profileId": null,
+    "scope": "profile",
+    "kind": "monitor",
+    "runId": "31781198465",
+    "profileId": "cn-semi-comms",
     "requestId": null,
-    "slotId": null,
-    "scheduledFor": null
+    "slotId": "slot-aa7314a520ee8cd46f0b67b570ae7fc865e89542c357b80cc5792ab06bfc00e9",
+    "scheduledFor": "2026-08-14T07:20:00.000Z"
   },
   "rating_tiers": [
     "Sell",
@@ -42,26 +42,26 @@
   ],
   "results": [
     {
-      "ticker": "512480.SS",
-      "rating": "Hold",
-      "report": "reports/512480.SS/2026-08-13-v3/complete_report.md",
+      "ticker": "515880.SS",
+      "rating": "Not Rated",
+      "report": "reports/515880.SS/2026-08-14/complete_report.md",
       "files": {
-        "fundamentals": "reports/512480.SS/2026-08-13-v3/1_analysts/fundamentals.md",
-        "market": "reports/512480.SS/2026-08-13-v3/1_analysts/market.md",
-        "news": "reports/512480.SS/2026-08-13-v3/1_analysts/news.md",
-        "bear": "reports/512480.SS/2026-08-13-v3/2_research/bear.md",
-        "bull": "reports/512480.SS/2026-08-13-v3/2_research/bull.md",
-        "manager": "reports/512480.SS/2026-08-13-v3/2_research/manager.md",
-        "trader": "reports/512480.SS/2026-08-13-v3/3_trading/trader.md",
-        "aggressive": "reports/512480.SS/2026-08-13-v3/4_risk/aggressive.md",
-        "conservative": "reports/512480.SS/2026-08-13-v3/4_risk/conservative.md",
-        "neutral": "reports/512480.SS/2026-08-13-v3/4_risk/neutral.md",
-        "decision": "reports/512480.SS/2026-08-13-v3/5_portfolio/decision.md",
-        "complete_report": "reports/512480.SS/2026-08-13-v3/complete_report.md"
+        "fundamentals": "reports/515880.SS/2026-08-14/1_analysts/fundamentals.md",
+        "market": "reports/515880.SS/2026-08-14/1_analysts/market.md",
+        "news": "reports/515880.SS/2026-08-14/1_analysts/news.md",
+        "bear": "reports/515880.SS/2026-08-14/2_research/bear.md",
+        "bull": "reports/515880.SS/2026-08-14/2_research/bull.md",
+        "manager": "reports/515880.SS/2026-08-14/2_research/manager.md",
+        "trader": "reports/515880.SS/2026-08-14/3_trading/trader.md",
+        "aggressive": "reports/515880.SS/2026-08-14/4_risk/aggressive.md",
+        "conservative": "reports/515880.SS/2026-08-14/4_risk/conservative.md",
+        "neutral": "reports/515880.SS/2026-08-14/4_risk/neutral.md",
+        "decision": "reports/515880.SS/2026-08-14/5_portfolio/decision.md",
+        "complete_report": "reports/515880.SS/2026-08-14/complete_report.md"
       },
-      "decision_excerpt": "**Rating**: Hold\n\n**Executive Summary**: `512480.SS` 近期收盘从 [M648] `0.969` 走到 [M655] `1.07`，且最近 8 个交易日收盘变化为 [D2] `10.42311662%`，说明短线确有修复；但最新收盘仍低于 MA60 [I6] `1.16225`，严格均线排列为 [D7] `none`，中期趋势尚未被证据确认。ETF 的 NAV、折溢价、跟踪误差、费率、持仓集中度、规模和申赎数据均为 `unavailable`，因此当前更适合维持中性持有，而不是把缺失信息解释为质量改善。\n\n**Investment Thesis**: 从技术状态看，`512480.SS` 最新收盘 [M655] `1.07` 高于 MA20 [I5] `1.05645`，但仍低于 MA60 [I6] `1.16225`，且严格均线排列为 [",
-      "analysis_status": "rated",
-      "audit_status": "verified",
+      "decision_excerpt": "**Rating**: Hold\n\n**Executive Summary**: 对 515880.SS（国泰中证全指通信设备交易型开放式指数证券投资基金）的最终交易决定为 Hold：维持现有暴露，既不加仓追涨，亦不机械减仓或清仓。\n\n近 8 个交易日收盘变化为 +7.47663551%〔D2〕，短窗价格录得正变化。\n\n最新一日收盘变化为 +3.6036036%〔D3〕，与短窗方向一致。\n\n最新收盘 0.69〔M1260〕相对 MA20 0.6412〔I5〕为 +7.61072988%〔D5〕，价格位于 MA20 上方。\n\nRSI14=52.26501616〔I11〕相对 rsiOversoldThreshold=30〔D8〕、rsiMidlineThreshold=50〔D9〕、rsiOverboughtThreshold=70〔D10〕处于中性区间。\n\nmacdHistogram=0.",
+      "analysis_status": "insufficient_evidence",
+      "audit_status": "legacy_unverified",
       "evidence_publish": {
         "published": true,
         "status": 201
@@ -69,9 +69,43 @@
       "marketHistory": {
         "source": "tencent",
         "adjustment": "qfq",
-        "barCount": 655,
+        "barCount": 1260,
+        "startAt": "2021-06-06T16:00:00Z",
+        "endAt": "2026-08-13T16:00:00Z"
+      },
+      "error": null
+    },
+    {
+      "ticker": "512480.SS",
+      "rating": "Not Rated",
+      "report": "reports/512480.SS/2026-08-14/complete_report.md",
+      "files": {
+        "fundamentals": "reports/512480.SS/2026-08-14/1_analysts/fundamentals.md",
+        "market": "reports/512480.SS/2026-08-14/1_analysts/market.md",
+        "news": "reports/512480.SS/2026-08-14/1_analysts/news.md",
+        "bear": "reports/512480.SS/2026-08-14/2_research/bear.md",
+        "bull": "reports/512480.SS/2026-08-14/2_research/bull.md",
+        "manager": "reports/512480.SS/2026-08-14/2_research/manager.md",
+        "trader": "reports/512480.SS/2026-08-14/3_trading/trader.md",
+        "aggressive": "reports/512480.SS/2026-08-14/4_risk/aggressive.md",
+        "conservative": "reports/512480.SS/2026-08-14/4_risk/conservative.md",
+        "neutral": "reports/512480.SS/2026-08-14/4_risk/neutral.md",
+        "decision": "reports/512480.SS/2026-08-14/5_portfolio/decision.md",
+        "complete_report": "reports/512480.SS/2026-08-14/complete_report.md"
+      },
+      "decision_excerpt": "**Rating**: Underweight\n\n**Executive Summary**:\n对 `512480.SS` 的立场为 Underweight：短窗收盘回升与中期均线压力并存，且严格均线排列为 none（[D7]），不足以将反弹写成已确认转势。\n\n最新收盘为 1.08（[M656]）。\n\n相对 MA20 为 +2.19047168%（[D5]）。\n\nMA20 为 1.05685（[I5]）。\n\n相对 MA60 为 -7.09277818%（[D6]）。\n\nMA60 为 1.16245（[I6]）。\n\n本账本未提供可引用的 NAV、持仓集中度、费率、跟踪误差或折溢价数值，相关产品字段为 unavailable，故不能据此加仓或把该主题 ETF 当作已完成产品尽调的配置结论。\n\n**Investment Thesis**:\n- 8 个交易日窗口收盘变动为 +4.54985479%",
+      "analysis_status": "insufficient_evidence",
+      "audit_status": "legacy_unverified",
+      "evidence_publish": {
+        "published": true,
+        "status": 201
+      },
+      "marketHistory": {
+        "source": "tencent",
+        "adjustment": "qfq",
+        "barCount": 656,
         "startAt": "2023-11-29T16:00:00Z",
-        "endAt": "2026-08-12T16:00:00Z"
+        "endAt": "2026-08-13T16:00:00Z"
       },
       "error": null
     }
