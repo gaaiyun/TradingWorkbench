@@ -1,10 +1,10 @@
 # Trading Workbench 下一 Agent 交接
 
-更新日期：2026-08-13（Grok→GPT 自动故障转移已通过真实生产验证：中转站故障持续超 1 小时、grok 触发 12 次瞬时错误，全部由兜底接住，最终 1/1 tickers ok，见 §1 顶部）
+更新日期：2026-08-18（新增数据目录、宇宙快照和有时点约束的单标的回测校验；生产状态须以本轮发布后的真实回读为准）
 
 实现基线：`main`。不要依赖本文中的旧提交号；接手时同时执行 `git rev-parse HEAD`、`git rev-parse origin/main`，并读取 Pages 与 Worker health 的 commit SHA。
 
-工作分支：`feat/fund-flow`；权威发布分支：`main`。本轮代码、报告数据和本文均直接同步到 `origin/main`；接手时不得沿用本文中的短 SHA，应以当前 `origin/main` 和 Pages/Worker 两个 health 端点的完整 SHA 为准。
+当前实现 worktree 分支：`release/model-migration-20260813`；权威发布分支：`main`。接手时不得沿用本文中的短 SHA，应以当前 `origin/main` 和 Pages/Worker 两个 health 端点的完整 SHA 为准。
 
 ## 0. 本文的地位与维护方式
 
@@ -15,6 +15,27 @@
 **维护约定**：任何 agent 做完一轮工作后，必须回到本文更新三处——§1 当前结论、§1.5 生产状态、§15 更新日志。发现本文与代码或生产不符时，**在同一提交里修正本文**，不要另开新的交接文档。数字和状态必须来自实际执行的命令，不要沿用上一轮的结论。
 
 ## 1. 当前结论
+
+### 2026-08-18 · 数据目录、股票宇宙与回测校验
+
+- 外部参考系统的 `1092` 只股票、`957,684` 行和 `103` 个因子已明确标为其内部
+  `stock_signal_features` 统计，不是本项目数据，也不是 A 股全市场。
+- 新增 `/api/data-catalog`、`/api/universe` 和 `/api/backtest`。数据目录与宇宙只读；
+  回测只读取当前 profile 已存 qfq 日线，不写 D1、不进入 Evidence、报告或问答。
+- A 股宇宙目标是东方财富当前上市股票 best-effort 快照，港美只追加 settings 中的核心标的。
+  历史退市成员仍为 `unavailable`，不得据此声称消除了生存者偏差。
+- 回测支持 `momentum20 / ma5x20`，收盘形成信号、下一交易日开盘成交、固定持有期后开盘
+  退出，拒绝周末、非法 OHLCV、样本不足和非 qfq 序列。默认每边 3bp 成本和 5bp 滑点；
+  停牌、涨跌停封单、申赎、最低佣金和盘口冲击未建模，页面明确“不代表实盘”。
+- 不新增第八个一级入口，不改 D1 migration、Worker slot、Provider 健康、EvidencePacket、
+  Manifest 或报告哈希。逐步记录和回滚见 [数据目录与回测校验实施记录](data-backtest-rollout.md)。
+- 发布前必要回归为 Functions `442 passed / 1 skipped`、前端 `122/122`，脚本语法与资产版本
+  检查通过；1440×1000、390×844 浏览器均无横向溢出或页面错误，回测表单可提交并显示
+  完整指标与限制。Python、Worker、D1 migration 均未改动，本地未重复跑 Python 全量矩阵。
+- 发布审阅补正了显式 `0 bp` 成本、宇宙筛选总数，并让宇宙机器人提交后显式 dispatch
+  `deploy-workbench.yml`，避免 GitHub token push 不触发级联部署。
+- 本节在代码实施阶段更新；只有 GitHub Actions、Pages SHA 和三个生产 API 实测完成后，
+  才能把状态改为“已上线”。
 
 ### 2026-08-13（三续）· GPT 故障转移真实生产验证通过：中转站故障持续 1 小时+，兜底全部接住，最终报告成功产出
 
@@ -909,6 +930,7 @@ gh workflow run deploy-monitor.yml --repo gaaiyun/TradingWorkbench --ref main
 | 2026-08-13 | 上一条修复推送后两次真实复验仍失败（`Error 524`→`Error 503`），定位到第二处独立缺口：`_get_provider_kwargs()` 转发 `openai_reasoning_effort` 的条件写死 `provider=="openai"`，`openai_compatible`/`xai`/`deepseek` 等全部被排除，配置从未到达上一条修复所在的层——上一条修复在两次复验里其实完全没生效。改用 `is_openai_compatible()` 判定 | 本地用真实 `TradingAgentsGraph` 构造生产同款 config（不发请求）实测 `deep_thinking_llm.reasoning_effort` 从 `None` 修复到 `"low"`；新增 3 项参数化回归测试；全量回归 `720 passed / 2 skipped`；`curl` 探测确认同期中转站 `/v1/chat/completions` 本身也有瞬时不稳定（连接在 60 秒内中断），`/v1/models` 正常；提交 `8f67e2c`，已推送 |
 | 2026-08-13 | 第三次真实复验（两处 reasoning_effort 修复均已正确生效）仍 `Error 524`，确认中转站 completions 端点当天本身持续故障（跨约 1 小时的 4 次真实失败：524/524/503/524），与本仓库代码无关。按用户要求实现 Grok→GPT 自动故障转移：`NormalizedChatOpenAI.invoke()` 捕获连接失败/5xx/429 并重放到 `fallback_llm`（400/401 等客户端错误不触发，避免掩盖真实故障），`TradingAgentsGraph._build_fallback_llm()` 仅需设置 fallback model 即可启用，provider/backend_url 默认复用主配置 | 生产已配置 secret `TRADINGAGENTS_LLM_FALLBACK_API_KEY`（独立 GPT key，SHA-256 已记录）与三个 Variable（`gpt-5.4-mini`，便宜档位，`/v1/models` 探测确认健康、2.3 秒内正确回答）；已接入两个真实工作流 env；14 项新测试覆盖 4 类瞬时错误触发、2 类客户端错误不触发、structured_output 路径；全量回归 `734 passed / 2 skipped`；CI 绿（含一次 ruff 修复）；提交 `cd2c09d`/`a3e4873`/`33c295a`，均已推送 |
 | 2026-08-13 | 部署后首次真实验证：GPT 故障转移在持续 1 小时+的真实中转站故障下完整生效 | run `31740098198` 耗时 `1h11m11s`，日志确认 grok-4.5 先后 12 次触发 fallback 到 gpt-5.4-mini，每次都成功，最终 `[DONE] 1/1 tickers ok`；`/api/health` 复核 `status:ok`；是当天 5 次真实调用中唯一成功产出报告的一次（前 4 次均因中转站故障失败） |
+| 2026-08-18 | 接入免费源数据目录、A 股当前上市宇宙快照与单标的 qfq 日线回测校验；保持七入口及 Evidence/Worker/D1 边界不变 | 发布前 Functions `442/1 skip`、前端 `122/122`，资产和语法检查通过；双视口浏览器无溢出或页面错误；生产 run、SHA、宇宙覆盖数待本轮发布后回填 |
 
 ## 1.6 2026-07-30 全局质量复审
 

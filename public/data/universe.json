@@ -1,0 +1,37 @@
+{
+  "version": 1,
+  "generatedAt": "2026-08-18T00:00:00.000Z",
+  "status": "degraded",
+  "coverage": {
+    "policy": "configured-core-fallback",
+    "cnCurrentListedStocks": null,
+    "cnConfiguredCore": 3,
+    "usCore": 9,
+    "hkCore": 1,
+    "historicalDelisted": "unavailable",
+    "note": "东财当前上市股票快照尚未完成首轮刷新；当前仅展示工作台配置核心标的。"
+  },
+  "sources": [
+    {
+      "id": "workbench-settings",
+      "role": "configured HK/US/CN core instruments",
+      "quality": "declared",
+      "asOf": "2026-08-18T00:00:00.000Z"
+    }
+  ],
+  "instruments": [
+    { "symbol": "159995.SZ", "name": "芯片ETF", "market": "CN", "exchange": "SZ", "instrumentType": "etf", "industry": null, "listDate": null, "source": "workbench-settings", "coverage": "configured_core" },
+    { "symbol": "3887.HK", "name": "HashKey Holdings", "market": "HK", "exchange": "HK", "instrumentType": "stock", "industry": null, "listDate": null, "source": "workbench-settings", "coverage": "configured_core" },
+    { "symbol": "512480.SS", "name": "半导体ETF", "market": "CN", "exchange": "SS", "instrumentType": "etf", "industry": null, "listDate": null, "source": "workbench-settings", "coverage": "configured_core" },
+    { "symbol": "515880.SS", "name": "通信ETF", "market": "CN", "exchange": "SS", "instrumentType": "etf", "industry": null, "listDate": null, "source": "workbench-settings", "coverage": "configured_core" },
+    { "symbol": "AMD", "name": "AMD", "market": "US", "exchange": "US", "instrumentType": "stock", "industry": null, "listDate": null, "source": "workbench-settings", "coverage": "configured_core" },
+    { "symbol": "ASML", "name": "ASML", "market": "US", "exchange": "US", "instrumentType": "stock", "industry": null, "listDate": null, "source": "workbench-settings", "coverage": "configured_core" },
+    { "symbol": "AVGO", "name": "AVGO", "market": "US", "exchange": "US", "instrumentType": "stock", "industry": null, "listDate": null, "source": "workbench-settings", "coverage": "configured_core" },
+    { "symbol": "GOOGL", "name": "Alphabet", "market": "US", "exchange": "US", "instrumentType": "stock", "industry": null, "listDate": null, "source": "workbench-settings", "coverage": "configured_core" },
+    { "symbol": "NVDA", "name": "NVDA", "market": "US", "exchange": "US", "instrumentType": "stock", "industry": null, "listDate": null, "source": "workbench-settings", "coverage": "configured_core" },
+    { "symbol": "ORCL", "name": "Oracle", "market": "US", "exchange": "US", "instrumentType": "stock", "industry": null, "listDate": null, "source": "workbench-settings", "coverage": "configured_core" },
+    { "symbol": "SMH", "name": "SMH", "market": "US", "exchange": "US", "instrumentType": "etf", "industry": null, "listDate": null, "source": "workbench-settings", "coverage": "configured_core" },
+    { "symbol": "SOXX", "name": "SOXX", "market": "US", "exchange": "US", "instrumentType": "etf", "industry": null, "listDate": null, "source": "workbench-settings", "coverage": "configured_core" },
+    { "symbol": "TSM", "name": "TSM", "market": "US", "exchange": "US", "instrumentType": "stock", "industry": null, "listDate": null, "source": "workbench-settings", "coverage": "configured_core" }
+  ]
+}

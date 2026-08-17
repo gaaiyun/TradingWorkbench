@@ -7,11 +7,11 @@
   <meta name="color-scheme" content="dark">
   <meta name="description" content="Trading Workbench 多市场研究与风险工作台">
   <title>Trading Workbench · 交易研究工作台</title>
-  <link rel="stylesheet" href="./assets/workbench.css?v=9650fb3e8d02">
+  <link rel="stylesheet" href="./assets/workbench.css?v=8e75c71538c9">
   <script type="importmap">
     { "imports": { "fancy-canvas": "./vendor/fancy-canvas/index.mjs" } }
   </script>
-  <script type="module" src="./assets/workbench.js?v=9650fb3e8d02"></script>
+  <script type="module" src="./assets/workbench.js?v=8e75c71538c9"></script>
 </head>
 <body data-mobile-view="chart" data-route="monitor" data-fund-flow-enabled="true">
   <a class="skip-link" href="#market-chart">跳到行情图表</a>
@@ -258,6 +258,33 @@
     <section class="workbench-panel run-card-panel">
       <header><div><span>RUN CARD</span><h2>本次研究记录</h2></div><a class="text-link" href="#archive">查看研究档案</a></header>
       <div class="panel-empty" id="agent-run-card"><b>尚未开始新的研究</b><span>运行后将记录输入时间、来源、降级情况、模型、耗时和未解决问题。</span></div>
+    </section>
+    <section class="workbench-panel data-backtest-panel" aria-labelledby="backtest-panel-title">
+      <header><div><span>DATA QUALITY / BACKTEST</span><h2 id="backtest-panel-title">数据覆盖与回测校验</h2></div><span id="data-quality-asof">等待目录</span></header>
+      <div class="data-backtest-layout">
+        <section class="data-coverage-pane" aria-labelledby="data-coverage-title">
+          <h3 id="data-coverage-title">当前覆盖</h3>
+          <div class="coverage-metrics" id="data-coverage-summary">
+            <div><span>A 股当前上市</span><b>—</b><small>等待宇宙快照</small></div>
+            <div><span>港美核心</span><b>—</b><small>按当前监控配置</small></div>
+            <div><span>历史退市成员</span><b>不可用</b><small>免费源边界</small></div>
+          </div>
+          <p class="data-quality-note" id="data-quality-note">免费公开源按 best-effort 使用；外部站点的 1092 只股票只是其内部股票池，不代表全市场。</p>
+        </section>
+        <section class="backtest-pane" aria-labelledby="backtest-title">
+          <h3 id="backtest-title">A 股 ETF 日线回测校验</h3>
+          <form class="backtest-form" id="backtest-form">
+            <label><span>标的</span><input id="backtest-symbol" value="512480.SS" required aria-label="回测标的"></label>
+            <label><span>规则</span><select id="backtest-strategy"><option value="momentum20">20 日动量为正</option><option value="ma5x20">MA5 上穿 MA20</option></select></label>
+            <label><span>持有</span><select id="backtest-holding"><option value="3">3 个交易日</option><option value="5" selected>5 个交易日</option><option value="10">10 个交易日</option></select></label>
+            <button class="button secondary" id="backtest-submit" type="submit">运行校验</button>
+          </form>
+          <div class="backtest-result" id="backtest-result">
+            <b>等待运行</b><span>仅使用工作台已存前复权（qfq）日线；信号在收盘形成，最早于下一交易日开盘成交。</span>
+          </div>
+          <p class="backtest-caveat">含每边 3bp 成本与 5bp 滑点；暂不模拟停牌、涨跌停封单、申赎、最低佣金和盘口冲击，不代表实盘，也不用于实盘交易。</p>
+        </section>
+      </div>
     </section>
   </section>
 

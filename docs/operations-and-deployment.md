@@ -1,6 +1,6 @@
 # 部署、验收与回退
 
-更新日期：2026-07-27
+更新日期：2026-08-18
 
 代码基线：`main`。精确版本以 `git rev-parse origin/main`、Pages `/api/health` 和 Worker `/health` 三方回读为准，不在文档中维护容易失真的固定 SHA。
 
@@ -94,6 +94,24 @@ OpenAI-compatible free-text 回退若把 `Rating / Executive Summary / Investmen
 
 当前 PushPlus 只运行 shadow 策略。即使环境中存在 `PUSHPLUS_TOKEN`，现有信号写入路径也不会 live 发送。
 
+### 2.2 股票宇宙刷新
+
+`.github/workflows/update-universe.yml` 在工作日 UTC 11:10 运行，也支持手工触发：
+
+```powershell
+gh workflow run update-universe.yml --repo gaaiyun/TradingWorkbench --ref main
+```
+
+任务串行分页读取东方财富当前上市股票，执行 `node scripts/update-universe.mjs`，仅在
+`public/data/universe.json` 改变时提交。失败不会写空文件，也不会删除上一份快照。
+机器人提交使用的 GitHub token 不会级联触发 push workflow，因此任务在成功提交后会显式
+dispatch `deploy-workbench.yml`；同时 `/api/universe` 从 `main` 的 raw 数据读取，五分钟缓存后
+即可观察更新。验收必须同时检查宇宙 workflow、随后触发的 Pages workflow、快照 `generatedAt`、
+`coverage.cnCurrentListedStocks` 和 `sources`；不能只看 workflow 被触发。
+
+回滚时禁用该 workflow 的 schedule 或回退 workflow 文件即可，保留最后一份有效快照。
+它没有 D1 migration、没有 Worker slot，也不影响行情、资金流、Evidence 或报告。
+
 ## 3. 发布前检查
 
 ```powershell
@@ -117,6 +135,17 @@ G:\venvs\tradingworkbench-report-evidence\Scripts\python.exe tests\e2e_workbench
 ```
 
 Python 全量测试和浏览器测试在 Windows 上串行执行。交接文档只记录本轮实际运行的命令和输出数字。
+
+本批数据目录与回测校验可用以下最小冒烟，不需要运行模型：
+
+```powershell
+curl.exe "https://tradingagents-board.pages.dev/api/data-catalog"
+curl.exe "https://tradingagents-board.pages.dev/api/universe?summary=1"
+curl.exe "https://tradingagents-board.pages.dev/api/backtest?profile=cn-semi-comms&symbol=512480.SS&strategy=momentum20&holdingDays=5"
+```
+
+回测响应必须明示 `signal_day_close`、`next_trading_day_open`、`qfq`、成本、滑点和限制；
+样本不足或复权不符必须返回 `unavailable`，不能给出收益数字。
 
 ## 4. D1 migration
 

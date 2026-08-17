@@ -29,7 +29,7 @@ import {
   isFundFlowUiEnabled,
   marketPercentageChange,
   selectFundFlowEventAnchors,
-} from "./workbench-fundflow.mjs?v=9650fb3e8d02";
+} from "./workbench-fundflow.mjs?v=8e75c71538c9";
 import {
   CandlestickSeries,
   ColorType,
@@ -81,7 +81,7 @@ import {
   legacyHistoryEntries,
   researchRunForRequest,
   researchTickerLimit,
-} from "./workbench-research.mjs?v=9650fb3e8d02";
+} from "./workbench-research.mjs?v=8e75c71538c9";
 
 (() => {
   "use strict";
@@ -146,6 +146,9 @@ import {
     threadStorageWarningShown: false,
     options: normalizeVolguardPayload(null),
     optionsNextAt: null,
+    dataCatalog: null,
+    universeSummary: null,
+    backtest: null,
   };
   const marketRequestGate = createLatestRequestGate();
   const profileRequests = createProfileRequestCoordinator();
@@ -1330,6 +1333,90 @@ import {
         ${pending && archivedBatch ? '<button class="text-button" id="agent-open-adhoc-report" type="button">查看临时研究报告</button>' : ""}
       </div>`;
     $("#agent-open-adhoc-report")?.addEventListener("click", openAdhocReport);
+  }
+
+  function percentage(value) {
+    const number = Number(value);
+    return Number.isFinite(number) ? `${(number * 100).toFixed(2)}%` : "—";
+  }
+
+  function renderDataQualityWorkspace() {
+    const coverage = state.universeSummary?.coverage || {};
+    const cnCount = coverage.cnCurrentListedStocks !== null
+      && coverage.cnCurrentListedStocks !== undefined
+      && Number.isFinite(Number(coverage.cnCurrentListedStocks))
+      ? formatNumber(coverage.cnCurrentListedStocks, 0)
+      : "等待刷新";
+    const coreCount = [coverage.usCore, coverage.hkCore]
+      .map(Number)
+      .filter(Number.isFinite)
+      .reduce((sum, value) => sum + value, 0);
+    $("#data-quality-asof").textContent = state.universeSummary?.asOf
+      ? `快照 ${formatDate(state.universeSummary.asOf)}`
+      : "目录不可用";
+    $("#data-coverage-summary").innerHTML = `
+      <div><span>A 股当前上市</span><b>${escapeHtml(cnCount)}</b><small>东财公开列表 · best-effort</small></div>
+      <div><span>港美核心</span><b>${escapeHtml(coreCount || "—")}</b><small>按当前监控配置</small></div>
+      <div><span>历史退市成员</span><b>${escapeHtml(coverage.historicalDelisted === "unavailable" ? "不可用" : coverage.historicalDelisted || "—")}</b><small>不参与当前股票池回测</small></div>`;
+    const external = state.dataCatalog?.externalReferences?.find(({ id }) => id === "external-stock-signal-features");
+    $("#data-quality-note").textContent = external?.note
+      || coverage.note
+      || "免费公开源按 best-effort 使用；缺失与来源失败不会被填成零。";
+  }
+
+  async function loadDataQualityWorkspace() {
+    const [catalog, universe] = await Promise.allSettled([
+      requestJson("/api/data-catalog"),
+      requestJson("/api/universe?summary=1"),
+    ]);
+    state.dataCatalog = catalog.status === "fulfilled" ? catalog.value : null;
+    state.universeSummary = universe.status === "fulfilled" ? universe.value : null;
+    renderDataQualityWorkspace();
+  }
+
+  function renderBacktestResult(payload) {
+    const result = $("#backtest-result");
+    if (!payload?.metrics) {
+      result.innerHTML = `<b>无法形成回测结果</b><span>${escapeHtml(payload?.reason || "日线不足、复权口径不符或接口不可用")}</span>`;
+      return;
+    }
+    const metrics = payload.metrics;
+    result.innerHTML = `<div class="backtest-metrics">
+      <div><span>策略净收益</span><b>${escapeHtml(percentage(metrics.totalReturn))}</b><small>已扣明示成本</small></div>
+      <div><span>同期持有</span><b>${escapeHtml(percentage(metrics.benchmarkReturn))}</b><small>首尾收盘比较</small></div>
+      <div><span>最大回撤</span><b>${escapeHtml(percentage(metrics.maxDrawdown))}</b><small>按已完成交易权益</small></div>
+      <div><span>胜率</span><b>${escapeHtml(percentage(metrics.winRate))}</b><small>${escapeHtml(metrics.tradeCount)} 笔交易</small></div>
+      <div><span>样本</span><b>${escapeHtml(formatNumber(metrics.sampleBars, 0))}</b><small>前复权日线</small></div>
+    </div><span>${escapeHtml((payload.audit?.limitations || []).join(" "))}</span>`;
+  }
+
+  async function submitBacktest(event) {
+    event.preventDefault();
+    const submit = $("#backtest-submit");
+    const symbol = $("#backtest-symbol").value.trim().toUpperCase();
+    if (!/^\d{6}\.(?:SS|SZ|BJ)$/.test(symbol)) {
+      renderBacktestResult({ reason: "第一版仅支持工作台已有日线的 A 股 ETF 代码。" });
+      return;
+    }
+    const params = new URLSearchParams({
+      symbol,
+      profile: currentProfile()?.id || "",
+      strategy: $("#backtest-strategy").value,
+      holdingDays: $("#backtest-holding").value,
+      costBps: "3",
+      slippageBps: "5",
+      limit: "650",
+    });
+    submit.disabled = true;
+    $("#backtest-result").innerHTML = "<b>正在校验</b><span>读取标准化 qfq 日线并按下一交易日开盘成交。</span>";
+    try {
+      state.backtest = await requestJson(`/api/backtest?${params}`);
+      renderBacktestResult(state.backtest);
+    } catch (error) {
+      renderBacktestResult({ reason: error.payload?.reason || error.message });
+    } finally {
+      submit.disabled = false;
+    }
   }
 
   function renderTaskBoard() {
@@ -3057,6 +3144,7 @@ import {
     $("#target-search").addEventListener("keydown", (event) => { if (event.key === "Enter") { event.preventDefault(); addTarget(); } });
     $("#settings-form").addEventListener("submit", saveSettings);
     $("#agent-research-form").addEventListener("submit", submitTemporaryResearch);
+    $("#backtest-form").addEventListener("submit", submitBacktest);
     $("#agent-research-depth").addEventListener("change", renderAgentWorkspace);
     $("#run-analysis").addEventListener("click", runAnalysis);
     $("#run-analysis-left").addEventListener("click", runAnalysis);
@@ -3142,6 +3230,7 @@ import {
     loadThreads();
     await recoverThread(state.threadId);
     await loadProfileContext();
+    await loadDataQualityWorkspace();
     setInterval(pollWorkbenchData, 60000);
     setInterval(refreshOptionsIfVisible, OPTIONS_FAST_REFRESH_MS);
     setInterval(renderOptionsCountdown, 1000);

@@ -337,6 +337,20 @@ MCP 只提供设置、监控、行情、新闻和研究历史查询，不接收�
 
 同日外部日期复审纠偏与美股分时的功能基线为 `64934de`：CI `30387614133`、Pages `30387770552`、Monitor `30387613679` 全绿；CI 内浏览器、Python 3.10–3.13、Functions、Ruff 与 clean install 全部成功。生产资金验收从 2024-01-01 起逐标的返回 620 个交易日，周五各 121、周末各 0、日线集合缺失各 0；完整 D1 两融仍为 `1638 / 1580 / 1522`。SOXX/NVDA 各保存 370 根 5m 行情，API 最近 300 根全部位于纽约常规时段、时间戳整 5 分钟、周末 0；首次 bootstrap 产生的两条未完成临时柱已精确删除且不可由新适配器重写。Pages 首次业务验收曾因生产别名传播延迟过早读到旧 schema，workflow 已改为有界重试，后续 run 成功。
 
+## 数据目录与回测校验
+
+Agent 研究页内置一个二级的“数据覆盖与回测校验”区，不增加第八个一级入口：
+
+- `/api/data-catalog` 公开当前真实使用的数据源、能力、复权口径和免费源限制；
+- `/api/universe?summary=1` 返回 A 股当前上市股票 best-effort 快照与港美配置核心标的覆盖；
+- `.github/workflows/update-universe.yml` 在工作日收盘后刷新宇宙，失败时保留上一份快照；
+- `/api/backtest` 只对工作台已有 qfq 日线做单标的规则校验。信号在收盘形成，最早下一交易日开盘成交，并明示每边 3bp 成本和 5bp 滑点；
+- 第一版不模拟停牌、涨跌停封单、申赎、最低佣金和盘口冲击，不是全市场研究级回测，也不代表实盘结果。
+
+外部参考站点的 `1092` 只股票、`957,684` 行和 `103` 个因子来自其内部
+`stock_signal_features` 表，只作为产品与公式参考，既不是本项目数据，也不代表 A 股全市场。
+完整口径、实施步骤与回滚点见 [数据目录与回测校验实施记录](docs/data-backtest-rollout.md)。
+
 ## 架构取舍
 
 项目保留 TradingAgents 的角色协作与报告链，使用 Lightweight Charts 渲染行情，并参考 OpenBB 的统一数据契约、Qlib 的离线评估边界和 FinGPT 的金融语料思路。当前没有引入它们的整套运行时：
@@ -354,6 +368,7 @@ MCP 只提供设置、监控、行情、新闻和研究历史查询，不接收�
 - [云端 Agent 手工工程审计提示词](docs/CLOUD_AGENT_DAILY_AUDIT_PROMPT.md)
 - [产品回归与迁移](docs/regression-and-migration.md)
 - [报告质量审计](docs/REPORT_QUALITY_AUDIT.md)
+- [数据目录与回测校验实施记录](docs/data-backtest-rollout.md)
 - [下一 Agent 交接](docs/NEXT_AGENT_HANDOFF.md)
 - [只读 MCP](docs/mcp-readonly.md)
 

@@ -1,6 +1,6 @@
 # 架构、接口与数据流
 
-更新日期：2026-07-28
+更新日期：2026-08-18
 
 代码基线：`main`；运行版本由 Pages `/api/health` 与 Worker `/health` 的 commit SHA 证明。
 
@@ -14,6 +14,7 @@
 | 监控调度器 | Cloudflare Worker + Cron | 轻量采集、slot、预算、outbox、规则信号、提醒 shadow |
 | 深度研究 | GitHub Actions + Python/LangGraph | TradingAgents、多模型调用、Evidence、报告、索引和审计 |
 | 资金流采集 | GitHub Actions + Node.js | 两融日频、ETF 规模/份额回填与工作日增量，参数化写入 D1 |
+| 股票宇宙快照 | GitHub Actions + Node.js | A 股当前上市股票 best-effort 快照与配置核心标的，不写 D1 |
 | 期权服务 | VolGuard 独立仓库与 Pages | 期权快行情和慢风险模型 |
 
 ```mermaid
@@ -56,6 +57,10 @@ flowchart TB
 
 Cloudflare 负责有界 I/O 和状态机。Python、LangGraph、LLM 辩论、GARCH、BSADF 和长历史回测留在 GitHub Actions 或 VolGuard。
 
+单标的回测校验是有界读操作：Pages Function 最多读取 1260 个日线交易日，只执行两种
+确定性规则，不训练模型、不扫描全市场、不持久化结果。长历史、组合和因子研究仍只能
+离线运行。
+
 ## 2. 浏览器状态
 
 页面模块按职责拆分：
@@ -68,6 +73,10 @@ Cloudflare 负责有界 I/O 和状态机。Python、LangGraph、LLM 辩论、GAR
 - `workbench-markdown.mjs`：安全报告渲染。
 - `workbench-fundflow.mjs`：资金面适用性、上海交易日、分位、标的驱动篮子、规则观察和缺失值展示模型。
 - `workbench.js`：网络请求、图表、设置、研究和问答编排。
+
+Agent 研究页的“数据覆盖与回测校验”是二级能力，不进入七路由契约。它读取
+`/api/data-catalog`、`/api/universe?summary=1` 和 `/api/backtest`，不进入报告问答上下文，
+也不改变 Evidence 门禁。
 
 ```mermaid
 flowchart LR
@@ -518,6 +527,18 @@ ETF 工作台是编排层，不替代原 TradingAgents 内核。
 | VolGuard | 期权快行情和慢模型分层 | 保持独立仓库与部署，工作台通过 API 接入 |
 
 免费来源的授权和稳定性不同。系统保存来源、时间、质量和降级轨迹，不把可访问等同于官方授权，也不把 discovery 升级为 evidence。更多项目评估见 [参考项目与架构决策](etf-monitoring-reference-and-decisions.md)。
+
+### 15.1 数据目录、宇宙和回测校验
+
+`public/data/data-catalog.json` 是数据能力声明；`public/data/universe.json` 是可替换快照。
+宇宙 workflow 串行读取东方财富当前上市列表；港美只追加当前 Workbench settings 中配置的
+核心标的。历史退市成员当前明确为 `unavailable`，因此宇宙不能用于声称无生存者偏差的
+全市场历史回测。
+
+`/api/backtest` 读取既有 `market_bars` 中 profile-scoped `1d` 数据，按交易日去重并拒绝
+周末、非法 OHLCV、样本不足和非 qfq 序列。支持 `momentum20` 和 `ma5x20`；信号只在
+收盘形成，下一交易日开盘入场，固定持有期后的开盘退出，不允许持仓重叠。结果返回来源、
+成本、滑点、样本数和未建模限制，不保存到 Evidence 或报告。
 
 ## 16. 输出质量与边缘调度保护
 

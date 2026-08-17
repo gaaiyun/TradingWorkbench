@@ -1,0 +1,91 @@
+{
+  "version": 1,
+  "generatedAt": "2026-08-18T00:00:00.000Z",
+  "policy": {
+    "marketScope": "A 股当前上市股票 + 工作台配置的港美核心标的",
+    "costModel": "免费公开源优先",
+    "claim": "best_effort",
+    "limitations": [
+      "不承诺港美全市场或全部标的分时覆盖。",
+      "免费公开源不能替代授权行情和完整历史退市股票池。",
+      "缺失、过期或来源失败必须显示 degraded/unavailable，不补零。"
+    ]
+  },
+  "sources": [
+    {
+      "id": "tencent",
+      "markets": ["CN"],
+      "capabilities": ["quote", "5m", "1d"],
+      "role": "工作台 A 股行情主源/降级链",
+      "adjustment": "日线 qfq，分时 none",
+      "licenseClass": "public-best-effort"
+    },
+    {
+      "id": "eastmoney",
+      "markets": ["CN", "US"],
+      "capabilities": ["universe", "1d", "5m-fallback", "margin", "fund-share"],
+      "role": "历史、宇宙与资金数据公开源",
+      "adjustment": "按接口显式标注",
+      "licenseClass": "public-best-effort"
+    },
+    {
+      "id": "yahoo",
+      "markets": ["US", "HK"],
+      "capabilities": ["1d", "5m-core-only"],
+      "role": "港美日线与 SOXX/NVDA 分时主源",
+      "adjustment": "按接口显式标注",
+      "licenseClass": "public-best-effort"
+    },
+    {
+      "id": "tencent-us/eastmoney-us/stooq",
+      "markets": ["US"],
+      "capabilities": ["1d-fallback"],
+      "role": "美股日线降级链",
+      "adjustment": "按 provider 标注",
+      "licenseClass": "public-best-effort"
+    }
+  ],
+  "datasets": [
+    {
+      "id": "market_bars",
+      "description": "工作台实际采集的标准化 OHLCV",
+      "timeframes": ["5m", "1d"],
+      "provenanceRequired": true
+    },
+    {
+      "id": "fund_flows",
+      "description": "ETF 融资、成分股融资合计与份额观察",
+      "provenanceRequired": true
+    },
+    {
+      "id": "universe",
+      "description": "A 股当前上市股票 best-effort 快照与配置核心标的",
+      "historicalMembership": false
+    }
+  ],
+  "factorDefinitions": [
+    {
+      "id": "momentum20",
+      "formula": "close[t] / close[t-20] - 1",
+      "signalAt": "交易日收盘",
+      "earliestExecution": "下一交易日开盘"
+    },
+    {
+      "id": "ma5x20",
+      "formula": "MA5 向上穿越 MA20",
+      "signalAt": "交易日收盘",
+      "earliestExecution": "下一交易日开盘"
+    }
+  ],
+  "externalReferences": [
+    {
+      "id": "external-stock-signal-features",
+      "stockCount": 1092,
+      "rowCount": 957684,
+      "factorCount": 103,
+      "sourceTable": "stock_signal_features",
+      "productionSource": false,
+      "note": "外部系统内部股票池，不代表全市场；只作为产品与公式参考。"
+    }
+  ]
+}

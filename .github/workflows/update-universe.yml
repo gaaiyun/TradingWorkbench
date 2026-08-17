@@ -1,0 +1,50 @@
+name: Update market universe
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "10 11 * * 1-5"
+
+permissions:
+  contents: write
+  actions: write
+
+concurrency:
+  group: update-market-universe
+  cancel-in-progress: false
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Refresh current-listed universe
+        run: node scripts/update-universe.mjs
+      - name: Persist snapshot when changed
+        id: persist
+        shell: bash
+        run: |
+          if git diff --quiet -- public/data/universe.json; then
+            echo "Universe snapshot unchanged"
+            echo "changed=false" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add public/data/universe.json
+          git commit -m "chore(data): 更新股票宇宙快照"
+          git pull --rebase origin main
+          git push origin HEAD:main
+          echo "changed=true" >> "$GITHUB_OUTPUT"
+      - name: Trigger Pages deployment
+        if: steps.persist.outputs.changed == 'true'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh workflow run deploy-workbench.yml --ref main
