@@ -47,4 +47,14 @@ jobs:
         if: steps.persist.outputs.changed == 'true'
         env:
           GH_TOKEN: ${{ github.token }}
-        run: gh workflow run deploy-workbench.yml --ref main
+        shell: bash
+        run: |
+          for attempt in 1 2 3; do
+            if gh workflow run deploy-workbench.yml --ref main; then
+              exit 0
+            fi
+            if [ "$attempt" -lt 3 ]; then
+              sleep $((attempt * 5))
+            fi
+          done
+          exit 1

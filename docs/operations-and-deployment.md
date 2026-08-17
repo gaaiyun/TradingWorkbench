@@ -108,7 +108,8 @@ gh workflow run update-universe.yml --repo gaaiyun/TradingWorkbench --ref main
 执行 `node scripts/update-universe.mjs`，仅在
 `public/data/universe.json` 改变时提交。失败不会写空文件，也不会删除上一份快照。
 机器人提交使用的 GitHub token 不会级联触发 push workflow，因此任务在成功提交后会显式
-dispatch `deploy-workbench.yml`；同时 `/api/universe` 从 `main` 的 raw 数据读取，五分钟缓存后
+dispatch `deploy-workbench.yml`，GitHub API 瞬时失败时最多重试 3 次；同时 `/api/universe`
+从 `main` 的 raw 数据读取，五分钟缓存后
 即可观察更新。验收必须同时检查宇宙 workflow、随后触发的 Pages workflow、快照 `generatedAt`、
 `coverage.cnCurrentListedStocks` 和 `sources`；不能只看 workflow 被触发。
 
