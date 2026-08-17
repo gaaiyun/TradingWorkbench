@@ -3,7 +3,7 @@ import test from "node:test";
 
 import * as catalogApi from "../functions/api/data-catalog.js";
 import * as universeApi from "../functions/api/universe.js";
-import { fetchCnUniverse } from "../scripts/update-universe.mjs";
+import { fetchCnUniverse, fetchSinaUniverse } from "../scripts/update-universe.mjs";
 
 function request(path) {
   return new Request(`https://workbench.test${path}`);
@@ -93,4 +93,14 @@ test("universe refresh uses the bounded Eastmoney current-listed contract", asyn
   assert.equal(requestedUrl.searchParams.get("np"), "2");
   assert.ok(requestedUrl.searchParams.get("ut"));
   assert.equal(instruments[0].symbol, "000001.SZ");
+});
+
+test("universe refresh normalizes the lightweight Sina fallback", async () => {
+  const instruments = await fetchSinaUniverse(async () => new Response(JSON.stringify([
+    { symbol: "sh600000", code: "600000", name: "浦发银行" },
+    { symbol: "bj920000", code: "920000", name: "安徽凤凰" },
+  ]), { status: 200 }));
+
+  assert.deepEqual(instruments.map(({ symbol }) => symbol), ["600000.SS", "920000.BJ"]);
+  assert.ok(instruments.every(({ source }) => source === "sina-market-center"));
 });

@@ -343,7 +343,8 @@ Agent 研究页内置一个二级的“数据覆盖与回测校验”区，不�
 
 - `/api/data-catalog` 公开当前真实使用的数据源、能力、复权口径和免费源限制；
 - `/api/universe?summary=1` 返回 A 股当前上市股票 best-effort 快照与港美配置核心标的覆盖；
-- `.github/workflows/update-universe.yml` 在工作日收盘后刷新宇宙，失败时保留上一份快照；
+- `.github/workflows/update-universe.yml` 在工作日收盘后以东财为主、新浪行情中心为降级源
+  刷新宇宙，全部失败时保留上一份快照；
 - `/api/backtest` 只对工作台已有 qfq 日线做单标的规则校验。信号在收盘形成，最早下一交易日开盘成交，并明示每边 3bp 成本和 5bp 滑点；
 - 第一版不模拟停牌、涨跌停封单、申赎、最低佣金和盘口冲击，不是全市场研究级回测，也不代表实盘结果。
 

@@ -40,7 +40,7 @@
 
 ## 5. 发布前验证
 
-- Functions：`443 passed / 1 skipped / 0 failed`（东财兼容调整后）。
+- Functions：`444 passed / 1 skipped / 0 failed`（新浪降级接入后）。
 - 前端：`122 passed / 0 failed`。
 - `npm run check:workbench` 与 `npm run check:asset-version` 通过，资产版本为
   `8e75c71538c9`。
@@ -62,3 +62,6 @@
   覆盖数和 Pages SHA 待复跑后回填。
 - 兼容调整后 run `32047470878` 已取得响应，但 `data.diff` 为数字键对象而非数组；脚本
   随后兼容两种形态，测试固定为本次生产实际返回结构。
+- run `32047611874` 在后续分页再次收到东财 `502`。为避免单源阻断，新增无依赖的新浪
+  行情中心 `hs_a` 分页降级；只有东财整批失败时启用，快照保留实际 source 与
+  `best_effort` 限制。

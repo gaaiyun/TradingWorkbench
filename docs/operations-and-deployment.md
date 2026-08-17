@@ -102,7 +102,8 @@ OpenAI-compatible free-text 回退若把 `Rating / Executive Summary / Investmen
 gh workflow run update-universe.yml --repo gaaiyun/TradingWorkbench --ref main
 ```
 
-任务通过东财专用子域、原域名降级和一轮有界重试串行读取当前上市股票，每页 100 条，
+任务通过东财专用子域、原域名降级和一轮有界重试串行读取当前上市股票，每页 100 条；
+东财整批失败时才降级到新浪行情中心 `hs_a` 的 500 条分页，并在快照中写实际 source。
 执行 `node scripts/update-universe.mjs`，仅在
 `public/data/universe.json` 改变时提交。失败不会写空文件，也不会删除上一份快照。
 机器人提交使用的 GitHub token 不会级联触发 push workflow，因此任务在成功提交后会显式

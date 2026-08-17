@@ -29,6 +29,14 @@
       "licenseClass": "public-best-effort"
     },
     {
+      "id": "sina-market-center",
+      "markets": ["CN"],
+      "capabilities": ["universe-fallback"],
+      "role": "A 股当前上市股票宇宙降级源",
+      "adjustment": "not_applicable",
+      "licenseClass": "public-best-effort"
+    },
+    {
       "id": "yahoo",
       "markets": ["US", "HK"],
       "capabilities": ["1d", "5m-core-only"],

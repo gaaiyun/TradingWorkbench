@@ -8,6 +8,8 @@ const ENDPOINTS = [
   "https://push2.eastmoney.com/api/qt/clist/get",
 ];
 const PAGE_SIZE = 100;
+const SINA_ENDPOINT = "https://vip.stock.finance.sina.com.cn/quotes_service/api/json_v2.php/Market_Center.getHQNodeData";
+const SINA_PAGE_SIZE = 500;
 const ROOT = new URL("../", import.meta.url);
 
 function listingDate(value) {
@@ -36,6 +38,25 @@ export function normalizeCnInstrument(row) {
     industry: String(row.f100 || "").trim() || null,
     listDate: listingDate(row.f26),
     source: "eastmoney-clist",
+    coverage: "current_listed_best_effort",
+  };
+}
+
+export function normalizeSinaInstrument(row) {
+  const rawSymbol = String(row?.symbol || "").trim().toLowerCase();
+  const match = /^(sh|sz|bj)(\d{6})$/.exec(rawSymbol);
+  const name = String(row?.name || "").trim();
+  if (!match || !name) return null;
+  const suffix = { sh: "SS", sz: "SZ", bj: "BJ" }[match[1]];
+  return {
+    symbol: `${match[2]}.${suffix}`,
+    name,
+    market: "CN",
+    exchange: suffix,
+    instrumentType: "stock",
+    industry: null,
+    listDate: null,
+    source: "sina-market-center",
     coverage: "current_listed_best_effort",
   };
 }
@@ -81,7 +102,7 @@ async function fetchPage(page, fetchImpl) {
   throw lastError;
 }
 
-export async function fetchCnUniverse(fetchImpl = globalThis.fetch) {
+async function fetchEastmoneyUniverse(fetchImpl) {
   const first = await fetchPage(1, fetchImpl);
   const pages = Math.max(1, Math.ceil(first.total / PAGE_SIZE));
   const rows = [...first.rows];
@@ -95,6 +116,40 @@ export async function fetchCnUniverse(fetchImpl = globalThis.fetch) {
     if (instrument) bySymbol.set(instrument.symbol, instrument);
   }
   return [...bySymbol.values()].sort((left, right) => left.symbol.localeCompare(right.symbol));
+}
+
+export async function fetchSinaUniverse(fetchImpl = globalThis.fetch) {
+  const bySymbol = new Map();
+  for (let page = 1; page <= 20; page += 1) {
+    const url = new URL(SINA_ENDPOINT);
+    url.search = new URLSearchParams({
+      page: String(page), num: String(SINA_PAGE_SIZE), sort: "symbol", asc: "1",
+      node: "hs_a", symbol: "",
+    });
+    const response = await fetchImpl(url, {
+      headers: { referer: "https://finance.sina.com.cn/", "user-agent": "Mozilla/5.0 (compatible; TradingWorkbench/1.0)" },
+      signal: AbortSignal.timeout(20_000),
+    });
+    if (!response.ok) throw new Error(`sina universe HTTP ${response.status}`);
+    const rows = await response.json();
+    if (!Array.isArray(rows)) throw new Error("sina universe malformed data");
+    for (const row of rows) {
+      const instrument = normalizeSinaInstrument(row);
+      if (instrument) bySymbol.set(instrument.symbol, instrument);
+    }
+    if (rows.length < SINA_PAGE_SIZE) break;
+    await new Promise((resolve) => setTimeout(resolve, 500));
+  }
+  if (!bySymbol.size) throw new Error("sina universe empty data");
+  return [...bySymbol.values()].sort((left, right) => left.symbol.localeCompare(right.symbol));
+}
+
+export async function fetchCnUniverse(fetchImpl = globalThis.fetch) {
+  try {
+    return await fetchEastmoneyUniverse(fetchImpl);
+  } catch {
+    return fetchSinaUniverse(fetchImpl);
+  }
 }
 
 function configuredInstruments(settings) {
@@ -124,6 +179,7 @@ export function buildUniverseSnapshot(cnStocks, settings, now = new Date()) {
   const bySymbol = new Map(cnStocks.map((item) => [item.symbol, item]));
   for (const item of configured) bySymbol.set(item.symbol, item);
   const instruments = [...bySymbol.values()].sort((left, right) => left.symbol.localeCompare(right.symbol));
+  const cnSources = [...new Set(cnStocks.map(({ source }) => source).filter(Boolean))];
   return {
     version: 1,
     generatedAt: now.toISOString(),
@@ -138,12 +194,12 @@ export function buildUniverseSnapshot(cnStocks, settings, now = new Date()) {
       note: "免费公开源快照；不等同于授权全市场历史股票池。",
     },
     sources: [
-      {
-        id: "eastmoney-clist",
+      ...cnSources.map((id) => ({
+        id,
         role: "CN current-listed discovery",
         quality: "best_effort",
         asOf: now.toISOString(),
-      },
+      })),
       {
         id: "workbench-settings",
         role: "configured HK/US/CN core instruments",
