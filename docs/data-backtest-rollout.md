@@ -28,7 +28,7 @@
 | 1 | 已完成 | 数据目录、宇宙快照及只读 API | API 契约测试通过；全量首刷待 workflow | 删除新增静态文件/API/工作流 |
 | 2 | 已完成 | 有时点约束的单标的回测 | 信号/成交日、周末、成本、缺失测试通过 | 删除回测模块/API |
 | 3 | 已完成 | Agent 研究页内二级 UI | 1440×1000、390×844 浏览器均无横向溢出和页面错误；表单可实际提交并渲染结果 | 删除二级区块和事件绑定 |
-| 4 | 进行中 | 文档、部署和生产冒烟 | 本地必要回归已完成；CI、Pages API 和全量宇宙首刷待验证 | 关闭 UI 接入或回滚本批提交 |
+| 4 | 已完成 | 文档、部署和生产冒烟 | CI、Pages、三个生产 API 和全量宇宙首刷均已验证 | 关闭 UI 接入或回滚本批提交 |
 
 ## 4. 数据与回测纪律
 
@@ -74,3 +74,20 @@
   共 `5556`，数据提交 `9fae701`，实际源为 `sina-market-center`。最后的 Pages dispatch
   遭遇 GitHub API 瞬时 `HTTP 503`，因此该 run 总结论为 failure；dispatch 随后增加 3 次
   有界重试，最终 Pages 发布以新的成功 run 和生产 SHA 为准。
+
+## 7. 最终生产证据
+
+- 代码 CI `32049058200` 成功：Python 3.10–3.13、Pages Functions、浏览器验收、Ruff 和
+  clean install 全部通过。
+- 权威 Pages run `32049125716` 成功：部署、deployment identity、生产 SHA 和资金业务日
+  门禁全部通过；功能验收时生产 SHA 为 `2fa161117e832bd8fb884698b956ce3551d6341f`。
+- `/api/data-catalog` 返回腾讯、东财、新浪、Yahoo 及美股降级链，并明确外部 1092 股票
+  参考表 `productionSource=false`。
+- `/api/universe?summary=1` 返回 `cnCurrentListedStocks=5543`、`usCore=9`、`hkCore=1`，
+  source 为 `sina-market-center,workbench-settings`；`status=degraded` 是因为历史退市成员
+  明确 unavailable，不是本次快照失败。
+- `/api/backtest` 对 `512480.SS` 返回 `status=ok`、`528` 根 qfq 日线、`58` 笔交易，
+  `execution=next_trading_day_open`、每边成本 3bp、滑点 5bp；结果不代表实盘。
+- `/api/health` 的 deployment manifest 合法且 SHA 对齐；总体 `degraded` 来自既有报告
+  `trade_date=2026-08-14` 落后预期交易日 `2026-08-17`，与本批接口和页面无关，未用
+  临时 LLM 运行掩盖该状态。

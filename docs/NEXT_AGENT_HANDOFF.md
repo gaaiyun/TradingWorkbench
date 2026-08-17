@@ -40,8 +40,13 @@
   完整指标与限制。Python、Worker、D1 migration 均未改动，本地未重复跑 Python 全量矩阵。
 - 发布审阅补正了显式 `0 bp` 成本、宇宙筛选总数，并让宇宙机器人提交后显式 dispatch
   `deploy-workbench.yml`，避免 GitHub token push 不触发级联部署。
-- 本节在代码实施阶段更新；只有 GitHub Actions、Pages SHA 和三个生产 API 实测完成后，
-  才能把状态改为“已上线”。
+- 本批已上线：CI `32049058200`、Pages `32049125716` 均成功；生产验收时 Pages SHA 为
+  `2fa161117e832bd8fb884698b956ce3551d6341f`，deployment manifest 合法。数据目录返回
+  实际免费源；宇宙摘要为 A 股 `5543`、美股核心 `9`、港股核心 `1`；`512480.SS` 回测
+  读取 `528` 根 qfq 日线并完成 `58` 笔非重叠交易，下一交易日开盘执行口径已回读。
+- `/api/health` 总体仍为 `degraded`，唯一降级项是既有报告日期停在 `2026-08-14`，落后
+  预期交易日 `2026-08-17`；部署清单本身 `ok=true`。这不是数据目录或回测回归，本批未
+  额外触发 LLM 报告来掩盖真实状态。
 
 ### 2026-08-13（三续）· GPT 故障转移真实生产验证通过：中转站故障持续 1 小时+，兜底全部接住，最终报告成功产出
 
@@ -936,7 +941,7 @@ gh workflow run deploy-monitor.yml --repo gaaiyun/TradingWorkbench --ref main
 | 2026-08-13 | 上一条修复推送后两次真实复验仍失败（`Error 524`→`Error 503`），定位到第二处独立缺口：`_get_provider_kwargs()` 转发 `openai_reasoning_effort` 的条件写死 `provider=="openai"`，`openai_compatible`/`xai`/`deepseek` 等全部被排除，配置从未到达上一条修复所在的层——上一条修复在两次复验里其实完全没生效。改用 `is_openai_compatible()` 判定 | 本地用真实 `TradingAgentsGraph` 构造生产同款 config（不发请求）实测 `deep_thinking_llm.reasoning_effort` 从 `None` 修复到 `"low"`；新增 3 项参数化回归测试；全量回归 `720 passed / 2 skipped`；`curl` 探测确认同期中转站 `/v1/chat/completions` 本身也有瞬时不稳定（连接在 60 秒内中断），`/v1/models` 正常；提交 `8f67e2c`，已推送 |
 | 2026-08-13 | 第三次真实复验（两处 reasoning_effort 修复均已正确生效）仍 `Error 524`，确认中转站 completions 端点当天本身持续故障（跨约 1 小时的 4 次真实失败：524/524/503/524），与本仓库代码无关。按用户要求实现 Grok→GPT 自动故障转移：`NormalizedChatOpenAI.invoke()` 捕获连接失败/5xx/429 并重放到 `fallback_llm`（400/401 等客户端错误不触发，避免掩盖真实故障），`TradingAgentsGraph._build_fallback_llm()` 仅需设置 fallback model 即可启用，provider/backend_url 默认复用主配置 | 生产已配置 secret `TRADINGAGENTS_LLM_FALLBACK_API_KEY`（独立 GPT key，SHA-256 已记录）与三个 Variable（`gpt-5.4-mini`，便宜档位，`/v1/models` 探测确认健康、2.3 秒内正确回答）；已接入两个真实工作流 env；14 项新测试覆盖 4 类瞬时错误触发、2 类客户端错误不触发、structured_output 路径；全量回归 `734 passed / 2 skipped`；CI 绿（含一次 ruff 修复）；提交 `cd2c09d`/`a3e4873`/`33c295a`，均已推送 |
 | 2026-08-13 | 部署后首次真实验证：GPT 故障转移在持续 1 小时+的真实中转站故障下完整生效 | run `31740098198` 耗时 `1h11m11s`，日志确认 grok-4.5 先后 12 次触发 fallback 到 gpt-5.4-mini，每次都成功，最终 `[DONE] 1/1 tickers ok`；`/api/health` 复核 `status:ok`；是当天 5 次真实调用中唯一成功产出报告的一次（前 4 次均因中转站故障失败） |
-| 2026-08-18 | 接入免费源数据目录、A 股当前上市宇宙快照与单标的 qfq 日线回测校验；保持七入口及 Evidence/Worker/D1 边界不变 | 新浪降级接入后 Functions `444/1 skip`、前端 `122/122`，资产和语法检查通过；双视口浏览器无溢出或页面错误；生产 run、SHA、宇宙覆盖数待本轮发布后回填 |
+| 2026-08-18 | 接入免费源数据目录、A 股当前上市宇宙快照与单标的 qfq 日线回测校验；保持七入口及 Evidence/Worker/D1 边界不变 | 本地 Functions `444/1 skip`、前端 `122/122`；CI `32049058200`、Pages `32049125716` 成功；生产 A 股当前上市 `5543`，512480 回测 `528` 根/`58` 笔；health 仅因既有报告滞后为 degraded |
 
 ## 1.6 2026-07-30 全局质量复审
 
