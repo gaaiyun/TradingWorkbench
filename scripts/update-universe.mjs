@@ -10,7 +10,8 @@ const ENDPOINTS = [
 const PAGE_SIZE = 100;
 const SINA_ENDPOINT = "https://vip.stock.finance.sina.com.cn/quotes_service/api/json_v2.php/Market_Center.getHQNodeData";
 const SINA_PAGE_SIZE = 100;
-const MIN_CN_UNIVERSE = 1000;
+const SINA_MAX_PAGES = 70;
+const MIN_CN_UNIVERSE = 4000;
 const ROOT = new URL("../", import.meta.url);
 
 function listingDate(value) {
@@ -121,7 +122,7 @@ export async function fetchEastmoneyUniverse(fetchImpl) {
 
 export async function fetchSinaUniverse(fetchImpl = globalThis.fetch) {
   const bySymbol = new Map();
-  for (let page = 1; page <= 20; page += 1) {
+  for (let page = 1; page <= SINA_MAX_PAGES; page += 1) {
     const url = new URL(SINA_ENDPOINT);
     url.search = new URLSearchParams({
       page: String(page), num: String(SINA_PAGE_SIZE), sort: "symbol", asc: "1",
