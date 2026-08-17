@@ -3,7 +3,7 @@ import test from "node:test";
 
 import * as catalogApi from "../functions/api/data-catalog.js";
 import * as universeApi from "../functions/api/universe.js";
-import { fetchCnUniverse, fetchSinaUniverse } from "../scripts/update-universe.mjs";
+import { fetchEastmoneyUniverse, fetchSinaUniverse } from "../scripts/update-universe.mjs";
 
 function request(path) {
   return new Request(`https://workbench.test${path}`);
@@ -76,7 +76,7 @@ test("universe filtering reports the full match count before applying the respon
 
 test("universe refresh uses the bounded Eastmoney current-listed contract", async () => {
   let requestedUrl;
-  const instruments = await fetchCnUniverse(async (url) => {
+  const instruments = await fetchEastmoneyUniverse(async (url) => {
     requestedUrl = url;
     return new Response(JSON.stringify({
       data: {
@@ -96,11 +96,16 @@ test("universe refresh uses the bounded Eastmoney current-listed contract", asyn
 });
 
 test("universe refresh normalizes the lightweight Sina fallback", async () => {
-  const instruments = await fetchSinaUniverse(async () => new Response(JSON.stringify([
+  let requestedUrl;
+  const instruments = await fetchSinaUniverse(async (url) => {
+    requestedUrl = url;
+    return new Response(JSON.stringify([
     { symbol: "sh600000", code: "600000", name: "浦发银行" },
     { symbol: "bj920000", code: "920000", name: "安徽凤凰" },
-  ]), { status: 200 }));
+    ]), { status: 200 });
+  });
 
+  assert.equal(requestedUrl.searchParams.get("num"), "100");
   assert.deepEqual(instruments.map(({ symbol }) => symbol), ["600000.SS", "920000.BJ"]);
   assert.ok(instruments.every(({ source }) => source === "sina-market-center"));
 });

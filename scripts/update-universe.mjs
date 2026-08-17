@@ -9,7 +9,8 @@ const ENDPOINTS = [
 ];
 const PAGE_SIZE = 100;
 const SINA_ENDPOINT = "https://vip.stock.finance.sina.com.cn/quotes_service/api/json_v2.php/Market_Center.getHQNodeData";
-const SINA_PAGE_SIZE = 500;
+const SINA_PAGE_SIZE = 100;
+const MIN_CN_UNIVERSE = 1000;
 const ROOT = new URL("../", import.meta.url);
 
 function listingDate(value) {
@@ -102,7 +103,7 @@ async function fetchPage(page, fetchImpl) {
   throw lastError;
 }
 
-async function fetchEastmoneyUniverse(fetchImpl) {
+export async function fetchEastmoneyUniverse(fetchImpl) {
   const first = await fetchPage(1, fetchImpl);
   const pages = Math.max(1, Math.ceil(first.total / PAGE_SIZE));
   const rows = [...first.rows];
@@ -146,10 +147,14 @@ export async function fetchSinaUniverse(fetchImpl = globalThis.fetch) {
 
 export async function fetchCnUniverse(fetchImpl = globalThis.fetch) {
   try {
-    return await fetchEastmoneyUniverse(fetchImpl);
+    const instruments = await fetchEastmoneyUniverse(fetchImpl);
+    if (instruments.length >= MIN_CN_UNIVERSE) return instruments;
   } catch {
-    return fetchSinaUniverse(fetchImpl);
+    // Fall through to the independent public source.
   }
+  const fallback = await fetchSinaUniverse(fetchImpl);
+  if (fallback.length < MIN_CN_UNIVERSE) throw new Error("CN universe incomplete");
+  return fallback;
 }
 
 function configuredInstruments(settings) {
