@@ -81,7 +81,9 @@ test("universe refresh uses the bounded Eastmoney current-listed contract", asyn
     return new Response(JSON.stringify({
       data: {
         total: 1,
-        diff: [{ f12: "000001", f13: 0, f14: "平安银行", f100: "银行", f26: "19910403" }],
+        diff: {
+          0: { f12: "000001", f13: 0, f14: "平安银行", f100: "银行", f26: "19910403" },
+        },
       },
     }), { status: 200 });
   });

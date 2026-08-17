@@ -64,8 +64,14 @@ async function fetchPage(page, fetchImpl) {
         });
         if (!response.ok) throw new Error(`eastmoney universe HTTP ${response.status}`);
         const payload = await response.json();
-        if (!Array.isArray(payload?.data?.diff)) throw new Error("eastmoney universe malformed data");
-        return { total: Number(payload.data.total) || 0, rows: payload.data.diff };
+        const diff = payload?.data?.diff;
+        const rows = Array.isArray(diff)
+          ? diff
+          : diff && typeof diff === "object"
+            ? Object.values(diff)
+            : null;
+        if (!rows) throw new Error("eastmoney universe malformed data");
+        return { total: Number(payload.data.total) || 0, rows };
       } catch (error) {
         lastError = error instanceof Error ? error : lastError;
       }
