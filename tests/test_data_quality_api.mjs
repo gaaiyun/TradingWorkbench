@@ -3,6 +3,7 @@ import test from "node:test";
 
 import * as catalogApi from "../functions/api/data-catalog.js";
 import * as universeApi from "../functions/api/universe.js";
+import { fetchCnUniverse } from "../scripts/update-universe.mjs";
 
 function request(path) {
   return new Request(`https://workbench.test${path}`);
@@ -71,4 +72,23 @@ test("universe filtering reports the full match count before applying the respon
   const payload = await response.json();
   assert.equal(payload.data.length, 1);
   assert.equal(payload.totalMatched, 2);
+});
+
+test("universe refresh uses the bounded Eastmoney current-listed contract", async () => {
+  let requestedUrl;
+  const instruments = await fetchCnUniverse(async (url) => {
+    requestedUrl = url;
+    return new Response(JSON.stringify({
+      data: {
+        total: 1,
+        diff: [{ f12: "000001", f13: 0, f14: "平安银行", f100: "银行", f26: "19910403" }],
+      },
+    }), { status: 200 });
+  });
+
+  assert.equal(requestedUrl.hostname, "82.push2.eastmoney.com");
+  assert.equal(requestedUrl.searchParams.get("pz"), "100");
+  assert.equal(requestedUrl.searchParams.get("np"), "2");
+  assert.ok(requestedUrl.searchParams.get("ut"));
+  assert.equal(instruments[0].symbol, "000001.SZ");
 });

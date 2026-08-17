@@ -40,7 +40,7 @@
 
 ## 5. 发布前验证
 
-- Functions：`442 passed / 1 skipped / 0 failed`。
+- Functions：`443 passed / 1 skipped / 0 failed`（东财兼容调整后）。
 - 前端：`122 passed / 0 failed`。
 - `npm run check:workbench` 与 `npm run check:asset-version` 通过，资产版本为
   `8e75c71538c9`。
@@ -51,3 +51,12 @@
   token push 的级联事件。
 - 本批没有修改 Python、Worker 或 D1 migration，因此未额外运行 Python 全量矩阵；
   由既有 CI 执行仓库完整质量门禁。
+
+## 6. 首轮股票宇宙刷新记录
+
+- workflow `32046914735`、`32047201467` 均在第一页返回 `eastmoney universe HTTP 502`。
+- 两次失败都发生在写文件前，`public/data/universe.json` 继续保留 13 个核心标的的
+  `degraded` 快照，没有产生空覆盖或错误上线。
+- 对照公开的 AKShare 东财 A 股现货请求后，更新脚本改用 `82.push2.eastmoney.com`、
+  `np=2`、`ut` 和每页 100 条，并保留原 `push2` 域名及一轮有界重试。最终成功 run、
+  覆盖数和 Pages SHA 待复跑后回填。

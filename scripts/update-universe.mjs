@@ -3,8 +3,11 @@
 import { readFile, writeFile } from "node:fs/promises";
 import { fileURLToPath } from "node:url";
 
-const ENDPOINT = "https://push2.eastmoney.com/api/qt/clist/get";
-const PAGE_SIZE = 500;
+const ENDPOINTS = [
+  "https://82.push2.eastmoney.com/api/qt/clist/get",
+  "https://push2.eastmoney.com/api/qt/clist/get",
+];
+const PAGE_SIZE = 100;
 const ROOT = new URL("../", import.meta.url);
 
 function listingDate(value) {
@@ -38,21 +41,38 @@ export function normalizeCnInstrument(row) {
 }
 
 async function fetchPage(page, fetchImpl) {
-  const url = new URL(ENDPOINT);
-  url.search = new URLSearchParams({
-    pn: String(page), pz: String(PAGE_SIZE), po: "1", np: "1", fltt: "2", invt: "2",
-    fid: "f12",
-    fs: "m:0+t:6,m:0+t:80,m:1+t:2,m:1+t:23,m:0+t:81+s:2048",
-    fields: "f12,f14,f13,f100,f26",
-  });
-  const response = await fetchImpl(url, {
-    headers: { referer: "https://quote.eastmoney.com/", "user-agent": "TradingWorkbench universe snapshot" },
-    signal: AbortSignal.timeout(20_000),
-  });
-  if (!response.ok) throw new Error(`eastmoney universe HTTP ${response.status}`);
-  const payload = await response.json();
-  if (!Array.isArray(payload?.data?.diff)) throw new Error("eastmoney universe malformed data");
-  return { total: Number(payload.data.total) || 0, rows: payload.data.diff };
+  let lastError = new Error("eastmoney universe unavailable");
+  for (let attempt = 0; attempt < 2; attempt += 1) {
+    for (const endpoint of ENDPOINTS) {
+      const url = new URL(endpoint);
+      url.search = new URLSearchParams({
+        pn: String(page), pz: String(PAGE_SIZE), po: "1", np: "2", fltt: "2", invt: "2",
+        ut: "bd1d9ddb04089700cf9c27f6f7426281",
+        fid: "f12",
+        fs: "m:0+t:6,m:0+t:80,m:1+t:2,m:1+t:23,m:0+t:81+s:2048",
+        fields: "f12,f14,f13,f100,f26",
+        _: String(Date.now()),
+      });
+      try {
+        const response = await fetchImpl(url, {
+          headers: {
+            accept: "application/json,text/plain,*/*",
+            referer: "https://quote.eastmoney.com/",
+            "user-agent": "Mozilla/5.0 (compatible; TradingWorkbench/1.0)",
+          },
+          signal: AbortSignal.timeout(20_000),
+        });
+        if (!response.ok) throw new Error(`eastmoney universe HTTP ${response.status}`);
+        const payload = await response.json();
+        if (!Array.isArray(payload?.data?.diff)) throw new Error("eastmoney universe malformed data");
+        return { total: Number(payload.data.total) || 0, rows: payload.data.diff };
+      } catch (error) {
+        lastError = error instanceof Error ? error : lastError;
+      }
+    }
+    if (attempt === 0) await new Promise((resolve) => setTimeout(resolve, 1000));
+  }
+  throw lastError;
 }
 
 export async function fetchCnUniverse(fetchImpl = globalThis.fetch) {

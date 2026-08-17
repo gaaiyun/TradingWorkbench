@@ -29,7 +29,7 @@
   停牌、涨跌停封单、申赎、最低佣金和盘口冲击未建模，页面明确“不代表实盘”。
 - 不新增第八个一级入口，不改 D1 migration、Worker slot、Provider 健康、EvidencePacket、
   Manifest 或报告哈希。逐步记录和回滚见 [数据目录与回测校验实施记录](data-backtest-rollout.md)。
-- 发布前必要回归为 Functions `442 passed / 1 skipped`、前端 `122/122`，脚本语法与资产版本
+- 发布前必要回归为 Functions `443 passed / 1 skipped`、前端 `122/122`，脚本语法与资产版本
   检查通过；1440×1000、390×844 浏览器均无横向溢出或页面错误，回测表单可提交并显示
   完整指标与限制。Python、Worker、D1 migration 均未改动，本地未重复跑 Python 全量矩阵。
 - 发布审阅补正了显式 `0 bp` 成本、宇宙筛选总数，并让宇宙机器人提交后显式 dispatch
@@ -930,7 +930,7 @@ gh workflow run deploy-monitor.yml --repo gaaiyun/TradingWorkbench --ref main
 | 2026-08-13 | 上一条修复推送后两次真实复验仍失败（`Error 524`→`Error 503`），定位到第二处独立缺口：`_get_provider_kwargs()` 转发 `openai_reasoning_effort` 的条件写死 `provider=="openai"`，`openai_compatible`/`xai`/`deepseek` 等全部被排除，配置从未到达上一条修复所在的层——上一条修复在两次复验里其实完全没生效。改用 `is_openai_compatible()` 判定 | 本地用真实 `TradingAgentsGraph` 构造生产同款 config（不发请求）实测 `deep_thinking_llm.reasoning_effort` 从 `None` 修复到 `"low"`；新增 3 项参数化回归测试；全量回归 `720 passed / 2 skipped`；`curl` 探测确认同期中转站 `/v1/chat/completions` 本身也有瞬时不稳定（连接在 60 秒内中断），`/v1/models` 正常；提交 `8f67e2c`，已推送 |
 | 2026-08-13 | 第三次真实复验（两处 reasoning_effort 修复均已正确生效）仍 `Error 524`，确认中转站 completions 端点当天本身持续故障（跨约 1 小时的 4 次真实失败：524/524/503/524），与本仓库代码无关。按用户要求实现 Grok→GPT 自动故障转移：`NormalizedChatOpenAI.invoke()` 捕获连接失败/5xx/429 并重放到 `fallback_llm`（400/401 等客户端错误不触发，避免掩盖真实故障），`TradingAgentsGraph._build_fallback_llm()` 仅需设置 fallback model 即可启用，provider/backend_url 默认复用主配置 | 生产已配置 secret `TRADINGAGENTS_LLM_FALLBACK_API_KEY`（独立 GPT key，SHA-256 已记录）与三个 Variable（`gpt-5.4-mini`，便宜档位，`/v1/models` 探测确认健康、2.3 秒内正确回答）；已接入两个真实工作流 env；14 项新测试覆盖 4 类瞬时错误触发、2 类客户端错误不触发、structured_output 路径；全量回归 `734 passed / 2 skipped`；CI 绿（含一次 ruff 修复）；提交 `cd2c09d`/`a3e4873`/`33c295a`，均已推送 |
 | 2026-08-13 | 部署后首次真实验证：GPT 故障转移在持续 1 小时+的真实中转站故障下完整生效 | run `31740098198` 耗时 `1h11m11s`，日志确认 grok-4.5 先后 12 次触发 fallback 到 gpt-5.4-mini，每次都成功，最终 `[DONE] 1/1 tickers ok`；`/api/health` 复核 `status:ok`；是当天 5 次真实调用中唯一成功产出报告的一次（前 4 次均因中转站故障失败） |
-| 2026-08-18 | 接入免费源数据目录、A 股当前上市宇宙快照与单标的 qfq 日线回测校验；保持七入口及 Evidence/Worker/D1 边界不变 | 发布前 Functions `442/1 skip`、前端 `122/122`，资产和语法检查通过；双视口浏览器无溢出或页面错误；生产 run、SHA、宇宙覆盖数待本轮发布后回填 |
+| 2026-08-18 | 接入免费源数据目录、A 股当前上市宇宙快照与单标的 qfq 日线回测校验；保持七入口及 Evidence/Worker/D1 边界不变 | 东财兼容调整后 Functions `443/1 skip`、前端 `122/122`，资产和语法检查通过；双视口浏览器无溢出或页面错误；生产 run、SHA、宇宙覆盖数待本轮发布后回填 |
 
 ## 1.6 2026-07-30 全局质量复审
 
