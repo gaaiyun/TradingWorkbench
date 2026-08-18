@@ -615,6 +615,9 @@ def test_price_and_volume_cannot_be_relabelled_as_flow_or_selling_pressure():
         "成交量仅证明交易活跃，不能据此推断资金流出或抛压 [M1]。\n\n"
         "卖压是否已经释放无法从单一快照确认 [M1]。"
     )
+    bounded_scope = (
+        "政策文件仅证明事件发生，未覆盖价格影响或资金流入结论 [M1]。"
+    )
     misleading_prefix = "不能忽视风险，主力资金正在流出 [M1]。"
     misleading_suffix = "主力资金正在流出，但是否持续无法确认 [M1]。"
     misleading_inline = "不能忽视主力资金正在流出 [M1]。"
@@ -628,6 +631,7 @@ def test_price_and_volume_cannot_be_relabelled_as_flow_or_selling_pressure():
 
     invented_result = validate_report_claims(invented, packet)
     bounded_result = validate_report_claims(bounded, packet)
+    bounded_scope_result = validate_report_claims(bounded_scope, packet)
     misleading_prefix_result = validate_report_claims(misleading_prefix, packet)
     misleading_suffix_result = validate_report_claims(misleading_suffix, packet)
     misleading_inline_result = validate_report_claims(misleading_inline, packet)
@@ -650,6 +654,8 @@ def test_price_and_volume_cannot_be_relabelled_as_flow_or_selling_pressure():
     assert invented_result["unsupportedActorOrFlowAttributionParagraphs"] == 1
     assert bounded_result["status"] == "passed"
     assert bounded_result["unsupportedActorOrFlowAttributionParagraphs"] == 0
+    assert bounded_scope_result["status"] == "passed"
+    assert bounded_scope_result["unsupportedActorOrFlowAttributionParagraphs"] == 0
     assert (
         "UNSUPPORTED_ACTOR_OR_FLOW_ATTRIBUTION"
         in misleading_prefix_result["errorCodes"]

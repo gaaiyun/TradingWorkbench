@@ -734,8 +734,10 @@ class TestPortfolioManagerInjection:
         assert "one evidence-backed claim per paragraph or bullet" in prompt
         assert "Every substantive paragraph or bullet must include" in prompt
         assert "Do not compress the entire Executive Summary or Investment Thesis" in prompt
+        assert "Never\n  write a bare ID or range such as M651-M658" in prompt
         assert "Policy documents and corporate actions prove only that the event occurred" in prompt
         assert "catalyst, benefit, liquidity improvement, or price effect" in prompt
+        assert "Do not attribute flows or actors" in prompt
         assert "Copy every cited numerical value exactly as it appears" in prompt
 
     def test_pm_revises_once_when_the_first_decision_fails_the_evidence_gate(self):

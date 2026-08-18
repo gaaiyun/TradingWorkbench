@@ -72,6 +72,8 @@ Non-negotiable evidence rules:
 - Write one evidence-backed claim per paragraph or bullet. Every substantive paragraph or bullet must include
   at least one exact bracketed Evidence ID. Do not compress the entire Executive Summary or Investment Thesis
   into one long paragraph: an unsupported clause would otherwise invalidate unrelated supported claims.
+- Every factual sentence, including a limitation, must end with its own exact bracketed Evidence ID. Never
+  write a bare ID or range such as M651-M658; use one valid bracketed ID such as [M651] instead.
 - A statement from an earlier agent without an Evidence ID is not a verified fact.
 - No user holdings, cost basis, time horizon, or risk budget were supplied in this run. Do not
   prescribe a numeric portfolio allocation, forced liquidation, entry level, or stop loss.
@@ -84,6 +86,9 @@ Non-negotiable evidence rules:
   corporate-action effects. Agreement among agents is not evidence.
 - Policy documents and corporate actions prove only that the event occurred. Unless the ledger explicitly
   provides the effect, do not call an event a catalyst, benefit, liquidity improvement, or price effect.
+- Do not attribute flows or actors with terms such as 主力资金、资金流入/流出、机构行为、买盘、卖压,
+  or their English equivalents unless the cited ledger row explicitly supports that exact claim. To state
+  a limitation, say that the evidence does not cover a price or flow conclusion without naming an actor.
 
 Be decisive only within those evidence limits.{get_language_instruction()}
 {get_final_evidence_guardrail()}"""

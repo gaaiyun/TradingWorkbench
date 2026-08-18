@@ -960,6 +960,7 @@ gh workflow run deploy-monitor.yml --repo gaaiyun/TradingWorkbench --ref main
 | 2026-08-13 | 第三次真实复验（两处 reasoning_effort 修复均已正确生效）仍 `Error 524`，确认中转站 completions 端点当天本身持续故障（跨约 1 小时的 4 次真实失败：524/524/503/524），与本仓库代码无关。按用户要求实现 Grok→GPT 自动故障转移：`NormalizedChatOpenAI.invoke()` 捕获连接失败/5xx/429 并重放到 `fallback_llm`（400/401 等客户端错误不触发，避免掩盖真实故障），`TradingAgentsGraph._build_fallback_llm()` 仅需设置 fallback model 即可启用，provider/backend_url 默认复用主配置 | 生产已配置 secret `TRADINGAGENTS_LLM_FALLBACK_API_KEY`（独立 GPT key，SHA-256 已记录）与三个 Variable（`gpt-5.4-mini`，便宜档位，`/v1/models` 探测确认健康、2.3 秒内正确回答）；已接入两个真实工作流 env；14 项新测试覆盖 4 类瞬时错误触发、2 类客户端错误不触发、structured_output 路径；全量回归 `734 passed / 2 skipped`；CI 绿（含一次 ruff 修复）；提交 `cd2c09d`/`a3e4873`/`33c295a`，均已推送 |
 | 2026-08-13 | 部署后首次真实验证：GPT 故障转移在持续 1 小时+的真实中转站故障下完整生效 | run `31740098198` 耗时 `1h11m11s`，日志确认 grok-4.5 先后 12 次触发 fallback 到 gpt-5.4-mini，每次都成功，最终 `[DONE] 1/1 tickers ok`；`/api/health` 复核 `status:ok`；是当天 5 次真实调用中唯一成功产出报告的一次（前 4 次均因中转站故障失败） |
 | 2026-08-18 | 接入免费源数据目录、A 股当前上市宇宙快照与单标的 qfq 日线回测校验；保持七入口及 Evidence/Worker/D1 边界不变 | 本地 Functions `444/1 skip`、前端 `122/122`；CI `32049058200`、Pages `32049125716` 成功；生产 A 股当前上市 `5543`，512480 回测 `528` 根/`58` 笔；health 仅因既有报告滞后为 degraded |
+| 2026-08-18 | 处理收盘日线与报告发布事故：日线正常收盘读取降为 40 根、`RETRY_EXHAUSTED` 恢复槽使用独立执行时刻以避开 D1 唯一键；官方新闻降为工作日每日 3 次，已知上游 SSE 局部失败改记降级而非 Action 失败；纯报告数据提交跳过全套 CI 矩阵 | 生产三只核心 ETF 的 `/api/market?timeframe=1d` 均为 `ok`、最新业务日 `2026-08-17`；当日 `daily-analysis` run `32112941002` 成功并产生 1 份 `verified` 报告；最终 Pages health 与运行时 SHA 必须继续以实时端点为准 |
 
 ## 1.6 2026-07-30 全局质量复审
 

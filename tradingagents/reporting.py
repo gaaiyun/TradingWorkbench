@@ -195,6 +195,8 @@ _ATTRIBUTION_NEGATION_RE = re.compile(
     r"(?:没有|缺乏)(?:直接|充分|足够)?证据"
     r"(?:显示|表明|证明|支持)|"
     r"(?:并非|不是|不等同于)|"
+    r"(?:未覆盖|未涉及|未提供|未显示|未说明|不含|不包含)"
+    r"[^，,。；;]{0,40}|"
     r"(?:cannot|can't|does\s+not|doesn't)\s+"
     r"(?:prove|show|identify|infer)"
     r")\s*$",

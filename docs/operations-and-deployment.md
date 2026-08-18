@@ -100,6 +100,11 @@ Portfolio Manager 会在首稿未通过同一确定性公开段落过滤器时�
 无编号 Evidence 占位符。不做无界循环；第三稿仍不合规则继续 `Not Rated`。运维验收必须查看最终 Manifest，不能把
 “分析 workflow success”误报成“报告通过 Evidence 门禁”。
 
+对于资金或主体的限制性表述，门禁只允许明确的“不支持/未覆盖该结论”语义；“无法否认主力
+资金流出”仍是未经支持的归因，必须拦截。生成提示词要求每个事实句末尾带一个有效的 `[Evidence ID]`，
+不得写裸 ID 或范围（如 `M651-M658`）。这既避免把真正免责声明误判为资金归因，也不允许用
+“免责声明”包装实际资金、主力或机构判断。
+
 OpenAI-compatible free-text 回退若把 `Rating / Executive Summary / Investment Thesis`
 标签与正文分成相邻两行，生成端会将这三个固定标签规范为 `**Label**: value`；该步骤不改
 正文、数字、Evidence ID 或评级值。除此之外不得用字符串清洗修补 claim。
