@@ -333,6 +333,14 @@ test("recovers a missed CN close snapshot and report without replaying high-freq
       ["intradayCollect", "intradaySignal", "newsCollect"].includes(type)),
     false,
   );
+  assert.equal(
+    tasks.every(({ scheduledFor }) =>
+      scheduledFor !== "2026-07-29T07:20:00.000Z"),
+    true,
+  );
+  assert.equal(new Set(
+    tasks.map(({ type, scheduledFor }) => `${type}|${scheduledFor}`),
+  ).size, tasks.length);
 });
 
 test("recovers the profile-local US close snapshot using the New York market date", async () => {

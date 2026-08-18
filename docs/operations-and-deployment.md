@@ -12,7 +12,9 @@
 `RETRY_EXHAUSTED` 取消，导致日线停在 2026-08-13、完整分析停在 2026-08-14；
 这不是 Pages 缓存或 API 解析问题。日线采集现区分 bootstrap/backfill 的 1500 根与
 日常收盘的 40 根重叠，避免每天重写整段历史。36 小时关键日恢复使用 `#recovery`
-独立 slot，并只在原槽确实为 `cancelled/RETRY_EXHAUSTED` 时重建，避免重复执行正常或已完成槽。
+独立 slot，并只在原槽确实为 `cancelled/RETRY_EXHAUSTED` 时重建。恢复槽不能复用原
+`scheduled_for`：D1 对 `(profile_id, slot_type, scheduled_for)` 有唯一约束；实现保留原业务日
+`localSlot`，另分配已到期且不重叠的 recovery 执行时间，避免静默冲突。
 
 近 30 天 Actions 审计显示 `official-news` 209 次运行、82 次因上交所已知 403/无效响应失败，
 现改为工作日每天 3 次；上游部分失败仍写入降级结果和错误码，但不再制造邮件级 Action failure，

@@ -11,7 +11,9 @@
 - 资金流是独立故障域：`fund-flow` run `32033363007` 成功写入 753 行，但两只沪市 ETF 的
   `sse-fund-scale-daily` 因 `UPSTREAM_BLOCKED` 降级；不能把它与日线缺失混为同一原因。
 - 现行修复：日常 `1d` 采集只取最近 40 根重叠柱；bootstrap/manual backfill 仍取 1500 根。
-  恢复任务使用 `#recovery` 新身份，并在原槽不是 `cancelled/RETRY_EXHAUSTED` 时过滤，避免重复日报或重复行情写入。
+  恢复任务使用 `#recovery` 新身份，并在原槽不是 `cancelled/RETRY_EXHAUSTED` 时过滤。D1 另有
+  `(profile_id, slot_type, scheduled_for)` 唯一约束，因此 recovery 会保留原业务日 `localSlot`，但使用
+  彼此错开的已到期执行时间；只换 ID 而复用原时间会被 D1 静默拒绝。
 - Actions 近 30 天审计：`official-news` 209 次/82 次失败（主要为上交所 403），`CI` 172 次，
   `deploy-workbench` 121 次。上交所 schedule 已从每两小时降为工作日每天三次；部分上游失败保留
   `degraded`/错误码但不再让 Action 失败，配置、D1 和响应大小错误仍失败；CI 对纯报告数据提交跳过。

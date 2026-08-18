@@ -326,9 +326,18 @@ export function recoveryTasksForProfile(
       recovery: true,
     });
   }
-  return [...unique.values()].sort((left, right) =>
+  const tasks = [...unique.values()].sort((left, right) =>
     left.scheduledFor.localeCompare(right.scheduledFor) ||
     left.type.localeCompare(right.type));
+  // A new id is not enough: scheduled_slots also enforces uniqueness for
+  // profile/type/scheduled_for. Keep the original business date in localSlot,
+  // but give every recovery a due, non-overlapping execution timestamp.
+  return tasks.map((task, index) => ({
+    ...task,
+    scheduledFor: new Date(
+      tick - (index + 1) * (MAX_SCHEDULED_EXTERNAL_REQUESTS + 1) * 1000,
+    ).toISOString(),
+  }));
 }
 
 const SCHEDULE_BY_TYPE = {
