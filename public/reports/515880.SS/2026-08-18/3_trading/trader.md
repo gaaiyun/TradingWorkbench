@@ -1,0 +1,5 @@
+**Action**: Hold
+
+**Reasoning**: The analysts' reports indicate a balanced view with mixed evidence: bullish points cite [D2] 7.57575758% gain over 8 days [M1253 to M1260], [D5] 10.01781979% above MA20=0.64535, RSI14=54.99749416 neutral [D9], MACD histogram positive 0.01633812 [I8], and catalysts like [CA1][CA2][N5][N3] share splits and [N1] new dealer [N2] quarterly report. Bearish counters [D3] -1.25173853% drop [M1259-M1260], [D6] -6.10949484% below MA60=0.7562, no strict alignment [D7], high 70.63332844% realized vol [I10], 5.60218028% ATR [D4]. EvidencePacketV1 shows short-term rebound but long-term MA60 pressure without alignment [D7], high volatility persistent, no scale expansion proof in [N2] or holdings. Plan recommends Hold as safest, monitor for close > MA20 > MA60 per [D7]. No target prices or sizing provided.
+
+FINAL TRANSACTION PROPOSAL: **HOLD**

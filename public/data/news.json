@@ -1,113 +1,113 @@
 {
   "version": 1,
   "status": "ok",
-  "generated_at": "2026-08-14T15:46:37+08:00",
-  "trade_date": "2026-08-14",
+  "generated_at": "2026-08-18T15:46:00+08:00",
+  "trade_date": "2026-08-18",
   "global": {
     "status": "ok",
     "query_type": "global",
     "ticker": null,
-    "start_date": "2026-08-07",
-    "end_date": "2026-08-14",
-    "fetched_at": "2026-08-14T07:46:38Z",
+    "start_date": "2026-08-11",
+    "end_date": "2026-08-18",
+    "fetched_at": "2026-08-18T07:46:01Z",
     "items": [
       {
-        "title": "Most Asian stocks track Wall St record as US data ease rate fears",
+        "title": "US 30-year yields hit highest level since 2007 as war, oil worries fester",
         "summary": "",
-        "url": "https://finance.yahoo.com/markets/world-indices/articles/most-asian-stocks-track-wall-024850728.html",
-        "source": "AFP",
-        "published_at": "2026-08-14T07:32:13Z",
-        "fetched_at": "2026-08-14T07:46:38Z",
-        "ticker": null,
-        "source_tier": "aggregator"
-      },
-      {
-        "title": "How far can global oil supplies stretch if the Iran war won't end?",
-        "summary": "",
-        "url": "https://finance.yahoo.com/video/far-global-oil-supplies-stretch-164543005.html",
-        "source": "Reuters Videos",
-        "published_at": "2026-08-14T07:14:24Z",
-        "fetched_at": "2026-08-14T07:46:38Z",
-        "ticker": null,
-        "source_tier": "aggregator"
-      },
-      {
-        "title": "Oil rises after US threatens indefinite blockade of Iran",
-        "summary": "",
-        "url": "https://finance.yahoo.com/energy/articles/oil-steadies-us-threatens-blockade-013600797.html",
+        "url": "https://finance.yahoo.com/markets/stocks/articles/us-30-yields-hit-highest-070949167.html",
         "source": "Reuters",
-        "published_at": "2026-08-14T07:02:27Z",
-        "fetched_at": "2026-08-14T07:46:38Z",
+        "published_at": "2026-08-18T07:09:49Z",
+        "fetched_at": "2026-08-18T07:46:01Z",
         "ticker": null,
         "source_tier": "aggregator"
       },
       {
-        "title": "London BTC Company targets antimony potential across Nevada exploration portfolio",
+        "title": "Bond yields rise, oil extends gains as US-Iran ceasefire expires",
         "summary": "",
-        "url": "https://finance.yahoo.com/m/f9f6d0c5-b781-344f-a7c1-0b65987f9a6f/london-btc-company-targets.html",
-        "source": "Proactive",
-        "published_at": "2026-08-14T06:36:00Z",
-        "fetched_at": "2026-08-14T07:46:38Z",
+        "url": "https://finance.yahoo.com/energy/articles/oil-prices-climb-bond-yields-011655842.html",
+        "source": "Reuters",
+        "published_at": "2026-08-18T07:00:48Z",
+        "fetched_at": "2026-08-18T07:46:01Z",
         "ticker": null,
         "source_tier": "aggregator"
       },
       {
-        "title": "FTSE 100 Live: Blue-chips set to open higher as soft US inflation cools rate rise bets",
+        "title": "Why Is The Crypto Market Down Today?",
         "summary": "",
-        "url": "https://finance.yahoo.com/m/9ba9264a-0d7b-3c33-9e9e-c7e5cada327a/ftse-100-live%3A-blue-chips-set.html",
-        "source": "Proactive",
-        "published_at": "2026-08-14T06:15:00Z",
-        "fetched_at": "2026-08-14T07:46:38Z",
+        "url": "https://finance.yahoo.com/m/e4348eaa-5ce1-3b9d-aaad-6e2b0f5ef5ee/why-is-the-crypto-market-down.html",
+        "source": "BeInCrypto",
+        "published_at": "2026-08-18T06:30:31Z",
+        "fetched_at": "2026-08-18T07:46:01Z",
         "ticker": null,
         "source_tier": "aggregator"
       },
       {
-        "title": "Pan American Silver Q2 Earnings Call Highlights",
+        "title": "Libya Seeks Up to $40 Billion to Boost Oil Output to 2 Million Bpd",
         "summary": "",
-        "url": "https://finance.yahoo.com/m/5bade3d0-e24c-315a-96a9-ee1f9d7487e7/pan-american-silver-q2.html",
-        "source": "MarketBeat",
-        "published_at": "2026-08-14T06:04:21Z",
-        "fetched_at": "2026-08-14T07:46:38Z",
-        "ticker": null,
-        "source_tier": "aggregator"
-      },
-      {
-        "title": "Asian shares mostly fall and US futures are little changed after US inflation data improves",
-        "summary": "",
-        "url": "https://finance.yahoo.com/markets/world-indices/articles/asian-shares-mostly-fall-us-055846864.html",
-        "source": "Associated Press",
-        "published_at": "2026-08-14T05:58:46Z",
-        "fetched_at": "2026-08-14T07:46:38Z",
-        "ticker": null,
-        "source_tier": "aggregator"
-      },
-      {
-        "title": "Oil Prices Head for 4% Weekly Gain as U.S.-Iran Deadlock Drags On",
-        "summary": "",
-        "url": "https://finance.yahoo.com/energy/articles/oil-prices-head-4-weekly-054000881.html",
+        "url": "https://finance.yahoo.com/energy/articles/libya-seeks-40-billion-boost-063000121.html",
         "source": "Oilprice.com",
-        "published_at": "2026-08-14T05:40:00Z",
-        "fetched_at": "2026-08-14T07:46:38Z",
+        "published_at": "2026-08-18T06:30:00Z",
+        "fetched_at": "2026-08-18T07:46:01Z",
         "ticker": null,
         "source_tier": "aggregator"
       },
       {
-        "title": "Asian stocks head for strong weekly gains as US rate hike bets fade",
+        "title": "ExxonMobil Holdings (XOM) Awards $1.1 Billion To Start Mozambique LNG Work",
         "summary": "",
-        "url": "https://finance.yahoo.com/news/asian-stocks-set-weekly-gain-023234921.html",
-        "source": "Reuters",
-        "published_at": "2026-08-14T05:15:34Z",
-        "fetched_at": "2026-08-14T07:46:38Z",
-        "ticker": null,
-        "source_tier": "aggregator"
-      },
-      {
-        "title": "How Investors May Respond To Walmart (WMT) Earnings Countdown And New Exclusive Family-Focused Offerings",
-        "summary": "",
-        "url": "https://finance.yahoo.com/markets/stocks/articles/investors-may-respond-walmart-wmt-031601378.html",
+        "url": "https://finance.yahoo.com/energy/articles/exxonmobil-holdings-xom-awards-1-061235796.html",
         "source": "Simply Wall St.",
-        "published_at": "2026-08-14T03:16:01Z",
-        "fetched_at": "2026-08-14T07:46:38Z",
+        "published_at": "2026-08-18T06:12:35Z",
+        "fetched_at": "2026-08-18T07:46:01Z",
+        "ticker": null,
+        "source_tier": "aggregator"
+      },
+      {
+        "title": "U.S. 30-Year Treasury Yield Rises to Highest Since 2007",
+        "summary": "",
+        "url": "https://finance.yahoo.com/m/52180e5d-d632-3d1e-90c8-6f2af3dc07ea/u.s.-30-year-treasury-yield.html",
+        "source": "The Wall Street Journal",
+        "published_at": "2026-08-18T05:49:00Z",
+        "fetched_at": "2026-08-18T07:46:01Z",
+        "ticker": null,
+        "source_tier": "aggregator"
+      },
+      {
+        "title": "FTSE 100 Live:UK blue-chips set for flat open as rising oil and inflation jitters weigh",
+        "summary": "",
+        "url": "https://finance.yahoo.com/m/049106a0-55a4-3fe3-bfe1-4f8e14b7fa2b/ftse-100-live%3Auk-blue-chips.html",
+        "source": "Proactive",
+        "published_at": "2026-08-18T05:25:00Z",
+        "fetched_at": "2026-08-18T07:46:01Z",
+        "ticker": null,
+        "source_tier": "aggregator"
+      },
+      {
+        "title": "Japan's 10-year yield hits three-decade peak on inflation worries",
+        "summary": "",
+        "url": "https://finance.yahoo.com/economy/policy/articles/japans-10-government-bond-yield-001613606.html",
+        "source": "Reuters",
+        "published_at": "2026-08-18T04:41:41Z",
+        "fetched_at": "2026-08-18T07:46:01Z",
+        "ticker": null,
+        "source_tier": "aggregator"
+      },
+      {
+        "title": "Morning Bid: Bond investors in revolt as Iran threatens to go 'fully offensive'",
+        "summary": "",
+        "url": "https://finance.yahoo.com/markets/articles/morning-bid-bond-investors-revolt-043748939.html",
+        "source": "Reuters",
+        "published_at": "2026-08-18T04:37:48Z",
+        "fetched_at": "2026-08-18T07:46:01Z",
+        "ticker": null,
+        "source_tier": "aggregator"
+      },
+      {
+        "title": "U.S.-Iran Tensions Push Oil Prices Higher as Diesel Margins Hit Records",
+        "summary": "",
+        "url": "https://finance.yahoo.com/energy/articles/u-iran-tensions-push-oil-043544035.html",
+        "source": "Oilprice.com",
+        "published_at": "2026-08-18T04:35:44Z",
+        "fetched_at": "2026-08-18T07:46:01Z",
         "ticker": null,
         "source_tier": "aggregator"
       }
@@ -116,7 +116,7 @@
       {
         "source": "Yahoo Finance",
         "status": "ok",
-        "item_count": 39
+        "item_count": 38
       },
       {
         "source": "Federal Reserve",
@@ -130,9 +130,9 @@
       "status": "empty",
       "query_type": "ticker",
       "ticker": "515880.SS",
-      "start_date": "2026-08-14",
-      "end_date": "2026-08-14",
-      "fetched_at": "2026-08-14T07:46:39Z",
+      "start_date": "2026-08-18",
+      "end_date": "2026-08-18",
+      "fetched_at": "2026-08-18T07:46:02Z",
       "items": [],
       "source_statuses": [
         {
@@ -153,13 +153,24 @@
       ]
     },
     "512480.SS": {
-      "status": "empty",
+      "status": "ok",
       "query_type": "ticker",
       "ticker": "512480.SS",
-      "start_date": "2026-08-14",
-      "end_date": "2026-08-14",
-      "fetched_at": "2026-08-14T07:46:40Z",
-      "items": [],
+      "start_date": "2026-08-18",
+      "end_date": "2026-08-18",
+      "fetched_at": "2026-08-18T07:46:05Z",
+      "items": [
+        {
+          "title": "8月17日半导体ETF国联安（512480）份额减少3.96亿份，最新份额184.82亿份，最新规模209.12亿元",
+          "summary": "8月17日半导体ETF国联安（512480）份额减少3.96亿份，最新份额184.82亿份，最新规模209.12亿元 新浪财经",
+          "url": "https://news.google.com/rss/articles/CBMimwFBVV95cUxQOFZqbjJ6SjZZNlpDSTU4WlFVS1V6YWhTbWMtS2N4QWdWcFJ3cmlhLW1VRXZGc28wTFVyRkZIYzZ5VUtjR0F2a2FIVTkteUtfMWt5QXRYNVZGa1dQMHNOYXJ3d3FhckQtR0JiQnMyRjVBMV9LNVV4QTRvNE9wTVZXQXRJcVJCT1JSNXB4UXMxN2VRanpSWE1tek5ZRQ?oc=5",
+          "source": "Google News / 新浪财经",
+          "published_at": "2026-08-18T01:00:00Z",
+          "fetched_at": "2026-08-18T07:46:05Z",
+          "ticker": "512480.SS",
+          "source_tier": "aggregator"
+        }
+      ],
       "source_statuses": [
         {
           "source": "Yahoo Finance",
@@ -168,8 +179,8 @@
         },
         {
           "source": "Google News RSS",
-          "status": "empty",
-          "item_count": 0
+          "status": "ok",
+          "item_count": 1
         },
         {
           "source": "SEC EDGAR",
@@ -181,103 +192,113 @@
   },
   "items": [
     {
-      "title": "Most Asian stocks track Wall St record as US data ease rate fears",
+      "title": "US 30-year yields hit highest level since 2007 as war, oil worries fester",
       "summary": "",
-      "url": "https://finance.yahoo.com/markets/world-indices/articles/most-asian-stocks-track-wall-024850728.html",
-      "source": "AFP",
-      "published_at": "2026-08-14T07:32:13Z",
-      "fetched_at": "2026-08-14T07:46:38Z",
-      "ticker": null,
-      "source_tier": "aggregator"
-    },
-    {
-      "title": "How far can global oil supplies stretch if the Iran war won't end?",
-      "summary": "",
-      "url": "https://finance.yahoo.com/video/far-global-oil-supplies-stretch-164543005.html",
-      "source": "Reuters Videos",
-      "published_at": "2026-08-14T07:14:24Z",
-      "fetched_at": "2026-08-14T07:46:38Z",
-      "ticker": null,
-      "source_tier": "aggregator"
-    },
-    {
-      "title": "Oil rises after US threatens indefinite blockade of Iran",
-      "summary": "",
-      "url": "https://finance.yahoo.com/energy/articles/oil-steadies-us-threatens-blockade-013600797.html",
+      "url": "https://finance.yahoo.com/markets/stocks/articles/us-30-yields-hit-highest-070949167.html",
       "source": "Reuters",
-      "published_at": "2026-08-14T07:02:27Z",
-      "fetched_at": "2026-08-14T07:46:38Z",
+      "published_at": "2026-08-18T07:09:49Z",
+      "fetched_at": "2026-08-18T07:46:01Z",
       "ticker": null,
       "source_tier": "aggregator"
     },
     {
-      "title": "London BTC Company targets antimony potential across Nevada exploration portfolio",
+      "title": "Bond yields rise, oil extends gains as US-Iran ceasefire expires",
       "summary": "",
-      "url": "https://finance.yahoo.com/m/f9f6d0c5-b781-344f-a7c1-0b65987f9a6f/london-btc-company-targets.html",
-      "source": "Proactive",
-      "published_at": "2026-08-14T06:36:00Z",
-      "fetched_at": "2026-08-14T07:46:38Z",
+      "url": "https://finance.yahoo.com/energy/articles/oil-prices-climb-bond-yields-011655842.html",
+      "source": "Reuters",
+      "published_at": "2026-08-18T07:00:48Z",
+      "fetched_at": "2026-08-18T07:46:01Z",
       "ticker": null,
       "source_tier": "aggregator"
     },
     {
-      "title": "FTSE 100 Live: Blue-chips set to open higher as soft US inflation cools rate rise bets",
+      "title": "Why Is The Crypto Market Down Today?",
       "summary": "",
-      "url": "https://finance.yahoo.com/m/9ba9264a-0d7b-3c33-9e9e-c7e5cada327a/ftse-100-live%3A-blue-chips-set.html",
-      "source": "Proactive",
-      "published_at": "2026-08-14T06:15:00Z",
-      "fetched_at": "2026-08-14T07:46:38Z",
+      "url": "https://finance.yahoo.com/m/e4348eaa-5ce1-3b9d-aaad-6e2b0f5ef5ee/why-is-the-crypto-market-down.html",
+      "source": "BeInCrypto",
+      "published_at": "2026-08-18T06:30:31Z",
+      "fetched_at": "2026-08-18T07:46:01Z",
       "ticker": null,
       "source_tier": "aggregator"
     },
     {
-      "title": "Pan American Silver Q2 Earnings Call Highlights",
+      "title": "Libya Seeks Up to $40 Billion to Boost Oil Output to 2 Million Bpd",
       "summary": "",
-      "url": "https://finance.yahoo.com/m/5bade3d0-e24c-315a-96a9-ee1f9d7487e7/pan-american-silver-q2.html",
-      "source": "MarketBeat",
-      "published_at": "2026-08-14T06:04:21Z",
-      "fetched_at": "2026-08-14T07:46:38Z",
-      "ticker": null,
-      "source_tier": "aggregator"
-    },
-    {
-      "title": "Asian shares mostly fall and US futures are little changed after US inflation data improves",
-      "summary": "",
-      "url": "https://finance.yahoo.com/markets/world-indices/articles/asian-shares-mostly-fall-us-055846864.html",
-      "source": "Associated Press",
-      "published_at": "2026-08-14T05:58:46Z",
-      "fetched_at": "2026-08-14T07:46:38Z",
-      "ticker": null,
-      "source_tier": "aggregator"
-    },
-    {
-      "title": "Oil Prices Head for 4% Weekly Gain as U.S.-Iran Deadlock Drags On",
-      "summary": "",
-      "url": "https://finance.yahoo.com/energy/articles/oil-prices-head-4-weekly-054000881.html",
+      "url": "https://finance.yahoo.com/energy/articles/libya-seeks-40-billion-boost-063000121.html",
       "source": "Oilprice.com",
-      "published_at": "2026-08-14T05:40:00Z",
-      "fetched_at": "2026-08-14T07:46:38Z",
+      "published_at": "2026-08-18T06:30:00Z",
+      "fetched_at": "2026-08-18T07:46:01Z",
       "ticker": null,
       "source_tier": "aggregator"
     },
     {
-      "title": "Asian stocks head for strong weekly gains as US rate hike bets fade",
+      "title": "ExxonMobil Holdings (XOM) Awards $1.1 Billion To Start Mozambique LNG Work",
       "summary": "",
-      "url": "https://finance.yahoo.com/news/asian-stocks-set-weekly-gain-023234921.html",
-      "source": "Reuters",
-      "published_at": "2026-08-14T05:15:34Z",
-      "fetched_at": "2026-08-14T07:46:38Z",
-      "ticker": null,
-      "source_tier": "aggregator"
-    },
-    {
-      "title": "How Investors May Respond To Walmart (WMT) Earnings Countdown And New Exclusive Family-Focused Offerings",
-      "summary": "",
-      "url": "https://finance.yahoo.com/markets/stocks/articles/investors-may-respond-walmart-wmt-031601378.html",
+      "url": "https://finance.yahoo.com/energy/articles/exxonmobil-holdings-xom-awards-1-061235796.html",
       "source": "Simply Wall St.",
-      "published_at": "2026-08-14T03:16:01Z",
-      "fetched_at": "2026-08-14T07:46:38Z",
+      "published_at": "2026-08-18T06:12:35Z",
+      "fetched_at": "2026-08-18T07:46:01Z",
       "ticker": null,
+      "source_tier": "aggregator"
+    },
+    {
+      "title": "U.S. 30-Year Treasury Yield Rises to Highest Since 2007",
+      "summary": "",
+      "url": "https://finance.yahoo.com/m/52180e5d-d632-3d1e-90c8-6f2af3dc07ea/u.s.-30-year-treasury-yield.html",
+      "source": "The Wall Street Journal",
+      "published_at": "2026-08-18T05:49:00Z",
+      "fetched_at": "2026-08-18T07:46:01Z",
+      "ticker": null,
+      "source_tier": "aggregator"
+    },
+    {
+      "title": "FTSE 100 Live:UK blue-chips set for flat open as rising oil and inflation jitters weigh",
+      "summary": "",
+      "url": "https://finance.yahoo.com/m/049106a0-55a4-3fe3-bfe1-4f8e14b7fa2b/ftse-100-live%3Auk-blue-chips.html",
+      "source": "Proactive",
+      "published_at": "2026-08-18T05:25:00Z",
+      "fetched_at": "2026-08-18T07:46:01Z",
+      "ticker": null,
+      "source_tier": "aggregator"
+    },
+    {
+      "title": "Japan's 10-year yield hits three-decade peak on inflation worries",
+      "summary": "",
+      "url": "https://finance.yahoo.com/economy/policy/articles/japans-10-government-bond-yield-001613606.html",
+      "source": "Reuters",
+      "published_at": "2026-08-18T04:41:41Z",
+      "fetched_at": "2026-08-18T07:46:01Z",
+      "ticker": null,
+      "source_tier": "aggregator"
+    },
+    {
+      "title": "Morning Bid: Bond investors in revolt as Iran threatens to go 'fully offensive'",
+      "summary": "",
+      "url": "https://finance.yahoo.com/markets/articles/morning-bid-bond-investors-revolt-043748939.html",
+      "source": "Reuters",
+      "published_at": "2026-08-18T04:37:48Z",
+      "fetched_at": "2026-08-18T07:46:01Z",
+      "ticker": null,
+      "source_tier": "aggregator"
+    },
+    {
+      "title": "U.S.-Iran Tensions Push Oil Prices Higher as Diesel Margins Hit Records",
+      "summary": "",
+      "url": "https://finance.yahoo.com/energy/articles/u-iran-tensions-push-oil-043544035.html",
+      "source": "Oilprice.com",
+      "published_at": "2026-08-18T04:35:44Z",
+      "fetched_at": "2026-08-18T07:46:01Z",
+      "ticker": null,
+      "source_tier": "aggregator"
+    },
+    {
+      "title": "8月17日半导体ETF国联安（512480）份额减少3.96亿份，最新份额184.82亿份，最新规模209.12亿元",
+      "summary": "8月17日半导体ETF国联安（512480）份额减少3.96亿份，最新份额184.82亿份，最新规模209.12亿元 新浪财经",
+      "url": "https://news.google.com/rss/articles/CBMimwFBVV95cUxQOFZqbjJ6SjZZNlpDSTU4WlFVS1V6YWhTbWMtS2N4QWdWcFJ3cmlhLW1VRXZGc28wTFVyRkZIYzZ5VUtjR0F2a2FIVTkteUtfMWt5QXRYNVZGa1dQMHNOYXJ3d3FhckQtR0JiQnMyRjVBMV9LNVV4QTRvNE9wTVZXQXRJcVJCT1JSNXB4UXMxN2VRanpSWE1tek5ZRQ?oc=5",
+      "source": "Google News / 新浪财经",
+      "published_at": "2026-08-18T01:00:00Z",
+      "fetched_at": "2026-08-18T07:46:05Z",
+      "ticker": "512480.SS",
       "source_tier": "aggregator"
     }
   ]
