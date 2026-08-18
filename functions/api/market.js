@@ -27,6 +27,7 @@ const DERIVED_TIMEFRAMES = {
 };
 
 const SOURCE_OVERLAP_FACTOR = 6;
+const DAILY_FRESHNESS_MAX_AGE_MS = 36 * 60 * 60 * 1000;
 const INTRADAY_FRESHNESS_MAX_AGE_MS = {
   "1m": 26 * 60 * 1000,
   "5m": 30 * 60 * 1000,
@@ -198,11 +199,15 @@ function marketEnvelope(rows, timeframe, now = Date.now()) {
     : null;
   const effectivelyStale = sessionFreshness
     ? sessionFreshness === "stale"
-    : Number.isFinite(maxAge) && (
-      !Number.isFinite(timestamp)
-      || now < timestamp
-      || now - timestamp > maxAge
-    );
+    : timeframe === "1d"
+      ? !Number.isFinite(timestamp)
+        || now < timestamp
+        || now - timestamp > DAILY_FRESHNESS_MAX_AGE_MS
+      : Number.isFinite(maxAge) && (
+        !Number.isFinite(timestamp)
+        || now < timestamp
+        || now - timestamp > maxAge
+      );
   const statusRow = latest && (sessionFreshness || effectivelyStale)
     ? { ...latest, freshness: sessionFreshness || "stale" }
     : latest;

@@ -317,7 +317,14 @@ export function recoveryTasksForProfile(
   }
   const unique = new Map();
   for (const task of recovered) {
-    unique.set(`${task.type}|${task.localSlot}`, task);
+    // A failed original slot is terminal after MAX_ATTEMPTS. Give recovery a
+    // distinct identity so it can actually be staged and claimed instead of
+    // colliding with the cancelled slot it is meant to replace.
+    unique.set(`${task.type}|${task.localSlot}`, {
+      ...task,
+      localSlot: `${task.localSlot}#recovery`,
+      recovery: true,
+    });
   }
   return [...unique.values()].sort((left, right) =>
     left.scheduledFor.localeCompare(right.scheduledFor) ||

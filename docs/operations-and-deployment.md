@@ -6,6 +6,19 @@
 
 2026-07-27 已恢复 GitHub Actions 的 Cloudflare 自动发布；同一 token 在童装 Agent production 环境也已验证。SEC 已有 GOOGL 官方 8-K evidence，工信部旧搜索端点已退役并替换为中国政府网政策库。2026-07-28 资金流 migration、回填、关闭态发布和 daily 增量均完成真实生产验收。
 
+### 2026-08-18 运行事故与降频处理
+
+生产回读发现 2026-08-17 三只 ETF 的 `cnDailySnapshot` 分片均在三次重试后以
+`RETRY_EXHAUSTED` 取消，导致日线停在 2026-08-13、完整分析停在 2026-08-14；
+这不是 Pages 缓存或 API 解析问题。日线采集现区分 bootstrap/backfill 的 1500 根与
+日常收盘的 40 根重叠，避免每天重写整段历史。36 小时关键日恢复使用 `#recovery`
+独立 slot，并只在原槽确实为 `cancelled/RETRY_EXHAUSTED` 时重建，避免重复执行正常或已完成槽。
+
+近 30 天 Actions 审计显示 `official-news` 209 次运行、82 次因上交所已知 403/无效响应失败，
+现改为工作日每天 3 次；上游部分失败仍写入降级结果和错误码，但不再制造邮件级 Action failure，
+凭据、响应过大和 D1 写入错误仍失败。CI 对纯报告/审计数据提交跳过全套矩阵；代码、函数和部署
+变更仍走原门禁。上述降频不会改变 evidence、fund-flow 或 Monitor 的数据口径。
+
 ## 1. 生产对象
 
 | 对象 | 名称或地址 |
@@ -531,7 +544,9 @@ HashKey 官方源使用 `https://group.hashkey.com/category/blog/news/feed/`。�
 - `512480` 与 `515880` 的季度报告、拆分公告等官方结果标记 `sourceTier=evidence`；
 - 东方财富或 Google 结果保持 `discovery`；
 - 抽查 A 股 discovery 标题：通信与半导体主题必须在标题中直接命中对应行业词；若政策主题只在摘要命中行业词，标题还必须同时含明确政策机关与政策动作。投资日历、宽基 ETF、海外个案或仅在风险提示中顺带出现行业词的文章不得入库，也不得由 `/api/news` 返回；
-- Monitor 内计划官方源失败时，即使东方财富成功，本次采集仍为 degraded；上交所失败则对应 `official-news` run 为 failure，不污染 Worker 健康状态。
+- Monitor 内计划官方源失败时，即使东方财富成功，本次采集仍为 degraded；上交所由独立
+  `official-news` 任务记录降级和错误码，不污染 Worker 健康状态。配置、响应过大或 D1
+  写入错误仍使该 run failure。
 
 生产核对必须使用 `profile=cn-semi-comms&limit=200`，否则 `512480.SS` 的高频 discovery 可能把较早的拆分公告挤出较小的时间窗口。2026-07-28 首轮生产 run `30290500176` 写入 7 行：`515880.SS=4`、`512480.SS=3`。
 

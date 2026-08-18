@@ -246,5 +246,8 @@ if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) 
     accountId: process.env.CLOUDFLARE_ACCOUNT_ID,
   });
   process.stdout.write(`${JSON.stringify(result)}\n`);
-  if (result.failures?.length) process.exitCode = 1;
+  // The SSE endpoint intermittently blocks GitHub runners with 403/invalid
+  // envelopes. Keep the degraded result visible in logs and D1, but reserve
+  // a failed Action (and notification) for configuration or D1 exceptions.
+  // A partial official source must not make the whole data pipeline red.
 }

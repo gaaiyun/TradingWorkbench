@@ -508,6 +508,25 @@ function profileRevisionMap(loaded) {
   ]));
 }
 
+async function filterRecoveryDuplicates(db, inputs) {
+  const recoveryInputs = inputs.filter((input) => input.recoveryOfId);
+  if (recoveryInputs.length === 0) return inputs;
+  const result = await db.prepare(`
+    SELECT id, status, last_error_code
+    FROM scheduled_slots
+    WHERE id IN (SELECT value FROM json_each(?))
+  `).bind(JSON.stringify(recoveryInputs.map(({ recoveryOfId }) => recoveryOfId))).all();
+  const existing = new Map((result?.results ?? []).map((row) => [row.id, row]));
+  return inputs.filter((input) => {
+    if (!input.recoveryOfId) return true;
+    const original = existing.get(input.recoveryOfId);
+    return !original || (
+      original.status === "cancelled" &&
+      original.last_error_code === "RETRY_EXHAUSTED"
+    );
+  });
+}
+
 async function stageDiscoveredSlots({
   scheduledTime,
   env,
@@ -563,6 +582,13 @@ async function stageDiscoveredSlots({
       ));
     for (const task of tasks) {
       const id = await slotIdForTask(profile.id, task);
+      const recoveryOfId = task.recovery
+        ? await slotIdForTask(profile.id, {
+          ...task,
+          recovery: false,
+          localSlot: task.localSlot.replace("#recovery", ""),
+        })
+        : null;
       const snapshot = await scheduledPayloadForTask(
         profile,
         task,
@@ -581,11 +607,12 @@ async function stageDiscoveredSlots({
         scheduledFor: task.scheduledFor,
         localDate,
         ...snapshot,
+        ...(recoveryOfId ? { recoveryOfId } : {}),
         now,
       });
     }
   }
-  return stageScheduledSlots(env.DB, discovered);
+  return stageScheduledSlots(env.DB, await filterRecoveryDuplicates(env.DB, discovered));
 }
 
 function workFromRows(rows) {

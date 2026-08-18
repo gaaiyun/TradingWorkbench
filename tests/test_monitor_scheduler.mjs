@@ -316,15 +316,15 @@ test("recovers a missed CN close snapshot and report without replaying high-freq
     [
       {
         type: "usCloseSnapshot",
-        localSlot: "2026-07-29T05:35",
+        localSlot: "2026-07-29T05:35#recovery",
       },
       {
         type: "closeFullAnalysis",
-        localSlot: "2026-07-29T15:20",
+        localSlot: "2026-07-29T15:20#recovery",
       },
       {
         type: "cnDailySnapshot",
-        localSlot: "2026-07-29T15:20",
+        localSlot: "2026-07-29T15:20#recovery",
       },
     ],
   );
@@ -340,7 +340,7 @@ test("recovers the profile-local US close snapshot using the New York market dat
   assert.deepEqual(
     tasks.filter(({ type }) => type === "usCloseSnapshot")
       .map(({ localSlot }) => localSlot),
-    ["2026-07-29T05:35", "2026-07-30T05:35"],
+    ["2026-07-29T05:35#recovery", "2026-07-30T05:35#recovery"],
   );
 });
 
@@ -375,11 +375,11 @@ test("recovery still finds Friday close work early Sunday within the 36-hour bou
     [
       {
         type: "closeFullAnalysis",
-        localSlot: "2026-07-31T15:20",
+        localSlot: "2026-07-31T15:20#recovery",
       },
       {
         type: "cnDailySnapshot",
-        localSlot: "2026-07-31T15:20",
+        localSlot: "2026-07-31T15:20#recovery",
       },
     ],
   );

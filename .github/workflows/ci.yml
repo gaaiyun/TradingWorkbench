@@ -3,6 +3,11 @@ name: CI
 on:
   push:
     branches: [main]
+    paths-ignore:
+      - "public/reports/**"
+      - "public/data/report-audit.json"
+      - "public/data/universe.json"
+      - "public/data/data-catalog.json"
   pull_request:
 
 permissions:

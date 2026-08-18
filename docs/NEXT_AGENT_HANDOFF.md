@@ -1,6 +1,22 @@
 # Trading Workbench 下一 Agent 交接
 
-更新日期：2026-08-18（新增数据目录、宇宙快照和有时点约束的单标的回测校验；生产状态须以本轮发布后的真实回读为准）
+更新日期：2026-08-18（新增数据目录、宇宙快照和有时点约束的单标的回测校验；补记 8 月 17 日日线 slot 重试耗尽与 Actions 降频修复；生产状态须以本轮发布后的真实回读为准）
+
+### 2026-08-18 · ETF 日线缺失与 Actions 噪音审计
+
+- 生产证据：`515880.SS`、`512480.SS`、`159995.SZ` 的 `/api/market?timeframe=1d` 最新均为
+  `2026-08-13T16:00:00Z`；D1 `market_bars` 同样没有 8 月 17 日。8 月 17 日三个
+  `cnDailySnapshot` 分片和一个 `closeFullAnalysis` slot 均为 `cancelled / RETRY_EXHAUSTED / attempt_count=3`，
+  因此没有 dispatch 新日报；最新成功 `daily-analysis` 为 `31781198465`（业务日 8 月 14 日）。
+- 资金流是独立故障域：`fund-flow` run `32033363007` 成功写入 753 行，但两只沪市 ETF 的
+  `sse-fund-scale-daily` 因 `UPSTREAM_BLOCKED` 降级；不能把它与日线缺失混为同一原因。
+- 现行修复：日常 `1d` 采集只取最近 40 根重叠柱；bootstrap/manual backfill 仍取 1500 根。
+  恢复任务使用 `#recovery` 新身份，并在原槽不是 `cancelled/RETRY_EXHAUSTED` 时过滤，避免重复日报或重复行情写入。
+- Actions 近 30 天审计：`official-news` 209 次/82 次失败（主要为上交所 403），`CI` 172 次，
+  `deploy-workbench` 121 次。上交所 schedule 已从每两小时降为工作日每天三次；部分上游失败保留
+  `degraded`/错误码但不再让 Action 失败，配置、D1 和响应大小错误仍失败；CI 对纯报告数据提交跳过。
+- 本轮部署后必须重新验证：三只 ETF 日线最新业务日、8 月 17 日回补、恢复槽不重复，Pages 与 Worker
+  完整 SHA 对齐；若仍缺失，先看 `scheduled_slots.last_error_code`，不要手工写 D1 冒充采集成功。
 
 实现基线：`main`。不要依赖本文中的旧提交号；接手时同时执行 `git rev-parse HEAD`、`git rev-parse origin/main`，并读取 Pages 与 Worker health 的 commit SHA。
 
@@ -633,7 +649,7 @@ workflow 校验互斥和字段完整性。history、Manifest、Evidence、run ti
 
 - ORCL、GOOGL：SEC EDGAR Submissions `8-K/8-K/A`。
 - A 股政策：中国政府网政策文件库，查询“通信 / 集成电路”，上海 30 天窗口；部门文件、公文、公报为 evidence，政策解读为 discovery。
-- `515880`、`512480`：上交所基金公告由 `official-news.yml` 每两小时从 GitHub runner 按代码精确查询，只接受官方 PDF，再向 enabled profile 参数化写入 D1。
+- `515880`、`512480`：上交所基金公告由 `official-news.yml` 在工作日每天三次从 GitHub runner 按代码精确查询，只接受官方 PDF，再向 enabled profile 参数化写入 D1；已知上游 403 只记录降级和错误码。
 - 3887.HK：HashKey 投资者关系公告。
 - 宏观：Federal Reserve 官方 RSS。
 - 发现层：Google News；Cloudflare 失败时使用东方财富或 Yahoo。

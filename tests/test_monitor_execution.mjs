@@ -46,6 +46,7 @@ test("US close uses only US driver targets at 1d and persists returned bars", as
     taskType: "usCloseSnapshot",
     profile: monitorSettings().profiles[0],
     registry: registryWith({}, calls),
+    task: { schedule: "manual/usCloseSnapshot" },
     writeBars: async (_db, payload) => writes.push(payload),
     db: {},
     now: new Date("2026-07-23T21:35:00.000Z"),
@@ -123,7 +124,7 @@ test("intraday uses only CN core/comparison targets at 5m and keeps partial succ
   assert.equal(result.sources.some((source) => source.reason === "UPSTREAM"), true);
 });
 
-test("CN daily snapshot backfills only CN core/comparison targets at 1d", async () => {
+test("CN daily bootstrap backfills only CN core/comparison targets at 1d", async () => {
   const { collectForTask } = await import(collectorUrl);
   const calls = [];
   const writes = [];
@@ -131,6 +132,10 @@ test("CN daily snapshot backfills only CN core/comparison targets at 1d", async 
     taskType: "cnDailySnapshot",
     profile: monitorSettings().profiles[0],
     registry: registryWith({}, calls),
+    task: {
+      type: "cnDailySnapshot",
+      bootstrapRequirements: [{ symbol: "515880.SS" }],
+    },
     writeBars: async (_db, payload) => writes.push(payload),
     db: {},
     now: new Date("2026-07-23T07:20:00.000Z"),
@@ -142,6 +147,24 @@ test("CN daily snapshot backfills only CN core/comparison targets at 1d", async 
   assert.equal(writes.length, 2);
   assert.equal(result.status, "completed");
   assert.equal(result.written, 2);
+});
+
+test("CN daily incremental snapshot uses a bounded overlap instead of rewriting history", async () => {
+  const { collectForTask } = await import(collectorUrl);
+  const calls = [];
+  await collectForTask({
+    taskType: "cnDailySnapshot",
+    profile: monitorSettings().profiles[0],
+    registry: registryWith({}, calls),
+    task: { type: "cnDailySnapshot" },
+    writeBars: async () => {},
+    db: {},
+    now: new Date("2026-08-18T07:20:00.000Z"),
+  });
+  assert.deepEqual(calls, [
+    { symbol: "515880.SS", market: "CN", timeframe: "1d", limit: 40 },
+    { symbol: "159995.SZ", market: "CN", timeframe: "1d", limit: 40 },
+  ]);
 });
 
 test("collector isolates thrown provider errors and fails stably only when all targets fail", async () => {

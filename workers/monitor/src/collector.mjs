@@ -2,6 +2,11 @@ import { US_INTRADAY_SYMBOLS } from "./scheduler.mjs";
 
 const US_INTRADAY_SET = new Set(US_INTRADAY_SYMBOLS);
 const INTRADAY_BAR_LIMIT = 96;
+const DAILY_BACKFILL_BAR_LIMIT = 1500;
+// A scheduled close snapshot only needs a small overlap to refresh the latest
+// bars. Full history is reserved for bootstrap/recovery backfills; rewriting
+// hundreds of rows on every 5-minute Worker tick needlessly burns CPU.
+const DAILY_INCREMENTAL_BAR_LIMIT = 40;
 
 function targetsForTask(profile, taskType, targetSymbols = null) {
   const selected = Array.isArray(targetSymbols)
@@ -47,7 +52,12 @@ export async function collectForTask({
   const timeframe = taskType === "usCloseSnapshot" || taskType === "cnDailySnapshot"
     ? "1d"
     : "5m";
-  const limit = timeframe === "1d" ? 1500 : INTRADAY_BAR_LIMIT;
+  const isDailyBackfill = timeframe === "1d" &&
+    (Boolean(task?.bootstrapRequirements?.length)
+      || String(task?.schedule || "").startsWith("manual/"));
+  const limit = timeframe === "1d"
+    ? (isDailyBackfill ? DAILY_BACKFILL_BAR_LIMIT : DAILY_INCREMENTAL_BAR_LIMIT)
+    : INTRADAY_BAR_LIMIT;
   const targets = targetsForTask(profile, taskType, task?.targetSymbols);
   if (targets.length === 0) {
     return {

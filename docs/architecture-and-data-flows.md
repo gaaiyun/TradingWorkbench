@@ -298,7 +298,7 @@ flowchart LR
     Q --> IR["HashKey IR"]
     Q --> FED["Federal Reserve RSS"]
     Q --> DISC["Google / 东方财富 / Yahoo"]
-    A["GitHub Actions 每两小时"] --> SSE["上交所 ETF 公告"]
+    A["GitHub Actions 工作日每天三次"] --> SSE["上交所 ETF 公告"]
     SEC --> E["evidence"]
     GOV --> E
     SSE --> E
@@ -313,9 +313,9 @@ SEC 只接受 `8-K/8-K/A` 和 `sec.gov/Archives` 链接。请求必须提供符�
 
 中国政府网请求使用官网前端的真实参数组合，分别查询“通信”和“集成电路”，再按上海日历执行 30 天 point-in-time 过滤。部门文件、国务院公文和公报进入 evidence；政策解读只作 discovery。解析器拒绝未来、窗口外、非 `www.gov.cn` 原文和不受支持的路径，每个查询最多保留 8 条。A 股聚合发现层统一执行标题优先的主题门禁：通信与半导体主题必须在标题中直接命中对应行业词；政策主题只有在标题同时命中明确政策机关与政策动作时，才允许用摘要中的行业词补充匹配。采集器与 `/api/news` 读取层执行同一门禁，因此历史误入库记录也不会继续展示。这会拒绝“碳酸锂”、投资日历、宽基 ETF 或海外个案等仅在摘要、标签或风险提示中顺带出现行业词的文章。
 
-上交所的两个查询入口从本机和 GitHub runner 可用，但从 Cloudflare 出口稳定返回 403。为避免持续制造 Worker degraded 和浪费 15 分钟采集预算，`.github/workflows/official-news.yml` 每两小时第 17 分钟从 GitHub runner 执行一次。脚本读取 D1 当前 settings，只向包含目标 ETF 的 enabled profile 分发；按证券代码精确查询 `515880`、`512480`，只接受 `www.sse.com.cn/disclosure/fund/announcement/` 的原始 PDF，并使用 JSON1 参数化 UPSERT。季度报告、招募说明书和份额拆分公告直接关联对应 ETF，不靠标题模糊猜标的。
+上交所的两个查询入口从本机和 GitHub runner 可用，但从 Cloudflare 出口稳定返回 403。为避免持续制造 Worker degraded 和浪费 Actions 额度，`.github/workflows/official-news.yml` 在工作日每天三次从 GitHub runner 执行。脚本读取 D1 当前 settings，只向包含目标 ETF 的 enabled profile 分发；按证券代码精确查询 `515880`、`512480`，只接受 `www.sse.com.cn/disclosure/fund/announcement/` 的原始 PDF，并使用 JSON1 参数化 UPSERT。季度报告、招募说明书和份额拆分公告直接关联对应 ETF，不靠标题模糊猜标的。
 
-发现层成功不会中断 Monitor 内的 SEC、中国政府网、HashKey 或 Federal Reserve 查询。任一计划内官方源出现 HTTP、结构或大小错误时，本次 Worker 结果保持 degraded，即使 discovery 返回了新闻。上交所属于独立 Actions 故障域：脚本只对网络异常、HTTP 429/5xx 和临时无效响应做两次有界重试；重试耗尽、其它 4xx、缺 Cloudflare 凭据、响应过大或 D1 写入失败时 workflow 直接失败。它不再参与 Worker `/health.newsProviders`，其健康状态以 `official-news` run 为准。
+发现层成功不会中断 Monitor 内的 SEC、中国政府网、HashKey 或 Federal Reserve 查询。任一计划内官方源出现 HTTP、结构或大小错误时，本次 Worker 结果保持 degraded，即使 discovery 返回了新闻。上交所属于独立 Actions 故障域：脚本只对网络异常、HTTP 429/5xx 和临时无效响应做两次有界重试；上游部分失败会保留失败码并以降级结果结束，不再把已知 403 变成邮件级 Action failure；缺 Cloudflare 凭据、响应过大或 D1 写入失败仍直接失败。它不再参与 Worker `/health.newsProviders`，其健康状态以日志中的 `degraded` 结果为准。
 
 D1 有意按“原文 × 关联标的”保存，便于按 profile 和 symbol 查询。网页读取后按 `cluster_id`、原文 URL、规范化标题依次聚合为一张资讯卡，并展示全部关联标的；事件与新闻使用不同分组，不互相吞并。新闻页和监控页在页面可见时每 60 秒刷新，后台标签页停止轮询，恢复可见后立即补一次请求。界面同时显示文章时间和最近请求完成时间，不能用文章发布时间冒充刷新时间。
 

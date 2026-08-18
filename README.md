@@ -131,7 +131,7 @@ A 股 5m 只接受上海时区 `09:30–11:30 / 13:00–15:00` 的合法会话�
 
 ## 新闻和证据
 
-资讯分成两条互补时钟：Cloudflare Monitor 按 profile 全天运行，默认每 15 分钟采集政策、发行人、宏观和发现层资讯；交易日 08:25 盘前还会确保生成同一套幂等新闻槽。上交所会拒绝 Cloudflare 出口，因此基金公告由轻量 GitHub Actions 每两小时采集一次并参数化写入同一 D1：
+资讯分成两条互补时钟：Cloudflare Monitor 按 profile 全天运行，默认每 15 分钟采集政策、发行人、宏观和发现层资讯；交易日 08:25 盘前还会确保生成同一套幂等新闻槽。上交所会拒绝 Cloudflare 出口，因此基金公告由轻量 GitHub Actions 在工作日每天三次采集并参数化写入同一 D1：
 
 - Oracle、Alphabet：SEC EDGAR Submissions 中的 `8-K/8-K/A`。
 - A 股政策：中国政府网政策文件库，按“通信 / 集成电路”检索；部门文件、国务院公文和公报为 `evidence`，政策解读只作 `discovery`。
@@ -140,7 +140,7 @@ A 股 5m 只接受上海时区 `09:30–11:30 / 13:00–15:00` 的合法会话�
 - 宏观：Federal Reserve 官方 RSS 中与 FOMC、货币政策和经济活动有关的条目。
 - 发现层：Google News RSS；Cloudflare 出口不可用时，A 股使用东方财富，美股和港股使用 Yahoo Finance RSS。A 股通信与半导体发现要求对应行业词直接出现在标题；政策类只有在标题同时包含明确政策机关和政策动作时，才允许用摘要中的行业词补充匹配。采集和 `/api/news` 读取两层执行同一门禁，会拒绝投资日历、宽基 ETF、海外个案或仅在风险提示中顺带出现半导体/通信的文章。
 
-官方来源标记为 `evidence`，聚合和搜索结果标记为 `discovery`。Monitor 内的发现层成功不会跳过官方查询；官方源失败时，本次采集保持 `degraded` 并保存失败码。上交所任务与 Worker 故障域隔离；网络错误、HTTP 429/5xx 和临时无效响应最多重试两次，仍失败或遇到其它 4xx、凭据、大小、D1 错误时 Actions run 响亮失败，不能用旧数据伪装成功。
+官方来源标记为 `evidence`，聚合和搜索结果标记为 `discovery`。Monitor 内的发现层成功不会跳过官方查询；官方源失败时，本次采集保持 `degraded` 并保存失败码。上交所任务与 Worker 故障域隔离；网络错误、HTTP 429/5xx 和临时无效响应最多重试两次。上游部分失败会以降级结果写日志并保持 Action 绿色，只有凭据、响应过大或 D1 等执行错误才使 Action 失败；不能用旧数据伪装成功。
 
 Python TradingAgents 的 SEC 客户端使用运行时 `TRADINGAGENTS_SEC_CONTACT_EMAIL`（GitHub Actions secret）构造 fair-access User-Agent；未配置时保留失败轨迹并降级，不把 Yahoo 发现层冒充 SEC evidence。
 
@@ -172,7 +172,7 @@ Worker 为每个理论任务生成稳定 `slotId`，并在首次入库时冻结 
 调度器还提供：
 
 - 原子租约、attempt fencing、最多三次重试。
-- 关键日任务补偿：若某次 Cron 在入库前失败，后续 tick 会在 36 小时内重新发现 `cnDailySnapshot`、`closeFullAnalysis`、`usCloseSnapshot`；稳定 slotId 保证只入库一次。盘中、信号和新闻高频任务不追溯，避免恢复风暴。
+- 关键日任务补偿：若某次 Cron 在入库前失败，后续 tick 会在 36 小时内重新发现 `cnDailySnapshot`、`closeFullAnalysis`、`usCloseSnapshot`；recovery 使用带 `#recovery` 后缀的新 slot 身份，避免与已取消的原槽冲突。盘中、信号和新闻高频任务不追溯，避免恢复风暴。
 - 同一监控组的待执行任务先按业务日、再按类型和计划时间排序：同一业务日的行情采集及其全部分片先于 `closeFullAnalysis`，但次日新行情不能反向饿死前一日分析。这避免报告读取只更新了一部分标的的混合截面。
 - `profile + localDate` 的完整分析预算；`fullAnalysesPerDay=0` 时不 dispatch。
 - profile 公平轮转、单 tick 工作量上限和外部请求预算。

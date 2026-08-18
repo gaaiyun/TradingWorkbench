@@ -438,7 +438,7 @@ test("market API returns distinct timestamps when provider fallbacks overlap", a
     low: 119,
     close: 121,
     volume: 1000,
-    as_of: "2026-07-23T04:00:00Z",
+    as_of: "2026-08-17T16:00:00Z",
     freshness: "stale",
     adjustment: "qfq",
     quality: "good",
@@ -446,23 +446,23 @@ test("market API returns distinct timestamps when provider fallbacks overlap", a
   const DB = new FakeD1({ rows: { market_bars: [
     {
       ...base,
-      ts: "2026-07-23T04:00:00Z",
+      ts: "2026-08-17T16:00:00Z",
       source: "tencent-us",
-      fetched_at: "2026-07-23T18:40:00Z",
+      fetched_at: "2026-08-17T18:40:00Z",
     },
     {
       ...base,
-      ts: "2026-07-23T04:00:00Z",
+      ts: "2026-08-17T16:00:00Z",
       source: "eastmoney-us",
-      fetched_at: "2026-07-24T01:00:00Z",
+      fetched_at: "2026-08-18T01:00:00Z",
       freshness: "fresh",
     },
     {
       ...base,
-      ts: "2026-07-22T04:00:00Z",
-      as_of: "2026-07-22T04:00:00Z",
+      ts: "2026-08-16T16:00:00Z",
+      as_of: "2026-08-16T16:00:00Z",
       source: "eastmoney-us",
-      fetched_at: "2026-07-24T01:00:00Z",
+      fetched_at: "2026-08-18T01:00:00Z",
     },
   ] } });
 
@@ -473,8 +473,8 @@ test("market API returns distinct timestamps when provider fallbacks overlap", a
   const payload = await response.json();
 
   assert.deepEqual(payload.data.map(({ ts }) => ts), [
-    "2026-07-23T04:00:00Z",
-    "2026-07-22T04:00:00Z",
+    "2026-08-17T16:00:00Z",
+    "2026-08-16T16:00:00Z",
   ]);
   assert.equal(payload.data[0].source, "eastmoney-us");
   assert.equal(payload.status, "ok");
@@ -679,6 +679,33 @@ test("daily market API keeps legitimate long holiday closures in one history", a
     "2026-02-13T16:00:00Z",
     "2026-02-12T16:00:00Z",
   ]);
+});
+
+test("daily market API marks an old close stale even when its write health was fresh", async () => {
+  const row = {
+    symbol: "512480.SS",
+    profile_id: "cn-semi-comms",
+    timeframe: "1d",
+    ts: "2026-08-13T16:00:00.000Z",
+    as_of: "2026-08-13T16:00:00.000Z",
+    fetched_at: "2026-08-14T07:35:50.000Z",
+    open: 1,
+    high: 1.1,
+    low: 0.9,
+    close: 1,
+    volume: 100,
+    source: "tencent",
+    freshness: "fresh",
+    adjustment: "qfq",
+    quality: "good",
+  };
+  const response = await marketApi.onRequestGet({
+    request: request("/api/market?symbol=512480.SS&profile=cn-semi-comms&timeframe=1d&limit=5"),
+    env: { DB: new FakeD1({ rows: { market_bars: [row] } }) },
+  });
+  const payload = await response.json();
+  assert.equal(payload.status, "stale");
+  assert.equal(payload.sources[0].freshness, "stale");
 });
 
 test("news and events APIs support topic and importance filters without interpolating input", async () => {

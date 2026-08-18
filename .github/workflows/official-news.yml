@@ -2,7 +2,10 @@ name: official-news
 
 on:
   schedule:
-    - cron: "17 */2 * * *"
+    # The Monitor already refreshes discovery/news on its own schedule. This
+    # runner is only for the SSE evidence source, so three weekday probes are
+    # enough and avoid spending quota on repeated known 403 responses.
+    - cron: "17 1,7,13 * * 1-5"
   workflow_dispatch:
 
 permissions:
