@@ -1,6 +1,6 @@
 {
   "status": "ok",
-  "generated_at": "2026-08-18T15:46:00+08:00",
+  "generated_at": "2026-08-18T18:33:32+08:00",
   "trade_date": "2026-08-18",
   "provider": "openai_compatible",
   "analysts": [
@@ -16,22 +16,22 @@
       "fundamentals"
     ],
     "researchDepth": "standard",
-    "kind": "monitor"
+    "kind": "legacy"
   },
   "run": {
-    "id": "32112941002",
+    "id": "32127279215",
     "attempt": "1",
     "workflow": "daily-analysis",
-    "url": "https://github.com/gaaiyun/TradingWorkbench/actions/runs/32112941002"
+    "url": "https://github.com/gaaiyun/TradingWorkbench/actions/runs/32127279215"
   },
   "identity": {
-    "scope": "profile",
-    "kind": "monitor",
-    "runId": "32112941002",
-    "profileId": "cn-semi-comms",
+    "scope": "legacy",
+    "kind": "legacy",
+    "runId": "32127279215",
+    "profileId": null,
     "requestId": null,
-    "slotId": "slot-040b43c816f098579be1393c2512ce6570d153809672fb06d8af5a47389a9c9b",
-    "scheduledFor": "2026-08-18T07:20:00.000Z"
+    "slotId": null,
+    "scheduledFor": null
   },
   "rating_tiers": [
     "Sell",
@@ -42,60 +42,26 @@
   ],
   "results": [
     {
-      "ticker": "515880.SS",
+      "ticker": "512480.SS",
       "rating": "Hold",
-      "report": "reports/515880.SS/2026-08-18/complete_report.md",
+      "report": "reports/512480.SS/2026-08-18-v2/complete_report.md",
       "files": {
-        "fundamentals": "reports/515880.SS/2026-08-18/1_analysts/fundamentals.md",
-        "market": "reports/515880.SS/2026-08-18/1_analysts/market.md",
-        "news": "reports/515880.SS/2026-08-18/1_analysts/news.md",
-        "bear": "reports/515880.SS/2026-08-18/2_research/bear.md",
-        "bull": "reports/515880.SS/2026-08-18/2_research/bull.md",
-        "manager": "reports/515880.SS/2026-08-18/2_research/manager.md",
-        "trader": "reports/515880.SS/2026-08-18/3_trading/trader.md",
-        "aggressive": "reports/515880.SS/2026-08-18/4_risk/aggressive.md",
-        "conservative": "reports/515880.SS/2026-08-18/4_risk/conservative.md",
-        "neutral": "reports/515880.SS/2026-08-18/4_risk/neutral.md",
-        "decision": "reports/515880.SS/2026-08-18/5_portfolio/decision.md",
-        "complete_report": "reports/515880.SS/2026-08-18/complete_report.md"
+        "fundamentals": "reports/512480.SS/2026-08-18-v2/1_analysts/fundamentals.md",
+        "market": "reports/512480.SS/2026-08-18-v2/1_analysts/market.md",
+        "news": "reports/512480.SS/2026-08-18-v2/1_analysts/news.md",
+        "bear": "reports/512480.SS/2026-08-18-v2/2_research/bear.md",
+        "bull": "reports/512480.SS/2026-08-18-v2/2_research/bull.md",
+        "manager": "reports/512480.SS/2026-08-18-v2/2_research/manager.md",
+        "trader": "reports/512480.SS/2026-08-18-v2/3_trading/trader.md",
+        "aggressive": "reports/512480.SS/2026-08-18-v2/4_risk/aggressive.md",
+        "conservative": "reports/512480.SS/2026-08-18-v2/4_risk/conservative.md",
+        "neutral": "reports/512480.SS/2026-08-18-v2/4_risk/neutral.md",
+        "decision": "reports/512480.SS/2026-08-18-v2/5_portfolio/decision.md",
+        "complete_report": "reports/512480.SS/2026-08-18-v2/complete_report.md"
       },
-      "decision_excerpt": "**Rating**: Hold\n\n**Executive Summary**: 风险分析师辩论呈现混合态势。牛方引用[D2]过去8个交易日累计上涨7.57575758%以及[D5]MA20上方10.01781979%和[I11]RSI14=54.99749416中性、[I8]MACD柱状图转正0.01633812、[CA1][CA2][N5][N3]份额拆分公告和[N1]新增交易商公告，强调短期反弹与通信设备板块催化剂。熊方指出[D3]最新单日-1.25173853%下跌、[D6]低于MA60-6.10949484%和[D7]严格移动均线对齐=none、[I10]20日实现波动率70.63332844高以及[D4]ATR14占最新收盘5.60218028%，强调中期压制与波动风险。[N2]季度报告仅为公告，未披露持仓集中度或规模扩张证据。整体证据均衡，无单一边际占优，持仓立场为最安全路径",
+      "decision_excerpt": "**Rating**: Hold  \n\n**Executive Summary**: 研究计划与交易者提议均为Hold，综合分析师辩论后维持当前仓位。政策文件[N1]于2026-08-02发布，近期8个交易日累计涨幅[D2]显示价格行为，收盘价1.13元[M658]高于MA20 1.0606[I5]并录得[D5]6.54346596%差值。MA60 1.16228333[I6]下仍维持[D6]-2.77757834%，MA对齐状态为none[D7]，RSI14 52.90999615[I11]处于中性区间[I11]，实现波动率63.86780642[I10]与ATR14 0.0642813[I3]占收盘价[D4]5.68861062%均属已知数据。持仓构成、NAV及跟踪误差全部unavailable[S1]构成核心未披露风险，单日回落[D3]-0.17667845%进一步放大短期波动暴露。",
       "analysis_status": "rated",
       "audit_status": "verified",
-      "evidence_publish": {
-        "published": true,
-        "status": 201
-      },
-      "marketHistory": {
-        "source": "tencent",
-        "adjustment": "qfq",
-        "barCount": 1260,
-        "startAt": "2021-06-08T16:00:00Z",
-        "endAt": "2026-08-17T16:00:00Z"
-      },
-      "error": null
-    },
-    {
-      "ticker": "512480.SS",
-      "rating": "Not Rated",
-      "report": "reports/512480.SS/2026-08-18/complete_report.md",
-      "files": {
-        "fundamentals": "reports/512480.SS/2026-08-18/1_analysts/fundamentals.md",
-        "market": "reports/512480.SS/2026-08-18/1_analysts/market.md",
-        "news": "reports/512480.SS/2026-08-18/1_analysts/news.md",
-        "bear": "reports/512480.SS/2026-08-18/2_research/bear.md",
-        "bull": "reports/512480.SS/2026-08-18/2_research/bull.md",
-        "manager": "reports/512480.SS/2026-08-18/2_research/manager.md",
-        "trader": "reports/512480.SS/2026-08-18/3_trading/trader.md",
-        "aggressive": "reports/512480.SS/2026-08-18/4_risk/aggressive.md",
-        "conservative": "reports/512480.SS/2026-08-18/4_risk/conservative.md",
-        "neutral": "reports/512480.SS/2026-08-18/4_risk/neutral.md",
-        "decision": "reports/512480.SS/2026-08-18/5_portfolio/decision.md",
-        "complete_report": "reports/512480.SS/2026-08-18/complete_report.md"
-      },
-      "decision_excerpt": "**Rating**: **Hold**\n\n**Executive Summary**: 辩论中牛市分析师围绕N1集成电路布图设计保护条例[N1]和N2季度报告[N2]提出长期增长观点，同时引用最近8个交易日的涨幅突破[D2]与收盘价高于MA20的表现[D5]。熊市分析师针对收盘价低于MA60[D6]、无严格移动平均对齐状态[D7]、MACD为负值[I7]和realizedVolatility20高波动率[I10]强调短期脆弱性，最新日跌幅[D3]进一步显示技术面不稳。CA1和CA2份额拆分公告[N3][N4]仅调整最小单位，未体现吸引资金效应。整体证据呈现政策利好与短期技术偏离并存的平衡状态，因此维持当前持仓立场。\n\n**Investment Thesis**: 基于EvidencePacketV1，当前持仓适合持续监控M651-M658市场行为演变。N1和N2证明政策与报告事件发生但未",
-      "analysis_status": "insufficient_evidence",
-      "audit_status": "legacy_unverified",
       "evidence_publish": {
         "published": true,
         "status": 201
