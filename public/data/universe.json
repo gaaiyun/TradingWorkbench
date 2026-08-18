@@ -1,10 +1,10 @@
 {
   "version": 1,
-  "generatedAt": "2026-08-17T17:06:51.972Z",
+  "generatedAt": "2026-08-18T11:37:33.142Z",
   "status": "degraded",
   "coverage": {
     "policy": "current-listed-best-effort-plus-configured-core",
-    "cnCurrentListedStocks": 5543,
+    "cnCurrentListedStocks": 5544,
     "cnConfiguredCore": 3,
     "usCore": 9,
     "hkCore": 1,
@@ -16,13 +16,13 @@
       "id": "sina-market-center",
       "role": "CN current-listed discovery",
       "quality": "best_effort",
-      "asOf": "2026-08-17T17:06:51.972Z"
+      "asOf": "2026-08-18T11:37:33.142Z"
     },
     {
       "id": "workbench-settings",
       "role": "configured HK/US/CN core instruments",
       "quality": "declared",
-      "asOf": "2026-08-17T17:06:51.972Z"
+      "asOf": "2026-08-18T11:37:33.142Z"
     }
   ],
   "instruments": [
@@ -31873,7 +31873,7 @@
     },
     {
       "symbol": "301717.SZ",
-      "name": "C超纯",
+      "name": "超纯应材",
       "market": "CN",
       "exchange": "SZ",
       "instrumentType": "stock",
@@ -32995,7 +32995,7 @@
     },
     {
       "symbol": "600131.SS",
-      "name": "国网信通",
+      "name": "XD国网信",
       "market": "CN",
       "exchange": "SS",
       "instrumentType": "stock",
@@ -38297,7 +38297,7 @@
     },
     {
       "symbol": "600768.SS",
-      "name": "宁波富邦",
+      "name": "富邦新材",
       "market": "CN",
       "exchange": "SS",
       "instrumentType": "stock",
@@ -46635,7 +46635,7 @@
     },
     {
       "symbol": "603535.SS",
-      "name": "嘉诚国际",
+      "name": "XD嘉诚国",
       "market": "CN",
       "exchange": "SS",
       "instrumentType": "stock",
@@ -50452,7 +50452,7 @@
     },
     {
       "symbol": "605398.SS",
-      "name": "XD新炬网",
+      "name": "新炬网络",
       "market": "CN",
       "exchange": "SS",
       "instrumentType": "stock",
@@ -57326,8 +57326,19 @@
       "coverage": "current_listed_best_effort"
     },
     {
+      "symbol": "688826.SS",
+      "name": "N频准",
+      "market": "CN",
+      "exchange": "SS",
+      "instrumentType": "stock",
+      "industry": null,
+      "listDate": null,
+      "source": "sina-market-center",
+      "coverage": "current_listed_best_effort"
+    },
+    {
       "symbol": "688828.SS",
-      "name": "C国仪",
+      "name": "国仪公司",
       "market": "CN",
       "exchange": "SS",
       "instrumentType": "stock",
@@ -58130,7 +58141,7 @@
     },
     {
       "symbol": "920107.BJ",
-      "name": "N恒兴",
+      "name": "恒兴股份",
       "market": "CN",
       "exchange": "BJ",
       "instrumentType": "stock",
