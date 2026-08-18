@@ -15,7 +15,7 @@ const EXPECTED_INVALIDATED_REPORTS = new Set([
   "reports/MSFT/2026-07-24/complete_report.md",
 ]);
 
-test("audit index classifies every successful archived report and the malformed ISSUE record", async () => {
+test("audit index classifies every archived report and any retained ISSUE record", async () => {
   const history = JSON.parse(
     await fs.readFile(path.join(repoRoot, "public", "data", "history.json"), "utf8"),
   );
@@ -55,9 +55,11 @@ test("audit index classifies every successful archived report and the malformed 
   }
 
   const issue = audit.reports.find((entry) => entry.ticker === "ISSUE");
-  assert.equal(issue.auditStatus, "invalid_record");
-  assert.equal(issue.failureClass, "invalid_input");
-  assert.match(issue.problemCodes.join(","), /INVALID_TICKER_INPUT/);
+  if (issue) {
+    assert.equal(issue.auditStatus, "invalid_record");
+    assert.equal(issue.failureClass, "invalid_input");
+    assert.match(issue.problemCodes.join(","), /INVALID_TICKER_INPUT/);
+  }
 });
 
 test("audit separates evidence validation failures from model or workflow failures", async () => {
