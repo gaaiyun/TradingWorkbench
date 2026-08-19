@@ -1,113 +1,113 @@
 {
   "version": 1,
   "status": "ok",
-  "generated_at": "2026-08-18T18:33:32+08:00",
-  "trade_date": "2026-08-18",
+  "generated_at": "2026-08-19T16:01:01+08:00",
+  "trade_date": "2026-08-19",
   "global": {
     "status": "ok",
     "query_type": "global",
     "ticker": null,
-    "start_date": "2026-08-11",
-    "end_date": "2026-08-18",
-    "fetched_at": "2026-08-18T10:33:32Z",
+    "start_date": "2026-08-12",
+    "end_date": "2026-08-19",
+    "fetched_at": "2026-08-19T08:01:02Z",
     "items": [
       {
-        "title": "Analysis-Canada's pipeline ambitions hinge on uncertain output expansion",
+        "title": "Why are bond yields surging, and why does it matter?",
         "summary": "",
-        "url": "https://finance.yahoo.com/news/analysis-canadas-pipeline-ambitions-hinge-100608458.html",
+        "url": "https://finance.yahoo.com/video/why-bond-yields-surging-why-073636210.html",
+        "source": "Reuters Videos",
+        "published_at": "2026-08-19T07:36:36Z",
+        "fetched_at": "2026-08-19T08:01:02Z",
+        "ticker": null,
+        "source_tier": "aggregator"
+      },
+      {
+        "title": "Tech leads losses as Asian stocks track Wall St selloff",
+        "summary": "",
+        "url": "https://finance.yahoo.com/markets/stocks/articles/tech-leads-losses-asian-stocks-024127256.html",
+        "source": "AFP",
+        "published_at": "2026-08-19T07:28:44Z",
+        "fetched_at": "2026-08-19T08:01:02Z",
+        "ticker": null,
+        "source_tier": "aggregator"
+      },
+      {
+        "title": "Venezuela Signs Oil Deals With SLB and Hunt to Boost Production",
+        "summary": "",
+        "url": "https://finance.yahoo.com/energy/articles/venezuela-signs-oil-deals-slb-070000855.html",
+        "source": "Oilprice.com",
+        "published_at": "2026-08-19T07:00:00Z",
+        "fetched_at": "2026-08-19T08:01:02Z",
+        "ticker": null,
+        "source_tier": "aggregator"
+      },
+      {
+        "title": "Stocks Are Sizzlin’—and Fall Will Be Even Hotter",
+        "summary": "",
+        "url": "https://finance.yahoo.com/m/a091d12f-c18d-3212-a883-2333956a87cd/stocks-are-sizzlin%E2%80%99%E2%80%94and-fall.html",
+        "source": "Barrons.com",
+        "published_at": "2026-08-19T07:00:00Z",
+        "fetched_at": "2026-08-19T08:01:02Z",
+        "ticker": null,
+        "source_tier": "aggregator"
+      },
+      {
+        "title": "Oil extends climb on prolonged Hormuz export uncertainty",
+        "summary": "",
+        "url": "https://finance.yahoo.com/news/oil-edges-uncertainty-over-exports-003901978.html",
         "source": "Reuters",
-        "published_at": "2026-08-18T10:06:08Z",
-        "fetched_at": "2026-08-18T10:33:32Z",
+        "published_at": "2026-08-19T06:45:58Z",
+        "fetched_at": "2026-08-19T08:01:02Z",
         "ticker": null,
         "source_tier": "aggregator"
       },
       {
-        "title": "Stock Futures Drop as Chip Rally Halts, Trump Ramps Up Middle East Tension",
+        "title": "KILL NTT DOCOMO BUSINESS and Chile’s State-owned Copper Company CODELCO Launch a Study and Proof of Concept Aimed at Improving the Efficiency of Remote Copper Mine Operations Using IOWN® APN",
         "summary": "",
-        "url": "https://finance.yahoo.com/m/27a70a36-1dc6-34ce-9f14-68f46db9d893/stock-futures-drop-as-chip.html",
-        "source": "Barrons.com",
-        "published_at": "2026-08-18T10:01:58Z",
-        "fetched_at": "2026-08-18T10:33:32Z",
+        "url": "https://finance.yahoo.com/energy/articles/ntt-docomo-business-chile-state-043000638.html",
+        "source": "Business Wire",
+        "published_at": "2026-08-19T06:07:00Z",
+        "fetched_at": "2026-08-19T08:01:02Z",
         "ticker": null,
         "source_tier": "aggregator"
       },
       {
-        "title": "NorthMin Corporation Announces Additional Barite Results Following Reanalysis of Drill Core Samples from Recently Reported High-Grade Copper and Polymetallic Intersections and Provides Update on Drilling Activities",
+        "title": "Oil Prices Rise for Fourth Day as Hormuz Traffic Slows",
         "summary": "",
-        "url": "https://finance.yahoo.com/markets/commodities/articles/northmin-corporation-announces-additional-barite-100000990.html",
-        "source": "TMX Newsfile",
-        "published_at": "2026-08-18T10:00:00Z",
-        "fetched_at": "2026-08-18T10:33:32Z",
+        "url": "https://finance.yahoo.com/energy/articles/oil-prices-rise-fourth-day-054000691.html",
+        "source": "Oilprice.com",
+        "published_at": "2026-08-19T05:40:00Z",
+        "fetched_at": "2026-08-19T08:01:02Z",
         "ticker": null,
         "source_tier": "aggregator"
       },
       {
-        "title": "Patagonia Gold Announces Astra’s Exercise of Earn-In Option at La Manchuria",
+        "title": "Is Compañía De Minas BuenaventuraA (BVN) Undervalued As San Gabriel Growth Nears?",
         "summary": "",
-        "url": "https://finance.yahoo.com/markets/commodities/articles/patagonia-gold-announces-astra-exercise-100000129.html",
-        "source": "GlobeNewswire",
-        "published_at": "2026-08-18T10:00:00Z",
-        "fetched_at": "2026-08-18T10:33:32Z",
+        "url": "https://finance.yahoo.com/markets/stocks/articles/compa-minas-buenaventuraa-bvn-undervalued-051049297.html",
+        "source": "Simply Wall St.",
+        "published_at": "2026-08-19T05:10:49Z",
+        "fetched_at": "2026-08-19T08:01:02Z",
         "ticker": null,
         "source_tier": "aggregator"
       },
       {
-        "title": "American Eagle Drills One Kilometre of Copper-Gold Mineralization from Surface at NAK: 1,001 Metres of 0.46% CuEq, Including 218 Metres of 1.01% CuEq",
+        "title": "AP Top Financial News at 2:33 a.m. EDT",
         "summary": "",
-        "url": "https://finance.yahoo.com/markets/commodities/articles/american-eagle-drills-one-kilometre-100000672.html",
-        "source": "TMX Newsfile",
-        "published_at": "2026-08-18T10:00:00Z",
-        "fetched_at": "2026-08-18T10:33:32Z",
+        "url": "https://finance.yahoo.com/economy/policy/articles/ap-top-financial-news-12-040000514.html",
+        "source": "Associated Press",
+        "published_at": "2026-08-19T04:00:00Z",
+        "fetched_at": "2026-08-19T08:01:02Z",
         "ticker": null,
         "source_tier": "aggregator"
       },
       {
-        "title": "Errington Metals Continues to Expand Mineralization at the Balfour Zone",
+        "title": "Aramco and Maaden Move Ahead With Saudi Copper Mining Venture",
         "summary": "",
-        "url": "https://finance.yahoo.com/markets/commodities/articles/errington-metals-continues-expand-mineralization-100000191.html",
-        "source": "CNW Group",
-        "published_at": "2026-08-18T10:00:00Z",
-        "fetched_at": "2026-08-18T10:33:32Z",
-        "ticker": null,
-        "source_tier": "aggregator"
-      },
-      {
-        "title": "Gold Slips on Higher Oil, Treasury Yields",
-        "summary": "",
-        "url": "https://finance.yahoo.com/m/06ed2dd3-4726-32f1-90ec-a87fac1b96ec/gold-slips-on-higher-oil%2C.html",
-        "source": "Barrons.com",
-        "published_at": "2026-08-18T09:51:52Z",
-        "fetched_at": "2026-08-18T10:33:32Z",
-        "ticker": null,
-        "source_tier": "aggregator"
-      },
-      {
-        "title": "Oil Prices Top $90, Fueled by Renewed Tensions in the Middle East",
-        "summary": "",
-        "url": "https://finance.yahoo.com/m/742b96e3-bc3d-3e6d-a18a-74c819293ea0/oil-prices-top-%2490%2C-fueled-by.html",
-        "source": "The Wall Street Journal",
-        "published_at": "2026-08-18T09:34:57Z",
-        "fetched_at": "2026-08-18T10:33:32Z",
-        "ticker": null,
-        "source_tier": "aggregator"
-      },
-      {
-        "title": "Gold Slips Below $4,400 as Higher Oil Prices and Treasury Yields Weigh",
-        "summary": "",
-        "url": "https://finance.yahoo.com/m/330c2740-a67f-3160-b3ad-add0a6116854/gold-slips-below-%244%2C400-as.html",
-        "source": "InvestorsHub",
-        "published_at": "2026-08-18T09:33:27Z",
-        "fetched_at": "2026-08-18T10:33:32Z",
-        "ticker": null,
-        "source_tier": "aggregator"
-      },
-      {
-        "title": "Oil Prices Reach Near Three-Week High as US-Iran Peace Prospects Deteriorate",
-        "summary": "",
-        "url": "https://finance.yahoo.com/m/de8c3452-4ff3-399f-99a4-463a9d21ad1c/oil-prices-reach-near.html",
-        "source": "InvestorsHub",
-        "published_at": "2026-08-18T09:29:48Z",
-        "fetched_at": "2026-08-18T10:33:32Z",
+        "url": "https://finance.yahoo.com/energy/articles/aramco-maaden-move-ahead-saudi-033906419.html",
+        "source": "Oilprice.com",
+        "published_at": "2026-08-19T03:39:06Z",
+        "fetched_at": "2026-08-19T08:01:02Z",
         "ticker": null,
         "source_tier": "aggregator"
       }
@@ -116,7 +116,7 @@
       {
         "source": "Yahoo Finance",
         "status": "ok",
-        "item_count": 30
+        "item_count": 29
       },
       {
         "source": "Federal Reserve",
@@ -126,21 +126,68 @@
     ]
   },
   "tickers": {
+    "515880.SS": {
+      "status": "ok",
+      "query_type": "ticker",
+      "ticker": "515880.SS",
+      "start_date": "2026-08-19",
+      "end_date": "2026-08-19",
+      "fetched_at": "2026-08-19T08:01:03Z",
+      "items": [
+        {
+          "title": "光通信板块迎持续流入，通信ETF国泰（515880）资金连续2日净流入",
+          "summary": "光通信板块迎持续流入，通信ETF国泰（515880）资金连续2日净流入 手机网易网",
+          "url": "https://news.google.com/rss/articles/CBMiYkFVX3lxTFBKUjBlV0h5aXpXeW9KS0ExT1JOcWp0UDlyS19JclRKZU9OMW45RExNbXFNZ1NpenZxanNOSTN2X2hicmFFckVVWE52TjMwLUZ5Nld6UDJJR1VxMTJFcFFlUkZR?oc=5",
+          "source": "Google News / 手机网易网",
+          "published_at": "2026-08-19T01:53:20Z",
+          "fetched_at": "2026-08-19T08:01:03Z",
+          "ticker": "515880.SS",
+          "source_tier": "aggregator"
+        },
+        {
+          "title": "通信ETF国泰（515880）开盘跌3.10%，重仓股新易盛跌4.47%，中际旭创跌4.48%",
+          "summary": "通信ETF国泰（515880）开盘跌3.10%，重仓股新易盛跌4.47%，中际旭创跌4.48% 新浪财经",
+          "url": "https://news.google.com/rss/articles/CBMimAFBVV95cUxPVmozZ1dMV1VSZWtVUGR0MU1qU3FaTWctTDFRM1FNV3V3dC1DS3A2bEFqclFocU51bFhiRTBZTjlLbm94RzlWdWJ1TXg0aDVRZHZBYmlCWmwxUV9nZzZuemZBQUh0Q1lsOUxoYl9hNVlUZ2dCbnM2RkE0VVE1bHRPQzRwYWN1WFl1aXh0SGt1di1lWElQYTNTdA?oc=5",
+          "source": "Google News / 新浪财经",
+          "published_at": "2026-08-19T01:36:00Z",
+          "fetched_at": "2026-08-19T08:01:03Z",
+          "ticker": "515880.SS",
+          "source_tier": "aggregator"
+        }
+      ],
+      "source_statuses": [
+        {
+          "source": "Yahoo Finance",
+          "status": "empty",
+          "item_count": 0
+        },
+        {
+          "source": "Google News RSS",
+          "status": "ok",
+          "item_count": 2
+        },
+        {
+          "source": "SEC EDGAR",
+          "status": "empty",
+          "item_count": 0
+        }
+      ]
+    },
     "512480.SS": {
       "status": "ok",
       "query_type": "ticker",
       "ticker": "512480.SS",
-      "start_date": "2026-08-18",
-      "end_date": "2026-08-18",
-      "fetched_at": "2026-08-18T10:33:34Z",
+      "start_date": "2026-08-19",
+      "end_date": "2026-08-19",
+      "fetched_at": "2026-08-19T08:01:06Z",
       "items": [
         {
-          "title": "8月17日半导体ETF国联安（512480）份额减少3.96亿份，最新份额184.82亿份，最新规模209.12亿元",
-          "summary": "8月17日半导体ETF国联安（512480）份额减少3.96亿份，最新份额184.82亿份，最新规模209.12亿元 新浪财经",
-          "url": "https://news.google.com/rss/articles/CBMimwFBVV95cUxQOFZqbjJ6SjZZNlpDSTU4WlFVS1V6YWhTbWMtS2N4QWdWcFJ3cmlhLW1VRXZGc28wTFVyRkZIYzZ5VUtjR0F2a2FIVTkteUtfMWt5QXRYNVZGa1dQMHNOYXJ3d3FhckQtR0JiQnMyRjVBMV9LNVV4QTRvNE9wTVZXQXRJcVJCT1JSNXB4UXMxN2VRanpSWE1tek5ZRQ?oc=5",
+          "title": "8月18日半导体ETF国联安（512480）份额增加1.32亿份，最新份额186.14亿份，最新规模210.75亿元",
+          "summary": "8月18日半导体ETF国联安（512480）份额增加1.32亿份，最新份额186.14亿份，最新规模210.75亿元 新浪财经",
+          "url": "https://news.google.com/rss/articles/CBMimwFBVV95cUxOVkkyRU9MZjFmNl9RS0R0WWNiOWtxUUNCbGNfNVd6bGQyWkFaSklGeldwSi1RZmFjSGF1S25MNV9udWthZW1mY1I4QU1pTG5IVmdWbGRZei1GbkFfUjhsbHREdXZBVFpUY0lvTWd5Z085Z09JcVhqNWp2QTdKODJPZkl2ankyUi1NRlQ5cnlvZTZVY1oxa1lpZEttUQ?oc=5",
           "source": "Google News / 新浪财经",
-          "published_at": "2026-08-18T01:00:00Z",
-          "fetched_at": "2026-08-18T10:33:34Z",
+          "published_at": "2026-08-19T01:00:00Z",
+          "fetched_at": "2026-08-19T08:01:06Z",
           "ticker": "512480.SS",
           "source_tier": "aggregator"
         }
@@ -166,112 +213,132 @@
   },
   "items": [
     {
-      "title": "Analysis-Canada's pipeline ambitions hinge on uncertain output expansion",
+      "title": "Why are bond yields surging, and why does it matter?",
       "summary": "",
-      "url": "https://finance.yahoo.com/news/analysis-canadas-pipeline-ambitions-hinge-100608458.html",
+      "url": "https://finance.yahoo.com/video/why-bond-yields-surging-why-073636210.html",
+      "source": "Reuters Videos",
+      "published_at": "2026-08-19T07:36:36Z",
+      "fetched_at": "2026-08-19T08:01:02Z",
+      "ticker": null,
+      "source_tier": "aggregator"
+    },
+    {
+      "title": "Tech leads losses as Asian stocks track Wall St selloff",
+      "summary": "",
+      "url": "https://finance.yahoo.com/markets/stocks/articles/tech-leads-losses-asian-stocks-024127256.html",
+      "source": "AFP",
+      "published_at": "2026-08-19T07:28:44Z",
+      "fetched_at": "2026-08-19T08:01:02Z",
+      "ticker": null,
+      "source_tier": "aggregator"
+    },
+    {
+      "title": "Venezuela Signs Oil Deals With SLB and Hunt to Boost Production",
+      "summary": "",
+      "url": "https://finance.yahoo.com/energy/articles/venezuela-signs-oil-deals-slb-070000855.html",
+      "source": "Oilprice.com",
+      "published_at": "2026-08-19T07:00:00Z",
+      "fetched_at": "2026-08-19T08:01:02Z",
+      "ticker": null,
+      "source_tier": "aggregator"
+    },
+    {
+      "title": "Stocks Are Sizzlin’—and Fall Will Be Even Hotter",
+      "summary": "",
+      "url": "https://finance.yahoo.com/m/a091d12f-c18d-3212-a883-2333956a87cd/stocks-are-sizzlin%E2%80%99%E2%80%94and-fall.html",
+      "source": "Barrons.com",
+      "published_at": "2026-08-19T07:00:00Z",
+      "fetched_at": "2026-08-19T08:01:02Z",
+      "ticker": null,
+      "source_tier": "aggregator"
+    },
+    {
+      "title": "Oil extends climb on prolonged Hormuz export uncertainty",
+      "summary": "",
+      "url": "https://finance.yahoo.com/news/oil-edges-uncertainty-over-exports-003901978.html",
       "source": "Reuters",
-      "published_at": "2026-08-18T10:06:08Z",
-      "fetched_at": "2026-08-18T10:33:32Z",
+      "published_at": "2026-08-19T06:45:58Z",
+      "fetched_at": "2026-08-19T08:01:02Z",
       "ticker": null,
       "source_tier": "aggregator"
     },
     {
-      "title": "Stock Futures Drop as Chip Rally Halts, Trump Ramps Up Middle East Tension",
+      "title": "KILL NTT DOCOMO BUSINESS and Chile’s State-owned Copper Company CODELCO Launch a Study and Proof of Concept Aimed at Improving the Efficiency of Remote Copper Mine Operations Using IOWN® APN",
       "summary": "",
-      "url": "https://finance.yahoo.com/m/27a70a36-1dc6-34ce-9f14-68f46db9d893/stock-futures-drop-as-chip.html",
-      "source": "Barrons.com",
-      "published_at": "2026-08-18T10:01:58Z",
-      "fetched_at": "2026-08-18T10:33:32Z",
+      "url": "https://finance.yahoo.com/energy/articles/ntt-docomo-business-chile-state-043000638.html",
+      "source": "Business Wire",
+      "published_at": "2026-08-19T06:07:00Z",
+      "fetched_at": "2026-08-19T08:01:02Z",
       "ticker": null,
       "source_tier": "aggregator"
     },
     {
-      "title": "NorthMin Corporation Announces Additional Barite Results Following Reanalysis of Drill Core Samples from Recently Reported High-Grade Copper and Polymetallic Intersections and Provides Update on Drilling Activities",
+      "title": "Oil Prices Rise for Fourth Day as Hormuz Traffic Slows",
       "summary": "",
-      "url": "https://finance.yahoo.com/markets/commodities/articles/northmin-corporation-announces-additional-barite-100000990.html",
-      "source": "TMX Newsfile",
-      "published_at": "2026-08-18T10:00:00Z",
-      "fetched_at": "2026-08-18T10:33:32Z",
+      "url": "https://finance.yahoo.com/energy/articles/oil-prices-rise-fourth-day-054000691.html",
+      "source": "Oilprice.com",
+      "published_at": "2026-08-19T05:40:00Z",
+      "fetched_at": "2026-08-19T08:01:02Z",
       "ticker": null,
       "source_tier": "aggregator"
     },
     {
-      "title": "Patagonia Gold Announces Astra’s Exercise of Earn-In Option at La Manchuria",
+      "title": "Is Compañía De Minas BuenaventuraA (BVN) Undervalued As San Gabriel Growth Nears?",
       "summary": "",
-      "url": "https://finance.yahoo.com/markets/commodities/articles/patagonia-gold-announces-astra-exercise-100000129.html",
-      "source": "GlobeNewswire",
-      "published_at": "2026-08-18T10:00:00Z",
-      "fetched_at": "2026-08-18T10:33:32Z",
+      "url": "https://finance.yahoo.com/markets/stocks/articles/compa-minas-buenaventuraa-bvn-undervalued-051049297.html",
+      "source": "Simply Wall St.",
+      "published_at": "2026-08-19T05:10:49Z",
+      "fetched_at": "2026-08-19T08:01:02Z",
       "ticker": null,
       "source_tier": "aggregator"
     },
     {
-      "title": "American Eagle Drills One Kilometre of Copper-Gold Mineralization from Surface at NAK: 1,001 Metres of 0.46% CuEq, Including 218 Metres of 1.01% CuEq",
+      "title": "AP Top Financial News at 2:33 a.m. EDT",
       "summary": "",
-      "url": "https://finance.yahoo.com/markets/commodities/articles/american-eagle-drills-one-kilometre-100000672.html",
-      "source": "TMX Newsfile",
-      "published_at": "2026-08-18T10:00:00Z",
-      "fetched_at": "2026-08-18T10:33:32Z",
+      "url": "https://finance.yahoo.com/economy/policy/articles/ap-top-financial-news-12-040000514.html",
+      "source": "Associated Press",
+      "published_at": "2026-08-19T04:00:00Z",
+      "fetched_at": "2026-08-19T08:01:02Z",
       "ticker": null,
       "source_tier": "aggregator"
     },
     {
-      "title": "Errington Metals Continues to Expand Mineralization at the Balfour Zone",
+      "title": "Aramco and Maaden Move Ahead With Saudi Copper Mining Venture",
       "summary": "",
-      "url": "https://finance.yahoo.com/markets/commodities/articles/errington-metals-continues-expand-mineralization-100000191.html",
-      "source": "CNW Group",
-      "published_at": "2026-08-18T10:00:00Z",
-      "fetched_at": "2026-08-18T10:33:32Z",
+      "url": "https://finance.yahoo.com/energy/articles/aramco-maaden-move-ahead-saudi-033906419.html",
+      "source": "Oilprice.com",
+      "published_at": "2026-08-19T03:39:06Z",
+      "fetched_at": "2026-08-19T08:01:02Z",
       "ticker": null,
       "source_tier": "aggregator"
     },
     {
-      "title": "Gold Slips on Higher Oil, Treasury Yields",
-      "summary": "",
-      "url": "https://finance.yahoo.com/m/06ed2dd3-4726-32f1-90ec-a87fac1b96ec/gold-slips-on-higher-oil%2C.html",
-      "source": "Barrons.com",
-      "published_at": "2026-08-18T09:51:52Z",
-      "fetched_at": "2026-08-18T10:33:32Z",
-      "ticker": null,
+      "title": "光通信板块迎持续流入，通信ETF国泰（515880）资金连续2日净流入",
+      "summary": "光通信板块迎持续流入，通信ETF国泰（515880）资金连续2日净流入 手机网易网",
+      "url": "https://news.google.com/rss/articles/CBMiYkFVX3lxTFBKUjBlV0h5aXpXeW9KS0ExT1JOcWp0UDlyS19JclRKZU9OMW45RExNbXFNZ1NpenZxanNOSTN2X2hicmFFckVVWE52TjMwLUZ5Nld6UDJJR1VxMTJFcFFlUkZR?oc=5",
+      "source": "Google News / 手机网易网",
+      "published_at": "2026-08-19T01:53:20Z",
+      "fetched_at": "2026-08-19T08:01:03Z",
+      "ticker": "515880.SS",
       "source_tier": "aggregator"
     },
     {
-      "title": "Oil Prices Top $90, Fueled by Renewed Tensions in the Middle East",
-      "summary": "",
-      "url": "https://finance.yahoo.com/m/742b96e3-bc3d-3e6d-a18a-74c819293ea0/oil-prices-top-%2490%2C-fueled-by.html",
-      "source": "The Wall Street Journal",
-      "published_at": "2026-08-18T09:34:57Z",
-      "fetched_at": "2026-08-18T10:33:32Z",
-      "ticker": null,
-      "source_tier": "aggregator"
-    },
-    {
-      "title": "Gold Slips Below $4,400 as Higher Oil Prices and Treasury Yields Weigh",
-      "summary": "",
-      "url": "https://finance.yahoo.com/m/330c2740-a67f-3160-b3ad-add0a6116854/gold-slips-below-%244%2C400-as.html",
-      "source": "InvestorsHub",
-      "published_at": "2026-08-18T09:33:27Z",
-      "fetched_at": "2026-08-18T10:33:32Z",
-      "ticker": null,
-      "source_tier": "aggregator"
-    },
-    {
-      "title": "Oil Prices Reach Near Three-Week High as US-Iran Peace Prospects Deteriorate",
-      "summary": "",
-      "url": "https://finance.yahoo.com/m/de8c3452-4ff3-399f-99a4-463a9d21ad1c/oil-prices-reach-near.html",
-      "source": "InvestorsHub",
-      "published_at": "2026-08-18T09:29:48Z",
-      "fetched_at": "2026-08-18T10:33:32Z",
-      "ticker": null,
-      "source_tier": "aggregator"
-    },
-    {
-      "title": "8月17日半导体ETF国联安（512480）份额减少3.96亿份，最新份额184.82亿份，最新规模209.12亿元",
-      "summary": "8月17日半导体ETF国联安（512480）份额减少3.96亿份，最新份额184.82亿份，最新规模209.12亿元 新浪财经",
-      "url": "https://news.google.com/rss/articles/CBMimwFBVV95cUxQOFZqbjJ6SjZZNlpDSTU4WlFVS1V6YWhTbWMtS2N4QWdWcFJ3cmlhLW1VRXZGc28wTFVyRkZIYzZ5VUtjR0F2a2FIVTkteUtfMWt5QXRYNVZGa1dQMHNOYXJ3d3FhckQtR0JiQnMyRjVBMV9LNVV4QTRvNE9wTVZXQXRJcVJCT1JSNXB4UXMxN2VRanpSWE1tek5ZRQ?oc=5",
+      "title": "通信ETF国泰（515880）开盘跌3.10%，重仓股新易盛跌4.47%，中际旭创跌4.48%",
+      "summary": "通信ETF国泰（515880）开盘跌3.10%，重仓股新易盛跌4.47%，中际旭创跌4.48% 新浪财经",
+      "url": "https://news.google.com/rss/articles/CBMimAFBVV95cUxPVmozZ1dMV1VSZWtVUGR0MU1qU3FaTWctTDFRM1FNV3V3dC1DS3A2bEFqclFocU51bFhiRTBZTjlLbm94RzlWdWJ1TXg0aDVRZHZBYmlCWmwxUV9nZzZuemZBQUh0Q1lsOUxoYl9hNVlUZ2dCbnM2RkE0VVE1bHRPQzRwYWN1WFl1aXh0SGt1di1lWElQYTNTdA?oc=5",
       "source": "Google News / 新浪财经",
-      "published_at": "2026-08-18T01:00:00Z",
-      "fetched_at": "2026-08-18T10:33:34Z",
+      "published_at": "2026-08-19T01:36:00Z",
+      "fetched_at": "2026-08-19T08:01:03Z",
+      "ticker": "515880.SS",
+      "source_tier": "aggregator"
+    },
+    {
+      "title": "8月18日半导体ETF国联安（512480）份额增加1.32亿份，最新份额186.14亿份，最新规模210.75亿元",
+      "summary": "8月18日半导体ETF国联安（512480）份额增加1.32亿份，最新份额186.14亿份，最新规模210.75亿元 新浪财经",
+      "url": "https://news.google.com/rss/articles/CBMimwFBVV95cUxOVkkyRU9MZjFmNl9RS0R0WWNiOWtxUUNCbGNfNVd6bGQyWkFaSklGeldwSi1RZmFjSGF1S25MNV9udWthZW1mY1I4QU1pTG5IVmdWbGRZei1GbkFfUjhsbHREdXZBVFpUY0lvTWd5Z085Z09JcVhqNWp2QTdKODJPZkl2ankyUi1NRlQ5cnlvZTZVY1oxa1lpZEttUQ?oc=5",
+      "source": "Google News / 新浪财经",
+      "published_at": "2026-08-19T01:00:00Z",
+      "fetched_at": "2026-08-19T08:01:06Z",
       "ticker": "512480.SS",
       "source_tier": "aggregator"
     }

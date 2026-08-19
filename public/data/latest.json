@@ -1,7 +1,7 @@
 {
   "status": "ok",
-  "generated_at": "2026-08-18T18:33:32+08:00",
-  "trade_date": "2026-08-18",
+  "generated_at": "2026-08-19T16:01:01+08:00",
+  "trade_date": "2026-08-19",
   "provider": "openai_compatible",
   "analysts": [
     "market",
@@ -16,22 +16,22 @@
       "fundamentals"
     ],
     "researchDepth": "standard",
-    "kind": "legacy"
+    "kind": "monitor"
   },
   "run": {
-    "id": "32127279215",
+    "id": "32230485893",
     "attempt": "1",
     "workflow": "daily-analysis",
-    "url": "https://github.com/gaaiyun/TradingWorkbench/actions/runs/32127279215"
+    "url": "https://github.com/gaaiyun/TradingWorkbench/actions/runs/32230485893"
   },
   "identity": {
-    "scope": "legacy",
-    "kind": "legacy",
-    "runId": "32127279215",
-    "profileId": null,
+    "scope": "profile",
+    "kind": "monitor",
+    "runId": "32230485893",
+    "profileId": "cn-semi-comms",
     "requestId": null,
-    "slotId": null,
-    "scheduledFor": null
+    "slotId": "slot-41a35eb1730160cdd6636a703f5da524f46b59196e0a8f8234e7e65cddac80ee",
+    "scheduledFor": "2026-08-19T07:17:15.000Z"
   },
   "rating_tiers": [
     "Sell",
@@ -42,24 +42,24 @@
   ],
   "results": [
     {
-      "ticker": "512480.SS",
+      "ticker": "515880.SS",
       "rating": "Hold",
-      "report": "reports/512480.SS/2026-08-18-v2/complete_report.md",
+      "report": "reports/515880.SS/2026-08-19/complete_report.md",
       "files": {
-        "fundamentals": "reports/512480.SS/2026-08-18-v2/1_analysts/fundamentals.md",
-        "market": "reports/512480.SS/2026-08-18-v2/1_analysts/market.md",
-        "news": "reports/512480.SS/2026-08-18-v2/1_analysts/news.md",
-        "bear": "reports/512480.SS/2026-08-18-v2/2_research/bear.md",
-        "bull": "reports/512480.SS/2026-08-18-v2/2_research/bull.md",
-        "manager": "reports/512480.SS/2026-08-18-v2/2_research/manager.md",
-        "trader": "reports/512480.SS/2026-08-18-v2/3_trading/trader.md",
-        "aggressive": "reports/512480.SS/2026-08-18-v2/4_risk/aggressive.md",
-        "conservative": "reports/512480.SS/2026-08-18-v2/4_risk/conservative.md",
-        "neutral": "reports/512480.SS/2026-08-18-v2/4_risk/neutral.md",
-        "decision": "reports/512480.SS/2026-08-18-v2/5_portfolio/decision.md",
-        "complete_report": "reports/512480.SS/2026-08-18-v2/complete_report.md"
+        "fundamentals": "reports/515880.SS/2026-08-19/1_analysts/fundamentals.md",
+        "market": "reports/515880.SS/2026-08-19/1_analysts/market.md",
+        "news": "reports/515880.SS/2026-08-19/1_analysts/news.md",
+        "bear": "reports/515880.SS/2026-08-19/2_research/bear.md",
+        "bull": "reports/515880.SS/2026-08-19/2_research/bull.md",
+        "manager": "reports/515880.SS/2026-08-19/2_research/manager.md",
+        "trader": "reports/515880.SS/2026-08-19/3_trading/trader.md",
+        "aggressive": "reports/515880.SS/2026-08-19/4_risk/aggressive.md",
+        "conservative": "reports/515880.SS/2026-08-19/4_risk/conservative.md",
+        "neutral": "reports/515880.SS/2026-08-19/4_risk/neutral.md",
+        "decision": "reports/515880.SS/2026-08-19/5_portfolio/decision.md",
+        "complete_report": "reports/515880.SS/2026-08-19/complete_report.md"
       },
-      "decision_excerpt": "**Rating**: Hold  \n\n**Executive Summary**: 研究计划与交易者提议均为Hold，综合分析师辩论后维持当前仓位。政策文件[N1]于2026-08-02发布，近期8个交易日累计涨幅[D2]显示价格行为，收盘价1.13元[M658]高于MA20 1.0606[I5]并录得[D5]6.54346596%差值。MA60 1.16228333[I6]下仍维持[D6]-2.77757834%，MA对齐状态为none[D7]，RSI14 52.90999615[I11]处于中性区间[I11]，实现波动率63.86780642[I10]与ATR14 0.0642813[I3]占收盘价[D4]5.68861062%均属已知数据。持仓构成、NAV及跟踪误差全部unavailable[S1]构成核心未披露风险，单日回落[D3]-0.17667845%进一步放大短期波动暴露。",
+      "decision_excerpt": "**Rating**: 持有\n\n**Executive Summary**: 该ETF最近8个交易日收盘价上涨0.93167702%。[D2]\n最新收盘价低于MA60，差距-13.80644059%。[D6]\n严格移动平均线对齐状态为none。[D7]\n最新交易日成交量为76854173.0。[M1260]\nNAV溢折价、持仓细节、费用和跟踪误差等核心数据不可用。[I2]\n基金份额拆分结果公告和新增一级交易商公告带来流动性改善因素。[CA1][N1]\n\n**Investment Thesis**: RSI14指标为45.21455392，处于中性区间。[I11]\nMACD柱状图为0.01215664显示潜在看涨动量转向。[I8]\n但MACD整体为-0.01009417且信号线更低。[I7]\n近期单日收盘价跌幅-8.32157969%。[D3]\n激进分析师强调短期涨幅和中性RSI，中性分析师",
       "analysis_status": "rated",
       "audit_status": "verified",
       "evidence_publish": {
@@ -69,9 +69,43 @@
       "marketHistory": {
         "source": "tencent",
         "adjustment": "qfq",
-        "barCount": 658,
+        "barCount": 1260,
+        "startAt": "2021-06-09T16:00:00Z",
+        "endAt": "2026-08-18T16:00:00Z"
+      },
+      "error": null
+    },
+    {
+      "ticker": "512480.SS",
+      "rating": "Not Rated",
+      "report": "reports/512480.SS/2026-08-19/complete_report.md",
+      "files": {
+        "fundamentals": "reports/512480.SS/2026-08-19/1_analysts/fundamentals.md",
+        "market": "reports/512480.SS/2026-08-19/1_analysts/market.md",
+        "news": "reports/512480.SS/2026-08-19/1_analysts/news.md",
+        "bear": "reports/512480.SS/2026-08-19/2_research/bear.md",
+        "bull": "reports/512480.SS/2026-08-19/2_research/bull.md",
+        "manager": "reports/512480.SS/2026-08-19/2_research/manager.md",
+        "trader": "reports/512480.SS/2026-08-19/3_trading/trader.md",
+        "aggressive": "reports/512480.SS/2026-08-19/4_risk/aggressive.md",
+        "conservative": "reports/512480.SS/2026-08-19/4_risk/conservative.md",
+        "neutral": "reports/512480.SS/2026-08-19/4_risk/neutral.md",
+        "decision": "reports/512480.SS/2026-08-19/5_portfolio/decision.md",
+        "complete_report": "reports/512480.SS/2026-08-19/complete_report.md"
+      },
+      "decision_excerpt": "**Rating**: Hold\n\n**Executive Summary**: 辩论双方均严格引用EvidencePacketV1的原始证据。[N1]\n牛派主要强调2026-08-02的集成电路布图设计保护条例。[N1]\n2026-07-20的2026年第2季度报告。[N2]\n2026-06-28及2026-07-02的基金份额拆分公告。[CA2]\n[CA1]\n熊派重点指出近期8个交易日收盘价变化。[D2]\n最新一日跌幅。[D3]\nclose小于MA20小于MA60的严格bearish排列。[D7]\nRSI14为44.87908645。[I11]\n中立派认为短期技术面bearish对齐与长期政策催化并存，尚未形成单方压倒性证据优势。[D7]\n综合EvidencePacketV1结论为持仓不动。[D7]\n\n**Investment Thesis**: 短期技术指标呈现bearish对齐。[",
+      "analysis_status": "insufficient_evidence",
+      "audit_status": "legacy_unverified",
+      "evidence_publish": {
+        "published": true,
+        "status": 201
+      },
+      "marketHistory": {
+        "source": "tencent",
+        "adjustment": "qfq",
+        "barCount": 659,
         "startAt": "2023-11-29T16:00:00Z",
-        "endAt": "2026-08-17T16:00:00Z"
+        "endAt": "2026-08-18T16:00:00Z"
       },
       "error": null
     }
