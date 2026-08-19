@@ -1,10 +1,10 @@
 {
   "version": 1,
-  "generatedAt": "2026-08-18T11:37:33.142Z",
+  "generatedAt": "2026-08-19T11:37:41.974Z",
   "status": "degraded",
   "coverage": {
     "policy": "current-listed-best-effort-plus-configured-core",
-    "cnCurrentListedStocks": 5544,
+    "cnCurrentListedStocks": 5546,
     "cnConfiguredCore": 3,
     "usCore": 9,
     "hkCore": 1,
@@ -16,13 +16,13 @@
       "id": "sina-market-center",
       "role": "CN current-listed discovery",
       "quality": "best_effort",
-      "asOf": "2026-08-18T11:37:33.142Z"
+      "asOf": "2026-08-19T11:37:41.974Z"
     },
     {
       "id": "workbench-settings",
       "role": "configured HK/US/CN core instruments",
       "quality": "declared",
-      "asOf": "2026-08-18T11:37:33.142Z"
+      "asOf": "2026-08-19T11:37:41.974Z"
     }
   ],
   "instruments": [
@@ -32566,7 +32566,7 @@
     },
     {
       "symbol": "600081.SS",
-      "name": "东风科技",
+      "name": "XD东风科",
       "market": "CN",
       "exchange": "SS",
       "instrumentType": "stock",
@@ -32995,7 +32995,7 @@
     },
     {
       "symbol": "600131.SS",
-      "name": "XD国网信",
+      "name": "国网信通",
       "market": "CN",
       "exchange": "SS",
       "instrumentType": "stock",
@@ -38110,7 +38110,7 @@
     },
     {
       "symbol": "600746.SS",
-      "name": "江苏索普",
+      "name": "XD江苏索",
       "market": "CN",
       "exchange": "SS",
       "instrumentType": "stock",
@@ -41795,7 +41795,7 @@
     },
     {
       "symbol": "601696.SS",
-      "name": "中银证券",
+      "name": "XD中银证",
       "market": "CN",
       "exchange": "SS",
       "instrumentType": "stock",
@@ -46635,7 +46635,7 @@
     },
     {
       "symbol": "603535.SS",
-      "name": "XD嘉诚国",
+      "name": "嘉诚国际",
       "market": "CN",
       "exchange": "SS",
       "instrumentType": "stock",
@@ -53015,7 +53015,7 @@
     },
     {
       "symbol": "688252.SS",
-      "name": "天德钰",
+      "name": "XD天德钰",
       "market": "CN",
       "exchange": "SS",
       "instrumentType": "stock",
@@ -57327,7 +57327,7 @@
     },
     {
       "symbol": "688826.SS",
-      "name": "N频准",
+      "name": "C频准",
       "market": "CN",
       "exchange": "SS",
       "instrumentType": "stock",
@@ -57339,6 +57339,17 @@
     {
       "symbol": "688828.SS",
       "name": "国仪公司",
+      "market": "CN",
+      "exchange": "SS",
+      "instrumentType": "stock",
+      "industry": null,
+      "listDate": null,
+      "source": "sina-market-center",
+      "coverage": "current_listed_best_effort"
+    },
+    {
+      "symbol": "688836.SS",
+      "name": "N宇树",
       "market": "CN",
       "exchange": "SS",
       "instrumentType": "stock",
@@ -57801,6 +57812,17 @@
     {
       "symbol": "920058.BJ",
       "name": "华洋赛车",
+      "market": "CN",
+      "exchange": "BJ",
+      "instrumentType": "stock",
+      "industry": null,
+      "listDate": null,
+      "source": "sina-market-center",
+      "coverage": "current_listed_best_effort"
+    },
+    {
+      "symbol": "920059.BJ",
+      "name": "N双英",
       "market": "CN",
       "exchange": "BJ",
       "instrumentType": "stock",
