@@ -1,10 +1,10 @@
 {
   "version": 1,
-  "generatedAt": "2026-08-19T11:37:41.974Z",
+  "generatedAt": "2026-08-20T11:39:27.437Z",
   "status": "degraded",
   "coverage": {
     "policy": "current-listed-best-effort-plus-configured-core",
-    "cnCurrentListedStocks": 5546,
+    "cnCurrentListedStocks": 5547,
     "cnConfiguredCore": 3,
     "usCore": 9,
     "hkCore": 1,
@@ -16,13 +16,13 @@
       "id": "sina-market-center",
       "role": "CN current-listed discovery",
       "quality": "best_effort",
-      "asOf": "2026-08-19T11:37:41.974Z"
+      "asOf": "2026-08-20T11:39:27.437Z"
     },
     {
       "id": "workbench-settings",
       "role": "configured HK/US/CN core instruments",
       "quality": "declared",
-      "asOf": "2026-08-19T11:37:41.974Z"
+      "asOf": "2026-08-20T11:39:27.437Z"
     }
   ],
   "instruments": [
@@ -31696,6 +31696,17 @@
       "coverage": "current_listed_best_effort"
     },
     {
+      "symbol": "301655.SZ",
+      "name": "N绿控",
+      "market": "CN",
+      "exchange": "SZ",
+      "instrumentType": "stock",
+      "industry": null,
+      "listDate": null,
+      "source": "sina-market-center",
+      "coverage": "current_listed_best_effort"
+    },
+    {
       "symbol": "301656.SZ",
       "name": "联合动力",
       "market": "CN",
@@ -32566,7 +32577,7 @@
     },
     {
       "symbol": "600081.SS",
-      "name": "XD东风科",
+      "name": "东风科技",
       "market": "CN",
       "exchange": "SS",
       "instrumentType": "stock",
@@ -38110,7 +38121,7 @@
     },
     {
       "symbol": "600746.SS",
-      "name": "XD江苏索",
+      "name": "江苏索普",
       "market": "CN",
       "exchange": "SS",
       "instrumentType": "stock",
@@ -38990,7 +39001,7 @@
     },
     {
       "symbol": "600846.SS",
-      "name": "同济科技",
+      "name": "XD同济科",
       "market": "CN",
       "exchange": "SS",
       "instrumentType": "stock",
@@ -39738,7 +39749,7 @@
     },
     {
       "symbol": "600956.SS",
-      "name": "新天绿能",
+      "name": "XD新天绿",
       "market": "CN",
       "exchange": "SS",
       "instrumentType": "stock",
@@ -40431,7 +40442,7 @@
     },
     {
       "symbol": "601066.SS",
-      "name": "中信建投",
+      "name": "XD中信建",
       "market": "CN",
       "exchange": "SS",
       "instrumentType": "stock",
@@ -41795,7 +41806,7 @@
     },
     {
       "symbol": "601696.SS",
-      "name": "XD中银证",
+      "name": "中银证券",
       "market": "CN",
       "exchange": "SS",
       "instrumentType": "stock",
@@ -42290,7 +42301,7 @@
     },
     {
       "symbol": "601901.SS",
-      "name": "方正证券",
+      "name": "XD方正证",
       "market": "CN",
       "exchange": "SS",
       "instrumentType": "stock",
@@ -42609,7 +42620,7 @@
     },
     {
       "symbol": "601999.SS",
-      "name": "出版传媒",
+      "name": "XD出版传",
       "market": "CN",
       "exchange": "SS",
       "instrumentType": "stock",
@@ -53015,7 +53026,7 @@
     },
     {
       "symbol": "688252.SS",
-      "name": "XD天德钰",
+      "name": "天德钰",
       "market": "CN",
       "exchange": "SS",
       "instrumentType": "stock",
@@ -57349,7 +57360,7 @@
     },
     {
       "symbol": "688836.SS",
-      "name": "N宇树",
+      "name": "C宇树",
       "market": "CN",
       "exchange": "SS",
       "instrumentType": "stock",
@@ -57822,7 +57833,7 @@
     },
     {
       "symbol": "920059.BJ",
-      "name": "N双英",
+      "name": "双英集团",
       "market": "CN",
       "exchange": "BJ",
       "instrumentType": "stock",
