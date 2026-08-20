@@ -1,7 +1,7 @@
 {
   "status": "ok",
-  "generated_at": "2026-08-19T16:01:01+08:00",
-  "trade_date": "2026-08-19",
+  "generated_at": "2026-08-20T16:01:06+08:00",
+  "trade_date": "2026-08-20",
   "provider": "openai_compatible",
   "analysts": [
     "market",
@@ -19,19 +19,19 @@
     "kind": "monitor"
   },
   "run": {
-    "id": "32230485893",
+    "id": "32346659561",
     "attempt": "1",
     "workflow": "daily-analysis",
-    "url": "https://github.com/gaaiyun/TradingWorkbench/actions/runs/32230485893"
+    "url": "https://github.com/gaaiyun/TradingWorkbench/actions/runs/32346659561"
   },
   "identity": {
     "scope": "profile",
     "kind": "monitor",
-    "runId": "32230485893",
+    "runId": "32346659561",
     "profileId": "cn-semi-comms",
     "requestId": null,
-    "slotId": "slot-41a35eb1730160cdd6636a703f5da524f46b59196e0a8f8234e7e65cddac80ee",
-    "scheduledFor": "2026-08-19T07:17:15.000Z"
+    "slotId": "slot-dadefece73766ec68ce08a56e16ea823f33cd66ad3de6c2824b30063d4be754c",
+    "scheduledFor": "2026-08-20T07:17:15.000Z"
   },
   "rating_tiers": [
     "Sell",
@@ -43,57 +43,23 @@
   "results": [
     {
       "ticker": "515880.SS",
-      "rating": "Hold",
-      "report": "reports/515880.SS/2026-08-19/complete_report.md",
-      "files": {
-        "fundamentals": "reports/515880.SS/2026-08-19/1_analysts/fundamentals.md",
-        "market": "reports/515880.SS/2026-08-19/1_analysts/market.md",
-        "news": "reports/515880.SS/2026-08-19/1_analysts/news.md",
-        "bear": "reports/515880.SS/2026-08-19/2_research/bear.md",
-        "bull": "reports/515880.SS/2026-08-19/2_research/bull.md",
-        "manager": "reports/515880.SS/2026-08-19/2_research/manager.md",
-        "trader": "reports/515880.SS/2026-08-19/3_trading/trader.md",
-        "aggressive": "reports/515880.SS/2026-08-19/4_risk/aggressive.md",
-        "conservative": "reports/515880.SS/2026-08-19/4_risk/conservative.md",
-        "neutral": "reports/515880.SS/2026-08-19/4_risk/neutral.md",
-        "decision": "reports/515880.SS/2026-08-19/5_portfolio/decision.md",
-        "complete_report": "reports/515880.SS/2026-08-19/complete_report.md"
-      },
-      "decision_excerpt": "**Rating**: 持有\n\n**Executive Summary**: 该ETF最近8个交易日收盘价上涨0.93167702%。[D2]\n最新收盘价低于MA60，差距-13.80644059%。[D6]\n严格移动平均线对齐状态为none。[D7]\n最新交易日成交量为76854173.0。[M1260]\nNAV溢折价、持仓细节、费用和跟踪误差等核心数据不可用。[I2]\n基金份额拆分结果公告和新增一级交易商公告带来流动性改善因素。[CA1][N1]\n\n**Investment Thesis**: RSI14指标为45.21455392，处于中性区间。[I11]\nMACD柱状图为0.01215664显示潜在看涨动量转向。[I8]\n但MACD整体为-0.01009417且信号线更低。[I7]\n近期单日收盘价跌幅-8.32157969%。[D3]\n激进分析师强调短期涨幅和中性RSI，中性分析师",
-      "analysis_status": "rated",
-      "audit_status": "verified",
-      "evidence_publish": {
-        "published": true,
-        "status": 201
-      },
-      "marketHistory": {
-        "source": "tencent",
-        "adjustment": "qfq",
-        "barCount": 1260,
-        "startAt": "2021-06-09T16:00:00Z",
-        "endAt": "2026-08-18T16:00:00Z"
-      },
-      "error": null
-    },
-    {
-      "ticker": "512480.SS",
       "rating": "Not Rated",
-      "report": "reports/512480.SS/2026-08-19/complete_report.md",
+      "report": "reports/515880.SS/2026-08-20/complete_report.md",
       "files": {
-        "fundamentals": "reports/512480.SS/2026-08-19/1_analysts/fundamentals.md",
-        "market": "reports/512480.SS/2026-08-19/1_analysts/market.md",
-        "news": "reports/512480.SS/2026-08-19/1_analysts/news.md",
-        "bear": "reports/512480.SS/2026-08-19/2_research/bear.md",
-        "bull": "reports/512480.SS/2026-08-19/2_research/bull.md",
-        "manager": "reports/512480.SS/2026-08-19/2_research/manager.md",
-        "trader": "reports/512480.SS/2026-08-19/3_trading/trader.md",
-        "aggressive": "reports/512480.SS/2026-08-19/4_risk/aggressive.md",
-        "conservative": "reports/512480.SS/2026-08-19/4_risk/conservative.md",
-        "neutral": "reports/512480.SS/2026-08-19/4_risk/neutral.md",
-        "decision": "reports/512480.SS/2026-08-19/5_portfolio/decision.md",
-        "complete_report": "reports/512480.SS/2026-08-19/complete_report.md"
+        "fundamentals": "reports/515880.SS/2026-08-20/1_analysts/fundamentals.md",
+        "market": "reports/515880.SS/2026-08-20/1_analysts/market.md",
+        "news": "reports/515880.SS/2026-08-20/1_analysts/news.md",
+        "bear": "reports/515880.SS/2026-08-20/2_research/bear.md",
+        "bull": "reports/515880.SS/2026-08-20/2_research/bull.md",
+        "manager": "reports/515880.SS/2026-08-20/2_research/manager.md",
+        "trader": "reports/515880.SS/2026-08-20/3_trading/trader.md",
+        "aggressive": "reports/515880.SS/2026-08-20/4_risk/aggressive.md",
+        "conservative": "reports/515880.SS/2026-08-20/4_risk/conservative.md",
+        "neutral": "reports/515880.SS/2026-08-20/4_risk/neutral.md",
+        "decision": "reports/515880.SS/2026-08-20/5_portfolio/decision.md",
+        "complete_report": "reports/515880.SS/2026-08-20/complete_report.md"
       },
-      "decision_excerpt": "**Rating**: Hold\n\n**Executive Summary**: 辩论双方均严格引用EvidencePacketV1的原始证据。[N1]\n牛派主要强调2026-08-02的集成电路布图设计保护条例。[N1]\n2026-07-20的2026年第2季度报告。[N2]\n2026-06-28及2026-07-02的基金份额拆分公告。[CA2]\n[CA1]\n熊派重点指出近期8个交易日收盘价变化。[D2]\n最新一日跌幅。[D3]\nclose小于MA20小于MA60的严格bearish排列。[D7]\nRSI14为44.87908645。[I11]\n中立派认为短期技术面bearish对齐与长期政策催化并存，尚未形成单方压倒性证据优势。[D7]\n综合EvidencePacketV1结论为持仓不动。[D7]\n\n**Investment Thesis**: 短期技术指标呈现bearish对齐。[",
+      "decision_excerpt": "**Rating**: Hold  \n\n**Executive Summary**: 维持515880.SS当前持仓。  \n[D2]过去8个交易日的收盘价涨幅+2.16718266%。  \n[D5]收盘价高于MA20 2.51630941%。  \n审查未来季报以获取未披露的持仓、费用等指标。  \n[CA1]基金份额拆分公告。  \n[N1]2026-08-16新增国新证券为一级交易商的公告。  \n避免新入或退出直到基本面有更清晰证据。  \n\n**Investment Thesis**: 风险分析师辩论评估。  \n短期积极信号包括[D2]过去8个交易日的收盘价涨幅+2.16718266%和[D5]高于MA20的2.51630941%。  \n[CA1]基金份额拆分结果公告。  \n长期担忧包括[D6]收盘价低于MA60 -12.27098557%。  \n[D7]无严格移动均线对齐。  \n[I7]M",
       "analysis_status": "insufficient_evidence",
       "audit_status": "legacy_unverified",
       "evidence_publish": {
@@ -103,9 +69,43 @@
       "marketHistory": {
         "source": "tencent",
         "adjustment": "qfq",
-        "barCount": 659,
+        "barCount": 1260,
+        "startAt": "2021-06-10T16:00:00Z",
+        "endAt": "2026-08-19T16:00:00Z"
+      },
+      "error": null
+    },
+    {
+      "ticker": "512480.SS",
+      "rating": "Hold",
+      "report": "reports/512480.SS/2026-08-20/complete_report.md",
+      "files": {
+        "fundamentals": "reports/512480.SS/2026-08-20/1_analysts/fundamentals.md",
+        "market": "reports/512480.SS/2026-08-20/1_analysts/market.md",
+        "news": "reports/512480.SS/2026-08-20/1_analysts/news.md",
+        "bear": "reports/512480.SS/2026-08-20/2_research/bear.md",
+        "bull": "reports/512480.SS/2026-08-20/2_research/bull.md",
+        "manager": "reports/512480.SS/2026-08-20/2_research/manager.md",
+        "trader": "reports/512480.SS/2026-08-20/3_trading/trader.md",
+        "aggressive": "reports/512480.SS/2026-08-20/4_risk/aggressive.md",
+        "conservative": "reports/512480.SS/2026-08-20/4_risk/conservative.md",
+        "neutral": "reports/512480.SS/2026-08-20/4_risk/neutral.md",
+        "decision": "reports/512480.SS/2026-08-20/5_portfolio/decision.md",
+        "complete_report": "reports/512480.SS/2026-08-20/complete_report.md"
+      },
+      "decision_excerpt": "**Rating**: Hold\n**Executive Summary**: 512480.SS 根据 [D7] 呈现严格熊市移动平均线对齐，收盘价低于 MA20 低于 MA60。[M660] close=1.04 与 [I5] MA20=1.05205 及 [I6] MA60=1.15883333 共同支持该对齐。[D2] 显示八个交易日收盘下跌 -2.80373832%。[EvidencePacketV1] 中持仓、NAV、费用、跟踪误差及集中度数据 unavailable。[N1] 集成电路布图设计保护条例与 [N2] 季度报告为政策事件，未证明实施效应。\n**Investment Thesis**: 熊市技术信号为主导。[D7] 严格对齐结合 [M660]、[I5]、[I6] 及 [D2] 的近期下跌。股息拆分 [CA1] 与 [CA2] 仅为公告事件，无指定持有人响应细节。[N",
+      "analysis_status": "rated",
+      "audit_status": "verified",
+      "evidence_publish": {
+        "published": true,
+        "status": 201
+      },
+      "marketHistory": {
+        "source": "tencent",
+        "adjustment": "qfq",
+        "barCount": 660,
         "startAt": "2023-11-29T16:00:00Z",
-        "endAt": "2026-08-18T16:00:00Z"
+        "endAt": "2026-08-19T16:00:00Z"
       },
       "error": null
     }

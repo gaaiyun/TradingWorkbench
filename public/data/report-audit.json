@@ -1,9 +1,9 @@
 {
   "version": 1,
-  "generatedAt": "2026-08-19T08:17:01.058Z",
+  "generatedAt": "2026-08-20T08:12:38.019Z",
   "summary": {
-    "successfulReports": 104,
-    "verifiedReports": 4,
+    "successfulReports": 105,
+    "verifiedReports": 5,
     "invalidatedReports": 15,
     "legacyUnverifiedReports": 85,
     "invalidRecords": 14,
@@ -12,6 +12,127 @@
     "invalidInputs": 0
   },
   "reports": [
+    {
+      "ticker": "515880.SS",
+      "tradeDate": "2026-08-20",
+      "generatedAt": "2026-08-20T16:01:06+08:00",
+      "provider": "openai_compatible",
+      "rating": "Not Rated",
+      "analysisStatus": "insufficient_evidence",
+      "report": "reports/515880.SS/2026-08-20/complete_report.md",
+      "auditStatus": "legacy_unverified",
+      "failureClass": null,
+      "problemCodes": [
+        "FILTERED_UNSAFE_PUBLIC_CLAIM",
+        "ETF_TEMPLATE_MISMATCH",
+        "MISSING_CLAIM_EVIDENCE",
+        "MISSING_PUBLICATION_TIME"
+      ],
+      "evidence": {
+        "urlCount": 5,
+        "claimCitationCount": 0,
+        "finalProposalMarkers": 0,
+        "priceTargetCount": 0,
+        "valuationMethodCount": 0,
+        "publishedMarkerCount": 0
+      },
+      "claimValidation": {
+        "status": "failed",
+        "errorCodes": [
+          "FILTERED_UNSAFE_PUBLIC_CLAIM",
+          "UNSUPPORTED_DERIVED_NUMERIC_CLAIM"
+        ],
+        "citationCount": 4,
+        "unknownEvidenceIds": [],
+        "invalidEvidenceCitations": [],
+        "uncitedNumericParagraphs": 0,
+        "unsupportedDerivedNumericParagraphs": 0,
+        "unsupportedSingleSnapshotTrendParagraphs": 0,
+        "contradictedMovingAverageAlignmentParagraphs": 0,
+        "unsupportedActorOrFlowAttributionParagraphs": 0,
+        "unsupportedWindowRankParagraphs": 0,
+        "unsupportedCausalOrPathParagraphs": 0,
+        "unsupportedFaceValueParagraphs": 0,
+        "omittedUnsafeParagraphs": 1
+      },
+      "evidencePacket": {
+        "status": "ok",
+        "asOf": "2026-08-20T08:01:15Z",
+        "contentHash": "bddda0a607c94776c933b1721507bc17bc6064c4b9552cb57472106dfe9a22f0"
+      },
+      "evidencePublish": {
+        "published": true,
+        "status": 201
+      },
+      "identity": {
+        "scope": "profile",
+        "kind": "monitor",
+        "runId": "32346659561",
+        "profileId": "cn-semi-comms",
+        "requestId": null,
+        "slotId": "slot-dadefece73766ec68ce08a56e16ea823f33cd66ad3de6c2824b30063d4be754c",
+        "scheduledFor": "2026-08-20T07:17:15.000Z"
+      },
+      "supersededBy": null
+    },
+    {
+      "ticker": "512480.SS",
+      "tradeDate": "2026-08-20",
+      "generatedAt": "2026-08-20T16:01:06+08:00",
+      "provider": "openai_compatible",
+      "rating": "Hold",
+      "analysisStatus": "rated",
+      "report": "reports/512480.SS/2026-08-20/complete_report.md",
+      "auditStatus": "verified",
+      "failureClass": null,
+      "problemCodes": [
+        "ETF_TEMPLATE_MISMATCH",
+        "MISSING_PUBLICATION_TIME"
+      ],
+      "evidence": {
+        "urlCount": 4,
+        "claimCitationCount": 0,
+        "finalProposalMarkers": 0,
+        "priceTargetCount": 0,
+        "valuationMethodCount": 0,
+        "publishedMarkerCount": 0
+      },
+      "claimValidation": {
+        "status": "passed",
+        "errorCodes": [],
+        "citationCount": 9,
+        "unknownEvidenceIds": [],
+        "invalidEvidenceCitations": [],
+        "uncitedNumericParagraphs": 0,
+        "unsupportedDerivedNumericParagraphs": 0,
+        "unsupportedSingleSnapshotTrendParagraphs": 0,
+        "contradictedMovingAverageAlignmentParagraphs": 0,
+        "unsupportedActorOrFlowAttributionParagraphs": 0,
+        "unsupportedWindowRankParagraphs": 0,
+        "unsupportedCausalOrPathParagraphs": 0,
+        "unsupportedFaceValueParagraphs": 0,
+        "omittedUnsafeParagraphs": 0
+      },
+      "evidencePacket": {
+        "status": "ok",
+        "asOf": "2026-08-20T08:06:33Z",
+        "contentHash": "4eb512b202645a3ae550842a521a624b180ed98cf7a5e0adc667ff5105183b87"
+      },
+      "evidencePublish": {
+        "published": true,
+        "status": 201
+      },
+      "identity": {
+        "scope": "profile",
+        "kind": "monitor",
+        "runId": "32346659561",
+        "profileId": "cn-semi-comms",
+        "requestId": null,
+        "slotId": "slot-dadefece73766ec68ce08a56e16ea823f33cd66ad3de6c2824b30063d4be754c",
+        "scheduledFor": "2026-08-20T07:17:15.000Z"
+      },
+      "supersededBy": null
+    },
     {
       "ticker": "515880.SS",
       "tradeDate": "2026-08-19",
@@ -1670,7 +1791,7 @@
         "slotId": "slot-b5a0997e42a6ca0cf2408023fccf268195e84564b99cea357e256ef6d1c0f2da",
         "scheduledFor": "2026-08-05T07:20:00.000Z"
       },
-      "supersededBy": "reports/512480.SS/2026-08-18-v2/complete_report.md"
+      "supersededBy": "reports/512480.SS/2026-08-20/complete_report.md"
     },
     {
       "ticker": "515880.SS",
@@ -2506,7 +2627,7 @@
         "slotId": null,
         "scheduledFor": null
       },
-      "supersededBy": "reports/512480.SS/2026-08-18-v2/complete_report.md"
+      "supersededBy": "reports/512480.SS/2026-08-20/complete_report.md"
     },
     {
       "ticker": "515880.SS",
@@ -3141,7 +3262,7 @@
         "slotId": null,
         "scheduledFor": null
       },
-      "supersededBy": "reports/512480.SS/2026-08-18-v2/complete_report.md"
+      "supersededBy": "reports/512480.SS/2026-08-20/complete_report.md"
     },
     {
       "ticker": "515880.SS",
@@ -3249,7 +3370,7 @@
         "slotId": null,
         "scheduledFor": null
       },
-      "supersededBy": "reports/512480.SS/2026-08-18-v2/complete_report.md"
+      "supersededBy": "reports/512480.SS/2026-08-20/complete_report.md"
     },
     {
       "ticker": "515880.SS",
@@ -3732,7 +3853,7 @@
         "slotId": "slot-60509113eaa7d4f54994f4bb62d3ab2cbd6813408b484fdfc9bcc21fa51c72d6",
         "scheduledFor": "2026-07-28T07:20:00.000Z"
       },
-      "supersededBy": "reports/512480.SS/2026-08-18-v2/complete_report.md"
+      "supersededBy": "reports/512480.SS/2026-08-20/complete_report.md"
     },
     {
       "ticker": "515880.SS",
@@ -4939,7 +5060,7 @@
         "slotId": null,
         "scheduledFor": null
       },
-      "supersededBy": "reports/512480.SS/2026-08-18-v2/complete_report.md"
+      "supersededBy": "reports/512480.SS/2026-08-20/complete_report.md"
     },
     {
       "ticker": "512480.SS",
@@ -4975,7 +5096,7 @@
         "slotId": null,
         "scheduledFor": null
       },
-      "supersededBy": "reports/512480.SS/2026-08-18-v2/complete_report.md"
+      "supersededBy": "reports/512480.SS/2026-08-20/complete_report.md"
     },
     {
       "ticker": "NVDA",
@@ -5873,43 +5994,6 @@
         "finalProposalMarkers": 1,
         "priceTargetCount": 0,
         "valuationMethodCount": 30,
-        "publishedMarkerCount": 0
-      },
-      "claimValidation": null,
-      "evidencePacket": null,
-      "evidencePublish": null,
-      "identity": {
-        "scope": "legacy",
-        "kind": "legacy",
-        "runId": null,
-        "profileId": null,
-        "requestId": null,
-        "slotId": null,
-        "scheduledFor": null
-      },
-      "supersededBy": null
-    },
-    {
-      "ticker": "000001.SZ",
-      "tradeDate": "2026-07-10",
-      "generatedAt": "2026-07-12T12:47:13+08:00",
-      "provider": "openai_compatible",
-      "rating": "Underweight",
-      "analysisStatus": null,
-      "report": "reports/000001.SZ/2026-07-10/complete_report.md",
-      "auditStatus": "legacy_unverified",
-      "failureClass": null,
-      "problemCodes": [
-        "MISSING_CLAIM_EVIDENCE",
-        "DUPLICATE_FINAL_PROPOSAL",
-        "MISSING_PUBLICATION_TIME"
-      ],
-      "evidence": {
-        "urlCount": 0,
-        "claimCitationCount": 0,
-        "finalProposalMarkers": 2,
-        "priceTargetCount": 1,
-        "valuationMethodCount": 23,
         "publishedMarkerCount": 0
       },
       "claimValidation": null,

@@ -1,0 +1,5 @@
+**Action**: Hold
+
+**Reasoning**: The research manager positions as Underweight with a hold recommendation due to bearish technical alignment on moving averages ([D7] strictMovingAverageAlignment=bearish) where close < MA20 < MA60 ([M660] close=1.04, I5=MA20=1.05205, I6=MA60=1.15883333), recent close decline (-2.80373832% over 8 trading days [D2]), and unavailable fundamental data including holdings, NAV, fees, tracking error, and concentration ([EvidencePacketV1] status=ok but no M/I/D/CA/N/S rows providing these metrics). This supports monitoring over new positions per the investment plan, which emphasizes continued observation of policy impacts ([N1], [N2]) and technical signals without adding exposure. No numeric entry, stop-loss, or sizing provided in evidence, so all left empty.
+
+FINAL TRANSACTION PROPOSAL: **HOLD**
