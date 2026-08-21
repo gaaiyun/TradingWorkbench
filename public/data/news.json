@@ -1,113 +1,113 @@
 {
   "version": 1,
   "status": "ok",
-  "generated_at": "2026-08-20T16:01:06+08:00",
-  "trade_date": "2026-08-20",
+  "generated_at": "2026-08-21T16:15:59+08:00",
+  "trade_date": "2026-08-21",
   "global": {
     "status": "ok",
     "query_type": "global",
     "ticker": null,
-    "start_date": "2026-08-13",
-    "end_date": "2026-08-20",
-    "fetched_at": "2026-08-20T08:01:08Z",
+    "start_date": "2026-08-14",
+    "end_date": "2026-08-21",
+    "fetched_at": "2026-08-21T08:16:00Z",
     "items": [
       {
-        "title": "European shares muted as higher oil prices counter bond recovery",
+        "title": "Why Is CVC Capital Partners (ENXTAM:CVC) Getting Attention Today?",
         "summary": "",
-        "url": "https://finance.yahoo.com/markets/world-indices/articles/european-shares-muted-higher-oil-073318836.html",
-        "source": "Reuters",
-        "published_at": "2026-08-20T07:33:18Z",
-        "fetched_at": "2026-08-20T08:01:08Z",
+        "url": "https://finance.yahoo.com/markets/stocks/articles/why-cvc-capital-partners-enxtam-081104111.html",
+        "source": "Simply Wall St.",
+        "published_at": "2026-08-21T08:11:04Z",
+        "fetched_at": "2026-08-21T08:16:00Z",
         "ticker": null,
         "source_tier": "aggregator"
       },
       {
-        "title": "Elevated Oil Prices Push Japan’s Imports to an All-Time High",
+        "title": "US Stock Market Today: S&P 500 Futures Edge Lower As Higher For Longer Worries Build",
         "summary": "",
-        "url": "https://finance.yahoo.com/energy/articles/elevated-oil-prices-push-japan-064500517.html",
+        "url": "https://finance.yahoo.com/markets/stocks/articles/us-stock-market-today-p-081024366.html",
+        "source": "Simply Wall St.",
+        "published_at": "2026-08-21T08:10:24Z",
+        "fetched_at": "2026-08-21T08:16:00Z",
+        "ticker": null,
+        "source_tier": "aggregator"
+      },
+      {
+        "title": "European stocks steady, set for weekly loss as oil prices, yields stay elevated",
+        "summary": "",
+        "url": "https://finance.yahoo.com/markets/world-indices/articles/european-stocks-steady-set-weekly-074231352.html",
+        "source": "Reuters",
+        "published_at": "2026-08-21T07:42:31Z",
+        "fetched_at": "2026-08-21T08:16:00Z",
+        "ticker": null,
+        "source_tier": "aggregator"
+      },
+      {
+        "title": "Asian markets extend rally as traders assess US Treasuries pledge",
+        "summary": "",
+        "url": "https://finance.yahoo.com/markets/world-indices/articles/asian-markets-extend-rally-traders-023442615.html",
+        "source": "AFP",
+        "published_at": "2026-08-21T07:39:36Z",
+        "fetched_at": "2026-08-21T08:16:00Z",
+        "ticker": null,
+        "source_tier": "aggregator"
+      },
+      {
+        "title": "Five Below Stock Looks Like a Winner for Back to School—and Beyond",
+        "summary": "",
+        "url": "https://finance.yahoo.com/m/48ce2c26-be6f-3a3c-972a-08b3d4d847bf/five-below-stock-looks-like-a.html",
+        "source": "Barrons.com",
+        "published_at": "2026-08-21T06:30:00Z",
+        "fetched_at": "2026-08-21T08:16:00Z",
+        "ticker": null,
+        "source_tier": "aggregator"
+      },
+      {
+        "title": "Why Oil Refiner Stocks Can Keep Gaining",
+        "summary": "",
+        "url": "https://finance.yahoo.com/m/47ad45b5-ed42-3326-8a0b-7b882997bb01/why-oil-refiner-stocks-can.html",
+        "source": "Barrons.com",
+        "published_at": "2026-08-21T06:00:00Z",
+        "fetched_at": "2026-08-21T08:16:00Z",
+        "ticker": null,
+        "source_tier": "aggregator"
+      },
+      {
+        "title": "Oil Prices Head for Second Straight Weekly Gain as Iran Risks Mount",
+        "summary": "",
+        "url": "https://finance.yahoo.com/energy/articles/oil-prices-head-second-straight-053000246.html",
         "source": "Oilprice.com",
-        "published_at": "2026-08-20T06:45:00Z",
-        "fetched_at": "2026-08-20T08:01:08Z",
+        "published_at": "2026-08-21T05:30:00Z",
+        "fetched_at": "2026-08-21T08:16:00Z",
         "ticker": null,
         "source_tier": "aggregator"
       },
       {
-        "title": "Copper has a timing problem; El Domo is racing the clock",
+        "title": "Dow Jones Futures: Market Triggers This Bearish Signal As Walmart, SpaceX, CrowdStrike Tumble",
         "summary": "",
-        "url": "https://finance.yahoo.com/m/80b7030d-326d-3963-a35c-497a45591c9a/copper-has-a-timing-problem%3B.html",
-        "source": "InvestorsHub",
-        "published_at": "2026-08-20T06:30:28Z",
-        "fetched_at": "2026-08-20T08:01:08Z",
+        "url": "https://finance.yahoo.com/m/91327cea-fed2-33ed-a182-385b27c0298f/dow-jones-futures%3A-market.html",
+        "source": "Investor's Business Daily",
+        "published_at": "2026-08-21T03:09:23Z",
+        "fetched_at": "2026-08-21T08:16:00Z",
         "ticker": null,
         "source_tier": "aggregator"
       },
       {
-        "title": "Oil rises as markets rebound on US Treasury debt buyback plan",
+        "title": "Ring Energy Eyes 10% Growth as Longer Laterals Unlock Permian Potential",
         "summary": "",
-        "url": "https://finance.yahoo.com/m/84d6862d-b639-3b5d-9694-c39b90452ee0/oil-rises-as-markets-rebound.html",
-        "source": "Euronews",
-        "published_at": "2026-08-20T06:19:04Z",
-        "fetched_at": "2026-08-20T08:01:08Z",
+        "url": "https://finance.yahoo.com/m/c5cba5ff-a427-3d3a-a331-f7d1c5bfd85a/ring-energy-eyes-10%25-growth.html",
+        "source": "MarketBeat",
+        "published_at": "2026-08-21T03:01:59Z",
+        "fetched_at": "2026-08-21T08:16:00Z",
         "ticker": null,
         "source_tier": "aggregator"
       },
       {
-        "title": "Dollar at three-month lows as Treasury takes aim at surging bond yields",
+        "title": "WMT Vs TGT: Walmart Has The Scale, Target Has Turnaround Momentum — Which Retail Stock Looks Better Now?",
         "summary": "",
-        "url": "https://finance.yahoo.com/news/dollar-hugs-three-month-lows-005324076.html",
-        "source": "Reuters",
-        "published_at": "2026-08-20T05:59:31Z",
-        "fetched_at": "2026-08-20T08:01:08Z",
-        "ticker": null,
-        "source_tier": "aggregator"
-      },
-      {
-        "title": "Japan reports record exports and imports for July as energy costs climb",
-        "summary": "",
-        "url": "https://finance.yahoo.com/economy/articles/japan-reports-record-exports-imports-030053044.html",
-        "source": "Associated Press",
-        "published_at": "2026-08-20T03:00:53Z",
-        "fetched_at": "2026-08-20T08:01:08Z",
-        "ticker": null,
-        "source_tier": "aggregator"
-      },
-      {
-        "title": "Permian Resources (PR): Is the 55% Rally Just Getting Started?",
-        "summary": "",
-        "url": "https://finance.yahoo.com/energy/articles/permian-resources-pr-55-rally-013635256.html",
-        "source": "Insider Monkey",
-        "published_at": "2026-08-20T01:36:35Z",
-        "fetched_at": "2026-08-20T08:01:08Z",
-        "ticker": null,
-        "source_tier": "aggregator"
-      },
-      {
-        "title": "Copper Just Overtook Iron Ore at BHP Group (BHP). Is Its Portfolio Finally Re-Rating?",
-        "summary": "",
-        "url": "https://finance.yahoo.com/markets/commodities/articles/copper-just-overtook-iron-ore-010149340.html",
-        "source": "Insider Monkey",
-        "published_at": "2026-08-20T01:01:49Z",
-        "fetched_at": "2026-08-20T08:01:08Z",
-        "ticker": null,
-        "source_tier": "aggregator"
-      },
-      {
-        "title": "Infrastructure Sterilisation Drilling Begins at Tunkillia",
-        "summary": "",
-        "url": "https://finance.yahoo.com/markets/commodities/articles/infrastructure-sterilisation-drilling-begins-tunkillia-002200714.html",
-        "source": "ACCESS Newswire",
-        "published_at": "2026-08-20T00:22:00Z",
-        "fetched_at": "2026-08-20T08:01:08Z",
-        "ticker": null,
-        "source_tier": "aggregator"
-      },
-      {
-        "title": "Iran Conflict Could Blow 11 Billion Pounds Hole in Healey's Budget",
-        "summary": "",
-        "url": "https://finance.yahoo.com/economy/policy/articles/iran-conflict-could-blow-11-233951251.html",
-        "source": "MT Newswires",
-        "published_at": "2026-08-19T23:39:51Z",
-        "fetched_at": "2026-08-20T08:01:08Z",
+        "url": "https://finance.yahoo.com/m/b25cec8d-1a44-3b85-be85-19573acfcd7e/wmt-vs-tgt%3A-walmart-has-the.html",
+        "source": "Stocktwits",
+        "published_at": "2026-08-21T02:39:34Z",
+        "fetched_at": "2026-08-21T08:16:00Z",
         "ticker": null,
         "source_tier": "aggregator"
       }
@@ -116,35 +116,24 @@
       {
         "source": "Yahoo Finance",
         "status": "ok",
-        "item_count": 29
+        "item_count": 30
       },
       {
         "source": "Federal Reserve",
         "status": "ok",
-        "item_count": 2
+        "item_count": 4
       }
     ]
   },
   "tickers": {
     "515880.SS": {
-      "status": "ok",
+      "status": "empty",
       "query_type": "ticker",
       "ticker": "515880.SS",
-      "start_date": "2026-08-20",
-      "end_date": "2026-08-20",
-      "fetched_at": "2026-08-20T08:01:09Z",
-      "items": [
-        {
-          "title": "8月19日通信ETF国泰（515880）份额增加15.70亿份，最新份额629.28亿份，最新规模410.48亿元",
-          "summary": "8月19日通信ETF国泰（515880）份额增加15.70亿份，最新份额629.28亿份，最新规模410.48亿元 新浪网",
-          "url": "https://news.google.com/rss/articles/CBMimwFBVV95cUxPN3N0Mm03Vm1MX2IyS3dVLUFwbXl1VTZ2REU1eGU1Ql93eHgzUjE0TzlOWlktbUV2MjY5R2FpNkx2WXJuaHp0UmFjb2lFdllTaTZWRV9tem44UkFGalgwSlpZYVZvUDFhNzI2aXkyeTJ5dDA5UFlxQ0U2LUdpS1ViZF9ubXFZOEJWUHNXTmp5WVNSNUx1UEhUR1VVSQ?oc=5",
-          "source": "Google News / 新浪网",
-          "published_at": "2026-08-20T01:00:00Z",
-          "fetched_at": "2026-08-20T08:01:09Z",
-          "ticker": "515880.SS",
-          "source_tier": "aggregator"
-        }
-      ],
+      "start_date": "2026-08-21",
+      "end_date": "2026-08-21",
+      "fetched_at": "2026-08-21T08:16:01Z",
+      "items": [],
       "source_statuses": [
         {
           "source": "Yahoo Finance",
@@ -153,8 +142,8 @@
         },
         {
           "source": "Google News RSS",
-          "status": "ok",
-          "item_count": 1
+          "status": "empty",
+          "item_count": 0
         },
         {
           "source": "SEC EDGAR",
@@ -167,9 +156,9 @@
       "status": "empty",
       "query_type": "ticker",
       "ticker": "512480.SS",
-      "start_date": "2026-08-20",
-      "end_date": "2026-08-20",
-      "fetched_at": "2026-08-20T08:01:12Z",
+      "start_date": "2026-08-21",
+      "end_date": "2026-08-21",
+      "fetched_at": "2026-08-21T08:16:04Z",
       "items": [],
       "source_statuses": [
         {
@@ -192,112 +181,102 @@
   },
   "items": [
     {
-      "title": "European shares muted as higher oil prices counter bond recovery",
+      "title": "Why Is CVC Capital Partners (ENXTAM:CVC) Getting Attention Today?",
       "summary": "",
-      "url": "https://finance.yahoo.com/markets/world-indices/articles/european-shares-muted-higher-oil-073318836.html",
-      "source": "Reuters",
-      "published_at": "2026-08-20T07:33:18Z",
-      "fetched_at": "2026-08-20T08:01:08Z",
+      "url": "https://finance.yahoo.com/markets/stocks/articles/why-cvc-capital-partners-enxtam-081104111.html",
+      "source": "Simply Wall St.",
+      "published_at": "2026-08-21T08:11:04Z",
+      "fetched_at": "2026-08-21T08:16:00Z",
       "ticker": null,
       "source_tier": "aggregator"
     },
     {
-      "title": "Elevated Oil Prices Push Japan’s Imports to an All-Time High",
+      "title": "US Stock Market Today: S&P 500 Futures Edge Lower As Higher For Longer Worries Build",
       "summary": "",
-      "url": "https://finance.yahoo.com/energy/articles/elevated-oil-prices-push-japan-064500517.html",
+      "url": "https://finance.yahoo.com/markets/stocks/articles/us-stock-market-today-p-081024366.html",
+      "source": "Simply Wall St.",
+      "published_at": "2026-08-21T08:10:24Z",
+      "fetched_at": "2026-08-21T08:16:00Z",
+      "ticker": null,
+      "source_tier": "aggregator"
+    },
+    {
+      "title": "European stocks steady, set for weekly loss as oil prices, yields stay elevated",
+      "summary": "",
+      "url": "https://finance.yahoo.com/markets/world-indices/articles/european-stocks-steady-set-weekly-074231352.html",
+      "source": "Reuters",
+      "published_at": "2026-08-21T07:42:31Z",
+      "fetched_at": "2026-08-21T08:16:00Z",
+      "ticker": null,
+      "source_tier": "aggregator"
+    },
+    {
+      "title": "Asian markets extend rally as traders assess US Treasuries pledge",
+      "summary": "",
+      "url": "https://finance.yahoo.com/markets/world-indices/articles/asian-markets-extend-rally-traders-023442615.html",
+      "source": "AFP",
+      "published_at": "2026-08-21T07:39:36Z",
+      "fetched_at": "2026-08-21T08:16:00Z",
+      "ticker": null,
+      "source_tier": "aggregator"
+    },
+    {
+      "title": "Five Below Stock Looks Like a Winner for Back to School—and Beyond",
+      "summary": "",
+      "url": "https://finance.yahoo.com/m/48ce2c26-be6f-3a3c-972a-08b3d4d847bf/five-below-stock-looks-like-a.html",
+      "source": "Barrons.com",
+      "published_at": "2026-08-21T06:30:00Z",
+      "fetched_at": "2026-08-21T08:16:00Z",
+      "ticker": null,
+      "source_tier": "aggregator"
+    },
+    {
+      "title": "Why Oil Refiner Stocks Can Keep Gaining",
+      "summary": "",
+      "url": "https://finance.yahoo.com/m/47ad45b5-ed42-3326-8a0b-7b882997bb01/why-oil-refiner-stocks-can.html",
+      "source": "Barrons.com",
+      "published_at": "2026-08-21T06:00:00Z",
+      "fetched_at": "2026-08-21T08:16:00Z",
+      "ticker": null,
+      "source_tier": "aggregator"
+    },
+    {
+      "title": "Oil Prices Head for Second Straight Weekly Gain as Iran Risks Mount",
+      "summary": "",
+      "url": "https://finance.yahoo.com/energy/articles/oil-prices-head-second-straight-053000246.html",
       "source": "Oilprice.com",
-      "published_at": "2026-08-20T06:45:00Z",
-      "fetched_at": "2026-08-20T08:01:08Z",
+      "published_at": "2026-08-21T05:30:00Z",
+      "fetched_at": "2026-08-21T08:16:00Z",
       "ticker": null,
       "source_tier": "aggregator"
     },
     {
-      "title": "Copper has a timing problem; El Domo is racing the clock",
+      "title": "Dow Jones Futures: Market Triggers This Bearish Signal As Walmart, SpaceX, CrowdStrike Tumble",
       "summary": "",
-      "url": "https://finance.yahoo.com/m/80b7030d-326d-3963-a35c-497a45591c9a/copper-has-a-timing-problem%3B.html",
-      "source": "InvestorsHub",
-      "published_at": "2026-08-20T06:30:28Z",
-      "fetched_at": "2026-08-20T08:01:08Z",
+      "url": "https://finance.yahoo.com/m/91327cea-fed2-33ed-a182-385b27c0298f/dow-jones-futures%3A-market.html",
+      "source": "Investor's Business Daily",
+      "published_at": "2026-08-21T03:09:23Z",
+      "fetched_at": "2026-08-21T08:16:00Z",
       "ticker": null,
       "source_tier": "aggregator"
     },
     {
-      "title": "Oil rises as markets rebound on US Treasury debt buyback plan",
+      "title": "Ring Energy Eyes 10% Growth as Longer Laterals Unlock Permian Potential",
       "summary": "",
-      "url": "https://finance.yahoo.com/m/84d6862d-b639-3b5d-9694-c39b90452ee0/oil-rises-as-markets-rebound.html",
-      "source": "Euronews",
-      "published_at": "2026-08-20T06:19:04Z",
-      "fetched_at": "2026-08-20T08:01:08Z",
+      "url": "https://finance.yahoo.com/m/c5cba5ff-a427-3d3a-a331-f7d1c5bfd85a/ring-energy-eyes-10%25-growth.html",
+      "source": "MarketBeat",
+      "published_at": "2026-08-21T03:01:59Z",
+      "fetched_at": "2026-08-21T08:16:00Z",
       "ticker": null,
       "source_tier": "aggregator"
     },
     {
-      "title": "Dollar at three-month lows as Treasury takes aim at surging bond yields",
+      "title": "WMT Vs TGT: Walmart Has The Scale, Target Has Turnaround Momentum — Which Retail Stock Looks Better Now?",
       "summary": "",
-      "url": "https://finance.yahoo.com/news/dollar-hugs-three-month-lows-005324076.html",
-      "source": "Reuters",
-      "published_at": "2026-08-20T05:59:31Z",
-      "fetched_at": "2026-08-20T08:01:08Z",
-      "ticker": null,
-      "source_tier": "aggregator"
-    },
-    {
-      "title": "Japan reports record exports and imports for July as energy costs climb",
-      "summary": "",
-      "url": "https://finance.yahoo.com/economy/articles/japan-reports-record-exports-imports-030053044.html",
-      "source": "Associated Press",
-      "published_at": "2026-08-20T03:00:53Z",
-      "fetched_at": "2026-08-20T08:01:08Z",
-      "ticker": null,
-      "source_tier": "aggregator"
-    },
-    {
-      "title": "Permian Resources (PR): Is the 55% Rally Just Getting Started?",
-      "summary": "",
-      "url": "https://finance.yahoo.com/energy/articles/permian-resources-pr-55-rally-013635256.html",
-      "source": "Insider Monkey",
-      "published_at": "2026-08-20T01:36:35Z",
-      "fetched_at": "2026-08-20T08:01:08Z",
-      "ticker": null,
-      "source_tier": "aggregator"
-    },
-    {
-      "title": "Copper Just Overtook Iron Ore at BHP Group (BHP). Is Its Portfolio Finally Re-Rating?",
-      "summary": "",
-      "url": "https://finance.yahoo.com/markets/commodities/articles/copper-just-overtook-iron-ore-010149340.html",
-      "source": "Insider Monkey",
-      "published_at": "2026-08-20T01:01:49Z",
-      "fetched_at": "2026-08-20T08:01:08Z",
-      "ticker": null,
-      "source_tier": "aggregator"
-    },
-    {
-      "title": "8月19日通信ETF国泰（515880）份额增加15.70亿份，最新份额629.28亿份，最新规模410.48亿元",
-      "summary": "8月19日通信ETF国泰（515880）份额增加15.70亿份，最新份额629.28亿份，最新规模410.48亿元 新浪网",
-      "url": "https://news.google.com/rss/articles/CBMimwFBVV95cUxPN3N0Mm03Vm1MX2IyS3dVLUFwbXl1VTZ2REU1eGU1Ql93eHgzUjE0TzlOWlktbUV2MjY5R2FpNkx2WXJuaHp0UmFjb2lFdllTaTZWRV9tem44UkFGalgwSlpZYVZvUDFhNzI2aXkyeTJ5dDA5UFlxQ0U2LUdpS1ViZF9ubXFZOEJWUHNXTmp5WVNSNUx1UEhUR1VVSQ?oc=5",
-      "source": "Google News / 新浪网",
-      "published_at": "2026-08-20T01:00:00Z",
-      "fetched_at": "2026-08-20T08:01:09Z",
-      "ticker": "515880.SS",
-      "source_tier": "aggregator"
-    },
-    {
-      "title": "Infrastructure Sterilisation Drilling Begins at Tunkillia",
-      "summary": "",
-      "url": "https://finance.yahoo.com/markets/commodities/articles/infrastructure-sterilisation-drilling-begins-tunkillia-002200714.html",
-      "source": "ACCESS Newswire",
-      "published_at": "2026-08-20T00:22:00Z",
-      "fetched_at": "2026-08-20T08:01:08Z",
-      "ticker": null,
-      "source_tier": "aggregator"
-    },
-    {
-      "title": "Iran Conflict Could Blow 11 Billion Pounds Hole in Healey's Budget",
-      "summary": "",
-      "url": "https://finance.yahoo.com/economy/policy/articles/iran-conflict-could-blow-11-233951251.html",
-      "source": "MT Newswires",
-      "published_at": "2026-08-19T23:39:51Z",
-      "fetched_at": "2026-08-20T08:01:08Z",
+      "url": "https://finance.yahoo.com/m/b25cec8d-1a44-3b85-be85-19573acfcd7e/wmt-vs-tgt%3A-walmart-has-the.html",
+      "source": "Stocktwits",
+      "published_at": "2026-08-21T02:39:34Z",
+      "fetched_at": "2026-08-21T08:16:00Z",
       "ticker": null,
       "source_tier": "aggregator"
     }
