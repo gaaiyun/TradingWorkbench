@@ -1,5 +1,103 @@
 [
   {
+    "trade_date": "2026-08-24",
+    "generated_at": "2026-08-24T16:51:37+08:00",
+    "provider": "openai_compatible",
+    "results": [
+      {
+        "ticker": "515880.SS",
+        "rating": "Hold",
+        "report": "reports/515880.SS/2026-08-24/complete_report.md",
+        "files": {
+          "fundamentals": "reports/515880.SS/2026-08-24/1_analysts/fundamentals.md",
+          "market": "reports/515880.SS/2026-08-24/1_analysts/market.md",
+          "news": "reports/515880.SS/2026-08-24/1_analysts/news.md",
+          "bear": "reports/515880.SS/2026-08-24/2_research/bear.md",
+          "bull": "reports/515880.SS/2026-08-24/2_research/bull.md",
+          "manager": "reports/515880.SS/2026-08-24/2_research/manager.md",
+          "trader": "reports/515880.SS/2026-08-24/3_trading/trader.md",
+          "aggressive": "reports/515880.SS/2026-08-24/4_risk/aggressive.md",
+          "conservative": "reports/515880.SS/2026-08-24/4_risk/conservative.md",
+          "neutral": "reports/515880.SS/2026-08-24/4_risk/neutral.md",
+          "decision": "reports/515880.SS/2026-08-24/5_portfolio/decision.md",
+          "complete_report": "reports/515880.SS/2026-08-24/complete_report.md"
+        },
+        "error": false,
+        "analysis_status": "rated",
+        "audit_status": "verified",
+        "evidence_publish": {
+          "published": true,
+          "status": 201
+        },
+        "marketHistory": {
+          "source": "tencent",
+          "adjustment": "qfq",
+          "barCount": 1260,
+          "startAt": "2021-06-14T16:00:00Z",
+          "endAt": "2026-08-20T16:00:00Z"
+        }
+      },
+      {
+        "ticker": "512480.SS",
+        "rating": "Hold",
+        "report": "reports/512480.SS/2026-08-24/complete_report.md",
+        "files": {
+          "fundamentals": "reports/512480.SS/2026-08-24/1_analysts/fundamentals.md",
+          "market": "reports/512480.SS/2026-08-24/1_analysts/market.md",
+          "news": "reports/512480.SS/2026-08-24/1_analysts/news.md",
+          "bear": "reports/512480.SS/2026-08-24/2_research/bear.md",
+          "bull": "reports/512480.SS/2026-08-24/2_research/bull.md",
+          "manager": "reports/512480.SS/2026-08-24/2_research/manager.md",
+          "trader": "reports/512480.SS/2026-08-24/3_trading/trader.md",
+          "aggressive": "reports/512480.SS/2026-08-24/4_risk/aggressive.md",
+          "conservative": "reports/512480.SS/2026-08-24/4_risk/conservative.md",
+          "neutral": "reports/512480.SS/2026-08-24/4_risk/neutral.md",
+          "decision": "reports/512480.SS/2026-08-24/5_portfolio/decision.md",
+          "complete_report": "reports/512480.SS/2026-08-24/complete_report.md"
+        },
+        "error": false,
+        "analysis_status": "rated",
+        "audit_status": "verified",
+        "evidence_publish": {
+          "published": true,
+          "status": 201
+        },
+        "marketHistory": {
+          "source": "tencent",
+          "adjustment": "qfq",
+          "barCount": 661,
+          "startAt": "2023-11-29T16:00:00Z",
+          "endAt": "2026-08-20T16:00:00Z"
+        }
+      }
+    ],
+    "request": {
+      "requestId": null,
+      "analysts": [
+        "market",
+        "news",
+        "fundamentals"
+      ],
+      "researchDepth": "standard",
+      "kind": "monitor"
+    },
+    "run": {
+      "id": "32708371308",
+      "attempt": "1",
+      "workflow": "daily-analysis",
+      "url": "https://github.com/gaaiyun/TradingWorkbench/actions/runs/32708371308"
+    },
+    "identity": {
+      "scope": "profile",
+      "kind": "monitor",
+      "runId": "32708371308",
+      "profileId": "cn-semi-comms",
+      "requestId": null,
+      "slotId": "slot-a00b191f4ae2c202e8c2d3b3c0091fe6d0295f3b8bad9070ebf0b7dd8fadd02f",
+      "scheduledFor": "2026-08-24T07:19:27.000Z"
+    }
+  },
+  {
     "trade_date": "2026-08-21",
     "generated_at": "2026-08-21T16:15:59+08:00",
     "provider": "openai_compatible",
@@ -4641,32 +4739,6 @@
           "neutral": "reports/600519.SS/2026-07-13/4_risk/neutral.md",
           "decision": "reports/600519.SS/2026-07-13/5_portfolio/decision.md",
           "complete_report": "reports/600519.SS/2026-07-13/complete_report.md"
-        }
-      }
-    ]
-  },
-  {
-    "trade_date": "2026-07-10",
-    "generated_at": "2026-07-13T02:13:48+08:00",
-    "provider": "openai_compatible",
-    "results": [
-      {
-        "ticker": "ORCL",
-        "rating": "Underweight",
-        "report": "reports/ORCL/2026-07-10/complete_report.md",
-        "error": false,
-        "files": {
-          "fundamentals": "reports/ORCL/2026-07-10/1_analysts/fundamentals.md",
-          "market": "reports/ORCL/2026-07-10/1_analysts/market.md",
-          "bear": "reports/ORCL/2026-07-10/2_research/bear.md",
-          "bull": "reports/ORCL/2026-07-10/2_research/bull.md",
-          "manager": "reports/ORCL/2026-07-10/2_research/manager.md",
-          "trader": "reports/ORCL/2026-07-10/3_trading/trader.md",
-          "aggressive": "reports/ORCL/2026-07-10/4_risk/aggressive.md",
-          "conservative": "reports/ORCL/2026-07-10/4_risk/conservative.md",
-          "neutral": "reports/ORCL/2026-07-10/4_risk/neutral.md",
-          "decision": "reports/ORCL/2026-07-10/5_portfolio/decision.md",
-          "complete_report": "reports/ORCL/2026-07-10/complete_report.md"
         }
       }
     ]

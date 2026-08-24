@@ -1,113 +1,113 @@
 {
   "version": 1,
   "status": "ok",
-  "generated_at": "2026-08-21T16:15:59+08:00",
-  "trade_date": "2026-08-21",
+  "generated_at": "2026-08-24T16:51:37+08:00",
+  "trade_date": "2026-08-24",
   "global": {
     "status": "ok",
     "query_type": "global",
     "ticker": null,
-    "start_date": "2026-08-14",
-    "end_date": "2026-08-21",
-    "fetched_at": "2026-08-21T08:16:00Z",
+    "start_date": "2026-08-17",
+    "end_date": "2026-08-24",
+    "fetched_at": "2026-08-24T08:51:38Z",
     "items": [
       {
-        "title": "Why Is CVC Capital Partners (ENXTAM:CVC) Getting Attention Today?",
+        "title": "Oil falls as Trump pledges economic war on Iran",
         "summary": "",
-        "url": "https://finance.yahoo.com/markets/stocks/articles/why-cvc-capital-partners-enxtam-081104111.html",
-        "source": "Simply Wall St.",
-        "published_at": "2026-08-21T08:11:04Z",
-        "fetched_at": "2026-08-21T08:16:00Z",
-        "ticker": null,
-        "source_tier": "aggregator"
-      },
-      {
-        "title": "US Stock Market Today: S&P 500 Futures Edge Lower As Higher For Longer Worries Build",
-        "summary": "",
-        "url": "https://finance.yahoo.com/markets/stocks/articles/us-stock-market-today-p-081024366.html",
-        "source": "Simply Wall St.",
-        "published_at": "2026-08-21T08:10:24Z",
-        "fetched_at": "2026-08-21T08:16:00Z",
-        "ticker": null,
-        "source_tier": "aggregator"
-      },
-      {
-        "title": "European stocks steady, set for weekly loss as oil prices, yields stay elevated",
-        "summary": "",
-        "url": "https://finance.yahoo.com/markets/world-indices/articles/european-stocks-steady-set-weekly-074231352.html",
-        "source": "Reuters",
-        "published_at": "2026-08-21T07:42:31Z",
-        "fetched_at": "2026-08-21T08:16:00Z",
-        "ticker": null,
-        "source_tier": "aggregator"
-      },
-      {
-        "title": "Asian markets extend rally as traders assess US Treasuries pledge",
-        "summary": "",
-        "url": "https://finance.yahoo.com/markets/world-indices/articles/asian-markets-extend-rally-traders-023442615.html",
+        "url": "https://finance.yahoo.com/energy/articles/oil-falls-trump-pledges-economic-030019769.html",
         "source": "AFP",
-        "published_at": "2026-08-21T07:39:36Z",
-        "fetched_at": "2026-08-21T08:16:00Z",
+        "published_at": "2026-08-24T08:49:13Z",
+        "fetched_at": "2026-08-24T08:51:38Z",
         "ticker": null,
         "source_tier": "aggregator"
       },
       {
-        "title": "Five Below Stock Looks Like a Winner for Back to School—and Beyond",
+        "title": "U.S. Treasury Doubling Long-End Debt Buybacks Highlights Underlying Issues",
         "summary": "",
-        "url": "https://finance.yahoo.com/m/48ce2c26-be6f-3a3c-972a-08b3d4d847bf/five-below-stock-looks-like-a.html",
-        "source": "Barrons.com",
-        "published_at": "2026-08-21T06:30:00Z",
-        "fetched_at": "2026-08-21T08:16:00Z",
+        "url": "https://finance.yahoo.com/m/d18c992f-8d90-389f-bfcc-b62cec56af3d/u.s.-treasury-doubling.html",
+        "source": "The Wall Street Journal",
+        "published_at": "2026-08-24T08:36:00Z",
+        "fetched_at": "2026-08-24T08:51:38Z",
         "ticker": null,
         "source_tier": "aggregator"
       },
       {
-        "title": "Why Oil Refiner Stocks Can Keep Gaining",
+        "title": "Shares, oil dip as US sanctions on Iran loom",
         "summary": "",
-        "url": "https://finance.yahoo.com/m/47ad45b5-ed42-3326-8a0b-7b882997bb01/why-oil-refiner-stocks-can.html",
-        "source": "Barrons.com",
-        "published_at": "2026-08-21T06:00:00Z",
-        "fetched_at": "2026-08-21T08:16:00Z",
+        "url": "https://finance.yahoo.com/news/shares-flat-asia-iran-sanctions-004936320.html",
+        "source": "Reuters",
+        "published_at": "2026-08-24T08:31:45Z",
+        "fetched_at": "2026-08-24T08:51:38Z",
         "ticker": null,
         "source_tier": "aggregator"
       },
       {
-        "title": "Oil Prices Head for Second Straight Weekly Gain as Iran Risks Mount",
+        "title": "Why Are Nasdaq, S&P 500 Futures Falling Premarket? NVDA, BABA, PSKY, SLS, AAOI, SPCX, RKLB Stocks In Focus",
         "summary": "",
-        "url": "https://finance.yahoo.com/energy/articles/oil-prices-head-second-straight-053000246.html",
-        "source": "Oilprice.com",
-        "published_at": "2026-08-21T05:30:00Z",
-        "fetched_at": "2026-08-21T08:16:00Z",
-        "ticker": null,
-        "source_tier": "aggregator"
-      },
-      {
-        "title": "Dow Jones Futures: Market Triggers This Bearish Signal As Walmart, SpaceX, CrowdStrike Tumble",
-        "summary": "",
-        "url": "https://finance.yahoo.com/m/91327cea-fed2-33ed-a182-385b27c0298f/dow-jones-futures%3A-market.html",
-        "source": "Investor's Business Daily",
-        "published_at": "2026-08-21T03:09:23Z",
-        "fetched_at": "2026-08-21T08:16:00Z",
-        "ticker": null,
-        "source_tier": "aggregator"
-      },
-      {
-        "title": "Ring Energy Eyes 10% Growth as Longer Laterals Unlock Permian Potential",
-        "summary": "",
-        "url": "https://finance.yahoo.com/m/c5cba5ff-a427-3d3a-a331-f7d1c5bfd85a/ring-energy-eyes-10%25-growth.html",
-        "source": "MarketBeat",
-        "published_at": "2026-08-21T03:01:59Z",
-        "fetched_at": "2026-08-21T08:16:00Z",
-        "ticker": null,
-        "source_tier": "aggregator"
-      },
-      {
-        "title": "WMT Vs TGT: Walmart Has The Scale, Target Has Turnaround Momentum — Which Retail Stock Looks Better Now?",
-        "summary": "",
-        "url": "https://finance.yahoo.com/m/b25cec8d-1a44-3b85-be85-19573acfcd7e/wmt-vs-tgt%3A-walmart-has-the.html",
+        "url": "https://finance.yahoo.com/m/3cafa466-cab9-3324-b9c3-0b2328983255/why-are-nasdaq%2C-s%26p-500.html",
         "source": "Stocktwits",
-        "published_at": "2026-08-21T02:39:34Z",
-        "fetched_at": "2026-08-21T08:16:00Z",
+        "published_at": "2026-08-24T08:26:18Z",
+        "fetched_at": "2026-08-24T08:51:38Z",
+        "ticker": null,
+        "source_tier": "aggregator"
+      },
+      {
+        "title": "Global Bond Yields Fall on Declining Oil, Prospects of Further Treasury Steps to Tackle Recent Highs",
+        "summary": "",
+        "url": "https://finance.yahoo.com/m/dac70cae-450f-38f7-a574-2af8de8e5fda/global-bond-yields-fall-on.html",
+        "source": "The Wall Street Journal",
+        "published_at": "2026-08-24T08:26:00Z",
+        "fetched_at": "2026-08-24T08:51:38Z",
+        "ticker": null,
+        "source_tier": "aggregator"
+      },
+      {
+        "title": "AI trade In focus, Iran sanctions loom - What’s moving markets",
+        "summary": "",
+        "url": "https://finance.yahoo.com/markets/stocks/articles/ai-trade-focus-iran-sanctions-081725634.html",
+        "source": "Investing.com",
+        "published_at": "2026-08-24T08:17:25Z",
+        "fetched_at": "2026-08-24T08:51:38Z",
+        "ticker": null,
+        "source_tier": "aggregator"
+      },
+      {
+        "title": "Gold Above $4,700 Ahead of Inflation Data, Fed Chair Speech",
+        "summary": "",
+        "url": "https://finance.yahoo.com/m/07eed4c5-bf1f-3f5d-9d66-871b4061fd68/gold-above-%244%2C700-ahead-of.html",
+        "source": "The Wall Street Journal",
+        "published_at": "2026-08-24T07:49:00Z",
+        "fetched_at": "2026-08-24T08:51:38Z",
+        "ticker": null,
+        "source_tier": "aggregator"
+      },
+      {
+        "title": "Oil Falls Ahead of Bessent’s Press Conference",
+        "summary": "",
+        "url": "https://finance.yahoo.com/m/6c899ae2-7ea3-30e2-80b8-a5fd695392bf/oil-falls-ahead-of-bessent%E2%80%99s.html",
+        "source": "The Wall Street Journal",
+        "published_at": "2026-08-24T07:48:00Z",
+        "fetched_at": "2026-08-24T08:51:38Z",
+        "ticker": null,
+        "source_tier": "aggregator"
+      },
+      {
+        "title": "European shares slip as tech drags; Iran sanctions in focus",
+        "summary": "",
+        "url": "https://finance.yahoo.com/markets/world-indices/articles/european-shares-slip-tech-drags-073044780.html",
+        "source": "Reuters",
+        "published_at": "2026-08-24T07:30:44Z",
+        "fetched_at": "2026-08-24T08:51:38Z",
+        "ticker": null,
+        "source_tier": "aggregator"
+      },
+      {
+        "title": "Tertiary Minerals latest drill results sees Discovery Zone advancing",
+        "summary": "",
+        "url": "https://finance.yahoo.com/m/b85499e8-137c-3c63-a5b1-da631c3832ec/tertiary-minerals-latest.html",
+        "source": "Proactive",
+        "published_at": "2026-08-24T06:39:00Z",
+        "fetched_at": "2026-08-24T08:51:38Z",
         "ticker": null,
         "source_tier": "aggregator"
       }
@@ -116,7 +116,7 @@
       {
         "source": "Yahoo Finance",
         "status": "ok",
-        "item_count": 30
+        "item_count": 39
       },
       {
         "source": "Federal Reserve",
@@ -130,9 +130,9 @@
       "status": "empty",
       "query_type": "ticker",
       "ticker": "515880.SS",
-      "start_date": "2026-08-21",
-      "end_date": "2026-08-21",
-      "fetched_at": "2026-08-21T08:16:01Z",
+      "start_date": "2026-08-24",
+      "end_date": "2026-08-24",
+      "fetched_at": "2026-08-24T08:51:39Z",
       "items": [],
       "source_statuses": [
         {
@@ -156,9 +156,9 @@
       "status": "empty",
       "query_type": "ticker",
       "ticker": "512480.SS",
-      "start_date": "2026-08-21",
-      "end_date": "2026-08-21",
-      "fetched_at": "2026-08-21T08:16:04Z",
+      "start_date": "2026-08-24",
+      "end_date": "2026-08-24",
+      "fetched_at": "2026-08-24T08:51:42Z",
       "items": [],
       "source_statuses": [
         {
@@ -181,102 +181,102 @@
   },
   "items": [
     {
-      "title": "Why Is CVC Capital Partners (ENXTAM:CVC) Getting Attention Today?",
+      "title": "Oil falls as Trump pledges economic war on Iran",
       "summary": "",
-      "url": "https://finance.yahoo.com/markets/stocks/articles/why-cvc-capital-partners-enxtam-081104111.html",
-      "source": "Simply Wall St.",
-      "published_at": "2026-08-21T08:11:04Z",
-      "fetched_at": "2026-08-21T08:16:00Z",
-      "ticker": null,
-      "source_tier": "aggregator"
-    },
-    {
-      "title": "US Stock Market Today: S&P 500 Futures Edge Lower As Higher For Longer Worries Build",
-      "summary": "",
-      "url": "https://finance.yahoo.com/markets/stocks/articles/us-stock-market-today-p-081024366.html",
-      "source": "Simply Wall St.",
-      "published_at": "2026-08-21T08:10:24Z",
-      "fetched_at": "2026-08-21T08:16:00Z",
-      "ticker": null,
-      "source_tier": "aggregator"
-    },
-    {
-      "title": "European stocks steady, set for weekly loss as oil prices, yields stay elevated",
-      "summary": "",
-      "url": "https://finance.yahoo.com/markets/world-indices/articles/european-stocks-steady-set-weekly-074231352.html",
-      "source": "Reuters",
-      "published_at": "2026-08-21T07:42:31Z",
-      "fetched_at": "2026-08-21T08:16:00Z",
-      "ticker": null,
-      "source_tier": "aggregator"
-    },
-    {
-      "title": "Asian markets extend rally as traders assess US Treasuries pledge",
-      "summary": "",
-      "url": "https://finance.yahoo.com/markets/world-indices/articles/asian-markets-extend-rally-traders-023442615.html",
+      "url": "https://finance.yahoo.com/energy/articles/oil-falls-trump-pledges-economic-030019769.html",
       "source": "AFP",
-      "published_at": "2026-08-21T07:39:36Z",
-      "fetched_at": "2026-08-21T08:16:00Z",
+      "published_at": "2026-08-24T08:49:13Z",
+      "fetched_at": "2026-08-24T08:51:38Z",
       "ticker": null,
       "source_tier": "aggregator"
     },
     {
-      "title": "Five Below Stock Looks Like a Winner for Back to School—and Beyond",
+      "title": "U.S. Treasury Doubling Long-End Debt Buybacks Highlights Underlying Issues",
       "summary": "",
-      "url": "https://finance.yahoo.com/m/48ce2c26-be6f-3a3c-972a-08b3d4d847bf/five-below-stock-looks-like-a.html",
-      "source": "Barrons.com",
-      "published_at": "2026-08-21T06:30:00Z",
-      "fetched_at": "2026-08-21T08:16:00Z",
+      "url": "https://finance.yahoo.com/m/d18c992f-8d90-389f-bfcc-b62cec56af3d/u.s.-treasury-doubling.html",
+      "source": "The Wall Street Journal",
+      "published_at": "2026-08-24T08:36:00Z",
+      "fetched_at": "2026-08-24T08:51:38Z",
       "ticker": null,
       "source_tier": "aggregator"
     },
     {
-      "title": "Why Oil Refiner Stocks Can Keep Gaining",
+      "title": "Shares, oil dip as US sanctions on Iran loom",
       "summary": "",
-      "url": "https://finance.yahoo.com/m/47ad45b5-ed42-3326-8a0b-7b882997bb01/why-oil-refiner-stocks-can.html",
-      "source": "Barrons.com",
-      "published_at": "2026-08-21T06:00:00Z",
-      "fetched_at": "2026-08-21T08:16:00Z",
+      "url": "https://finance.yahoo.com/news/shares-flat-asia-iran-sanctions-004936320.html",
+      "source": "Reuters",
+      "published_at": "2026-08-24T08:31:45Z",
+      "fetched_at": "2026-08-24T08:51:38Z",
       "ticker": null,
       "source_tier": "aggregator"
     },
     {
-      "title": "Oil Prices Head for Second Straight Weekly Gain as Iran Risks Mount",
+      "title": "Why Are Nasdaq, S&P 500 Futures Falling Premarket? NVDA, BABA, PSKY, SLS, AAOI, SPCX, RKLB Stocks In Focus",
       "summary": "",
-      "url": "https://finance.yahoo.com/energy/articles/oil-prices-head-second-straight-053000246.html",
-      "source": "Oilprice.com",
-      "published_at": "2026-08-21T05:30:00Z",
-      "fetched_at": "2026-08-21T08:16:00Z",
-      "ticker": null,
-      "source_tier": "aggregator"
-    },
-    {
-      "title": "Dow Jones Futures: Market Triggers This Bearish Signal As Walmart, SpaceX, CrowdStrike Tumble",
-      "summary": "",
-      "url": "https://finance.yahoo.com/m/91327cea-fed2-33ed-a182-385b27c0298f/dow-jones-futures%3A-market.html",
-      "source": "Investor's Business Daily",
-      "published_at": "2026-08-21T03:09:23Z",
-      "fetched_at": "2026-08-21T08:16:00Z",
-      "ticker": null,
-      "source_tier": "aggregator"
-    },
-    {
-      "title": "Ring Energy Eyes 10% Growth as Longer Laterals Unlock Permian Potential",
-      "summary": "",
-      "url": "https://finance.yahoo.com/m/c5cba5ff-a427-3d3a-a331-f7d1c5bfd85a/ring-energy-eyes-10%25-growth.html",
-      "source": "MarketBeat",
-      "published_at": "2026-08-21T03:01:59Z",
-      "fetched_at": "2026-08-21T08:16:00Z",
-      "ticker": null,
-      "source_tier": "aggregator"
-    },
-    {
-      "title": "WMT Vs TGT: Walmart Has The Scale, Target Has Turnaround Momentum — Which Retail Stock Looks Better Now?",
-      "summary": "",
-      "url": "https://finance.yahoo.com/m/b25cec8d-1a44-3b85-be85-19573acfcd7e/wmt-vs-tgt%3A-walmart-has-the.html",
+      "url": "https://finance.yahoo.com/m/3cafa466-cab9-3324-b9c3-0b2328983255/why-are-nasdaq%2C-s%26p-500.html",
       "source": "Stocktwits",
-      "published_at": "2026-08-21T02:39:34Z",
-      "fetched_at": "2026-08-21T08:16:00Z",
+      "published_at": "2026-08-24T08:26:18Z",
+      "fetched_at": "2026-08-24T08:51:38Z",
+      "ticker": null,
+      "source_tier": "aggregator"
+    },
+    {
+      "title": "Global Bond Yields Fall on Declining Oil, Prospects of Further Treasury Steps to Tackle Recent Highs",
+      "summary": "",
+      "url": "https://finance.yahoo.com/m/dac70cae-450f-38f7-a574-2af8de8e5fda/global-bond-yields-fall-on.html",
+      "source": "The Wall Street Journal",
+      "published_at": "2026-08-24T08:26:00Z",
+      "fetched_at": "2026-08-24T08:51:38Z",
+      "ticker": null,
+      "source_tier": "aggregator"
+    },
+    {
+      "title": "AI trade In focus, Iran sanctions loom - What’s moving markets",
+      "summary": "",
+      "url": "https://finance.yahoo.com/markets/stocks/articles/ai-trade-focus-iran-sanctions-081725634.html",
+      "source": "Investing.com",
+      "published_at": "2026-08-24T08:17:25Z",
+      "fetched_at": "2026-08-24T08:51:38Z",
+      "ticker": null,
+      "source_tier": "aggregator"
+    },
+    {
+      "title": "Gold Above $4,700 Ahead of Inflation Data, Fed Chair Speech",
+      "summary": "",
+      "url": "https://finance.yahoo.com/m/07eed4c5-bf1f-3f5d-9d66-871b4061fd68/gold-above-%244%2C700-ahead-of.html",
+      "source": "The Wall Street Journal",
+      "published_at": "2026-08-24T07:49:00Z",
+      "fetched_at": "2026-08-24T08:51:38Z",
+      "ticker": null,
+      "source_tier": "aggregator"
+    },
+    {
+      "title": "Oil Falls Ahead of Bessent’s Press Conference",
+      "summary": "",
+      "url": "https://finance.yahoo.com/m/6c899ae2-7ea3-30e2-80b8-a5fd695392bf/oil-falls-ahead-of-bessent%E2%80%99s.html",
+      "source": "The Wall Street Journal",
+      "published_at": "2026-08-24T07:48:00Z",
+      "fetched_at": "2026-08-24T08:51:38Z",
+      "ticker": null,
+      "source_tier": "aggregator"
+    },
+    {
+      "title": "European shares slip as tech drags; Iran sanctions in focus",
+      "summary": "",
+      "url": "https://finance.yahoo.com/markets/world-indices/articles/european-shares-slip-tech-drags-073044780.html",
+      "source": "Reuters",
+      "published_at": "2026-08-24T07:30:44Z",
+      "fetched_at": "2026-08-24T08:51:38Z",
+      "ticker": null,
+      "source_tier": "aggregator"
+    },
+    {
+      "title": "Tertiary Minerals latest drill results sees Discovery Zone advancing",
+      "summary": "",
+      "url": "https://finance.yahoo.com/m/b85499e8-137c-3c63-a5b1-da631c3832ec/tertiary-minerals-latest.html",
+      "source": "Proactive",
+      "published_at": "2026-08-24T06:39:00Z",
+      "fetched_at": "2026-08-24T08:51:38Z",
       "ticker": null,
       "source_tier": "aggregator"
     }

@@ -1,0 +1,5 @@
+**Rating**: Hold
+
+**Executive Summary**: ETF 512480.SS displays bearish MA alignment with latest close below MA20 and MA60 [D7]. Recent window of 8 trading days shows close decline -4.41176471% [D2]. Unavailable data covers holdings, NAV, premium-discount, tracking error, fees, concentration, and direct policy impacts on ETF performance [unavailable]. Share splits occurred [CA1][CA2] without stated effects. Maintain current exposure per snapshot.
+
+**Investment Thesis**: Research Manager recommends Hold based on mixed analyst views, but ledger evidence prioritizes technical weaknesses: bearish MA alignment [D7], negative MACD signal [I9], neutral RSI below midline [D9], and 8-day decline [D2] over unverified policy theses where direct ETF impact is unavailable [unavailable in ledger]. Holdings, NAV, and corporate action effects absent [unavailable]. No target price derivable. Position unchanged.
