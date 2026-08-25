@@ -1,113 +1,113 @@
 {
   "version": 1,
   "status": "ok",
-  "generated_at": "2026-08-24T16:51:37+08:00",
-  "trade_date": "2026-08-24",
+  "generated_at": "2026-08-25T16:01:48+08:00",
+  "trade_date": "2026-08-25",
   "global": {
     "status": "ok",
     "query_type": "global",
     "ticker": null,
-    "start_date": "2026-08-17",
-    "end_date": "2026-08-24",
-    "fetched_at": "2026-08-24T08:51:38Z",
+    "start_date": "2026-08-18",
+    "end_date": "2026-08-25",
+    "fetched_at": "2026-08-25T08:01:49Z",
     "items": [
       {
-        "title": "Oil falls as Trump pledges economic war on Iran",
+        "title": "European shares climb on Iran sanctions relief, defence gains",
         "summary": "",
-        "url": "https://finance.yahoo.com/energy/articles/oil-falls-trump-pledges-economic-030019769.html",
-        "source": "AFP",
-        "published_at": "2026-08-24T08:49:13Z",
-        "fetched_at": "2026-08-24T08:51:38Z",
-        "ticker": null,
-        "source_tier": "aggregator"
-      },
-      {
-        "title": "U.S. Treasury Doubling Long-End Debt Buybacks Highlights Underlying Issues",
-        "summary": "",
-        "url": "https://finance.yahoo.com/m/d18c992f-8d90-389f-bfcc-b62cec56af3d/u.s.-treasury-doubling.html",
-        "source": "The Wall Street Journal",
-        "published_at": "2026-08-24T08:36:00Z",
-        "fetched_at": "2026-08-24T08:51:38Z",
-        "ticker": null,
-        "source_tier": "aggregator"
-      },
-      {
-        "title": "Shares, oil dip as US sanctions on Iran loom",
-        "summary": "",
-        "url": "https://finance.yahoo.com/news/shares-flat-asia-iran-sanctions-004936320.html",
+        "url": "https://finance.yahoo.com/markets/world-indices/articles/european-shares-climb-iran-sanctions-073245293.html",
         "source": "Reuters",
-        "published_at": "2026-08-24T08:31:45Z",
-        "fetched_at": "2026-08-24T08:51:38Z",
+        "published_at": "2026-08-25T07:32:45Z",
+        "fetched_at": "2026-08-25T08:01:49Z",
         "ticker": null,
         "source_tier": "aggregator"
       },
       {
-        "title": "Why Are Nasdaq, S&P 500 Futures Falling Premarket? NVDA, BABA, PSKY, SLS, AAOI, SPCX, RKLB Stocks In Focus",
+        "title": "Star Copper Completes Seven Northeast Step-Out Drill Holes at Star Main",
         "summary": "",
-        "url": "https://finance.yahoo.com/m/3cafa466-cab9-3324-b9c3-0b2328983255/why-are-nasdaq%2C-s%26p-500.html",
-        "source": "Stocktwits",
-        "published_at": "2026-08-24T08:26:18Z",
-        "fetched_at": "2026-08-24T08:51:38Z",
+        "url": "https://finance.yahoo.com/markets/commodities/articles/star-copper-completes-seven-northeast-070100950.html",
+        "source": "ACCESS Newswire",
+        "published_at": "2026-08-25T07:01:00Z",
+        "fetched_at": "2026-08-25T08:01:49Z",
         "ticker": null,
         "source_tier": "aggregator"
       },
       {
-        "title": "Global Bond Yields Fall on Declining Oil, Prospects of Further Treasury Steps to Tackle Recent Highs",
+        "title": "Woodside Energy Group Ltd (WOPEF) (H1 2026) Earnings Call Highlights: Record Free Cash Flow ...",
         "summary": "",
-        "url": "https://finance.yahoo.com/m/dac70cae-450f-38f7-a574-2af8de8e5fda/global-bond-yields-fall-on.html",
-        "source": "The Wall Street Journal",
-        "published_at": "2026-08-24T08:26:00Z",
-        "fetched_at": "2026-08-24T08:51:38Z",
+        "url": "https://finance.yahoo.com/energy/articles/woodside-energy-group-ltd-wopef-070055286.html",
+        "source": "GuruFocus.com",
+        "published_at": "2026-08-25T07:00:55Z",
+        "fetched_at": "2026-08-25T08:01:49Z",
         "ticker": null,
         "source_tier": "aggregator"
       },
       {
-        "title": "AI trade In focus, Iran sanctions loom - What’s moving markets",
+        "title": "Oil extends fall as investors shrug off latest US sanctions on Iran",
         "summary": "",
-        "url": "https://finance.yahoo.com/markets/stocks/articles/ai-trade-focus-iran-sanctions-081725634.html",
-        "source": "Investing.com",
-        "published_at": "2026-08-24T08:17:25Z",
-        "fetched_at": "2026-08-24T08:51:38Z",
-        "ticker": null,
-        "source_tier": "aggregator"
-      },
-      {
-        "title": "Gold Above $4,700 Ahead of Inflation Data, Fed Chair Speech",
-        "summary": "",
-        "url": "https://finance.yahoo.com/m/07eed4c5-bf1f-3f5d-9d66-871b4061fd68/gold-above-%244%2C700-ahead-of.html",
-        "source": "The Wall Street Journal",
-        "published_at": "2026-08-24T07:49:00Z",
-        "fetched_at": "2026-08-24T08:51:38Z",
-        "ticker": null,
-        "source_tier": "aggregator"
-      },
-      {
-        "title": "Oil Falls Ahead of Bessent’s Press Conference",
-        "summary": "",
-        "url": "https://finance.yahoo.com/m/6c899ae2-7ea3-30e2-80b8-a5fd695392bf/oil-falls-ahead-of-bessent%E2%80%99s.html",
-        "source": "The Wall Street Journal",
-        "published_at": "2026-08-24T07:48:00Z",
-        "fetched_at": "2026-08-24T08:51:38Z",
-        "ticker": null,
-        "source_tier": "aggregator"
-      },
-      {
-        "title": "European shares slip as tech drags; Iran sanctions in focus",
-        "summary": "",
-        "url": "https://finance.yahoo.com/markets/world-indices/articles/european-shares-slip-tech-drags-073044780.html",
+        "url": "https://finance.yahoo.com/energy/articles/oil-prices-steady-investors-weigh-011547751.html",
         "source": "Reuters",
-        "published_at": "2026-08-24T07:30:44Z",
-        "fetched_at": "2026-08-24T08:51:38Z",
+        "published_at": "2026-08-25T06:51:21Z",
+        "fetched_at": "2026-08-25T08:01:49Z",
         "ticker": null,
         "source_tier": "aggregator"
       },
       {
-        "title": "Tertiary Minerals latest drill results sees Discovery Zone advancing",
+        "title": "Southern Energy Corp. Announces Second Quarter 2026 Financial and Operating Results and Information Regarding the Annual Meeting of Shareholders",
         "summary": "",
-        "url": "https://finance.yahoo.com/m/b85499e8-137c-3c63-a5b1-da631c3832ec/tertiary-minerals-latest.html",
+        "url": "https://finance.yahoo.com/energy/articles/southern-energy-corp-announces-second-060200556.html",
+        "source": "ACCESS Newswire",
+        "published_at": "2026-08-25T06:02:00Z",
+        "fetched_at": "2026-08-25T08:01:49Z",
+        "ticker": null,
+        "source_tier": "aggregator"
+      },
+      {
+        "title": "Asian shares mostly gain and oil prices hold steady as the US raises pressure on Iran",
+        "summary": "",
+        "url": "https://finance.yahoo.com/markets/world-indices/articles/asian-shares-mixed-oil-prices-052631381.html",
+        "source": "Associated Press",
+        "published_at": "2026-08-25T05:26:31Z",
+        "fetched_at": "2026-08-25T08:01:49Z",
+        "ticker": null,
+        "source_tier": "aggregator"
+      },
+      {
+        "title": "Walmart sales miss hides bigger shift in business",
+        "summary": "",
+        "url": "https://finance.yahoo.com/m/3d74c536-a2e6-3645-ac62-5e7360ab101a/walmart-sales-miss-hides.html",
+        "source": "TheStreet",
+        "published_at": "2026-08-25T05:07:00Z",
+        "fetched_at": "2026-08-25T08:01:49Z",
+        "ticker": null,
+        "source_tier": "aggregator"
+      },
+      {
+        "title": "Novo Resources maps a discovery-led path through strong gold and copper markets",
+        "summary": "",
+        "url": "https://finance.yahoo.com/m/55f3d91f-1255-3ad9-bbd2-0772e10a63de/novo-resources-maps-a.html",
         "source": "Proactive",
-        "published_at": "2026-08-24T06:39:00Z",
-        "fetched_at": "2026-08-24T08:51:38Z",
+        "published_at": "2026-08-25T04:29:00Z",
+        "fetched_at": "2026-08-25T08:01:49Z",
+        "ticker": null,
+        "source_tier": "aggregator"
+      },
+      {
+        "title": "AP Top Financial News at 3:39 a.m. EDT",
+        "summary": "",
+        "url": "https://finance.yahoo.com/energy/articles/ap-top-financial-news-1-040000426.html",
+        "source": "Associated Press",
+        "published_at": "2026-08-25T04:00:00Z",
+        "fetched_at": "2026-08-25T08:01:49Z",
+        "ticker": null,
+        "source_tier": "aggregator"
+      },
+      {
+        "title": "Bitcoin Tops $81,000 as Gold Notches Its Best Month Since 1999",
+        "summary": "",
+        "url": "https://finance.yahoo.com/m/0a073373-a998-30b2-aaaf-f6563562d492/bitcoin-tops-%2481%2C000-as-gold.html",
+        "source": "BeInCrypto",
+        "published_at": "2026-08-25T03:33:32Z",
+        "fetched_at": "2026-08-25T08:01:49Z",
         "ticker": null,
         "source_tier": "aggregator"
       }
@@ -127,13 +127,34 @@
   },
   "tickers": {
     "515880.SS": {
-      "status": "empty",
+      "status": "ok",
       "query_type": "ticker",
       "ticker": "515880.SS",
-      "start_date": "2026-08-24",
-      "end_date": "2026-08-24",
-      "fetched_at": "2026-08-24T08:51:39Z",
-      "items": [],
+      "start_date": "2026-08-25",
+      "end_date": "2026-08-25",
+      "fetched_at": "2026-08-25T08:01:51Z",
+      "items": [
+        {
+          "title": "通信ETF国泰（515880）跌0.93%，半日成交额17.31亿元",
+          "summary": "通信ETF国泰（515880）跌0.93%，半日成交额17.31亿元 finance.sina.com.cn",
+          "url": "https://news.google.com/rss/articles/CBMimAFBVV95cUxObkJ5Q1hySmlRcnFCcDVHbl9DUEY0WkRxckJibTFsSTJETjVmVjktaURrZ1B4V2VURzd2VWlNQzZQd3VKNTdrYmJ4OUVuN0MtalZRUkIxNFBrUFNJTHBneUtEU2ozQjEzTm4tV25EVlBhb1h3SkFJb1phVHdnWUd0Rm9HNm03VjFNWS1ycjl3cmd0RlNRWjZlNg?oc=5",
+          "source": "Google News / finance.sina.com.cn",
+          "published_at": "2026-08-25T03:31:00Z",
+          "fetched_at": "2026-08-25T08:01:51Z",
+          "ticker": "515880.SS",
+          "source_tier": "aggregator"
+        },
+        {
+          "title": "8月24日通信ETF国泰（515880）份额增加7.96亿份，最新份额629.70亿份，最新规模407.98亿元",
+          "summary": "8月24日通信ETF国泰（515880）份额增加7.96亿份，最新份额629.70亿份，最新规模407.98亿元 finance.sina.com.cn",
+          "url": "https://news.google.com/rss/articles/CBMimwFBVV95cUxPaGlsMXBOSkVtTC1nbnJ0RXNVUHJrMFA2WllBZmFEVktGRFR6eWk1YnBPQUpibDNtRXN5R3RfX3NZaG9FbG1vOW9vUFJsU3lvRmhKOU5HQlE3NzNjamZtMzcwOVlndlRkRjJMczBqNGE1TGRkZkF4dDZiUkdSNmRFeS1JSWwzbjhEUWo3MjJaS1lOclc5NWtRaFUxOA?oc=5",
+          "source": "Google News / finance.sina.com.cn",
+          "published_at": "2026-08-25T01:00:00Z",
+          "fetched_at": "2026-08-25T08:01:51Z",
+          "ticker": "515880.SS",
+          "source_tier": "aggregator"
+        }
+      ],
       "source_statuses": [
         {
           "source": "Yahoo Finance",
@@ -142,8 +163,8 @@
         },
         {
           "source": "Google News RSS",
-          "status": "empty",
-          "item_count": 0
+          "status": "ok",
+          "item_count": 2
         },
         {
           "source": "SEC EDGAR",
@@ -153,13 +174,24 @@
       ]
     },
     "512480.SS": {
-      "status": "empty",
+      "status": "ok",
       "query_type": "ticker",
       "ticker": "512480.SS",
-      "start_date": "2026-08-24",
-      "end_date": "2026-08-24",
-      "fetched_at": "2026-08-24T08:51:42Z",
-      "items": [],
+      "start_date": "2026-08-25",
+      "end_date": "2026-08-25",
+      "fetched_at": "2026-08-25T08:01:54Z",
+      "items": [
+        {
+          "title": "8月24日半导体ETF国联安（512480）份额增加1.76亿份，最新份额193.78亿份，最新规模195.70亿元",
+          "summary": "8月24日半导体ETF国联安（512480）份额增加1.76亿份，最新份额193.78亿份，最新规模195.70亿元 finance.sina.com.cn",
+          "url": "https://news.google.com/rss/articles/CBMimwFBVV95cUxNTTJfWFhZMmh0eEpJTHB5X0ttLURnUEJkQjFhcE5aUXBiN2NPYmE5dmVMdmpOS2s3c0lLdXdvN2o0SW1OXzZrZEhqQ2lta1YzckNNSFJOZ1lKNVM4Q3AtT2E4ZU1OVVNYRlNaY0hwb2c1bVZyZ05lMVZTQjd0U1B1V3BFeXpLQXlEYzhxdUZZclhvTFg1OGpKWDJ1aw?oc=5",
+          "source": "Google News / finance.sina.com.cn",
+          "published_at": "2026-08-25T01:00:00Z",
+          "fetched_at": "2026-08-25T08:01:54Z",
+          "ticker": "512480.SS",
+          "source_tier": "aggregator"
+        }
+      ],
       "source_statuses": [
         {
           "source": "Yahoo Finance",
@@ -168,8 +200,8 @@
         },
         {
           "source": "Google News RSS",
-          "status": "empty",
-          "item_count": 0
+          "status": "ok",
+          "item_count": 1
         },
         {
           "source": "SEC EDGAR",
@@ -181,103 +213,133 @@
   },
   "items": [
     {
-      "title": "Oil falls as Trump pledges economic war on Iran",
+      "title": "European shares climb on Iran sanctions relief, defence gains",
       "summary": "",
-      "url": "https://finance.yahoo.com/energy/articles/oil-falls-trump-pledges-economic-030019769.html",
-      "source": "AFP",
-      "published_at": "2026-08-24T08:49:13Z",
-      "fetched_at": "2026-08-24T08:51:38Z",
-      "ticker": null,
-      "source_tier": "aggregator"
-    },
-    {
-      "title": "U.S. Treasury Doubling Long-End Debt Buybacks Highlights Underlying Issues",
-      "summary": "",
-      "url": "https://finance.yahoo.com/m/d18c992f-8d90-389f-bfcc-b62cec56af3d/u.s.-treasury-doubling.html",
-      "source": "The Wall Street Journal",
-      "published_at": "2026-08-24T08:36:00Z",
-      "fetched_at": "2026-08-24T08:51:38Z",
-      "ticker": null,
-      "source_tier": "aggregator"
-    },
-    {
-      "title": "Shares, oil dip as US sanctions on Iran loom",
-      "summary": "",
-      "url": "https://finance.yahoo.com/news/shares-flat-asia-iran-sanctions-004936320.html",
+      "url": "https://finance.yahoo.com/markets/world-indices/articles/european-shares-climb-iran-sanctions-073245293.html",
       "source": "Reuters",
-      "published_at": "2026-08-24T08:31:45Z",
-      "fetched_at": "2026-08-24T08:51:38Z",
+      "published_at": "2026-08-25T07:32:45Z",
+      "fetched_at": "2026-08-25T08:01:49Z",
       "ticker": null,
       "source_tier": "aggregator"
     },
     {
-      "title": "Why Are Nasdaq, S&P 500 Futures Falling Premarket? NVDA, BABA, PSKY, SLS, AAOI, SPCX, RKLB Stocks In Focus",
+      "title": "Star Copper Completes Seven Northeast Step-Out Drill Holes at Star Main",
       "summary": "",
-      "url": "https://finance.yahoo.com/m/3cafa466-cab9-3324-b9c3-0b2328983255/why-are-nasdaq%2C-s%26p-500.html",
-      "source": "Stocktwits",
-      "published_at": "2026-08-24T08:26:18Z",
-      "fetched_at": "2026-08-24T08:51:38Z",
+      "url": "https://finance.yahoo.com/markets/commodities/articles/star-copper-completes-seven-northeast-070100950.html",
+      "source": "ACCESS Newswire",
+      "published_at": "2026-08-25T07:01:00Z",
+      "fetched_at": "2026-08-25T08:01:49Z",
       "ticker": null,
       "source_tier": "aggregator"
     },
     {
-      "title": "Global Bond Yields Fall on Declining Oil, Prospects of Further Treasury Steps to Tackle Recent Highs",
+      "title": "Woodside Energy Group Ltd (WOPEF) (H1 2026) Earnings Call Highlights: Record Free Cash Flow ...",
       "summary": "",
-      "url": "https://finance.yahoo.com/m/dac70cae-450f-38f7-a574-2af8de8e5fda/global-bond-yields-fall-on.html",
-      "source": "The Wall Street Journal",
-      "published_at": "2026-08-24T08:26:00Z",
-      "fetched_at": "2026-08-24T08:51:38Z",
+      "url": "https://finance.yahoo.com/energy/articles/woodside-energy-group-ltd-wopef-070055286.html",
+      "source": "GuruFocus.com",
+      "published_at": "2026-08-25T07:00:55Z",
+      "fetched_at": "2026-08-25T08:01:49Z",
       "ticker": null,
       "source_tier": "aggregator"
     },
     {
-      "title": "AI trade In focus, Iran sanctions loom - What’s moving markets",
+      "title": "Oil extends fall as investors shrug off latest US sanctions on Iran",
       "summary": "",
-      "url": "https://finance.yahoo.com/markets/stocks/articles/ai-trade-focus-iran-sanctions-081725634.html",
-      "source": "Investing.com",
-      "published_at": "2026-08-24T08:17:25Z",
-      "fetched_at": "2026-08-24T08:51:38Z",
-      "ticker": null,
-      "source_tier": "aggregator"
-    },
-    {
-      "title": "Gold Above $4,700 Ahead of Inflation Data, Fed Chair Speech",
-      "summary": "",
-      "url": "https://finance.yahoo.com/m/07eed4c5-bf1f-3f5d-9d66-871b4061fd68/gold-above-%244%2C700-ahead-of.html",
-      "source": "The Wall Street Journal",
-      "published_at": "2026-08-24T07:49:00Z",
-      "fetched_at": "2026-08-24T08:51:38Z",
-      "ticker": null,
-      "source_tier": "aggregator"
-    },
-    {
-      "title": "Oil Falls Ahead of Bessent’s Press Conference",
-      "summary": "",
-      "url": "https://finance.yahoo.com/m/6c899ae2-7ea3-30e2-80b8-a5fd695392bf/oil-falls-ahead-of-bessent%E2%80%99s.html",
-      "source": "The Wall Street Journal",
-      "published_at": "2026-08-24T07:48:00Z",
-      "fetched_at": "2026-08-24T08:51:38Z",
-      "ticker": null,
-      "source_tier": "aggregator"
-    },
-    {
-      "title": "European shares slip as tech drags; Iran sanctions in focus",
-      "summary": "",
-      "url": "https://finance.yahoo.com/markets/world-indices/articles/european-shares-slip-tech-drags-073044780.html",
+      "url": "https://finance.yahoo.com/energy/articles/oil-prices-steady-investors-weigh-011547751.html",
       "source": "Reuters",
-      "published_at": "2026-08-24T07:30:44Z",
-      "fetched_at": "2026-08-24T08:51:38Z",
+      "published_at": "2026-08-25T06:51:21Z",
+      "fetched_at": "2026-08-25T08:01:49Z",
       "ticker": null,
       "source_tier": "aggregator"
     },
     {
-      "title": "Tertiary Minerals latest drill results sees Discovery Zone advancing",
+      "title": "Southern Energy Corp. Announces Second Quarter 2026 Financial and Operating Results and Information Regarding the Annual Meeting of Shareholders",
       "summary": "",
-      "url": "https://finance.yahoo.com/m/b85499e8-137c-3c63-a5b1-da631c3832ec/tertiary-minerals-latest.html",
+      "url": "https://finance.yahoo.com/energy/articles/southern-energy-corp-announces-second-060200556.html",
+      "source": "ACCESS Newswire",
+      "published_at": "2026-08-25T06:02:00Z",
+      "fetched_at": "2026-08-25T08:01:49Z",
+      "ticker": null,
+      "source_tier": "aggregator"
+    },
+    {
+      "title": "Asian shares mostly gain and oil prices hold steady as the US raises pressure on Iran",
+      "summary": "",
+      "url": "https://finance.yahoo.com/markets/world-indices/articles/asian-shares-mixed-oil-prices-052631381.html",
+      "source": "Associated Press",
+      "published_at": "2026-08-25T05:26:31Z",
+      "fetched_at": "2026-08-25T08:01:49Z",
+      "ticker": null,
+      "source_tier": "aggregator"
+    },
+    {
+      "title": "Walmart sales miss hides bigger shift in business",
+      "summary": "",
+      "url": "https://finance.yahoo.com/m/3d74c536-a2e6-3645-ac62-5e7360ab101a/walmart-sales-miss-hides.html",
+      "source": "TheStreet",
+      "published_at": "2026-08-25T05:07:00Z",
+      "fetched_at": "2026-08-25T08:01:49Z",
+      "ticker": null,
+      "source_tier": "aggregator"
+    },
+    {
+      "title": "Novo Resources maps a discovery-led path through strong gold and copper markets",
+      "summary": "",
+      "url": "https://finance.yahoo.com/m/55f3d91f-1255-3ad9-bbd2-0772e10a63de/novo-resources-maps-a.html",
       "source": "Proactive",
-      "published_at": "2026-08-24T06:39:00Z",
-      "fetched_at": "2026-08-24T08:51:38Z",
+      "published_at": "2026-08-25T04:29:00Z",
+      "fetched_at": "2026-08-25T08:01:49Z",
       "ticker": null,
+      "source_tier": "aggregator"
+    },
+    {
+      "title": "AP Top Financial News at 3:39 a.m. EDT",
+      "summary": "",
+      "url": "https://finance.yahoo.com/energy/articles/ap-top-financial-news-1-040000426.html",
+      "source": "Associated Press",
+      "published_at": "2026-08-25T04:00:00Z",
+      "fetched_at": "2026-08-25T08:01:49Z",
+      "ticker": null,
+      "source_tier": "aggregator"
+    },
+    {
+      "title": "Bitcoin Tops $81,000 as Gold Notches Its Best Month Since 1999",
+      "summary": "",
+      "url": "https://finance.yahoo.com/m/0a073373-a998-30b2-aaaf-f6563562d492/bitcoin-tops-%2481%2C000-as-gold.html",
+      "source": "BeInCrypto",
+      "published_at": "2026-08-25T03:33:32Z",
+      "fetched_at": "2026-08-25T08:01:49Z",
+      "ticker": null,
+      "source_tier": "aggregator"
+    },
+    {
+      "title": "通信ETF国泰（515880）跌0.93%，半日成交额17.31亿元",
+      "summary": "通信ETF国泰（515880）跌0.93%，半日成交额17.31亿元 finance.sina.com.cn",
+      "url": "https://news.google.com/rss/articles/CBMimAFBVV95cUxObkJ5Q1hySmlRcnFCcDVHbl9DUEY0WkRxckJibTFsSTJETjVmVjktaURrZ1B4V2VURzd2VWlNQzZQd3VKNTdrYmJ4OUVuN0MtalZRUkIxNFBrUFNJTHBneUtEU2ozQjEzTm4tV25EVlBhb1h3SkFJb1phVHdnWUd0Rm9HNm03VjFNWS1ycjl3cmd0RlNRWjZlNg?oc=5",
+      "source": "Google News / finance.sina.com.cn",
+      "published_at": "2026-08-25T03:31:00Z",
+      "fetched_at": "2026-08-25T08:01:51Z",
+      "ticker": "515880.SS",
+      "source_tier": "aggregator"
+    },
+    {
+      "title": "8月24日通信ETF国泰（515880）份额增加7.96亿份，最新份额629.70亿份，最新规模407.98亿元",
+      "summary": "8月24日通信ETF国泰（515880）份额增加7.96亿份，最新份额629.70亿份，最新规模407.98亿元 finance.sina.com.cn",
+      "url": "https://news.google.com/rss/articles/CBMimwFBVV95cUxPaGlsMXBOSkVtTC1nbnJ0RXNVUHJrMFA2WllBZmFEVktGRFR6eWk1YnBPQUpibDNtRXN5R3RfX3NZaG9FbG1vOW9vUFJsU3lvRmhKOU5HQlE3NzNjamZtMzcwOVlndlRkRjJMczBqNGE1TGRkZkF4dDZiUkdSNmRFeS1JSWwzbjhEUWo3MjJaS1lOclc5NWtRaFUxOA?oc=5",
+      "source": "Google News / finance.sina.com.cn",
+      "published_at": "2026-08-25T01:00:00Z",
+      "fetched_at": "2026-08-25T08:01:51Z",
+      "ticker": "515880.SS",
+      "source_tier": "aggregator"
+    },
+    {
+      "title": "8月24日半导体ETF国联安（512480）份额增加1.76亿份，最新份额193.78亿份，最新规模195.70亿元",
+      "summary": "8月24日半导体ETF国联安（512480）份额增加1.76亿份，最新份额193.78亿份，最新规模195.70亿元 finance.sina.com.cn",
+      "url": "https://news.google.com/rss/articles/CBMimwFBVV95cUxNTTJfWFhZMmh0eEpJTHB5X0ttLURnUEJkQjFhcE5aUXBiN2NPYmE5dmVMdmpOS2s3c0lLdXdvN2o0SW1OXzZrZEhqQ2lta1YzckNNSFJOZ1lKNVM4Q3AtT2E4ZU1OVVNYRlNaY0hwb2c1bVZyZ05lMVZTQjd0U1B1V3BFeXpLQXlEYzhxdUZZclhvTFg1OGpKWDJ1aw?oc=5",
+      "source": "Google News / finance.sina.com.cn",
+      "published_at": "2026-08-25T01:00:00Z",
+      "fetched_at": "2026-08-25T08:01:54Z",
+      "ticker": "512480.SS",
       "source_tier": "aggregator"
     }
   ]

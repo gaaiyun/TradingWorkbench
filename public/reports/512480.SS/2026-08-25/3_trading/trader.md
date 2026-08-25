@@ -1,0 +1,5 @@
+**Action**: Hold
+
+**Reasoning**: Research plan and analyst reports support Underweight stance due to bearish technical alignment where close is below MA20 and MA60 [D7][D5][D6], negative MACD [I7] with histogram near zero [I8], and RSI at 41.25 [I11] indicating oversold but momentum weak. Recent price decline of -6.22098422 percent [D2] over 8 trading days [D1] and 0 percent change from latest [D3] reflect short-term weakness despite policy news on circuit design protection [N1] and fund share splits [CA1][CA2] which lack quantified impact on NAV or tracking error in evidence packet. Maintain current holdings while gradually reducing exposure to control volatility as high realized volatility stands at 63.49066243 percent [I10], following evidence-based rules without introducing external numbers.
+
+FINAL TRANSACTION PROPOSAL: **HOLD**
