@@ -1,10 +1,10 @@
 {
   "version": 1,
-  "generatedAt": "2026-08-24T11:41:18.860Z",
+  "generatedAt": "2026-08-25T11:40:00.924Z",
   "status": "degraded",
   "coverage": {
     "policy": "current-listed-best-effort-plus-configured-core",
-    "cnCurrentListedStocks": 5548,
+    "cnCurrentListedStocks": 5549,
     "cnConfiguredCore": 3,
     "usCore": 9,
     "hkCore": 1,
@@ -16,13 +16,13 @@
       "id": "sina-market-center",
       "role": "CN current-listed discovery",
       "quality": "best_effort",
-      "asOf": "2026-08-24T11:41:18.860Z"
+      "asOf": "2026-08-25T11:40:00.924Z"
     },
     {
       "id": "workbench-settings",
       "role": "configured HK/US/CN core instruments",
       "quality": "declared",
-      "asOf": "2026-08-24T11:41:18.860Z"
+      "asOf": "2026-08-25T11:40:00.924Z"
     }
   ],
   "instruments": [
@@ -27946,7 +27946,7 @@
     },
     {
       "symbol": "301117.SZ",
-      "name": "佳缘科技",
+      "name": "ST佳缘",
       "market": "CN",
       "exchange": "SZ",
       "instrumentType": "stock",
@@ -36999,7 +36999,7 @@
     },
     {
       "symbol": "600620.SS",
-      "name": "天宸股份",
+      "name": "XD天宸股",
       "market": "CN",
       "exchange": "SS",
       "instrumentType": "stock",
@@ -42147,7 +42147,7 @@
     },
     {
       "symbol": "601868.SS",
-      "name": "XD中国能",
+      "name": "中国能建",
       "market": "CN",
       "exchange": "SS",
       "instrumentType": "stock",
@@ -42576,7 +42576,7 @@
     },
     {
       "symbol": "601995.SS",
-      "name": "XD中金公",
+      "name": "中金公司",
       "market": "CN",
       "exchange": "SS",
       "instrumentType": "stock",
@@ -46712,7 +46712,7 @@
     },
     {
       "symbol": "603558.SS",
-      "name": "健盛集团",
+      "name": "XD健盛集",
       "market": "CN",
       "exchange": "SS",
       "instrumentType": "stock",
@@ -57338,7 +57338,7 @@
     },
     {
       "symbol": "688826.SS",
-      "name": "C频准",
+      "name": "频准激光",
       "market": "CN",
       "exchange": "SS",
       "instrumentType": "stock",
@@ -57350,6 +57350,17 @@
     {
       "symbol": "688828.SS",
       "name": "国仪公司",
+      "market": "CN",
+      "exchange": "SS",
+      "instrumentType": "stock",
+      "industry": null,
+      "listDate": null,
+      "source": "sina-market-center",
+      "coverage": "current_listed_best_effort"
+    },
+    {
+      "symbol": "688835.SS",
+      "name": "N高凯",
       "market": "CN",
       "exchange": "SS",
       "instrumentType": "stock",
