@@ -1,7 +1,7 @@
 {
   "status": "ok",
-  "generated_at": "2026-08-25T16:01:48+08:00",
-  "trade_date": "2026-08-25",
+  "generated_at": "2026-08-26T16:01:39+08:00",
+  "trade_date": "2026-08-26",
   "provider": "openai_compatible",
   "analysts": [
     "market",
@@ -19,19 +19,19 @@
     "kind": "monitor"
   },
   "run": {
-    "id": "32824441309",
+    "id": "32945595319",
     "attempt": "1",
     "workflow": "daily-analysis",
-    "url": "https://github.com/gaaiyun/TradingWorkbench/actions/runs/32824441309"
+    "url": "https://github.com/gaaiyun/TradingWorkbench/actions/runs/32945595319"
   },
   "identity": {
     "scope": "profile",
     "kind": "monitor",
-    "runId": "32824441309",
+    "runId": "32945595319",
     "profileId": "cn-semi-comms",
     "requestId": null,
-    "slotId": "slot-5a82c8300018946a6ba11aa7ed3c089e0804c332398dab514aa3ee8f23a6a7de",
-    "scheduledFor": "2026-08-25T07:17:48.000Z"
+    "slotId": "slot-35c4bad672f83678c1f93f823a00ab01ece72e087b8074cdc6e9d4910c4b6c4a",
+    "scheduledFor": "2026-08-26T07:17:15.000Z"
   },
   "rating_tiers": [
     "Sell",
@@ -43,57 +43,37 @@
   "results": [
     {
       "ticker": "515880.SS",
-      "rating": "Underweight",
-      "report": "reports/515880.SS/2026-08-25/complete_report.md",
-      "files": {
-        "fundamentals": "reports/515880.SS/2026-08-25/1_analysts/fundamentals.md",
-        "market": "reports/515880.SS/2026-08-25/1_analysts/market.md",
-        "news": "reports/515880.SS/2026-08-25/1_analysts/news.md",
-        "bear": "reports/515880.SS/2026-08-25/2_research/bear.md",
-        "bull": "reports/515880.SS/2026-08-25/2_research/bull.md",
-        "manager": "reports/515880.SS/2026-08-25/2_research/manager.md",
-        "trader": "reports/515880.SS/2026-08-25/3_trading/trader.md",
-        "aggressive": "reports/515880.SS/2026-08-25/4_risk/aggressive.md",
-        "conservative": "reports/515880.SS/2026-08-25/4_risk/conservative.md",
-        "neutral": "reports/515880.SS/2026-08-25/4_risk/neutral.md",
-        "decision": "reports/515880.SS/2026-08-25/5_portfolio/decision.md",
-        "complete_report": "reports/515880.SS/2026-08-25/complete_report.md"
-      },
-      "decision_excerpt": "**Rating**: Underweight  \n\n**Executive Summary**: 基于EvidencePacketV1，过去8个交易日收盘变化为-5.79710145% [D2]。收盘低于MA60 [D6]且严格移动平均对齐=none [D7]。RSI14=45.54832737 [I11]处于中性弱势区间，MACD柱状图0.00471231 [I8]缺乏加速迹象。tracked index、holdings、concentration、NAV、premium-discount、tracking error及fees数据均unavailable [as per research plan]。基金份额拆分公告仅记录事件标题与日期 [CA1][CA2]，无实施效应或持有人反应证据。辩论中激进分析师强调通信设备创新浪潮与近期反弹 [D3]，但忽略下跌势头与不可用数据；保守与中立",
-      "analysis_status": "rated",
-      "audit_status": "verified",
+      "rating": null,
+      "report": null,
+      "files": {},
+      "decision_excerpt": "",
+      "analysis_status": "data_validation_failed",
+      "audit_status": "invalidated",
       "evidence_publish": {
         "published": true,
         "status": 201
       },
-      "marketHistory": {
-        "source": "tencent",
-        "adjustment": "qfq",
-        "barCount": 1260,
-        "startAt": "2021-06-16T16:00:00Z",
-        "endAt": "2026-08-24T16:00:00Z"
-      },
-      "error": null
+      "error": "evidence validation failed; model run skipped"
     },
     {
       "ticker": "512480.SS",
-      "rating": "Underweight",
-      "report": "reports/512480.SS/2026-08-25/complete_report.md",
+      "rating": "Hold",
+      "report": "reports/512480.SS/2026-08-26/complete_report.md",
       "files": {
-        "fundamentals": "reports/512480.SS/2026-08-25/1_analysts/fundamentals.md",
-        "market": "reports/512480.SS/2026-08-25/1_analysts/market.md",
-        "news": "reports/512480.SS/2026-08-25/1_analysts/news.md",
-        "bear": "reports/512480.SS/2026-08-25/2_research/bear.md",
-        "bull": "reports/512480.SS/2026-08-25/2_research/bull.md",
-        "manager": "reports/512480.SS/2026-08-25/2_research/manager.md",
-        "trader": "reports/512480.SS/2026-08-25/3_trading/trader.md",
-        "aggressive": "reports/512480.SS/2026-08-25/4_risk/aggressive.md",
-        "conservative": "reports/512480.SS/2026-08-25/4_risk/conservative.md",
-        "neutral": "reports/512480.SS/2026-08-25/4_risk/neutral.md",
-        "decision": "reports/512480.SS/2026-08-25/5_portfolio/decision.md",
-        "complete_report": "reports/512480.SS/2026-08-25/complete_report.md"
+        "fundamentals": "reports/512480.SS/2026-08-26/1_analysts/fundamentals.md",
+        "market": "reports/512480.SS/2026-08-26/1_analysts/market.md",
+        "news": "reports/512480.SS/2026-08-26/1_analysts/news.md",
+        "bear": "reports/512480.SS/2026-08-26/2_research/bear.md",
+        "bull": "reports/512480.SS/2026-08-26/2_research/bull.md",
+        "manager": "reports/512480.SS/2026-08-26/2_research/manager.md",
+        "trader": "reports/512480.SS/2026-08-26/3_trading/trader.md",
+        "aggressive": "reports/512480.SS/2026-08-26/4_risk/aggressive.md",
+        "conservative": "reports/512480.SS/2026-08-26/4_risk/conservative.md",
+        "neutral": "reports/512480.SS/2026-08-26/4_risk/neutral.md",
+        "decision": "reports/512480.SS/2026-08-26/5_portfolio/decision.md",
+        "complete_report": "reports/512480.SS/2026-08-26/complete_report.md"
       },
-      "decision_excerpt": "**Rating**: Underweight  \n\n**Executive Summary**: ETF 512480.SS 收盘价低于MA20和MA60呈现严格熊市对齐状态[D7]。  \n过去8个交易日的收盘价变化下跌[D2]。  \nMACD为负值[I7]且直方图接近零[I8]。  \nRSI14为41.24853572[I11]未达超卖阈值[D8]。  \n政策新闻及份额拆分仅为事件记录[D2][N1][CA1][CA2]，无量化NAV或跟踪误差影响[M656-M663]。  \n高波动率显示[I10]但不改变技术弱势结论。  \n成交量维持活跃水平[M663]但无流向证据。  \n证据包缺失持仓明细、NAV、溢折价、集中度、费用及跟踪误差数据[I2]。  \n综合技术面证据主导，立场为Underweight[D1][D5][D6][I7][I11]。  \n\n**Investment Thesi",
+      "decision_excerpt": "**Rating**: Hold\n**Executive Summary**: Bull Analyst emphasizes the integrated circuit layout design protection regulations [N1]. Bull Analyst emphasizes the integrated circuit layout design protection regulations [N2]. Bear Analyst points out the strict bearish moving average alignment [D7]. Neutral Analyst synthesizes the views of both sides [N3]. Neutral Analyst notes that unavailable data does",
       "analysis_status": "rated",
       "audit_status": "verified",
       "evidence_publish": {
@@ -103,9 +83,9 @@
       "marketHistory": {
         "source": "tencent",
         "adjustment": "qfq",
-        "barCount": 663,
+        "barCount": 664,
         "startAt": "2023-11-29T16:00:00Z",
-        "endAt": "2026-08-24T16:00:00Z"
+        "endAt": "2026-08-25T16:00:00Z"
       },
       "error": null
     }
