@@ -1,6 +1,39 @@
 # Trading Workbench 下一 Agent 交接
 
-更新日期：2026-08-18（新增数据目录、宇宙快照和有时点约束的单标的回测校验；补记 8 月 17 日日线 slot 重试耗尽与 Actions 降频修复；生产状态须以本轮发布后的真实回读为准）
+更新日期：2026-08-26（定位并修复造成全天失败邮件的时间腐化测试，新增时钟前移 +400 天的 CI 门禁；解开"手动 wrangler 部署"悬案＝期权仓库每 30 分钟代为部署）
+
+### 2026-08-26 · 一条时间腐化的测试造成全天失败邮件；已加时钟前移门禁
+
+- 用户反馈"GitHub 整天发失败邮件"。定位到**单条断言**：`test_dynamic_api.mjs` 的
+  `market API returns distinct timestamps when provider fallbacks overlap`，fixture 写死在
+  `2026-08-17/18` 且未固定时钟，而行情 freshness 在读取时按真实时钟重算，于是断言
+  `status='ok'` 在日期漂移后必然拿到 `stale`。447 个测试只挂这 1 个。
+- 影响面被严重低估：它同时打挂 `SH_50_Index_Option_Trading_Signals` 的 `pages-snapshot`
+  （**每 30 分钟**一跑，近 60 次全红）和本仓库 `deploy-workbench`（近 8 次全红），
+  每轮各发一封失败邮件。同期 `official-news`(36) 与 `Update market universe`(5) 的失败
+  是更早的一段、已自愈，**不是当前噪音源**，别再去改它们。
+- **顺带解开交接文档记了两次的悬案**：`pages-snapshot.yml` 在自己的任务之外，还会
+  `checkout gaaiyun/TradingWorkbench@main` 然后直接
+  `wrangler pages deploy public --project-name tradingagents-board`。此前两次记录的
+  "查不到是谁触发的手动 wrangler 部署、绕过 deploy-workbench 的 D1 身份落库、
+  `/api/health` 变 degraded"，来源就是它——**不是人手动跑的，是期权仓库每半小时替本仓库
+  部署一次**。本轮未改动该行为（它目前是 Pages 的实际部署途径之一，贸然删会让页面停更），
+  但它是 `deployment_metadata` 不同步的结构性原因，需要时再决策。
+- **已加门禁防复发**：`npm run test:daterot`（`scripts/check-date-rot.mjs` +
+  `tests/helpers/clock-shift.cjs`）把时钟前移 400 天重跑 functions 与 frontend 两套，
+  已接入 CI。自己固定时钟或用 `2099-01-01` 远期哨兵的测试不受影响，红了就是真依赖当天日期。
+  测试文件清单从 `package.json` 现有脚本读回，新增文件不会漏出门禁。
+  **不要改成"静态扫描硬编码日期"**：该仓库 37 个测试文件带日期，只有 1 个真需要固定时钟，
+  静态规则会误报 36 个。
+- 门禁上线即抖出两处既有腐化，一并修掉：`deleteChatSession` 是 `_chat_repository.mjs` 里
+  唯一不接受可注入 `now` 的读取路径（保留期永远按真实时钟过滤，约 3 个月后必炸），
+  已补上与同族函数一致的可选参数；`test_chat_persistence.mjs` 的 evidence fixture
+  `expires_at` 从写死的 `2027-07-24` 改为本文件通用的 2099 哨兵。生产新鲜度逻辑未放宽。
+- 证据：正常时钟 functions `447/446 通过 0 失败`、frontend `122` 全通过；+400 天与 +1200 天
+  同样全绿；**临时移除已知修复后门禁如期返回 EXIT=1**（确认守卫不是空转）；ruff 全绿。
+  提交 `12b8d6c`（修复）+ `c869874`（门禁），CI run `32952903228` 全绿且
+  "Date-rot gate (clock shifted +400 days)" 步骤 success。红转绿实证：
+  `pages-snapshot` 09:12 `success`（近 60 次以来首次）、`deploy-workbench` 09:25 `success`。
 
 ### 2026-08-18 · ETF 日线缺失与 Actions 噪音审计
 
@@ -961,6 +994,7 @@ gh workflow run deploy-monitor.yml --repo gaaiyun/TradingWorkbench --ref main
 | 2026-08-13 | 部署后首次真实验证：GPT 故障转移在持续 1 小时+的真实中转站故障下完整生效 | run `31740098198` 耗时 `1h11m11s`，日志确认 grok-4.5 先后 12 次触发 fallback 到 gpt-5.4-mini，每次都成功，最终 `[DONE] 1/1 tickers ok`；`/api/health` 复核 `status:ok`；是当天 5 次真实调用中唯一成功产出报告的一次（前 4 次均因中转站故障失败） |
 | 2026-08-18 | 接入免费源数据目录、A 股当前上市宇宙快照与单标的 qfq 日线回测校验；保持七入口及 Evidence/Worker/D1 边界不变 | 本地 Functions `444/1 skip`、前端 `122/122`；CI `32049058200`、Pages `32049125716` 成功；生产 A 股当前上市 `5543`，512480 回测 `528` 根/`58` 笔；health 仅因既有报告滞后为 degraded |
 | 2026-08-18 | 处理收盘日线与报告发布事故：日线正常收盘读取降为 40 根、`RETRY_EXHAUSTED` 恢复槽使用独立执行时刻以避开 D1 唯一键；官方新闻降为工作日每日 3 次，已知上游 SSE 局部失败改记降级而非 Action 失败；纯报告数据提交跳过全套 CI 矩阵 | 生产三只核心 ETF 的 `/api/market?timeframe=1d` 均为 `ok`、最新业务日 `2026-08-17`；当日 `daily-analysis` run `32112941002` 成功并产生 1 份 `verified` 报告；最终 Pages health 与运行时 SHA 必须继续以实时端点为准 |
+| 2026-08-26 | 定位并修复造成全天 GitHub 失败邮件的时间腐化测试：`test_dynamic_api.mjs` 单条断言写死 fixture 日期又未固定时钟，同时打挂 `SH_50_Index_Option_Trading_Signals` 的 `pages-snapshot`（每 30 分钟）与本仓库 `deploy-workbench`。新增 `npm run test:daterot`（时钟前移 400 天重跑两套测试）并接入 CI；顺带修掉门禁抖出的 `deleteChatSession` 缺少可注入 `now`、evidence fixture `expires_at` 写死 2027 两处既有腐化。另查明此前两次记录的"手动 wrangler 部署绕过 deploy-workbench"实为 `pages-snapshot.yml` 每 30 分钟代为部署本仓库 Pages | 正常时钟 functions `447/446 通过 0 失败`、frontend `122` 全通过；+400 天与 +1200 天全绿；临时移除已知修复后门禁如期 EXIT=1，确认守卫非空转；ruff 全绿。提交 `12b8d6c`+`c869874`，CI run `32952903228` 全绿且门禁步骤 success。红转绿实证：`pages-snapshot` 09:12 success（近 60 次以来首次）、`deploy-workbench` 09:25 success |
 
 ## 1.6 2026-07-30 全局质量复审
 
