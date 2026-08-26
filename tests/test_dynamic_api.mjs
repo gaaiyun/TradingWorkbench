@@ -428,7 +428,14 @@ test("market API hides a stored US session-close sentinel from five-minute chart
   assert.equal(payload.indicators.bars, 1);
 });
 
-test("market API returns distinct timestamps when provider fallbacks overlap", async () => {
+test("market API returns distinct timestamps when provider fallbacks overlap", async (t) => {
+  // Freshness is recomputed against the wall clock at read time, so the fixed
+  // fixture dates below only stay `fresh` once the clock is pinned near them.
+  // Unpinned, this passes on the day it is written and starts failing days
+  // later: it broke the every-30-minutes pages-snapshot schedule in both this
+  // repo and SH_50_Index_Option_Trading_Signals, mailing a failure per run.
+  // Same fix as the stale-freshness test earlier in this file.
+  t.mock.method(Date, "now", () => Date.parse("2026-08-18T02:00:00Z"));
   const base = {
     symbol: "ORCL",
     profile_id: "cn-semi-comms",
