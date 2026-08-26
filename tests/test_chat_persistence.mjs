@@ -176,7 +176,7 @@ test("chat session owner is immutable and every repository operation is profile-
     ChatSessionProfileConflictError,
   );
   await assert.rejects(
-    deleteChatSession(fixture.DB, "session-owner-shared", "profile-b"),
+    deleteChatSession(fixture.DB, "session-owner-shared", "profile-b", now),
     ChatSessionProfileConflictError,
   );
   assert.ok(await getChatSession(fixture.DB, "session-owner-shared", {
@@ -456,7 +456,10 @@ test("chat evidence includes the exact published EvidencePacket and validation s
     packet.status,
     JSON.stringify(packet),
     packet.contentHash,
-    "2027-07-24T00:00:00.000Z",
+    // Far-future sentinel, matching the other fixtures in this file: the row is
+    // meant to be live for the whole test, not to expire once real time passes
+    // a date someone picked while writing it.
+    "2099-01-01T00:00:00.000Z",
   );
 
   const result = await loadWorkbenchEvidence(fixture.DB, {

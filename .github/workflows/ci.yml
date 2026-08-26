@@ -33,6 +33,13 @@ jobs:
           npm run check:workbench
           npm run check:asset-version
 
+      # Re-runs both suites with the clock shifted forward so a test that
+      # silently depends on today's date fails HERE, on the PR, instead of
+      # weeks later on a schedule — where it turned pages-snapshot red in two
+      # repos and mailed a failure notification every 30 minutes.
+      - name: Date-rot gate (clock shifted +400 days)
+        run: npm run test:daterot
+
   workbench-e2e:
     name: Workbench browser flows
     runs-on: ubuntu-latest

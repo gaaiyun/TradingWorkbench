@@ -314,8 +314,11 @@ export async function listChatSessions(db, {
   }));
 }
 
-export async function deleteChatSession(db, sessionId, profileId = null) {
-  const at = iso(new Date());
+// `now` is injectable like every other reader in this module (getChatSession,
+// listChatSessions, claimChatRequest). It was the one exception, which made the
+// retention filter below read the wall clock even when a caller had pinned time.
+export async function deleteChatSession(db, sessionId, profileId = null, now = new Date()) {
+  const at = iso(now);
   const owner = await db.prepare(
     `SELECT id FROM chat_sessions
      WHERE id = ? AND expires_at > ?
