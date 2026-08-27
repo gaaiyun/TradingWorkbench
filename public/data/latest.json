@@ -1,7 +1,7 @@
 {
   "status": "ok",
-  "generated_at": "2026-08-26T16:01:39+08:00",
-  "trade_date": "2026-08-26",
+  "generated_at": "2026-08-27T16:01:52+08:00",
+  "trade_date": "2026-08-27",
   "provider": "openai_compatible",
   "analysts": [
     "market",
@@ -19,19 +19,19 @@
     "kind": "monitor"
   },
   "run": {
-    "id": "32945595319",
+    "id": "33052166914",
     "attempt": "1",
     "workflow": "daily-analysis",
-    "url": "https://github.com/gaaiyun/TradingWorkbench/actions/runs/32945595319"
+    "url": "https://github.com/gaaiyun/TradingWorkbench/actions/runs/33052166914"
   },
   "identity": {
     "scope": "profile",
     "kind": "monitor",
-    "runId": "32945595319",
+    "runId": "33052166914",
     "profileId": "cn-semi-comms",
     "requestId": null,
-    "slotId": "slot-35c4bad672f83678c1f93f823a00ab01ece72e087b8074cdc6e9d4910c4b6c4a",
-    "scheduledFor": "2026-08-26T07:17:15.000Z"
+    "slotId": "slot-efda4c22fdd5d1dfa00c3157a50d99f253d6a19c2f821c314cfccd7c3cc5b1ed",
+    "scheduledFor": "2026-08-27T07:17:15.000Z"
   },
   "rating_tiers": [
     "Sell",
@@ -57,23 +57,23 @@
     },
     {
       "ticker": "512480.SS",
-      "rating": "Hold",
-      "report": "reports/512480.SS/2026-08-26/complete_report.md",
+      "rating": "Underweight",
+      "report": "reports/512480.SS/2026-08-27/complete_report.md",
       "files": {
-        "fundamentals": "reports/512480.SS/2026-08-26/1_analysts/fundamentals.md",
-        "market": "reports/512480.SS/2026-08-26/1_analysts/market.md",
-        "news": "reports/512480.SS/2026-08-26/1_analysts/news.md",
-        "bear": "reports/512480.SS/2026-08-26/2_research/bear.md",
-        "bull": "reports/512480.SS/2026-08-26/2_research/bull.md",
-        "manager": "reports/512480.SS/2026-08-26/2_research/manager.md",
-        "trader": "reports/512480.SS/2026-08-26/3_trading/trader.md",
-        "aggressive": "reports/512480.SS/2026-08-26/4_risk/aggressive.md",
-        "conservative": "reports/512480.SS/2026-08-26/4_risk/conservative.md",
-        "neutral": "reports/512480.SS/2026-08-26/4_risk/neutral.md",
-        "decision": "reports/512480.SS/2026-08-26/5_portfolio/decision.md",
-        "complete_report": "reports/512480.SS/2026-08-26/complete_report.md"
+        "fundamentals": "reports/512480.SS/2026-08-27/1_analysts/fundamentals.md",
+        "market": "reports/512480.SS/2026-08-27/1_analysts/market.md",
+        "news": "reports/512480.SS/2026-08-27/1_analysts/news.md",
+        "bear": "reports/512480.SS/2026-08-27/2_research/bear.md",
+        "bull": "reports/512480.SS/2026-08-27/2_research/bull.md",
+        "manager": "reports/512480.SS/2026-08-27/2_research/manager.md",
+        "trader": "reports/512480.SS/2026-08-27/3_trading/trader.md",
+        "aggressive": "reports/512480.SS/2026-08-27/4_risk/aggressive.md",
+        "conservative": "reports/512480.SS/2026-08-27/4_risk/conservative.md",
+        "neutral": "reports/512480.SS/2026-08-27/4_risk/neutral.md",
+        "decision": "reports/512480.SS/2026-08-27/5_portfolio/decision.md",
+        "complete_report": "reports/512480.SS/2026-08-27/complete_report.md"
       },
-      "decision_excerpt": "**Rating**: Hold\n**Executive Summary**: Bull Analyst emphasizes the integrated circuit layout design protection regulations [N1]. Bull Analyst emphasizes the integrated circuit layout design protection regulations [N2]. Bear Analyst points out the strict bearish moving average alignment [D7]. Neutral Analyst synthesizes the views of both sides [N3]. Neutral Analyst notes that unavailable data does",
+      "decision_excerpt": "**Rating**: Underweight  \n\n**Executive Summary**: 512480.SS 最新收盘价 1.06 [M665] 仍低于 MA60 1.15501667 [I6]，严格均线对齐为 none [D7]。最近 8 个交易日累计下跌 -6.36042403% [D2]，最新单日反弹仅 +4.22812193% [D3] 但整体弱势未扭转。RSI14 48.15215695 [I11] 处于中性区间，ATR14 0.05698479 [I3] 占最新收盘 5.37592358% [D4] 波动可控。份额拆分仅确认事件日期 [CA1][CA2][N4][N5]，政策条例存在 [N1][N2]，季报公告存在 [N3]，但持仓 NAV 折溢价 费用跟踪误差均 unavailable [S1]，无法确认任何量化改善。  \n\n**Investment Thesis*",
       "analysis_status": "rated",
       "audit_status": "verified",
       "evidence_publish": {
@@ -83,9 +83,9 @@
       "marketHistory": {
         "source": "tencent",
         "adjustment": "qfq",
-        "barCount": 664,
+        "barCount": 665,
         "startAt": "2023-11-29T16:00:00Z",
-        "endAt": "2026-08-25T16:00:00Z"
+        "endAt": "2026-08-26T16:00:00Z"
       },
       "error": null
     }
