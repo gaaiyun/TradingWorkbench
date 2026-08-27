@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "generatedAt": "2026-08-25T11:40:00.924Z",
+  "generatedAt": "2026-08-27T21:01:02.532Z",
   "status": "degraded",
   "coverage": {
     "policy": "current-listed-best-effort-plus-configured-core",
@@ -16,13 +16,13 @@
       "id": "sina-market-center",
       "role": "CN current-listed discovery",
       "quality": "best_effort",
-      "asOf": "2026-08-25T11:40:00.924Z"
+      "asOf": "2026-08-27T21:01:02.532Z"
     },
     {
       "id": "workbench-settings",
       "role": "configured HK/US/CN core instruments",
       "quality": "declared",
-      "asOf": "2026-08-25T11:40:00.924Z"
+      "asOf": "2026-08-27T21:01:02.532Z"
     }
   ],
   "instruments": [
@@ -31697,7 +31697,7 @@
     },
     {
       "symbol": "301655.SZ",
-      "name": "C绿控",
+      "name": "绿控传动",
       "market": "CN",
       "exchange": "SZ",
       "instrumentType": "stock",
@@ -33270,7 +33270,7 @@
     },
     {
       "symbol": "600165.SS",
-      "name": "ST宁科",
+      "name": "宁科生物",
       "market": "CN",
       "exchange": "SS",
       "instrumentType": "stock",
@@ -36130,7 +36130,7 @@
     },
     {
       "symbol": "600525.SS",
-      "name": "ST长园",
+      "name": "长园集团",
       "market": "CN",
       "exchange": "SS",
       "instrumentType": "stock",
@@ -36999,7 +36999,7 @@
     },
     {
       "symbol": "600620.SS",
-      "name": "XD天宸股",
+      "name": "天宸股份",
       "market": "CN",
       "exchange": "SS",
       "instrumentType": "stock",
@@ -41234,7 +41234,7 @@
     },
     {
       "symbol": "601339.SS",
-      "name": "百隆东方",
+      "name": "XD百隆东",
       "market": "CN",
       "exchange": "SS",
       "instrumentType": "stock",
@@ -43621,7 +43621,7 @@
     },
     {
       "symbol": "603102.SS",
-      "name": "百合股份",
+      "name": "XD百合股",
       "market": "CN",
       "exchange": "SS",
       "instrumentType": "stock",
@@ -44842,7 +44842,7 @@
     },
     {
       "symbol": "603236.SS",
-      "name": "移远通信",
+      "name": "XD移远通",
       "market": "CN",
       "exchange": "SS",
       "instrumentType": "stock",
@@ -46712,7 +46712,7 @@
     },
     {
       "symbol": "603558.SS",
-      "name": "XD健盛集",
+      "name": "健盛集团",
       "market": "CN",
       "exchange": "SS",
       "instrumentType": "stock",
@@ -57360,7 +57360,7 @@
     },
     {
       "symbol": "688835.SS",
-      "name": "N高凯",
+      "name": "C高凯",
       "market": "CN",
       "exchange": "SS",
       "instrumentType": "stock",
@@ -57371,7 +57371,7 @@
     },
     {
       "symbol": "688836.SS",
-      "name": "C宇树",
+      "name": "宇树科技",
       "market": "CN",
       "exchange": "SS",
       "instrumentType": "stock",
