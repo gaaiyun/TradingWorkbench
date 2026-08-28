@@ -1,10 +1,10 @@
 {
   "version": 1,
-  "generatedAt": "2026-08-27T21:01:02.532Z",
+  "generatedAt": "2026-08-28T21:22:16.284Z",
   "status": "degraded",
   "coverage": {
     "policy": "current-listed-best-effort-plus-configured-core",
-    "cnCurrentListedStocks": 5549,
+    "cnCurrentListedStocks": 5550,
     "cnConfiguredCore": 3,
     "usCore": 9,
     "hkCore": 1,
@@ -16,13 +16,13 @@
       "id": "sina-market-center",
       "role": "CN current-listed discovery",
       "quality": "best_effort",
-      "asOf": "2026-08-27T21:01:02.532Z"
+      "asOf": "2026-08-28T21:22:16.284Z"
     },
     {
       "id": "workbench-settings",
       "role": "configured HK/US/CN core instruments",
       "quality": "declared",
-      "asOf": "2026-08-27T21:01:02.532Z"
+      "asOf": "2026-08-28T21:22:16.284Z"
     }
   ],
   "instruments": [
@@ -6485,7 +6485,7 @@
     },
     {
       "symbol": "002058.SZ",
-      "name": "威尔泰",
+      "name": "紫竹高科",
       "market": "CN",
       "exchange": "SZ",
       "instrumentType": "stock",
@@ -38748,7 +38748,7 @@
     },
     {
       "symbol": "600817.SS",
-      "name": "宇通重工",
+      "name": "XD宇通重",
       "market": "CN",
       "exchange": "SS",
       "instrumentType": "stock",
@@ -41234,7 +41234,7 @@
     },
     {
       "symbol": "601339.SS",
-      "name": "XD百隆东",
+      "name": "百隆东方",
       "market": "CN",
       "exchange": "SS",
       "instrumentType": "stock",
@@ -41938,7 +41938,7 @@
     },
     {
       "symbol": "601788.SS",
-      "name": "光大证券",
+      "name": "XD光大证",
       "market": "CN",
       "exchange": "SS",
       "instrumentType": "stock",
@@ -43621,7 +43621,7 @@
     },
     {
       "symbol": "603102.SS",
-      "name": "XD百合股",
+      "name": "百合股份",
       "market": "CN",
       "exchange": "SS",
       "instrumentType": "stock",
@@ -44842,7 +44842,7 @@
     },
     {
       "symbol": "603236.SS",
-      "name": "XD移远通",
+      "name": "移远通信",
       "market": "CN",
       "exchange": "SS",
       "instrumentType": "stock",
@@ -59231,6 +59231,17 @@
     {
       "symbol": "920284.BJ",
       "name": "灵鸽科技",
+      "market": "CN",
+      "exchange": "BJ",
+      "instrumentType": "stock",
+      "industry": null,
+      "listDate": null,
+      "source": "sina-market-center",
+      "coverage": "current_listed_best_effort"
+    },
+    {
+      "symbol": "920288.BJ",
+      "name": "N华大",
       "market": "CN",
       "exchange": "BJ",
       "instrumentType": "stock",
