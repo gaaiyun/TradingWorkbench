@@ -1,5 +1,83 @@
 [
   {
+    "trade_date": "2026-08-28",
+    "generated_at": "2026-08-28T16:01:45+08:00",
+    "provider": "openai_compatible",
+    "results": [
+      {
+        "ticker": "515880.SS",
+        "rating": null,
+        "report": null,
+        "files": {},
+        "error": true,
+        "analysis_status": "data_validation_failed",
+        "audit_status": "invalidated",
+        "evidence_publish": {
+          "published": true,
+          "status": 201
+        }
+      },
+      {
+        "ticker": "512480.SS",
+        "rating": "Underweight",
+        "report": "reports/512480.SS/2026-08-28/complete_report.md",
+        "files": {
+          "fundamentals": "reports/512480.SS/2026-08-28/1_analysts/fundamentals.md",
+          "market": "reports/512480.SS/2026-08-28/1_analysts/market.md",
+          "news": "reports/512480.SS/2026-08-28/1_analysts/news.md",
+          "bear": "reports/512480.SS/2026-08-28/2_research/bear.md",
+          "bull": "reports/512480.SS/2026-08-28/2_research/bull.md",
+          "manager": "reports/512480.SS/2026-08-28/2_research/manager.md",
+          "trader": "reports/512480.SS/2026-08-28/3_trading/trader.md",
+          "aggressive": "reports/512480.SS/2026-08-28/4_risk/aggressive.md",
+          "conservative": "reports/512480.SS/2026-08-28/4_risk/conservative.md",
+          "neutral": "reports/512480.SS/2026-08-28/4_risk/neutral.md",
+          "decision": "reports/512480.SS/2026-08-28/5_portfolio/decision.md",
+          "complete_report": "reports/512480.SS/2026-08-28/complete_report.md"
+        },
+        "error": false,
+        "analysis_status": "rated",
+        "audit_status": "verified",
+        "evidence_publish": {
+          "published": true,
+          "status": 201
+        },
+        "marketHistory": {
+          "source": "tencent",
+          "adjustment": "qfq",
+          "barCount": 666,
+          "startAt": "2023-11-29T16:00:00Z",
+          "endAt": "2026-08-27T16:00:00Z"
+        }
+      }
+    ],
+    "request": {
+      "requestId": null,
+      "analysts": [
+        "market",
+        "news",
+        "fundamentals"
+      ],
+      "researchDepth": "standard",
+      "kind": "monitor"
+    },
+    "run": {
+      "id": "33153647328",
+      "attempt": "1",
+      "workflow": "daily-analysis",
+      "url": "https://github.com/gaaiyun/TradingWorkbench/actions/runs/33153647328"
+    },
+    "identity": {
+      "scope": "profile",
+      "kind": "monitor",
+      "runId": "33153647328",
+      "profileId": "cn-semi-comms",
+      "requestId": null,
+      "slotId": "slot-ecef3a4e69bab3865a338b5dbef6c71dd0a9ba3136cd3990725ba26f5ed3baff",
+      "scheduledFor": "2026-08-28T07:17:15.000Z"
+    }
+  },
+  {
     "trade_date": "2026-08-27",
     "generated_at": "2026-08-27T16:01:52+08:00",
     "provider": "openai_compatible",
@@ -4805,33 +4883,6 @@
           "neutral": "reports/600519.SS/2026-07-15/4_risk/neutral.md",
           "decision": "reports/600519.SS/2026-07-15/5_portfolio/decision.md",
           "complete_report": "reports/600519.SS/2026-07-15/complete_report.md"
-        }
-      }
-    ]
-  },
-  {
-    "trade_date": "2026-07-15",
-    "generated_at": "2026-07-15T17:07:07+08:00",
-    "provider": "openai_compatible",
-    "results": [
-      {
-        "ticker": "ORCL",
-        "rating": "Underweight",
-        "report": "reports/ORCL/2026-07-15/complete_report.md",
-        "error": false,
-        "files": {
-          "fundamentals": "reports/ORCL/2026-07-15/1_analysts/fundamentals.md",
-          "market": "reports/ORCL/2026-07-15/1_analysts/market.md",
-          "news": "reports/ORCL/2026-07-15/1_analysts/news.md",
-          "bear": "reports/ORCL/2026-07-15/2_research/bear.md",
-          "bull": "reports/ORCL/2026-07-15/2_research/bull.md",
-          "manager": "reports/ORCL/2026-07-15/2_research/manager.md",
-          "trader": "reports/ORCL/2026-07-15/3_trading/trader.md",
-          "aggressive": "reports/ORCL/2026-07-15/4_risk/aggressive.md",
-          "conservative": "reports/ORCL/2026-07-15/4_risk/conservative.md",
-          "neutral": "reports/ORCL/2026-07-15/4_risk/neutral.md",
-          "decision": "reports/ORCL/2026-07-15/5_portfolio/decision.md",
-          "complete_report": "reports/ORCL/2026-07-15/complete_report.md"
         }
       }
     ]
