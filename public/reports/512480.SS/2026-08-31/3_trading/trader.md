@@ -1,0 +1,5 @@
+**Action**: Hold
+
+**Reasoning**: Hold recommendation justified by balanced analyst insights from the research plan. Bull arguments include policy support from IC design protection regulations [N2][N3] as long-term growth driver for the semiconductor ETF, recent 8-day close change of +2.02117421% [D2], price above MA20 by 0.45965029% [D5], neutral RSI at 48.51416955 [I11], and share splits [CA1][CA2] as positive signals. Bear side notes policies lack quantified implementation effects, ETF below MA60 by -8.17210485% [D6] with negative MACD of -0.02088557 and signal -0.02548708 [I7][I9], plus EvidencePacketV1 lacks data on holdings concentration, tracking error, NAV/premium, fees, liquidity risks, or macro threats, rendering policy benefits unproven. Overall evidence balanced with short-term rebound optimism tempered by technical caution, supporting Hold.
+
+FINAL TRANSACTION PROPOSAL: **HOLD**
