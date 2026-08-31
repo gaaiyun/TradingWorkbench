@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "generatedAt": "2026-08-28T21:22:16.284Z",
+  "generatedAt": "2026-08-31T18:00:16.022Z",
   "status": "degraded",
   "coverage": {
     "policy": "current-listed-best-effort-plus-configured-core",
@@ -16,13 +16,13 @@
       "id": "sina-market-center",
       "role": "CN current-listed discovery",
       "quality": "best_effort",
-      "asOf": "2026-08-28T21:22:16.284Z"
+      "asOf": "2026-08-31T18:00:16.022Z"
     },
     {
       "id": "workbench-settings",
       "role": "configured HK/US/CN core instruments",
       "quality": "declared",
-      "asOf": "2026-08-28T21:22:16.284Z"
+      "asOf": "2026-08-31T18:00:16.022Z"
     }
   ],
   "instruments": [
@@ -2525,7 +2525,7 @@
     },
     {
       "symbol": "000711.SZ",
-      "name": "ST京蓝",
+      "name": "京蓝科技",
       "market": "CN",
       "exchange": "SZ",
       "instrumentType": "stock",
@@ -11908,7 +11908,7 @@
     },
     {
       "symbol": "002586.SZ",
-      "name": "ST围海",
+      "name": "围海股份",
       "market": "CN",
       "exchange": "SZ",
       "instrumentType": "stock",
@@ -38748,7 +38748,7 @@
     },
     {
       "symbol": "600817.SS",
-      "name": "XD宇通重",
+      "name": "宇通重工",
       "market": "CN",
       "exchange": "SS",
       "instrumentType": "stock",
@@ -41938,7 +41938,7 @@
     },
     {
       "symbol": "601788.SS",
-      "name": "XD光大证",
+      "name": "光大证券",
       "market": "CN",
       "exchange": "SS",
       "instrumentType": "stock",
@@ -49825,7 +49825,7 @@
     },
     {
       "symbol": "605136.SS",
-      "name": "丽人丽妆",
+      "name": "XD丽人丽",
       "market": "CN",
       "exchange": "SS",
       "instrumentType": "stock",
@@ -50980,7 +50980,7 @@
     },
     {
       "symbol": "688036.SS",
-      "name": "传音控股",
+      "name": "XD传音控",
       "market": "CN",
       "exchange": "SS",
       "instrumentType": "stock",
@@ -59241,7 +59241,7 @@
     },
     {
       "symbol": "920288.BJ",
-      "name": "N华大",
+      "name": "华大海天",
       "market": "CN",
       "exchange": "BJ",
       "instrumentType": "stock",
