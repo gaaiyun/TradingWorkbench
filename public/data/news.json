@@ -1,113 +1,113 @@
 {
   "version": 1,
-  "status": "ok",
-  "generated_at": "2026-08-31T16:01:42+08:00",
-  "trade_date": "2026-08-31",
+  "status": "partial",
+  "generated_at": "2026-09-01T16:01:42+08:00",
+  "trade_date": "2026-09-01",
   "global": {
     "status": "ok",
     "query_type": "global",
     "ticker": null,
-    "start_date": "2026-08-24",
-    "end_date": "2026-08-31",
-    "fetched_at": "2026-08-31T08:01:43Z",
+    "start_date": "2026-08-25",
+    "end_date": "2026-09-01",
+    "fetched_at": "2026-09-01T08:01:43Z",
     "items": [
       {
-        "title": "Oil rises as US, Iran resume military attacks",
+        "title": "Analysts react to global bond selloff",
         "summary": "",
-        "url": "https://finance.yahoo.com/energy/articles/oil-jumps-more-2-us-221149377.html",
+        "url": "https://finance.yahoo.com/markets/articles/analysts-react-global-bond-selloff-055026990.html",
         "source": "Reuters",
-        "published_at": "2026-08-31T07:47:45Z",
-        "fetched_at": "2026-08-31T08:01:43Z",
+        "published_at": "2026-09-01T07:49:02Z",
+        "fetched_at": "2026-09-01T08:01:43Z",
         "ticker": null,
         "source_tier": "aggregator"
       },
       {
-        "title": "Eni Signs Deal to Revive Venezuela Oil Activities",
+        "title": "European stocks muted as bond selloff continues; Reckitt jumps",
         "summary": "",
-        "url": "https://finance.yahoo.com/energy/articles/eni-signs-deal-revive-venezuela-073124386.html",
-        "source": "MT Newswires",
-        "published_at": "2026-08-31T07:31:24Z",
-        "fetched_at": "2026-08-31T08:01:43Z",
+        "url": "https://finance.yahoo.com/markets/world-indices/articles/european-stocks-muted-bond-selloff-074340233.html",
+        "source": "Reuters",
+        "published_at": "2026-09-01T07:43:40Z",
+        "fetched_at": "2026-09-01T08:01:43Z",
         "ticker": null,
         "source_tier": "aggregator"
       },
       {
-        "title": "Crude prices rise on US-Iran strikes, equities mixed after Warsh remarks",
+        "title": "Oil extends gains, stocks mixed as Trump issues fresh Iran warning",
         "summary": "",
-        "url": "https://finance.yahoo.com/economy/policy/articles/stocks-drop-warsh-fans-us-025203186.html",
+        "url": "https://finance.yahoo.com/markets/commodities/articles/oil-extends-gains-stocks-drop-024448410.html",
         "source": "AFP",
-        "published_at": "2026-08-31T07:27:39Z",
-        "fetched_at": "2026-08-31T08:01:43Z",
+        "published_at": "2026-09-01T07:36:10Z",
+        "fetched_at": "2026-09-01T08:01:43Z",
         "ticker": null,
         "source_tier": "aggregator"
       },
       {
-        "title": "Goldman Sachs Sees Diesel Refining Margins Soaring to $63 a Barrel",
+        "title": "Capricorn Energy Backs DNO’s $396 Million Bid Over Genel Offer",
         "summary": "",
-        "url": "https://finance.yahoo.com/energy/articles/goldman-sachs-sees-diesel-refining-064500319.html",
+        "url": "https://finance.yahoo.com/energy/articles/capricorn-energy-backs-dno-396-072000342.html",
         "source": "Oilprice.com",
-        "published_at": "2026-08-31T06:45:00Z",
-        "fetched_at": "2026-08-31T08:01:43Z",
+        "published_at": "2026-09-01T07:20:00Z",
+        "fetched_at": "2026-09-01T08:01:43Z",
         "ticker": null,
         "source_tier": "aggregator"
       },
       {
-        "title": "Asian shares, US futures retreat and oil prices surge after US strike on Iranian rocket launchers",
+        "title": "Why Are XOM, CVX, GEV Stocks Rising Overnight?",
         "summary": "",
-        "url": "https://finance.yahoo.com/economy/policy/articles/asian-shares-us-futures-retreat-063215597.html",
+        "url": "https://finance.yahoo.com/m/5c537888-592e-36fd-9c89-428f916daefe/why-are-xom%2C-cvx%2C-gev-stocks.html",
+        "source": "Stocktwits",
+        "published_at": "2026-09-01T07:03:27Z",
+        "fetched_at": "2026-09-01T08:01:43Z",
+        "ticker": null,
+        "source_tier": "aggregator"
+      },
+      {
+        "title": "Tertiary Minerals boosted as results confirm Mushima North potential",
+        "summary": "",
+        "url": "https://finance.yahoo.com/m/4d47a242-41fd-3a7b-8b52-8a84fcf14193/tertiary-minerals-boosted-as.html",
+        "source": "Proactive",
+        "published_at": "2026-09-01T06:51:00Z",
+        "fetched_at": "2026-09-01T08:01:43Z",
+        "ticker": null,
+        "source_tier": "aggregator"
+      },
+      {
+        "title": "Oil prices rise as latest fighting revives Mideast supply disruption risks",
+        "summary": "",
+        "url": "https://finance.yahoo.com/energy/articles/oil-prices-rise-latest-fighting-005551870.html",
+        "source": "Reuters",
+        "published_at": "2026-09-01T06:48:00Z",
+        "fetched_at": "2026-09-01T08:01:43Z",
+        "ticker": null,
+        "source_tier": "aggregator"
+      },
+      {
+        "title": "Oil prices rise and stocks waver as Middle East violence flares, adding to uncertainty",
+        "summary": "",
+        "url": "https://finance.yahoo.com/energy/articles/oil-prices-rise-stocks-waver-064156540.html",
         "source": "Associated Press",
-        "published_at": "2026-08-31T06:32:15Z",
-        "fetched_at": "2026-08-31T08:01:43Z",
+        "published_at": "2026-09-01T06:41:56Z",
+        "fetched_at": "2026-09-01T08:01:43Z",
         "ticker": null,
         "source_tier": "aggregator"
       },
       {
-        "title": "Dollar Eases, Trims Post-Warsh Gains",
+        "title": "Chariot doubles economic footprint in Angola",
         "summary": "",
-        "url": "https://finance.yahoo.com/m/a8c9c17e-c3b9-35e6-94b1-8b0050e6d41d/dollar-eases%2C-trims.html",
-        "source": "The Wall Street Journal",
-        "published_at": "2026-08-31T06:31:00Z",
-        "fetched_at": "2026-08-31T08:01:43Z",
+        "url": "https://finance.yahoo.com/m/8f3b590c-d875-3c61-b5b7-84d357153eb2/chariot-doubles-economic.html",
+        "source": "Proactive",
+        "published_at": "2026-09-01T06:34:00Z",
+        "fetched_at": "2026-09-01T08:01:43Z",
         "ticker": null,
         "source_tier": "aggregator"
       },
       {
-        "title": "Bitcoin Pares Gains as Iran Retaliates to US Strikes on Larak Island, Oil Prices Rise",
+        "title": "Bond selloff deepens as rising energy prices stoke inflation fears",
         "summary": "",
-        "url": "https://finance.yahoo.com/m/2f878c02-59c5-306a-b87a-2c5413785d2d/bitcoin-pares-gains-as-iran.html",
-        "source": "CoinGape",
-        "published_at": "2026-08-31T06:06:35Z",
-        "fetched_at": "2026-08-31T08:01:43Z",
-        "ticker": null,
-        "source_tier": "aggregator"
-      },
-      {
-        "title": "Shares ease in Asia as oil climbs, yields stay high",
-        "summary": "",
-        "url": "https://finance.yahoo.com/markets/articles/shares-skid-asia-oil-yields-003835124.html",
+        "url": "https://finance.yahoo.com/markets/articles/bond-selloff-pressures-stocks-oil-014547216.html",
         "source": "Reuters",
-        "published_at": "2026-08-31T05:34:36Z",
-        "fetched_at": "2026-08-31T08:01:43Z",
-        "ticker": null,
-        "source_tier": "aggregator"
-      },
-      {
-        "title": "Morning Bid: Oil climbs as missiles fly in the Gulf",
-        "summary": "",
-        "url": "https://finance.yahoo.com/energy/articles/morning-bid-oil-climbs-missiles-043154399.html",
-        "source": "Reuters",
-        "published_at": "2026-08-31T04:31:54Z",
-        "fetched_at": "2026-08-31T08:01:43Z",
-        "ticker": null,
-        "source_tier": "aggregator"
-      },
-      {
-        "title": "Oil prices higher as US-Iran tensions flare and Warsh fans rate hikes",
-        "summary": "",
-        "url": "https://finance.yahoo.com/m/b1667730-9e87-3457-a7c0-cd1c25e9b5aa/oil-prices-higher-as-us-iran.html",
-        "source": "Euronews",
-        "published_at": "2026-08-31T04:07:55Z",
-        "fetched_at": "2026-08-31T08:01:43Z",
+        "published_at": "2026-09-01T06:13:51Z",
+        "fetched_at": "2026-09-01T08:01:43Z",
         "ticker": null,
         "source_tier": "aggregator"
       }
@@ -127,34 +127,13 @@
   },
   "tickers": {
     "515880.SS": {
-      "status": "ok",
+      "status": "partial_empty",
       "query_type": "ticker",
       "ticker": "515880.SS",
-      "start_date": "2026-08-31",
-      "end_date": "2026-08-31",
-      "fetched_at": "2026-08-31T08:01:44Z",
-      "items": [
-        {
-          "title": "通信ETF国泰（515880）跌1.05%，半日成交额15.52亿元",
-          "summary": "通信ETF国泰（515880）跌1.05%，半日成交额15.52亿元 新浪财经",
-          "url": "https://news.google.com/rss/articles/CBMimAFBVV95cUxQcEdPWWdiUmxvMjk0RHotb0trNTF0bzVTRzNSS1BaajlCdzRqSG4xRlVpempJLXU1WW5sT2xOdS1VdHMzb3FsX1Y4RGswUU9naTdsQlV0TVg0N3FjMW1jM25GMDFLcXptNndZZVBkdTZXRzVCdkRjQm1SOWZZZTVISEJwRUlnX21wRmR1WXJPREs3Ynd6MG1DTA?oc=5",
-          "source": "Google News / 新浪财经",
-          "published_at": "2026-08-31T03:31:00Z",
-          "fetched_at": "2026-08-31T08:01:44Z",
-          "ticker": "515880.SS",
-          "source_tier": "aggregator"
-        },
-        {
-          "title": "8月28日通信ETF国泰（515880）份额减少1800.00万份，最新份额627.98亿份，最新规模419.49亿元",
-          "summary": "8月28日通信ETF国泰（515880）份额减少1800.00万份，最新份额627.98亿份，最新规模419.49亿元 新浪财经",
-          "url": "https://news.google.com/rss/articles/CBMimwFBVV95cUxOQzcxbVRDNU5CazhuSFBOUzdlN0tSdDFET0xsVnFfZENiV2VVekptUnVqbHVsNFU3Y0hoVUIwNi1aX0hPUHY1MUtxUGlxbmtxTGowdG1XSzhRUFpJeVdKSjJTQ2lKN3N2UndNX0YtSjlWYWpJOW5EcWxibndoWVhwdUpnVEVkc251clk5YUoySlJqQUYzcU5SYzRNVQ?oc=5",
-          "source": "Google News / 新浪财经",
-          "published_at": "2026-08-31T01:00:00Z",
-          "fetched_at": "2026-08-31T08:01:44Z",
-          "ticker": "515880.SS",
-          "source_tier": "aggregator"
-        }
-      ],
+      "start_date": "2026-09-01",
+      "end_date": "2026-09-01",
+      "fetched_at": "2026-09-01T08:01:44Z",
+      "items": [],
       "source_statuses": [
         {
           "source": "Yahoo Finance",
@@ -163,8 +142,8 @@
         },
         {
           "source": "Google News RSS",
-          "status": "ok",
-          "item_count": 2
+          "status": "failed",
+          "item_count": 0
         },
         {
           "source": "SEC EDGAR",
@@ -174,44 +153,13 @@
       ]
     },
     "512480.SS": {
-      "status": "ok",
+      "status": "partial_empty",
       "query_type": "ticker",
       "ticker": "512480.SS",
-      "start_date": "2026-08-31",
-      "end_date": "2026-08-31",
-      "fetched_at": "2026-08-31T08:01:47Z",
-      "items": [
-        {
-          "title": "半导体ETF国联安（512480）跌1.25%，半日成交额6.35亿元",
-          "summary": "半导体ETF国联安（512480）跌1.25%，半日成交额6.35亿元 新浪财经",
-          "url": "https://news.google.com/rss/articles/CBMimAFBVV95cUxNbXZpYWpxQXVRWXVmZldDZkxnTEhMSzR3cU8zamMwM041N2tld3lJaHQ3eGpwSXY4V1dOZG10WkZ0RFBEYjlSdlphcVg0enFzMmRfeTJacW9icE9rZG0xV3U2RFV0aFk0Z1lJUWVEdzFBZVk4WVY1OTZoVFQxenhGVWItcEItNUFFemc2Y0kzOWMwYnpHTTNYYQ?oc=5",
-          "source": "Google News / 新浪财经",
-          "published_at": "2026-08-31T03:31:00Z",
-          "fetched_at": "2026-08-31T08:01:47Z",
-          "ticker": "512480.SS",
-          "source_tier": "aggregator"
-        },
-        {
-          "title": "半导体ETF国联安（512480）开盘跌2.21%，重仓股兆易创新跌2.46%，寒武纪跌2.97%",
-          "summary": "半导体ETF国联安（512480）开盘跌2.21%，重仓股兆易创新跌2.46%，寒武纪跌2.97% 新浪财经",
-          "url": "https://news.google.com/rss/articles/CBMimAFBVV95cUxNV0FkYldVN0I3TWhUek9Ca1p4aEEtaTJkY1ZLSEE2TWszQ1JHT3psYTRFTDZ5QXJmN2RiUWo5ODM5R3hSQXdiZ1ljMVRSb1laWjNtSXNpZF9LRUFKZm5xSy10bklWdHN0N0MycHdsSlhhQ1pfZkFTRlp0UDlnNGp6UFp3TmhyMy1qQUVGQ2pCeE5TSnJSbUJTZw?oc=5",
-          "source": "Google News / 新浪财经",
-          "published_at": "2026-08-31T01:31:00Z",
-          "fetched_at": "2026-08-31T08:01:47Z",
-          "ticker": "512480.SS",
-          "source_tier": "aggregator"
-        },
-        {
-          "title": "8月28日半导体ETF国联安（512480）份额增加4000.00万份，最新份额191.98亿份，最新规模199.28亿元",
-          "summary": "8月28日半导体ETF国联安（512480）份额增加4000.00万份，最新份额191.98亿份，最新规模199.28亿元 新浪财经",
-          "url": "https://news.google.com/rss/articles/CBMimwFBVV95cUxQNG10UkdDQ2Z5X2tIUlJXRFo2S0pta2Y1NTlIZ1ZrbjZRcEE5MnJzVDdYQXFOclpKMGFNZDc3TTdZc1gzaE9HNENOTTByRGY3WVNhNE9jbC1TTERGNGZ0Yk50NjN5WHZUUHhlSkp3NmlhRnhZTUprNDhmNjRFVzJ1LXZVMGpTNjZDNzRiVXJ6d2pFcGVyMGNVY0pQdw?oc=5",
-          "source": "Google News / 新浪财经",
-          "published_at": "2026-08-31T01:00:00Z",
-          "fetched_at": "2026-08-31T08:01:47Z",
-          "ticker": "512480.SS",
-          "source_tier": "aggregator"
-        }
-      ],
+      "start_date": "2026-09-01",
+      "end_date": "2026-09-01",
+      "fetched_at": "2026-09-01T08:01:55Z",
+      "items": [],
       "source_statuses": [
         {
           "source": "Yahoo Finance",
@@ -220,8 +168,8 @@
         },
         {
           "source": "Google News RSS",
-          "status": "ok",
-          "item_count": 3
+          "status": "failed",
+          "item_count": 0
         },
         {
           "source": "SEC EDGAR",
@@ -233,153 +181,103 @@
   },
   "items": [
     {
-      "title": "Oil rises as US, Iran resume military attacks",
+      "title": "Analysts react to global bond selloff",
       "summary": "",
-      "url": "https://finance.yahoo.com/energy/articles/oil-jumps-more-2-us-221149377.html",
+      "url": "https://finance.yahoo.com/markets/articles/analysts-react-global-bond-selloff-055026990.html",
       "source": "Reuters",
-      "published_at": "2026-08-31T07:47:45Z",
-      "fetched_at": "2026-08-31T08:01:43Z",
+      "published_at": "2026-09-01T07:49:02Z",
+      "fetched_at": "2026-09-01T08:01:43Z",
       "ticker": null,
       "source_tier": "aggregator"
     },
     {
-      "title": "Eni Signs Deal to Revive Venezuela Oil Activities",
+      "title": "European stocks muted as bond selloff continues; Reckitt jumps",
       "summary": "",
-      "url": "https://finance.yahoo.com/energy/articles/eni-signs-deal-revive-venezuela-073124386.html",
-      "source": "MT Newswires",
-      "published_at": "2026-08-31T07:31:24Z",
-      "fetched_at": "2026-08-31T08:01:43Z",
+      "url": "https://finance.yahoo.com/markets/world-indices/articles/european-stocks-muted-bond-selloff-074340233.html",
+      "source": "Reuters",
+      "published_at": "2026-09-01T07:43:40Z",
+      "fetched_at": "2026-09-01T08:01:43Z",
       "ticker": null,
       "source_tier": "aggregator"
     },
     {
-      "title": "Crude prices rise on US-Iran strikes, equities mixed after Warsh remarks",
+      "title": "Oil extends gains, stocks mixed as Trump issues fresh Iran warning",
       "summary": "",
-      "url": "https://finance.yahoo.com/economy/policy/articles/stocks-drop-warsh-fans-us-025203186.html",
+      "url": "https://finance.yahoo.com/markets/commodities/articles/oil-extends-gains-stocks-drop-024448410.html",
       "source": "AFP",
-      "published_at": "2026-08-31T07:27:39Z",
-      "fetched_at": "2026-08-31T08:01:43Z",
+      "published_at": "2026-09-01T07:36:10Z",
+      "fetched_at": "2026-09-01T08:01:43Z",
       "ticker": null,
       "source_tier": "aggregator"
     },
     {
-      "title": "Goldman Sachs Sees Diesel Refining Margins Soaring to $63 a Barrel",
+      "title": "Capricorn Energy Backs DNO’s $396 Million Bid Over Genel Offer",
       "summary": "",
-      "url": "https://finance.yahoo.com/energy/articles/goldman-sachs-sees-diesel-refining-064500319.html",
+      "url": "https://finance.yahoo.com/energy/articles/capricorn-energy-backs-dno-396-072000342.html",
       "source": "Oilprice.com",
-      "published_at": "2026-08-31T06:45:00Z",
-      "fetched_at": "2026-08-31T08:01:43Z",
+      "published_at": "2026-09-01T07:20:00Z",
+      "fetched_at": "2026-09-01T08:01:43Z",
       "ticker": null,
       "source_tier": "aggregator"
     },
     {
-      "title": "Asian shares, US futures retreat and oil prices surge after US strike on Iranian rocket launchers",
+      "title": "Why Are XOM, CVX, GEV Stocks Rising Overnight?",
       "summary": "",
-      "url": "https://finance.yahoo.com/economy/policy/articles/asian-shares-us-futures-retreat-063215597.html",
+      "url": "https://finance.yahoo.com/m/5c537888-592e-36fd-9c89-428f916daefe/why-are-xom%2C-cvx%2C-gev-stocks.html",
+      "source": "Stocktwits",
+      "published_at": "2026-09-01T07:03:27Z",
+      "fetched_at": "2026-09-01T08:01:43Z",
+      "ticker": null,
+      "source_tier": "aggregator"
+    },
+    {
+      "title": "Tertiary Minerals boosted as results confirm Mushima North potential",
+      "summary": "",
+      "url": "https://finance.yahoo.com/m/4d47a242-41fd-3a7b-8b52-8a84fcf14193/tertiary-minerals-boosted-as.html",
+      "source": "Proactive",
+      "published_at": "2026-09-01T06:51:00Z",
+      "fetched_at": "2026-09-01T08:01:43Z",
+      "ticker": null,
+      "source_tier": "aggregator"
+    },
+    {
+      "title": "Oil prices rise as latest fighting revives Mideast supply disruption risks",
+      "summary": "",
+      "url": "https://finance.yahoo.com/energy/articles/oil-prices-rise-latest-fighting-005551870.html",
+      "source": "Reuters",
+      "published_at": "2026-09-01T06:48:00Z",
+      "fetched_at": "2026-09-01T08:01:43Z",
+      "ticker": null,
+      "source_tier": "aggregator"
+    },
+    {
+      "title": "Oil prices rise and stocks waver as Middle East violence flares, adding to uncertainty",
+      "summary": "",
+      "url": "https://finance.yahoo.com/energy/articles/oil-prices-rise-stocks-waver-064156540.html",
       "source": "Associated Press",
-      "published_at": "2026-08-31T06:32:15Z",
-      "fetched_at": "2026-08-31T08:01:43Z",
+      "published_at": "2026-09-01T06:41:56Z",
+      "fetched_at": "2026-09-01T08:01:43Z",
       "ticker": null,
       "source_tier": "aggregator"
     },
     {
-      "title": "Dollar Eases, Trims Post-Warsh Gains",
+      "title": "Chariot doubles economic footprint in Angola",
       "summary": "",
-      "url": "https://finance.yahoo.com/m/a8c9c17e-c3b9-35e6-94b1-8b0050e6d41d/dollar-eases%2C-trims.html",
-      "source": "The Wall Street Journal",
-      "published_at": "2026-08-31T06:31:00Z",
-      "fetched_at": "2026-08-31T08:01:43Z",
+      "url": "https://finance.yahoo.com/m/8f3b590c-d875-3c61-b5b7-84d357153eb2/chariot-doubles-economic.html",
+      "source": "Proactive",
+      "published_at": "2026-09-01T06:34:00Z",
+      "fetched_at": "2026-09-01T08:01:43Z",
       "ticker": null,
       "source_tier": "aggregator"
     },
     {
-      "title": "Bitcoin Pares Gains as Iran Retaliates to US Strikes on Larak Island, Oil Prices Rise",
+      "title": "Bond selloff deepens as rising energy prices stoke inflation fears",
       "summary": "",
-      "url": "https://finance.yahoo.com/m/2f878c02-59c5-306a-b87a-2c5413785d2d/bitcoin-pares-gains-as-iran.html",
-      "source": "CoinGape",
-      "published_at": "2026-08-31T06:06:35Z",
-      "fetched_at": "2026-08-31T08:01:43Z",
-      "ticker": null,
-      "source_tier": "aggregator"
-    },
-    {
-      "title": "Shares ease in Asia as oil climbs, yields stay high",
-      "summary": "",
-      "url": "https://finance.yahoo.com/markets/articles/shares-skid-asia-oil-yields-003835124.html",
+      "url": "https://finance.yahoo.com/markets/articles/bond-selloff-pressures-stocks-oil-014547216.html",
       "source": "Reuters",
-      "published_at": "2026-08-31T05:34:36Z",
-      "fetched_at": "2026-08-31T08:01:43Z",
+      "published_at": "2026-09-01T06:13:51Z",
+      "fetched_at": "2026-09-01T08:01:43Z",
       "ticker": null,
-      "source_tier": "aggregator"
-    },
-    {
-      "title": "Morning Bid: Oil climbs as missiles fly in the Gulf",
-      "summary": "",
-      "url": "https://finance.yahoo.com/energy/articles/morning-bid-oil-climbs-missiles-043154399.html",
-      "source": "Reuters",
-      "published_at": "2026-08-31T04:31:54Z",
-      "fetched_at": "2026-08-31T08:01:43Z",
-      "ticker": null,
-      "source_tier": "aggregator"
-    },
-    {
-      "title": "Oil prices higher as US-Iran tensions flare and Warsh fans rate hikes",
-      "summary": "",
-      "url": "https://finance.yahoo.com/m/b1667730-9e87-3457-a7c0-cd1c25e9b5aa/oil-prices-higher-as-us-iran.html",
-      "source": "Euronews",
-      "published_at": "2026-08-31T04:07:55Z",
-      "fetched_at": "2026-08-31T08:01:43Z",
-      "ticker": null,
-      "source_tier": "aggregator"
-    },
-    {
-      "title": "通信ETF国泰（515880）跌1.05%，半日成交额15.52亿元",
-      "summary": "通信ETF国泰（515880）跌1.05%，半日成交额15.52亿元 新浪财经",
-      "url": "https://news.google.com/rss/articles/CBMimAFBVV95cUxQcEdPWWdiUmxvMjk0RHotb0trNTF0bzVTRzNSS1BaajlCdzRqSG4xRlVpempJLXU1WW5sT2xOdS1VdHMzb3FsX1Y4RGswUU9naTdsQlV0TVg0N3FjMW1jM25GMDFLcXptNndZZVBkdTZXRzVCdkRjQm1SOWZZZTVISEJwRUlnX21wRmR1WXJPREs3Ynd6MG1DTA?oc=5",
-      "source": "Google News / 新浪财经",
-      "published_at": "2026-08-31T03:31:00Z",
-      "fetched_at": "2026-08-31T08:01:44Z",
-      "ticker": "515880.SS",
-      "source_tier": "aggregator"
-    },
-    {
-      "title": "半导体ETF国联安（512480）跌1.25%，半日成交额6.35亿元",
-      "summary": "半导体ETF国联安（512480）跌1.25%，半日成交额6.35亿元 新浪财经",
-      "url": "https://news.google.com/rss/articles/CBMimAFBVV95cUxNbXZpYWpxQXVRWXVmZldDZkxnTEhMSzR3cU8zamMwM041N2tld3lJaHQ3eGpwSXY4V1dOZG10WkZ0RFBEYjlSdlphcVg0enFzMmRfeTJacW9icE9rZG0xV3U2RFV0aFk0Z1lJUWVEdzFBZVk4WVY1OTZoVFQxenhGVWItcEItNUFFemc2Y0kzOWMwYnpHTTNYYQ?oc=5",
-      "source": "Google News / 新浪财经",
-      "published_at": "2026-08-31T03:31:00Z",
-      "fetched_at": "2026-08-31T08:01:47Z",
-      "ticker": "512480.SS",
-      "source_tier": "aggregator"
-    },
-    {
-      "title": "半导体ETF国联安（512480）开盘跌2.21%，重仓股兆易创新跌2.46%，寒武纪跌2.97%",
-      "summary": "半导体ETF国联安（512480）开盘跌2.21%，重仓股兆易创新跌2.46%，寒武纪跌2.97% 新浪财经",
-      "url": "https://news.google.com/rss/articles/CBMimAFBVV95cUxNV0FkYldVN0I3TWhUek9Ca1p4aEEtaTJkY1ZLSEE2TWszQ1JHT3psYTRFTDZ5QXJmN2RiUWo5ODM5R3hSQXdiZ1ljMVRSb1laWjNtSXNpZF9LRUFKZm5xSy10bklWdHN0N0MycHdsSlhhQ1pfZkFTRlp0UDlnNGp6UFp3TmhyMy1qQUVGQ2pCeE5TSnJSbUJTZw?oc=5",
-      "source": "Google News / 新浪财经",
-      "published_at": "2026-08-31T01:31:00Z",
-      "fetched_at": "2026-08-31T08:01:47Z",
-      "ticker": "512480.SS",
-      "source_tier": "aggregator"
-    },
-    {
-      "title": "8月28日通信ETF国泰（515880）份额减少1800.00万份，最新份额627.98亿份，最新规模419.49亿元",
-      "summary": "8月28日通信ETF国泰（515880）份额减少1800.00万份，最新份额627.98亿份，最新规模419.49亿元 新浪财经",
-      "url": "https://news.google.com/rss/articles/CBMimwFBVV95cUxOQzcxbVRDNU5CazhuSFBOUzdlN0tSdDFET0xsVnFfZENiV2VVekptUnVqbHVsNFU3Y0hoVUIwNi1aX0hPUHY1MUtxUGlxbmtxTGowdG1XSzhRUFpJeVdKSjJTQ2lKN3N2UndNX0YtSjlWYWpJOW5EcWxibndoWVhwdUpnVEVkc251clk5YUoySlJqQUYzcU5SYzRNVQ?oc=5",
-      "source": "Google News / 新浪财经",
-      "published_at": "2026-08-31T01:00:00Z",
-      "fetched_at": "2026-08-31T08:01:44Z",
-      "ticker": "515880.SS",
-      "source_tier": "aggregator"
-    },
-    {
-      "title": "8月28日半导体ETF国联安（512480）份额增加4000.00万份，最新份额191.98亿份，最新规模199.28亿元",
-      "summary": "8月28日半导体ETF国联安（512480）份额增加4000.00万份，最新份额191.98亿份，最新规模199.28亿元 新浪财经",
-      "url": "https://news.google.com/rss/articles/CBMimwFBVV95cUxQNG10UkdDQ2Z5X2tIUlJXRFo2S0pta2Y1NTlIZ1ZrbjZRcEE5MnJzVDdYQXFOclpKMGFNZDc3TTdZc1gzaE9HNENOTTByRGY3WVNhNE9jbC1TTERGNGZ0Yk50NjN5WHZUUHhlSkp3NmlhRnhZTUprNDhmNjRFVzJ1LXZVMGpTNjZDNzRiVXJ6d2pFcGVyMGNVY0pQdw?oc=5",
-      "source": "Google News / 新浪财经",
-      "published_at": "2026-08-31T01:00:00Z",
-      "fetched_at": "2026-08-31T08:01:47Z",
-      "ticker": "512480.SS",
       "source_tier": "aggregator"
     }
   ]

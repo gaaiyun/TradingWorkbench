@@ -1,7 +1,7 @@
 {
   "status": "ok",
-  "generated_at": "2026-08-31T16:01:42+08:00",
-  "trade_date": "2026-08-31",
+  "generated_at": "2026-09-01T16:01:42+08:00",
+  "trade_date": "2026-09-01",
   "provider": "openai_compatible",
   "analysts": [
     "market",
@@ -19,19 +19,19 @@
     "kind": "monitor"
   },
   "run": {
-    "id": "33370920486",
+    "id": "33484910165",
     "attempt": "1",
     "workflow": "daily-analysis",
-    "url": "https://github.com/gaaiyun/TradingWorkbench/actions/runs/33370920486"
+    "url": "https://github.com/gaaiyun/TradingWorkbench/actions/runs/33484910165"
   },
   "identity": {
     "scope": "profile",
     "kind": "monitor",
-    "runId": "33370920486",
+    "runId": "33484910165",
     "profileId": "cn-semi-comms",
     "requestId": null,
-    "slotId": "slot-22445300a1f281137f0a98f4ea9528dcdbc5d02179499edd0503a7126bc219a6",
-    "scheduledFor": "2026-08-31T07:19:27.000Z"
+    "slotId": "slot-3f838a442b1f79274fc633ff3ceec9501283467a4140db66962b0d694d73451c",
+    "scheduledFor": "2026-09-01T07:17:48.000Z"
   },
   "rating_tiers": [
     "Sell",
@@ -57,23 +57,23 @@
     },
     {
       "ticker": "512480.SS",
-      "rating": "Hold",
-      "report": "reports/512480.SS/2026-08-31/complete_report.md",
+      "rating": "Underweight",
+      "report": "reports/512480.SS/2026-09-01/complete_report.md",
       "files": {
-        "fundamentals": "reports/512480.SS/2026-08-31/1_analysts/fundamentals.md",
-        "market": "reports/512480.SS/2026-08-31/1_analysts/market.md",
-        "news": "reports/512480.SS/2026-08-31/1_analysts/news.md",
-        "bear": "reports/512480.SS/2026-08-31/2_research/bear.md",
-        "bull": "reports/512480.SS/2026-08-31/2_research/bull.md",
-        "manager": "reports/512480.SS/2026-08-31/2_research/manager.md",
-        "trader": "reports/512480.SS/2026-08-31/3_trading/trader.md",
-        "aggressive": "reports/512480.SS/2026-08-31/4_risk/aggressive.md",
-        "conservative": "reports/512480.SS/2026-08-31/4_risk/conservative.md",
-        "neutral": "reports/512480.SS/2026-08-31/4_risk/neutral.md",
-        "decision": "reports/512480.SS/2026-08-31/5_portfolio/decision.md",
-        "complete_report": "reports/512480.SS/2026-08-31/complete_report.md"
+        "fundamentals": "reports/512480.SS/2026-09-01/1_analysts/fundamentals.md",
+        "market": "reports/512480.SS/2026-09-01/1_analysts/market.md",
+        "news": "reports/512480.SS/2026-09-01/1_analysts/news.md",
+        "bear": "reports/512480.SS/2026-09-01/2_research/bear.md",
+        "bull": "reports/512480.SS/2026-09-01/2_research/bull.md",
+        "manager": "reports/512480.SS/2026-09-01/2_research/manager.md",
+        "trader": "reports/512480.SS/2026-09-01/3_trading/trader.md",
+        "aggressive": "reports/512480.SS/2026-09-01/4_risk/aggressive.md",
+        "conservative": "reports/512480.SS/2026-09-01/4_risk/conservative.md",
+        "neutral": "reports/512480.SS/2026-09-01/4_risk/neutral.md",
+        "decision": "reports/512480.SS/2026-09-01/5_portfolio/decision.md",
+        "complete_report": "reports/512480.SS/2026-09-01/complete_report.md"
       },
-      "decision_excerpt": "**Rating**: Hold  \n\n**Executive Summary**: 证据呈现平衡状态，支持温和持仓而非激进买入或保守退出。短期温和反弹叠加长期政策导向，但同时伴随高波动和无法量化风险的因素。  \n[D2]  \n[D6]  \n[I10]  \n[N1]  \n\n**Investment Thesis**: 短期反弹与政策驱动并存，需持续关注波动和未提供的基金细节，以实现可靠增长而非极端冒险。  \n[D2]  \n[D5]  \n[D6]  \n[CA1]  \n[N4]",
+      "decision_excerpt": "**Rating**: Underweight [D7]\n\n**Executive Summary**: 512480.SS is trading below both moving averages, with close below MA20 and MA60, which is a bearish alignment under the packet’s own rule set. [D7] Recent price action is weak, with the latest close change at -2.64650284 percent and the 8-trading-day close change at -1.15163148 percent. [D3][D2] RSI14 is 44.97146746, which is below the 50 midlin",
       "analysis_status": "rated",
       "audit_status": "verified",
       "evidence_publish": {
@@ -83,9 +83,9 @@
       "marketHistory": {
         "source": "tencent",
         "adjustment": "qfq",
-        "barCount": 667,
+        "barCount": 668,
         "startAt": "2023-11-29T16:00:00Z",
-        "endAt": "2026-08-30T16:00:00Z"
+        "endAt": "2026-08-31T16:00:00Z"
       },
       "error": null
     }
