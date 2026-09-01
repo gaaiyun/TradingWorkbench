@@ -1,10 +1,10 @@
 {
   "version": 1,
-  "generatedAt": "2026-08-31T18:00:16.022Z",
+  "generatedAt": "2026-09-01T15:28:27.473Z",
   "status": "degraded",
   "coverage": {
     "policy": "current-listed-best-effort-plus-configured-core",
-    "cnCurrentListedStocks": 5550,
+    "cnCurrentListedStocks": 5552,
     "cnConfiguredCore": 3,
     "usCore": 9,
     "hkCore": 1,
@@ -16,13 +16,13 @@
       "id": "sina-market-center",
       "role": "CN current-listed discovery",
       "quality": "best_effort",
-      "asOf": "2026-08-31T18:00:16.022Z"
+      "asOf": "2026-09-01T15:28:27.473Z"
     },
     {
       "id": "workbench-settings",
       "role": "configured HK/US/CN core instruments",
       "quality": "declared",
-      "asOf": "2026-08-31T18:00:16.022Z"
+      "asOf": "2026-09-01T15:28:27.473Z"
     }
   ],
   "instruments": [
@@ -31872,6 +31872,17 @@
       "coverage": "current_listed_best_effort"
     },
     {
+      "symbol": "301697.SZ",
+      "name": "N贝特利",
+      "market": "CN",
+      "exchange": "SZ",
+      "instrumentType": "stock",
+      "industry": null,
+      "listDate": null,
+      "source": "sina-market-center",
+      "coverage": "current_listed_best_effort"
+    },
+    {
       "symbol": "301707.SZ",
       "name": "展芯股份",
       "market": "CN",
@@ -34788,7 +34799,7 @@
     },
     {
       "symbol": "600351.SS",
-      "name": "亚宝药业",
+      "name": "XD亚宝药",
       "market": "CN",
       "exchange": "SS",
       "instrumentType": "stock",
@@ -40057,7 +40068,7 @@
     },
     {
       "symbol": "600989.SS",
-      "name": "宝丰能源",
+      "name": "XD宝丰能",
       "market": "CN",
       "exchange": "SS",
       "instrumentType": "stock",
@@ -40685,6 +40696,17 @@
     {
       "symbol": "601121.SS",
       "name": "宝地矿业",
+      "market": "CN",
+      "exchange": "SS",
+      "instrumentType": "stock",
+      "industry": null,
+      "listDate": null,
+      "source": "sina-market-center",
+      "coverage": "current_listed_best_effort"
+    },
+    {
+      "symbol": "601123.SS",
+      "name": "N马矿",
       "market": "CN",
       "exchange": "SS",
       "instrumentType": "stock",
@@ -49825,7 +49847,7 @@
     },
     {
       "symbol": "605136.SS",
-      "name": "XD丽人丽",
+      "name": "丽人丽妆",
       "market": "CN",
       "exchange": "SS",
       "instrumentType": "stock",
@@ -50980,7 +51002,7 @@
     },
     {
       "symbol": "688036.SS",
-      "name": "XD传音控",
+      "name": "传音控股",
       "market": "CN",
       "exchange": "SS",
       "instrumentType": "stock",
@@ -57360,7 +57382,7 @@
     },
     {
       "symbol": "688835.SS",
-      "name": "C高凯",
+      "name": "高凯技术",
       "market": "CN",
       "exchange": "SS",
       "instrumentType": "stock",
