@@ -1,10 +1,10 @@
 {
   "version": 1,
-  "generatedAt": "2026-09-01T15:28:27.473Z",
+  "generatedAt": "2026-09-02T15:05:37.669Z",
   "status": "degraded",
   "coverage": {
     "policy": "current-listed-best-effort-plus-configured-core",
-    "cnCurrentListedStocks": 5552,
+    "cnCurrentListedStocks": 5553,
     "cnConfiguredCore": 3,
     "usCore": 9,
     "hkCore": 1,
@@ -16,13 +16,13 @@
       "id": "sina-market-center",
       "role": "CN current-listed discovery",
       "quality": "best_effort",
-      "asOf": "2026-09-01T15:28:27.473Z"
+      "asOf": "2026-09-02T15:05:37.669Z"
     },
     {
       "id": "workbench-settings",
       "role": "configured HK/US/CN core instruments",
       "quality": "declared",
-      "asOf": "2026-09-01T15:28:27.473Z"
+      "asOf": "2026-09-02T15:05:37.669Z"
     }
   ],
   "instruments": [
@@ -31861,6 +31861,17 @@
       "coverage": "current_listed_best_effort"
     },
     {
+      "symbol": "301688.SZ",
+      "name": "N格林",
+      "market": "CN",
+      "exchange": "SZ",
+      "instrumentType": "stock",
+      "industry": null,
+      "listDate": null,
+      "source": "sina-market-center",
+      "coverage": "current_listed_best_effort"
+    },
+    {
       "symbol": "301696.SZ",
       "name": "三瑞智能",
       "market": "CN",
@@ -31873,7 +31884,7 @@
     },
     {
       "symbol": "301697.SZ",
-      "name": "N贝特利",
+      "name": "C贝特利",
       "market": "CN",
       "exchange": "SZ",
       "instrumentType": "stock",
@@ -34799,7 +34810,7 @@
     },
     {
       "symbol": "600351.SS",
-      "name": "XD亚宝药",
+      "name": "亚宝药业",
       "market": "CN",
       "exchange": "SS",
       "instrumentType": "stock",
@@ -40068,7 +40079,7 @@
     },
     {
       "symbol": "600989.SS",
-      "name": "XD宝丰能",
+      "name": "宝丰能源",
       "market": "CN",
       "exchange": "SS",
       "instrumentType": "stock",
@@ -40706,7 +40717,7 @@
     },
     {
       "symbol": "601123.SS",
-      "name": "N马矿",
+      "name": "C马矿",
       "market": "CN",
       "exchange": "SS",
       "instrumentType": "stock",
@@ -55589,7 +55600,7 @@
     },
     {
       "symbol": "688578.SS",
-      "name": "艾力斯",
+      "name": "XD艾力斯",
       "market": "CN",
       "exchange": "SS",
       "instrumentType": "stock",
