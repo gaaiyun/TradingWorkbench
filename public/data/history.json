@@ -1,5 +1,83 @@
 [
   {
+    "trade_date": "2026-09-02",
+    "generated_at": "2026-09-02T16:01:46+08:00",
+    "provider": "openai_compatible",
+    "results": [
+      {
+        "ticker": "515880.SS",
+        "rating": null,
+        "report": null,
+        "files": {},
+        "error": true,
+        "analysis_status": "data_validation_failed",
+        "audit_status": "invalidated",
+        "evidence_publish": {
+          "published": true,
+          "status": 201
+        }
+      },
+      {
+        "ticker": "512480.SS",
+        "rating": "Hold",
+        "report": "reports/512480.SS/2026-09-02/complete_report.md",
+        "files": {
+          "fundamentals": "reports/512480.SS/2026-09-02/1_analysts/fundamentals.md",
+          "market": "reports/512480.SS/2026-09-02/1_analysts/market.md",
+          "news": "reports/512480.SS/2026-09-02/1_analysts/news.md",
+          "bear": "reports/512480.SS/2026-09-02/2_research/bear.md",
+          "bull": "reports/512480.SS/2026-09-02/2_research/bull.md",
+          "manager": "reports/512480.SS/2026-09-02/2_research/manager.md",
+          "trader": "reports/512480.SS/2026-09-02/3_trading/trader.md",
+          "aggressive": "reports/512480.SS/2026-09-02/4_risk/aggressive.md",
+          "conservative": "reports/512480.SS/2026-09-02/4_risk/conservative.md",
+          "neutral": "reports/512480.SS/2026-09-02/4_risk/neutral.md",
+          "decision": "reports/512480.SS/2026-09-02/5_portfolio/decision.md",
+          "complete_report": "reports/512480.SS/2026-09-02/complete_report.md"
+        },
+        "error": false,
+        "analysis_status": "rated",
+        "audit_status": "verified",
+        "evidence_publish": {
+          "published": true,
+          "status": 201
+        },
+        "marketHistory": {
+          "source": "tencent",
+          "adjustment": "qfq",
+          "barCount": 669,
+          "startAt": "2023-11-29T16:00:00Z",
+          "endAt": "2026-09-01T16:00:00Z"
+        }
+      }
+    ],
+    "request": {
+      "requestId": null,
+      "analysts": [
+        "market",
+        "news",
+        "fundamentals"
+      ],
+      "researchDepth": "standard",
+      "kind": "monitor"
+    },
+    "run": {
+      "id": "33606487783",
+      "attempt": "1",
+      "workflow": "daily-analysis",
+      "url": "https://github.com/gaaiyun/TradingWorkbench/actions/runs/33606487783"
+    },
+    "identity": {
+      "scope": "profile",
+      "kind": "monitor",
+      "runId": "33606487783",
+      "profileId": "cn-semi-comms",
+      "requestId": null,
+      "slotId": "slot-641fa300cc00e45a94132fad0fe638a40b3e416eb0f7625707714f48e7916cc0",
+      "scheduledFor": "2026-09-02T07:17:15.000Z"
+    }
+  },
+  {
     "trade_date": "2026-09-01",
     "generated_at": "2026-09-01T16:01:42+08:00",
     "provider": "openai_compatible",
@@ -4839,73 +4917,6 @@
           "neutral": "reports/600519.SS/2026-07-21/4_risk/neutral.md",
           "decision": "reports/600519.SS/2026-07-21/5_portfolio/decision.md",
           "complete_report": "reports/600519.SS/2026-07-21/complete_report.md"
-        }
-      }
-    ]
-  },
-  {
-    "trade_date": "2026-07-20",
-    "generated_at": "2026-07-21T06:31:39+08:00",
-    "provider": "openai_compatible",
-    "results": [
-      {
-        "ticker": "NVDA",
-        "rating": "Hold",
-        "report": "reports/NVDA/2026-07-20/complete_report.md",
-        "error": false,
-        "files": {
-          "fundamentals": "reports/NVDA/2026-07-20/1_analysts/fundamentals.md",
-          "market": "reports/NVDA/2026-07-20/1_analysts/market.md",
-          "news": "reports/NVDA/2026-07-20/1_analysts/news.md",
-          "bear": "reports/NVDA/2026-07-20/2_research/bear.md",
-          "bull": "reports/NVDA/2026-07-20/2_research/bull.md",
-          "manager": "reports/NVDA/2026-07-20/2_research/manager.md",
-          "trader": "reports/NVDA/2026-07-20/3_trading/trader.md",
-          "aggressive": "reports/NVDA/2026-07-20/4_risk/aggressive.md",
-          "conservative": "reports/NVDA/2026-07-20/4_risk/conservative.md",
-          "neutral": "reports/NVDA/2026-07-20/4_risk/neutral.md",
-          "decision": "reports/NVDA/2026-07-20/5_portfolio/decision.md",
-          "complete_report": "reports/NVDA/2026-07-20/complete_report.md"
-        }
-      },
-      {
-        "ticker": "SPY",
-        "rating": "Hold",
-        "report": "reports/SPY/2026-07-20/complete_report.md",
-        "error": false,
-        "files": {
-          "fundamentals": "reports/SPY/2026-07-20/1_analysts/fundamentals.md",
-          "market": "reports/SPY/2026-07-20/1_analysts/market.md",
-          "news": "reports/SPY/2026-07-20/1_analysts/news.md",
-          "bear": "reports/SPY/2026-07-20/2_research/bear.md",
-          "bull": "reports/SPY/2026-07-20/2_research/bull.md",
-          "manager": "reports/SPY/2026-07-20/2_research/manager.md",
-          "trader": "reports/SPY/2026-07-20/3_trading/trader.md",
-          "aggressive": "reports/SPY/2026-07-20/4_risk/aggressive.md",
-          "conservative": "reports/SPY/2026-07-20/4_risk/conservative.md",
-          "neutral": "reports/SPY/2026-07-20/4_risk/neutral.md",
-          "decision": "reports/SPY/2026-07-20/5_portfolio/decision.md",
-          "complete_report": "reports/SPY/2026-07-20/complete_report.md"
-        }
-      },
-      {
-        "ticker": "600519.SS",
-        "rating": "Hold",
-        "report": "reports/600519.SS/2026-07-20/complete_report.md",
-        "error": false,
-        "files": {
-          "fundamentals": "reports/600519.SS/2026-07-20/1_analysts/fundamentals.md",
-          "market": "reports/600519.SS/2026-07-20/1_analysts/market.md",
-          "news": "reports/600519.SS/2026-07-20/1_analysts/news.md",
-          "bear": "reports/600519.SS/2026-07-20/2_research/bear.md",
-          "bull": "reports/600519.SS/2026-07-20/2_research/bull.md",
-          "manager": "reports/600519.SS/2026-07-20/2_research/manager.md",
-          "trader": "reports/600519.SS/2026-07-20/3_trading/trader.md",
-          "aggressive": "reports/600519.SS/2026-07-20/4_risk/aggressive.md",
-          "conservative": "reports/600519.SS/2026-07-20/4_risk/conservative.md",
-          "neutral": "reports/600519.SS/2026-07-20/4_risk/neutral.md",
-          "decision": "reports/600519.SS/2026-07-20/5_portfolio/decision.md",
-          "complete_report": "reports/600519.SS/2026-07-20/complete_report.md"
         }
       }
     ]
