@@ -1,113 +1,113 @@
 {
   "version": 1,
   "status": "ok",
-  "generated_at": "2026-09-02T16:01:46+08:00",
-  "trade_date": "2026-09-02",
+  "generated_at": "2026-09-03T16:01:54+08:00",
+  "trade_date": "2026-09-03",
   "global": {
     "status": "ok",
     "query_type": "global",
     "ticker": null,
-    "start_date": "2026-08-26",
-    "end_date": "2026-09-02",
-    "fetched_at": "2026-09-02T08:01:47Z",
+    "start_date": "2026-08-27",
+    "end_date": "2026-09-03",
+    "fetched_at": "2026-09-03T08:01:56Z",
     "items": [
       {
-        "title": "Why Tech Stocks Rule The Market, Even As Their Revenue Trails Consumer And Banking Giants",
+        "title": "Kroger (KR) Taps Mark Ibbotson To Help Drive Its Store And Digital Shift",
         "summary": "",
-        "url": "https://finance.yahoo.com/m/01d1a1d1-7a00-3f0c-b3f9-e1813db83d1c/why-tech-stocks-rule-the.html",
-        "source": "Stocktwits",
-        "published_at": "2026-09-02T07:53:10Z",
-        "fetched_at": "2026-09-02T08:01:47Z",
-        "ticker": null,
-        "source_tier": "aggregator"
-      },
-      {
-        "title": "Dollar hits 7-week high, Middle East conflict and rate paths in focus",
-        "summary": "",
-        "url": "https://finance.yahoo.com/markets/currencies/articles/dollar-holds-firm-middle-east-010249651.html",
-        "source": "Reuters",
-        "published_at": "2026-09-02T07:35:32Z",
-        "fetched_at": "2026-09-02T08:01:47Z",
-        "ticker": null,
-        "source_tier": "aggregator"
-      },
-      {
-        "title": "Stocks drop as yields and oil prices spike on Mideast flare-up",
-        "summary": "",
-        "url": "https://finance.yahoo.com/markets/articles/stocks-sink-yields-multi-decade-024500420.html",
-        "source": "AFP",
-        "published_at": "2026-09-02T07:32:10Z",
-        "fetched_at": "2026-09-02T08:01:47Z",
-        "ticker": null,
-        "source_tier": "aggregator"
-      },
-      {
-        "title": "European shares pinned at one-month low as flaring Mideast tensions lift bond yields",
-        "summary": "",
-        "url": "https://finance.yahoo.com/markets/world-indices/articles/european-shares-pinned-one-month-072719530.html",
-        "source": "Reuters",
-        "published_at": "2026-09-02T07:27:19Z",
-        "fetched_at": "2026-09-02T08:01:47Z",
-        "ticker": null,
-        "source_tier": "aggregator"
-      },
-      {
-        "title": "European Equities Mixed in Muted Trade",
-        "summary": "",
-        "url": "https://finance.yahoo.com/m/3a61364d-aad0-3b44-b878-ea8ff39cf2eb/european-equities-mixed-in.html",
-        "source": "The Wall Street Journal",
-        "published_at": "2026-09-02T07:26:00Z",
-        "fetched_at": "2026-09-02T08:01:47Z",
-        "ticker": null,
-        "source_tier": "aggregator"
-      },
-      {
-        "title": "Eurozone Bond Yields Rise With Global Peers; 10-Year Bund Yield Hits New 15-Year Hig",
-        "summary": "",
-        "url": "https://finance.yahoo.com/m/f3e71e55-629a-39e4-80e2-7614fbda0854/eurozone-bond-yields-rise.html",
-        "source": "The Wall Street Journal",
-        "published_at": "2026-09-02T06:55:00Z",
-        "fetched_at": "2026-09-02T08:01:47Z",
-        "ticker": null,
-        "source_tier": "aggregator"
-      },
-      {
-        "title": "Dollar Rises to Highest in Nearly Three Weeks Vs Basket of Currencies",
-        "summary": "",
-        "url": "https://finance.yahoo.com/m/5608d87c-d647-35f8-8aca-b6895950fe50/dollar-rises-to-highest-in.html",
-        "source": "The Wall Street Journal",
-        "published_at": "2026-09-02T06:51:00Z",
-        "fetched_at": "2026-09-02T08:01:47Z",
-        "ticker": null,
-        "source_tier": "aggregator"
-      },
-      {
-        "title": "Why Is The Crypto Market Down Today?",
-        "summary": "",
-        "url": "https://finance.yahoo.com/m/e4348eaa-5ce1-3b9d-aaad-6e2b0f5ef5ee/why-is-the-crypto-market-down.html",
-        "source": "BeInCrypto",
-        "published_at": "2026-09-02T06:27:37Z",
-        "fetched_at": "2026-09-02T08:01:47Z",
-        "ticker": null,
-        "source_tier": "aggregator"
-      },
-      {
-        "title": "Stock Market: Will S&P 500 Open Up or Down Today?",
-        "summary": "",
-        "url": "https://finance.yahoo.com/m/3a757a8c-f7f3-36f8-ad48-0212b5f4b9d5/stock-market%3A-will-s%26p-500.html",
-        "source": "Benzinga Prediction Markets",
-        "published_at": "2026-09-02T06:22:16Z",
-        "fetched_at": "2026-09-02T08:01:47Z",
-        "ticker": null,
-        "source_tier": "aggregator"
-      },
-      {
-        "title": "ExxonMobil Holdings (XOM) Could Be 3% Undervalued On Shell Chemicals Bid Talk",
-        "summary": "",
-        "url": "https://finance.yahoo.com/energy/articles/exxonmobil-holdings-xom-could-3-061216768.html",
+        "url": "https://finance.yahoo.com/markets/stocks/articles/kroger-kr-taps-mark-ibbotson-070632963.html",
         "source": "Simply Wall St.",
-        "published_at": "2026-09-02T06:12:16Z",
-        "fetched_at": "2026-09-02T08:01:47Z",
+        "published_at": "2026-09-03T07:06:32Z",
+        "fetched_at": "2026-09-03T08:01:56Z",
+        "ticker": null,
+        "source_tier": "aggregator"
+      },
+      {
+        "title": "3 AI Power Stocks With Revenue Over $4B",
+        "summary": "",
+        "url": "https://finance.yahoo.com/markets/stocks/articles/3-ai-power-stocks-revenue-043333548.html",
+        "source": "Simply Wall St.",
+        "published_at": "2026-09-03T04:33:33Z",
+        "fetched_at": "2026-09-03T08:01:56Z",
+        "ticker": null,
+        "source_tier": "aggregator"
+      },
+      {
+        "title": "How many employees does UnitedHealth have in 2026? Locations & layoffs explained",
+        "summary": "",
+        "url": "https://finance.yahoo.com/m/2e8e5ded-1c45-38f7-a5cf-ec0a2f2a952c/how-many-employees-does.html",
+        "source": "TheStreet",
+        "published_at": "2026-09-03T01:33:40Z",
+        "fetched_at": "2026-09-03T08:01:56Z",
+        "ticker": null,
+        "source_tier": "aggregator"
+      },
+      {
+        "title": "DOJ Antitrust Unit Adds Eight Retailers to Beef Pricing Investigation",
+        "summary": "",
+        "url": "https://finance.yahoo.com/economy/policy/articles/doj-antitrust-unit-adds-eight-235309040.html",
+        "source": "MT Newswires",
+        "published_at": "2026-09-02T23:53:09Z",
+        "fetched_at": "2026-09-03T08:01:56Z",
+        "ticker": null,
+        "source_tier": "aggregator"
+      },
+      {
+        "title": "Why SSR Mining Stock Was a Winner on Wednesday",
+        "summary": "",
+        "url": "https://finance.yahoo.com/m/6733ccab-9268-3cff-b044-06abef33106a/why-ssr-mining-stock-was-a.html",
+        "source": "Motley Fool",
+        "published_at": "2026-09-02T23:52:16Z",
+        "fetched_at": "2026-09-03T08:01:56Z",
+        "ticker": null,
+        "source_tier": "aggregator"
+      },
+      {
+        "title": "The Best-Performing Commodity ETFs of 2026: Oil and Broad Baskets Lead the Pack",
+        "summary": "",
+        "url": "https://finance.yahoo.com/m/249a0e56-94dc-38c4-855d-4735473e9da5/the-best-performing-commodity.html",
+        "source": "etf.com",
+        "published_at": "2026-09-02T23:26:17Z",
+        "fetched_at": "2026-09-03T08:01:56Z",
+        "ticker": null,
+        "source_tier": "aggregator"
+      },
+      {
+        "title": "Why Hycroft Mining Stock Zoomed More Than 7% Higher Today",
+        "summary": "",
+        "url": "https://finance.yahoo.com/m/4c2f0ff7-b9e6-35c2-ba2f-9a8a83ff2034/why-hycroft-mining-stock.html",
+        "source": "Motley Fool",
+        "published_at": "2026-09-02T23:05:02Z",
+        "fetched_at": "2026-09-03T08:01:56Z",
+        "ticker": null,
+        "source_tier": "aggregator"
+      },
+      {
+        "title": "Walmart Insider Sold Shares Worth $415,298, According to a Recent SEC Filing",
+        "summary": "",
+        "url": "https://finance.yahoo.com/markets/stocks/articles/walmart-insider-sold-shares-worth-210349016.html",
+        "source": "MT Newswires",
+        "published_at": "2026-09-02T21:03:49Z",
+        "fetched_at": "2026-09-03T08:01:56Z",
+        "ticker": null,
+        "source_tier": "aggregator"
+      },
+      {
+        "title": "Basic Materials Roundup: Market Talk",
+        "summary": "",
+        "url": "https://finance.yahoo.com/m/bd2d3ff6-a89e-38c8-9656-fdcf3a7a510b/basic-materials-roundup%3A.html",
+        "source": "The Wall Street Journal",
+        "published_at": "2026-09-02T21:02:00Z",
+        "fetched_at": "2026-09-03T08:01:56Z",
+        "ticker": null,
+        "source_tier": "aggregator"
+      },
+      {
+        "title": "Kroger Names Chief Store Operations Officer",
+        "summary": "",
+        "url": "https://finance.yahoo.com/markets/stocks/articles/kroger-names-chief-store-operations-205706562.html",
+        "source": "MT Newswires",
+        "published_at": "2026-09-02T20:57:06Z",
+        "fetched_at": "2026-09-03T08:01:56Z",
         "ticker": null,
         "source_tier": "aggregator"
       }
@@ -130,9 +130,9 @@
       "status": "empty",
       "query_type": "ticker",
       "ticker": "515880.SS",
-      "start_date": "2026-09-02",
-      "end_date": "2026-09-02",
-      "fetched_at": "2026-09-02T08:01:48Z",
+      "start_date": "2026-09-03",
+      "end_date": "2026-09-03",
+      "fetched_at": "2026-09-03T08:01:58Z",
       "items": [],
       "source_statuses": [
         {
@@ -156,9 +156,9 @@
       "status": "empty",
       "query_type": "ticker",
       "ticker": "512480.SS",
-      "start_date": "2026-09-02",
-      "end_date": "2026-09-02",
-      "fetched_at": "2026-09-02T08:01:51Z",
+      "start_date": "2026-09-03",
+      "end_date": "2026-09-03",
+      "fetched_at": "2026-09-03T08:01:59Z",
       "items": [],
       "source_statuses": [
         {
@@ -181,102 +181,102 @@
   },
   "items": [
     {
-      "title": "Why Tech Stocks Rule The Market, Even As Their Revenue Trails Consumer And Banking Giants",
+      "title": "Kroger (KR) Taps Mark Ibbotson To Help Drive Its Store And Digital Shift",
       "summary": "",
-      "url": "https://finance.yahoo.com/m/01d1a1d1-7a00-3f0c-b3f9-e1813db83d1c/why-tech-stocks-rule-the.html",
-      "source": "Stocktwits",
-      "published_at": "2026-09-02T07:53:10Z",
-      "fetched_at": "2026-09-02T08:01:47Z",
-      "ticker": null,
-      "source_tier": "aggregator"
-    },
-    {
-      "title": "Dollar hits 7-week high, Middle East conflict and rate paths in focus",
-      "summary": "",
-      "url": "https://finance.yahoo.com/markets/currencies/articles/dollar-holds-firm-middle-east-010249651.html",
-      "source": "Reuters",
-      "published_at": "2026-09-02T07:35:32Z",
-      "fetched_at": "2026-09-02T08:01:47Z",
-      "ticker": null,
-      "source_tier": "aggregator"
-    },
-    {
-      "title": "Stocks drop as yields and oil prices spike on Mideast flare-up",
-      "summary": "",
-      "url": "https://finance.yahoo.com/markets/articles/stocks-sink-yields-multi-decade-024500420.html",
-      "source": "AFP",
-      "published_at": "2026-09-02T07:32:10Z",
-      "fetched_at": "2026-09-02T08:01:47Z",
-      "ticker": null,
-      "source_tier": "aggregator"
-    },
-    {
-      "title": "European shares pinned at one-month low as flaring Mideast tensions lift bond yields",
-      "summary": "",
-      "url": "https://finance.yahoo.com/markets/world-indices/articles/european-shares-pinned-one-month-072719530.html",
-      "source": "Reuters",
-      "published_at": "2026-09-02T07:27:19Z",
-      "fetched_at": "2026-09-02T08:01:47Z",
-      "ticker": null,
-      "source_tier": "aggregator"
-    },
-    {
-      "title": "European Equities Mixed in Muted Trade",
-      "summary": "",
-      "url": "https://finance.yahoo.com/m/3a61364d-aad0-3b44-b878-ea8ff39cf2eb/european-equities-mixed-in.html",
-      "source": "The Wall Street Journal",
-      "published_at": "2026-09-02T07:26:00Z",
-      "fetched_at": "2026-09-02T08:01:47Z",
-      "ticker": null,
-      "source_tier": "aggregator"
-    },
-    {
-      "title": "Eurozone Bond Yields Rise With Global Peers; 10-Year Bund Yield Hits New 15-Year Hig",
-      "summary": "",
-      "url": "https://finance.yahoo.com/m/f3e71e55-629a-39e4-80e2-7614fbda0854/eurozone-bond-yields-rise.html",
-      "source": "The Wall Street Journal",
-      "published_at": "2026-09-02T06:55:00Z",
-      "fetched_at": "2026-09-02T08:01:47Z",
-      "ticker": null,
-      "source_tier": "aggregator"
-    },
-    {
-      "title": "Dollar Rises to Highest in Nearly Three Weeks Vs Basket of Currencies",
-      "summary": "",
-      "url": "https://finance.yahoo.com/m/5608d87c-d647-35f8-8aca-b6895950fe50/dollar-rises-to-highest-in.html",
-      "source": "The Wall Street Journal",
-      "published_at": "2026-09-02T06:51:00Z",
-      "fetched_at": "2026-09-02T08:01:47Z",
-      "ticker": null,
-      "source_tier": "aggregator"
-    },
-    {
-      "title": "Why Is The Crypto Market Down Today?",
-      "summary": "",
-      "url": "https://finance.yahoo.com/m/e4348eaa-5ce1-3b9d-aaad-6e2b0f5ef5ee/why-is-the-crypto-market-down.html",
-      "source": "BeInCrypto",
-      "published_at": "2026-09-02T06:27:37Z",
-      "fetched_at": "2026-09-02T08:01:47Z",
-      "ticker": null,
-      "source_tier": "aggregator"
-    },
-    {
-      "title": "Stock Market: Will S&P 500 Open Up or Down Today?",
-      "summary": "",
-      "url": "https://finance.yahoo.com/m/3a757a8c-f7f3-36f8-ad48-0212b5f4b9d5/stock-market%3A-will-s%26p-500.html",
-      "source": "Benzinga Prediction Markets",
-      "published_at": "2026-09-02T06:22:16Z",
-      "fetched_at": "2026-09-02T08:01:47Z",
-      "ticker": null,
-      "source_tier": "aggregator"
-    },
-    {
-      "title": "ExxonMobil Holdings (XOM) Could Be 3% Undervalued On Shell Chemicals Bid Talk",
-      "summary": "",
-      "url": "https://finance.yahoo.com/energy/articles/exxonmobil-holdings-xom-could-3-061216768.html",
+      "url": "https://finance.yahoo.com/markets/stocks/articles/kroger-kr-taps-mark-ibbotson-070632963.html",
       "source": "Simply Wall St.",
-      "published_at": "2026-09-02T06:12:16Z",
-      "fetched_at": "2026-09-02T08:01:47Z",
+      "published_at": "2026-09-03T07:06:32Z",
+      "fetched_at": "2026-09-03T08:01:56Z",
+      "ticker": null,
+      "source_tier": "aggregator"
+    },
+    {
+      "title": "3 AI Power Stocks With Revenue Over $4B",
+      "summary": "",
+      "url": "https://finance.yahoo.com/markets/stocks/articles/3-ai-power-stocks-revenue-043333548.html",
+      "source": "Simply Wall St.",
+      "published_at": "2026-09-03T04:33:33Z",
+      "fetched_at": "2026-09-03T08:01:56Z",
+      "ticker": null,
+      "source_tier": "aggregator"
+    },
+    {
+      "title": "How many employees does UnitedHealth have in 2026? Locations & layoffs explained",
+      "summary": "",
+      "url": "https://finance.yahoo.com/m/2e8e5ded-1c45-38f7-a5cf-ec0a2f2a952c/how-many-employees-does.html",
+      "source": "TheStreet",
+      "published_at": "2026-09-03T01:33:40Z",
+      "fetched_at": "2026-09-03T08:01:56Z",
+      "ticker": null,
+      "source_tier": "aggregator"
+    },
+    {
+      "title": "DOJ Antitrust Unit Adds Eight Retailers to Beef Pricing Investigation",
+      "summary": "",
+      "url": "https://finance.yahoo.com/economy/policy/articles/doj-antitrust-unit-adds-eight-235309040.html",
+      "source": "MT Newswires",
+      "published_at": "2026-09-02T23:53:09Z",
+      "fetched_at": "2026-09-03T08:01:56Z",
+      "ticker": null,
+      "source_tier": "aggregator"
+    },
+    {
+      "title": "Why SSR Mining Stock Was a Winner on Wednesday",
+      "summary": "",
+      "url": "https://finance.yahoo.com/m/6733ccab-9268-3cff-b044-06abef33106a/why-ssr-mining-stock-was-a.html",
+      "source": "Motley Fool",
+      "published_at": "2026-09-02T23:52:16Z",
+      "fetched_at": "2026-09-03T08:01:56Z",
+      "ticker": null,
+      "source_tier": "aggregator"
+    },
+    {
+      "title": "The Best-Performing Commodity ETFs of 2026: Oil and Broad Baskets Lead the Pack",
+      "summary": "",
+      "url": "https://finance.yahoo.com/m/249a0e56-94dc-38c4-855d-4735473e9da5/the-best-performing-commodity.html",
+      "source": "etf.com",
+      "published_at": "2026-09-02T23:26:17Z",
+      "fetched_at": "2026-09-03T08:01:56Z",
+      "ticker": null,
+      "source_tier": "aggregator"
+    },
+    {
+      "title": "Why Hycroft Mining Stock Zoomed More Than 7% Higher Today",
+      "summary": "",
+      "url": "https://finance.yahoo.com/m/4c2f0ff7-b9e6-35c2-ba2f-9a8a83ff2034/why-hycroft-mining-stock.html",
+      "source": "Motley Fool",
+      "published_at": "2026-09-02T23:05:02Z",
+      "fetched_at": "2026-09-03T08:01:56Z",
+      "ticker": null,
+      "source_tier": "aggregator"
+    },
+    {
+      "title": "Walmart Insider Sold Shares Worth $415,298, According to a Recent SEC Filing",
+      "summary": "",
+      "url": "https://finance.yahoo.com/markets/stocks/articles/walmart-insider-sold-shares-worth-210349016.html",
+      "source": "MT Newswires",
+      "published_at": "2026-09-02T21:03:49Z",
+      "fetched_at": "2026-09-03T08:01:56Z",
+      "ticker": null,
+      "source_tier": "aggregator"
+    },
+    {
+      "title": "Basic Materials Roundup: Market Talk",
+      "summary": "",
+      "url": "https://finance.yahoo.com/m/bd2d3ff6-a89e-38c8-9656-fdcf3a7a510b/basic-materials-roundup%3A.html",
+      "source": "The Wall Street Journal",
+      "published_at": "2026-09-02T21:02:00Z",
+      "fetched_at": "2026-09-03T08:01:56Z",
+      "ticker": null,
+      "source_tier": "aggregator"
+    },
+    {
+      "title": "Kroger Names Chief Store Operations Officer",
+      "summary": "",
+      "url": "https://finance.yahoo.com/markets/stocks/articles/kroger-names-chief-store-operations-205706562.html",
+      "source": "MT Newswires",
+      "published_at": "2026-09-02T20:57:06Z",
+      "fetched_at": "2026-09-03T08:01:56Z",
       "ticker": null,
       "source_tier": "aggregator"
     }
