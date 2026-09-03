@@ -1,10 +1,10 @@
 {
   "version": 1,
-  "generatedAt": "2026-09-02T15:05:37.669Z",
+  "generatedAt": "2026-09-03T14:59:35.475Z",
   "status": "degraded",
   "coverage": {
     "policy": "current-listed-best-effort-plus-configured-core",
-    "cnCurrentListedStocks": 5553,
+    "cnCurrentListedStocks": 5554,
     "cnConfiguredCore": 3,
     "usCore": 9,
     "hkCore": 1,
@@ -16,13 +16,13 @@
       "id": "sina-market-center",
       "role": "CN current-listed discovery",
       "quality": "best_effort",
-      "asOf": "2026-09-02T15:05:37.669Z"
+      "asOf": "2026-09-03T14:59:35.475Z"
     },
     {
       "id": "workbench-settings",
       "role": "configured HK/US/CN core instruments",
       "quality": "declared",
-      "asOf": "2026-09-02T15:05:37.669Z"
+      "asOf": "2026-09-03T14:59:35.475Z"
     }
   ],
   "instruments": [
@@ -21225,7 +21225,7 @@
     },
     {
       "symbol": "300472.SZ",
-      "name": "*ST新元",
+      "name": "ST新元",
       "market": "CN",
       "exchange": "SZ",
       "instrumentType": "stock",
@@ -31862,7 +31862,7 @@
     },
     {
       "symbol": "301688.SZ",
-      "name": "N格林",
+      "name": "C格林",
       "market": "CN",
       "exchange": "SZ",
       "instrumentType": "stock",
@@ -53334,7 +53334,7 @@
     },
     {
       "symbol": "688281.SS",
-      "name": "华秦科技",
+      "name": "XD华秦科",
       "market": "CN",
       "exchange": "SS",
       "instrumentType": "stock",
@@ -55347,7 +55347,7 @@
     },
     {
       "symbol": "688550.SS",
-      "name": "瑞联新材",
+      "name": "XD瑞联新",
       "market": "CN",
       "exchange": "SS",
       "instrumentType": "stock",
@@ -55600,7 +55600,7 @@
     },
     {
       "symbol": "688578.SS",
-      "name": "XD艾力斯",
+      "name": "艾力斯",
       "market": "CN",
       "exchange": "SS",
       "instrumentType": "stock",
@@ -57955,6 +57955,17 @@
     {
       "symbol": "920069.BJ",
       "name": "普昂医疗",
+      "market": "CN",
+      "exchange": "BJ",
+      "instrumentType": "stock",
+      "industry": null,
+      "listDate": null,
+      "source": "sina-market-center",
+      "coverage": "current_listed_best_effort"
+    },
+    {
+      "symbol": "920071.BJ",
+      "name": "N金钛",
       "market": "CN",
       "exchange": "BJ",
       "instrumentType": "stock",
