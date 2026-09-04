@@ -1,10 +1,10 @@
 {
   "version": 1,
-  "generatedAt": "2026-09-03T14:59:35.475Z",
+  "generatedAt": "2026-09-04T14:57:09.132Z",
   "status": "degraded",
   "coverage": {
     "policy": "current-listed-best-effort-plus-configured-core",
-    "cnCurrentListedStocks": 5554,
+    "cnCurrentListedStocks": 5555,
     "cnConfiguredCore": 3,
     "usCore": 9,
     "hkCore": 1,
@@ -16,13 +16,13 @@
       "id": "sina-market-center",
       "role": "CN current-listed discovery",
       "quality": "best_effort",
-      "asOf": "2026-09-03T14:59:35.475Z"
+      "asOf": "2026-09-04T14:57:09.132Z"
     },
     {
       "id": "workbench-settings",
       "role": "configured HK/US/CN core instruments",
       "quality": "declared",
-      "asOf": "2026-09-03T14:59:35.475Z"
+      "asOf": "2026-09-04T14:57:09.132Z"
     }
   ],
   "instruments": [
@@ -44325,7 +44325,7 @@
     },
     {
       "symbol": "603182.SS",
-      "name": "嘉华股份",
+      "name": "XD嘉华股",
       "market": "CN",
       "exchange": "SS",
       "instrumentType": "stock",
@@ -44974,7 +44974,7 @@
     },
     {
       "symbol": "603259.SS",
-      "name": "药明康德",
+      "name": "XD药明康",
       "market": "CN",
       "exchange": "SS",
       "instrumentType": "stock",
@@ -53334,7 +53334,7 @@
     },
     {
       "symbol": "688281.SS",
-      "name": "XD华秦科",
+      "name": "华秦科技",
       "market": "CN",
       "exchange": "SS",
       "instrumentType": "stock",
@@ -55347,7 +55347,7 @@
     },
     {
       "symbol": "688550.SS",
-      "name": "XD瑞联新",
+      "name": "瑞联新材",
       "market": "CN",
       "exchange": "SS",
       "instrumentType": "stock",
@@ -57965,7 +57965,7 @@
     },
     {
       "symbol": "920071.BJ",
-      "name": "N金钛",
+      "name": "金钛股份",
       "market": "CN",
       "exchange": "BJ",
       "instrumentType": "stock",
@@ -59286,6 +59286,17 @@
     {
       "symbol": "920288.BJ",
       "name": "华大海天",
+      "market": "CN",
+      "exchange": "BJ",
+      "instrumentType": "stock",
+      "industry": null,
+      "listDate": null,
+      "source": "sina-market-center",
+      "coverage": "current_listed_best_effort"
+    },
+    {
+      "symbol": "920289.BJ",
+      "name": "N华汇",
       "market": "CN",
       "exchange": "BJ",
       "instrumentType": "stock",
@@ -60847,7 +60858,7 @@
     },
     {
       "symbol": "920879.BJ",
-      "name": "基康技术",
+      "name": "XD基康技",
       "market": "CN",
       "exchange": "BJ",
       "instrumentType": "stock",
