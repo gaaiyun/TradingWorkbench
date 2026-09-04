@@ -1,113 +1,113 @@
 {
   "version": 1,
   "status": "ok",
-  "generated_at": "2026-09-03T16:01:54+08:00",
-  "trade_date": "2026-09-03",
+  "generated_at": "2026-09-04T16:01:56+08:00",
+  "trade_date": "2026-09-04",
   "global": {
     "status": "ok",
     "query_type": "global",
     "ticker": null,
-    "start_date": "2026-08-27",
-    "end_date": "2026-09-03",
-    "fetched_at": "2026-09-03T08:01:56Z",
+    "start_date": "2026-08-28",
+    "end_date": "2026-09-04",
+    "fetched_at": "2026-09-04T08:01:58Z",
     "items": [
       {
-        "title": "Kroger (KR) Taps Mark Ibbotson To Help Drive Its Store And Digital Shift",
+        "title": "Asian stocks rally as traders pare rate bets ahead of jobs data",
         "summary": "",
-        "url": "https://finance.yahoo.com/markets/stocks/articles/kroger-kr-taps-mark-ibbotson-070632963.html",
+        "url": "https://finance.yahoo.com/markets/world-indices/articles/asian-stocks-rally-traders-pare-024214659.html",
+        "source": "AFP",
+        "published_at": "2026-09-04T07:31:21Z",
+        "fetched_at": "2026-09-04T08:01:58Z",
+        "ticker": null,
+        "source_tier": "aggregator"
+      },
+      {
+        "title": "How Many Times Will The Fed Hike Rates This Year? What Retail Traders Think Happens Next",
+        "summary": "",
+        "url": "https://finance.yahoo.com/m/5a0cc168-230b-3855-910f-fdc336a9d53b/how-many-times-will-the-fed.html",
+        "source": "Stocktwits",
+        "published_at": "2026-09-04T06:13:50Z",
+        "fetched_at": "2026-09-04T08:01:58Z",
+        "ticker": null,
+        "source_tier": "aggregator"
+      },
+      {
+        "title": "Brent Nears $96 as Iran Conflict Keeps Oil Market on Edge",
+        "summary": "",
+        "url": "https://finance.yahoo.com/energy/articles/brent-nears-96-iran-conflict-054000574.html",
+        "source": "Oilprice.com",
+        "published_at": "2026-09-04T05:40:00Z",
+        "fetched_at": "2026-09-04T08:01:58Z",
+        "ticker": null,
+        "source_tier": "aggregator"
+      },
+      {
+        "title": "Should Crescent Energy’s Upbeat Q2 and Guidance Shift Require Action From Crescent Energy (CRGY) Investors?",
+        "summary": "",
+        "url": "https://finance.yahoo.com/markets/stocks/articles/crescent-energy-upbeat-q2-guidance-021635375.html",
         "source": "Simply Wall St.",
-        "published_at": "2026-09-03T07:06:32Z",
-        "fetched_at": "2026-09-03T08:01:56Z",
+        "published_at": "2026-09-04T02:16:35Z",
+        "fetched_at": "2026-09-04T08:01:58Z",
         "ticker": null,
         "source_tier": "aggregator"
       },
       {
-        "title": "3 AI Power Stocks With Revenue Over $4B",
+        "title": "9-3-2026: Oil Surges on Iran Tensions, Yields Swing + Tech Holds Up",
         "summary": "",
-        "url": "https://finance.yahoo.com/markets/stocks/articles/3-ai-power-stocks-revenue-043333548.html",
-        "source": "Simply Wall St.",
-        "published_at": "2026-09-03T04:33:33Z",
-        "fetched_at": "2026-09-03T08:01:56Z",
+        "url": "https://finance.yahoo.com/video/9-3-2026-oil-surges-021345437.html",
+        "source": "NYSE",
+        "published_at": "2026-09-04T02:13:45Z",
+        "fetched_at": "2026-09-04T08:01:58Z",
         "ticker": null,
         "source_tier": "aggregator"
       },
       {
-        "title": "How many employees does UnitedHealth have in 2026? Locations & layoffs explained",
+        "title": "Oil ETFs Are Crushing Oil Itself, Thanks to the Futures Curve",
         "summary": "",
-        "url": "https://finance.yahoo.com/m/2e8e5ded-1c45-38f7-a5cf-ec0a2f2a952c/how-many-employees-does.html",
-        "source": "TheStreet",
-        "published_at": "2026-09-03T01:33:40Z",
-        "fetched_at": "2026-09-03T08:01:56Z",
-        "ticker": null,
-        "source_tier": "aggregator"
-      },
-      {
-        "title": "DOJ Antitrust Unit Adds Eight Retailers to Beef Pricing Investigation",
-        "summary": "",
-        "url": "https://finance.yahoo.com/economy/policy/articles/doj-antitrust-unit-adds-eight-235309040.html",
-        "source": "MT Newswires",
-        "published_at": "2026-09-02T23:53:09Z",
-        "fetched_at": "2026-09-03T08:01:56Z",
-        "ticker": null,
-        "source_tier": "aggregator"
-      },
-      {
-        "title": "Why SSR Mining Stock Was a Winner on Wednesday",
-        "summary": "",
-        "url": "https://finance.yahoo.com/m/6733ccab-9268-3cff-b044-06abef33106a/why-ssr-mining-stock-was-a.html",
-        "source": "Motley Fool",
-        "published_at": "2026-09-02T23:52:16Z",
-        "fetched_at": "2026-09-03T08:01:56Z",
-        "ticker": null,
-        "source_tier": "aggregator"
-      },
-      {
-        "title": "The Best-Performing Commodity ETFs of 2026: Oil and Broad Baskets Lead the Pack",
-        "summary": "",
-        "url": "https://finance.yahoo.com/m/249a0e56-94dc-38c4-855d-4735473e9da5/the-best-performing-commodity.html",
+        "url": "https://finance.yahoo.com/m/2ffca22d-e7ed-31f2-82a7-ef95ed81b083/oil-etfs-are-crushing-oil.html",
         "source": "etf.com",
-        "published_at": "2026-09-02T23:26:17Z",
-        "fetched_at": "2026-09-03T08:01:56Z",
+        "published_at": "2026-09-04T01:49:11Z",
+        "fetched_at": "2026-09-04T08:01:58Z",
         "ticker": null,
         "source_tier": "aggregator"
       },
       {
-        "title": "Why Hycroft Mining Stock Zoomed More Than 7% Higher Today",
+        "title": "Goldman’s Energy Dividend Picks: Why Devon and HF Sinclair Still Offer Upside",
         "summary": "",
-        "url": "https://finance.yahoo.com/m/4c2f0ff7-b9e6-35c2-ba2f-9a8a83ff2034/why-hycroft-mining-stock.html",
-        "source": "Motley Fool",
-        "published_at": "2026-09-02T23:05:02Z",
-        "fetched_at": "2026-09-03T08:01:56Z",
+        "url": "https://finance.yahoo.com/energy/articles/goldman-energy-dividend-picks-why-013009416.html",
+        "source": "Insider Monkey",
+        "published_at": "2026-09-04T01:30:09Z",
+        "fetched_at": "2026-09-04T08:01:58Z",
         "ticker": null,
         "source_tier": "aggregator"
       },
       {
-        "title": "Walmart Insider Sold Shares Worth $415,298, According to a Recent SEC Filing",
+        "title": "Why Big Oil Is Wary of Trump’s Foray Into Venezuela’s Oil Patch",
         "summary": "",
-        "url": "https://finance.yahoo.com/markets/stocks/articles/walmart-insider-sold-shares-worth-210349016.html",
-        "source": "MT Newswires",
-        "published_at": "2026-09-02T21:03:49Z",
-        "fetched_at": "2026-09-03T08:01:56Z",
-        "ticker": null,
-        "source_tier": "aggregator"
-      },
-      {
-        "title": "Basic Materials Roundup: Market Talk",
-        "summary": "",
-        "url": "https://finance.yahoo.com/m/bd2d3ff6-a89e-38c8-9656-fdcf3a7a510b/basic-materials-roundup%3A.html",
+        "url": "https://finance.yahoo.com/m/83581f72-7489-3b42-ae89-1651468e5f0f/why-big-oil-is-wary-of.html",
         "source": "The Wall Street Journal",
-        "published_at": "2026-09-02T21:02:00Z",
-        "fetched_at": "2026-09-03T08:01:56Z",
+        "published_at": "2026-09-04T01:00:00Z",
+        "fetched_at": "2026-09-04T08:01:58Z",
         "ticker": null,
         "source_tier": "aggregator"
       },
       {
-        "title": "Kroger Names Chief Store Operations Officer",
+        "title": "Oil Rises Amid Elevated Supply-Disruption Concerns",
         "summary": "",
-        "url": "https://finance.yahoo.com/markets/stocks/articles/kroger-names-chief-store-operations-205706562.html",
-        "source": "MT Newswires",
-        "published_at": "2026-09-02T20:57:06Z",
-        "fetched_at": "2026-09-03T08:01:56Z",
+        "url": "https://finance.yahoo.com/m/90fb06f5-2a3d-3840-90db-3be47e69a5bb/oil-rises-amid-elevated.html",
+        "source": "The Wall Street Journal",
+        "published_at": "2026-09-04T00:27:00Z",
+        "fetched_at": "2026-09-04T08:01:58Z",
+        "ticker": null,
+        "source_tier": "aggregator"
+      },
+      {
+        "title": "Nikkei Rises 0.5%, Led by Tech, Financial Stocks",
+        "summary": "",
+        "url": "https://finance.yahoo.com/m/eef101ba-3aa9-3dc6-b4ab-fbc24b0d6828/nikkei-rises-0.5%25%2C-led-by.html",
+        "source": "The Wall Street Journal",
+        "published_at": "2026-09-04T00:24:00Z",
+        "fetched_at": "2026-09-04T08:01:58Z",
         "ticker": null,
         "source_tier": "aggregator"
       }
@@ -116,24 +116,35 @@
       {
         "source": "Yahoo Finance",
         "status": "ok",
-        "item_count": 49
+        "item_count": 39
       },
       {
         "source": "Federal Reserve",
-        "status": "ok",
-        "item_count": 1
+        "status": "empty",
+        "item_count": 0
       }
     ]
   },
   "tickers": {
     "515880.SS": {
-      "status": "empty",
+      "status": "ok",
       "query_type": "ticker",
       "ticker": "515880.SS",
-      "start_date": "2026-09-03",
-      "end_date": "2026-09-03",
-      "fetched_at": "2026-09-03T08:01:58Z",
-      "items": [],
+      "start_date": "2026-09-04",
+      "end_date": "2026-09-04",
+      "fetched_at": "2026-09-04T08:01:59Z",
+      "items": [
+        {
+          "title": "9月3日通信ETF国泰（515880）份额减少2600.00万份，最新份额625.48亿份，最新规模404.56亿元",
+          "summary": "9月3日通信ETF国泰（515880）份额减少2600.00万份，最新份额625.48亿份，最新规模404.56亿元 新浪财经",
+          "url": "https://news.google.com/rss/articles/CBMimwFBVV95cUxQQjB4R0x5NTdyb1JFSHhaUk1FamZTZVRqRm0wNjc3OUdLNzBfQVFMaldrSEdXSU1mOEg1Yzl1N0FuRi1LaHVKcERpczZ5VVFLdEg0V1A3XzFDZ1NucTVSM2lYcHplUXpLTHd0dWE0eVRMbVJ5M3BqeXJEM1VjV2dFZWZIVDNEWE9XblZQWHZBUzM4Szd6cnNvbUl2bw?oc=5",
+          "source": "Google News / 新浪财经",
+          "published_at": "2026-09-04T01:00:00Z",
+          "fetched_at": "2026-09-04T08:01:59Z",
+          "ticker": "515880.SS",
+          "source_tier": "aggregator"
+        }
+      ],
       "source_statuses": [
         {
           "source": "Yahoo Finance",
@@ -142,8 +153,8 @@
         },
         {
           "source": "Google News RSS",
-          "status": "empty",
-          "item_count": 0
+          "status": "ok",
+          "item_count": 1
         },
         {
           "source": "SEC EDGAR",
@@ -153,13 +164,24 @@
       ]
     },
     "512480.SS": {
-      "status": "empty",
+      "status": "ok",
       "query_type": "ticker",
       "ticker": "512480.SS",
-      "start_date": "2026-09-03",
-      "end_date": "2026-09-03",
-      "fetched_at": "2026-09-03T08:01:59Z",
-      "items": [],
+      "start_date": "2026-09-04",
+      "end_date": "2026-09-04",
+      "fetched_at": "2026-09-04T08:02:01Z",
+      "items": [
+        {
+          "title": "半导体ETF国联安（512480）跌1.29%，半日成交额8.29亿元",
+          "summary": "半导体ETF国联安（512480）跌1.29%，半日成交额8.29亿元 新浪财经",
+          "url": "https://news.google.com/rss/articles/CBMimAFBVV95cUxQRHJfNlJEYk1JcXNoZUplT05LYjdyN29peThRVllpUmxmakZ3SzZjc2JXSWFKZlpFSDF2QnJsTzBNSEZLNmdubWVFLTE5eWswQldrbFhJY0RGOVg0UUk0WXZLVC1ORmpQeW1NdFE4UWNEQUxvTWZRMkU4SDdRUTk1VWJYWEJ3bEphc2p4ZkRKUGc0SE1jSk5Ldg?oc=5",
+          "source": "Google News / 新浪财经",
+          "published_at": "2026-09-04T03:31:00Z",
+          "fetched_at": "2026-09-04T08:02:01Z",
+          "ticker": "512480.SS",
+          "source_tier": "aggregator"
+        }
+      ],
       "source_statuses": [
         {
           "source": "Yahoo Finance",
@@ -168,8 +190,8 @@
         },
         {
           "source": "Google News RSS",
-          "status": "empty",
-          "item_count": 0
+          "status": "ok",
+          "item_count": 1
         },
         {
           "source": "SEC EDGAR",
@@ -181,102 +203,122 @@
   },
   "items": [
     {
-      "title": "Kroger (KR) Taps Mark Ibbotson To Help Drive Its Store And Digital Shift",
+      "title": "Asian stocks rally as traders pare rate bets ahead of jobs data",
       "summary": "",
-      "url": "https://finance.yahoo.com/markets/stocks/articles/kroger-kr-taps-mark-ibbotson-070632963.html",
+      "url": "https://finance.yahoo.com/markets/world-indices/articles/asian-stocks-rally-traders-pare-024214659.html",
+      "source": "AFP",
+      "published_at": "2026-09-04T07:31:21Z",
+      "fetched_at": "2026-09-04T08:01:58Z",
+      "ticker": null,
+      "source_tier": "aggregator"
+    },
+    {
+      "title": "How Many Times Will The Fed Hike Rates This Year? What Retail Traders Think Happens Next",
+      "summary": "",
+      "url": "https://finance.yahoo.com/m/5a0cc168-230b-3855-910f-fdc336a9d53b/how-many-times-will-the-fed.html",
+      "source": "Stocktwits",
+      "published_at": "2026-09-04T06:13:50Z",
+      "fetched_at": "2026-09-04T08:01:58Z",
+      "ticker": null,
+      "source_tier": "aggregator"
+    },
+    {
+      "title": "Brent Nears $96 as Iran Conflict Keeps Oil Market on Edge",
+      "summary": "",
+      "url": "https://finance.yahoo.com/energy/articles/brent-nears-96-iran-conflict-054000574.html",
+      "source": "Oilprice.com",
+      "published_at": "2026-09-04T05:40:00Z",
+      "fetched_at": "2026-09-04T08:01:58Z",
+      "ticker": null,
+      "source_tier": "aggregator"
+    },
+    {
+      "title": "半导体ETF国联安（512480）跌1.29%，半日成交额8.29亿元",
+      "summary": "半导体ETF国联安（512480）跌1.29%，半日成交额8.29亿元 新浪财经",
+      "url": "https://news.google.com/rss/articles/CBMimAFBVV95cUxQRHJfNlJEYk1JcXNoZUplT05LYjdyN29peThRVllpUmxmakZ3SzZjc2JXSWFKZlpFSDF2QnJsTzBNSEZLNmdubWVFLTE5eWswQldrbFhJY0RGOVg0UUk0WXZLVC1ORmpQeW1NdFE4UWNEQUxvTWZRMkU4SDdRUTk1VWJYWEJ3bEphc2p4ZkRKUGc0SE1jSk5Ldg?oc=5",
+      "source": "Google News / 新浪财经",
+      "published_at": "2026-09-04T03:31:00Z",
+      "fetched_at": "2026-09-04T08:02:01Z",
+      "ticker": "512480.SS",
+      "source_tier": "aggregator"
+    },
+    {
+      "title": "Should Crescent Energy’s Upbeat Q2 and Guidance Shift Require Action From Crescent Energy (CRGY) Investors?",
+      "summary": "",
+      "url": "https://finance.yahoo.com/markets/stocks/articles/crescent-energy-upbeat-q2-guidance-021635375.html",
       "source": "Simply Wall St.",
-      "published_at": "2026-09-03T07:06:32Z",
-      "fetched_at": "2026-09-03T08:01:56Z",
+      "published_at": "2026-09-04T02:16:35Z",
+      "fetched_at": "2026-09-04T08:01:58Z",
       "ticker": null,
       "source_tier": "aggregator"
     },
     {
-      "title": "3 AI Power Stocks With Revenue Over $4B",
+      "title": "9-3-2026: Oil Surges on Iran Tensions, Yields Swing + Tech Holds Up",
       "summary": "",
-      "url": "https://finance.yahoo.com/markets/stocks/articles/3-ai-power-stocks-revenue-043333548.html",
-      "source": "Simply Wall St.",
-      "published_at": "2026-09-03T04:33:33Z",
-      "fetched_at": "2026-09-03T08:01:56Z",
+      "url": "https://finance.yahoo.com/video/9-3-2026-oil-surges-021345437.html",
+      "source": "NYSE",
+      "published_at": "2026-09-04T02:13:45Z",
+      "fetched_at": "2026-09-04T08:01:58Z",
       "ticker": null,
       "source_tier": "aggregator"
     },
     {
-      "title": "How many employees does UnitedHealth have in 2026? Locations & layoffs explained",
+      "title": "Oil ETFs Are Crushing Oil Itself, Thanks to the Futures Curve",
       "summary": "",
-      "url": "https://finance.yahoo.com/m/2e8e5ded-1c45-38f7-a5cf-ec0a2f2a952c/how-many-employees-does.html",
-      "source": "TheStreet",
-      "published_at": "2026-09-03T01:33:40Z",
-      "fetched_at": "2026-09-03T08:01:56Z",
-      "ticker": null,
-      "source_tier": "aggregator"
-    },
-    {
-      "title": "DOJ Antitrust Unit Adds Eight Retailers to Beef Pricing Investigation",
-      "summary": "",
-      "url": "https://finance.yahoo.com/economy/policy/articles/doj-antitrust-unit-adds-eight-235309040.html",
-      "source": "MT Newswires",
-      "published_at": "2026-09-02T23:53:09Z",
-      "fetched_at": "2026-09-03T08:01:56Z",
-      "ticker": null,
-      "source_tier": "aggregator"
-    },
-    {
-      "title": "Why SSR Mining Stock Was a Winner on Wednesday",
-      "summary": "",
-      "url": "https://finance.yahoo.com/m/6733ccab-9268-3cff-b044-06abef33106a/why-ssr-mining-stock-was-a.html",
-      "source": "Motley Fool",
-      "published_at": "2026-09-02T23:52:16Z",
-      "fetched_at": "2026-09-03T08:01:56Z",
-      "ticker": null,
-      "source_tier": "aggregator"
-    },
-    {
-      "title": "The Best-Performing Commodity ETFs of 2026: Oil and Broad Baskets Lead the Pack",
-      "summary": "",
-      "url": "https://finance.yahoo.com/m/249a0e56-94dc-38c4-855d-4735473e9da5/the-best-performing-commodity.html",
+      "url": "https://finance.yahoo.com/m/2ffca22d-e7ed-31f2-82a7-ef95ed81b083/oil-etfs-are-crushing-oil.html",
       "source": "etf.com",
-      "published_at": "2026-09-02T23:26:17Z",
-      "fetched_at": "2026-09-03T08:01:56Z",
+      "published_at": "2026-09-04T01:49:11Z",
+      "fetched_at": "2026-09-04T08:01:58Z",
       "ticker": null,
       "source_tier": "aggregator"
     },
     {
-      "title": "Why Hycroft Mining Stock Zoomed More Than 7% Higher Today",
+      "title": "Goldman’s Energy Dividend Picks: Why Devon and HF Sinclair Still Offer Upside",
       "summary": "",
-      "url": "https://finance.yahoo.com/m/4c2f0ff7-b9e6-35c2-ba2f-9a8a83ff2034/why-hycroft-mining-stock.html",
-      "source": "Motley Fool",
-      "published_at": "2026-09-02T23:05:02Z",
-      "fetched_at": "2026-09-03T08:01:56Z",
+      "url": "https://finance.yahoo.com/energy/articles/goldman-energy-dividend-picks-why-013009416.html",
+      "source": "Insider Monkey",
+      "published_at": "2026-09-04T01:30:09Z",
+      "fetched_at": "2026-09-04T08:01:58Z",
       "ticker": null,
       "source_tier": "aggregator"
     },
     {
-      "title": "Walmart Insider Sold Shares Worth $415,298, According to a Recent SEC Filing",
+      "title": "Why Big Oil Is Wary of Trump’s Foray Into Venezuela’s Oil Patch",
       "summary": "",
-      "url": "https://finance.yahoo.com/markets/stocks/articles/walmart-insider-sold-shares-worth-210349016.html",
-      "source": "MT Newswires",
-      "published_at": "2026-09-02T21:03:49Z",
-      "fetched_at": "2026-09-03T08:01:56Z",
-      "ticker": null,
-      "source_tier": "aggregator"
-    },
-    {
-      "title": "Basic Materials Roundup: Market Talk",
-      "summary": "",
-      "url": "https://finance.yahoo.com/m/bd2d3ff6-a89e-38c8-9656-fdcf3a7a510b/basic-materials-roundup%3A.html",
+      "url": "https://finance.yahoo.com/m/83581f72-7489-3b42-ae89-1651468e5f0f/why-big-oil-is-wary-of.html",
       "source": "The Wall Street Journal",
-      "published_at": "2026-09-02T21:02:00Z",
-      "fetched_at": "2026-09-03T08:01:56Z",
+      "published_at": "2026-09-04T01:00:00Z",
+      "fetched_at": "2026-09-04T08:01:58Z",
       "ticker": null,
       "source_tier": "aggregator"
     },
     {
-      "title": "Kroger Names Chief Store Operations Officer",
+      "title": "9月3日通信ETF国泰（515880）份额减少2600.00万份，最新份额625.48亿份，最新规模404.56亿元",
+      "summary": "9月3日通信ETF国泰（515880）份额减少2600.00万份，最新份额625.48亿份，最新规模404.56亿元 新浪财经",
+      "url": "https://news.google.com/rss/articles/CBMimwFBVV95cUxQQjB4R0x5NTdyb1JFSHhaUk1FamZTZVRqRm0wNjc3OUdLNzBfQVFMaldrSEdXSU1mOEg1Yzl1N0FuRi1LaHVKcERpczZ5VVFLdEg0V1A3XzFDZ1NucTVSM2lYcHplUXpLTHd0dWE0eVRMbVJ5M3BqeXJEM1VjV2dFZWZIVDNEWE9XblZQWHZBUzM4Szd6cnNvbUl2bw?oc=5",
+      "source": "Google News / 新浪财经",
+      "published_at": "2026-09-04T01:00:00Z",
+      "fetched_at": "2026-09-04T08:01:59Z",
+      "ticker": "515880.SS",
+      "source_tier": "aggregator"
+    },
+    {
+      "title": "Oil Rises Amid Elevated Supply-Disruption Concerns",
       "summary": "",
-      "url": "https://finance.yahoo.com/markets/stocks/articles/kroger-names-chief-store-operations-205706562.html",
-      "source": "MT Newswires",
-      "published_at": "2026-09-02T20:57:06Z",
-      "fetched_at": "2026-09-03T08:01:56Z",
+      "url": "https://finance.yahoo.com/m/90fb06f5-2a3d-3840-90db-3be47e69a5bb/oil-rises-amid-elevated.html",
+      "source": "The Wall Street Journal",
+      "published_at": "2026-09-04T00:27:00Z",
+      "fetched_at": "2026-09-04T08:01:58Z",
+      "ticker": null,
+      "source_tier": "aggregator"
+    },
+    {
+      "title": "Nikkei Rises 0.5%, Led by Tech, Financial Stocks",
+      "summary": "",
+      "url": "https://finance.yahoo.com/m/eef101ba-3aa9-3dc6-b4ab-fbc24b0d6828/nikkei-rises-0.5%25%2C-led-by.html",
+      "source": "The Wall Street Journal",
+      "published_at": "2026-09-04T00:24:00Z",
+      "fetched_at": "2026-09-04T08:01:58Z",
       "ticker": null,
       "source_tier": "aggregator"
     }

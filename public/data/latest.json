@@ -1,7 +1,7 @@
 {
   "status": "ok",
-  "generated_at": "2026-09-03T16:01:54+08:00",
-  "trade_date": "2026-09-03",
+  "generated_at": "2026-09-04T16:01:56+08:00",
+  "trade_date": "2026-09-04",
   "provider": "openai_compatible",
   "analysts": [
     "market",
@@ -19,19 +19,19 @@
     "kind": "monitor"
   },
   "run": {
-    "id": "33731086966",
+    "id": "33851392714",
     "attempt": "1",
     "workflow": "daily-analysis",
-    "url": "https://github.com/gaaiyun/TradingWorkbench/actions/runs/33731086966"
+    "url": "https://github.com/gaaiyun/TradingWorkbench/actions/runs/33851392714"
   },
   "identity": {
     "scope": "profile",
     "kind": "monitor",
-    "runId": "33731086966",
+    "runId": "33851392714",
     "profileId": "cn-semi-comms",
     "requestId": null,
-    "slotId": "slot-315fe6765b5d62e0d2019c57d910d826d886819b68331a5a379fe17adb6960c7",
-    "scheduledFor": "2026-09-03T07:17:15.000Z"
+    "slotId": "slot-d047169d4dc434f4b76e00803c30f0afe77fa742f136c32af95da5bcfab373fd",
+    "scheduledFor": "2026-09-04T07:17:15.000Z"
   },
   "rating_tiers": [
     "Sell",
@@ -57,25 +57,25 @@
     },
     {
       "ticker": "512480.SS",
-      "rating": "Underweight",
-      "report": "reports/512480.SS/2026-09-03/complete_report.md",
+      "rating": "Not Rated",
+      "report": "reports/512480.SS/2026-09-04/complete_report.md",
       "files": {
-        "fundamentals": "reports/512480.SS/2026-09-03/1_analysts/fundamentals.md",
-        "market": "reports/512480.SS/2026-09-03/1_analysts/market.md",
-        "news": "reports/512480.SS/2026-09-03/1_analysts/news.md",
-        "bear": "reports/512480.SS/2026-09-03/2_research/bear.md",
-        "bull": "reports/512480.SS/2026-09-03/2_research/bull.md",
-        "manager": "reports/512480.SS/2026-09-03/2_research/manager.md",
-        "trader": "reports/512480.SS/2026-09-03/3_trading/trader.md",
-        "aggressive": "reports/512480.SS/2026-09-03/4_risk/aggressive.md",
-        "conservative": "reports/512480.SS/2026-09-03/4_risk/conservative.md",
-        "neutral": "reports/512480.SS/2026-09-03/4_risk/neutral.md",
-        "decision": "reports/512480.SS/2026-09-03/5_portfolio/decision.md",
-        "complete_report": "reports/512480.SS/2026-09-03/complete_report.md"
+        "fundamentals": "reports/512480.SS/2026-09-04/1_analysts/fundamentals.md",
+        "market": "reports/512480.SS/2026-09-04/1_analysts/market.md",
+        "news": "reports/512480.SS/2026-09-04/1_analysts/news.md",
+        "bear": "reports/512480.SS/2026-09-04/2_research/bear.md",
+        "bull": "reports/512480.SS/2026-09-04/2_research/bull.md",
+        "manager": "reports/512480.SS/2026-09-04/2_research/manager.md",
+        "trader": "reports/512480.SS/2026-09-04/3_trading/trader.md",
+        "aggressive": "reports/512480.SS/2026-09-04/4_risk/aggressive.md",
+        "conservative": "reports/512480.SS/2026-09-04/4_risk/conservative.md",
+        "neutral": "reports/512480.SS/2026-09-04/4_risk/neutral.md",
+        "decision": "reports/512480.SS/2026-09-04/5_portfolio/decision.md",
+        "complete_report": "reports/512480.SS/2026-09-04/complete_report.md"
       },
-      "decision_excerpt": "**Rating**: Underweight\n\n**Executive Summary**: 风险分析师辩论显示512480.SS存在政策催化剂与技术信号的冲突观点。激进分析师强调集成电路布图设计保护条例的长期政策支持[N2][N3]以及份额拆分带来的流动性改善[CA2][N6]。保守分析师则指出严格熊市均线排列[D7]和最近8个交易日收盘轻微下跌[D2]会增加持仓风险。高实现波动率[I10]进一步放大潜在损失可能性。不可用的NAV和溢折价数据[I2]削弱了政策落地后的具体影响评估。中立分析师建议持续监控均线交叉信号[D7]。综合来看技术负信号主导，推荐Underweight以逐步降低敞口。\n\n**Investment Thesis**: 中期报告确认了指数跟踪表现[N1][N4]。份额拆分公告虽被提及为正面事件[CA1][N5][N6]但缺乏具体实施效应证据。政策文件仅证明事件发生[N",
-      "analysis_status": "rated",
-      "audit_status": "verified",
+      "decision_excerpt": "**Rating**: Hold\n**Executive Summary**:\n过去8个交易日收盘价下跌3.63815143% [D2]。\n最新一日变化-2.39043825% [D3]。\n收盘低于MA20 6.63554518% [D5]且低于MA60 14.92317041% [D6]。\n严格呈现bearish移动平均对齐 [D7]。\nRSI14为39.36343373 [I11]未触及超卖30阈值 [D8]。\nMACD柱状图-0.00169784 [I8]显示动能负值。\n成交量在9868747股至16972792股间波动 [M664]至[M671]。\n份额拆分公告 [CA1] [CA2]提升了流动性但本身为基金调整信号而非增长驱动。\nNAV、溢折价、跟踪误差、费用率、持仓构成、集中度等关键指标均为unavailable。\n政策条例 [N2] [N3]仅提供集成电路保护框架但无直接实施",
+      "analysis_status": "insufficient_evidence",
+      "audit_status": "legacy_unverified",
       "evidence_publish": {
         "published": true,
         "status": 201
@@ -83,9 +83,9 @@
       "marketHistory": {
         "source": "tencent",
         "adjustment": "qfq",
-        "barCount": 670,
+        "barCount": 671,
         "startAt": "2023-11-29T16:00:00Z",
-        "endAt": "2026-09-02T16:00:00Z"
+        "endAt": "2026-09-03T16:00:00Z"
       },
       "error": null
     }
