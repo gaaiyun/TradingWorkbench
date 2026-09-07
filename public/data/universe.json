@@ -1,10 +1,10 @@
 {
   "version": 1,
-  "generatedAt": "2026-09-04T14:57:09.132Z",
+  "generatedAt": "2026-09-07T16:26:28.165Z",
   "status": "degraded",
   "coverage": {
     "policy": "current-listed-best-effort-plus-configured-core",
-    "cnCurrentListedStocks": 5555,
+    "cnCurrentListedStocks": 5557,
     "cnConfiguredCore": 3,
     "usCore": 9,
     "hkCore": 1,
@@ -16,13 +16,13 @@
       "id": "sina-market-center",
       "role": "CN current-listed discovery",
       "quality": "best_effort",
-      "asOf": "2026-09-04T14:57:09.132Z"
+      "asOf": "2026-09-07T16:26:28.165Z"
     },
     {
       "id": "workbench-settings",
       "role": "configured HK/US/CN core instruments",
       "quality": "declared",
-      "asOf": "2026-09-04T14:57:09.132Z"
+      "asOf": "2026-09-07T16:26:28.165Z"
     }
   ],
   "instruments": [
@@ -34953,7 +34953,7 @@
     },
     {
       "symbol": "600367.SS",
-      "name": "红星发展",
+      "name": "XD红星发",
       "market": "CN",
       "exchange": "SS",
       "instrumentType": "stock",
@@ -42389,7 +42389,7 @@
     },
     {
       "symbol": "601921.SS",
-      "name": "浙版传媒",
+      "name": "XD浙版传",
       "market": "CN",
       "exchange": "SS",
       "instrumentType": "stock",
@@ -44325,7 +44325,7 @@
     },
     {
       "symbol": "603182.SS",
-      "name": "XD嘉华股",
+      "name": "嘉华股份",
       "market": "CN",
       "exchange": "SS",
       "instrumentType": "stock",
@@ -44974,7 +44974,7 @@
     },
     {
       "symbol": "603259.SS",
-      "name": "XD药明康",
+      "name": "药明康德",
       "market": "CN",
       "exchange": "SS",
       "instrumentType": "stock",
@@ -46030,7 +46030,7 @@
     },
     {
       "symbol": "603379.SS",
-      "name": "三美股份",
+      "name": "XD三美股",
       "market": "CN",
       "exchange": "SS",
       "instrumentType": "stock",
@@ -46350,6 +46350,17 @@
     {
       "symbol": "603444.SS",
       "name": "吉比特",
+      "market": "CN",
+      "exchange": "SS",
+      "instrumentType": "stock",
+      "industry": null,
+      "listDate": null,
+      "source": "sina-market-center",
+      "coverage": "current_listed_best_effort"
+    },
+    {
+      "symbol": "603448.SS",
+      "name": "N天博",
       "market": "CN",
       "exchange": "SS",
       "instrumentType": "stock",
@@ -49726,7 +49737,7 @@
     },
     {
       "symbol": "605098.SS",
-      "name": "行动教育",
+      "name": "XD行动教",
       "market": "CN",
       "exchange": "SS",
       "instrumentType": "stock",
@@ -59207,6 +59218,17 @@
       "coverage": "current_listed_best_effort"
     },
     {
+      "symbol": "920269.BJ",
+      "name": "N杰锋",
+      "market": "CN",
+      "exchange": "BJ",
+      "instrumentType": "stock",
+      "industry": null,
+      "listDate": null,
+      "source": "sina-market-center",
+      "coverage": "current_listed_best_effort"
+    },
+    {
       "symbol": "920270.BJ",
       "name": "天铭科技",
       "market": "CN",
@@ -59296,7 +59318,7 @@
     },
     {
       "symbol": "920289.BJ",
-      "name": "N华汇",
+      "name": "华汇智能",
       "market": "CN",
       "exchange": "BJ",
       "instrumentType": "stock",
@@ -60858,7 +60880,7 @@
     },
     {
       "symbol": "920879.BJ",
-      "name": "XD基康技",
+      "name": "基康技术",
       "market": "CN",
       "exchange": "BJ",
       "instrumentType": "stock",
