@@ -1,113 +1,113 @@
 {
   "version": 1,
-  "status": "partial",
-  "generated_at": "2026-09-07T16:01:23+08:00",
-  "trade_date": "2026-09-07",
+  "status": "ok",
+  "generated_at": "2026-09-08T16:01:29+08:00",
+  "trade_date": "2026-09-08",
   "global": {
     "status": "ok",
     "query_type": "global",
     "ticker": null,
-    "start_date": "2026-08-31",
-    "end_date": "2026-09-07",
-    "fetched_at": "2026-09-07T08:01:24Z",
+    "start_date": "2026-09-01",
+    "end_date": "2026-09-08",
+    "fetched_at": "2026-09-08T08:01:30Z",
     "items": [
       {
-        "title": "Eurozone Bond Yields Open Higher, Thursday’s ECB Decision in Focus",
+        "title": "Stock Market: Will S&P 500 Open Up or Down Today?",
         "summary": "",
-        "url": "https://finance.yahoo.com/m/03dc6f44-9f10-30df-9c0e-4a4e2fbb799b/eurozone-bond-yields-open.html",
-        "source": "The Wall Street Journal",
-        "published_at": "2026-09-07T07:29:00Z",
-        "fetched_at": "2026-09-07T08:01:24Z",
+        "url": "https://finance.yahoo.com/m/f6027657-7ebf-3218-a5a0-0e0ab05618bb/stock-market%3A-will-s%26p-500.html",
+        "source": "Benzinga Prediction Markets",
+        "published_at": "2026-09-08T07:44:57Z",
+        "fetched_at": "2026-09-08T08:01:30Z",
         "ticker": null,
         "source_tier": "aggregator"
       },
       {
-        "title": "Dollar Declines, Shrugs Off Higher Oil Prices",
+        "title": "European shares dip as higher crude revives inflation worries; Novartis drags",
         "summary": "",
-        "url": "https://finance.yahoo.com/m/9160c575-c39f-3e0e-b978-11e2b46c64a7/dollar-declines%2C-shrugs-off.html",
-        "source": "The Wall Street Journal",
-        "published_at": "2026-09-07T07:17:00Z",
-        "fetched_at": "2026-09-07T08:01:24Z",
-        "ticker": null,
-        "source_tier": "aggregator"
-      },
-      {
-        "title": "Oil extends gains after US and Iran exchange attacks on ships",
-        "summary": "",
-        "url": "https://finance.yahoo.com/energy/articles/oil-extends-gains-us-iran-001532615.html",
+        "url": "https://finance.yahoo.com/markets/stocks/articles/european-shares-dip-higher-crude-071307627.html",
         "source": "Reuters",
-        "published_at": "2026-09-07T06:35:58Z",
-        "fetched_at": "2026-09-07T08:01:24Z",
+        "published_at": "2026-09-08T07:13:07Z",
+        "fetched_at": "2026-09-08T08:01:30Z",
         "ticker": null,
         "source_tier": "aggregator"
       },
       {
-        "title": "Tertiary Minerals extends Mushima North mineralisation at depth",
+        "title": "Oil rises as risks of prolonged Mideast conflict fan supply worries",
         "summary": "",
-        "url": "https://finance.yahoo.com/m/bbbca48f-b607-35a1-806e-b5e15eb12e09/tertiary-minerals-extends.html",
-        "source": "Proactive",
-        "published_at": "2026-09-07T06:28:00Z",
-        "fetched_at": "2026-09-07T08:01:24Z",
-        "ticker": null,
-        "source_tier": "aggregator"
-      },
-      {
-        "title": "Asia tech shares rally, others hesitate as oil climbs",
-        "summary": "",
-        "url": "https://finance.yahoo.com/markets/world-indices/articles/asia-shares-bounce-others-cautious-010602533.html",
+        "url": "https://finance.yahoo.com/energy/articles/oil-rises-risks-prolonged-mideast-005052539.html",
         "source": "Reuters",
-        "published_at": "2026-09-07T05:57:00Z",
-        "fetched_at": "2026-09-07T08:01:24Z",
+        "published_at": "2026-09-08T06:43:39Z",
+        "fetched_at": "2026-09-08T08:01:30Z",
         "ticker": null,
         "source_tier": "aggregator"
       },
       {
-        "title": "Shipping Fuel Shortage Looms as Refiners Prioritize Diesel",
+        "title": "U.S. Treasury Yields Edge Lower in Asian Trade",
         "summary": "",
-        "url": "https://finance.yahoo.com/energy/articles/shipping-fuel-shortage-looms-refiners-055000909.html",
+        "url": "https://finance.yahoo.com/m/13605f70-b88c-3e84-9ff4-6760d26c41b6/u.s.-treasury-yields-edge.html",
+        "source": "The Wall Street Journal",
+        "published_at": "2026-09-08T06:25:00Z",
+        "fetched_at": "2026-09-08T08:01:30Z",
+        "ticker": null,
+        "source_tier": "aggregator"
+      },
+      {
+        "title": "Asian shares and US futures decline, while oil prices press higher",
+        "summary": "",
+        "url": "https://finance.yahoo.com/markets/world-indices/articles/asian-shares-us-futures-mixed-054945712.html",
+        "source": "Associated Press",
+        "published_at": "2026-09-08T05:49:45Z",
+        "fetched_at": "2026-09-08T08:01:30Z",
+        "ticker": null,
+        "source_tier": "aggregator"
+      },
+      {
+        "title": "Oil Prices Climb Toward $100 as Middle East Peace Hopes Fade",
+        "summary": "",
+        "url": "https://finance.yahoo.com/energy/articles/oil-prices-climb-toward-100-053000885.html",
         "source": "Oilprice.com",
-        "published_at": "2026-09-07T05:50:00Z",
-        "fetched_at": "2026-09-07T08:01:24Z",
+        "published_at": "2026-09-08T05:30:00Z",
+        "fetched_at": "2026-09-08T08:01:30Z",
         "ticker": null,
         "source_tier": "aggregator"
       },
       {
-        "title": "Oil Rises as Escalating U.S.-Iran Conflict Stokes Supply Disruption Fears",
+        "title": "RUBIS: H1 2026 Results - Strong performance leading way to upgrade of 2026 guidance",
         "summary": "",
-        "url": "https://finance.yahoo.com/m/fb547e02-8aff-319b-bea2-487d0274bacd/oil-rises-as-escalating.html",
-        "source": "The Wall Street Journal",
-        "published_at": "2026-09-07T05:30:00Z",
-        "fetched_at": "2026-09-07T08:01:24Z",
+        "url": "https://finance.yahoo.com/energy/articles/rubis-h1-2026-results-strong-050000701.html",
+        "source": "GlobeNewswire",
+        "published_at": "2026-09-08T05:00:00Z",
+        "fetched_at": "2026-09-08T08:01:30Z",
         "ticker": null,
         "source_tier": "aggregator"
       },
       {
-        "title": "Iran, US Trade Tanker Attacks as Conflict Escalates",
+        "title": "Dow, S&P 500 Futures Decline Amid Rising Oil Prices As Iran War Escalates: MU, ORCL, INTC, BE Stocks In Focus",
         "summary": "",
-        "url": "https://finance.yahoo.com/video/iran-us-trade-tanker-attacks-050612379.html",
-        "source": "Bloomberg",
-        "published_at": "2026-09-07T05:06:12Z",
-        "fetched_at": "2026-09-07T08:01:24Z",
+        "url": "https://finance.yahoo.com/m/4dcdc60e-284b-3dd7-a408-636af30e3130/dow%2C-s%26p-500-futures-decline.html",
+        "source": "Stocktwits",
+        "published_at": "2026-09-08T02:19:20Z",
+        "fetched_at": "2026-09-08T08:01:30Z",
         "ticker": null,
         "source_tier": "aggregator"
       },
       {
-        "title": "Another rate hike, just for insurance: Five questions for the ECB",
+        "title": "Goldman Sachs Says Oil Could Hit $120 as Trump Dismisses Diplomacy with Iran",
         "summary": "",
-        "url": "https://finance.yahoo.com/economy/policy/articles/another-rate-hike-just-insurance-040303890.html",
-        "source": "Reuters",
-        "published_at": "2026-09-07T04:28:59Z",
-        "fetched_at": "2026-09-07T08:01:24Z",
+        "url": "https://finance.yahoo.com/m/db45a1f7-500f-3a5a-9881-9179c830b123/goldman-sachs-says-oil-could.html",
+        "source": "BeInCrypto",
+        "published_at": "2026-09-08T01:33:40Z",
+        "fetched_at": "2026-09-08T08:01:30Z",
         "ticker": null,
         "source_tier": "aggregator"
       },
       {
-        "title": "Oil Prices Climb After U.S. Strikes Three Iranian Tankers and Iran Vows Revenge",
+        "title": "Trump Says Oil Prices Will Fall ‘Precipitously’ After Iran War Even As Brent Crude Soars Past $97 A Barrel",
         "summary": "",
-        "url": "https://finance.yahoo.com/energy/articles/oil-prices-climb-u-strikes-034000493.html",
-        "source": "Oilprice.com",
-        "published_at": "2026-09-07T03:40:00Z",
-        "fetched_at": "2026-09-07T08:01:24Z",
+        "url": "https://finance.yahoo.com/m/b61d57f1-86fc-337f-99cf-216a0c36576f/trump-says-oil-prices-will.html",
+        "source": "Stocktwits",
+        "published_at": "2026-09-08T01:02:28Z",
+        "fetched_at": "2026-09-08T08:01:30Z",
         "ticker": null,
         "source_tier": "aggregator"
       }
@@ -116,7 +116,7 @@
       {
         "source": "Yahoo Finance",
         "status": "ok",
-        "item_count": 35
+        "item_count": 33
       },
       {
         "source": "Federal Reserve",
@@ -127,12 +127,12 @@
   },
   "tickers": {
     "515880.SS": {
-      "status": "partial_empty",
+      "status": "empty",
       "query_type": "ticker",
       "ticker": "515880.SS",
-      "start_date": "2026-09-07",
-      "end_date": "2026-09-07",
-      "fetched_at": "2026-09-07T08:01:25Z",
+      "start_date": "2026-09-08",
+      "end_date": "2026-09-08",
+      "fetched_at": "2026-09-08T08:01:32Z",
       "items": [],
       "source_statuses": [
         {
@@ -142,7 +142,7 @@
         },
         {
           "source": "Google News RSS",
-          "status": "failed",
+          "status": "empty",
           "item_count": 0
         },
         {
@@ -153,12 +153,12 @@
       ]
     },
     "512480.SS": {
-      "status": "partial_empty",
+      "status": "empty",
       "query_type": "ticker",
       "ticker": "512480.SS",
-      "start_date": "2026-09-07",
-      "end_date": "2026-09-07",
-      "fetched_at": "2026-09-07T08:01:32Z",
+      "start_date": "2026-09-08",
+      "end_date": "2026-09-08",
+      "fetched_at": "2026-09-08T08:01:34Z",
       "items": [],
       "source_statuses": [
         {
@@ -168,7 +168,7 @@
         },
         {
           "source": "Google News RSS",
-          "status": "failed",
+          "status": "empty",
           "item_count": 0
         },
         {
@@ -181,102 +181,102 @@
   },
   "items": [
     {
-      "title": "Eurozone Bond Yields Open Higher, Thursday’s ECB Decision in Focus",
+      "title": "Stock Market: Will S&P 500 Open Up or Down Today?",
       "summary": "",
-      "url": "https://finance.yahoo.com/m/03dc6f44-9f10-30df-9c0e-4a4e2fbb799b/eurozone-bond-yields-open.html",
-      "source": "The Wall Street Journal",
-      "published_at": "2026-09-07T07:29:00Z",
-      "fetched_at": "2026-09-07T08:01:24Z",
+      "url": "https://finance.yahoo.com/m/f6027657-7ebf-3218-a5a0-0e0ab05618bb/stock-market%3A-will-s%26p-500.html",
+      "source": "Benzinga Prediction Markets",
+      "published_at": "2026-09-08T07:44:57Z",
+      "fetched_at": "2026-09-08T08:01:30Z",
       "ticker": null,
       "source_tier": "aggregator"
     },
     {
-      "title": "Dollar Declines, Shrugs Off Higher Oil Prices",
+      "title": "European shares dip as higher crude revives inflation worries; Novartis drags",
       "summary": "",
-      "url": "https://finance.yahoo.com/m/9160c575-c39f-3e0e-b978-11e2b46c64a7/dollar-declines%2C-shrugs-off.html",
-      "source": "The Wall Street Journal",
-      "published_at": "2026-09-07T07:17:00Z",
-      "fetched_at": "2026-09-07T08:01:24Z",
-      "ticker": null,
-      "source_tier": "aggregator"
-    },
-    {
-      "title": "Oil extends gains after US and Iran exchange attacks on ships",
-      "summary": "",
-      "url": "https://finance.yahoo.com/energy/articles/oil-extends-gains-us-iran-001532615.html",
+      "url": "https://finance.yahoo.com/markets/stocks/articles/european-shares-dip-higher-crude-071307627.html",
       "source": "Reuters",
-      "published_at": "2026-09-07T06:35:58Z",
-      "fetched_at": "2026-09-07T08:01:24Z",
+      "published_at": "2026-09-08T07:13:07Z",
+      "fetched_at": "2026-09-08T08:01:30Z",
       "ticker": null,
       "source_tier": "aggregator"
     },
     {
-      "title": "Tertiary Minerals extends Mushima North mineralisation at depth",
+      "title": "Oil rises as risks of prolonged Mideast conflict fan supply worries",
       "summary": "",
-      "url": "https://finance.yahoo.com/m/bbbca48f-b607-35a1-806e-b5e15eb12e09/tertiary-minerals-extends.html",
-      "source": "Proactive",
-      "published_at": "2026-09-07T06:28:00Z",
-      "fetched_at": "2026-09-07T08:01:24Z",
-      "ticker": null,
-      "source_tier": "aggregator"
-    },
-    {
-      "title": "Asia tech shares rally, others hesitate as oil climbs",
-      "summary": "",
-      "url": "https://finance.yahoo.com/markets/world-indices/articles/asia-shares-bounce-others-cautious-010602533.html",
+      "url": "https://finance.yahoo.com/energy/articles/oil-rises-risks-prolonged-mideast-005052539.html",
       "source": "Reuters",
-      "published_at": "2026-09-07T05:57:00Z",
-      "fetched_at": "2026-09-07T08:01:24Z",
+      "published_at": "2026-09-08T06:43:39Z",
+      "fetched_at": "2026-09-08T08:01:30Z",
       "ticker": null,
       "source_tier": "aggregator"
     },
     {
-      "title": "Shipping Fuel Shortage Looms as Refiners Prioritize Diesel",
+      "title": "U.S. Treasury Yields Edge Lower in Asian Trade",
       "summary": "",
-      "url": "https://finance.yahoo.com/energy/articles/shipping-fuel-shortage-looms-refiners-055000909.html",
+      "url": "https://finance.yahoo.com/m/13605f70-b88c-3e84-9ff4-6760d26c41b6/u.s.-treasury-yields-edge.html",
+      "source": "The Wall Street Journal",
+      "published_at": "2026-09-08T06:25:00Z",
+      "fetched_at": "2026-09-08T08:01:30Z",
+      "ticker": null,
+      "source_tier": "aggregator"
+    },
+    {
+      "title": "Asian shares and US futures decline, while oil prices press higher",
+      "summary": "",
+      "url": "https://finance.yahoo.com/markets/world-indices/articles/asian-shares-us-futures-mixed-054945712.html",
+      "source": "Associated Press",
+      "published_at": "2026-09-08T05:49:45Z",
+      "fetched_at": "2026-09-08T08:01:30Z",
+      "ticker": null,
+      "source_tier": "aggregator"
+    },
+    {
+      "title": "Oil Prices Climb Toward $100 as Middle East Peace Hopes Fade",
+      "summary": "",
+      "url": "https://finance.yahoo.com/energy/articles/oil-prices-climb-toward-100-053000885.html",
       "source": "Oilprice.com",
-      "published_at": "2026-09-07T05:50:00Z",
-      "fetched_at": "2026-09-07T08:01:24Z",
+      "published_at": "2026-09-08T05:30:00Z",
+      "fetched_at": "2026-09-08T08:01:30Z",
       "ticker": null,
       "source_tier": "aggregator"
     },
     {
-      "title": "Oil Rises as Escalating U.S.-Iran Conflict Stokes Supply Disruption Fears",
+      "title": "RUBIS: H1 2026 Results - Strong performance leading way to upgrade of 2026 guidance",
       "summary": "",
-      "url": "https://finance.yahoo.com/m/fb547e02-8aff-319b-bea2-487d0274bacd/oil-rises-as-escalating.html",
-      "source": "The Wall Street Journal",
-      "published_at": "2026-09-07T05:30:00Z",
-      "fetched_at": "2026-09-07T08:01:24Z",
+      "url": "https://finance.yahoo.com/energy/articles/rubis-h1-2026-results-strong-050000701.html",
+      "source": "GlobeNewswire",
+      "published_at": "2026-09-08T05:00:00Z",
+      "fetched_at": "2026-09-08T08:01:30Z",
       "ticker": null,
       "source_tier": "aggregator"
     },
     {
-      "title": "Iran, US Trade Tanker Attacks as Conflict Escalates",
+      "title": "Dow, S&P 500 Futures Decline Amid Rising Oil Prices As Iran War Escalates: MU, ORCL, INTC, BE Stocks In Focus",
       "summary": "",
-      "url": "https://finance.yahoo.com/video/iran-us-trade-tanker-attacks-050612379.html",
-      "source": "Bloomberg",
-      "published_at": "2026-09-07T05:06:12Z",
-      "fetched_at": "2026-09-07T08:01:24Z",
+      "url": "https://finance.yahoo.com/m/4dcdc60e-284b-3dd7-a408-636af30e3130/dow%2C-s%26p-500-futures-decline.html",
+      "source": "Stocktwits",
+      "published_at": "2026-09-08T02:19:20Z",
+      "fetched_at": "2026-09-08T08:01:30Z",
       "ticker": null,
       "source_tier": "aggregator"
     },
     {
-      "title": "Another rate hike, just for insurance: Five questions for the ECB",
+      "title": "Goldman Sachs Says Oil Could Hit $120 as Trump Dismisses Diplomacy with Iran",
       "summary": "",
-      "url": "https://finance.yahoo.com/economy/policy/articles/another-rate-hike-just-insurance-040303890.html",
-      "source": "Reuters",
-      "published_at": "2026-09-07T04:28:59Z",
-      "fetched_at": "2026-09-07T08:01:24Z",
+      "url": "https://finance.yahoo.com/m/db45a1f7-500f-3a5a-9881-9179c830b123/goldman-sachs-says-oil-could.html",
+      "source": "BeInCrypto",
+      "published_at": "2026-09-08T01:33:40Z",
+      "fetched_at": "2026-09-08T08:01:30Z",
       "ticker": null,
       "source_tier": "aggregator"
     },
     {
-      "title": "Oil Prices Climb After U.S. Strikes Three Iranian Tankers and Iran Vows Revenge",
+      "title": "Trump Says Oil Prices Will Fall ‘Precipitously’ After Iran War Even As Brent Crude Soars Past $97 A Barrel",
       "summary": "",
-      "url": "https://finance.yahoo.com/energy/articles/oil-prices-climb-u-strikes-034000493.html",
-      "source": "Oilprice.com",
-      "published_at": "2026-09-07T03:40:00Z",
-      "fetched_at": "2026-09-07T08:01:24Z",
+      "url": "https://finance.yahoo.com/m/b61d57f1-86fc-337f-99cf-216a0c36576f/trump-says-oil-prices-will.html",
+      "source": "Stocktwits",
+      "published_at": "2026-09-08T01:02:28Z",
+      "fetched_at": "2026-09-08T08:01:30Z",
       "ticker": null,
       "source_tier": "aggregator"
     }

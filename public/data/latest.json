@@ -1,7 +1,7 @@
 {
   "status": "ok",
-  "generated_at": "2026-09-07T16:01:23+08:00",
-  "trade_date": "2026-09-07",
+  "generated_at": "2026-09-08T16:01:29+08:00",
+  "trade_date": "2026-09-08",
   "provider": "openai_compatible",
   "analysts": [
     "market",
@@ -19,19 +19,19 @@
     "kind": "monitor"
   },
   "run": {
-    "id": "34098318032",
+    "id": "34202212893",
     "attempt": "1",
     "workflow": "daily-analysis",
-    "url": "https://github.com/gaaiyun/TradingWorkbench/actions/runs/34098318032"
+    "url": "https://github.com/gaaiyun/TradingWorkbench/actions/runs/34202212893"
   },
   "identity": {
     "scope": "profile",
     "kind": "monitor",
-    "runId": "34098318032",
+    "runId": "34202212893",
     "profileId": "cn-semi-comms",
     "requestId": null,
-    "slotId": "slot-7584ebee6817732bb2ca1a80abd7eb7822423dd5673bb304145b1dc4617cd4bb",
-    "scheduledFor": "2026-09-07T07:19:27.000Z"
+    "slotId": "slot-e588c9f8bb38702e9cae30f14246a9252b26e699fec49c2af97433947b3791ed",
+    "scheduledFor": "2026-09-08T07:17:48.000Z"
   },
   "rating_tiers": [
     "Sell",
@@ -57,25 +57,25 @@
     },
     {
       "ticker": "512480.SS",
-      "rating": "Not Rated",
-      "report": "reports/512480.SS/2026-09-07/complete_report.md",
+      "rating": "Underweight",
+      "report": "reports/512480.SS/2026-09-08/complete_report.md",
       "files": {
-        "fundamentals": "reports/512480.SS/2026-09-07/1_analysts/fundamentals.md",
-        "market": "reports/512480.SS/2026-09-07/1_analysts/market.md",
-        "news": "reports/512480.SS/2026-09-07/1_analysts/news.md",
-        "bear": "reports/512480.SS/2026-09-07/2_research/bear.md",
-        "bull": "reports/512480.SS/2026-09-07/2_research/bull.md",
-        "manager": "reports/512480.SS/2026-09-07/2_research/manager.md",
-        "trader": "reports/512480.SS/2026-09-07/3_trading/trader.md",
-        "aggressive": "reports/512480.SS/2026-09-07/4_risk/aggressive.md",
-        "conservative": "reports/512480.SS/2026-09-07/4_risk/conservative.md",
-        "neutral": "reports/512480.SS/2026-09-07/4_risk/neutral.md",
-        "decision": "reports/512480.SS/2026-09-07/5_portfolio/decision.md",
-        "complete_report": "reports/512480.SS/2026-09-07/complete_report.md"
+        "fundamentals": "reports/512480.SS/2026-09-08/1_analysts/fundamentals.md",
+        "market": "reports/512480.SS/2026-09-08/1_analysts/market.md",
+        "news": "reports/512480.SS/2026-09-08/1_analysts/news.md",
+        "bear": "reports/512480.SS/2026-09-08/2_research/bear.md",
+        "bull": "reports/512480.SS/2026-09-08/2_research/bull.md",
+        "manager": "reports/512480.SS/2026-09-08/2_research/manager.md",
+        "trader": "reports/512480.SS/2026-09-08/3_trading/trader.md",
+        "aggressive": "reports/512480.SS/2026-09-08/4_risk/aggressive.md",
+        "conservative": "reports/512480.SS/2026-09-08/4_risk/conservative.md",
+        "neutral": "reports/512480.SS/2026-09-08/4_risk/neutral.md",
+        "decision": "reports/512480.SS/2026-09-08/5_portfolio/decision.md",
+        "complete_report": "reports/512480.SS/2026-09-08/complete_report.md"
       },
-      "decision_excerpt": "**Rating**: Hold\n**Executive Summary**: 综合风险分析师辩论，短期技术信号主导决策。 [D2] 最近8个交易日收盘价变化百分比为-5.92662277。 [D7] 收盘价低于MA20 1.0454且严格呈现熊市排列。 [I11] RSI14为42.84200976。 [S1] NAV持仓构成跟踪误差等核心指标不可用。 [N2] 集成电路布图设计保护条例发布于2026-08-02。 [N3] 集成电路布图设计保护条例发布于2026-08-19。 [N1] ETF中期报告存在。 [N4] ETF季度报告存在。 [CA1] 基金份额拆分公告于2026-07-02。 [CA2] 基金份额拆分公告于2026-06-28。\n**Investment Thesis**: 研究经理的投资计划为Hold。 [D2] 短期下跌信号突出。 [D7] 均线熊市对齐显现。 [I",
-      "analysis_status": "insufficient_evidence",
-      "audit_status": "legacy_unverified",
+      "decision_excerpt": "**Rating**: Underweight\n\n**Executive Summary**: 现有证据显示512480.SS收盘价低于MA20和MA60且严格bearish均线排列[D7][D5][D6]，这不是短期波动而是明确弱势结构。近期8个交易日收盘变动为-4.71607315%[D2]，最新单日变动-1.19760479%[D3]，RSI14为41.71910051未达超卖阈值[I11]，MACD为-0.02698801且柱状图为-0.00168408无反转确认[I7][I8]，20日实现波动率为45.98962107[I10]，ATR14为0.04744095占最新收盘价4.79201515%[I3][D4]，价格行为仍偏弱[D1]。持仓、NAV/折溢价、跟踪误差、费用、流动性、集中度均为unavailable[S2][S5][N1][N4]，无法将缺失数据当作正面或负面信号，",
+      "analysis_status": "rated",
+      "audit_status": "verified",
       "evidence_publish": {
         "published": true,
         "status": 201
@@ -83,9 +83,9 @@
       "marketHistory": {
         "source": "tencent",
         "adjustment": "qfq",
-        "barCount": 672,
+        "barCount": 673,
         "startAt": "2023-11-29T16:00:00Z",
-        "endAt": "2026-09-06T16:00:00Z"
+        "endAt": "2026-09-07T16:00:00Z"
       },
       "error": null
     }
