@@ -1,10 +1,10 @@
 {
   "version": 1,
-  "generatedAt": "2026-09-08T15:04:52.964Z",
+  "generatedAt": "2026-09-09T15:06:38.537Z",
   "status": "degraded",
   "coverage": {
     "policy": "current-listed-best-effort-plus-configured-core",
-    "cnCurrentListedStocks": 5557,
+    "cnCurrentListedStocks": 5559,
     "cnConfiguredCore": 3,
     "usCore": 9,
     "hkCore": 1,
@@ -16,13 +16,13 @@
       "id": "sina-market-center",
       "role": "CN current-listed discovery",
       "quality": "best_effort",
-      "asOf": "2026-09-08T15:04:52.964Z"
+      "asOf": "2026-09-09T15:06:38.537Z"
     },
     {
       "id": "workbench-settings",
       "role": "configured HK/US/CN core instruments",
       "quality": "declared",
-      "asOf": "2026-09-08T15:04:52.964Z"
+      "asOf": "2026-09-09T15:06:38.537Z"
     }
   ],
   "instruments": [
@@ -22171,7 +22171,7 @@
     },
     {
       "symbol": "300562.SZ",
-      "name": "乐心医疗",
+      "name": "乐心股份",
       "market": "CN",
       "exchange": "SZ",
       "instrumentType": "stock",
@@ -31862,7 +31862,7 @@
     },
     {
       "symbol": "301688.SZ",
-      "name": "C格林",
+      "name": "格林生物",
       "market": "CN",
       "exchange": "SZ",
       "instrumentType": "stock",
@@ -31885,6 +31885,17 @@
     {
       "symbol": "301697.SZ",
       "name": "贝特利",
+      "market": "CN",
+      "exchange": "SZ",
+      "instrumentType": "stock",
+      "industry": null,
+      "listDate": null,
+      "source": "sina-market-center",
+      "coverage": "current_listed_best_effort"
+    },
+    {
+      "symbol": "301699.SZ",
+      "name": "N洛轴",
       "market": "CN",
       "exchange": "SZ",
       "instrumentType": "stock",
@@ -32863,7 +32874,7 @@
     },
     {
       "symbol": "600114.SS",
-      "name": "东睦股份",
+      "name": "XD东睦股",
       "market": "CN",
       "exchange": "SS",
       "instrumentType": "stock",
@@ -43467,7 +43478,7 @@
     },
     {
       "symbol": "603083.SS",
-      "name": "XD剑桥科",
+      "name": "剑桥科技",
       "market": "CN",
       "exchange": "SS",
       "instrumentType": "stock",
@@ -44149,7 +44160,7 @@
     },
     {
       "symbol": "603165.SS",
-      "name": "XD荣晟环",
+      "name": "荣晟环保",
       "market": "CN",
       "exchange": "SS",
       "instrumentType": "stock",
@@ -49374,7 +49385,7 @@
     },
     {
       "symbol": "603992.SS",
-      "name": "松霖科技",
+      "name": "XD松霖科",
       "market": "CN",
       "exchange": "SS",
       "instrumentType": "stock",
@@ -49385,7 +49396,7 @@
     },
     {
       "symbol": "603993.SS",
-      "name": "洛阳钼业",
+      "name": "XD洛阳钼",
       "market": "CN",
       "exchange": "SS",
       "instrumentType": "stock",
@@ -50463,7 +50474,7 @@
     },
     {
       "symbol": "605377.SS",
-      "name": "华旺科技",
+      "name": "XD华旺科",
       "market": "CN",
       "exchange": "SS",
       "instrumentType": "stock",
@@ -50496,7 +50507,7 @@
     },
     {
       "symbol": "605389.SS",
-      "name": "XD长龄液",
+      "name": "长龄液压",
       "market": "CN",
       "exchange": "SS",
       "instrumentType": "stock",
@@ -51915,7 +51926,7 @@
     },
     {
       "symbol": "688128.SS",
-      "name": "中国电研",
+      "name": "XD中国电",
       "market": "CN",
       "exchange": "SS",
       "instrumentType": "stock",
@@ -53246,7 +53257,7 @@
     },
     {
       "symbol": "688271.SS",
-      "name": "联影医疗",
+      "name": "XD联影医",
       "market": "CN",
       "exchange": "SS",
       "instrumentType": "stock",
@@ -59209,6 +59220,17 @@
     {
       "symbol": "920267.BJ",
       "name": "鑫汇科",
+      "market": "CN",
+      "exchange": "BJ",
+      "instrumentType": "stock",
+      "industry": null,
+      "listDate": null,
+      "source": "sina-market-center",
+      "coverage": "current_listed_best_effort"
+    },
+    {
+      "symbol": "920268.BJ",
+      "name": "N百迈科",
       "market": "CN",
       "exchange": "BJ",
       "instrumentType": "stock",
