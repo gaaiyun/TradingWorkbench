@@ -1,7 +1,7 @@
 {
   "status": "ok",
-  "generated_at": "2026-09-10T16:01:46+08:00",
-  "trade_date": "2026-09-10",
+  "generated_at": "2026-09-11T16:01:56+08:00",
+  "trade_date": "2026-09-11",
   "provider": "openai_compatible",
   "analysts": [
     "market",
@@ -19,19 +19,19 @@
     "kind": "monitor"
   },
   "run": {
-    "id": "34452910212",
+    "id": "34577087331",
     "attempt": "1",
     "workflow": "daily-analysis",
-    "url": "https://github.com/gaaiyun/TradingWorkbench/actions/runs/34452910212"
+    "url": "https://github.com/gaaiyun/TradingWorkbench/actions/runs/34577087331"
   },
   "identity": {
     "scope": "profile",
     "kind": "monitor",
-    "runId": "34452910212",
+    "runId": "34577087331",
     "profileId": "cn-semi-comms",
     "requestId": null,
-    "slotId": "slot-6ee5b6ce07aaccfe7c9ad17b5bb2337c57926cc6a6cf8338345f13e74ed86f00",
-    "scheduledFor": "2026-09-10T07:17:15.000Z"
+    "slotId": "slot-0fb743ceaac5102c5657b683450818f017de663166860a01bf1aacdd4d2a8898",
+    "scheduledFor": "2026-09-11T07:17:15.000Z"
   },
   "rating_tiers": [
     "Sell",
@@ -57,25 +57,25 @@
     },
     {
       "ticker": "512480.SS",
-      "rating": "Not Rated",
-      "report": "reports/512480.SS/2026-09-10/complete_report.md",
+      "rating": "Hold",
+      "report": "reports/512480.SS/2026-09-11/complete_report.md",
       "files": {
-        "fundamentals": "reports/512480.SS/2026-09-10/1_analysts/fundamentals.md",
-        "market": "reports/512480.SS/2026-09-10/1_analysts/market.md",
-        "news": "reports/512480.SS/2026-09-10/1_analysts/news.md",
-        "bear": "reports/512480.SS/2026-09-10/2_research/bear.md",
-        "bull": "reports/512480.SS/2026-09-10/2_research/bull.md",
-        "manager": "reports/512480.SS/2026-09-10/2_research/manager.md",
-        "trader": "reports/512480.SS/2026-09-10/3_trading/trader.md",
-        "aggressive": "reports/512480.SS/2026-09-10/4_risk/aggressive.md",
-        "conservative": "reports/512480.SS/2026-09-10/4_risk/conservative.md",
-        "neutral": "reports/512480.SS/2026-09-10/4_risk/neutral.md",
-        "decision": "reports/512480.SS/2026-09-10/5_portfolio/decision.md",
-        "complete_report": "reports/512480.SS/2026-09-10/complete_report.md"
+        "fundamentals": "reports/512480.SS/2026-09-11/1_analysts/fundamentals.md",
+        "market": "reports/512480.SS/2026-09-11/1_analysts/market.md",
+        "news": "reports/512480.SS/2026-09-11/1_analysts/news.md",
+        "bear": "reports/512480.SS/2026-09-11/2_research/bear.md",
+        "bull": "reports/512480.SS/2026-09-11/2_research/bull.md",
+        "manager": "reports/512480.SS/2026-09-11/2_research/manager.md",
+        "trader": "reports/512480.SS/2026-09-11/3_trading/trader.md",
+        "aggressive": "reports/512480.SS/2026-09-11/4_risk/aggressive.md",
+        "conservative": "reports/512480.SS/2026-09-11/4_risk/conservative.md",
+        "neutral": "reports/512480.SS/2026-09-11/4_risk/neutral.md",
+        "decision": "reports/512480.SS/2026-09-11/5_portfolio/decision.md",
+        "complete_report": "reports/512480.SS/2026-09-11/complete_report.md"
       },
-      "decision_excerpt": "**Rating**: Sell\n**Executive Summary**: 最近8个交易日的收盘下跌4.85436893% [D2]。  \n严格的熊市均线排列 [D7]。  \nRSI14=40.50778198 [I11]处于中性偏弱区域 [D9]。  \nMACD指标值为-0.02829086 [I7]，柱状图-0.00196458 [I8]，信号线-0.02632627 [I9] [I5] [I6]。  \nATR14=0.04399246 [I3]显示高波动性。  \n8个交易日窗口技术信号压制 [D1]。  \n基金份额拆分公告 [CA1] [CA2]与季度报告 [N1] [N4]缺乏直接影响证据。  \nETF基本面数据不可用 [D1 unavailable]。  \n交易提案基于上述熊市证据 [M675] [I7] [D2]。  \n**Investment Thesis**: 5124",
-      "analysis_status": "insufficient_evidence",
-      "audit_status": "legacy_unverified",
+      "decision_excerpt": "**Rating**: Hold\n\n**Executive Summary**:  \n过去8个交易日的收盘价变动百分比为-4.95049505%[D2]。  \n收盘价低于MA20[D5]，低于MA60[D6]。  \n严格的看跌移动均线对齐[D7]。  \nMACD柱状图为-0.00302357[I8]。  \nMACD信号为-0.02714598[I9]。  \nRSI14为38.00667413[I11]。  \nRSI14低于中线[D9]。  \n基金份额拆分[CA2][N6]实施。  \n集成电路布图设计保护条例[N2][N3]存在。  \n持仓NAV等数据不可用[S1]。  \n维持当前持仓。  \n\n**Investment Thesis**:  \n技术面呈现严格bearish对齐[D7]。  \n近期下跌[D2]和MA位置[D5][D6]反映下跌趋势。  \nMACD柱状图和信号为负[I8][I9]",
+      "analysis_status": "rated",
+      "audit_status": "verified",
       "evidence_publish": {
         "published": true,
         "status": 201
@@ -83,9 +83,9 @@
       "marketHistory": {
         "source": "tencent",
         "adjustment": "qfq",
-        "barCount": 675,
+        "barCount": 676,
         "startAt": "2023-11-29T16:00:00Z",
-        "endAt": "2026-09-09T16:00:00Z"
+        "endAt": "2026-09-10T16:00:00Z"
       },
       "error": null
     }
