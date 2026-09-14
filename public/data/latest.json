@@ -1,7 +1,7 @@
 {
   "status": "ok",
-  "generated_at": "2026-09-11T16:01:56+08:00",
-  "trade_date": "2026-09-11",
+  "generated_at": "2026-09-14T16:01:24+08:00",
+  "trade_date": "2026-09-14",
   "provider": "openai_compatible",
   "analysts": [
     "market",
@@ -19,19 +19,19 @@
     "kind": "monitor"
   },
   "run": {
-    "id": "34577087331",
+    "id": "34820519782",
     "attempt": "1",
     "workflow": "daily-analysis",
-    "url": "https://github.com/gaaiyun/TradingWorkbench/actions/runs/34577087331"
+    "url": "https://github.com/gaaiyun/TradingWorkbench/actions/runs/34820519782"
   },
   "identity": {
     "scope": "profile",
     "kind": "monitor",
-    "runId": "34577087331",
+    "runId": "34820519782",
     "profileId": "cn-semi-comms",
     "requestId": null,
-    "slotId": "slot-0fb743ceaac5102c5657b683450818f017de663166860a01bf1aacdd4d2a8898",
-    "scheduledFor": "2026-09-11T07:17:15.000Z"
+    "slotId": "slot-4a701057e14002929cf7f9048d93a0614c4f6e313725f30e29cc76e7b31bf65c",
+    "scheduledFor": "2026-09-14T07:19:27.000Z"
   },
   "rating_tiers": [
     "Sell",
@@ -57,25 +57,25 @@
     },
     {
       "ticker": "512480.SS",
-      "rating": "Hold",
-      "report": "reports/512480.SS/2026-09-11/complete_report.md",
+      "rating": "Not Rated",
+      "report": "reports/512480.SS/2026-09-14/complete_report.md",
       "files": {
-        "fundamentals": "reports/512480.SS/2026-09-11/1_analysts/fundamentals.md",
-        "market": "reports/512480.SS/2026-09-11/1_analysts/market.md",
-        "news": "reports/512480.SS/2026-09-11/1_analysts/news.md",
-        "bear": "reports/512480.SS/2026-09-11/2_research/bear.md",
-        "bull": "reports/512480.SS/2026-09-11/2_research/bull.md",
-        "manager": "reports/512480.SS/2026-09-11/2_research/manager.md",
-        "trader": "reports/512480.SS/2026-09-11/3_trading/trader.md",
-        "aggressive": "reports/512480.SS/2026-09-11/4_risk/aggressive.md",
-        "conservative": "reports/512480.SS/2026-09-11/4_risk/conservative.md",
-        "neutral": "reports/512480.SS/2026-09-11/4_risk/neutral.md",
-        "decision": "reports/512480.SS/2026-09-11/5_portfolio/decision.md",
-        "complete_report": "reports/512480.SS/2026-09-11/complete_report.md"
+        "fundamentals": "reports/512480.SS/2026-09-14/1_analysts/fundamentals.md",
+        "market": "reports/512480.SS/2026-09-14/1_analysts/market.md",
+        "news": "reports/512480.SS/2026-09-14/1_analysts/news.md",
+        "bear": "reports/512480.SS/2026-09-14/2_research/bear.md",
+        "bull": "reports/512480.SS/2026-09-14/2_research/bull.md",
+        "manager": "reports/512480.SS/2026-09-14/2_research/manager.md",
+        "trader": "reports/512480.SS/2026-09-14/3_trading/trader.md",
+        "aggressive": "reports/512480.SS/2026-09-14/4_risk/aggressive.md",
+        "conservative": "reports/512480.SS/2026-09-14/4_risk/conservative.md",
+        "neutral": "reports/512480.SS/2026-09-14/4_risk/neutral.md",
+        "decision": "reports/512480.SS/2026-09-14/5_portfolio/decision.md",
+        "complete_report": "reports/512480.SS/2026-09-14/complete_report.md"
       },
-      "decision_excerpt": "**Rating**: Hold\n\n**Executive Summary**:  \n过去8个交易日的收盘价变动百分比为-4.95049505%[D2]。  \n收盘价低于MA20[D5]，低于MA60[D6]。  \n严格的看跌移动均线对齐[D7]。  \nMACD柱状图为-0.00302357[I8]。  \nMACD信号为-0.02714598[I9]。  \nRSI14为38.00667413[I11]。  \nRSI14低于中线[D9]。  \n基金份额拆分[CA2][N6]实施。  \n集成电路布图设计保护条例[N2][N3]存在。  \n持仓NAV等数据不可用[S1]。  \n维持当前持仓。  \n\n**Investment Thesis**:  \n技术面呈现严格bearish对齐[D7]。  \n近期下跌[D2]和MA位置[D5][D6]反映下跌趋势。  \nMACD柱状图和信号为负[I8][I9]",
-      "analysis_status": "rated",
-      "audit_status": "verified",
+      "decision_excerpt": "**Rating**: Underweight\n**Executive Summary**: ETF 512480.SS 显示出持续的下跌趋势和负面技术信号。长期半导体行业的潜力通过政策支持和基金份额拆分得到认可，但ETF特定指标如NAV和持仓数据不可用。分析师辩论综合后倾向于谨慎立场，建议逐步减少暴露。\n**Investment Thesis**: 过去8个交易日收盘下跌5.37848606% [D2]。  \n收盘价低于MA20 1.0166 且低于MA60 1.1327形成严格熊市排列 [D7]。  \nMACD柱状图 -0.00375951 [I8] 且信号线 -0.02808586 [I9] 占主导负面信号 [I7]。  \nATR14 0.04201864 [I3]。  \nRSI14 36.76659057 [I11] 处于接近超卖区但未确认 [D8]。  \n政策支持集成电路布图设计",
+      "analysis_status": "insufficient_evidence",
+      "audit_status": "legacy_unverified",
       "evidence_publish": {
         "published": true,
         "status": 201
@@ -83,9 +83,9 @@
       "marketHistory": {
         "source": "tencent",
         "adjustment": "qfq",
-        "barCount": 676,
+        "barCount": 677,
         "startAt": "2023-11-29T16:00:00Z",
-        "endAt": "2026-09-10T16:00:00Z"
+        "endAt": "2026-09-13T16:00:00Z"
       },
       "error": null
     }

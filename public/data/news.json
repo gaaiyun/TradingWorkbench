@@ -1,113 +1,113 @@
 {
   "version": 1,
-  "status": "partial",
-  "generated_at": "2026-09-11T16:01:56+08:00",
-  "trade_date": "2026-09-11",
+  "status": "ok",
+  "generated_at": "2026-09-14T16:01:24+08:00",
+  "trade_date": "2026-09-14",
   "global": {
-    "status": "partial",
+    "status": "ok",
     "query_type": "global",
     "ticker": null,
-    "start_date": "2026-09-04",
-    "end_date": "2026-09-11",
-    "fetched_at": "2026-09-11T08:01:58Z",
+    "start_date": "2026-09-07",
+    "end_date": "2026-09-14",
+    "fetched_at": "2026-09-14T08:01:25Z",
     "items": [
       {
-        "title": "Stocks tumble as oil and inflation worries fan rate hike bets",
+        "title": "Oil surges past $108 as Hormuz attack and Saudi pipeline shutdown rattle markets",
         "summary": "",
-        "url": "https://finance.yahoo.com/economy/policy/articles/stocks-tumble-oil-inflation-fan-024648193.html",
-        "source": "AFP",
-        "published_at": "2026-09-11T07:50:00Z",
-        "fetched_at": "2026-09-11T08:01:58Z",
-        "ticker": null,
-        "source_tier": "aggregator"
-      },
-      {
-        "title": "Dow Jones Futures Rise, Oil Prices Fall, Oracle Jumps; CPI Inflation Data To Inform Fed",
-        "summary": "",
-        "url": "https://finance.yahoo.com/m/c29e8241-4bb8-3a14-aa17-d5e2fa2c38f6/dow-jones-futures-rise%2C-oil.html",
-        "source": "Investor's Business Daily",
-        "published_at": "2026-09-11T07:41:12Z",
-        "fetched_at": "2026-09-11T08:01:58Z",
-        "ticker": null,
-        "source_tier": "aggregator"
-      },
-      {
-        "title": "There Are Only a Handful of Dow Stocks That Yield Over 3%. Here's My Top Pick to Buy Before September Ends.",
-        "summary": "",
-        "url": "https://finance.yahoo.com/m/0cc059b9-32a3-3fff-8749-9241d3b8437a/there-are-only-a-handful-of.html",
-        "source": "Motley Fool",
-        "published_at": "2026-09-11T07:25:00Z",
-        "fetched_at": "2026-09-11T08:01:58Z",
-        "ticker": null,
-        "source_tier": "aggregator"
-      },
-      {
-        "title": "Eurozone Bond Yields Rise; 10-Year Bund Yield Hits New 15-Year High",
-        "summary": "",
-        "url": "https://finance.yahoo.com/m/33c74a73-cfc1-32e1-bc85-ca47563bdba8/eurozone-bond-yields-rise%3B.html",
-        "source": "The Wall Street Journal",
-        "published_at": "2026-09-11T07:20:00Z",
-        "fetched_at": "2026-09-11T08:01:58Z",
-        "ticker": null,
-        "source_tier": "aggregator"
-      },
-      {
-        "title": "Dollar Steady Ahead of U.S. Inflation Data",
-        "summary": "",
-        "url": "https://finance.yahoo.com/m/225cea2b-deec-3a51-a3fd-bcc9e3f24f80/dollar-steady-ahead-of-u.s..html",
-        "source": "The Wall Street Journal",
-        "published_at": "2026-09-11T07:02:00Z",
-        "fetched_at": "2026-09-11T08:01:58Z",
-        "ticker": null,
-        "source_tier": "aggregator"
-      },
-      {
-        "title": "Bonds buckle, stocks fall as surging oil prices inflame inflation risks",
-        "summary": "",
-        "url": "https://finance.yahoo.com/economy/policy/articles/global-bonds-fall-surging-oil-005601417.html",
-        "source": "Reuters",
-        "published_at": "2026-09-11T06:09:49Z",
-        "fetched_at": "2026-09-11T08:01:58Z",
-        "ticker": null,
-        "source_tier": "aggregator"
-      },
-      {
-        "title": "Global bond selloff pushes 10-year US yield toward 5% on oil, rate-hike fears",
-        "summary": "",
-        "url": "https://finance.yahoo.com/economy/policy/articles/global-bond-selloff-pushes-10-055855890.html",
-        "source": "Reuters",
-        "published_at": "2026-09-11T05:58:55Z",
-        "fetched_at": "2026-09-11T08:01:58Z",
-        "ticker": null,
-        "source_tier": "aggregator"
-      },
-      {
-        "title": "Can the ECB rate hike stop an inflation shock driven by energy costs?",
-        "summary": "",
-        "url": "https://finance.yahoo.com/m/6bb32a9d-b03f-3bc1-b948-8cdc9a08b3f1/can-the-ecb-rate-hike-stop-an.html",
+        "url": "https://finance.yahoo.com/m/7b42b636-01be-39c3-9ef4-d3aa0e6aba75/oil-surges-past-%24108-as.html",
         "source": "Euronews",
-        "published_at": "2026-09-11T05:33:38Z",
-        "fetched_at": "2026-09-11T08:01:58Z",
+        "published_at": "2026-09-14T07:46:24Z",
+        "fetched_at": "2026-09-14T08:01:25Z",
         "ticker": null,
         "source_tier": "aggregator"
       },
       {
-        "title": "Oil Prices Surge to Four-Month Highs as War Risks Mount",
+        "title": "Oil Prices Gain as Conflict Spreads",
         "summary": "",
-        "url": "https://finance.yahoo.com/energy/articles/oil-prices-surge-four-month-053000138.html",
-        "source": "Oilprice.com",
-        "published_at": "2026-09-11T05:30:00Z",
-        "fetched_at": "2026-09-11T08:01:58Z",
+        "url": "https://finance.yahoo.com/m/763ea28b-00b8-34f1-800f-9ffef8caa74f/oil-prices-gain-as-conflict.html",
+        "source": "The Wall Street Journal",
+        "published_at": "2026-09-14T07:43:00Z",
+        "fetched_at": "2026-09-14T08:01:25Z",
         "ticker": null,
         "source_tier": "aggregator"
       },
       {
-        "title": "Oil prices falls to $105 and Asian shares decline, tracking Wall Street losses",
+        "title": "Oil prices extend gains on Mideast supply fears, tech leads losses",
         "summary": "",
-        "url": "https://finance.yahoo.com/energy/articles/oil-prices-stay-above-108-045937202.html",
-        "source": "Associated Press",
-        "published_at": "2026-09-11T04:59:37Z",
-        "fetched_at": "2026-09-11T08:01:58Z",
+        "url": "https://finance.yahoo.com/technology/ai/articles/tech-firms-hit-ai-slowdown-024739551.html",
+        "source": "AFP",
+        "published_at": "2026-09-14T07:39:48Z",
+        "fetched_at": "2026-09-14T08:01:25Z",
+        "ticker": null,
+        "source_tier": "aggregator"
+      },
+      {
+        "title": "European shares muted as tech slides, oil surge weighs",
+        "summary": "",
+        "url": "https://finance.yahoo.com/markets/stocks/articles/european-shares-muted-tech-slides-072955621.html",
+        "source": "Reuters",
+        "published_at": "2026-09-14T07:29:55Z",
+        "fetched_at": "2026-09-14T08:01:25Z",
+        "ticker": null,
+        "source_tier": "aggregator"
+      },
+      {
+        "title": "US manufacturers raise concerns about AI shopping chatbots",
+        "summary": "",
+        "url": "https://finance.yahoo.com/technology/ai/articles/us-manufacturers-raise-concerns-ai-071939228.html",
+        "source": "Just Style",
+        "published_at": "2026-09-14T07:19:39Z",
+        "fetched_at": "2026-09-14T08:01:25Z",
+        "ticker": null,
+        "source_tier": "aggregator"
+      },
+      {
+        "title": "S&P 500 Bulls Are Not Giving Up Yet – But Rising Oil Prices, Long-Term Yields Rise Are Narrowing The Path Higher",
+        "summary": "",
+        "url": "https://finance.yahoo.com/m/85b94c2e-b74a-3dc9-8115-70fa52f39f0f/s%26p-500-bulls-are-not-giving.html",
+        "source": "Stocktwits",
+        "published_at": "2026-09-14T06:52:13Z",
+        "fetched_at": "2026-09-14T08:01:25Z",
+        "ticker": null,
+        "source_tier": "aggregator"
+      },
+      {
+        "title": "Dollar Rises on Fed Rate-Hike Prospects, High Oil Prices",
+        "summary": "",
+        "url": "https://finance.yahoo.com/m/b0012212-b385-3cbd-9491-a2c6ad23308f/dollar-rises-on-fed-rate-hike.html",
+        "source": "The Wall Street Journal",
+        "published_at": "2026-09-14T06:48:00Z",
+        "fetched_at": "2026-09-14T08:01:25Z",
+        "ticker": null,
+        "source_tier": "aggregator"
+      },
+      {
+        "title": "Dow Jones Futures: Techs Tumble As Anthropic Leads Call For AI Slowdown; Fed Meeting Ahead",
+        "summary": "",
+        "url": "https://finance.yahoo.com/m/75964091-0d57-3879-b55e-2c11b3225642/dow-jones-futures%3A-techs.html",
+        "source": "Investor's Business Daily",
+        "published_at": "2026-09-14T06:40:45Z",
+        "fetched_at": "2026-09-14T08:01:25Z",
+        "ticker": null,
+        "source_tier": "aggregator"
+      },
+      {
+        "title": "Oil prices up over 2% following new strikes on Saudi, Strait of Hormuz",
+        "summary": "",
+        "url": "https://finance.yahoo.com/energy/articles/oil-prices-jump-more-3-224715375.html",
+        "source": "Reuters",
+        "published_at": "2026-09-14T06:36:34Z",
+        "fetched_at": "2026-09-14T08:01:25Z",
+        "ticker": null,
+        "source_tier": "aggregator"
+      },
+      {
+        "title": "Touchstone Exploration mobilises rig for WD-4 well in Trinidad",
+        "summary": "",
+        "url": "https://finance.yahoo.com/m/551ab00a-6f35-3bc7-a752-0ef4277158f3/touchstone-exploration.html",
+        "source": "Proactive",
+        "published_at": "2026-09-14T06:34:00Z",
+        "fetched_at": "2026-09-14T08:01:25Z",
         "ticker": null,
         "source_tier": "aggregator"
       }
@@ -116,12 +116,12 @@
       {
         "source": "Yahoo Finance",
         "status": "ok",
-        "item_count": 50
+        "item_count": 49
       },
       {
         "source": "Federal Reserve",
-        "status": "failed",
-        "item_count": 0
+        "status": "ok",
+        "item_count": 2
       }
     ]
   },
@@ -130,17 +130,17 @@
       "status": "ok",
       "query_type": "ticker",
       "ticker": "515880.SS",
-      "start_date": "2026-09-11",
-      "end_date": "2026-09-11",
-      "fetched_at": "2026-09-11T08:01:59Z",
+      "start_date": "2026-09-14",
+      "end_date": "2026-09-14",
+      "fetched_at": "2026-09-14T08:01:27Z",
       "items": [
         {
-          "title": "9月10日通信ETF国泰（515880）份额增加1.40亿份，最新份额626.22亿份，最新规模420.19亿元",
-          "summary": "9月10日通信ETF国泰（515880）份额增加1.40亿份，最新份额626.22亿份，最新规模420.19亿元 新浪财经",
-          "url": "https://news.google.com/rss/articles/CBMimwFBVV95cUxPck1yVHZ6d0l1cmIwM2FDX0JnN3kyQXBvMVRyWmJPZUE2bXREUWJfRFlpVVdvTHMyVzJpOEs1dDZ0UlYzbE5wRHdRVFUzazJHRVdJZUJ6Nm9hQ0RULWVNTFVVVzNGbEJOR1hOdnUzSERmX3Vhd2pPSjd1SzREdy1vMklpNzUwUEZEeXJ1X3R5S3I3ODM3SElsNkJfUQ?oc=5",
-          "source": "Google News / 新浪财经",
-          "published_at": "2026-09-11T01:00:00Z",
-          "fetched_at": "2026-09-11T08:01:59Z",
+          "title": "9月11日通信ETF国泰（515880）份额增加14.14亿份，最新份额640.36亿份，最新规模432.82亿元",
+          "summary": "9月11日通信ETF国泰（515880）份额增加14.14亿份，最新份额640.36亿份，最新规模432.82亿元 finance.sina.com.cn",
+          "url": "https://news.google.com/rss/articles/CBMimwFBVV95cUxQRU9rTkJ0WE1pR2p2aENuM2M0RnNwU0tSckw0dTc2Wl9YWUhJVTdFR01iNC12S0RkNEVaMDlTRVF3dWhTNTlkbTVldUNsVDVvb2lNNUZOUFlxRDVSQzlKUXNTVzFIM2xlbWJ1R0I5SDZoZ1hncjhfZDIyQTZZTkdlNVRhY3Z2RXBzT1loQURPUUZncWU1Z3EwVkZRRQ?oc=5",
+          "source": "Google News / finance.sina.com.cn",
+          "published_at": "2026-09-14T01:00:00Z",
+          "fetched_at": "2026-09-14T08:01:27Z",
           "ticker": "515880.SS",
           "source_tier": "aggregator"
         }
@@ -167,9 +167,9 @@
       "status": "empty",
       "query_type": "ticker",
       "ticker": "512480.SS",
-      "start_date": "2026-09-11",
-      "end_date": "2026-09-11",
-      "fetched_at": "2026-09-11T08:02:02Z",
+      "start_date": "2026-09-14",
+      "end_date": "2026-09-14",
+      "fetched_at": "2026-09-14T08:01:29Z",
       "items": [],
       "source_statuses": [
         {
@@ -192,112 +192,112 @@
   },
   "items": [
     {
-      "title": "Stocks tumble as oil and inflation worries fan rate hike bets",
+      "title": "Oil surges past $108 as Hormuz attack and Saudi pipeline shutdown rattle markets",
       "summary": "",
-      "url": "https://finance.yahoo.com/economy/policy/articles/stocks-tumble-oil-inflation-fan-024648193.html",
-      "source": "AFP",
-      "published_at": "2026-09-11T07:50:00Z",
-      "fetched_at": "2026-09-11T08:01:58Z",
-      "ticker": null,
-      "source_tier": "aggregator"
-    },
-    {
-      "title": "Dow Jones Futures Rise, Oil Prices Fall, Oracle Jumps; CPI Inflation Data To Inform Fed",
-      "summary": "",
-      "url": "https://finance.yahoo.com/m/c29e8241-4bb8-3a14-aa17-d5e2fa2c38f6/dow-jones-futures-rise%2C-oil.html",
-      "source": "Investor's Business Daily",
-      "published_at": "2026-09-11T07:41:12Z",
-      "fetched_at": "2026-09-11T08:01:58Z",
-      "ticker": null,
-      "source_tier": "aggregator"
-    },
-    {
-      "title": "There Are Only a Handful of Dow Stocks That Yield Over 3%. Here's My Top Pick to Buy Before September Ends.",
-      "summary": "",
-      "url": "https://finance.yahoo.com/m/0cc059b9-32a3-3fff-8749-9241d3b8437a/there-are-only-a-handful-of.html",
-      "source": "Motley Fool",
-      "published_at": "2026-09-11T07:25:00Z",
-      "fetched_at": "2026-09-11T08:01:58Z",
-      "ticker": null,
-      "source_tier": "aggregator"
-    },
-    {
-      "title": "Eurozone Bond Yields Rise; 10-Year Bund Yield Hits New 15-Year High",
-      "summary": "",
-      "url": "https://finance.yahoo.com/m/33c74a73-cfc1-32e1-bc85-ca47563bdba8/eurozone-bond-yields-rise%3B.html",
-      "source": "The Wall Street Journal",
-      "published_at": "2026-09-11T07:20:00Z",
-      "fetched_at": "2026-09-11T08:01:58Z",
-      "ticker": null,
-      "source_tier": "aggregator"
-    },
-    {
-      "title": "Dollar Steady Ahead of U.S. Inflation Data",
-      "summary": "",
-      "url": "https://finance.yahoo.com/m/225cea2b-deec-3a51-a3fd-bcc9e3f24f80/dollar-steady-ahead-of-u.s..html",
-      "source": "The Wall Street Journal",
-      "published_at": "2026-09-11T07:02:00Z",
-      "fetched_at": "2026-09-11T08:01:58Z",
-      "ticker": null,
-      "source_tier": "aggregator"
-    },
-    {
-      "title": "Bonds buckle, stocks fall as surging oil prices inflame inflation risks",
-      "summary": "",
-      "url": "https://finance.yahoo.com/economy/policy/articles/global-bonds-fall-surging-oil-005601417.html",
-      "source": "Reuters",
-      "published_at": "2026-09-11T06:09:49Z",
-      "fetched_at": "2026-09-11T08:01:58Z",
-      "ticker": null,
-      "source_tier": "aggregator"
-    },
-    {
-      "title": "Global bond selloff pushes 10-year US yield toward 5% on oil, rate-hike fears",
-      "summary": "",
-      "url": "https://finance.yahoo.com/economy/policy/articles/global-bond-selloff-pushes-10-055855890.html",
-      "source": "Reuters",
-      "published_at": "2026-09-11T05:58:55Z",
-      "fetched_at": "2026-09-11T08:01:58Z",
-      "ticker": null,
-      "source_tier": "aggregator"
-    },
-    {
-      "title": "Can the ECB rate hike stop an inflation shock driven by energy costs?",
-      "summary": "",
-      "url": "https://finance.yahoo.com/m/6bb32a9d-b03f-3bc1-b948-8cdc9a08b3f1/can-the-ecb-rate-hike-stop-an.html",
+      "url": "https://finance.yahoo.com/m/7b42b636-01be-39c3-9ef4-d3aa0e6aba75/oil-surges-past-%24108-as.html",
       "source": "Euronews",
-      "published_at": "2026-09-11T05:33:38Z",
-      "fetched_at": "2026-09-11T08:01:58Z",
+      "published_at": "2026-09-14T07:46:24Z",
+      "fetched_at": "2026-09-14T08:01:25Z",
       "ticker": null,
       "source_tier": "aggregator"
     },
     {
-      "title": "Oil Prices Surge to Four-Month Highs as War Risks Mount",
+      "title": "Oil Prices Gain as Conflict Spreads",
       "summary": "",
-      "url": "https://finance.yahoo.com/energy/articles/oil-prices-surge-four-month-053000138.html",
-      "source": "Oilprice.com",
-      "published_at": "2026-09-11T05:30:00Z",
-      "fetched_at": "2026-09-11T08:01:58Z",
+      "url": "https://finance.yahoo.com/m/763ea28b-00b8-34f1-800f-9ffef8caa74f/oil-prices-gain-as-conflict.html",
+      "source": "The Wall Street Journal",
+      "published_at": "2026-09-14T07:43:00Z",
+      "fetched_at": "2026-09-14T08:01:25Z",
       "ticker": null,
       "source_tier": "aggregator"
     },
     {
-      "title": "Oil prices falls to $105 and Asian shares decline, tracking Wall Street losses",
+      "title": "Oil prices extend gains on Mideast supply fears, tech leads losses",
       "summary": "",
-      "url": "https://finance.yahoo.com/energy/articles/oil-prices-stay-above-108-045937202.html",
-      "source": "Associated Press",
-      "published_at": "2026-09-11T04:59:37Z",
-      "fetched_at": "2026-09-11T08:01:58Z",
+      "url": "https://finance.yahoo.com/technology/ai/articles/tech-firms-hit-ai-slowdown-024739551.html",
+      "source": "AFP",
+      "published_at": "2026-09-14T07:39:48Z",
+      "fetched_at": "2026-09-14T08:01:25Z",
       "ticker": null,
       "source_tier": "aggregator"
     },
     {
-      "title": "9月10日通信ETF国泰（515880）份额增加1.40亿份，最新份额626.22亿份，最新规模420.19亿元",
-      "summary": "9月10日通信ETF国泰（515880）份额增加1.40亿份，最新份额626.22亿份，最新规模420.19亿元 新浪财经",
-      "url": "https://news.google.com/rss/articles/CBMimwFBVV95cUxPck1yVHZ6d0l1cmIwM2FDX0JnN3kyQXBvMVRyWmJPZUE2bXREUWJfRFlpVVdvTHMyVzJpOEs1dDZ0UlYzbE5wRHdRVFUzazJHRVdJZUJ6Nm9hQ0RULWVNTFVVVzNGbEJOR1hOdnUzSERmX3Vhd2pPSjd1SzREdy1vMklpNzUwUEZEeXJ1X3R5S3I3ODM3SElsNkJfUQ?oc=5",
-      "source": "Google News / 新浪财经",
-      "published_at": "2026-09-11T01:00:00Z",
-      "fetched_at": "2026-09-11T08:01:59Z",
+      "title": "European shares muted as tech slides, oil surge weighs",
+      "summary": "",
+      "url": "https://finance.yahoo.com/markets/stocks/articles/european-shares-muted-tech-slides-072955621.html",
+      "source": "Reuters",
+      "published_at": "2026-09-14T07:29:55Z",
+      "fetched_at": "2026-09-14T08:01:25Z",
+      "ticker": null,
+      "source_tier": "aggregator"
+    },
+    {
+      "title": "US manufacturers raise concerns about AI shopping chatbots",
+      "summary": "",
+      "url": "https://finance.yahoo.com/technology/ai/articles/us-manufacturers-raise-concerns-ai-071939228.html",
+      "source": "Just Style",
+      "published_at": "2026-09-14T07:19:39Z",
+      "fetched_at": "2026-09-14T08:01:25Z",
+      "ticker": null,
+      "source_tier": "aggregator"
+    },
+    {
+      "title": "S&P 500 Bulls Are Not Giving Up Yet – But Rising Oil Prices, Long-Term Yields Rise Are Narrowing The Path Higher",
+      "summary": "",
+      "url": "https://finance.yahoo.com/m/85b94c2e-b74a-3dc9-8115-70fa52f39f0f/s%26p-500-bulls-are-not-giving.html",
+      "source": "Stocktwits",
+      "published_at": "2026-09-14T06:52:13Z",
+      "fetched_at": "2026-09-14T08:01:25Z",
+      "ticker": null,
+      "source_tier": "aggregator"
+    },
+    {
+      "title": "Dollar Rises on Fed Rate-Hike Prospects, High Oil Prices",
+      "summary": "",
+      "url": "https://finance.yahoo.com/m/b0012212-b385-3cbd-9491-a2c6ad23308f/dollar-rises-on-fed-rate-hike.html",
+      "source": "The Wall Street Journal",
+      "published_at": "2026-09-14T06:48:00Z",
+      "fetched_at": "2026-09-14T08:01:25Z",
+      "ticker": null,
+      "source_tier": "aggregator"
+    },
+    {
+      "title": "Dow Jones Futures: Techs Tumble As Anthropic Leads Call For AI Slowdown; Fed Meeting Ahead",
+      "summary": "",
+      "url": "https://finance.yahoo.com/m/75964091-0d57-3879-b55e-2c11b3225642/dow-jones-futures%3A-techs.html",
+      "source": "Investor's Business Daily",
+      "published_at": "2026-09-14T06:40:45Z",
+      "fetched_at": "2026-09-14T08:01:25Z",
+      "ticker": null,
+      "source_tier": "aggregator"
+    },
+    {
+      "title": "Oil prices up over 2% following new strikes on Saudi, Strait of Hormuz",
+      "summary": "",
+      "url": "https://finance.yahoo.com/energy/articles/oil-prices-jump-more-3-224715375.html",
+      "source": "Reuters",
+      "published_at": "2026-09-14T06:36:34Z",
+      "fetched_at": "2026-09-14T08:01:25Z",
+      "ticker": null,
+      "source_tier": "aggregator"
+    },
+    {
+      "title": "Touchstone Exploration mobilises rig for WD-4 well in Trinidad",
+      "summary": "",
+      "url": "https://finance.yahoo.com/m/551ab00a-6f35-3bc7-a752-0ef4277158f3/touchstone-exploration.html",
+      "source": "Proactive",
+      "published_at": "2026-09-14T06:34:00Z",
+      "fetched_at": "2026-09-14T08:01:25Z",
+      "ticker": null,
+      "source_tier": "aggregator"
+    },
+    {
+      "title": "9月11日通信ETF国泰（515880）份额增加14.14亿份，最新份额640.36亿份，最新规模432.82亿元",
+      "summary": "9月11日通信ETF国泰（515880）份额增加14.14亿份，最新份额640.36亿份，最新规模432.82亿元 finance.sina.com.cn",
+      "url": "https://news.google.com/rss/articles/CBMimwFBVV95cUxQRU9rTkJ0WE1pR2p2aENuM2M0RnNwU0tSckw0dTc2Wl9YWUhJVTdFR01iNC12S0RkNEVaMDlTRVF3dWhTNTlkbTVldUNsVDVvb2lNNUZOUFlxRDVSQzlKUXNTVzFIM2xlbWJ1R0I5SDZoZ1hncjhfZDIyQTZZTkdlNVRhY3Z2RXBzT1loQURPUUZncWU1Z3EwVkZRRQ?oc=5",
+      "source": "Google News / finance.sina.com.cn",
+      "published_at": "2026-09-14T01:00:00Z",
+      "fetched_at": "2026-09-14T08:01:27Z",
       "ticker": "515880.SS",
       "source_tier": "aggregator"
     }
