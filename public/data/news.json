@@ -1,113 +1,113 @@
 {
   "version": 1,
   "status": "ok",
-  "generated_at": "2026-09-15T16:01:09+08:00",
-  "trade_date": "2026-09-15",
+  "generated_at": "2026-09-16T16:01:33+08:00",
+  "trade_date": "2026-09-16",
   "global": {
     "status": "ok",
     "query_type": "global",
     "ticker": null,
-    "start_date": "2026-09-08",
-    "end_date": "2026-09-15",
-    "fetched_at": "2026-09-15T08:01:10Z",
+    "start_date": "2026-09-09",
+    "end_date": "2026-09-16",
+    "fetched_at": "2026-09-16T08:01:34Z",
     "items": [
       {
-        "title": "Avenrock Energy to purchase Parallax Energy Operating in Alberta",
+        "title": "Dollar edges lower before expected Fed hike",
         "summary": "",
-        "url": "https://finance.yahoo.com/m/6a774df2-778d-3f25-8c59-de0484064dde/avenrock-energy-to-purchase.html",
-        "source": "Offshore Technology",
-        "published_at": "2026-09-15T07:58:58Z",
-        "fetched_at": "2026-09-15T08:01:10Z",
+        "url": "https://finance.yahoo.com/markets/currencies/articles/dollar-girded-bets-us-hiking-045220914.html",
+        "source": "Reuters",
+        "published_at": "2026-09-16T07:48:17Z",
+        "fetched_at": "2026-09-16T08:01:34Z",
         "ticker": null,
         "source_tier": "aggregator"
       },
       {
-        "title": "Carlyle-Backed Avenrock Energy to Acquire Parallax Energy",
+        "title": "Stocks head higher as traders prepare for Fed decision",
         "summary": "",
-        "url": "https://finance.yahoo.com/energy/articles/carlyle-backed-avenrock-energy-acquire-075313892.html",
-        "source": "MT Newswires",
-        "published_at": "2026-09-15T07:53:13Z",
-        "fetched_at": "2026-09-15T08:01:10Z",
-        "ticker": null,
-        "source_tier": "aggregator"
-      },
-      {
-        "title": "FTSE 100 today: Stocks slip as oil surges, AI safety rift adds to unease",
-        "summary": "",
-        "url": "https://finance.yahoo.com/markets/world-indices/articles/ftse-100-today-stocks-slip-075124691.html",
-        "source": "Investing.com",
-        "published_at": "2026-09-15T07:51:24Z",
-        "fetched_at": "2026-09-15T08:01:10Z",
-        "ticker": null,
-        "source_tier": "aggregator"
-      },
-      {
-        "title": "Stocks drop, oil climbs and Treasury yields hit 19-year high",
-        "summary": "",
-        "url": "https://finance.yahoo.com/markets/articles/most-markets-drop-oil-extends-025204412.html",
+        "url": "https://finance.yahoo.com/economy/policy/articles/asian-stocks-stutter-traders-prepare-024656301.html",
         "source": "AFP",
-        "published_at": "2026-09-15T07:30:59Z",
-        "fetched_at": "2026-09-15T08:01:10Z",
+        "published_at": "2026-09-16T07:35:05Z",
+        "fetched_at": "2026-09-16T08:01:34Z",
         "ticker": null,
         "source_tier": "aggregator"
       },
       {
-        "title": "BofA Sees Chance of $150 Oil on Critical Infrastructure Risk",
+        "title": "Fundstrat’s Tom Lee Sees S&P 500 Above 8,200 By Year-End, But This Analyst Just Slashed The Target For 2026",
         "summary": "",
-        "url": "https://finance.yahoo.com/video/bofa-sees-chance-150-oil-072157400.html",
-        "source": "Bloomberg",
-        "published_at": "2026-09-15T07:21:57Z",
-        "fetched_at": "2026-09-15T08:01:10Z",
+        "url": "https://finance.yahoo.com/markets/stocks/articles/fundstrat-tom-lee-sees-p-073202187.html",
+        "source": "Stocktwits",
+        "published_at": "2026-09-16T07:32:02Z",
+        "fetched_at": "2026-09-16T08:01:34Z",
         "ticker": null,
         "source_tier": "aggregator"
       },
       {
-        "title": "Europe shares slip as banks drag, oil-driven inflation fears weigh",
+        "title": "European shares rise as oil rally pauses; all eyes on Fed",
         "summary": "",
-        "url": "https://finance.yahoo.com/economy/policy/articles/europe-shares-slip-banks-drag-072039280.html",
+        "url": "https://finance.yahoo.com/markets/articles/european-shares-rise-oil-rally-071347504.html",
         "source": "Reuters",
-        "published_at": "2026-09-15T07:20:39Z",
-        "fetched_at": "2026-09-15T08:01:10Z",
+        "published_at": "2026-09-16T07:13:47Z",
+        "fetched_at": "2026-09-16T08:01:34Z",
         "ticker": null,
         "source_tier": "aggregator"
       },
       {
-        "title": "Dollar Rises in Anticipation of Fed Rate Increase",
+        "title": "UK inflation hits 3.1% but data offers some relief for BoE",
         "summary": "",
-        "url": "https://finance.yahoo.com/m/17176f7a-d3f5-3815-931e-9b7f06e28135/dollar-rises-in-anticipation.html",
-        "source": "The Wall Street Journal",
-        "published_at": "2026-09-15T07:02:00Z",
-        "fetched_at": "2026-09-15T08:01:10Z",
-        "ticker": null,
-        "source_tier": "aggregator"
-      },
-      {
-        "title": "Oil climbs as Saudi pipeline outage, fresh attacks heighten supply concerns",
-        "summary": "",
-        "url": "https://finance.yahoo.com/news/oil-prices-rise-saudi-pipeline-003617502.html",
+        "url": "https://finance.yahoo.com/economy/articles/uk-inflation-speeds-3-1-060709273.html",
         "source": "Reuters",
-        "published_at": "2026-09-15T06:55:51Z",
-        "fetched_at": "2026-09-15T08:01:10Z",
+        "published_at": "2026-09-16T07:03:24Z",
+        "fetched_at": "2026-09-16T08:01:34Z",
         "ticker": null,
         "source_tier": "aggregator"
       },
       {
-        "title": "Dollar inches higher as 10-year Treasury yield climbs to highest since 2007",
+        "title": "Oil slips on US stock build, Middle East disruptions in focus",
         "summary": "",
-        "url": "https://finance.yahoo.com/markets/currencies/articles/dollar-near-two-week-high-015754426.html",
+        "url": "https://finance.yahoo.com/energy/articles/oil-slips-us-stock-build-050411696.html",
         "source": "Reuters",
-        "published_at": "2026-09-15T06:00:09Z",
-        "fetched_at": "2026-09-15T08:01:10Z",
+        "published_at": "2026-09-16T06:58:51Z",
+        "fetched_at": "2026-09-16T08:01:34Z",
+        "ticker": null,
+        "source_tier": "aggregator"
+      },
+      {
+        "title": "Invesco studied 50 years of dividend stock returns to see if owning them really pays off or not",
+        "summary": "",
+        "url": "https://finance.yahoo.com/markets/stocks/articles/invesco-studied-50-years-dividend-064700520.html",
+        "source": "TheStreet",
+        "published_at": "2026-09-16T06:47:00Z",
+        "fetched_at": "2026-09-16T08:01:34Z",
         "ticker": null,
         "source_tier": "aggregator"
       },
       {
         "title": "Stock Market: Will S&P 500 Open Up or Down Today?",
         "summary": "",
-        "url": "https://finance.yahoo.com/m/c11a3ffc-bee7-38ac-87b3-c7e8b05fd17f/stock-market%3A-will-s%26p-500.html",
+        "url": "https://finance.yahoo.com/markets/stocks/articles/stock-market-p-500-open-062937200.html",
         "source": "Benzinga Prediction Markets",
-        "published_at": "2026-09-15T05:58:02Z",
-        "fetched_at": "2026-09-15T08:01:10Z",
+        "published_at": "2026-09-16T06:29:37Z",
+        "fetched_at": "2026-09-16T08:01:34Z",
+        "ticker": null,
+        "source_tier": "aggregator"
+      },
+      {
+        "title": "Valaris (VAL) Soars 8.6%: Is Further Upside Left in the Stock?",
+        "summary": "",
+        "url": "https://finance.yahoo.com/markets/stocks/articles/valaris-val-soars-8-6-061100707.html",
+        "source": "Zacks",
+        "published_at": "2026-09-16T06:11:00Z",
+        "fetched_at": "2026-09-16T08:01:34Z",
+        "ticker": null,
+        "source_tier": "aggregator"
+      },
+      {
+        "title": "Not Just the US: Global Bond Yields Hit Multi-Decade Highs. Time to Worry?",
+        "summary": "",
+        "url": "https://finance.yahoo.com/markets/currencies/articles/not-just-us-global-bond-054934436.html",
+        "source": "BeInCrypto",
+        "published_at": "2026-09-16T05:49:34Z",
+        "fetched_at": "2026-09-16T08:01:34Z",
         "ticker": null,
         "source_tier": "aggregator"
       }
@@ -116,7 +116,7 @@
       {
         "source": "Yahoo Finance",
         "status": "ok",
-        "item_count": 50
+        "item_count": 48
       },
       {
         "source": "Federal Reserve",
@@ -130,27 +130,17 @@
       "status": "ok",
       "query_type": "ticker",
       "ticker": "515880.SS",
-      "start_date": "2026-09-15",
-      "end_date": "2026-09-15",
-      "fetched_at": "2026-09-15T08:01:12Z",
+      "start_date": "2026-09-16",
+      "end_date": "2026-09-16",
+      "fetched_at": "2026-09-16T08:01:35Z",
       "items": [
         {
-          "title": "通信ETF国泰（515880）跌0.15%，半日成交额17.96亿元",
-          "summary": "通信ETF国泰（515880）跌0.15%，半日成交额17.96亿元 finance.sina.cn",
-          "url": "https://news.google.com/rss/articles/CBMieEFVX3lxTE55NVB2Nno0UWVPN2QtaUlEWVNsTTJENmFwZGlYeWVtNklpREQ1SER3ejdMcVp3M19yOXhrb3VONEtPNVdWQlc0QWpCWlNjczQ4YlJYRmc2TXNXY3h0R0toWmQ4LW1CbjRYb21xbDJpblp2ZFhMZl9JMw?oc=5",
-          "source": "Google News / finance.sina.cn",
-          "published_at": "2026-09-15T03:37:29Z",
-          "fetched_at": "2026-09-15T08:01:12Z",
-          "ticker": "515880.SS",
-          "source_tier": "aggregator"
-        },
-        {
-          "title": "通信ETF国泰（515880）开盘跌0.91%，重仓股新易盛涨0.02%，中际旭创涨0.04%",
-          "summary": "通信ETF国泰（515880）开盘跌0.91%，重仓股新易盛涨0.02%，中际旭创涨0.04% finance.sina.com.cn",
-          "url": "https://news.google.com/rss/articles/CBMimAFBVV95cUxObXNrMEo3MVFYSWQyMGowcUE5UnZaM1pTM2RBSVI0TDVjZG5QWU4xcVVDcmRvMUNVcTMzdlEyQ3FIbTQ0U24xOVFndGxqbG5oYkk4XzhjU2k0T2lqMVVJNkZlUFc0V05TSVVudW0tTmRGMFRyVU9HVkRHWWJFaDZSOEdTWlhGeERzMnFadjIzUXNFVUF5em52eQ?oc=5",
-          "source": "Google News / finance.sina.com.cn",
-          "published_at": "2026-09-15T01:30:00Z",
-          "fetched_at": "2026-09-15T08:01:12Z",
+          "title": "9月15日通信ETF国泰（515880）份额减少2.08亿份，最新份额639.58亿份，最新规模417.58亿元",
+          "summary": "9月15日通信ETF国泰（515880）份额减少2.08亿份，最新份额639.58亿份，最新规模417.58亿元 新浪财经",
+          "url": "https://news.google.com/rss/articles/CBMimwFBVV95cUxNMTdBTTVXRjZuVi11N1pfeWtNMFNkakZtOFBueDZMc2xiV2FRY3drekRXOERINTNucHVSTEE4c2tiUlQ4QjlwaXBBcUJpcEZRcV9yZFQxTkU0U09WM1I0VzFBZmpnMUF6cERHeHFjV1Y5cTZQT2R2UmVyZWY4bHllRkFTSDlMX3FyY2hPeGFZcDJCQ3l1NlBjRXVKcw?oc=5",
+          "source": "Google News / 新浪财经",
+          "published_at": "2026-09-16T01:00:00Z",
+          "fetched_at": "2026-09-16T08:01:35Z",
           "ticker": "515880.SS",
           "source_tier": "aggregator"
         }
@@ -164,7 +154,7 @@
         {
           "source": "Google News RSS",
           "status": "ok",
-          "item_count": 2
+          "item_count": 1
         },
         {
           "source": "SEC EDGAR",
@@ -174,13 +164,24 @@
       ]
     },
     "512480.SS": {
-      "status": "empty",
+      "status": "ok",
       "query_type": "ticker",
       "ticker": "512480.SS",
-      "start_date": "2026-09-15",
-      "end_date": "2026-09-15",
-      "fetched_at": "2026-09-15T08:01:14Z",
-      "items": [],
+      "start_date": "2026-09-16",
+      "end_date": "2026-09-16",
+      "fetched_at": "2026-09-16T08:01:38Z",
+      "items": [
+        {
+          "title": "9月15日半导体ETF国联安（512480）份额减少2.92亿份，最新份额202.18亿份，最新规模194.90亿元",
+          "summary": "9月15日半导体ETF国联安（512480）份额减少2.92亿份，最新份额202.18亿份，最新规模194.90亿元 新浪财经",
+          "url": "https://news.google.com/rss/articles/CBMimwFBVV95cUxQY0g3Z0JSRnQzX1dCUjFlTjN0ZzRLQ20zVm9IaG5CdUEzVzViODB1eDBZWFJkMG9XaWVFTkNXb2M0LXV5TTl2ZFRaMVZQRE0yMlNUTDEwVmpfSDFkbkpXc0dxdFBlcFd0Z2w2aWNLZmZSdTYtSGRoQWtkMFhmaGx3WlpjT3prdzR0ZXNCc1o2ekotWG0xaXFwVVBPWQ?oc=5",
+          "source": "Google News / 新浪财经",
+          "published_at": "2026-09-16T01:00:00Z",
+          "fetched_at": "2026-09-16T08:01:38Z",
+          "ticker": "512480.SS",
+          "source_tier": "aggregator"
+        }
+      ],
       "source_statuses": [
         {
           "source": "Yahoo Finance",
@@ -189,8 +190,8 @@
         },
         {
           "source": "Google News RSS",
-          "status": "empty",
-          "item_count": 0
+          "status": "ok",
+          "item_count": 1
         },
         {
           "source": "SEC EDGAR",
@@ -202,123 +203,123 @@
   },
   "items": [
     {
-      "title": "Avenrock Energy to purchase Parallax Energy Operating in Alberta",
+      "title": "Dollar edges lower before expected Fed hike",
       "summary": "",
-      "url": "https://finance.yahoo.com/m/6a774df2-778d-3f25-8c59-de0484064dde/avenrock-energy-to-purchase.html",
-      "source": "Offshore Technology",
-      "published_at": "2026-09-15T07:58:58Z",
-      "fetched_at": "2026-09-15T08:01:10Z",
+      "url": "https://finance.yahoo.com/markets/currencies/articles/dollar-girded-bets-us-hiking-045220914.html",
+      "source": "Reuters",
+      "published_at": "2026-09-16T07:48:17Z",
+      "fetched_at": "2026-09-16T08:01:34Z",
       "ticker": null,
       "source_tier": "aggregator"
     },
     {
-      "title": "Carlyle-Backed Avenrock Energy to Acquire Parallax Energy",
+      "title": "Stocks head higher as traders prepare for Fed decision",
       "summary": "",
-      "url": "https://finance.yahoo.com/energy/articles/carlyle-backed-avenrock-energy-acquire-075313892.html",
-      "source": "MT Newswires",
-      "published_at": "2026-09-15T07:53:13Z",
-      "fetched_at": "2026-09-15T08:01:10Z",
-      "ticker": null,
-      "source_tier": "aggregator"
-    },
-    {
-      "title": "FTSE 100 today: Stocks slip as oil surges, AI safety rift adds to unease",
-      "summary": "",
-      "url": "https://finance.yahoo.com/markets/world-indices/articles/ftse-100-today-stocks-slip-075124691.html",
-      "source": "Investing.com",
-      "published_at": "2026-09-15T07:51:24Z",
-      "fetched_at": "2026-09-15T08:01:10Z",
-      "ticker": null,
-      "source_tier": "aggregator"
-    },
-    {
-      "title": "Stocks drop, oil climbs and Treasury yields hit 19-year high",
-      "summary": "",
-      "url": "https://finance.yahoo.com/markets/articles/most-markets-drop-oil-extends-025204412.html",
+      "url": "https://finance.yahoo.com/economy/policy/articles/asian-stocks-stutter-traders-prepare-024656301.html",
       "source": "AFP",
-      "published_at": "2026-09-15T07:30:59Z",
-      "fetched_at": "2026-09-15T08:01:10Z",
+      "published_at": "2026-09-16T07:35:05Z",
+      "fetched_at": "2026-09-16T08:01:34Z",
       "ticker": null,
       "source_tier": "aggregator"
     },
     {
-      "title": "BofA Sees Chance of $150 Oil on Critical Infrastructure Risk",
+      "title": "Fundstrat’s Tom Lee Sees S&P 500 Above 8,200 By Year-End, But This Analyst Just Slashed The Target For 2026",
       "summary": "",
-      "url": "https://finance.yahoo.com/video/bofa-sees-chance-150-oil-072157400.html",
-      "source": "Bloomberg",
-      "published_at": "2026-09-15T07:21:57Z",
-      "fetched_at": "2026-09-15T08:01:10Z",
+      "url": "https://finance.yahoo.com/markets/stocks/articles/fundstrat-tom-lee-sees-p-073202187.html",
+      "source": "Stocktwits",
+      "published_at": "2026-09-16T07:32:02Z",
+      "fetched_at": "2026-09-16T08:01:34Z",
       "ticker": null,
       "source_tier": "aggregator"
     },
     {
-      "title": "Europe shares slip as banks drag, oil-driven inflation fears weigh",
+      "title": "European shares rise as oil rally pauses; all eyes on Fed",
       "summary": "",
-      "url": "https://finance.yahoo.com/economy/policy/articles/europe-shares-slip-banks-drag-072039280.html",
+      "url": "https://finance.yahoo.com/markets/articles/european-shares-rise-oil-rally-071347504.html",
       "source": "Reuters",
-      "published_at": "2026-09-15T07:20:39Z",
-      "fetched_at": "2026-09-15T08:01:10Z",
+      "published_at": "2026-09-16T07:13:47Z",
+      "fetched_at": "2026-09-16T08:01:34Z",
       "ticker": null,
       "source_tier": "aggregator"
     },
     {
-      "title": "Dollar Rises in Anticipation of Fed Rate Increase",
+      "title": "UK inflation hits 3.1% but data offers some relief for BoE",
       "summary": "",
-      "url": "https://finance.yahoo.com/m/17176f7a-d3f5-3815-931e-9b7f06e28135/dollar-rises-in-anticipation.html",
-      "source": "The Wall Street Journal",
-      "published_at": "2026-09-15T07:02:00Z",
-      "fetched_at": "2026-09-15T08:01:10Z",
-      "ticker": null,
-      "source_tier": "aggregator"
-    },
-    {
-      "title": "Oil climbs as Saudi pipeline outage, fresh attacks heighten supply concerns",
-      "summary": "",
-      "url": "https://finance.yahoo.com/news/oil-prices-rise-saudi-pipeline-003617502.html",
+      "url": "https://finance.yahoo.com/economy/articles/uk-inflation-speeds-3-1-060709273.html",
       "source": "Reuters",
-      "published_at": "2026-09-15T06:55:51Z",
-      "fetched_at": "2026-09-15T08:01:10Z",
+      "published_at": "2026-09-16T07:03:24Z",
+      "fetched_at": "2026-09-16T08:01:34Z",
       "ticker": null,
       "source_tier": "aggregator"
     },
     {
-      "title": "Dollar inches higher as 10-year Treasury yield climbs to highest since 2007",
+      "title": "Oil slips on US stock build, Middle East disruptions in focus",
       "summary": "",
-      "url": "https://finance.yahoo.com/markets/currencies/articles/dollar-near-two-week-high-015754426.html",
+      "url": "https://finance.yahoo.com/energy/articles/oil-slips-us-stock-build-050411696.html",
       "source": "Reuters",
-      "published_at": "2026-09-15T06:00:09Z",
-      "fetched_at": "2026-09-15T08:01:10Z",
+      "published_at": "2026-09-16T06:58:51Z",
+      "fetched_at": "2026-09-16T08:01:34Z",
+      "ticker": null,
+      "source_tier": "aggregator"
+    },
+    {
+      "title": "Invesco studied 50 years of dividend stock returns to see if owning them really pays off or not",
+      "summary": "",
+      "url": "https://finance.yahoo.com/markets/stocks/articles/invesco-studied-50-years-dividend-064700520.html",
+      "source": "TheStreet",
+      "published_at": "2026-09-16T06:47:00Z",
+      "fetched_at": "2026-09-16T08:01:34Z",
       "ticker": null,
       "source_tier": "aggregator"
     },
     {
       "title": "Stock Market: Will S&P 500 Open Up or Down Today?",
       "summary": "",
-      "url": "https://finance.yahoo.com/m/c11a3ffc-bee7-38ac-87b3-c7e8b05fd17f/stock-market%3A-will-s%26p-500.html",
+      "url": "https://finance.yahoo.com/markets/stocks/articles/stock-market-p-500-open-062937200.html",
       "source": "Benzinga Prediction Markets",
-      "published_at": "2026-09-15T05:58:02Z",
-      "fetched_at": "2026-09-15T08:01:10Z",
+      "published_at": "2026-09-16T06:29:37Z",
+      "fetched_at": "2026-09-16T08:01:34Z",
       "ticker": null,
       "source_tier": "aggregator"
     },
     {
-      "title": "通信ETF国泰（515880）跌0.15%，半日成交额17.96亿元",
-      "summary": "通信ETF国泰（515880）跌0.15%，半日成交额17.96亿元 finance.sina.cn",
-      "url": "https://news.google.com/rss/articles/CBMieEFVX3lxTE55NVB2Nno0UWVPN2QtaUlEWVNsTTJENmFwZGlYeWVtNklpREQ1SER3ejdMcVp3M19yOXhrb3VONEtPNVdWQlc0QWpCWlNjczQ4YlJYRmc2TXNXY3h0R0toWmQ4LW1CbjRYb21xbDJpblp2ZFhMZl9JMw?oc=5",
-      "source": "Google News / finance.sina.cn",
-      "published_at": "2026-09-15T03:37:29Z",
-      "fetched_at": "2026-09-15T08:01:12Z",
+      "title": "Valaris (VAL) Soars 8.6%: Is Further Upside Left in the Stock?",
+      "summary": "",
+      "url": "https://finance.yahoo.com/markets/stocks/articles/valaris-val-soars-8-6-061100707.html",
+      "source": "Zacks",
+      "published_at": "2026-09-16T06:11:00Z",
+      "fetched_at": "2026-09-16T08:01:34Z",
+      "ticker": null,
+      "source_tier": "aggregator"
+    },
+    {
+      "title": "Not Just the US: Global Bond Yields Hit Multi-Decade Highs. Time to Worry?",
+      "summary": "",
+      "url": "https://finance.yahoo.com/markets/currencies/articles/not-just-us-global-bond-054934436.html",
+      "source": "BeInCrypto",
+      "published_at": "2026-09-16T05:49:34Z",
+      "fetched_at": "2026-09-16T08:01:34Z",
+      "ticker": null,
+      "source_tier": "aggregator"
+    },
+    {
+      "title": "9月15日通信ETF国泰（515880）份额减少2.08亿份，最新份额639.58亿份，最新规模417.58亿元",
+      "summary": "9月15日通信ETF国泰（515880）份额减少2.08亿份，最新份额639.58亿份，最新规模417.58亿元 新浪财经",
+      "url": "https://news.google.com/rss/articles/CBMimwFBVV95cUxNMTdBTTVXRjZuVi11N1pfeWtNMFNkakZtOFBueDZMc2xiV2FRY3drekRXOERINTNucHVSTEE4c2tiUlQ4QjlwaXBBcUJpcEZRcV9yZFQxTkU0U09WM1I0VzFBZmpnMUF6cERHeHFjV1Y5cTZQT2R2UmVyZWY4bHllRkFTSDlMX3FyY2hPeGFZcDJCQ3l1NlBjRXVKcw?oc=5",
+      "source": "Google News / 新浪财经",
+      "published_at": "2026-09-16T01:00:00Z",
+      "fetched_at": "2026-09-16T08:01:35Z",
       "ticker": "515880.SS",
       "source_tier": "aggregator"
     },
     {
-      "title": "通信ETF国泰（515880）开盘跌0.91%，重仓股新易盛涨0.02%，中际旭创涨0.04%",
-      "summary": "通信ETF国泰（515880）开盘跌0.91%，重仓股新易盛涨0.02%，中际旭创涨0.04% finance.sina.com.cn",
-      "url": "https://news.google.com/rss/articles/CBMimAFBVV95cUxObXNrMEo3MVFYSWQyMGowcUE5UnZaM1pTM2RBSVI0TDVjZG5QWU4xcVVDcmRvMUNVcTMzdlEyQ3FIbTQ0U24xOVFndGxqbG5oYkk4XzhjU2k0T2lqMVVJNkZlUFc0V05TSVVudW0tTmRGMFRyVU9HVkRHWWJFaDZSOEdTWlhGeERzMnFadjIzUXNFVUF5em52eQ?oc=5",
-      "source": "Google News / finance.sina.com.cn",
-      "published_at": "2026-09-15T01:30:00Z",
-      "fetched_at": "2026-09-15T08:01:12Z",
-      "ticker": "515880.SS",
+      "title": "9月15日半导体ETF国联安（512480）份额减少2.92亿份，最新份额202.18亿份，最新规模194.90亿元",
+      "summary": "9月15日半导体ETF国联安（512480）份额减少2.92亿份，最新份额202.18亿份，最新规模194.90亿元 新浪财经",
+      "url": "https://news.google.com/rss/articles/CBMimwFBVV95cUxQY0g3Z0JSRnQzX1dCUjFlTjN0ZzRLQ20zVm9IaG5CdUEzVzViODB1eDBZWFJkMG9XaWVFTkNXb2M0LXV5TTl2ZFRaMVZQRE0yMlNUTDEwVmpfSDFkbkpXc0dxdFBlcFd0Z2w2aWNLZmZSdTYtSGRoQWtkMFhmaGx3WlpjT3prdzR0ZXNCc1o2ekotWG0xaXFwVVBPWQ?oc=5",
+      "source": "Google News / 新浪财经",
+      "published_at": "2026-09-16T01:00:00Z",
+      "fetched_at": "2026-09-16T08:01:38Z",
+      "ticker": "512480.SS",
       "source_tier": "aggregator"
     }
   ]
