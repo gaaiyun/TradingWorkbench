@@ -1,7 +1,7 @@
 {
   "status": "ok",
-  "generated_at": "2026-09-17T16:02:02+08:00",
-  "trade_date": "2026-09-17",
+  "generated_at": "2026-09-18T16:02:09+08:00",
+  "trade_date": "2026-09-18",
   "provider": "openai_compatible",
   "analysts": [
     "market",
@@ -19,19 +19,19 @@
     "kind": "monitor"
   },
   "run": {
-    "id": "35197455216",
+    "id": "35322257944",
     "attempt": "1",
     "workflow": "daily-analysis",
-    "url": "https://github.com/gaaiyun/TradingWorkbench/actions/runs/35197455216"
+    "url": "https://github.com/gaaiyun/TradingWorkbench/actions/runs/35322257944"
   },
   "identity": {
     "scope": "profile",
     "kind": "monitor",
-    "runId": "35197455216",
+    "runId": "35322257944",
     "profileId": "cn-semi-comms",
     "requestId": null,
-    "slotId": "slot-9d8f528e07ff516bfa9eb68a5188707294ffd4fa823af2cc07d597a76b662e3e",
-    "scheduledFor": "2026-09-17T07:17:15.000Z"
+    "slotId": "slot-b4a72b7aba9ba668f05e3f1ec3849f4b86e15caa3161c7283ff380ead777a995",
+    "scheduledFor": "2026-09-18T07:17:15.000Z"
   },
   "rating_tiers": [
     "Sell",
@@ -58,22 +58,22 @@
     {
       "ticker": "512480.SS",
       "rating": "Hold",
-      "report": "reports/512480.SS/2026-09-17/complete_report.md",
+      "report": "reports/512480.SS/2026-09-18/complete_report.md",
       "files": {
-        "fundamentals": "reports/512480.SS/2026-09-17/1_analysts/fundamentals.md",
-        "market": "reports/512480.SS/2026-09-17/1_analysts/market.md",
-        "news": "reports/512480.SS/2026-09-17/1_analysts/news.md",
-        "bear": "reports/512480.SS/2026-09-17/2_research/bear.md",
-        "bull": "reports/512480.SS/2026-09-17/2_research/bull.md",
-        "manager": "reports/512480.SS/2026-09-17/2_research/manager.md",
-        "trader": "reports/512480.SS/2026-09-17/3_trading/trader.md",
-        "aggressive": "reports/512480.SS/2026-09-17/4_risk/aggressive.md",
-        "conservative": "reports/512480.SS/2026-09-17/4_risk/conservative.md",
-        "neutral": "reports/512480.SS/2026-09-17/4_risk/neutral.md",
-        "decision": "reports/512480.SS/2026-09-17/5_portfolio/decision.md",
-        "complete_report": "reports/512480.SS/2026-09-17/complete_report.md"
+        "fundamentals": "reports/512480.SS/2026-09-18/1_analysts/fundamentals.md",
+        "market": "reports/512480.SS/2026-09-18/1_analysts/market.md",
+        "news": "reports/512480.SS/2026-09-18/1_analysts/news.md",
+        "bear": "reports/512480.SS/2026-09-18/2_research/bear.md",
+        "bull": "reports/512480.SS/2026-09-18/2_research/bull.md",
+        "manager": "reports/512480.SS/2026-09-18/2_research/manager.md",
+        "trader": "reports/512480.SS/2026-09-18/3_trading/trader.md",
+        "aggressive": "reports/512480.SS/2026-09-18/4_risk/aggressive.md",
+        "conservative": "reports/512480.SS/2026-09-18/4_risk/conservative.md",
+        "neutral": "reports/512480.SS/2026-09-18/4_risk/neutral.md",
+        "decision": "reports/512480.SS/2026-09-18/5_portfolio/decision.md",
+        "complete_report": "reports/512480.SS/2026-09-18/complete_report.md"
       },
-      "decision_excerpt": "**Rating**: Hold\n\n**Executive Summary**: 根据风险分析师辩论，512480.SS ETF受益于集成电路布图设计保护条例[N2][N3]和2026年6月28日基金份额拆分[CA2]改善流动性，8天收盘变化正[D2]，但收盘低于MA60[D6]且RSI中性[I11]，核心NAV/费用/跟踪误差不可用[M681-M688]。研究经理推荐持有，维持立场。\n\n**Investment Thesis**: 激进分析师视政策和拆分利好长期半导体增长，但保守分析师关注MA60距离[D6]和数据空白。平衡下ETF持有捕捉结构性机会，最新收盘1.0[M688]，ATR14=0.03902653[I3]允许波动。政策仅证明事件，份额拆分仅调整单位，无效果推断。保持持仓监控季度报告[N1][N4]和指标[I系列]，避免新进入直到指标可用。",
+      "decision_excerpt": "**Rating**: 持有\n\n**Executive Summary**: 风险分析师辩论综合后决定持有512480.SS [D1]。激进分析师强调最近8天收盘变化6.55737705% [D2] 和集成电路布图设计保护条例 [N2][N3]。保守分析师指出实现波动率36.35376726% [I10]、价格低于MA60且无严格对齐 [D7]、MACD为-0.01503861 [I7] 以及持仓NAV费用等数据 unavailable。最终立场为持有 [D1]。\n\n**Investment Thesis**: ETF 512480.SS 最新收盘价为1.04 [M689]。最近8天收盘变化为6.55737705% [D2]。实现波动率为36.35376726% [I10]。价格低于MA60的1.06318333 [I6] 且无严格对齐 [D7]。MACD为-0.01503861 [I7]",
       "analysis_status": "rated",
       "audit_status": "verified",
       "evidence_publish": {
@@ -83,9 +83,9 @@
       "marketHistory": {
         "source": "tencent",
         "adjustment": "mixed",
-        "barCount": 688,
+        "barCount": 689,
         "startAt": "2023-11-29T16:00:00Z",
-        "endAt": "2026-09-16T16:00:00Z"
+        "endAt": "2026-09-17T16:00:00Z"
       },
       "error": null
     }

@@ -1,113 +1,113 @@
 {
   "version": 1,
   "status": "ok",
-  "generated_at": "2026-09-17T16:02:02+08:00",
-  "trade_date": "2026-09-17",
+  "generated_at": "2026-09-18T16:02:09+08:00",
+  "trade_date": "2026-09-18",
   "global": {
     "status": "ok",
     "query_type": "global",
     "ticker": null,
-    "start_date": "2026-09-10",
-    "end_date": "2026-09-17",
-    "fetched_at": "2026-09-17T08:02:03Z",
+    "start_date": "2026-09-11",
+    "end_date": "2026-09-18",
+    "fetched_at": "2026-09-18T08:02:10Z",
     "items": [
       {
-        "title": "Dollar's allure, oil surge fan bearish bets on emerging Asian currencies: Reuters poll",
+        "title": "Bank of Japan hikes rates to 31-year high to battle inflation",
         "summary": "",
-        "url": "https://finance.yahoo.com/markets/currencies/articles/dollars-allure-oil-surge-fan-073814903.html",
-        "source": "Reuters",
-        "published_at": "2026-09-17T07:38:14Z",
-        "fetched_at": "2026-09-17T08:02:03Z",
-        "ticker": null,
-        "source_tier": "aggregator"
-      },
-      {
-        "title": "Mechanics Bank Sells $417 Million of Auto Loans to Bank of America",
-        "summary": "",
-        "url": "https://finance.yahoo.com/markets/stocks/articles/mechanics-bank-sells-417-million-073200737.html",
-        "source": "MT Newswires",
-        "published_at": "2026-09-17T07:32:00Z",
-        "fetched_at": "2026-09-17T08:02:03Z",
-        "ticker": null,
-        "source_tier": "aggregator"
-      },
-      {
-        "title": "Most stocks rise as Fed hikes and indicates drive to curb inflation",
-        "summary": "",
-        "url": "https://finance.yahoo.com/economy/policy/articles/most-stocks-rise-fed-hikes-024434772.html",
+        "url": "https://finance.yahoo.com/economy/policy/articles/bank-japan-hikes-rates-31-035536907.html",
         "source": "AFP",
-        "published_at": "2026-09-17T07:24:48Z",
-        "fetched_at": "2026-09-17T08:02:03Z",
+        "published_at": "2026-09-18T07:52:38Z",
+        "fetched_at": "2026-09-18T08:02:10Z",
         "ticker": null,
         "source_tier": "aggregator"
       },
       {
-        "title": "European shares rise as oil slips, yields stall",
+        "title": "Most Asian stocks track Wall St rally, yen drops after BoJ rate hike",
         "summary": "",
-        "url": "https://finance.yahoo.com/markets/world-indices/articles/european-shares-rise-oil-slips-072028795.html",
+        "url": "https://finance.yahoo.com/markets/world-indices/articles/asian-stocks-track-wall-st-021940059.html",
+        "source": "AFP",
+        "published_at": "2026-09-18T07:49:21Z",
+        "fetched_at": "2026-09-18T08:02:10Z",
+        "ticker": null,
+        "source_tier": "aggregator"
+      },
+      {
+        "title": "US Stock Market This Week: Are SPY, QQQ Beating Asian Equities?",
+        "summary": "",
+        "url": "https://finance.yahoo.com/markets/stocks/articles/us-stock-market-week-spy-073651691.html",
+        "source": "Stocktwits",
+        "published_at": "2026-09-18T07:36:51Z",
+        "fetched_at": "2026-09-18T08:02:10Z",
+        "ticker": null,
+        "source_tier": "aggregator"
+      },
+      {
+        "title": "Eurozone Government Bond Yields Edge Higher But Stay Below Recent Highs",
+        "summary": "",
+        "url": "https://finance.yahoo.com/m/1cc691e1-9541-3c38-bd3c-517a56c1ba44/eurozone-government-bond.html",
+        "source": "The Wall Street Journal",
+        "published_at": "2026-09-18T07:23:00Z",
+        "fetched_at": "2026-09-18T08:02:10Z",
+        "ticker": null,
+        "source_tier": "aggregator"
+      },
+      {
+        "title": "Best Income Stocks to Buy for September 18th",
+        "summary": "",
+        "url": "https://finance.yahoo.com/markets/stocks/articles/best-income-stocks-buy-september-065800652.html",
+        "source": "Zacks",
+        "published_at": "2026-09-18T06:58:00Z",
+        "fetched_at": "2026-09-18T08:02:10Z",
+        "ticker": null,
+        "source_tier": "aggregator"
+      },
+      {
+        "title": "Zacks.com featured highlights EuroDry, Vince Holding, Nutex, TXO Partners and KB Financial",
+        "summary": "",
+        "url": "https://finance.yahoo.com/markets/stocks/articles/zacks-com-featured-highlights-eurodry-064700221.html",
+        "source": "Zacks",
+        "published_at": "2026-09-18T06:47:00Z",
+        "fetched_at": "2026-09-18T08:02:10Z",
+        "ticker": null,
+        "source_tier": "aggregator"
+      },
+      {
+        "title": "Zacks.com featured highlights Vince, Cognyte and Magnolia Oil & Gas",
+        "summary": "",
+        "url": "https://finance.yahoo.com/markets/stocks/articles/zacks-com-featured-highlights-vince-064300361.html",
+        "source": "Zacks",
+        "published_at": "2026-09-18T06:43:00Z",
+        "fetched_at": "2026-09-18T08:02:10Z",
+        "ticker": null,
+        "source_tier": "aggregator"
+      },
+      {
+        "title": "Oil prices fall 2% on hopes of limited Saudi supply disruptions",
+        "summary": "",
+        "url": "https://finance.yahoo.com/energy/articles/oil-prices-fall-third-day-034804936.html",
         "source": "Reuters",
-        "published_at": "2026-09-17T07:20:28Z",
-        "fetched_at": "2026-09-17T08:02:03Z",
+        "published_at": "2026-09-18T06:41:41Z",
+        "fetched_at": "2026-09-18T08:02:10Z",
         "ticker": null,
         "source_tier": "aggregator"
       },
       {
-        "title": "If the Stock Market Crashes, History Says This 1 Investing Move Has Never Once Failed",
+        "title": "Asian stocks track Wall Street rally as oil prices decline",
         "summary": "",
-        "url": "https://finance.yahoo.com/markets/stocks/articles/stock-market-crashes-history-says-072000510.html",
-        "source": "Motley Fool",
-        "published_at": "2026-09-17T07:20:00Z",
-        "fetched_at": "2026-09-17T08:02:03Z",
+        "url": "https://finance.yahoo.com/markets/world-indices/articles/asian-stocks-track-wall-street-055413873.html",
+        "source": "Euronews",
+        "published_at": "2026-09-18T05:54:13Z",
+        "fetched_at": "2026-09-18T08:02:10Z",
         "ticker": null,
         "source_tier": "aggregator"
       },
       {
-        "title": "Oil prices extend losses on easing fears of Middle East supply disruption",
+        "title": "Stocks rise, yen weakens as BOJ split-vote hike tempers hawkish wagers",
         "summary": "",
-        "url": "https://finance.yahoo.com/energy/articles/oil-prices-extend-losses-easing-065110892.html",
+        "url": "https://finance.yahoo.com/markets/articles/stocks-rise-oil-dips-yen-013424826.html",
         "source": "Reuters",
-        "published_at": "2026-09-17T06:51:10Z",
-        "fetched_at": "2026-09-17T08:02:03Z",
-        "ticker": null,
-        "source_tier": "aggregator"
-      },
-      {
-        "title": "Shares edge up after Fed hike, dollar firm on short-term yields",
-        "summary": "",
-        "url": "https://finance.yahoo.com/economy/policy/articles/shares-tick-higher-fed-hikes-020459399.html",
-        "source": "Reuters",
-        "published_at": "2026-09-17T05:31:59Z",
-        "fetched_at": "2026-09-17T08:02:03Z",
-        "ticker": null,
-        "source_tier": "aggregator"
-      },
-      {
-        "title": "Oil Prices Slide as Saudi Arabia Reroutes Crude via Oman",
-        "summary": "",
-        "url": "https://finance.yahoo.com/energy/articles/oil-prices-slide-saudi-arabia-052000161.html",
-        "source": "Oilprice.com",
-        "published_at": "2026-09-17T05:20:00Z",
-        "fetched_at": "2026-09-17T08:02:03Z",
-        "ticker": null,
-        "source_tier": "aggregator"
-      },
-      {
-        "title": "Boeing (BA) Lands Up To Four Freighter Orders And A New Cargo Lease",
-        "summary": "",
-        "url": "https://finance.yahoo.com/markets/stocks/articles/boeing-ba-lands-four-freighter-051454747.html",
-        "source": "Simply Wall St.",
-        "published_at": "2026-09-17T05:14:54Z",
-        "fetched_at": "2026-09-17T08:02:03Z",
-        "ticker": null,
-        "source_tier": "aggregator"
-      },
-      {
-        "title": "Does Surging Fuel Costs And Capacity Discipline Change The Bull Case For American Airlines (AAL)?",
-        "summary": "",
-        "url": "https://finance.yahoo.com/markets/stocks/articles/does-surging-fuel-costs-capacity-042839753.html",
-        "source": "Simply Wall St.",
-        "published_at": "2026-09-17T04:28:39Z",
-        "fetched_at": "2026-09-17T08:02:03Z",
+        "published_at": "2026-09-18T05:51:45Z",
+        "fetched_at": "2026-09-18T08:02:10Z",
         "ticker": null,
         "source_tier": "aggregator"
       }
@@ -116,12 +116,12 @@
       {
         "source": "Yahoo Finance",
         "status": "ok",
-        "item_count": 49
+        "item_count": 44
       },
       {
         "source": "Federal Reserve",
         "status": "ok",
-        "item_count": 4
+        "item_count": 3
       }
     ]
   },
@@ -130,27 +130,27 @@
       "status": "ok",
       "query_type": "ticker",
       "ticker": "515880.SS",
-      "start_date": "2026-09-17",
-      "end_date": "2026-09-17",
-      "fetched_at": "2026-09-17T08:02:04Z",
+      "start_date": "2026-09-18",
+      "end_date": "2026-09-18",
+      "fetched_at": "2026-09-18T08:02:12Z",
       "items": [
         {
-          "title": "通信ETF国泰（515880）涨0.44%，半日成交额24.04亿元",
-          "summary": "通信ETF国泰（515880）涨0.44%，半日成交额24.04亿元 新浪财经",
-          "url": "https://news.google.com/rss/articles/CBMimAFBVV95cUxOdkNZY0VsTGFNYnc3WWV6eWp4RG9tQnhqOVFfdTVRTHMyZGkyUlZEQS1hZ1kwVFE3bDJ0RExFM0FaX09yWHNOUkVsd2hVZnFRelVFYW1kaC1QNmNwZEhiNUZyN3Fma09XbWsyYVNDVXg2WEZheE5FSGc5ZW91SWRLRnhwR3FnQ2JkWF9DTmdLbFV5OFZiOHRSdA?oc=5",
-          "source": "Google News / 新浪财经",
-          "published_at": "2026-09-17T03:31:00Z",
-          "fetched_at": "2026-09-17T08:02:04Z",
+          "title": "通信ETF国泰（515880）开盘涨1.90%，重仓股新易盛涨2.51%，中际旭创涨1.56%",
+          "summary": "通信ETF国泰（515880）开盘涨1.90%，重仓股新易盛涨2.51%，中际旭创涨1.56% 新浪财经_金融信息服务商",
+          "url": "https://news.google.com/rss/articles/CBMimAFBVV95cUxPWF8zR0p6bUU2TndDUHpqbTc5UDhzai00WE90R1dTUTdQY2pQQnQzVldlT3J6WjBHUWFuVjQya29TajZRUVl4anhLZmNSeXlMZVFST2kzMWZreld1SmhpRUNIU3hmSG5xZXlmX0hZdjVBWFZXS0Rxa3lyQl9GYW5FWEVsazZsb0QwNFcwaFBLUWprcHo2VlNwcA?oc=5",
+          "source": "Google News / 新浪财经_金融信息服务商",
+          "published_at": "2026-09-18T01:30:00Z",
+          "fetched_at": "2026-09-18T08:02:12Z",
           "ticker": "515880.SS",
           "source_tier": "aggregator"
         },
         {
-          "title": "通信ETF国泰（515880）开盘跌0.44%，重仓股新易盛跌0.63%，中际旭创跌0.83%",
-          "summary": "通信ETF国泰（515880）开盘跌0.44%，重仓股新易盛跌0.63%，中际旭创跌0.83% finance.sina.com.cn",
-          "url": "https://news.google.com/rss/articles/CBMieEFVX3lxTE9rRVFEaVd5V002bHRZMDBNb252Y2Ita0pRTF9Cenk5eEV6NWMzU3RRYmlsc1ByQ3drMzZoWjZuQmxnZi15V2wxSnltakQxbjlYY2J4Q0xfc1JfRUo1SDA5c1kyajlmQmtjRmpVUHFQMTZoN3hUMmtwMA?oc=5",
-          "source": "Google News / finance.sina.com.cn",
-          "published_at": "2026-09-17T03:29:58Z",
-          "fetched_at": "2026-09-17T08:02:04Z",
+          "title": "9月17日通信ETF国泰（515880）份额减少3.20亿份，最新份额632.72亿份，最新规模433.98亿元",
+          "summary": "9月17日通信ETF国泰（515880）份额减少3.20亿份，最新份额632.72亿份，最新规模433.98亿元 video.sina.com.cn",
+          "url": "https://news.google.com/rss/articles/CBMiggFBVV95cUxNQldKYzRVTGpUUE5nQTRnUEluRDg0Ty00bm5uckt1VFM4MnpjeFV2SS1OMHh1NlZoeHdSOFU5ZHVacjA3TkpyM0tDR3FHdEMwU2JPNkZiek5vdXhnOTJXUGJNaXBuLXJqSnVMNTY5VGVtSFZ4NXd3X2FlcUFuVlpMN0hR?oc=5",
+          "source": "Google News / video.sina.com.cn",
+          "published_at": "2026-09-18T01:07:19Z",
+          "fetched_at": "2026-09-18T08:02:12Z",
           "ticker": "515880.SS",
           "source_tier": "aggregator"
         }
@@ -177,9 +177,9 @@
       "status": "empty",
       "query_type": "ticker",
       "ticker": "512480.SS",
-      "start_date": "2026-09-17",
-      "end_date": "2026-09-17",
-      "fetched_at": "2026-09-17T08:02:07Z",
+      "start_date": "2026-09-18",
+      "end_date": "2026-09-18",
+      "fetched_at": "2026-09-18T08:02:15Z",
       "items": [],
       "source_statuses": [
         {
@@ -202,122 +202,122 @@
   },
   "items": [
     {
-      "title": "Dollar's allure, oil surge fan bearish bets on emerging Asian currencies: Reuters poll",
+      "title": "Bank of Japan hikes rates to 31-year high to battle inflation",
       "summary": "",
-      "url": "https://finance.yahoo.com/markets/currencies/articles/dollars-allure-oil-surge-fan-073814903.html",
-      "source": "Reuters",
-      "published_at": "2026-09-17T07:38:14Z",
-      "fetched_at": "2026-09-17T08:02:03Z",
-      "ticker": null,
-      "source_tier": "aggregator"
-    },
-    {
-      "title": "Mechanics Bank Sells $417 Million of Auto Loans to Bank of America",
-      "summary": "",
-      "url": "https://finance.yahoo.com/markets/stocks/articles/mechanics-bank-sells-417-million-073200737.html",
-      "source": "MT Newswires",
-      "published_at": "2026-09-17T07:32:00Z",
-      "fetched_at": "2026-09-17T08:02:03Z",
-      "ticker": null,
-      "source_tier": "aggregator"
-    },
-    {
-      "title": "Most stocks rise as Fed hikes and indicates drive to curb inflation",
-      "summary": "",
-      "url": "https://finance.yahoo.com/economy/policy/articles/most-stocks-rise-fed-hikes-024434772.html",
+      "url": "https://finance.yahoo.com/economy/policy/articles/bank-japan-hikes-rates-31-035536907.html",
       "source": "AFP",
-      "published_at": "2026-09-17T07:24:48Z",
-      "fetched_at": "2026-09-17T08:02:03Z",
+      "published_at": "2026-09-18T07:52:38Z",
+      "fetched_at": "2026-09-18T08:02:10Z",
       "ticker": null,
       "source_tier": "aggregator"
     },
     {
-      "title": "European shares rise as oil slips, yields stall",
+      "title": "Most Asian stocks track Wall St rally, yen drops after BoJ rate hike",
       "summary": "",
-      "url": "https://finance.yahoo.com/markets/world-indices/articles/european-shares-rise-oil-slips-072028795.html",
+      "url": "https://finance.yahoo.com/markets/world-indices/articles/asian-stocks-track-wall-st-021940059.html",
+      "source": "AFP",
+      "published_at": "2026-09-18T07:49:21Z",
+      "fetched_at": "2026-09-18T08:02:10Z",
+      "ticker": null,
+      "source_tier": "aggregator"
+    },
+    {
+      "title": "US Stock Market This Week: Are SPY, QQQ Beating Asian Equities?",
+      "summary": "",
+      "url": "https://finance.yahoo.com/markets/stocks/articles/us-stock-market-week-spy-073651691.html",
+      "source": "Stocktwits",
+      "published_at": "2026-09-18T07:36:51Z",
+      "fetched_at": "2026-09-18T08:02:10Z",
+      "ticker": null,
+      "source_tier": "aggregator"
+    },
+    {
+      "title": "Eurozone Government Bond Yields Edge Higher But Stay Below Recent Highs",
+      "summary": "",
+      "url": "https://finance.yahoo.com/m/1cc691e1-9541-3c38-bd3c-517a56c1ba44/eurozone-government-bond.html",
+      "source": "The Wall Street Journal",
+      "published_at": "2026-09-18T07:23:00Z",
+      "fetched_at": "2026-09-18T08:02:10Z",
+      "ticker": null,
+      "source_tier": "aggregator"
+    },
+    {
+      "title": "Best Income Stocks to Buy for September 18th",
+      "summary": "",
+      "url": "https://finance.yahoo.com/markets/stocks/articles/best-income-stocks-buy-september-065800652.html",
+      "source": "Zacks",
+      "published_at": "2026-09-18T06:58:00Z",
+      "fetched_at": "2026-09-18T08:02:10Z",
+      "ticker": null,
+      "source_tier": "aggregator"
+    },
+    {
+      "title": "Zacks.com featured highlights EuroDry, Vince Holding, Nutex, TXO Partners and KB Financial",
+      "summary": "",
+      "url": "https://finance.yahoo.com/markets/stocks/articles/zacks-com-featured-highlights-eurodry-064700221.html",
+      "source": "Zacks",
+      "published_at": "2026-09-18T06:47:00Z",
+      "fetched_at": "2026-09-18T08:02:10Z",
+      "ticker": null,
+      "source_tier": "aggregator"
+    },
+    {
+      "title": "Zacks.com featured highlights Vince, Cognyte and Magnolia Oil & Gas",
+      "summary": "",
+      "url": "https://finance.yahoo.com/markets/stocks/articles/zacks-com-featured-highlights-vince-064300361.html",
+      "source": "Zacks",
+      "published_at": "2026-09-18T06:43:00Z",
+      "fetched_at": "2026-09-18T08:02:10Z",
+      "ticker": null,
+      "source_tier": "aggregator"
+    },
+    {
+      "title": "Oil prices fall 2% on hopes of limited Saudi supply disruptions",
+      "summary": "",
+      "url": "https://finance.yahoo.com/energy/articles/oil-prices-fall-third-day-034804936.html",
       "source": "Reuters",
-      "published_at": "2026-09-17T07:20:28Z",
-      "fetched_at": "2026-09-17T08:02:03Z",
+      "published_at": "2026-09-18T06:41:41Z",
+      "fetched_at": "2026-09-18T08:02:10Z",
       "ticker": null,
       "source_tier": "aggregator"
     },
     {
-      "title": "If the Stock Market Crashes, History Says This 1 Investing Move Has Never Once Failed",
+      "title": "Asian stocks track Wall Street rally as oil prices decline",
       "summary": "",
-      "url": "https://finance.yahoo.com/markets/stocks/articles/stock-market-crashes-history-says-072000510.html",
-      "source": "Motley Fool",
-      "published_at": "2026-09-17T07:20:00Z",
-      "fetched_at": "2026-09-17T08:02:03Z",
+      "url": "https://finance.yahoo.com/markets/world-indices/articles/asian-stocks-track-wall-street-055413873.html",
+      "source": "Euronews",
+      "published_at": "2026-09-18T05:54:13Z",
+      "fetched_at": "2026-09-18T08:02:10Z",
       "ticker": null,
       "source_tier": "aggregator"
     },
     {
-      "title": "Oil prices extend losses on easing fears of Middle East supply disruption",
+      "title": "Stocks rise, yen weakens as BOJ split-vote hike tempers hawkish wagers",
       "summary": "",
-      "url": "https://finance.yahoo.com/energy/articles/oil-prices-extend-losses-easing-065110892.html",
+      "url": "https://finance.yahoo.com/markets/articles/stocks-rise-oil-dips-yen-013424826.html",
       "source": "Reuters",
-      "published_at": "2026-09-17T06:51:10Z",
-      "fetched_at": "2026-09-17T08:02:03Z",
+      "published_at": "2026-09-18T05:51:45Z",
+      "fetched_at": "2026-09-18T08:02:10Z",
       "ticker": null,
       "source_tier": "aggregator"
     },
     {
-      "title": "Shares edge up after Fed hike, dollar firm on short-term yields",
-      "summary": "",
-      "url": "https://finance.yahoo.com/economy/policy/articles/shares-tick-higher-fed-hikes-020459399.html",
-      "source": "Reuters",
-      "published_at": "2026-09-17T05:31:59Z",
-      "fetched_at": "2026-09-17T08:02:03Z",
-      "ticker": null,
-      "source_tier": "aggregator"
-    },
-    {
-      "title": "Oil Prices Slide as Saudi Arabia Reroutes Crude via Oman",
-      "summary": "",
-      "url": "https://finance.yahoo.com/energy/articles/oil-prices-slide-saudi-arabia-052000161.html",
-      "source": "Oilprice.com",
-      "published_at": "2026-09-17T05:20:00Z",
-      "fetched_at": "2026-09-17T08:02:03Z",
-      "ticker": null,
-      "source_tier": "aggregator"
-    },
-    {
-      "title": "Boeing (BA) Lands Up To Four Freighter Orders And A New Cargo Lease",
-      "summary": "",
-      "url": "https://finance.yahoo.com/markets/stocks/articles/boeing-ba-lands-four-freighter-051454747.html",
-      "source": "Simply Wall St.",
-      "published_at": "2026-09-17T05:14:54Z",
-      "fetched_at": "2026-09-17T08:02:03Z",
-      "ticker": null,
-      "source_tier": "aggregator"
-    },
-    {
-      "title": "Does Surging Fuel Costs And Capacity Discipline Change The Bull Case For American Airlines (AAL)?",
-      "summary": "",
-      "url": "https://finance.yahoo.com/markets/stocks/articles/does-surging-fuel-costs-capacity-042839753.html",
-      "source": "Simply Wall St.",
-      "published_at": "2026-09-17T04:28:39Z",
-      "fetched_at": "2026-09-17T08:02:03Z",
-      "ticker": null,
-      "source_tier": "aggregator"
-    },
-    {
-      "title": "通信ETF国泰（515880）涨0.44%，半日成交额24.04亿元",
-      "summary": "通信ETF国泰（515880）涨0.44%，半日成交额24.04亿元 新浪财经",
-      "url": "https://news.google.com/rss/articles/CBMimAFBVV95cUxOdkNZY0VsTGFNYnc3WWV6eWp4RG9tQnhqOVFfdTVRTHMyZGkyUlZEQS1hZ1kwVFE3bDJ0RExFM0FaX09yWHNOUkVsd2hVZnFRelVFYW1kaC1QNmNwZEhiNUZyN3Fma09XbWsyYVNDVXg2WEZheE5FSGc5ZW91SWRLRnhwR3FnQ2JkWF9DTmdLbFV5OFZiOHRSdA?oc=5",
-      "source": "Google News / 新浪财经",
-      "published_at": "2026-09-17T03:31:00Z",
-      "fetched_at": "2026-09-17T08:02:04Z",
+      "title": "通信ETF国泰（515880）开盘涨1.90%，重仓股新易盛涨2.51%，中际旭创涨1.56%",
+      "summary": "通信ETF国泰（515880）开盘涨1.90%，重仓股新易盛涨2.51%，中际旭创涨1.56% 新浪财经_金融信息服务商",
+      "url": "https://news.google.com/rss/articles/CBMimAFBVV95cUxPWF8zR0p6bUU2TndDUHpqbTc5UDhzai00WE90R1dTUTdQY2pQQnQzVldlT3J6WjBHUWFuVjQya29TajZRUVl4anhLZmNSeXlMZVFST2kzMWZreld1SmhpRUNIU3hmSG5xZXlmX0hZdjVBWFZXS0Rxa3lyQl9GYW5FWEVsazZsb0QwNFcwaFBLUWprcHo2VlNwcA?oc=5",
+      "source": "Google News / 新浪财经_金融信息服务商",
+      "published_at": "2026-09-18T01:30:00Z",
+      "fetched_at": "2026-09-18T08:02:12Z",
       "ticker": "515880.SS",
       "source_tier": "aggregator"
     },
     {
-      "title": "通信ETF国泰（515880）开盘跌0.44%，重仓股新易盛跌0.63%，中际旭创跌0.83%",
-      "summary": "通信ETF国泰（515880）开盘跌0.44%，重仓股新易盛跌0.63%，中际旭创跌0.83% finance.sina.com.cn",
-      "url": "https://news.google.com/rss/articles/CBMieEFVX3lxTE9rRVFEaVd5V002bHRZMDBNb252Y2Ita0pRTF9Cenk5eEV6NWMzU3RRYmlsc1ByQ3drMzZoWjZuQmxnZi15V2wxSnltakQxbjlYY2J4Q0xfc1JfRUo1SDA5c1kyajlmQmtjRmpVUHFQMTZoN3hUMmtwMA?oc=5",
-      "source": "Google News / finance.sina.com.cn",
-      "published_at": "2026-09-17T03:29:58Z",
-      "fetched_at": "2026-09-17T08:02:04Z",
+      "title": "9月17日通信ETF国泰（515880）份额减少3.20亿份，最新份额632.72亿份，最新规模433.98亿元",
+      "summary": "9月17日通信ETF国泰（515880）份额减少3.20亿份，最新份额632.72亿份，最新规模433.98亿元 video.sina.com.cn",
+      "url": "https://news.google.com/rss/articles/CBMiggFBVV95cUxNQldKYzRVTGpUUE5nQTRnUEluRDg0Ty00bm5uckt1VFM4MnpjeFV2SS1OMHh1NlZoeHdSOFU5ZHVacjA3TkpyM0tDR3FHdEMwU2JPNkZiek5vdXhnOTJXUGJNaXBuLXJqSnVMNTY5VGVtSFZ4NXd3X2FlcUFuVlpMN0hR?oc=5",
+      "source": "Google News / video.sina.com.cn",
+      "published_at": "2026-09-18T01:07:19Z",
+      "fetched_at": "2026-09-18T08:02:12Z",
       "ticker": "515880.SS",
       "source_tier": "aggregator"
     }
