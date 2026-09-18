@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "generatedAt": "2026-09-17T15:33:05.703Z",
+  "generatedAt": "2026-09-18T14:58:14.117Z",
   "status": "degraded",
   "coverage": {
     "policy": "current-listed-best-effort-plus-configured-core",
@@ -16,13 +16,13 @@
       "id": "sina-market-center",
       "role": "CN current-listed discovery",
       "quality": "best_effort",
-      "asOf": "2026-09-17T15:33:05.703Z"
+      "asOf": "2026-09-18T14:58:14.117Z"
     },
     {
       "id": "workbench-settings",
       "role": "configured HK/US/CN core instruments",
       "quality": "declared",
-      "asOf": "2026-09-17T15:33:05.703Z"
+      "asOf": "2026-09-18T14:58:14.117Z"
     }
   ],
   "instruments": [
@@ -32038,7 +32038,7 @@
     },
     {
       "symbol": "600009.SS",
-      "name": "XD上海机",
+      "name": "XD上海机场",
       "market": "CN",
       "exchange": "SS",
       "instrumentType": "stock",
@@ -36097,7 +36097,7 @@
     },
     {
       "symbol": "600517.SS",
-      "name": "XD国网英",
+      "name": "XD国网英大",
       "market": "CN",
       "exchange": "SS",
       "instrumentType": "stock",
@@ -37813,7 +37813,7 @@
     },
     {
       "symbol": "600713.SS",
-      "name": "XD南京医",
+      "name": "XD南京医药",
       "market": "CN",
       "exchange": "SS",
       "instrumentType": "stock",
@@ -39705,7 +39705,7 @@
     },
     {
       "symbol": "600930.SS",
-      "name": "华电新能",
+      "name": "华电新能源集团",
       "market": "CN",
       "exchange": "SS",
       "instrumentType": "stock",
@@ -40409,7 +40409,7 @@
     },
     {
       "symbol": "601026.SS",
-      "name": "道生天合",
+      "name": "道生天合材料科技",
       "market": "CN",
       "exchange": "SS",
       "instrumentType": "stock",
@@ -40475,7 +40475,7 @@
     },
     {
       "symbol": "601065.SS",
-      "name": "江盐集团",
+      "name": "江西省盐业集团",
       "market": "CN",
       "exchange": "SS",
       "instrumentType": "stock",
@@ -40574,7 +40574,7 @@
     },
     {
       "symbol": "601091.SS",
-      "name": "N沈鼓",
+      "name": "N沈鼓集团",
       "market": "CN",
       "exchange": "SS",
       "instrumentType": "stock",
@@ -40585,7 +40585,7 @@
     },
     {
       "symbol": "601096.SS",
-      "name": "宏盛华源",
+      "name": "宏盛华源铁塔集团",
       "market": "CN",
       "exchange": "SS",
       "instrumentType": "stock",
@@ -40794,7 +40794,7 @@
     },
     {
       "symbol": "601133.SS",
-      "name": "柏诚股份",
+      "name": "柏诚系统股份公司",
       "market": "CN",
       "exchange": "SS",
       "instrumentType": "stock",
@@ -41157,7 +41157,7 @@
     },
     {
       "symbol": "601236.SS",
-      "name": "XD红塔证",
+      "name": "XD红塔证券",
       "market": "CN",
       "exchange": "SS",
       "instrumentType": "stock",
@@ -43236,7 +43236,7 @@
     },
     {
       "symbol": "603057.SS",
-      "name": "紫燕食品",
+      "name": "上海紫燕食品",
       "market": "CN",
       "exchange": "SS",
       "instrumentType": "stock",
@@ -43280,7 +43280,7 @@
     },
     {
       "symbol": "603061.SS",
-      "name": "金海通",
+      "name": "金海通股份",
       "market": "CN",
       "exchange": "SS",
       "instrumentType": "stock",
@@ -43390,7 +43390,7 @@
     },
     {
       "symbol": "603072.SS",
-      "name": "天和磁材",
+      "name": "天和磁材科技",
       "market": "CN",
       "exchange": "SS",
       "instrumentType": "stock",
@@ -43412,7 +43412,7 @@
     },
     {
       "symbol": "603075.SS",
-      "name": "热威股份",
+      "name": "热威科技股份",
       "market": "CN",
       "exchange": "SS",
       "instrumentType": "stock",
@@ -43489,7 +43489,7 @@
     },
     {
       "symbol": "603082.SS",
-      "name": "北自科技",
+      "name": "北自科技股份",
       "market": "CN",
       "exchange": "SS",
       "instrumentType": "stock",
@@ -43588,7 +43588,7 @@
     },
     {
       "symbol": "603092.SS",
-      "name": "德力佳",
+      "name": "德力佳传动",
       "market": "CN",
       "exchange": "SS",
       "instrumentType": "stock",
@@ -43852,7 +43852,7 @@
     },
     {
       "symbol": "603119.SS",
-      "name": "浙江荣泰",
+      "name": "浙江荣泰股份",
       "market": "CN",
       "exchange": "SS",
       "instrumentType": "stock",
@@ -43863,7 +43863,7 @@
     },
     {
       "symbol": "603120.SS",
-      "name": "肯特催化",
+      "name": "肯特催化材料",
       "market": "CN",
       "exchange": "SS",
       "instrumentType": "stock",
@@ -43918,7 +43918,7 @@
     },
     {
       "symbol": "603125.SS",
-      "name": "常青科技",
+      "name": "江苏常青树科技",
       "market": "CN",
       "exchange": "SS",
       "instrumentType": "stock",
@@ -43973,7 +43973,7 @@
     },
     {
       "symbol": "603130.SS",
-      "name": "云中马",
+      "name": "云中马股份",
       "market": "CN",
       "exchange": "SS",
       "instrumentType": "stock",
@@ -44072,7 +44072,7 @@
     },
     {
       "symbol": "603151.SS",
-      "name": "邦基科技",
+      "name": "邦基科技股份",
       "market": "CN",
       "exchange": "SS",
       "instrumentType": "stock",
@@ -44083,7 +44083,7 @@
     },
     {
       "symbol": "603153.SS",
-      "name": "上海建科",
+      "name": "上海建科集团",
       "market": "CN",
       "exchange": "SS",
       "instrumentType": "stock",
@@ -44171,7 +44171,7 @@
     },
     {
       "symbol": "603163.SS",
-      "name": "圣晖集成",
+      "name": "圣晖系统集成集团",
       "market": "CN",
       "exchange": "SS",
       "instrumentType": "stock",
@@ -44237,7 +44237,7 @@
     },
     {
       "symbol": "603170.SS",
-      "name": "宝立食品",
+      "name": "宝立食品科技",
       "market": "CN",
       "exchange": "SS",
       "instrumentType": "stock",
@@ -44259,7 +44259,7 @@
     },
     {
       "symbol": "603172.SS",
-      "name": "万丰股份",
+      "name": "浙江万丰股份",
       "market": "CN",
       "exchange": "SS",
       "instrumentType": "stock",
@@ -44270,7 +44270,7 @@
     },
     {
       "symbol": "603173.SS",
-      "name": "福斯达",
+      "name": "福斯达深冷",
       "market": "CN",
       "exchange": "SS",
       "instrumentType": "stock",
@@ -44358,7 +44358,7 @@
     },
     {
       "symbol": "603182.SS",
-      "name": "嘉华股份",
+      "name": "嘉华生物科技股份",
       "market": "CN",
       "exchange": "SS",
       "instrumentType": "stock",
@@ -44435,7 +44435,7 @@
     },
     {
       "symbol": "603190.SS",
-      "name": "亚通精工",
+      "name": "烟台亚通精工机械",
       "market": "CN",
       "exchange": "SS",
       "instrumentType": "stock",
@@ -44468,7 +44468,7 @@
     },
     {
       "symbol": "603193.SS",
-      "name": "润本股份",
+      "name": "润本生物技术股份",
       "market": "CN",
       "exchange": "SS",
       "instrumentType": "stock",
@@ -44611,7 +44611,7 @@
     },
     {
       "symbol": "603207.SS",
-      "name": "小方制药",
+      "name": "上海小方制药",
       "market": "CN",
       "exchange": "SS",
       "instrumentType": "stock",
@@ -44655,7 +44655,7 @@
     },
     {
       "symbol": "603211.SS",
-      "name": "晋拓股份",
+      "name": "晋拓科技股份",
       "market": "CN",
       "exchange": "SS",
       "instrumentType": "stock",
@@ -44919,7 +44919,7 @@
     },
     {
       "symbol": "603237.SS",
-      "name": "五芳斋",
+      "name": "五芳斋实业",
       "market": "CN",
       "exchange": "SS",
       "instrumentType": "stock",
@@ -44963,7 +44963,7 @@
     },
     {
       "symbol": "603255.SS",
-      "name": "鼎际得",
+      "name": "鼎际得股份",
       "market": "CN",
       "exchange": "SS",
       "instrumentType": "stock",
@@ -45095,7 +45095,7 @@
     },
     {
       "symbol": "603270.SS",
-      "name": "金帝股份",
+      "name": "金帝精密科技股份",
       "market": "CN",
       "exchange": "SS",
       "instrumentType": "stock",
@@ -45106,7 +45106,7 @@
     },
     {
       "symbol": "603271.SS",
-      "name": "永杰新材",
+      "name": "永杰新材料",
       "market": "CN",
       "exchange": "SS",
       "instrumentType": "stock",
@@ -45139,7 +45139,7 @@
     },
     {
       "symbol": "603275.SS",
-      "name": "众辰科技",
+      "name": "上海众辰科技",
       "market": "CN",
       "exchange": "SS",
       "instrumentType": "stock",
@@ -45150,7 +45150,7 @@
     },
     {
       "symbol": "603276.SS",
-      "name": "恒兴新材",
+      "name": "恒兴新材料科技",
       "market": "CN",
       "exchange": "SS",
       "instrumentType": "stock",
@@ -45194,7 +45194,7 @@
     },
     {
       "symbol": "603280.SS",
-      "name": "南方路机",
+      "name": "南方路面机械",
       "market": "CN",
       "exchange": "SS",
       "instrumentType": "stock",
@@ -45216,7 +45216,7 @@
     },
     {
       "symbol": "603282.SS",
-      "name": "亚光股份",
+      "name": "亚光科技股份",
       "market": "CN",
       "exchange": "SS",
       "instrumentType": "stock",
@@ -45315,7 +45315,7 @@
     },
     {
       "symbol": "603293.SS",
-      "name": "埃泰克",
+      "name": "埃泰克汽车电子",
       "market": "CN",
       "exchange": "SS",
       "instrumentType": "stock",
@@ -45788,7 +45788,7 @@
     },
     {
       "symbol": "603344.SS",
-      "name": "星德胜",
+      "name": "星德胜科技",
       "market": "CN",
       "exchange": "SS",
       "instrumentType": "stock",
@@ -46008,7 +46008,7 @@
     },
     {
       "symbol": "603373.SS",
-      "name": "安邦护卫",
+      "name": "安邦护卫集团股份",
       "market": "CN",
       "exchange": "SS",
       "instrumentType": "stock",
@@ -46019,7 +46019,7 @@
     },
     {
       "symbol": "603375.SS",
-      "name": "盛景微",
+      "name": "盛景微电子",
       "market": "CN",
       "exchange": "SS",
       "instrumentType": "stock",
@@ -46206,7 +46206,7 @@
     },
     {
       "symbol": "603395.SS",
-      "name": "红四方",
+      "name": "中盐红四方",
       "market": "CN",
       "exchange": "SS",
       "instrumentType": "stock",
@@ -46393,7 +46393,7 @@
     },
     {
       "symbol": "603448.SS",
-      "name": "天博智能",
+      "name": "天博智能科技",
       "market": "CN",
       "exchange": "SS",
       "instrumentType": "stock",
@@ -46503,7 +46503,7 @@
     },
     {
       "symbol": "603496.SS",
-      "name": "XD恒为科",
+      "name": "XD恒为科技",
       "market": "CN",
       "exchange": "SS",
       "instrumentType": "stock",
@@ -48626,7 +48626,7 @@
     },
     {
       "symbol": "603876.SS",
-      "name": "XD鼎胜新",
+      "name": "XD鼎胜新材",
       "market": "CN",
       "exchange": "SS",
       "instrumentType": "stock",
@@ -49726,7 +49726,7 @@
     },
     {
       "symbol": "605086.SS",
-      "name": "XD龙高股",
+      "name": "XD龙高股份",
       "market": "CN",
       "exchange": "SS",
       "instrumentType": "stock",
@@ -50705,7 +50705,7 @@
     },
     {
       "symbol": "688001.SS",
-      "name": "华兴源创",
+      "name": "苏州华兴源创科技",
       "market": "CN",
       "exchange": "SS",
       "instrumentType": "stock",
@@ -50738,7 +50738,7 @@
     },
     {
       "symbol": "688004.SS",
-      "name": "博汇科技",
+      "name": "北京博汇科技",
       "market": "CN",
       "exchange": "SS",
       "instrumentType": "stock",
@@ -50760,7 +50760,7 @@
     },
     {
       "symbol": "688006.SS",
-      "name": "杭可科技",
+      "name": "浙江杭可科技",
       "market": "CN",
       "exchange": "SS",
       "instrumentType": "stock",
@@ -50815,7 +50815,7 @@
     },
     {
       "symbol": "688011.SS",
-      "name": "新光光电",
+      "name": "新光光电科技股份",
       "market": "CN",
       "exchange": "SS",
       "instrumentType": "stock",
@@ -50826,7 +50826,7 @@
     },
     {
       "symbol": "688012.SS",
-      "name": "中微公司",
+      "name": "中微半导体设备",
       "market": "CN",
       "exchange": "SS",
       "instrumentType": "stock",
@@ -50837,7 +50837,7 @@
     },
     {
       "symbol": "688013.SS",
-      "name": "天臣医疗",
+      "name": "天臣国际医疗科技",
       "market": "CN",
       "exchange": "SS",
       "instrumentType": "stock",
@@ -50925,7 +50925,7 @@
     },
     {
       "symbol": "688022.SS",
-      "name": "ST瀚川",
+      "name": "ST瀚川智能",
       "market": "CN",
       "exchange": "SS",
       "instrumentType": "stock",
@@ -50947,7 +50947,7 @@
     },
     {
       "symbol": "688025.SS",
-      "name": "杰普特",
+      "name": "杰普特光电",
       "market": "CN",
       "exchange": "SS",
       "instrumentType": "stock",
@@ -50958,7 +50958,7 @@
     },
     {
       "symbol": "688026.SS",
-      "name": "洁特生物",
+      "name": "洁特生物股份",
       "market": "CN",
       "exchange": "SS",
       "instrumentType": "stock",
@@ -50969,7 +50969,7 @@
     },
     {
       "symbol": "688027.SS",
-      "name": "国盾量子",
+      "name": "科大国盾量子",
       "market": "CN",
       "exchange": "SS",
       "instrumentType": "stock",
@@ -50980,7 +50980,7 @@
     },
     {
       "symbol": "688028.SS",
-      "name": "沃尔德",
+      "name": "沃尔德金刚石",
       "market": "CN",
       "exchange": "SS",
       "instrumentType": "stock",
@@ -50991,7 +50991,7 @@
     },
     {
       "symbol": "688029.SS",
-      "name": "南微医学",
+      "name": "南微医学科技",
       "market": "CN",
       "exchange": "SS",
       "instrumentType": "stock",
@@ -51035,7 +51035,7 @@
     },
     {
       "symbol": "688033.SS",
-      "name": "*ST天宜",
+      "name": "*ST天宜新材",
       "market": "CN",
       "exchange": "SS",
       "instrumentType": "stock",
@@ -51046,7 +51046,7 @@
     },
     {
       "symbol": "688035.SS",
-      "name": "德邦科技",
+      "name": "德邦科技股份",
       "market": "CN",
       "exchange": "SS",
       "instrumentType": "stock",
@@ -51068,7 +51068,7 @@
     },
     {
       "symbol": "688037.SS",
-      "name": "芯源微",
+      "name": "芯源微电子",
       "market": "CN",
       "exchange": "SS",
       "instrumentType": "stock",
@@ -51079,7 +51079,7 @@
     },
     {
       "symbol": "688038.SS",
-      "name": "中科通达",
+      "name": "武汉中科通达",
       "market": "CN",
       "exchange": "SS",
       "instrumentType": "stock",
@@ -51112,7 +51112,7 @@
     },
     {
       "symbol": "688045.SS",
-      "name": "必易微",
+      "name": "必易微电子",
       "market": "CN",
       "exchange": "SS",
       "instrumentType": "stock",
@@ -51167,7 +51167,7 @@
     },
     {
       "symbol": "688050.SS",
-      "name": "爱博医疗",
+      "name": "爱博诺德医疗",
       "market": "CN",
       "exchange": "SS",
       "instrumentType": "stock",
@@ -51178,7 +51178,7 @@
     },
     {
       "symbol": "688051.SS",
-      "name": "佳华科技",
+      "name": "罗克佳华科技",
       "market": "CN",
       "exchange": "SS",
       "instrumentType": "stock",
@@ -51189,7 +51189,7 @@
     },
     {
       "symbol": "688052.SS",
-      "name": "纳芯微",
+      "name": "纳芯微电子",
       "market": "CN",
       "exchange": "SS",
       "instrumentType": "stock",
@@ -51200,7 +51200,7 @@
     },
     {
       "symbol": "688053.SS",
-      "name": "ST思科瑞",
+      "name": "ST思科瑞微电子",
       "market": "CN",
       "exchange": "SS",
       "instrumentType": "stock",
@@ -51211,7 +51211,7 @@
     },
     {
       "symbol": "688055.SS",
-      "name": "龙腾光电",
+      "name": "昆山龙腾光电",
       "market": "CN",
       "exchange": "SS",
       "instrumentType": "stock",
@@ -51222,7 +51222,7 @@
     },
     {
       "symbol": "688056.SS",
-      "name": "莱伯泰科",
+      "name": "莱伯泰科仪器",
       "market": "CN",
       "exchange": "SS",
       "instrumentType": "stock",
@@ -51233,7 +51233,7 @@
     },
     {
       "symbol": "688057.SS",
-      "name": "金达莱",
+      "name": "金达莱环保",
       "market": "CN",
       "exchange": "SS",
       "instrumentType": "stock",
@@ -51244,7 +51244,7 @@
     },
     {
       "symbol": "688058.SS",
-      "name": "宝兰德",
+      "name": "宝兰德软件",
       "market": "CN",
       "exchange": "SS",
       "instrumentType": "stock",
@@ -51255,7 +51255,7 @@
     },
     {
       "symbol": "688059.SS",
-      "name": "华锐精密",
+      "name": "株洲华锐精密",
       "market": "CN",
       "exchange": "SS",
       "instrumentType": "stock",
@@ -51266,7 +51266,7 @@
     },
     {
       "symbol": "688060.SS",
-      "name": "云涌科技",
+      "name": "江苏云涌电子科技",
       "market": "CN",
       "exchange": "SS",
       "instrumentType": "stock",
@@ -51321,7 +51321,7 @@
     },
     {
       "symbol": "688066.SS",
-      "name": "*ST航图",
+      "name": "*ST航天宏图",
       "market": "CN",
       "exchange": "SS",
       "instrumentType": "stock",
@@ -51354,7 +51354,7 @@
     },
     {
       "symbol": "688069.SS",
-      "name": "德林海",
+      "name": "德林海环保",
       "market": "CN",
       "exchange": "SS",
       "instrumentType": "stock",
@@ -51365,7 +51365,7 @@
     },
     {
       "symbol": "688070.SS",
-      "name": "纵横股份",
+      "name": "成都纵横",
       "market": "CN",
       "exchange": "SS",
       "instrumentType": "stock",
@@ -51376,7 +51376,7 @@
     },
     {
       "symbol": "688071.SS",
-      "name": "华依科技",
+      "name": "华依科技集团",
       "market": "CN",
       "exchange": "SS",
       "instrumentType": "stock",
@@ -51398,7 +51398,7 @@
     },
     {
       "symbol": "688073.SS",
-      "name": "毕得医药",
+      "name": "毕得医药科技股份",
       "market": "CN",
       "exchange": "SS",
       "instrumentType": "stock",
@@ -51420,7 +51420,7 @@
     },
     {
       "symbol": "688076.SS",
-      "name": "ST诺泰",
+      "name": "ST诺泰生物",
       "market": "CN",
       "exchange": "SS",
       "instrumentType": "stock",
@@ -51431,7 +51431,7 @@
     },
     {
       "symbol": "688077.SS",
-      "name": "大地熊",
+      "name": "大地熊新材料",
       "market": "CN",
       "exchange": "SS",
       "instrumentType": "stock",
@@ -51453,7 +51453,7 @@
     },
     {
       "symbol": "688079.SS",
-      "name": "美迪凯",
+      "name": "美迪凯股份",
       "market": "CN",
       "exchange": "SS",
       "instrumentType": "stock",
@@ -51464,7 +51464,7 @@
     },
     {
       "symbol": "688080.SS",
-      "name": "映翰通",
+      "name": "映翰通网络",
       "market": "CN",
       "exchange": "SS",
       "instrumentType": "stock",
@@ -51486,7 +51486,7 @@
     },
     {
       "symbol": "688082.SS",
-      "name": "盛美上海",
+      "name": "盛美上海半导体",
       "market": "CN",
       "exchange": "SS",
       "instrumentType": "stock",
@@ -51552,7 +51552,7 @@
     },
     {
       "symbol": "688089.SS",
-      "name": "ST嘉必优",
+      "name": "ST嘉必优生物",
       "market": "CN",
       "exchange": "SS",
       "instrumentType": "stock",
@@ -51574,7 +51574,7 @@
     },
     {
       "symbol": "688091.SS",
-      "name": "上海谊众",
+      "name": "上海谊众药业",
       "market": "CN",
       "exchange": "SS",
       "instrumentType": "stock",
@@ -51585,7 +51585,7 @@
     },
     {
       "symbol": "688092.SS",
-      "name": "爱科科技",
+      "name": "爱科科技股份",
       "market": "CN",
       "exchange": "SS",
       "instrumentType": "stock",
@@ -51607,7 +51607,7 @@
     },
     {
       "symbol": "688095.SS",
-      "name": "福昕软件",
+      "name": "福昕软件开发",
       "market": "CN",
       "exchange": "SS",
       "instrumentType": "stock",
@@ -51618,7 +51618,7 @@
     },
     {
       "symbol": "688096.SS",
-      "name": "京源环保",
+      "name": "江苏京源环保",
       "market": "CN",
       "exchange": "SS",
       "instrumentType": "stock",
@@ -51629,7 +51629,7 @@
     },
     {
       "symbol": "688097.SS",
-      "name": "博众精工",
+      "name": "博众精工科技",
       "market": "CN",
       "exchange": "SS",
       "instrumentType": "stock",
@@ -51640,7 +51640,7 @@
     },
     {
       "symbol": "688098.SS",
-      "name": "申联生物",
+      "name": "申联生物医药",
       "market": "CN",
       "exchange": "SS",
       "instrumentType": "stock",
@@ -51651,7 +51651,7 @@
     },
     {
       "symbol": "688099.SS",
-      "name": "晶晨股份",
+      "name": "晶晨半导体",
       "market": "CN",
       "exchange": "SS",
       "instrumentType": "stock",
@@ -51673,7 +51673,7 @@
     },
     {
       "symbol": "688101.SS",
-      "name": "三达膜",
+      "name": "三达膜环境技术",
       "market": "CN",
       "exchange": "SS",
       "instrumentType": "stock",
@@ -51684,7 +51684,7 @@
     },
     {
       "symbol": "688102.SS",
-      "name": "斯瑞新材",
+      "name": "陕西斯瑞新材股份",
       "market": "CN",
       "exchange": "SS",
       "instrumentType": "stock",
@@ -51706,7 +51706,7 @@
     },
     {
       "symbol": "688105.SS",
-      "name": "诺唯赞",
+      "name": "诺唯赞生物",
       "market": "CN",
       "exchange": "SS",
       "instrumentType": "stock",
@@ -51739,7 +51739,7 @@
     },
     {
       "symbol": "688108.SS",
-      "name": "赛诺医疗",
+      "name": "赛诺医疗科学",
       "market": "CN",
       "exchange": "SS",
       "instrumentType": "stock",
@@ -51816,7 +51816,7 @@
     },
     {
       "symbol": "688115.SS",
-      "name": "思林杰",
+      "name": "思林杰科技",
       "market": "CN",
       "exchange": "SS",
       "instrumentType": "stock",
@@ -51882,7 +51882,7 @@
     },
     {
       "symbol": "688121.SS",
-      "name": "*ST卓然",
+      "name": "*ST卓然技术",
       "market": "CN",
       "exchange": "SS",
       "instrumentType": "stock",
@@ -51904,7 +51904,7 @@
     },
     {
       "symbol": "688123.SS",
-      "name": "聚辰股份",
+      "name": "聚辰半导体",
       "market": "CN",
       "exchange": "SS",
       "instrumentType": "stock",
@@ -51926,7 +51926,7 @@
     },
     {
       "symbol": "688126.SS",
-      "name": "沪硅产业",
+      "name": "上海硅产业集团",
       "market": "CN",
       "exchange": "SS",
       "instrumentType": "stock",
@@ -51948,7 +51948,7 @@
     },
     {
       "symbol": "688128.SS",
-      "name": "中国电研",
+      "name": "中国电器研究院",
       "market": "CN",
       "exchange": "SS",
       "instrumentType": "stock",
@@ -51959,7 +51959,7 @@
     },
     {
       "symbol": "688129.SS",
-      "name": "东来技术",
+      "name": "东来涂料技术股份",
       "market": "CN",
       "exchange": "SS",
       "instrumentType": "stock",
@@ -51970,7 +51970,7 @@
     },
     {
       "symbol": "688130.SS",
-      "name": "晶华微",
+      "name": "晶华微电子",
       "market": "CN",
       "exchange": "SS",
       "instrumentType": "stock",
@@ -51992,7 +51992,7 @@
     },
     {
       "symbol": "688132.SS",
-      "name": "邦彦技术",
+      "name": "邦彦技术股份",
       "market": "CN",
       "exchange": "SS",
       "instrumentType": "stock",
@@ -52003,7 +52003,7 @@
     },
     {
       "symbol": "688133.SS",
-      "name": "泰坦科技",
+      "name": "泰坦股份",
       "market": "CN",
       "exchange": "SS",
       "instrumentType": "stock",
@@ -52025,7 +52025,7 @@
     },
     {
       "symbol": "688136.SS",
-      "name": "科兴制药",
+      "name": "科兴生物制药",
       "market": "CN",
       "exchange": "SS",
       "instrumentType": "stock",
@@ -52069,7 +52069,7 @@
     },
     {
       "symbol": "688141.SS",
-      "name": "杰华特",
+      "name": "杰华特微电子",
       "market": "CN",
       "exchange": "SS",
       "instrumentType": "stock",
@@ -52080,7 +52080,7 @@
     },
     {
       "symbol": "688143.SS",
-      "name": "长盈通",
+      "name": "长盈通光电",
       "market": "CN",
       "exchange": "SS",
       "instrumentType": "stock",
@@ -52091,7 +52091,7 @@
     },
     {
       "symbol": "688146.SS",
-      "name": "中船特气",
+      "name": "中船派瑞特气",
       "market": "CN",
       "exchange": "SS",
       "instrumentType": "stock",
@@ -52102,7 +52102,7 @@
     },
     {
       "symbol": "688147.SS",
-      "name": "微导纳米",
+      "name": "微导纳米科技",
       "market": "CN",
       "exchange": "SS",
       "instrumentType": "stock",
@@ -52124,7 +52124,7 @@
     },
     {
       "symbol": "688150.SS",
-      "name": "莱特光电",
+      "name": "莱特光电股份",
       "market": "CN",
       "exchange": "SS",
       "instrumentType": "stock",
@@ -52190,7 +52190,7 @@
     },
     {
       "symbol": "688157.SS",
-      "name": "松井股份",
+      "name": "松井新材料",
       "market": "CN",
       "exchange": "SS",
       "instrumentType": "stock",
@@ -52201,7 +52201,7 @@
     },
     {
       "symbol": "688158.SS",
-      "name": "优刻得",
+      "name": "优刻得科技",
       "market": "CN",
       "exchange": "SS",
       "instrumentType": "stock",
@@ -52223,7 +52223,7 @@
     },
     {
       "symbol": "688160.SS",
-      "name": "步科股份",
+      "name": "步科自动化",
       "market": "CN",
       "exchange": "SS",
       "instrumentType": "stock",
@@ -52267,7 +52267,7 @@
     },
     {
       "symbol": "688165.SS",
-      "name": "埃夫特",
+      "name": "埃夫特智能",
       "market": "CN",
       "exchange": "SS",
       "instrumentType": "stock",
@@ -52278,7 +52278,7 @@
     },
     {
       "symbol": "688166.SS",
-      "name": "博瑞医药",
+      "name": "博瑞生物医药",
       "market": "CN",
       "exchange": "SS",
       "instrumentType": "stock",
@@ -52289,7 +52289,7 @@
     },
     {
       "symbol": "688167.SS",
-      "name": "炬光科技",
+      "name": "西安炬光科技",
       "market": "CN",
       "exchange": "SS",
       "instrumentType": "stock",
@@ -52300,7 +52300,7 @@
     },
     {
       "symbol": "688168.SS",
-      "name": "安博通",
+      "name": "北京安博通",
       "market": "CN",
       "exchange": "SS",
       "instrumentType": "stock",
@@ -52344,7 +52344,7 @@
     },
     {
       "symbol": "688172.SS",
-      "name": "燕东微",
+      "name": "燕东微电子股份",
       "market": "CN",
       "exchange": "SS",
       "instrumentType": "stock",
@@ -52355,7 +52355,7 @@
     },
     {
       "symbol": "688173.SS",
-      "name": "希荻微",
+      "name": "希荻微电子",
       "market": "CN",
       "exchange": "SS",
       "instrumentType": "stock",
@@ -52366,7 +52366,7 @@
     },
     {
       "symbol": "688175.SS",
-      "name": "高凌信息",
+      "name": "珠海高凌信息",
       "market": "CN",
       "exchange": "SS",
       "instrumentType": "stock",
@@ -52377,7 +52377,7 @@
     },
     {
       "symbol": "688176.SS",
-      "name": "亚虹医药",
+      "name": "亚虹医药科技",
       "market": "CN",
       "exchange": "SS",
       "instrumentType": "stock",
@@ -52388,7 +52388,7 @@
     },
     {
       "symbol": "688177.SS",
-      "name": "百奥泰",
+      "name": "百奥泰生物",
       "market": "CN",
       "exchange": "SS",
       "instrumentType": "stock",
@@ -52399,7 +52399,7 @@
     },
     {
       "symbol": "688178.SS",
-      "name": "万德斯",
+      "name": "万德斯环保",
       "market": "CN",
       "exchange": "SS",
       "instrumentType": "stock",
@@ -52410,7 +52410,7 @@
     },
     {
       "symbol": "688179.SS",
-      "name": "阿拉丁",
+      "name": "阿拉丁科技",
       "market": "CN",
       "exchange": "SS",
       "instrumentType": "stock",
@@ -52432,7 +52432,7 @@
     },
     {
       "symbol": "688181.SS",
-      "name": "八亿时空",
+      "name": "八亿时空液晶股份",
       "market": "CN",
       "exchange": "SS",
       "instrumentType": "stock",
@@ -52465,7 +52465,7 @@
     },
     {
       "symbol": "688184.SS",
-      "name": "ST帕瓦",
+      "name": "ST帕瓦股份",
       "market": "CN",
       "exchange": "SS",
       "instrumentType": "stock",
@@ -52476,7 +52476,7 @@
     },
     {
       "symbol": "688185.SS",
-      "name": "康希诺",
+      "name": "康希诺生物",
       "market": "CN",
       "exchange": "SS",
       "instrumentType": "stock",
@@ -52487,7 +52487,7 @@
     },
     {
       "symbol": "688186.SS",
-      "name": "广大特材",
+      "name": "张家港广大特材",
       "market": "CN",
       "exchange": "SS",
       "instrumentType": "stock",
@@ -52509,7 +52509,7 @@
     },
     {
       "symbol": "688188.SS",
-      "name": "柏楚电子",
+      "name": "上海柏楚电子科技",
       "market": "CN",
       "exchange": "SS",
       "instrumentType": "stock",
@@ -52520,7 +52520,7 @@
     },
     {
       "symbol": "688189.SS",
-      "name": "ST南新",
+      "name": "ST南新制药",
       "market": "CN",
       "exchange": "SS",
       "instrumentType": "stock",
@@ -52531,7 +52531,7 @@
     },
     {
       "symbol": "688190.SS",
-      "name": "云路股份",
+      "name": "云路先进材料股份",
       "market": "CN",
       "exchange": "SS",
       "instrumentType": "stock",
@@ -52542,7 +52542,7 @@
     },
     {
       "symbol": "688191.SS",
-      "name": "智洋创新",
+      "name": "智洋创新科技",
       "market": "CN",
       "exchange": "SS",
       "instrumentType": "stock",
@@ -52608,7 +52608,7 @@
     },
     {
       "symbol": "688198.SS",
-      "name": "佰仁医疗",
+      "name": "佰仁医疗科技",
       "market": "CN",
       "exchange": "SS",
       "instrumentType": "stock",
@@ -52619,7 +52619,7 @@
     },
     {
       "symbol": "688199.SS",
-      "name": "久日新材",
+      "name": "久日新材料",
       "market": "CN",
       "exchange": "SS",
       "instrumentType": "stock",
@@ -52641,7 +52641,7 @@
     },
     {
       "symbol": "688201.SS",
-      "name": "ST信安",
+      "name": "ST信安世纪",
       "market": "CN",
       "exchange": "SS",
       "instrumentType": "stock",
@@ -52652,7 +52652,7 @@
     },
     {
       "symbol": "688202.SS",
-      "name": "美迪西",
+      "name": "美迪西生物医药",
       "market": "CN",
       "exchange": "SS",
       "instrumentType": "stock",
@@ -52663,7 +52663,7 @@
     },
     {
       "symbol": "688203.SS",
-      "name": "海正生材",
+      "name": "海正生物材料",
       "market": "CN",
       "exchange": "SS",
       "instrumentType": "stock",
@@ -52674,7 +52674,7 @@
     },
     {
       "symbol": "688205.SS",
-      "name": "XD德科立",
+      "name": "XD德科立光电子",
       "market": "CN",
       "exchange": "SS",
       "instrumentType": "stock",
@@ -52718,7 +52718,7 @@
     },
     {
       "symbol": "688209.SS",
-      "name": "英集芯",
+      "name": "英集芯科技",
       "market": "CN",
       "exchange": "SS",
       "instrumentType": "stock",
@@ -52729,7 +52729,7 @@
     },
     {
       "symbol": "688210.SS",
-      "name": "统联精密",
+      "name": "泛海统联精密制造",
       "market": "CN",
       "exchange": "SS",
       "instrumentType": "stock",
@@ -52762,7 +52762,7 @@
     },
     {
       "symbol": "688213.SS",
-      "name": "思特威",
+      "name": "思特威电子科技",
       "market": "CN",
       "exchange": "SS",
       "instrumentType": "stock",
@@ -52773,7 +52773,7 @@
     },
     {
       "symbol": "688215.SS",
-      "name": "瑞晟智能",
+      "name": "瑞晟智能科技",
       "market": "CN",
       "exchange": "SS",
       "instrumentType": "stock",
@@ -52795,7 +52795,7 @@
     },
     {
       "symbol": "688217.SS",
-      "name": "睿昂基因",
+      "name": "上海睿昂基因",
       "market": "CN",
       "exchange": "SS",
       "instrumentType": "stock",
@@ -52883,7 +52883,7 @@
     },
     {
       "symbol": "688226.SS",
-      "name": "威腾电气",
+      "name": "威腾电气集团股份",
       "market": "CN",
       "exchange": "SS",
       "instrumentType": "stock",
@@ -52905,7 +52905,7 @@
     },
     {
       "symbol": "688228.SS",
-      "name": "开普云",
+      "name": "开普云信息科技",
       "market": "CN",
       "exchange": "SS",
       "instrumentType": "stock",
@@ -52916,7 +52916,7 @@
     },
     {
       "symbol": "688229.SS",
-      "name": "博睿数据",
+      "name": "博睿宏远数据",
       "market": "CN",
       "exchange": "SS",
       "instrumentType": "stock",
@@ -52938,7 +52938,7 @@
     },
     {
       "symbol": "688231.SS",
-      "name": "隆达股份",
+      "name": "隆达超合金股份",
       "market": "CN",
       "exchange": "SS",
       "instrumentType": "stock",
@@ -52949,7 +52949,7 @@
     },
     {
       "symbol": "688232.SS",
-      "name": "新点软件",
+      "name": "国泰新点软件",
       "market": "CN",
       "exchange": "SS",
       "instrumentType": "stock",
@@ -52960,7 +52960,7 @@
     },
     {
       "symbol": "688233.SS",
-      "name": "神工股份",
+      "name": "神工半导体",
       "market": "CN",
       "exchange": "SS",
       "instrumentType": "stock",
@@ -52993,7 +52993,7 @@
     },
     {
       "symbol": "688236.SS",
-      "name": "春立医疗",
+      "name": "春立正达医疗",
       "market": "CN",
       "exchange": "SS",
       "instrumentType": "stock",
@@ -53026,7 +53026,7 @@
     },
     {
       "symbol": "688239.SS",
-      "name": "航宇科技",
+      "name": "贵州航宇科技",
       "market": "CN",
       "exchange": "SS",
       "instrumentType": "stock",
@@ -53048,7 +53048,7 @@
     },
     {
       "symbol": "688246.SS",
-      "name": "嘉和美康",
+      "name": "嘉和美康科技",
       "market": "CN",
       "exchange": "SS",
       "instrumentType": "stock",
@@ -53070,7 +53070,7 @@
     },
     {
       "symbol": "688248.SS",
-      "name": "南网科技",
+      "name": "南方电网电力科技",
       "market": "CN",
       "exchange": "SS",
       "instrumentType": "stock",
@@ -53092,7 +53092,7 @@
     },
     {
       "symbol": "688251.SS",
-      "name": "井松智能",
+      "name": "井松智能科技",
       "market": "CN",
       "exchange": "SS",
       "instrumentType": "stock",
@@ -53103,7 +53103,7 @@
     },
     {
       "symbol": "688252.SS",
-      "name": "天德钰",
+      "name": "天德钰科技",
       "market": "CN",
       "exchange": "SS",
       "instrumentType": "stock",
@@ -53114,7 +53114,7 @@
     },
     {
       "symbol": "688253.SS",
-      "name": "英诺特",
+      "name": "英诺特生物股份",
       "market": "CN",
       "exchange": "SS",
       "instrumentType": "stock",
@@ -53125,7 +53125,7 @@
     },
     {
       "symbol": "688255.SS",
-      "name": "凯尔达",
+      "name": "凯尔达机器人",
       "market": "CN",
       "exchange": "SS",
       "instrumentType": "stock",
@@ -53136,7 +53136,7 @@
     },
     {
       "symbol": "688256.SS",
-      "name": "寒武纪",
+      "name": "寒武纪科技",
       "market": "CN",
       "exchange": "SS",
       "instrumentType": "stock",
@@ -53158,7 +53158,7 @@
     },
     {
       "symbol": "688258.SS",
-      "name": "卓易信息",
+      "name": "江苏卓易信息科技",
       "market": "CN",
       "exchange": "SS",
       "instrumentType": "stock",
@@ -53169,7 +53169,7 @@
     },
     {
       "symbol": "688259.SS",
-      "name": "创耀科技",
+      "name": "创耀通信科技",
       "market": "CN",
       "exchange": "SS",
       "instrumentType": "stock",
@@ -53191,7 +53191,7 @@
     },
     {
       "symbol": "688261.SS",
-      "name": "东微半导",
+      "name": "东微半导体",
       "market": "CN",
       "exchange": "SS",
       "instrumentType": "stock",
@@ -53202,7 +53202,7 @@
     },
     {
       "symbol": "688262.SS",
-      "name": "国芯科技",
+      "name": "苏州国芯科技",
       "market": "CN",
       "exchange": "SS",
       "instrumentType": "stock",
@@ -53213,7 +53213,7 @@
     },
     {
       "symbol": "688265.SS",
-      "name": "南模生物",
+      "name": "南方模式生物",
       "market": "CN",
       "exchange": "SS",
       "instrumentType": "stock",
@@ -53235,7 +53235,7 @@
     },
     {
       "symbol": "688267.SS",
-      "name": "中触媒",
+      "name": "中触媒股份",
       "market": "CN",
       "exchange": "SS",
       "instrumentType": "stock",
@@ -53246,7 +53246,7 @@
     },
     {
       "symbol": "688268.SS",
-      "name": "华特气体",
+      "name": "广东华特气体",
       "market": "CN",
       "exchange": "SS",
       "instrumentType": "stock",
@@ -53257,7 +53257,7 @@
     },
     {
       "symbol": "688269.SS",
-      "name": "凯立新材",
+      "name": "西安凯立新材",
       "market": "CN",
       "exchange": "SS",
       "instrumentType": "stock",
@@ -53268,7 +53268,7 @@
     },
     {
       "symbol": "688270.SS",
-      "name": "ST臻镭",
+      "name": "ST臻镭科技",
       "market": "CN",
       "exchange": "SS",
       "instrumentType": "stock",
@@ -53290,7 +53290,7 @@
     },
     {
       "symbol": "688272.SS",
-      "name": "富吉瑞",
+      "name": "富吉瑞光电",
       "market": "CN",
       "exchange": "SS",
       "instrumentType": "stock",
@@ -53301,7 +53301,7 @@
     },
     {
       "symbol": "688273.SS",
-      "name": "麦澜德",
+      "name": "麦澜德医疗",
       "market": "CN",
       "exchange": "SS",
       "instrumentType": "stock",
@@ -53312,7 +53312,7 @@
     },
     {
       "symbol": "688275.SS",
-      "name": "万润新能",
+      "name": "万润新能源",
       "market": "CN",
       "exchange": "SS",
       "instrumentType": "stock",
@@ -53323,7 +53323,7 @@
     },
     {
       "symbol": "688276.SS",
-      "name": "百克生物",
+      "name": "长春百克生物科技",
       "market": "CN",
       "exchange": "SS",
       "instrumentType": "stock",
@@ -53334,7 +53334,7 @@
     },
     {
       "symbol": "688277.SS",
-      "name": "天智航",
+      "name": "天智航医疗",
       "market": "CN",
       "exchange": "SS",
       "instrumentType": "stock",
@@ -53378,7 +53378,7 @@
     },
     {
       "symbol": "688281.SS",
-      "name": "华秦科技",
+      "name": "华秦科技实业",
       "market": "CN",
       "exchange": "SS",
       "instrumentType": "stock",
@@ -53466,7 +53466,7 @@
     },
     {
       "symbol": "688291.SS",
-      "name": "金橙子",
+      "name": "金橙子科技",
       "market": "CN",
       "exchange": "SS",
       "instrumentType": "stock",
@@ -53477,7 +53477,7 @@
     },
     {
       "symbol": "688292.SS",
-      "name": "浩瀚深度",
+      "name": "浩瀚深度信息技术",
       "market": "CN",
       "exchange": "SS",
       "instrumentType": "stock",
@@ -53488,7 +53488,7 @@
     },
     {
       "symbol": "688293.SS",
-      "name": "奥浦迈",
+      "name": "奥浦迈生物",
       "market": "CN",
       "exchange": "SS",
       "instrumentType": "stock",
@@ -53499,7 +53499,7 @@
     },
     {
       "symbol": "688295.SS",
-      "name": "中复神鹰",
+      "name": "中复神鹰碳纤维",
       "market": "CN",
       "exchange": "SS",
       "instrumentType": "stock",
@@ -53521,7 +53521,7 @@
     },
     {
       "symbol": "688297.SS",
-      "name": "中无人机",
+      "name": "中航无人机",
       "market": "CN",
       "exchange": "SS",
       "instrumentType": "stock",
@@ -53532,7 +53532,7 @@
     },
     {
       "symbol": "688298.SS",
-      "name": "东方生物",
+      "name": "东方基因生物",
       "market": "CN",
       "exchange": "SS",
       "instrumentType": "stock",
@@ -53565,7 +53565,7 @@
     },
     {
       "symbol": "688301.SS",
-      "name": "奕瑞科技",
+      "name": "奕瑞科技股份",
       "market": "CN",
       "exchange": "SS",
       "instrumentType": "stock",
@@ -53609,7 +53609,7 @@
     },
     {
       "symbol": "688306.SS",
-      "name": "均普智能",
+      "name": "均普智能制造",
       "market": "CN",
       "exchange": "SS",
       "instrumentType": "stock",
@@ -53631,7 +53631,7 @@
     },
     {
       "symbol": "688308.SS",
-      "name": "欧科亿",
+      "name": "欧科亿数控刀具",
       "market": "CN",
       "exchange": "SS",
       "instrumentType": "stock",
@@ -53708,7 +53708,7 @@
     },
     {
       "symbol": "688315.SS",
-      "name": "诺禾致源",
+      "name": "诺禾致源科技",
       "market": "CN",
       "exchange": "SS",
       "instrumentType": "stock",
@@ -53730,7 +53730,7 @@
     },
     {
       "symbol": "688317.SS",
-      "name": "之江生物",
+      "name": "上海之江生物",
       "market": "CN",
       "exchange": "SS",
       "instrumentType": "stock",
@@ -53796,7 +53796,7 @@
     },
     {
       "symbol": "688323.SS",
-      "name": "瑞华泰",
+      "name": "瑞华泰薄膜科技",
       "market": "CN",
       "exchange": "SS",
       "instrumentType": "stock",
@@ -53807,7 +53807,7 @@
     },
     {
       "symbol": "688325.SS",
-      "name": "赛微微电",
+      "name": "赛微微电子",
       "market": "CN",
       "exchange": "SS",
       "instrumentType": "stock",
@@ -53840,7 +53840,7 @@
     },
     {
       "symbol": "688328.SS",
-      "name": "深科达",
+      "name": "深科达智能装备",
       "market": "CN",
       "exchange": "SS",
       "instrumentType": "stock",
@@ -53851,7 +53851,7 @@
     },
     {
       "symbol": "688329.SS",
-      "name": "艾隆科技",
+      "name": "苏州艾隆科技",
       "market": "CN",
       "exchange": "SS",
       "instrumentType": "stock",
@@ -53862,7 +53862,7 @@
     },
     {
       "symbol": "688330.SS",
-      "name": "宏力达",
+      "name": "宏力达信息",
       "market": "CN",
       "exchange": "SS",
       "instrumentType": "stock",
@@ -53895,7 +53895,7 @@
     },
     {
       "symbol": "688333.SS",
-      "name": "铂力特",
+      "name": "西安铂力特",
       "market": "CN",
       "exchange": "SS",
       "instrumentType": "stock",
@@ -53961,7 +53961,7 @@
     },
     {
       "symbol": "688339.SS",
-      "name": "亿华通",
+      "name": "亿华通科技",
       "market": "CN",
       "exchange": "SS",
       "instrumentType": "stock",
@@ -53972,7 +53972,7 @@
     },
     {
       "symbol": "688343.SS",
-      "name": "云天励飞",
+      "name": "云天励飞股份",
       "market": "CN",
       "exchange": "SS",
       "instrumentType": "stock",
@@ -53994,7 +53994,7 @@
     },
     {
       "symbol": "688347.SS",
-      "name": "华虹宏力",
+      "name": "华虹宏力半导体",
       "market": "CN",
       "exchange": "SS",
       "instrumentType": "stock",
@@ -54038,7 +54038,7 @@
     },
     {
       "symbol": "688351.SS",
-      "name": "微电生理",
+      "name": "微创电生理股份",
       "market": "CN",
       "exchange": "SS",
       "instrumentType": "stock",
@@ -54104,7 +54104,7 @@
     },
     {
       "symbol": "688358.SS",
-      "name": "祥生医疗",
+      "name": "祥生医疗科技",
       "market": "CN",
       "exchange": "SS",
       "instrumentType": "stock",
@@ -54115,7 +54115,7 @@
     },
     {
       "symbol": "688359.SS",
-      "name": "三孚新科",
+      "name": "三孚新材料科技",
       "market": "CN",
       "exchange": "SS",
       "instrumentType": "stock",
@@ -54181,7 +54181,7 @@
     },
     {
       "symbol": "688366.SS",
-      "name": "昊海生科",
+      "name": "昊海生物科技",
       "market": "CN",
       "exchange": "SS",
       "instrumentType": "stock",
@@ -54203,7 +54203,7 @@
     },
     {
       "symbol": "688368.SS",
-      "name": "晶丰明源",
+      "name": "晶丰明源半导体",
       "market": "CN",
       "exchange": "SS",
       "instrumentType": "stock",
@@ -54225,7 +54225,7 @@
     },
     {
       "symbol": "688370.SS",
-      "name": "丛麟科技",
+      "name": "丛麟环保科技",
       "market": "CN",
       "exchange": "SS",
       "instrumentType": "stock",
@@ -54236,7 +54236,7 @@
     },
     {
       "symbol": "688371.SS",
-      "name": "菲沃泰",
+      "name": "菲沃泰纳米科技",
       "market": "CN",
       "exchange": "SS",
       "instrumentType": "stock",
@@ -54291,7 +54291,7 @@
     },
     {
       "symbol": "688377.SS",
-      "name": "迪威尔",
+      "name": "迪威尔高端制造",
       "market": "CN",
       "exchange": "SS",
       "instrumentType": "stock",
@@ -54302,7 +54302,7 @@
     },
     {
       "symbol": "688378.SS",
-      "name": "奥来德",
+      "name": "奥来德光电",
       "market": "CN",
       "exchange": "SS",
       "instrumentType": "stock",
@@ -54335,7 +54335,7 @@
     },
     {
       "symbol": "688381.SS",
-      "name": "帝奥微",
+      "name": "帝奥微电子",
       "market": "CN",
       "exchange": "SS",
       "instrumentType": "stock",
@@ -54346,7 +54346,7 @@
     },
     {
       "symbol": "688382.SS",
-      "name": "益方生物",
+      "name": "益方生物科技",
       "market": "CN",
       "exchange": "SS",
       "instrumentType": "stock",
@@ -54357,7 +54357,7 @@
     },
     {
       "symbol": "688383.SS",
-      "name": "新益昌",
+      "name": "新益昌科技",
       "market": "CN",
       "exchange": "SS",
       "instrumentType": "stock",
@@ -54390,7 +54390,7 @@
     },
     {
       "symbol": "688387.SS",
-      "name": "信科移动",
+      "name": "中信科移动",
       "market": "CN",
       "exchange": "SS",
       "instrumentType": "stock",
@@ -54412,7 +54412,7 @@
     },
     {
       "symbol": "688389.SS",
-      "name": "普门科技",
+      "name": "深圳普门科技",
       "market": "CN",
       "exchange": "SS",
       "instrumentType": "stock",
@@ -54423,7 +54423,7 @@
     },
     {
       "symbol": "688390.SS",
-      "name": "固德威",
+      "name": "固德威电源",
       "market": "CN",
       "exchange": "SS",
       "instrumentType": "stock",
@@ -54445,7 +54445,7 @@
     },
     {
       "symbol": "688392.SS",
-      "name": "骄成超声",
+      "name": "骄成超声波",
       "market": "CN",
       "exchange": "SS",
       "instrumentType": "stock",
@@ -54456,7 +54456,7 @@
     },
     {
       "symbol": "688393.SS",
-      "name": "安必平",
+      "name": "安必平医药",
       "market": "CN",
       "exchange": "SS",
       "instrumentType": "stock",
@@ -54467,7 +54467,7 @@
     },
     {
       "symbol": "688395.SS",
-      "name": "正弦电气",
+      "name": "深圳正弦电气股份",
       "market": "CN",
       "exchange": "SS",
       "instrumentType": "stock",
@@ -54478,7 +54478,7 @@
     },
     {
       "symbol": "688396.SS",
-      "name": "华润微",
+      "name": "华润微电子",
       "market": "CN",
       "exchange": "SS",
       "instrumentType": "stock",
@@ -54511,7 +54511,7 @@
     },
     {
       "symbol": "688400.SS",
-      "name": "凌云光",
+      "name": "凌云光技术",
       "market": "CN",
       "exchange": "SS",
       "instrumentType": "stock",
@@ -54544,7 +54544,7 @@
     },
     {
       "symbol": "688408.SS",
-      "name": "中信博",
+      "name": "中信博新能源",
       "market": "CN",
       "exchange": "SS",
       "instrumentType": "stock",
@@ -54566,7 +54566,7 @@
     },
     {
       "symbol": "688410.SS",
-      "name": "山外山",
+      "name": "山外山血液净化",
       "market": "CN",
       "exchange": "SS",
       "instrumentType": "stock",
@@ -54621,7 +54621,7 @@
     },
     {
       "symbol": "688420.SS",
-      "name": "美腾科技",
+      "name": "天津美腾科技",
       "market": "CN",
       "exchange": "SS",
       "instrumentType": "stock",
@@ -54643,7 +54643,7 @@
     },
     {
       "symbol": "688426.SS",
-      "name": "康为世纪",
+      "name": "康为世纪生物科技",
       "market": "CN",
       "exchange": "SS",
       "instrumentType": "stock",
@@ -54731,7 +54731,7 @@
     },
     {
       "symbol": "688448.SS",
-      "name": "磁谷科技",
+      "name": "南京磁谷科技",
       "market": "CN",
       "exchange": "SS",
       "instrumentType": "stock",
@@ -54786,7 +54786,7 @@
     },
     {
       "symbol": "688458.SS",
-      "name": "美芯晟",
+      "name": "美芯晟科技",
       "market": "CN",
       "exchange": "SS",
       "instrumentType": "stock",
@@ -54841,7 +54841,7 @@
     },
     {
       "symbol": "688472.SS",
-      "name": "阿特斯",
+      "name": "阿特斯阳光电力",
       "market": "CN",
       "exchange": "SS",
       "instrumentType": "stock",
@@ -54874,7 +54874,7 @@
     },
     {
       "symbol": "688479.SS",
-      "name": "友车科技",
+      "name": "用友汽车信息科技",
       "market": "CN",
       "exchange": "SS",
       "instrumentType": "stock",
@@ -54885,7 +54885,7 @@
     },
     {
       "symbol": "688480.SS",
-      "name": "赛恩斯",
+      "name": "赛恩斯环保",
       "market": "CN",
       "exchange": "SS",
       "instrumentType": "stock",
@@ -54907,7 +54907,7 @@
     },
     {
       "symbol": "688485.SS",
-      "name": "九州一轨",
+      "name": "九州一轨环科",
       "market": "CN",
       "exchange": "SS",
       "instrumentType": "stock",
@@ -54951,7 +54951,7 @@
     },
     {
       "symbol": "688496.SS",
-      "name": "*ST清越",
+      "name": "*ST清越科技",
       "market": "CN",
       "exchange": "SS",
       "instrumentType": "stock",
@@ -54973,7 +54973,7 @@
     },
     {
       "symbol": "688499.SS",
-      "name": "利元亨",
+      "name": "广东利元亨",
       "market": "CN",
       "exchange": "SS",
       "instrumentType": "stock",
@@ -54984,7 +54984,7 @@
     },
     {
       "symbol": "688500.SS",
-      "name": "慧辰股份",
+      "name": "慧辰资讯股份公司",
       "market": "CN",
       "exchange": "SS",
       "instrumentType": "stock",
@@ -54995,7 +54995,7 @@
     },
     {
       "symbol": "688501.SS",
-      "name": "青达环保",
+      "name": "青岛达能环保",
       "market": "CN",
       "exchange": "SS",
       "instrumentType": "stock",
@@ -55017,7 +55017,7 @@
     },
     {
       "symbol": "688503.SS",
-      "name": "聚和材料",
+      "name": "聚和材料股份公司",
       "market": "CN",
       "exchange": "SS",
       "instrumentType": "stock",
@@ -55028,7 +55028,7 @@
     },
     {
       "symbol": "688505.SS",
-      "name": "复旦张江",
+      "name": "复旦张江股份",
       "market": "CN",
       "exchange": "SS",
       "instrumentType": "stock",
@@ -55039,7 +55039,7 @@
     },
     {
       "symbol": "688506.SS",
-      "name": "百利天恒",
+      "name": "百利天恒药业",
       "market": "CN",
       "exchange": "SS",
       "instrumentType": "stock",
@@ -55061,7 +55061,7 @@
     },
     {
       "symbol": "688508.SS",
-      "name": "芯朋微",
+      "name": "芯朋微电子",
       "market": "CN",
       "exchange": "SS",
       "instrumentType": "stock",
@@ -55105,7 +55105,7 @@
     },
     {
       "symbol": "688512.SS",
-      "name": "慧智微",
+      "name": "慧智微电子",
       "market": "CN",
       "exchange": "SS",
       "instrumentType": "stock",
@@ -55127,7 +55127,7 @@
     },
     {
       "symbol": "688515.SS",
-      "name": "裕太微",
+      "name": "裕太微电子",
       "market": "CN",
       "exchange": "SS",
       "instrumentType": "stock",
@@ -55138,7 +55138,7 @@
     },
     {
       "symbol": "688516.SS",
-      "name": "奥特维",
+      "name": "奥特维科技",
       "market": "CN",
       "exchange": "SS",
       "instrumentType": "stock",
@@ -55160,7 +55160,7 @@
     },
     {
       "symbol": "688518.SS",
-      "name": "联赢激光",
+      "name": "联赢激光股份",
       "market": "CN",
       "exchange": "SS",
       "instrumentType": "stock",
@@ -55171,7 +55171,7 @@
     },
     {
       "symbol": "688519.SS",
-      "name": "南亚新材",
+      "name": "南亚新材料",
       "market": "CN",
       "exchange": "SS",
       "instrumentType": "stock",
@@ -55182,7 +55182,7 @@
     },
     {
       "symbol": "688520.SS",
-      "name": "神州细胞",
+      "name": "神州细胞集团公司",
       "market": "CN",
       "exchange": "SS",
       "instrumentType": "stock",
@@ -55193,7 +55193,7 @@
     },
     {
       "symbol": "688521.SS",
-      "name": "芯原股份",
+      "name": "芯原微电子",
       "market": "CN",
       "exchange": "SS",
       "instrumentType": "stock",
@@ -55204,7 +55204,7 @@
     },
     {
       "symbol": "688522.SS",
-      "name": "纳睿雷达",
+      "name": "纳睿雷达科技",
       "market": "CN",
       "exchange": "SS",
       "instrumentType": "stock",
@@ -55215,7 +55215,7 @@
     },
     {
       "symbol": "688523.SS",
-      "name": "航天环宇",
+      "name": "航天环宇科技",
       "market": "CN",
       "exchange": "SS",
       "instrumentType": "stock",
@@ -55237,7 +55237,7 @@
     },
     {
       "symbol": "688526.SS",
-      "name": "科前生物",
+      "name": "武汉科前生物",
       "market": "CN",
       "exchange": "SS",
       "instrumentType": "stock",
@@ -55248,7 +55248,7 @@
     },
     {
       "symbol": "688528.SS",
-      "name": "秦川物联",
+      "name": "秦川物联网",
       "market": "CN",
       "exchange": "SS",
       "instrumentType": "stock",
@@ -55259,7 +55259,7 @@
     },
     {
       "symbol": "688529.SS",
-      "name": "豪森智能",
+      "name": "豪森智能股份",
       "market": "CN",
       "exchange": "SS",
       "instrumentType": "stock",
@@ -55281,7 +55281,7 @@
     },
     {
       "symbol": "688531.SS",
-      "name": "日联科技",
+      "name": "日联科技股份",
       "market": "CN",
       "exchange": "SS",
       "instrumentType": "stock",
@@ -55292,7 +55292,7 @@
     },
     {
       "symbol": "688533.SS",
-      "name": "上声电子",
+      "name": "上声电子股份",
       "market": "CN",
       "exchange": "SS",
       "instrumentType": "stock",
@@ -55303,7 +55303,7 @@
     },
     {
       "symbol": "688535.SS",
-      "name": "华海诚科",
+      "name": "华海诚科新材料",
       "market": "CN",
       "exchange": "SS",
       "instrumentType": "stock",
@@ -55314,7 +55314,7 @@
     },
     {
       "symbol": "688536.SS",
-      "name": "思瑞浦",
+      "name": "思瑞浦股份",
       "market": "CN",
       "exchange": "SS",
       "instrumentType": "stock",
@@ -55369,7 +55369,7 @@
     },
     {
       "symbol": "688548.SS",
-      "name": "广钢气体",
+      "name": "广钢气体股份",
       "market": "CN",
       "exchange": "SS",
       "instrumentType": "stock",
@@ -55380,7 +55380,7 @@
     },
     {
       "symbol": "688549.SS",
-      "name": "中巨芯",
+      "name": "中巨芯科技",
       "market": "CN",
       "exchange": "SS",
       "instrumentType": "stock",
@@ -55391,7 +55391,7 @@
     },
     {
       "symbol": "688550.SS",
-      "name": "瑞联新材",
+      "name": "瑞联新材料",
       "market": "CN",
       "exchange": "SS",
       "instrumentType": "stock",
@@ -55402,7 +55402,7 @@
     },
     {
       "symbol": "688551.SS",
-      "name": "科威尔",
+      "name": "科威尔股份",
       "market": "CN",
       "exchange": "SS",
       "instrumentType": "stock",
@@ -55435,7 +55435,7 @@
     },
     {
       "symbol": "688556.SS",
-      "name": "高测股份",
+      "name": "高测科技股份",
       "market": "CN",
       "exchange": "SS",
       "instrumentType": "stock",
@@ -55457,7 +55457,7 @@
     },
     {
       "symbol": "688558.SS",
-      "name": "国盛智科",
+      "name": "国盛智科股份",
       "market": "CN",
       "exchange": "SS",
       "instrumentType": "stock",
@@ -55468,7 +55468,7 @@
     },
     {
       "symbol": "688559.SS",
-      "name": "海目星",
+      "name": "海目星激光",
       "market": "CN",
       "exchange": "SS",
       "instrumentType": "stock",
@@ -55479,7 +55479,7 @@
     },
     {
       "symbol": "688560.SS",
-      "name": "明冠新材",
+      "name": "明冠新材料",
       "market": "CN",
       "exchange": "SS",
       "instrumentType": "stock",
@@ -55490,7 +55490,7 @@
     },
     {
       "symbol": "688561.SS",
-      "name": "奇安信",
+      "name": "奇安信集团",
       "market": "CN",
       "exchange": "SS",
       "instrumentType": "stock",
@@ -55501,7 +55501,7 @@
     },
     {
       "symbol": "688562.SS",
-      "name": "航天软件",
+      "name": "航天软件股份",
       "market": "CN",
       "exchange": "SS",
       "instrumentType": "stock",
@@ -55512,7 +55512,7 @@
     },
     {
       "symbol": "688563.SS",
-      "name": "航材股份",
+      "name": "航空材料股份",
       "market": "CN",
       "exchange": "SS",
       "instrumentType": "stock",
@@ -55534,7 +55534,7 @@
     },
     {
       "symbol": "688566.SS",
-      "name": "吉贝尔",
+      "name": "吉贝尔药业",
       "market": "CN",
       "exchange": "SS",
       "instrumentType": "stock",
@@ -55556,7 +55556,7 @@
     },
     {
       "symbol": "688568.SS",
-      "name": "中科星图",
+      "name": "中科星图公司",
       "market": "CN",
       "exchange": "SS",
       "instrumentType": "stock",
@@ -55589,7 +55589,7 @@
     },
     {
       "symbol": "688571.SS",
-      "name": "杭华股份",
+      "name": "杭华油墨股份",
       "market": "CN",
       "exchange": "SS",
       "instrumentType": "stock",
@@ -55611,7 +55611,7 @@
     },
     {
       "symbol": "688575.SS",
-      "name": "亚辉龙",
+      "name": "亚辉龙生物",
       "market": "CN",
       "exchange": "SS",
       "instrumentType": "stock",
@@ -55633,7 +55633,7 @@
     },
     {
       "symbol": "688577.SS",
-      "name": "浙海德曼",
+      "name": "海德曼装备",
       "market": "CN",
       "exchange": "SS",
       "instrumentType": "stock",
@@ -55644,7 +55644,7 @@
     },
     {
       "symbol": "688578.SS",
-      "name": "艾力斯",
+      "name": "艾力斯医药科技",
       "market": "CN",
       "exchange": "SS",
       "instrumentType": "stock",
@@ -55677,7 +55677,7 @@
     },
     {
       "symbol": "688581.SS",
-      "name": "安杰思",
+      "name": "安杰思医学",
       "market": "CN",
       "exchange": "SS",
       "instrumentType": "stock",
@@ -55699,7 +55699,7 @@
     },
     {
       "symbol": "688583.SS",
-      "name": "思看科技",
+      "name": "杭州思看科技",
       "market": "CN",
       "exchange": "SS",
       "instrumentType": "stock",
@@ -55710,7 +55710,7 @@
     },
     {
       "symbol": "688584.SS",
-      "name": "上海合晶",
+      "name": "上海合晶硅材料",
       "market": "CN",
       "exchange": "SS",
       "instrumentType": "stock",
@@ -55732,7 +55732,7 @@
     },
     {
       "symbol": "688586.SS",
-      "name": "江航装备",
+      "name": "江航飞机装备",
       "market": "CN",
       "exchange": "SS",
       "instrumentType": "stock",
@@ -55754,7 +55754,7 @@
     },
     {
       "symbol": "688589.SS",
-      "name": "力合微",
+      "name": "力合微电子",
       "market": "CN",
       "exchange": "SS",
       "instrumentType": "stock",
@@ -55842,7 +55842,7 @@
     },
     {
       "symbol": "688598.SS",
-      "name": "金博股份",
+      "name": "金博碳素股份",
       "market": "CN",
       "exchange": "SS",
       "instrumentType": "stock",
@@ -55875,7 +55875,7 @@
     },
     {
       "symbol": "688601.SS",
-      "name": "力芯微",
+      "name": "力芯微股份",
       "market": "CN",
       "exchange": "SS",
       "instrumentType": "stock",
@@ -55930,7 +55930,7 @@
     },
     {
       "symbol": "688607.SS",
-      "name": "康众科技",
+      "name": "康众数字医疗科技",
       "market": "CN",
       "exchange": "SS",
       "instrumentType": "stock",
@@ -55952,7 +55952,7 @@
     },
     {
       "symbol": "688609.SS",
-      "name": "九联科技",
+      "name": "广东九联科技",
       "market": "CN",
       "exchange": "SS",
       "instrumentType": "stock",
@@ -55974,7 +55974,7 @@
     },
     {
       "symbol": "688611.SS",
-      "name": "杭州柯林",
+      "name": "杭州柯林股份",
       "market": "CN",
       "exchange": "SS",
       "instrumentType": "stock",
@@ -56051,7 +56051,7 @@
     },
     {
       "symbol": "688619.SS",
-      "name": "罗普特",
+      "name": "罗普特科技",
       "market": "CN",
       "exchange": "SS",
       "instrumentType": "stock",
@@ -56062,7 +56062,7 @@
     },
     {
       "symbol": "688620.SS",
-      "name": "安凯微",
+      "name": "安凯微电子",
       "market": "CN",
       "exchange": "SS",
       "instrumentType": "stock",
@@ -56084,7 +56084,7 @@
     },
     {
       "symbol": "688622.SS",
-      "name": "*ST禾信",
+      "name": "*ST禾信仪器",
       "market": "CN",
       "exchange": "SS",
       "instrumentType": "stock",
@@ -56128,7 +56128,7 @@
     },
     {
       "symbol": "688627.SS",
-      "name": "精智达",
+      "name": "精智达技术",
       "market": "CN",
       "exchange": "SS",
       "instrumentType": "stock",
@@ -56139,7 +56139,7 @@
     },
     {
       "symbol": "688628.SS",
-      "name": "优利德",
+      "name": "优利德科技",
       "market": "CN",
       "exchange": "SS",
       "instrumentType": "stock",
@@ -56150,7 +56150,7 @@
     },
     {
       "symbol": "688629.SS",
-      "name": "华丰科技",
+      "name": "四川华丰科技",
       "market": "CN",
       "exchange": "SS",
       "instrumentType": "stock",
@@ -56205,7 +56205,7 @@
     },
     {
       "symbol": "688636.SS",
-      "name": "智明达",
+      "name": "智明达电子",
       "market": "CN",
       "exchange": "SS",
       "instrumentType": "stock",
@@ -56260,7 +56260,7 @@
     },
     {
       "symbol": "688651.SS",
-      "name": "盛邦安全",
+      "name": "远江盛邦安全",
       "market": "CN",
       "exchange": "SS",
       "instrumentType": "stock",
@@ -56293,7 +56293,7 @@
     },
     {
       "symbol": "688655.SS",
-      "name": "迅捷兴",
+      "name": "迅捷兴科技",
       "market": "CN",
       "exchange": "SS",
       "instrumentType": "stock",
@@ -56304,7 +56304,7 @@
     },
     {
       "symbol": "688656.SS",
-      "name": "浩欧博",
+      "name": "浩欧博生物",
       "market": "CN",
       "exchange": "SS",
       "instrumentType": "stock",
@@ -56359,7 +56359,7 @@
     },
     {
       "symbol": "688661.SS",
-      "name": "和林微纳",
+      "name": "和林微纳科技",
       "market": "CN",
       "exchange": "SS",
       "instrumentType": "stock",
@@ -56370,7 +56370,7 @@
     },
     {
       "symbol": "688662.SS",
-      "name": "富信科技",
+      "name": "广东富信科技",
       "market": "CN",
       "exchange": "SS",
       "instrumentType": "stock",
@@ -56381,7 +56381,7 @@
     },
     {
       "symbol": "688663.SS",
-      "name": "新风光",
+      "name": "新风光科技",
       "market": "CN",
       "exchange": "SS",
       "instrumentType": "stock",
@@ -56392,7 +56392,7 @@
     },
     {
       "symbol": "688665.SS",
-      "name": "四方光电",
+      "name": "四方光电股份",
       "market": "CN",
       "exchange": "SS",
       "instrumentType": "stock",
@@ -56425,7 +56425,7 @@
     },
     {
       "symbol": "688669.SS",
-      "name": "聚石化学",
+      "name": "聚石化学股份",
       "market": "CN",
       "exchange": "SS",
       "instrumentType": "stock",
@@ -56436,7 +56436,7 @@
     },
     {
       "symbol": "688670.SS",
-      "name": "金迪克",
+      "name": "金迪克生物",
       "market": "CN",
       "exchange": "SS",
       "instrumentType": "stock",
@@ -56458,7 +56458,7 @@
     },
     {
       "symbol": "688676.SS",
-      "name": "金盘科技",
+      "name": "海南金盘智能科技",
       "market": "CN",
       "exchange": "SS",
       "instrumentType": "stock",
@@ -56469,7 +56469,7 @@
     },
     {
       "symbol": "688677.SS",
-      "name": "海泰新光",
+      "name": "青岛海泰新光",
       "market": "CN",
       "exchange": "SS",
       "instrumentType": "stock",
@@ -56480,7 +56480,7 @@
     },
     {
       "symbol": "688678.SS",
-      "name": "福立旺",
+      "name": "福立旺精密",
       "market": "CN",
       "exchange": "SS",
       "instrumentType": "stock",
@@ -56513,7 +56513,7 @@
     },
     {
       "symbol": "688681.SS",
-      "name": "科汇股份",
+      "name": "科汇电力自动化",
       "market": "CN",
       "exchange": "SS",
       "instrumentType": "stock",
@@ -56524,7 +56524,7 @@
     },
     {
       "symbol": "688682.SS",
-      "name": "霍莱沃",
+      "name": "霍莱沃技术",
       "market": "CN",
       "exchange": "SS",
       "instrumentType": "stock",
@@ -56546,7 +56546,7 @@
     },
     {
       "symbol": "688685.SS",
-      "name": "迈信林",
+      "name": "迈信林航空股份",
       "market": "CN",
       "exchange": "SS",
       "instrumentType": "stock",
@@ -56557,7 +56557,7 @@
     },
     {
       "symbol": "688686.SS",
-      "name": "奥普特",
+      "name": "奥普特科技",
       "market": "CN",
       "exchange": "SS",
       "instrumentType": "stock",
@@ -56568,7 +56568,7 @@
     },
     {
       "symbol": "688687.SS",
-      "name": "凯因科技",
+      "name": "北京凯因科技",
       "market": "CN",
       "exchange": "SS",
       "instrumentType": "stock",
@@ -56579,7 +56579,7 @@
     },
     {
       "symbol": "688689.SS",
-      "name": "银河微电",
+      "name": "常州银河微电",
       "market": "CN",
       "exchange": "SS",
       "instrumentType": "stock",
@@ -56601,7 +56601,7 @@
     },
     {
       "symbol": "688691.SS",
-      "name": "灿芯股份",
+      "name": "灿芯半导体股份",
       "market": "CN",
       "exchange": "SS",
       "instrumentType": "stock",
@@ -56656,7 +56656,7 @@
     },
     {
       "symbol": "688697.SS",
-      "name": "纽威数控",
+      "name": "纽威数控装备",
       "market": "CN",
       "exchange": "SS",
       "instrumentType": "stock",
@@ -56700,7 +56700,7 @@
     },
     {
       "symbol": "688701.SS",
-      "name": "卓锦股份",
+      "name": "浙江卓锦股份",
       "market": "CN",
       "exchange": "SS",
       "instrumentType": "stock",
@@ -56722,7 +56722,7 @@
     },
     {
       "symbol": "688707.SS",
-      "name": "振华新材",
+      "name": "振华新材料",
       "market": "CN",
       "exchange": "SS",
       "instrumentType": "stock",
@@ -56755,7 +56755,7 @@
     },
     {
       "symbol": "688710.SS",
-      "name": "益诺思",
+      "name": "益诺思生物",
       "market": "CN",
       "exchange": "SS",
       "instrumentType": "stock",
@@ -56766,7 +56766,7 @@
     },
     {
       "symbol": "688711.SS",
-      "name": "宏微科技",
+      "name": "江苏宏微科技",
       "market": "CN",
       "exchange": "SS",
       "instrumentType": "stock",
@@ -56810,7 +56810,7 @@
     },
     {
       "symbol": "688718.SS",
-      "name": "唯赛勃",
+      "name": "唯赛勃科技",
       "market": "CN",
       "exchange": "SS",
       "instrumentType": "stock",
@@ -56854,7 +56854,7 @@
     },
     {
       "symbol": "688722.SS",
-      "name": "同益中",
+      "name": "同益中新材料",
       "market": "CN",
       "exchange": "SS",
       "instrumentType": "stock",
@@ -56887,7 +56887,7 @@
     },
     {
       "symbol": "688728.SS",
-      "name": "格科微",
+      "name": "格科微有限公司",
       "market": "CN",
       "exchange": "SS",
       "instrumentType": "stock",
@@ -56898,7 +56898,7 @@
     },
     {
       "symbol": "688729.SS",
-      "name": "屹唐股份",
+      "name": "屹唐半导体股份",
       "market": "CN",
       "exchange": "SS",
       "instrumentType": "stock",
@@ -56942,7 +56942,7 @@
     },
     {
       "symbol": "688750.SS",
-      "name": "金天钛业",
+      "name": "湘投金天钛业",
       "market": "CN",
       "exchange": "SS",
       "instrumentType": "stock",
@@ -56997,7 +56997,7 @@
     },
     {
       "symbol": "688765.SS",
-      "name": "禾元生物",
+      "name": "武汉禾元生物",
       "market": "CN",
       "exchange": "SS",
       "instrumentType": "stock",
@@ -57008,7 +57008,7 @@
     },
     {
       "symbol": "688766.SS",
-      "name": "普冉股份",
+      "name": "普冉半导体",
       "market": "CN",
       "exchange": "SS",
       "instrumentType": "stock",
@@ -57019,7 +57019,7 @@
     },
     {
       "symbol": "688767.SS",
-      "name": "博拓生物",
+      "name": "杭州博拓生物科技",
       "market": "CN",
       "exchange": "SS",
       "instrumentType": "stock",
@@ -57041,7 +57041,7 @@
     },
     {
       "symbol": "688772.SS",
-      "name": "珠海冠宇",
+      "name": "珠海冠宇电池",
       "market": "CN",
       "exchange": "SS",
       "instrumentType": "stock",
@@ -57085,7 +57085,7 @@
     },
     {
       "symbol": "688778.SS",
-      "name": "厦钨新能",
+      "name": "厦钨新能源",
       "market": "CN",
       "exchange": "SS",
       "instrumentType": "stock",
@@ -57129,7 +57129,7 @@
     },
     {
       "symbol": "688785.SS",
-      "name": "恒运昌",
+      "name": "恒运昌股份",
       "market": "CN",
       "exchange": "SS",
       "instrumentType": "stock",
@@ -57173,7 +57173,7 @@
     },
     {
       "symbol": "688789.SS",
-      "name": "宏华数科",
+      "name": "杭州宏华数码科技",
       "market": "CN",
       "exchange": "SS",
       "instrumentType": "stock",
@@ -57195,7 +57195,7 @@
     },
     {
       "symbol": "688793.SS",
-      "name": "倍轻松",
+      "name": "倍轻松科技",
       "market": "CN",
       "exchange": "SS",
       "instrumentType": "stock",
@@ -57250,7 +57250,7 @@
     },
     {
       "symbol": "688799.SS",
-      "name": "华纳药厂",
+      "name": "华纳大药厂",
       "market": "CN",
       "exchange": "SS",
       "instrumentType": "stock",
@@ -57261,7 +57261,7 @@
     },
     {
       "symbol": "688800.SS",
-      "name": "瑞可达",
+      "name": "瑞可达连接系统",
       "market": "CN",
       "exchange": "SS",
       "instrumentType": "stock",
@@ -57272,7 +57272,7 @@
     },
     {
       "symbol": "688801.SS",
-      "name": "C燧原",
+      "name": "C燧原科技",
       "market": "CN",
       "exchange": "SS",
       "instrumentType": "stock",
@@ -57316,7 +57316,7 @@
     },
     {
       "symbol": "688807.SS",
-      "name": "优迅股份",
+      "name": "优迅芯片股份",
       "market": "CN",
       "exchange": "SS",
       "instrumentType": "stock",
@@ -57349,7 +57349,7 @@
     },
     {
       "symbol": "688811.SS",
-      "name": "有研复材",
+      "name": "有研金属复材",
       "market": "CN",
       "exchange": "SS",
       "instrumentType": "stock",
@@ -57382,7 +57382,7 @@
     },
     {
       "symbol": "688818.SS",
-      "name": "电科蓝天",
+      "name": "中电科蓝天科技",
       "market": "CN",
       "exchange": "SS",
       "instrumentType": "stock",
@@ -57393,7 +57393,7 @@
     },
     {
       "symbol": "688819.SS",
-      "name": "天能股份",
+      "name": "天能电池集团股份",
       "market": "CN",
       "exchange": "SS",
       "instrumentType": "stock",
@@ -58119,7 +58119,7 @@
     },
     {
       "symbol": "920081.BJ",
-      "name": "XD欧伦电",
+      "name": "欧伦电气",
       "market": "CN",
       "exchange": "BJ",
       "instrumentType": "stock",
@@ -58735,7 +58735,7 @@
     },
     {
       "symbol": "920176.BJ",
-      "name": "维琪科技",
+      "name": "XD维琪科",
       "market": "CN",
       "exchange": "BJ",
       "instrumentType": "stock",
@@ -58801,7 +58801,7 @@
     },
     {
       "symbol": "920183.BJ",
-      "name": "海菲曼",
+      "name": "XD海菲曼",
       "market": "CN",
       "exchange": "BJ",
       "instrumentType": "stock",
@@ -59791,7 +59791,7 @@
     },
     {
       "symbol": "920445.BJ",
-      "name": "龙竹科技",
+      "name": "XD龙竹科",
       "market": "CN",
       "exchange": "BJ",
       "instrumentType": "stock",
