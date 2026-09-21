@@ -1,7 +1,7 @@
 {
-  "status": "ok",
-  "generated_at": "2026-09-18T16:02:09+08:00",
-  "trade_date": "2026-09-18",
+  "status": "failed",
+  "generated_at": "2026-09-21T16:02:02+08:00",
+  "trade_date": "2026-09-21",
   "provider": "openai_compatible",
   "analysts": [
     "market",
@@ -19,19 +19,19 @@
     "kind": "monitor"
   },
   "run": {
-    "id": "35322257944",
+    "id": "35575721663",
     "attempt": "1",
     "workflow": "daily-analysis",
-    "url": "https://github.com/gaaiyun/TradingWorkbench/actions/runs/35322257944"
+    "url": "https://github.com/gaaiyun/TradingWorkbench/actions/runs/35575721663"
   },
   "identity": {
     "scope": "profile",
     "kind": "monitor",
-    "runId": "35322257944",
+    "runId": "35575721663",
     "profileId": "cn-semi-comms",
     "requestId": null,
-    "slotId": "slot-b4a72b7aba9ba668f05e3f1ec3849f4b86e15caa3161c7283ff380ead777a995",
-    "scheduledFor": "2026-09-18T07:17:15.000Z"
+    "slotId": "slot-7a925c2824d63ddeeca35e0b3f2dea33f93f1c43dec5e3c143da23df7a1b1bf3",
+    "scheduledFor": "2026-09-21T07:19:27.000Z"
   },
   "rating_tiers": [
     "Sell",
@@ -57,37 +57,10 @@
     },
     {
       "ticker": "512480.SS",
-      "rating": "Hold",
-      "report": "reports/512480.SS/2026-09-18/complete_report.md",
-      "files": {
-        "fundamentals": "reports/512480.SS/2026-09-18/1_analysts/fundamentals.md",
-        "market": "reports/512480.SS/2026-09-18/1_analysts/market.md",
-        "news": "reports/512480.SS/2026-09-18/1_analysts/news.md",
-        "bear": "reports/512480.SS/2026-09-18/2_research/bear.md",
-        "bull": "reports/512480.SS/2026-09-18/2_research/bull.md",
-        "manager": "reports/512480.SS/2026-09-18/2_research/manager.md",
-        "trader": "reports/512480.SS/2026-09-18/3_trading/trader.md",
-        "aggressive": "reports/512480.SS/2026-09-18/4_risk/aggressive.md",
-        "conservative": "reports/512480.SS/2026-09-18/4_risk/conservative.md",
-        "neutral": "reports/512480.SS/2026-09-18/4_risk/neutral.md",
-        "decision": "reports/512480.SS/2026-09-18/5_portfolio/decision.md",
-        "complete_report": "reports/512480.SS/2026-09-18/complete_report.md"
-      },
-      "decision_excerpt": "**Rating**: 持有\n\n**Executive Summary**: 风险分析师辩论综合后决定持有512480.SS [D1]。激进分析师强调最近8天收盘变化6.55737705% [D2] 和集成电路布图设计保护条例 [N2][N3]。保守分析师指出实现波动率36.35376726% [I10]、价格低于MA60且无严格对齐 [D7]、MACD为-0.01503861 [I7] 以及持仓NAV费用等数据 unavailable。最终立场为持有 [D1]。\n\n**Investment Thesis**: ETF 512480.SS 最新收盘价为1.04 [M689]。最近8天收盘变化为6.55737705% [D2]。实现波动率为36.35376726% [I10]。价格低于MA60的1.06318333 [I6] 且无严格对齐 [D7]。MACD为-0.01503861 [I7]",
-      "analysis_status": "rated",
-      "audit_status": "verified",
-      "evidence_publish": {
-        "published": true,
-        "status": 201
-      },
-      "marketHistory": {
-        "source": "tencent",
-        "adjustment": "mixed",
-        "barCount": 689,
-        "startAt": "2023-11-29T16:00:00Z",
-        "endAt": "2026-09-17T16:00:00Z"
-      },
-      "error": null
+      "rating": null,
+      "report": null,
+      "decision_excerpt": "",
+      "error": "OpenAIModelNotFoundError: Error code: 404 - {'error': {'message': 'Model \"gpt-5.4-mini\" is not supported by any configured account in this group', 'type': 'model_not_found'}}"
     }
   ]
 }

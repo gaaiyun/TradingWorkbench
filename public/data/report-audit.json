@@ -1,17 +1,90 @@
 {
   "version": 1,
-  "generatedAt": "2026-09-18T08:20:02.015Z",
+  "generatedAt": "2026-09-21T08:07:37.891Z",
   "summary": {
-    "successfulReports": 83,
+    "successfulReports": 81,
     "verifiedReports": 23,
-    "invalidatedReports": 11,
+    "invalidatedReports": 9,
     "legacyUnverifiedReports": 49,
-    "invalidRecords": 26,
-    "evidenceValidationFailures": 18,
-    "analysisExecutionFailures": 8,
+    "invalidRecords": 28,
+    "evidenceValidationFailures": 19,
+    "analysisExecutionFailures": 9,
     "invalidInputs": 0
   },
   "reports": [
+    {
+      "ticker": "515880.SS",
+      "tradeDate": "2026-09-21",
+      "generatedAt": "2026-09-21T16:02:02+08:00",
+      "provider": "openai_compatible",
+      "rating": null,
+      "analysisStatus": "data_validation_failed",
+      "report": null,
+      "auditStatus": "invalid_record",
+      "failureClass": "evidence_validation",
+      "problemCodes": [
+        "EVIDENCE_VALIDATION_FAILED"
+      ],
+      "evidence": {
+        "urlCount": 0,
+        "claimCitationCount": 0,
+        "finalProposalMarkers": 0,
+        "priceTargetCount": 0,
+        "valuationMethodCount": 0,
+        "publishedMarkerCount": 0
+      },
+      "claimValidation": null,
+      "evidencePacket": null,
+      "evidencePublish": {
+        "published": true,
+        "status": 201
+      },
+      "identity": {
+        "scope": "profile",
+        "kind": "monitor",
+        "runId": "35575721663",
+        "profileId": "cn-semi-comms",
+        "requestId": null,
+        "slotId": "slot-7a925c2824d63ddeeca35e0b3f2dea33f93f1c43dec5e3c143da23df7a1b1bf3",
+        "scheduledFor": "2026-09-21T07:19:27.000Z"
+      },
+      "supersededBy": null
+    },
+    {
+      "ticker": "512480.SS",
+      "tradeDate": "2026-09-21",
+      "generatedAt": "2026-09-21T16:02:02+08:00",
+      "provider": "openai_compatible",
+      "rating": null,
+      "analysisStatus": null,
+      "report": null,
+      "auditStatus": "invalid_record",
+      "failureClass": "analysis_execution",
+      "problemCodes": [
+        "ANALYSIS_EXECUTION_FAILED"
+      ],
+      "evidence": {
+        "urlCount": 0,
+        "claimCitationCount": 0,
+        "finalProposalMarkers": 0,
+        "priceTargetCount": 0,
+        "valuationMethodCount": 0,
+        "publishedMarkerCount": 0
+      },
+      "claimValidation": null,
+      "evidencePacket": null,
+      "evidencePublish": null,
+      "identity": {
+        "scope": "profile",
+        "kind": "monitor",
+        "runId": "35575721663",
+        "profileId": "cn-semi-comms",
+        "requestId": null,
+        "slotId": "slot-7a925c2824d63ddeeca35e0b3f2dea33f93f1c43dec5e3c143da23df7a1b1bf3",
+        "scheduledFor": "2026-09-21T07:19:27.000Z"
+      },
+      "supersededBy": null
+    },
     {
       "ticker": "515880.SS",
       "tradeDate": "2026-09-18",
@@ -5865,114 +5938,6 @@
         "scheduledFor": null
       },
       "supersededBy": null
-    },
-    {
-      "ticker": "515880.SS",
-      "tradeDate": "2026-07-28",
-      "generatedAt": "2026-07-28T15:21:34+08:00",
-      "provider": "openai_compatible",
-      "rating": "Not Rated",
-      "analysisStatus": "insufficient_evidence",
-      "report": "reports/515880.SS/2026-07-28/complete_report.md",
-      "auditStatus": "invalidated",
-      "failureClass": null,
-      "problemCodes": [
-        "CORPORATE_ACTION_CONTAMINATION",
-        "ETF_TEMPLATE_MISMATCH",
-        "MISSING_CLAIM_EVIDENCE"
-      ],
-      "evidence": {
-        "urlCount": 19,
-        "claimCitationCount": 0,
-        "finalProposalMarkers": 1,
-        "priceTargetCount": 0,
-        "valuationMethodCount": 44,
-        "publishedMarkerCount": 11
-      },
-      "claimValidation": {
-        "status": "failed",
-        "errorCodes": [
-          "UNCITED_NUMERIC_CLAIM",
-          "UNSUPPORTED_ALLOCATION"
-        ],
-        "citationCount": 33,
-        "unknownEvidenceIds": [],
-        "uncitedNumericParagraphs": 130
-      },
-      "evidencePacket": {
-        "status": "ok",
-        "asOf": "2026-07-28T23:59:59Z",
-        "contentHash": "a2db34734d0f7a4bfe25e37c1cb1bc97515557d3183f5264b4e990338fb6259e"
-      },
-      "evidencePublish": {
-        "published": false,
-        "reason": "http_error",
-        "status": 400
-      },
-      "identity": {
-        "scope": "profile",
-        "kind": "monitor",
-        "runId": "30338065603",
-        "profileId": "cn-semi-comms",
-        "requestId": null,
-        "slotId": "slot-60509113eaa7d4f54994f4bb62d3ab2cbd6813408b484fdfc9bcc21fa51c72d6",
-        "scheduledFor": "2026-07-28T07:20:00.000Z"
-      },
-      "supersededBy": "reports/515880.SS/2026-08-25/complete_report.md"
-    },
-    {
-      "ticker": "512480.SS",
-      "tradeDate": "2026-07-28",
-      "generatedAt": "2026-07-28T15:21:34+08:00",
-      "provider": "openai_compatible",
-      "rating": "Not Rated",
-      "analysisStatus": "insufficient_evidence",
-      "report": "reports/512480.SS/2026-07-28/complete_report.md",
-      "auditStatus": "invalidated",
-      "failureClass": null,
-      "problemCodes": [
-        "CORPORATE_ACTION_CONTAMINATION",
-        "ETF_TEMPLATE_MISMATCH",
-        "MISSING_CLAIM_EVIDENCE"
-      ],
-      "evidence": {
-        "urlCount": 20,
-        "claimCitationCount": 0,
-        "finalProposalMarkers": 1,
-        "priceTargetCount": 0,
-        "valuationMethodCount": 44,
-        "publishedMarkerCount": 12
-      },
-      "claimValidation": {
-        "status": "failed",
-        "errorCodes": [
-          "UNCITED_NUMERIC_CLAIM",
-          "UNSUPPORTED_ALLOCATION"
-        ],
-        "citationCount": 33,
-        "unknownEvidenceIds": [],
-        "uncitedNumericParagraphs": 122
-      },
-      "evidencePacket": {
-        "status": "ok",
-        "asOf": "2026-07-28T23:59:59Z",
-        "contentHash": "5b88ac9fce02d5e74565e74e24d2479fdc2a5c7f7b3f9b9ec47f4cee47c63aa9"
-      },
-      "evidencePublish": {
-        "published": false,
-        "reason": "http_error",
-        "status": 400
-      },
-      "identity": {
-        "scope": "profile",
-        "kind": "monitor",
-        "runId": "30338065603",
-        "profileId": "cn-semi-comms",
-        "requestId": null,
-        "slotId": "slot-60509113eaa7d4f54994f4bb62d3ab2cbd6813408b484fdfc9bcc21fa51c72d6",
-        "scheduledFor": "2026-07-28T07:20:00.000Z"
-      },
-      "supersededBy": "reports/512480.SS/2026-09-18/complete_report.md"
     }
   ]
 }
