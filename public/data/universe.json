@@ -1,10 +1,10 @@
 {
   "version": 1,
-  "generatedAt": "2026-09-21T17:01:03.556Z",
+  "generatedAt": "2026-09-22T15:30:40.825Z",
   "status": "degraded",
   "coverage": {
     "policy": "current-listed-best-effort-plus-configured-core",
-    "cnCurrentListedStocks": 5564,
+    "cnCurrentListedStocks": 5566,
     "cnConfiguredCore": 3,
     "usCore": 9,
     "hkCore": 1,
@@ -16,13 +16,13 @@
       "id": "sina-market-center",
       "role": "CN current-listed discovery",
       "quality": "best_effort",
-      "asOf": "2026-09-21T17:01:03.556Z"
+      "asOf": "2026-09-22T15:30:40.825Z"
     },
     {
       "id": "workbench-settings",
       "role": "configured HK/US/CN core instruments",
       "quality": "declared",
-      "asOf": "2026-09-21T17:01:03.556Z"
+      "asOf": "2026-09-22T15:30:40.825Z"
     }
   ],
   "instruments": [
@@ -31850,6 +31850,17 @@
       "coverage": "current_listed_best_effort"
     },
     {
+      "symbol": "301686.SZ",
+      "name": "N中塑",
+      "market": "CN",
+      "exchange": "SZ",
+      "instrumentType": "stock",
+      "industry": null,
+      "listDate": null,
+      "source": "sina-market-center",
+      "coverage": "current_listed_best_effort"
+    },
+    {
       "symbol": "301687.SZ",
       "name": "新广益",
       "market": "CN",
@@ -58757,7 +58768,7 @@
     },
     {
       "symbol": "920178.BJ",
-      "name": "锐翔智能",
+      "name": "XD锐翔智",
       "market": "CN",
       "exchange": "BJ",
       "instrumentType": "stock",
@@ -58999,7 +59010,7 @@
     },
     {
       "symbol": "920211.BJ",
-      "name": "XD新睿电",
+      "name": "新睿电子",
       "market": "CN",
       "exchange": "BJ",
       "instrumentType": "stock",
@@ -59088,6 +59099,17 @@
     {
       "symbol": "920227.BJ",
       "name": "美登科技",
+      "market": "CN",
+      "exchange": "BJ",
+      "instrumentType": "stock",
+      "industry": null,
+      "listDate": null,
+      "source": "sina-market-center",
+      "coverage": "current_listed_best_effort"
+    },
+    {
+      "symbol": "920229.BJ",
+      "name": "N世纪",
       "market": "CN",
       "exchange": "BJ",
       "instrumentType": "stock",
