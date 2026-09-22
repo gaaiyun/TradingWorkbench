@@ -1,0 +1,51 @@
+{
+  "schemaVersion": 1,
+  "ticker": "512480.SS",
+  "tradeDate": "2026-09-22",
+  "generatedAt": "2026-09-22T08:07:33.937859+00:00",
+  "analysisStatus": "insufficient_evidence",
+  "auditStatus": "legacy_unverified",
+  "claimValidation": {
+    "status": "failed",
+    "errorCodes": [
+      "FILTERED_UNSAFE_PUBLIC_CLAIM",
+      "MISSING_EVIDENCE_CITATION",
+      "UNSUPPORTED_ACTOR_OR_FLOW_ATTRIBUTION"
+    ],
+    "citationCount": 16,
+    "unknownEvidenceIds": [],
+    "invalidEvidenceCitations": [],
+    "uncitedNumericParagraphs": 0,
+    "unsupportedDerivedNumericParagraphs": 0,
+    "unsupportedSingleSnapshotTrendParagraphs": 0,
+    "contradictedMovingAverageAlignmentParagraphs": 0,
+    "unsupportedActorOrFlowAttributionParagraphs": 0,
+    "unsupportedWindowRankParagraphs": 0,
+    "unsupportedCausalOrPathParagraphs": 0,
+    "unsupportedFaceValueParagraphs": 0,
+    "omittedUnsafeParagraphs": 4
+  },
+  "evidence": {
+    "schemaVersion": "EvidencePacketV1",
+    "asOf": "2026-09-22T08:02:14Z",
+    "contentHash": "605a690ab3acb3892dc30464404195c1889252236015ec6750c0e1ba3b6a741f",
+    "packetFileHash": "2a794873e1083ad838d61822cd2901be318ccdb8da6385e17ed2c811504af25f",
+    "status": "ok",
+    "marketHistory": {
+      "source": "yahoo",
+      "adjustment": "mixed",
+      "barCount": 692,
+      "startAt": "2023-11-29T16:00:00Z",
+      "endAt": "2026-09-22T01:30:00Z"
+    }
+  },
+  "identity": {
+    "scope": "profile",
+    "kind": "monitor",
+    "runId": "35702538469",
+    "profileId": "cn-semi-comms",
+    "requestId": null,
+    "slotId": "slot-8ff86476b1d2238ca6941ebbcdd77ba9409d430784d0ee487e32ba641154499a",
+    "scheduledFor": "2026-09-22T07:17:48.000Z"
+  }
+}

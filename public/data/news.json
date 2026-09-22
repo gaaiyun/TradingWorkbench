@@ -1,113 +1,113 @@
 {
   "version": 1,
   "status": "ok",
-  "generated_at": "2026-09-21T16:02:02+08:00",
-  "trade_date": "2026-09-21",
+  "generated_at": "2026-09-22T16:02:02+08:00",
+  "trade_date": "2026-09-22",
   "global": {
     "status": "ok",
     "query_type": "global",
     "ticker": null,
-    "start_date": "2026-09-14",
-    "end_date": "2026-09-21",
-    "fetched_at": "2026-09-21T08:02:04Z",
+    "start_date": "2026-09-15",
+    "end_date": "2026-09-22",
+    "fetched_at": "2026-09-22T08:02:04Z",
     "items": [
       {
-        "title": "Critical Metals, Greenland-Linked Stocks Rise After Trump Unveils Security Deal",
+        "title": "European shares muted as investors eye US-Iran talks",
         "summary": "",
-        "url": "https://finance.yahoo.com/markets/commodities/articles/critical-metals-greenland-linked-stocks-075416803.html",
-        "source": "MT Newswires",
-        "published_at": "2026-09-21T07:54:16Z",
-        "fetched_at": "2026-09-21T08:02:04Z",
-        "ticker": null,
-        "source_tier": "aggregator"
-      },
-      {
-        "title": "Oil prices slide on hopes of diplomacy in Iran war",
-        "summary": "",
-        "url": "https://finance.yahoo.com/energy/articles/oil-rises-houthi-attack-saudi-221210416.html",
+        "url": "https://finance.yahoo.com/markets/world-indices/articles/european-shares-muted-investors-eye-072119792.html",
         "source": "Reuters",
-        "published_at": "2026-09-21T07:21:54Z",
-        "fetched_at": "2026-09-21T08:02:04Z",
+        "published_at": "2026-09-22T07:21:19Z",
+        "fetched_at": "2026-09-22T08:02:04Z",
         "ticker": null,
         "source_tier": "aggregator"
       },
       {
-        "title": "U.S. Treasury Yields Decline as Oil Prices Ease",
+        "title": "Petro Matad production halted in Mongolia amid PetroChina row",
         "summary": "",
-        "url": "https://finance.yahoo.com/m/a92ba6e9-b587-3911-ac2a-797c16e67e6a/u.s.-treasury-yields-decline.html",
+        "url": "https://finance.yahoo.com/energy/articles/petro-matad-production-halted-mongolia-065200559.html",
+        "source": "Proactive",
+        "published_at": "2026-09-22T06:52:00Z",
+        "fetched_at": "2026-09-22T08:02:04Z",
+        "ticker": null,
+        "source_tier": "aggregator"
+      },
+      {
+        "title": "Oil Prices Gain as Hopes Fade for U.S.-Iran Talks",
+        "summary": "",
+        "url": "https://finance.yahoo.com/m/f0bc892a-4146-3c7d-bc9e-08e17c39b9b6/oil-prices-gain-as-hopes-fade.html",
         "source": "The Wall Street Journal",
-        "published_at": "2026-09-21T06:20:00Z",
-        "fetched_at": "2026-09-21T08:02:04Z",
+        "published_at": "2026-09-22T06:37:00Z",
+        "fetched_at": "2026-09-22T08:02:04Z",
         "ticker": null,
         "source_tier": "aggregator"
       },
       {
-        "title": "Is the Trump-Xi Summit Now an Iran Summit? Bitcoin, Stocks and Oil Are Trading Like It",
+        "title": "U.S. Treasury Yields Rise, Geopolitics in Focus",
         "summary": "",
-        "url": "https://finance.yahoo.com/markets/articles/trump-xi-summit-now-iran-060753030.html",
-        "source": "BeInCrypto",
-        "published_at": "2026-09-21T06:07:53Z",
-        "fetched_at": "2026-09-21T08:02:04Z",
+        "url": "https://finance.yahoo.com/m/114ecd82-1927-3adc-b952-794a3fb7dd72/u.s.-treasury-yields-rise%2C.html",
+        "source": "The Wall Street Journal",
+        "published_at": "2026-09-22T06:29:00Z",
+        "fetched_at": "2026-09-22T08:02:04Z",
         "ticker": null,
         "source_tier": "aggregator"
       },
       {
-        "title": "Stock Market: Will S&P 500 Open Up or Down Today?",
+        "title": "Oil prices climb ahead of potential US-Iran talks",
         "summary": "",
-        "url": "https://finance.yahoo.com/markets/stocks/articles/stock-market-p-500-open-055817820.html",
-        "source": "Benzinga Prediction Markets",
-        "published_at": "2026-09-21T05:58:17Z",
-        "fetched_at": "2026-09-21T08:02:04Z",
+        "url": "https://finance.yahoo.com/energy/articles/oil-rises-slightly-ahead-potential-003404571.html",
+        "source": "Reuters",
+        "published_at": "2026-09-22T06:20:59Z",
+        "fetched_at": "2026-09-22T08:02:04Z",
         "ticker": null,
         "source_tier": "aggregator"
       },
       {
-        "title": "Oil Prices Slide as Traders Bet on Iran Diplomacy",
+        "title": "Warner Bros. Discovery (WBD) Signs Multi Year Harry Potter Gaming Accessories Deal",
         "summary": "",
-        "url": "https://finance.yahoo.com/energy/articles/oil-prices-slide-traders-bet-054500383.html",
+        "url": "https://finance.yahoo.com/media-advertising/articles/warner-bros-discovery-wbd-signs-061513242.html",
+        "source": "Simply Wall St.",
+        "published_at": "2026-09-22T06:15:13Z",
+        "fetched_at": "2026-09-22T08:02:04Z",
+        "ticker": null,
+        "source_tier": "aggregator"
+      },
+      {
+        "title": "Tech rally boosts Asian stocks, dollar firms on rate-hike wagers",
+        "summary": "",
+        "url": "https://finance.yahoo.com/markets/stocks/articles/tech-rally-boosts-asian-stocks-021102067.html",
+        "source": "Reuters",
+        "published_at": "2026-09-22T05:38:52Z",
+        "fetched_at": "2026-09-22T08:02:04Z",
+        "ticker": null,
+        "source_tier": "aggregator"
+      },
+      {
+        "title": "Oil Prices Reverse Course as Traders Watch US-Iran Diplomacy",
+        "summary": "",
+        "url": "https://finance.yahoo.com/energy/articles/oil-prices-reverse-course-traders-053000153.html",
         "source": "Oilprice.com",
-        "published_at": "2026-09-21T05:45:00Z",
-        "fetched_at": "2026-09-21T08:02:04Z",
+        "published_at": "2026-09-22T05:30:00Z",
+        "fetched_at": "2026-09-22T08:02:04Z",
         "ticker": null,
         "source_tier": "aggregator"
       },
       {
-        "title": "Bank of America Stock Fell 8% Last Week After Its CEO Spoke at an Industry Conference. Here’s What He Said That Spooked Investors.",
+        "title": "The Bond Market's Big Re-Steepening",
         "summary": "",
-        "url": "https://finance.yahoo.com/markets/stocks/articles/bank-america-stock-fell-8-052209841.html",
-        "source": "TIKR",
-        "published_at": "2026-09-21T05:22:09Z",
-        "fetched_at": "2026-09-21T08:02:04Z",
+        "url": "https://finance.yahoo.com/markets/options/articles/bond-markets-big-steepening-040150357.html",
+        "source": "etf.com",
+        "published_at": "2026-09-22T04:01:50Z",
+        "fetched_at": "2026-09-22T08:02:04Z",
         "ticker": null,
         "source_tier": "aggregator"
       },
       {
-        "title": "Strategists Say Market's ‘Wall of Worry' Is Healthy, Not a Warning Sign",
+        "title": "What’s News: Business & Finance",
         "summary": "",
-        "url": "https://finance.yahoo.com/markets/stocks/articles/strategists-markets-wall-worry-healthy-022642954.html",
-        "source": "BeInCrypto",
-        "published_at": "2026-09-21T02:26:42Z",
-        "fetched_at": "2026-09-21T08:02:04Z",
-        "ticker": null,
-        "source_tier": "aggregator"
-      },
-      {
-        "title": "Paramount Discussed $1.5 Billion California Investment to Clear Merger Hurdle",
-        "summary": "",
-        "url": "https://finance.yahoo.com/m/6fc96d24-2323-3183-980a-71c250c2f8b5/paramount-discussed-%241.5.html",
+        "url": "https://finance.yahoo.com/m/cba2ddcf-fd52-3ac2-8721-aa8c84981d0a/what%E2%80%99s-news%3A-business-%26.html",
         "source": "The Wall Street Journal",
-        "published_at": "2026-09-21T02:20:00Z",
-        "fetched_at": "2026-09-21T08:02:04Z",
-        "ticker": null,
-        "source_tier": "aggregator"
-      },
-      {
-        "title": "Bessent is sitting down with Iran's biggest oil customer",
-        "summary": "",
-        "url": "https://finance.yahoo.com/energy/articles/bessent-sitting-down-irans-biggest-021700864.html",
-        "source": "TheStreet",
-        "published_at": "2026-09-21T02:17:00Z",
-        "fetched_at": "2026-09-21T08:02:04Z",
+        "published_at": "2026-09-22T04:01:00Z",
+        "fetched_at": "2026-09-22T08:02:04Z",
         "ticker": null,
         "source_tier": "aggregator"
       }
@@ -116,7 +116,7 @@
       {
         "source": "Yahoo Finance",
         "status": "ok",
-        "item_count": 40
+        "item_count": 49
       },
       {
         "source": "Federal Reserve",
@@ -127,34 +127,13 @@
   },
   "tickers": {
     "515880.SS": {
-      "status": "ok",
+      "status": "empty",
       "query_type": "ticker",
       "ticker": "515880.SS",
-      "start_date": "2026-09-21",
-      "end_date": "2026-09-21",
-      "fetched_at": "2026-09-21T08:02:06Z",
-      "items": [
-        {
-          "title": "通信ETF国泰：9月18日融资买入3.75亿元，融资融券余额12.83亿元",
-          "summary": "通信ETF国泰：9月18日融资买入3.75亿元，融资融券余额12.83亿元 同花顺",
-          "url": "https://news.google.com/rss/articles/CBMiXkFVX3lxTE10cU9TZHJLT3JXWXZmcFl4eGRCcktzMzlONFUxNDkxSnRFREpnYmZrcWZ6UjZFeXhyVk1FXzhwSGN5WUpFS1RvS2hwbUxtTTVjeUJocFZ2djhoQmNnVWc?oc=5",
-          "source": "Google News / 同花顺",
-          "published_at": "2026-09-21T01:19:37Z",
-          "fetched_at": "2026-09-21T08:02:06Z",
-          "ticker": "515880.SS",
-          "source_tier": "aggregator"
-        },
-        {
-          "title": "通信ETF国泰，上周五净流入逾10亿元",
-          "summary": "通信ETF国泰，上周五净流入逾10亿元 凤凰网",
-          "url": "https://news.google.com/rss/articles/CBMiUEFVX3lxTE54dklvZERQdUpsYUN5TkJ1NG9VcXEwNDc4alpXVXRHN2xjT2xHT2NqRVdrcWxVZXVPdHRFM1BBaFF6TzIzazJULUtab01lX0VP?oc=5",
-          "source": "Google News / 凤凰网",
-          "published_at": "2026-09-20T23:32:57Z",
-          "fetched_at": "2026-09-21T08:02:06Z",
-          "ticker": "515880.SS",
-          "source_tier": "aggregator"
-        }
-      ],
+      "start_date": "2026-09-22",
+      "end_date": "2026-09-22",
+      "fetched_at": "2026-09-22T08:02:05Z",
+      "items": [],
       "source_statuses": [
         {
           "source": "Yahoo Finance",
@@ -163,8 +142,8 @@
         },
         {
           "source": "Google News RSS",
-          "status": "ok",
-          "item_count": 2
+          "status": "empty",
+          "item_count": 0
         },
         {
           "source": "SEC EDGAR",
@@ -177,9 +156,9 @@
       "status": "empty",
       "query_type": "ticker",
       "ticker": "512480.SS",
-      "start_date": "2026-09-21",
-      "end_date": "2026-09-21",
-      "fetched_at": "2026-09-21T08:02:08Z",
+      "start_date": "2026-09-22",
+      "end_date": "2026-09-22",
+      "fetched_at": "2026-09-22T08:02:07Z",
       "items": [],
       "source_statuses": [
         {
@@ -202,123 +181,103 @@
   },
   "items": [
     {
-      "title": "Critical Metals, Greenland-Linked Stocks Rise After Trump Unveils Security Deal",
+      "title": "European shares muted as investors eye US-Iran talks",
       "summary": "",
-      "url": "https://finance.yahoo.com/markets/commodities/articles/critical-metals-greenland-linked-stocks-075416803.html",
-      "source": "MT Newswires",
-      "published_at": "2026-09-21T07:54:16Z",
-      "fetched_at": "2026-09-21T08:02:04Z",
-      "ticker": null,
-      "source_tier": "aggregator"
-    },
-    {
-      "title": "Oil prices slide on hopes of diplomacy in Iran war",
-      "summary": "",
-      "url": "https://finance.yahoo.com/energy/articles/oil-rises-houthi-attack-saudi-221210416.html",
+      "url": "https://finance.yahoo.com/markets/world-indices/articles/european-shares-muted-investors-eye-072119792.html",
       "source": "Reuters",
-      "published_at": "2026-09-21T07:21:54Z",
-      "fetched_at": "2026-09-21T08:02:04Z",
+      "published_at": "2026-09-22T07:21:19Z",
+      "fetched_at": "2026-09-22T08:02:04Z",
       "ticker": null,
       "source_tier": "aggregator"
     },
     {
-      "title": "U.S. Treasury Yields Decline as Oil Prices Ease",
+      "title": "Petro Matad production halted in Mongolia amid PetroChina row",
       "summary": "",
-      "url": "https://finance.yahoo.com/m/a92ba6e9-b587-3911-ac2a-797c16e67e6a/u.s.-treasury-yields-decline.html",
+      "url": "https://finance.yahoo.com/energy/articles/petro-matad-production-halted-mongolia-065200559.html",
+      "source": "Proactive",
+      "published_at": "2026-09-22T06:52:00Z",
+      "fetched_at": "2026-09-22T08:02:04Z",
+      "ticker": null,
+      "source_tier": "aggregator"
+    },
+    {
+      "title": "Oil Prices Gain as Hopes Fade for U.S.-Iran Talks",
+      "summary": "",
+      "url": "https://finance.yahoo.com/m/f0bc892a-4146-3c7d-bc9e-08e17c39b9b6/oil-prices-gain-as-hopes-fade.html",
       "source": "The Wall Street Journal",
-      "published_at": "2026-09-21T06:20:00Z",
-      "fetched_at": "2026-09-21T08:02:04Z",
+      "published_at": "2026-09-22T06:37:00Z",
+      "fetched_at": "2026-09-22T08:02:04Z",
       "ticker": null,
       "source_tier": "aggregator"
     },
     {
-      "title": "Is the Trump-Xi Summit Now an Iran Summit? Bitcoin, Stocks and Oil Are Trading Like It",
+      "title": "U.S. Treasury Yields Rise, Geopolitics in Focus",
       "summary": "",
-      "url": "https://finance.yahoo.com/markets/articles/trump-xi-summit-now-iran-060753030.html",
-      "source": "BeInCrypto",
-      "published_at": "2026-09-21T06:07:53Z",
-      "fetched_at": "2026-09-21T08:02:04Z",
+      "url": "https://finance.yahoo.com/m/114ecd82-1927-3adc-b952-794a3fb7dd72/u.s.-treasury-yields-rise%2C.html",
+      "source": "The Wall Street Journal",
+      "published_at": "2026-09-22T06:29:00Z",
+      "fetched_at": "2026-09-22T08:02:04Z",
       "ticker": null,
       "source_tier": "aggregator"
     },
     {
-      "title": "Stock Market: Will S&P 500 Open Up or Down Today?",
+      "title": "Oil prices climb ahead of potential US-Iran talks",
       "summary": "",
-      "url": "https://finance.yahoo.com/markets/stocks/articles/stock-market-p-500-open-055817820.html",
-      "source": "Benzinga Prediction Markets",
-      "published_at": "2026-09-21T05:58:17Z",
-      "fetched_at": "2026-09-21T08:02:04Z",
+      "url": "https://finance.yahoo.com/energy/articles/oil-rises-slightly-ahead-potential-003404571.html",
+      "source": "Reuters",
+      "published_at": "2026-09-22T06:20:59Z",
+      "fetched_at": "2026-09-22T08:02:04Z",
       "ticker": null,
       "source_tier": "aggregator"
     },
     {
-      "title": "Oil Prices Slide as Traders Bet on Iran Diplomacy",
+      "title": "Warner Bros. Discovery (WBD) Signs Multi Year Harry Potter Gaming Accessories Deal",
       "summary": "",
-      "url": "https://finance.yahoo.com/energy/articles/oil-prices-slide-traders-bet-054500383.html",
+      "url": "https://finance.yahoo.com/media-advertising/articles/warner-bros-discovery-wbd-signs-061513242.html",
+      "source": "Simply Wall St.",
+      "published_at": "2026-09-22T06:15:13Z",
+      "fetched_at": "2026-09-22T08:02:04Z",
+      "ticker": null,
+      "source_tier": "aggregator"
+    },
+    {
+      "title": "Tech rally boosts Asian stocks, dollar firms on rate-hike wagers",
+      "summary": "",
+      "url": "https://finance.yahoo.com/markets/stocks/articles/tech-rally-boosts-asian-stocks-021102067.html",
+      "source": "Reuters",
+      "published_at": "2026-09-22T05:38:52Z",
+      "fetched_at": "2026-09-22T08:02:04Z",
+      "ticker": null,
+      "source_tier": "aggregator"
+    },
+    {
+      "title": "Oil Prices Reverse Course as Traders Watch US-Iran Diplomacy",
+      "summary": "",
+      "url": "https://finance.yahoo.com/energy/articles/oil-prices-reverse-course-traders-053000153.html",
       "source": "Oilprice.com",
-      "published_at": "2026-09-21T05:45:00Z",
-      "fetched_at": "2026-09-21T08:02:04Z",
+      "published_at": "2026-09-22T05:30:00Z",
+      "fetched_at": "2026-09-22T08:02:04Z",
       "ticker": null,
       "source_tier": "aggregator"
     },
     {
-      "title": "Bank of America Stock Fell 8% Last Week After Its CEO Spoke at an Industry Conference. Here’s What He Said That Spooked Investors.",
+      "title": "The Bond Market's Big Re-Steepening",
       "summary": "",
-      "url": "https://finance.yahoo.com/markets/stocks/articles/bank-america-stock-fell-8-052209841.html",
-      "source": "TIKR",
-      "published_at": "2026-09-21T05:22:09Z",
-      "fetched_at": "2026-09-21T08:02:04Z",
+      "url": "https://finance.yahoo.com/markets/options/articles/bond-markets-big-steepening-040150357.html",
+      "source": "etf.com",
+      "published_at": "2026-09-22T04:01:50Z",
+      "fetched_at": "2026-09-22T08:02:04Z",
       "ticker": null,
       "source_tier": "aggregator"
     },
     {
-      "title": "Strategists Say Market's ‘Wall of Worry' Is Healthy, Not a Warning Sign",
+      "title": "What’s News: Business & Finance",
       "summary": "",
-      "url": "https://finance.yahoo.com/markets/stocks/articles/strategists-markets-wall-worry-healthy-022642954.html",
-      "source": "BeInCrypto",
-      "published_at": "2026-09-21T02:26:42Z",
-      "fetched_at": "2026-09-21T08:02:04Z",
-      "ticker": null,
-      "source_tier": "aggregator"
-    },
-    {
-      "title": "Paramount Discussed $1.5 Billion California Investment to Clear Merger Hurdle",
-      "summary": "",
-      "url": "https://finance.yahoo.com/m/6fc96d24-2323-3183-980a-71c250c2f8b5/paramount-discussed-%241.5.html",
+      "url": "https://finance.yahoo.com/m/cba2ddcf-fd52-3ac2-8721-aa8c84981d0a/what%E2%80%99s-news%3A-business-%26.html",
       "source": "The Wall Street Journal",
-      "published_at": "2026-09-21T02:20:00Z",
-      "fetched_at": "2026-09-21T08:02:04Z",
+      "published_at": "2026-09-22T04:01:00Z",
+      "fetched_at": "2026-09-22T08:02:04Z",
       "ticker": null,
-      "source_tier": "aggregator"
-    },
-    {
-      "title": "Bessent is sitting down with Iran's biggest oil customer",
-      "summary": "",
-      "url": "https://finance.yahoo.com/energy/articles/bessent-sitting-down-irans-biggest-021700864.html",
-      "source": "TheStreet",
-      "published_at": "2026-09-21T02:17:00Z",
-      "fetched_at": "2026-09-21T08:02:04Z",
-      "ticker": null,
-      "source_tier": "aggregator"
-    },
-    {
-      "title": "通信ETF国泰：9月18日融资买入3.75亿元，融资融券余额12.83亿元",
-      "summary": "通信ETF国泰：9月18日融资买入3.75亿元，融资融券余额12.83亿元 同花顺",
-      "url": "https://news.google.com/rss/articles/CBMiXkFVX3lxTE10cU9TZHJLT3JXWXZmcFl4eGRCcktzMzlONFUxNDkxSnRFREpnYmZrcWZ6UjZFeXhyVk1FXzhwSGN5WUpFS1RvS2hwbUxtTTVjeUJocFZ2djhoQmNnVWc?oc=5",
-      "source": "Google News / 同花顺",
-      "published_at": "2026-09-21T01:19:37Z",
-      "fetched_at": "2026-09-21T08:02:06Z",
-      "ticker": "515880.SS",
-      "source_tier": "aggregator"
-    },
-    {
-      "title": "通信ETF国泰，上周五净流入逾10亿元",
-      "summary": "通信ETF国泰，上周五净流入逾10亿元 凤凰网",
-      "url": "https://news.google.com/rss/articles/CBMiUEFVX3lxTE54dklvZERQdUpsYUN5TkJ1NG9VcXEwNDc4alpXVXRHN2xjT2xHT2NqRVdrcWxVZXVPdHRFM1BBaFF6TzIzazJULUtab01lX0VP?oc=5",
-      "source": "Google News / 凤凰网",
-      "published_at": "2026-09-20T23:32:57Z",
-      "fetched_at": "2026-09-21T08:02:06Z",
-      "ticker": "515880.SS",
       "source_tier": "aggregator"
     }
   ]
