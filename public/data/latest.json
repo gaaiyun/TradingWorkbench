@@ -1,7 +1,7 @@
 {
-  "status": "ok",
-  "generated_at": "2026-09-22T16:02:02+08:00",
-  "trade_date": "2026-09-22",
+  "status": "failed",
+  "generated_at": "2026-09-23T16:01:58+08:00",
+  "trade_date": "2026-09-23",
   "provider": "openai_compatible",
   "analysts": [
     "market",
@@ -19,19 +19,19 @@
     "kind": "monitor"
   },
   "run": {
-    "id": "35702538469",
+    "id": "35834772651",
     "attempt": "1",
     "workflow": "daily-analysis",
-    "url": "https://github.com/gaaiyun/TradingWorkbench/actions/runs/35702538469"
+    "url": "https://github.com/gaaiyun/TradingWorkbench/actions/runs/35834772651"
   },
   "identity": {
     "scope": "profile",
     "kind": "monitor",
-    "runId": "35702538469",
+    "runId": "35834772651",
     "profileId": "cn-semi-comms",
     "requestId": null,
-    "slotId": "slot-8ff86476b1d2238ca6941ebbcdd77ba9409d430784d0ee487e32ba641154499a",
-    "scheduledFor": "2026-09-22T07:17:48.000Z"
+    "slotId": "slot-b51a05de9ddeca2a585e9aa74784e9eedc238a8b9d701719b140156289453fb6",
+    "scheduledFor": "2026-09-23T07:17:15.000Z"
   },
   "rating_tiers": [
     "Sell",
@@ -57,37 +57,10 @@
     },
     {
       "ticker": "512480.SS",
-      "rating": "Not Rated",
-      "report": "reports/512480.SS/2026-09-22/complete_report.md",
-      "files": {
-        "fundamentals": "reports/512480.SS/2026-09-22/1_analysts/fundamentals.md",
-        "market": "reports/512480.SS/2026-09-22/1_analysts/market.md",
-        "news": "reports/512480.SS/2026-09-22/1_analysts/news.md",
-        "bear": "reports/512480.SS/2026-09-22/2_research/bear.md",
-        "bull": "reports/512480.SS/2026-09-22/2_research/bull.md",
-        "manager": "reports/512480.SS/2026-09-22/2_research/manager.md",
-        "trader": "reports/512480.SS/2026-09-22/3_trading/trader.md",
-        "aggressive": "reports/512480.SS/2026-09-22/4_risk/aggressive.md",
-        "conservative": "reports/512480.SS/2026-09-22/4_risk/conservative.md",
-        "neutral": "reports/512480.SS/2026-09-22/4_risk/neutral.md",
-        "decision": "reports/512480.SS/2026-09-22/5_portfolio/decision.md",
-        "complete_report": "reports/512480.SS/2026-09-22/complete_report.md"
-      },
-      "decision_excerpt": "**Rating**: 持有\n\n**Executive Summary**: EvidencePacketV1显示技术面中性状态。  \n[D7]  \n\n短期市场序列[M692]收盘1.0509999990463257略高于MA20。  \n[M692]  \n[I5]  \n\n但低于MA60。  \n[M692]  \n[I6]  \n\n严格移动平均对齐状态为none。  \n[D7]  \n\nRSI14为57.63265706在中性区间。  \n[I11]  \n\nMACD信号线[I7]为负值，macdHistogram[I8]为正值但信号线[I9]仍为负，背离未改善。  \n[I7]  \n[I8]  \n[I9]  \n\nrealizedVolatility20为31.93715393。  \n[I10]  \n\nETF核心指标如跟踪误差、费用率、持仓集中度、NAV溢折价、流动性评估全部标为unavailable。",
-      "analysis_status": "insufficient_evidence",
-      "audit_status": "legacy_unverified",
-      "evidence_publish": {
-        "published": true,
-        "status": 201
-      },
-      "marketHistory": {
-        "source": "yahoo",
-        "adjustment": "mixed",
-        "barCount": 692,
-        "startAt": "2023-11-29T16:00:00Z",
-        "endAt": "2026-09-22T01:30:00Z"
-      },
-      "error": null
+      "rating": null,
+      "report": null,
+      "decision_excerpt": "",
+      "error": "IncompleteAgentOutputError: Portfolio Manager: LLM response still missing required sections ('**Rating**', '**Executive Summary**', '**Investment Thesis**') after retry"
     }
   ]
 }
