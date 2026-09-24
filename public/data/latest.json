@@ -1,7 +1,7 @@
 {
-  "status": "failed",
-  "generated_at": "2026-09-23T16:01:58+08:00",
-  "trade_date": "2026-09-23",
+  "status": "ok",
+  "generated_at": "2026-09-24T17:06:47+08:00",
+  "trade_date": "2026-09-24",
   "provider": "openai_compatible",
   "analysts": [
     "market",
@@ -19,19 +19,19 @@
     "kind": "monitor"
   },
   "run": {
-    "id": "35834772651",
+    "id": "35979177245",
     "attempt": "1",
     "workflow": "daily-analysis",
-    "url": "https://github.com/gaaiyun/TradingWorkbench/actions/runs/35834772651"
+    "url": "https://github.com/gaaiyun/TradingWorkbench/actions/runs/35979177245"
   },
   "identity": {
     "scope": "profile",
     "kind": "monitor",
-    "runId": "35834772651",
+    "runId": "35979177245",
     "profileId": "cn-semi-comms",
     "requestId": null,
-    "slotId": "slot-b51a05de9ddeca2a585e9aa74784e9eedc238a8b9d701719b140156289453fb6",
-    "scheduledFor": "2026-09-23T07:17:15.000Z"
+    "slotId": "slot-c56565be6fafc4b475841d251fc2321920bb3a20ca31b1bdc3c2034c03a9571f",
+    "scheduledFor": "2026-09-24T08:47:15.000Z"
   },
   "rating_tiers": [
     "Sell",
@@ -57,10 +57,37 @@
     },
     {
       "ticker": "512480.SS",
-      "rating": null,
-      "report": null,
-      "decision_excerpt": "",
-      "error": "IncompleteAgentOutputError: Portfolio Manager: LLM response still missing required sections ('**Rating**', '**Executive Summary**', '**Investment Thesis**') after retry"
+      "rating": "Not Rated",
+      "report": "reports/512480.SS/2026-09-24/complete_report.md",
+      "files": {
+        "fundamentals": "reports/512480.SS/2026-09-24/1_analysts/fundamentals.md",
+        "market": "reports/512480.SS/2026-09-24/1_analysts/market.md",
+        "news": "reports/512480.SS/2026-09-24/1_analysts/news.md",
+        "bear": "reports/512480.SS/2026-09-24/2_research/bear.md",
+        "bull": "reports/512480.SS/2026-09-24/2_research/bull.md",
+        "manager": "reports/512480.SS/2026-09-24/2_research/manager.md",
+        "trader": "reports/512480.SS/2026-09-24/3_trading/trader.md",
+        "aggressive": "reports/512480.SS/2026-09-24/4_risk/aggressive.md",
+        "conservative": "reports/512480.SS/2026-09-24/4_risk/conservative.md",
+        "neutral": "reports/512480.SS/2026-09-24/4_risk/neutral.md",
+        "decision": "reports/512480.SS/2026-09-24/5_portfolio/decision.md",
+        "complete_report": "reports/512480.SS/2026-09-24/complete_report.md"
+      },
+      "decision_excerpt": "**Rating**: Hold\n**Executive Summary**: 辩论中综合风险分析师意见，最终交易决策为持仓不动。\n**Investment Thesis**:\n最近8个交易日累计上涨1.19047619% [D2].\n当前收盘价为1.02元 [M694].\n价格较MA20上涨1.98470229% [D5].\n价格较MA60下跌1.8082048% [D6].\n严格移动平均对齐状态为none [D7].\nRSI14指标为49.82718013处于中性区域 [I11].\n20日实现波动率达到31.50174518% [I10].\n近期成交量为9408766 [M694].\n2026年中期报告发布 [N1].\n集成电路布图设计保护条例出台 [N2].\n集成电路布图设计保护条例出台 [N3].\n基金份额拆分于2026-07-02 [CA1].\n基金份额拆分于2026-06-28",
+      "analysis_status": "insufficient_evidence",
+      "audit_status": "legacy_unverified",
+      "evidence_publish": {
+        "published": true,
+        "status": 201
+      },
+      "marketHistory": {
+        "source": "tencent",
+        "adjustment": "mixed",
+        "barCount": 694,
+        "startAt": "2023-11-29T16:00:00Z",
+        "endAt": "2026-09-23T16:00:00Z"
+      },
+      "error": null
     }
   ]
 }

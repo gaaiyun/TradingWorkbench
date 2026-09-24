@@ -1,113 +1,113 @@
 {
   "version": 1,
   "status": "ok",
-  "generated_at": "2026-09-23T16:01:58+08:00",
-  "trade_date": "2026-09-23",
+  "generated_at": "2026-09-24T17:06:47+08:00",
+  "trade_date": "2026-09-24",
   "global": {
     "status": "ok",
     "query_type": "global",
     "ticker": null,
-    "start_date": "2026-09-16",
-    "end_date": "2026-09-23",
-    "fetched_at": "2026-09-23T08:01:58Z",
+    "start_date": "2026-09-17",
+    "end_date": "2026-09-24",
+    "fetched_at": "2026-09-24T09:06:48Z",
     "items": [
       {
-        "title": "Europe stocks rise as oil retreat aids sentiment; PMI data in focus",
+        "title": "Independence Gold Confirms Balrog Vein at Depth and Intercepts 3.11 g/t Gold and 48.69 g/t Silver over 8.03 Metres at the Tommy Vein, 3Ts Project, BC",
         "summary": "",
-        "url": "https://finance.yahoo.com/markets/world-indices/articles/europe-stocks-rise-oil-retreat-072448328.html",
-        "source": "Reuters",
-        "published_at": "2026-09-23T07:24:48Z",
-        "fetched_at": "2026-09-23T08:01:58Z",
+        "url": "https://finance.yahoo.com/markets/commodities/articles/independence-gold-confirms-balrog-vein-090000746.html",
+        "source": "TMX Newsfile",
+        "published_at": "2026-09-24T09:00:00Z",
+        "fetched_at": "2026-09-24T09:06:48Z",
         "ticker": null,
         "source_tier": "aggregator"
       },
       {
-        "title": "Oil falls below $100 after Trump reports talks with Iran",
+        "title": "Meta's Zuckerberg says Muse AI agent will take a small fee from transactions",
         "summary": "",
-        "url": "https://finance.yahoo.com/m/aab08867-44eb-3b68-95a6-0a244c49e194/oil-falls-below-%24100-after.html",
+        "url": "https://finance.yahoo.com/technology/article/metas-zuckerberg-says-muse-ai-agent-will-take-a-small-fee-from-transactions-234639802.html",
+        "source": "Yahoo Finance",
+        "published_at": "2026-09-24T08:39:21Z",
+        "fetched_at": "2026-09-24T09:06:48Z",
+        "ticker": null,
+        "source_tier": "aggregator"
+      },
+      {
+        "title": "Oil extends gains on little sign of progress in US-Iran talks",
+        "summary": "",
+        "url": "https://finance.yahoo.com/energy/articles/oil-extends-gains-little-sign-070623934.html",
+        "source": "Reuters",
+        "published_at": "2026-09-24T08:23:23Z",
+        "fetched_at": "2026-09-24T09:06:48Z",
+        "ticker": null,
+        "source_tier": "aggregator"
+      },
+      {
+        "title": "HSBC Holdings (LSE:HSBA) Cuts Its US Treasury Yield Forecast",
+        "summary": "",
+        "url": "https://finance.yahoo.com/markets/currencies/articles/hsbc-holdings-lse-hsba-cuts-080828381.html",
+        "source": "Simply Wall St.",
+        "published_at": "2026-09-24T08:08:28Z",
+        "fetched_at": "2026-09-24T09:06:48Z",
+        "ticker": null,
+        "source_tier": "aggregator"
+      },
+      {
+        "title": "VR Submits NOI Permit Amendment to Expand Drill Sites for its New Boston Moly-Tungsten-Copper-Silver Porphyry Project in Nevada",
+        "summary": "",
+        "url": "https://finance.yahoo.com/markets/commodities/articles/vr-submits-noi-permit-amendment-080000535.html",
+        "source": "GlobeNewswire",
+        "published_at": "2026-09-24T08:00:00Z",
+        "fetched_at": "2026-09-24T09:06:48Z",
+        "ticker": null,
+        "source_tier": "aggregator"
+      },
+      {
+        "title": "Dollar near 2-month peak as investors pause after rally, geopolitics eyed",
+        "summary": "",
+        "url": "https://finance.yahoo.com/markets/currencies/articles/dollar-perched-two-month-high-020212904.html",
+        "source": "Reuters",
+        "published_at": "2026-09-24T07:49:33Z",
+        "fetched_at": "2026-09-24T09:06:48Z",
+        "ticker": null,
+        "source_tier": "aggregator"
+      },
+      {
+        "title": "European shares dip on Middle East tensions ahead of US-China talks",
+        "summary": "",
+        "url": "https://finance.yahoo.com/markets/world-indices/articles/european-shares-dip-middle-east-073803624.html",
+        "source": "Reuters",
+        "published_at": "2026-09-24T07:38:03Z",
+        "fetched_at": "2026-09-24T09:06:48Z",
+        "ticker": null,
+        "source_tier": "aggregator"
+      },
+      {
+        "title": "Markets mixed as investors eye oil price volatility and US bonds",
+        "summary": "",
+        "url": "https://finance.yahoo.com/markets/articles/markets-mixed-investors-eye-oil-061124062.html",
         "source": "Euronews",
-        "published_at": "2026-09-23T07:24:24Z",
-        "fetched_at": "2026-09-23T08:01:58Z",
+        "published_at": "2026-09-24T07:28:04Z",
+        "fetched_at": "2026-09-24T09:06:48Z",
         "ticker": null,
         "source_tier": "aggregator"
       },
       {
-        "title": "Exclusive: Hashgraph lands IBM marketplace listing for AI-agent identity tool",
+        "title": "Baytex Energy (TSX:BTE) Pulls Back As Oil Softens But Is The Undervalued View Still Intact",
         "summary": "",
-        "url": "https://finance.yahoo.com/technology/ai/articles/exclusive-hashgraph-lands-ibm-marketplace-071426827.html",
-        "source": "Investing.com",
-        "published_at": "2026-09-23T07:14:26Z",
-        "fetched_at": "2026-09-23T08:01:58Z",
+        "url": "https://finance.yahoo.com/energy/articles/baytex-energy-tsx-bte-pulls-071228656.html",
+        "source": "Simply Wall St.",
+        "published_at": "2026-09-24T07:12:28Z",
+        "fetched_at": "2026-09-24T09:06:48Z",
         "ticker": null,
         "source_tier": "aggregator"
       },
       {
-        "title": "Oil falls on better supply outlook, hopes for US-Iran talks",
+        "title": "Bonds shaky, oil eases off highs amid trade, peace talks",
         "summary": "",
-        "url": "https://finance.yahoo.com/news/oil-falls-increased-gulf-supply-014402051.html",
+        "url": "https://finance.yahoo.com/markets/articles/bonds-shaky-oil-eases-off-014844818.html",
         "source": "Reuters",
-        "published_at": "2026-09-23T07:05:20Z",
-        "fetched_at": "2026-09-23T08:01:58Z",
-        "ticker": null,
-        "source_tier": "aggregator"
-      },
-      {
-        "title": "Algo Grande Copper Confirms 68.43 Metres of Copper-Silver-Gold Mineralization Across Two Zones in Hole AG-CG-PH2-002, Including a New Zone of 38.20 Metres at 1.0% CuEq",
-        "summary": "",
-        "url": "https://finance.yahoo.com/markets/commodities/articles/algo-grande-copper-confirms-68-070500818.html",
-        "source": "ACCESS Newswire",
-        "published_at": "2026-09-23T07:05:00Z",
-        "fetched_at": "2026-09-23T08:01:58Z",
-        "ticker": null,
-        "source_tier": "aggregator"
-      },
-      {
-        "title": "U.S. Treasury, Eurozone Bond Yields Fall on Mideast Diplomacy Prospect",
-        "summary": "",
-        "url": "https://finance.yahoo.com/m/5c02dfe7-06db-3902-b3e5-2ff27e51cb06/u.s.-treasury%2C-eurozone-bond.html",
-        "source": "The Wall Street Journal",
-        "published_at": "2026-09-23T07:02:00Z",
-        "fetched_at": "2026-09-23T08:01:58Z",
-        "ticker": null,
-        "source_tier": "aggregator"
-      },
-      {
-        "title": "Dollar Jumps on U.S. Rate-Rise Bets",
-        "summary": "",
-        "url": "https://finance.yahoo.com/m/13ca5e65-8986-3a1d-88f7-392a48654589/dollar-jumps-on-u.s..html",
-        "source": "The Wall Street Journal",
-        "published_at": "2026-09-23T07:00:00Z",
-        "fetched_at": "2026-09-23T08:01:58Z",
-        "ticker": null,
-        "source_tier": "aggregator"
-      },
-      {
-        "title": "Oil Falls on Hopes for U.S.-Iran Talks",
-        "summary": "",
-        "url": "https://finance.yahoo.com/m/0a1132de-f825-31a4-8289-6260362cb2f7/oil-falls-on-hopes-for.html",
-        "source": "The Wall Street Journal",
-        "published_at": "2026-09-23T06:57:00Z",
-        "fetched_at": "2026-09-23T08:01:58Z",
-        "ticker": null,
-        "source_tier": "aggregator"
-      },
-      {
-        "title": "Bitcoin Surges as Trump Confirms “Good Meeting” with Iran amid Hormuz Opening Proposal",
-        "summary": "",
-        "url": "https://finance.yahoo.com/m/12e6c9c8-8d6e-3871-9d12-b46e0abf230c/bitcoin-surges-as-trump.html",
-        "source": "CoinGape",
-        "published_at": "2026-09-23T06:21:25Z",
-        "fetched_at": "2026-09-23T08:01:58Z",
-        "ticker": null,
-        "source_tier": "aggregator"
-      },
-      {
-        "title": "Zephyr Energy reports better-than-expected production",
-        "summary": "",
-        "url": "https://finance.yahoo.com/m/d9d39557-0821-30d6-ac2b-84e79d98f37f/zephyr-energy-reports.html",
-        "source": "Proactive",
-        "published_at": "2026-09-23T06:17:00Z",
-        "fetched_at": "2026-09-23T08:01:58Z",
+        "published_at": "2026-09-24T05:54:02Z",
+        "fetched_at": "2026-09-24T09:06:48Z",
         "ticker": null,
         "source_tier": "aggregator"
       }
@@ -116,12 +116,12 @@
       {
         "source": "Yahoo Finance",
         "status": "ok",
-        "item_count": 50
+        "item_count": 49
       },
       {
         "source": "Federal Reserve",
         "status": "ok",
-        "item_count": 5
+        "item_count": 3
       }
     ]
   },
@@ -130,17 +130,17 @@
       "status": "ok",
       "query_type": "ticker",
       "ticker": "515880.SS",
-      "start_date": "2026-09-23",
-      "end_date": "2026-09-23",
-      "fetched_at": "2026-09-23T08:02:00Z",
+      "start_date": "2026-09-24",
+      "end_date": "2026-09-24",
+      "fetched_at": "2026-09-24T09:06:49Z",
       "items": [
         {
-          "title": "9月22日通信ETF国泰（515880）份额增加2.66亿份，最新份额648.52亿份，最新规模458.31亿元",
-          "summary": "9月22日通信ETF国泰（515880）份额增加2.66亿份，最新份额648.52亿份，最新规模458.31亿元 新浪财经",
-          "url": "https://news.google.com/rss/articles/CBMimwFBVV95cUxObFJUeWZVc3M5NVRjMWp6VmRmdTFybHZiUDE3U19Belcwa1k4NldhWjRyUHJscUxHVVFjWFE1dU5Fc3VBcDdlY2Z6cEJiYVV5TEhKMjQ5YnU4TUJyUXdPbmZyVzJacnpqWjFDc3ByQ01JamM2ZTB3QVk5OE4zU2lmOV9PeHNOODRTQ2JJY29nVE10ZkZ6Tk9iMEhTUQ?oc=5",
-          "source": "Google News / 新浪财经",
-          "published_at": "2026-09-23T01:00:00Z",
-          "fetched_at": "2026-09-23T08:02:00Z",
+          "title": "财中ETF风向标｜通信ETF国泰(515880)盘中跌2.71%，成交额21.15亿元",
+          "summary": "财中ETF风向标｜通信ETF国泰(515880)盘中跌2.71%，成交额21.15亿元 财中社",
+          "url": "https://news.google.com/rss/articles/CBMiZEFVX3lxTE45LXFFMjZudkJKTnppQmlQN21NbWoyOVJXZGFpVzBEOHNvUkJMczBjQm5vTEJ1by03SWdNX0FzMTE5YVA3bFdPMXp2cmw4Nnp5Z3huczRYQS1TSHZSbVBoMGNJVF8?oc=5",
+          "source": "Google News / 财中社",
+          "published_at": "2026-09-24T05:40:00Z",
+          "fetched_at": "2026-09-24T09:06:49Z",
           "ticker": "515880.SS",
           "source_tier": "aggregator"
         }
@@ -167,9 +167,9 @@
       "status": "empty",
       "query_type": "ticker",
       "ticker": "512480.SS",
-      "start_date": "2026-09-23",
-      "end_date": "2026-09-23",
-      "fetched_at": "2026-09-23T08:02:02Z",
+      "start_date": "2026-09-24",
+      "end_date": "2026-09-24",
+      "fetched_at": "2026-09-24T09:06:51Z",
       "items": [],
       "source_statuses": [
         {
@@ -192,112 +192,112 @@
   },
   "items": [
     {
-      "title": "Europe stocks rise as oil retreat aids sentiment; PMI data in focus",
+      "title": "Independence Gold Confirms Balrog Vein at Depth and Intercepts 3.11 g/t Gold and 48.69 g/t Silver over 8.03 Metres at the Tommy Vein, 3Ts Project, BC",
       "summary": "",
-      "url": "https://finance.yahoo.com/markets/world-indices/articles/europe-stocks-rise-oil-retreat-072448328.html",
-      "source": "Reuters",
-      "published_at": "2026-09-23T07:24:48Z",
-      "fetched_at": "2026-09-23T08:01:58Z",
+      "url": "https://finance.yahoo.com/markets/commodities/articles/independence-gold-confirms-balrog-vein-090000746.html",
+      "source": "TMX Newsfile",
+      "published_at": "2026-09-24T09:00:00Z",
+      "fetched_at": "2026-09-24T09:06:48Z",
       "ticker": null,
       "source_tier": "aggregator"
     },
     {
-      "title": "Oil falls below $100 after Trump reports talks with Iran",
+      "title": "Meta's Zuckerberg says Muse AI agent will take a small fee from transactions",
       "summary": "",
-      "url": "https://finance.yahoo.com/m/aab08867-44eb-3b68-95a6-0a244c49e194/oil-falls-below-%24100-after.html",
+      "url": "https://finance.yahoo.com/technology/article/metas-zuckerberg-says-muse-ai-agent-will-take-a-small-fee-from-transactions-234639802.html",
+      "source": "Yahoo Finance",
+      "published_at": "2026-09-24T08:39:21Z",
+      "fetched_at": "2026-09-24T09:06:48Z",
+      "ticker": null,
+      "source_tier": "aggregator"
+    },
+    {
+      "title": "Oil extends gains on little sign of progress in US-Iran talks",
+      "summary": "",
+      "url": "https://finance.yahoo.com/energy/articles/oil-extends-gains-little-sign-070623934.html",
+      "source": "Reuters",
+      "published_at": "2026-09-24T08:23:23Z",
+      "fetched_at": "2026-09-24T09:06:48Z",
+      "ticker": null,
+      "source_tier": "aggregator"
+    },
+    {
+      "title": "HSBC Holdings (LSE:HSBA) Cuts Its US Treasury Yield Forecast",
+      "summary": "",
+      "url": "https://finance.yahoo.com/markets/currencies/articles/hsbc-holdings-lse-hsba-cuts-080828381.html",
+      "source": "Simply Wall St.",
+      "published_at": "2026-09-24T08:08:28Z",
+      "fetched_at": "2026-09-24T09:06:48Z",
+      "ticker": null,
+      "source_tier": "aggregator"
+    },
+    {
+      "title": "VR Submits NOI Permit Amendment to Expand Drill Sites for its New Boston Moly-Tungsten-Copper-Silver Porphyry Project in Nevada",
+      "summary": "",
+      "url": "https://finance.yahoo.com/markets/commodities/articles/vr-submits-noi-permit-amendment-080000535.html",
+      "source": "GlobeNewswire",
+      "published_at": "2026-09-24T08:00:00Z",
+      "fetched_at": "2026-09-24T09:06:48Z",
+      "ticker": null,
+      "source_tier": "aggregator"
+    },
+    {
+      "title": "Dollar near 2-month peak as investors pause after rally, geopolitics eyed",
+      "summary": "",
+      "url": "https://finance.yahoo.com/markets/currencies/articles/dollar-perched-two-month-high-020212904.html",
+      "source": "Reuters",
+      "published_at": "2026-09-24T07:49:33Z",
+      "fetched_at": "2026-09-24T09:06:48Z",
+      "ticker": null,
+      "source_tier": "aggregator"
+    },
+    {
+      "title": "European shares dip on Middle East tensions ahead of US-China talks",
+      "summary": "",
+      "url": "https://finance.yahoo.com/markets/world-indices/articles/european-shares-dip-middle-east-073803624.html",
+      "source": "Reuters",
+      "published_at": "2026-09-24T07:38:03Z",
+      "fetched_at": "2026-09-24T09:06:48Z",
+      "ticker": null,
+      "source_tier": "aggregator"
+    },
+    {
+      "title": "Markets mixed as investors eye oil price volatility and US bonds",
+      "summary": "",
+      "url": "https://finance.yahoo.com/markets/articles/markets-mixed-investors-eye-oil-061124062.html",
       "source": "Euronews",
-      "published_at": "2026-09-23T07:24:24Z",
-      "fetched_at": "2026-09-23T08:01:58Z",
+      "published_at": "2026-09-24T07:28:04Z",
+      "fetched_at": "2026-09-24T09:06:48Z",
       "ticker": null,
       "source_tier": "aggregator"
     },
     {
-      "title": "Exclusive: Hashgraph lands IBM marketplace listing for AI-agent identity tool",
+      "title": "Baytex Energy (TSX:BTE) Pulls Back As Oil Softens But Is The Undervalued View Still Intact",
       "summary": "",
-      "url": "https://finance.yahoo.com/technology/ai/articles/exclusive-hashgraph-lands-ibm-marketplace-071426827.html",
-      "source": "Investing.com",
-      "published_at": "2026-09-23T07:14:26Z",
-      "fetched_at": "2026-09-23T08:01:58Z",
+      "url": "https://finance.yahoo.com/energy/articles/baytex-energy-tsx-bte-pulls-071228656.html",
+      "source": "Simply Wall St.",
+      "published_at": "2026-09-24T07:12:28Z",
+      "fetched_at": "2026-09-24T09:06:48Z",
       "ticker": null,
       "source_tier": "aggregator"
     },
     {
-      "title": "Oil falls on better supply outlook, hopes for US-Iran talks",
+      "title": "Bonds shaky, oil eases off highs amid trade, peace talks",
       "summary": "",
-      "url": "https://finance.yahoo.com/news/oil-falls-increased-gulf-supply-014402051.html",
+      "url": "https://finance.yahoo.com/markets/articles/bonds-shaky-oil-eases-off-014844818.html",
       "source": "Reuters",
-      "published_at": "2026-09-23T07:05:20Z",
-      "fetched_at": "2026-09-23T08:01:58Z",
+      "published_at": "2026-09-24T05:54:02Z",
+      "fetched_at": "2026-09-24T09:06:48Z",
       "ticker": null,
       "source_tier": "aggregator"
     },
     {
-      "title": "Algo Grande Copper Confirms 68.43 Metres of Copper-Silver-Gold Mineralization Across Two Zones in Hole AG-CG-PH2-002, Including a New Zone of 38.20 Metres at 1.0% CuEq",
-      "summary": "",
-      "url": "https://finance.yahoo.com/markets/commodities/articles/algo-grande-copper-confirms-68-070500818.html",
-      "source": "ACCESS Newswire",
-      "published_at": "2026-09-23T07:05:00Z",
-      "fetched_at": "2026-09-23T08:01:58Z",
-      "ticker": null,
-      "source_tier": "aggregator"
-    },
-    {
-      "title": "U.S. Treasury, Eurozone Bond Yields Fall on Mideast Diplomacy Prospect",
-      "summary": "",
-      "url": "https://finance.yahoo.com/m/5c02dfe7-06db-3902-b3e5-2ff27e51cb06/u.s.-treasury%2C-eurozone-bond.html",
-      "source": "The Wall Street Journal",
-      "published_at": "2026-09-23T07:02:00Z",
-      "fetched_at": "2026-09-23T08:01:58Z",
-      "ticker": null,
-      "source_tier": "aggregator"
-    },
-    {
-      "title": "Dollar Jumps on U.S. Rate-Rise Bets",
-      "summary": "",
-      "url": "https://finance.yahoo.com/m/13ca5e65-8986-3a1d-88f7-392a48654589/dollar-jumps-on-u.s..html",
-      "source": "The Wall Street Journal",
-      "published_at": "2026-09-23T07:00:00Z",
-      "fetched_at": "2026-09-23T08:01:58Z",
-      "ticker": null,
-      "source_tier": "aggregator"
-    },
-    {
-      "title": "Oil Falls on Hopes for U.S.-Iran Talks",
-      "summary": "",
-      "url": "https://finance.yahoo.com/m/0a1132de-f825-31a4-8289-6260362cb2f7/oil-falls-on-hopes-for.html",
-      "source": "The Wall Street Journal",
-      "published_at": "2026-09-23T06:57:00Z",
-      "fetched_at": "2026-09-23T08:01:58Z",
-      "ticker": null,
-      "source_tier": "aggregator"
-    },
-    {
-      "title": "Bitcoin Surges as Trump Confirms “Good Meeting” with Iran amid Hormuz Opening Proposal",
-      "summary": "",
-      "url": "https://finance.yahoo.com/m/12e6c9c8-8d6e-3871-9d12-b46e0abf230c/bitcoin-surges-as-trump.html",
-      "source": "CoinGape",
-      "published_at": "2026-09-23T06:21:25Z",
-      "fetched_at": "2026-09-23T08:01:58Z",
-      "ticker": null,
-      "source_tier": "aggregator"
-    },
-    {
-      "title": "Zephyr Energy reports better-than-expected production",
-      "summary": "",
-      "url": "https://finance.yahoo.com/m/d9d39557-0821-30d6-ac2b-84e79d98f37f/zephyr-energy-reports.html",
-      "source": "Proactive",
-      "published_at": "2026-09-23T06:17:00Z",
-      "fetched_at": "2026-09-23T08:01:58Z",
-      "ticker": null,
-      "source_tier": "aggregator"
-    },
-    {
-      "title": "9月22日通信ETF国泰（515880）份额增加2.66亿份，最新份额648.52亿份，最新规模458.31亿元",
-      "summary": "9月22日通信ETF国泰（515880）份额增加2.66亿份，最新份额648.52亿份，最新规模458.31亿元 新浪财经",
-      "url": "https://news.google.com/rss/articles/CBMimwFBVV95cUxObFJUeWZVc3M5NVRjMWp6VmRmdTFybHZiUDE3U19Belcwa1k4NldhWjRyUHJscUxHVVFjWFE1dU5Fc3VBcDdlY2Z6cEJiYVV5TEhKMjQ5YnU4TUJyUXdPbmZyVzJacnpqWjFDc3ByQ01JamM2ZTB3QVk5OE4zU2lmOV9PeHNOODRTQ2JJY29nVE10ZkZ6Tk9iMEhTUQ?oc=5",
-      "source": "Google News / 新浪财经",
-      "published_at": "2026-09-23T01:00:00Z",
-      "fetched_at": "2026-09-23T08:02:00Z",
+      "title": "财中ETF风向标｜通信ETF国泰(515880)盘中跌2.71%，成交额21.15亿元",
+      "summary": "财中ETF风向标｜通信ETF国泰(515880)盘中跌2.71%，成交额21.15亿元 财中社",
+      "url": "https://news.google.com/rss/articles/CBMiZEFVX3lxTE45LXFFMjZudkJKTnppQmlQN21NbWoyOVJXZGFpVzBEOHNvUkJMczBjQm5vTEJ1by03SWdNX0FzMTE5YVA3bFdPMXp2cmw4Nnp5Z3huczRYQS1TSHZSbVBoMGNJVF8?oc=5",
+      "source": "Google News / 财中社",
+      "published_at": "2026-09-24T05:40:00Z",
+      "fetched_at": "2026-09-24T09:06:49Z",
       "ticker": "515880.SS",
       "source_tier": "aggregator"
     }
