@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "generatedAt": "2026-09-24T15:49:14.177Z",
+  "generatedAt": "2026-09-25T15:49:36.401Z",
   "status": "degraded",
   "coverage": {
     "policy": "current-listed-best-effort-plus-configured-core",
@@ -16,13 +16,13 @@
       "id": "sina-market-center",
       "role": "CN current-listed discovery",
       "quality": "best_effort",
-      "asOf": "2026-09-24T15:49:14.177Z"
+      "asOf": "2026-09-25T15:49:36.401Z"
     },
     {
       "id": "workbench-settings",
       "role": "configured HK/US/CN core instruments",
       "quality": "declared",
-      "asOf": "2026-09-24T15:49:14.177Z"
+      "asOf": "2026-09-25T15:49:36.401Z"
     }
   ],
   "instruments": [
