@@ -1,7 +1,7 @@
 {
   "status": "ok",
-  "generated_at": "2026-09-24T17:06:47+08:00",
-  "trade_date": "2026-09-24",
+  "generated_at": "2026-09-25T16:01:43+08:00",
+  "trade_date": "2026-09-25",
   "provider": "openai_compatible",
   "analysts": [
     "market",
@@ -19,19 +19,19 @@
     "kind": "monitor"
   },
   "run": {
-    "id": "35979177245",
+    "id": "36110636883",
     "attempt": "1",
     "workflow": "daily-analysis",
-    "url": "https://github.com/gaaiyun/TradingWorkbench/actions/runs/35979177245"
+    "url": "https://github.com/gaaiyun/TradingWorkbench/actions/runs/36110636883"
   },
   "identity": {
     "scope": "profile",
     "kind": "monitor",
-    "runId": "35979177245",
+    "runId": "36110636883",
     "profileId": "cn-semi-comms",
     "requestId": null,
-    "slotId": "slot-c56565be6fafc4b475841d251fc2321920bb3a20ca31b1bdc3c2034c03a9571f",
-    "scheduledFor": "2026-09-24T08:47:15.000Z"
+    "slotId": "slot-0f6f8c9e6f9e75d70b726b281a17f2d99296a4bccbf5ba31217cfd068e84fd73",
+    "scheduledFor": "2026-09-25T07:17:15.000Z"
   },
   "rating_tiers": [
     "Sell",
@@ -57,35 +57,35 @@
     },
     {
       "ticker": "512480.SS",
-      "rating": "Not Rated",
-      "report": "reports/512480.SS/2026-09-24/complete_report.md",
+      "rating": "Hold",
+      "report": "reports/512480.SS/2026-09-25/complete_report.md",
       "files": {
-        "fundamentals": "reports/512480.SS/2026-09-24/1_analysts/fundamentals.md",
-        "market": "reports/512480.SS/2026-09-24/1_analysts/market.md",
-        "news": "reports/512480.SS/2026-09-24/1_analysts/news.md",
-        "bear": "reports/512480.SS/2026-09-24/2_research/bear.md",
-        "bull": "reports/512480.SS/2026-09-24/2_research/bull.md",
-        "manager": "reports/512480.SS/2026-09-24/2_research/manager.md",
-        "trader": "reports/512480.SS/2026-09-24/3_trading/trader.md",
-        "aggressive": "reports/512480.SS/2026-09-24/4_risk/aggressive.md",
-        "conservative": "reports/512480.SS/2026-09-24/4_risk/conservative.md",
-        "neutral": "reports/512480.SS/2026-09-24/4_risk/neutral.md",
-        "decision": "reports/512480.SS/2026-09-24/5_portfolio/decision.md",
-        "complete_report": "reports/512480.SS/2026-09-24/complete_report.md"
+        "fundamentals": "reports/512480.SS/2026-09-25/1_analysts/fundamentals.md",
+        "market": "reports/512480.SS/2026-09-25/1_analysts/market.md",
+        "news": "reports/512480.SS/2026-09-25/1_analysts/news.md",
+        "bear": "reports/512480.SS/2026-09-25/2_research/bear.md",
+        "bull": "reports/512480.SS/2026-09-25/2_research/bull.md",
+        "manager": "reports/512480.SS/2026-09-25/2_research/manager.md",
+        "trader": "reports/512480.SS/2026-09-25/3_trading/trader.md",
+        "aggressive": "reports/512480.SS/2026-09-25/4_risk/aggressive.md",
+        "conservative": "reports/512480.SS/2026-09-25/4_risk/conservative.md",
+        "neutral": "reports/512480.SS/2026-09-25/4_risk/neutral.md",
+        "decision": "reports/512480.SS/2026-09-25/5_portfolio/decision.md",
+        "complete_report": "reports/512480.SS/2026-09-25/complete_report.md"
       },
-      "decision_excerpt": "**Rating**: Hold\n**Executive Summary**: 辩论中综合风险分析师意见，最终交易决策为持仓不动。\n**Investment Thesis**:\n最近8个交易日累计上涨1.19047619% [D2].\n当前收盘价为1.02元 [M694].\n价格较MA20上涨1.98470229% [D5].\n价格较MA60下跌1.8082048% [D6].\n严格移动平均对齐状态为none [D7].\nRSI14指标为49.82718013处于中性区域 [I11].\n20日实现波动率达到31.50174518% [I10].\n近期成交量为9408766 [M694].\n2026年中期报告发布 [N1].\n集成电路布图设计保护条例出台 [N2].\n集成电路布图设计保护条例出台 [N3].\n基金份额拆分于2026-07-02 [CA1].\n基金份额拆分于2026-06-28",
-      "analysis_status": "insufficient_evidence",
-      "audit_status": "legacy_unverified",
+      "decision_excerpt": "**Rating**: Hold\n\n**Executive Summary**: 风险分析师辩论中激进分析师强调半导体设计保护条例的尾风 [N2][N3]、最近8个交易日收盘变化9.02489768% [D2]、高成交量 [M690]、RSI14=57.7606985处于中性正面区间 [I11]、MACD柱状图0.01183736 [I8]、价格在MA20之上 [D5]以及份额拆分提升流动性 [CA1][CA2]，这些因素支持短期积极信号。保守分析师则指出高实现波动率31.13238523 [I10]、中性移动平均对齐 [D7]以及NAV溢折价数据不可用 [S2]等结构性差距，而中性分析师平衡两方观点，认为短期增长潜力存在但政策影响需持续观察，最终达成维持持仓的共识。\n\n**Investment Thesis**: 激进分析师引用政策文件 [N2][N3]及[S3][S4]显示半导体设计保",
+      "analysis_status": "rated",
+      "audit_status": "verified",
       "evidence_publish": {
         "published": true,
         "status": 201
       },
       "marketHistory": {
-        "source": "tencent",
+        "source": "yahoo",
         "adjustment": "mixed",
         "barCount": 694,
         "startAt": "2023-11-29T16:00:00Z",
-        "endAt": "2026-09-23T16:00:00Z"
+        "endAt": "2026-09-23T01:30:00Z"
       },
       "error": null
     }

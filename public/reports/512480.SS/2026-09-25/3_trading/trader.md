@@ -1,0 +1,5 @@
+**Action**: Hold
+
+**Reasoning**: Hold recommendation justified by bull analyst's policy tailwinds from semiconductor design protection regulations [N2][N3][S3][S4], 9.02489768% close change over recent 8 trading days [D2] from M687 to M694, high trading volumes such as M690, RSI14 at 57.7606985 in neutral-positive territory per [I11][D9][D10], positive MACD histogram [I8], price above MA20 per [D5], and share splits for liquidity [CA1][CA2][S6][S7]. Bear analyst highlights structural gaps like unavailable NAV/premium data [S2], elevated realized volatility [I10], neutral MA alignment [D7], and dated policy impacts [N1-N4], leading to balanced but cautious view favoring Hold without clear directional edge. No entry, stop-loss, or sizing proposed as per evidence constraints.
+
+FINAL TRANSACTION PROPOSAL: **HOLD**
