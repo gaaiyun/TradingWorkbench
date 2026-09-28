@@ -1,113 +1,113 @@
 {
   "version": 1,
   "status": "ok",
-  "generated_at": "2026-09-25T16:01:43+08:00",
-  "trade_date": "2026-09-25",
+  "generated_at": "2026-09-28T16:01:16+08:00",
+  "trade_date": "2026-09-28",
   "global": {
     "status": "ok",
     "query_type": "global",
     "ticker": null,
-    "start_date": "2026-09-18",
-    "end_date": "2026-09-25",
-    "fetched_at": "2026-09-25T08:01:44Z",
+    "start_date": "2026-09-21",
+    "end_date": "2026-09-28",
+    "fetched_at": "2026-09-28T08:01:17Z",
     "items": [
       {
-        "title": "HSBC shuffles oil stocks ratings, upgrades BP and TotalEnergies to Buy",
+        "title": "European bourses slip after Trump rejects Iran proposal; tech stocks slip",
         "summary": "",
-        "url": "https://finance.yahoo.com/markets/stocks/articles/hsbc-shuffles-oil-stocks-ratings-074201093.html",
+        "url": "https://finance.yahoo.com/markets/stocks/articles/european-bourses-slip-trump-rejects-074309875.html",
         "source": "Investing.com",
-        "published_at": "2026-09-25T07:42:01Z",
-        "fetched_at": "2026-09-25T08:01:44Z",
+        "published_at": "2026-09-28T07:43:09Z",
+        "fetched_at": "2026-09-28T08:01:17Z",
         "ticker": null,
         "source_tier": "aggregator"
       },
       {
-        "title": "European equities edge higher as easing crude overshadow yield spikes",
+        "title": "Oil prices jump after Trump rejects Iran’s truce offer",
         "summary": "",
-        "url": "https://finance.yahoo.com/markets/world-indices/articles/european-equities-edge-higher-easing-073403876.html",
-        "source": "Investing.com",
-        "published_at": "2026-09-25T07:34:03Z",
-        "fetched_at": "2026-09-25T08:01:44Z",
+        "url": "https://finance.yahoo.com/energy/articles/oil-prices-jump-trump-rejects-054633588.html",
+        "source": "Euronews",
+        "published_at": "2026-09-28T07:21:36Z",
+        "fetched_at": "2026-09-28T08:01:17Z",
         "ticker": null,
         "source_tier": "aggregator"
       },
       {
-        "title": "European stocks on track for weekly gain as oil prices ease",
+        "title": "Datalec Strengthens its Liquid Cooling Capabilities with the Appointment of Dominik Dziarczykowski",
         "summary": "",
-        "url": "https://finance.yahoo.com/markets/world-indices/articles/european-stocks-track-weekly-gain-073241880.html",
+        "url": "https://finance.yahoo.com/technology/articles/datalec-strengthens-liquid-cooling-capabilities-070400930.html",
+        "source": "GlobeNewswire",
+        "published_at": "2026-09-28T07:04:00Z",
+        "fetched_at": "2026-09-28T08:01:17Z",
+        "ticker": null,
+        "source_tier": "aggregator"
+      },
+      {
+        "title": "Dollar Rises Along With Oil Prices as U.S.-Iran Talks Stall",
+        "summary": "",
+        "url": "https://finance.yahoo.com/m/43c58ee1-ad76-34b0-9800-a157582af919/dollar-rises-along-with-oil.html",
+        "source": "The Wall Street Journal",
+        "published_at": "2026-09-28T06:53:00Z",
+        "fetched_at": "2026-09-28T08:01:17Z",
+        "ticker": null,
+        "source_tier": "aggregator"
+      },
+      {
+        "title": "Zephyr Energy turns profit in first half, revenue lifted by rising oil price",
+        "summary": "",
+        "url": "https://finance.yahoo.com/energy/articles/zephyr-energy-turns-profit-first-065200593.html",
+        "source": "Proactive",
+        "published_at": "2026-09-28T06:52:00Z",
+        "fetched_at": "2026-09-28T08:01:17Z",
+        "ticker": null,
+        "source_tier": "aggregator"
+      },
+      {
+        "title": "Treasury Yields Rise Amid U.S.-Iran Diplomatic Stalemate",
+        "summary": "",
+        "url": "https://finance.yahoo.com/m/b2c6a11a-fd63-3ad9-8d95-5d47f23f4d1c/treasury-yields-rise-amid.html",
+        "source": "The Wall Street Journal",
+        "published_at": "2026-09-28T06:38:00Z",
+        "fetched_at": "2026-09-28T08:01:17Z",
+        "ticker": null,
+        "source_tier": "aggregator"
+      },
+      {
+        "title": "Stock Market News for Sep 28, 2026",
+        "summary": "",
+        "url": "https://finance.yahoo.com/markets/stocks/articles/stock-market-news-sep-28-060400192.html",
+        "source": "Zacks",
+        "published_at": "2026-09-28T06:04:00Z",
+        "fetched_at": "2026-09-28T08:01:17Z",
+        "ticker": null,
+        "source_tier": "aggregator"
+      },
+      {
+        "title": "Dollar holds firm as US-Iran tensions lift oil, hawkish Fed bets build",
+        "summary": "",
+        "url": "https://finance.yahoo.com/markets/currencies/articles/dollar-firms-us-iran-tensions-013542829.html",
         "source": "Reuters",
-        "published_at": "2026-09-25T07:32:41Z",
-        "fetched_at": "2026-09-25T08:01:44Z",
+        "published_at": "2026-09-28T06:03:01Z",
+        "fetched_at": "2026-09-28T08:01:17Z",
         "ticker": null,
         "source_tier": "aggregator"
       },
       {
-        "title": "Asian markets mixed after recent oil surge",
+        "title": "Oil heads higher as US-Iran peace talks in stalemate",
         "summary": "",
-        "url": "https://finance.yahoo.com/markets/world-indices/articles/asian-markets-mixed-recent-oil-072512362.html",
-        "source": "AFP",
-        "published_at": "2026-09-25T07:25:12Z",
-        "fetched_at": "2026-09-25T08:01:44Z",
-        "ticker": null,
-        "source_tier": "aggregator"
-      },
-      {
-        "title": "US Bond Yields Keep Climbing — But Retail Traders Still Can’t Get Enough Of Stocks",
-        "summary": "",
-        "url": "https://finance.yahoo.com/markets/stocks/articles/us-bond-yields-keep-climbing-071620110.html",
-        "source": "Stocktwits",
-        "published_at": "2026-09-25T07:16:20Z",
-        "fetched_at": "2026-09-25T08:01:44Z",
-        "ticker": null,
-        "source_tier": "aggregator"
-      },
-      {
-        "title": "Oil slides as US-Iran truce hopes outweigh Houthi attacks on Saudi Arabia",
-        "summary": "",
-        "url": "https://finance.yahoo.com/news/oil-prices-fall-markets-look-011125829.html",
+        "url": "https://finance.yahoo.com/energy/articles/oil-rebounds-trump-rejects-iran-221457073.html",
         "source": "Reuters",
-        "published_at": "2026-09-25T06:19:52Z",
-        "fetched_at": "2026-09-25T08:01:44Z",
+        "published_at": "2026-09-28T05:46:38Z",
+        "fetched_at": "2026-09-28T08:01:17Z",
         "ticker": null,
         "source_tier": "aggregator"
       },
       {
-        "title": "Asian stocks weather bond storm, oil retreats slightly",
+        "title": "Trumpflation Is No Longer Just an Gas Story: The US Economy Under Threat",
         "summary": "",
-        "url": "https://finance.yahoo.com/markets/world-indices/articles/asian-stocks-weather-bond-storm-021934818.html",
-        "source": "Reuters",
-        "published_at": "2026-09-25T06:15:11Z",
-        "fetched_at": "2026-09-25T08:01:44Z",
-        "ticker": null,
-        "source_tier": "aggregator"
-      },
-      {
-        "title": "Stocktwits Passport Portfolio: QQQ Weekly Rally Leaves SPY, DIA And Asia In The Dust",
-        "summary": "",
-        "url": "https://finance.yahoo.com/markets/stocks/articles/stocktwits-passport-portfolio-qqq-weekly-060930878.html",
-        "source": "Stocktwits",
-        "published_at": "2026-09-25T06:09:30Z",
-        "fetched_at": "2026-09-25T08:01:44Z",
-        "ticker": null,
-        "source_tier": "aggregator"
-      },
-      {
-        "title": "Rupiah heads for biggest weekly fall since May on higher US yields, firm dollar",
-        "summary": "",
-        "url": "https://finance.yahoo.com/markets/currencies/articles/rupiah-heads-biggest-weekly-fall-060057872.html",
-        "source": "Reuters",
-        "published_at": "2026-09-25T06:00:57Z",
-        "fetched_at": "2026-09-25T08:01:44Z",
-        "ticker": null,
-        "source_tier": "aggregator"
-      },
-      {
-        "title": "Costco Just Showed Why It's a Better Buy Than Walmart",
-        "summary": "",
-        "url": "https://finance.yahoo.com/markets/stocks/articles/costco-just-showed-why-better-055001241.html",
-        "source": "Motley Fool",
-        "published_at": "2026-09-25T05:50:01Z",
-        "fetched_at": "2026-09-25T08:01:44Z",
+        "url": "https://finance.yahoo.com/economy/articles/trumpflation-no-longer-just-gas-054500488.html",
+        "source": "BeInCrypto",
+        "published_at": "2026-09-28T05:45:00Z",
+        "fetched_at": "2026-09-28T08:01:17Z",
         "ticker": null,
         "source_tier": "aggregator"
       }
@@ -116,24 +116,45 @@
       {
         "source": "Yahoo Finance",
         "status": "ok",
-        "item_count": 49
+        "item_count": 46
       },
       {
         "source": "Federal Reserve",
         "status": "ok",
-        "item_count": 5
+        "item_count": 4
       }
     ]
   },
   "tickers": {
     "515880.SS": {
-      "status": "empty",
+      "status": "ok",
       "query_type": "ticker",
       "ticker": "515880.SS",
-      "start_date": "2026-09-25",
-      "end_date": "2026-09-25",
-      "fetched_at": "2026-09-25T08:01:46Z",
-      "items": [],
+      "start_date": "2026-09-28",
+      "end_date": "2026-09-28",
+      "fetched_at": "2026-09-28T08:01:19Z",
+      "items": [
+        {
+          "title": "通信ETF国泰（515880）开盘跌1.33%，重仓股新易盛跌0.60%，中际旭创跌1.32%",
+          "summary": "通信ETF国泰（515880）开盘跌1.33%，重仓股新易盛跌0.60%，中际旭创跌1.32% finance.sina.com.cn",
+          "url": "https://news.google.com/rss/articles/CBMimAFBVV95cUxOT21xVi12bGpvNmhobkhlVXEyM3g2NGNycWtCWU1pWElxckdudm9NNGtFUGhPRlRtZzZnSkU3X2pPdFZDVV9pN2lDTmlSelNsejdUd3pEU2F3YjFJeGhFanJkTzN5S0tnd2J6WDFTVHNPT3VXNnYzVUVxNkFFZHBNbHYzRTRZSDZjZGRRZERYQzhkT2xCZUkyUw?oc=5",
+          "source": "Google News / finance.sina.com.cn",
+          "published_at": "2026-09-28T01:30:00Z",
+          "fetched_at": "2026-09-28T08:01:19Z",
+          "ticker": "515880.SS",
+          "source_tier": "aggregator"
+        },
+        {
+          "title": "9月24日通信ETF国泰（515880）份额增加9.16亿份，最新份额659.94亿份，最新规模447.77亿元",
+          "summary": "9月24日通信ETF国泰（515880）份额增加9.16亿份，最新份额659.94亿份，最新规模447.77亿元 video.sina.com.cn",
+          "url": "https://news.google.com/rss/articles/CBMiggFBVV95cUxQaDg5NTlYMmhKUk5uREVQTkViMjlPQmVxN29RQXFwY1NoTkFLMUxOVWNQaVhrajVWRmxKSW9pNGo1QVBYV0FPMHd2YjAtNkNsZnlPWU8wM3VaQzR5V3pnendfa2JJQnZzNnp4cTJuajZYUjJOUDlhVl9EX2I0RGF3b0hR?oc=5",
+          "source": "Google News / video.sina.com.cn",
+          "published_at": "2026-09-28T01:07:46Z",
+          "fetched_at": "2026-09-28T08:01:19Z",
+          "ticker": "515880.SS",
+          "source_tier": "aggregator"
+        }
+      ],
       "source_statuses": [
         {
           "source": "Yahoo Finance",
@@ -142,8 +163,8 @@
         },
         {
           "source": "Google News RSS",
-          "status": "empty",
-          "item_count": 0
+          "status": "ok",
+          "item_count": 3
         },
         {
           "source": "SEC EDGAR",
@@ -156,9 +177,9 @@
       "status": "empty",
       "query_type": "ticker",
       "ticker": "512480.SS",
-      "start_date": "2026-09-25",
-      "end_date": "2026-09-25",
-      "fetched_at": "2026-09-25T08:01:49Z",
+      "start_date": "2026-09-28",
+      "end_date": "2026-09-28",
+      "fetched_at": "2026-09-28T08:01:22Z",
       "items": [],
       "source_statuses": [
         {
@@ -181,103 +202,123 @@
   },
   "items": [
     {
-      "title": "HSBC shuffles oil stocks ratings, upgrades BP and TotalEnergies to Buy",
+      "title": "European bourses slip after Trump rejects Iran proposal; tech stocks slip",
       "summary": "",
-      "url": "https://finance.yahoo.com/markets/stocks/articles/hsbc-shuffles-oil-stocks-ratings-074201093.html",
+      "url": "https://finance.yahoo.com/markets/stocks/articles/european-bourses-slip-trump-rejects-074309875.html",
       "source": "Investing.com",
-      "published_at": "2026-09-25T07:42:01Z",
-      "fetched_at": "2026-09-25T08:01:44Z",
+      "published_at": "2026-09-28T07:43:09Z",
+      "fetched_at": "2026-09-28T08:01:17Z",
       "ticker": null,
       "source_tier": "aggregator"
     },
     {
-      "title": "European equities edge higher as easing crude overshadow yield spikes",
+      "title": "Oil prices jump after Trump rejects Iran’s truce offer",
       "summary": "",
-      "url": "https://finance.yahoo.com/markets/world-indices/articles/european-equities-edge-higher-easing-073403876.html",
-      "source": "Investing.com",
-      "published_at": "2026-09-25T07:34:03Z",
-      "fetched_at": "2026-09-25T08:01:44Z",
+      "url": "https://finance.yahoo.com/energy/articles/oil-prices-jump-trump-rejects-054633588.html",
+      "source": "Euronews",
+      "published_at": "2026-09-28T07:21:36Z",
+      "fetched_at": "2026-09-28T08:01:17Z",
       "ticker": null,
       "source_tier": "aggregator"
     },
     {
-      "title": "European stocks on track for weekly gain as oil prices ease",
+      "title": "Datalec Strengthens its Liquid Cooling Capabilities with the Appointment of Dominik Dziarczykowski",
       "summary": "",
-      "url": "https://finance.yahoo.com/markets/world-indices/articles/european-stocks-track-weekly-gain-073241880.html",
+      "url": "https://finance.yahoo.com/technology/articles/datalec-strengthens-liquid-cooling-capabilities-070400930.html",
+      "source": "GlobeNewswire",
+      "published_at": "2026-09-28T07:04:00Z",
+      "fetched_at": "2026-09-28T08:01:17Z",
+      "ticker": null,
+      "source_tier": "aggregator"
+    },
+    {
+      "title": "Dollar Rises Along With Oil Prices as U.S.-Iran Talks Stall",
+      "summary": "",
+      "url": "https://finance.yahoo.com/m/43c58ee1-ad76-34b0-9800-a157582af919/dollar-rises-along-with-oil.html",
+      "source": "The Wall Street Journal",
+      "published_at": "2026-09-28T06:53:00Z",
+      "fetched_at": "2026-09-28T08:01:17Z",
+      "ticker": null,
+      "source_tier": "aggregator"
+    },
+    {
+      "title": "Zephyr Energy turns profit in first half, revenue lifted by rising oil price",
+      "summary": "",
+      "url": "https://finance.yahoo.com/energy/articles/zephyr-energy-turns-profit-first-065200593.html",
+      "source": "Proactive",
+      "published_at": "2026-09-28T06:52:00Z",
+      "fetched_at": "2026-09-28T08:01:17Z",
+      "ticker": null,
+      "source_tier": "aggregator"
+    },
+    {
+      "title": "Treasury Yields Rise Amid U.S.-Iran Diplomatic Stalemate",
+      "summary": "",
+      "url": "https://finance.yahoo.com/m/b2c6a11a-fd63-3ad9-8d95-5d47f23f4d1c/treasury-yields-rise-amid.html",
+      "source": "The Wall Street Journal",
+      "published_at": "2026-09-28T06:38:00Z",
+      "fetched_at": "2026-09-28T08:01:17Z",
+      "ticker": null,
+      "source_tier": "aggregator"
+    },
+    {
+      "title": "Stock Market News for Sep 28, 2026",
+      "summary": "",
+      "url": "https://finance.yahoo.com/markets/stocks/articles/stock-market-news-sep-28-060400192.html",
+      "source": "Zacks",
+      "published_at": "2026-09-28T06:04:00Z",
+      "fetched_at": "2026-09-28T08:01:17Z",
+      "ticker": null,
+      "source_tier": "aggregator"
+    },
+    {
+      "title": "Dollar holds firm as US-Iran tensions lift oil, hawkish Fed bets build",
+      "summary": "",
+      "url": "https://finance.yahoo.com/markets/currencies/articles/dollar-firms-us-iran-tensions-013542829.html",
       "source": "Reuters",
-      "published_at": "2026-09-25T07:32:41Z",
-      "fetched_at": "2026-09-25T08:01:44Z",
+      "published_at": "2026-09-28T06:03:01Z",
+      "fetched_at": "2026-09-28T08:01:17Z",
       "ticker": null,
       "source_tier": "aggregator"
     },
     {
-      "title": "Asian markets mixed after recent oil surge",
+      "title": "Oil heads higher as US-Iran peace talks in stalemate",
       "summary": "",
-      "url": "https://finance.yahoo.com/markets/world-indices/articles/asian-markets-mixed-recent-oil-072512362.html",
-      "source": "AFP",
-      "published_at": "2026-09-25T07:25:12Z",
-      "fetched_at": "2026-09-25T08:01:44Z",
-      "ticker": null,
-      "source_tier": "aggregator"
-    },
-    {
-      "title": "US Bond Yields Keep Climbing — But Retail Traders Still Can’t Get Enough Of Stocks",
-      "summary": "",
-      "url": "https://finance.yahoo.com/markets/stocks/articles/us-bond-yields-keep-climbing-071620110.html",
-      "source": "Stocktwits",
-      "published_at": "2026-09-25T07:16:20Z",
-      "fetched_at": "2026-09-25T08:01:44Z",
-      "ticker": null,
-      "source_tier": "aggregator"
-    },
-    {
-      "title": "Oil slides as US-Iran truce hopes outweigh Houthi attacks on Saudi Arabia",
-      "summary": "",
-      "url": "https://finance.yahoo.com/news/oil-prices-fall-markets-look-011125829.html",
+      "url": "https://finance.yahoo.com/energy/articles/oil-rebounds-trump-rejects-iran-221457073.html",
       "source": "Reuters",
-      "published_at": "2026-09-25T06:19:52Z",
-      "fetched_at": "2026-09-25T08:01:44Z",
+      "published_at": "2026-09-28T05:46:38Z",
+      "fetched_at": "2026-09-28T08:01:17Z",
       "ticker": null,
       "source_tier": "aggregator"
     },
     {
-      "title": "Asian stocks weather bond storm, oil retreats slightly",
+      "title": "Trumpflation Is No Longer Just an Gas Story: The US Economy Under Threat",
       "summary": "",
-      "url": "https://finance.yahoo.com/markets/world-indices/articles/asian-stocks-weather-bond-storm-021934818.html",
-      "source": "Reuters",
-      "published_at": "2026-09-25T06:15:11Z",
-      "fetched_at": "2026-09-25T08:01:44Z",
+      "url": "https://finance.yahoo.com/economy/articles/trumpflation-no-longer-just-gas-054500488.html",
+      "source": "BeInCrypto",
+      "published_at": "2026-09-28T05:45:00Z",
+      "fetched_at": "2026-09-28T08:01:17Z",
       "ticker": null,
       "source_tier": "aggregator"
     },
     {
-      "title": "Stocktwits Passport Portfolio: QQQ Weekly Rally Leaves SPY, DIA And Asia In The Dust",
-      "summary": "",
-      "url": "https://finance.yahoo.com/markets/stocks/articles/stocktwits-passport-portfolio-qqq-weekly-060930878.html",
-      "source": "Stocktwits",
-      "published_at": "2026-09-25T06:09:30Z",
-      "fetched_at": "2026-09-25T08:01:44Z",
-      "ticker": null,
+      "title": "通信ETF国泰（515880）开盘跌1.33%，重仓股新易盛跌0.60%，中际旭创跌1.32%",
+      "summary": "通信ETF国泰（515880）开盘跌1.33%，重仓股新易盛跌0.60%，中际旭创跌1.32% finance.sina.com.cn",
+      "url": "https://news.google.com/rss/articles/CBMimAFBVV95cUxOT21xVi12bGpvNmhobkhlVXEyM3g2NGNycWtCWU1pWElxckdudm9NNGtFUGhPRlRtZzZnSkU3X2pPdFZDVV9pN2lDTmlSelNsejdUd3pEU2F3YjFJeGhFanJkTzN5S0tnd2J6WDFTVHNPT3VXNnYzVUVxNkFFZHBNbHYzRTRZSDZjZGRRZERYQzhkT2xCZUkyUw?oc=5",
+      "source": "Google News / finance.sina.com.cn",
+      "published_at": "2026-09-28T01:30:00Z",
+      "fetched_at": "2026-09-28T08:01:19Z",
+      "ticker": "515880.SS",
       "source_tier": "aggregator"
     },
     {
-      "title": "Rupiah heads for biggest weekly fall since May on higher US yields, firm dollar",
-      "summary": "",
-      "url": "https://finance.yahoo.com/markets/currencies/articles/rupiah-heads-biggest-weekly-fall-060057872.html",
-      "source": "Reuters",
-      "published_at": "2026-09-25T06:00:57Z",
-      "fetched_at": "2026-09-25T08:01:44Z",
-      "ticker": null,
-      "source_tier": "aggregator"
-    },
-    {
-      "title": "Costco Just Showed Why It's a Better Buy Than Walmart",
-      "summary": "",
-      "url": "https://finance.yahoo.com/markets/stocks/articles/costco-just-showed-why-better-055001241.html",
-      "source": "Motley Fool",
-      "published_at": "2026-09-25T05:50:01Z",
-      "fetched_at": "2026-09-25T08:01:44Z",
-      "ticker": null,
+      "title": "9月24日通信ETF国泰（515880）份额增加9.16亿份，最新份额659.94亿份，最新规模447.77亿元",
+      "summary": "9月24日通信ETF国泰（515880）份额增加9.16亿份，最新份额659.94亿份，最新规模447.77亿元 video.sina.com.cn",
+      "url": "https://news.google.com/rss/articles/CBMiggFBVV95cUxQaDg5NTlYMmhKUk5uREVQTkViMjlPQmVxN29RQXFwY1NoTkFLMUxOVWNQaVhrajVWRmxKSW9pNGo1QVBYV0FPMHd2YjAtNkNsZnlPWU8wM3VaQzR5V3pnendfa2JJQnZzNnp4cTJuajZYUjJOUDlhVl9EX2I0RGF3b0hR?oc=5",
+      "source": "Google News / video.sina.com.cn",
+      "published_at": "2026-09-28T01:07:46Z",
+      "fetched_at": "2026-09-28T08:01:19Z",
+      "ticker": "515880.SS",
       "source_tier": "aggregator"
     }
   ]
