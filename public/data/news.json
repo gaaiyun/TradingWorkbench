@@ -1,113 +1,113 @@
 {
   "version": 1,
   "status": "ok",
-  "generated_at": "2026-09-29T16:01:12+08:00",
-  "trade_date": "2026-09-29",
+  "generated_at": "2026-09-30T16:01:04+08:00",
+  "trade_date": "2026-09-30",
   "global": {
     "status": "ok",
     "query_type": "global",
     "ticker": null,
-    "start_date": "2026-09-22",
-    "end_date": "2026-09-29",
-    "fetched_at": "2026-09-29T08:01:12Z",
+    "start_date": "2026-09-23",
+    "end_date": "2026-09-30",
+    "fetched_at": "2026-09-30T08:01:04Z",
     "items": [
       {
-        "title": "Oil Just Jumped on Trump's Iran Rejection -- and TotalEnergies Is Already Cashing In",
+        "title": "Most equities rise after oil price plunge, US data in focus",
         "summary": "",
-        "url": "https://finance.yahoo.com/energy/articles/oil-just-jumped-trumps-iran-074105321.html",
-        "source": "Motley Fool",
-        "published_at": "2026-09-29T07:41:05Z",
-        "fetched_at": "2026-09-29T08:01:12Z",
-        "ticker": null,
-        "source_tier": "aggregator"
-      },
-      {
-        "title": "European shares edge higher as tech stocks offset oil pressure",
-        "summary": "",
-        "url": "https://finance.yahoo.com/markets/stocks/articles/european-shares-edge-higher-tech-073205231.html",
-        "source": "Reuters",
-        "published_at": "2026-09-29T07:32:05Z",
-        "fetched_at": "2026-09-29T08:01:12Z",
-        "ticker": null,
-        "source_tier": "aggregator"
-      },
-      {
-        "title": "Oil prices rise as bond sell-off hits global markets",
-        "summary": "",
-        "url": "https://finance.yahoo.com/energy/articles/oil-prices-rise-bond-sell-060349286.html",
-        "source": "Euronews",
-        "published_at": "2026-09-29T07:28:05Z",
-        "fetched_at": "2026-09-29T08:01:12Z",
-        "ticker": null,
-        "source_tier": "aggregator"
-      },
-      {
-        "title": "European Indexes Gain at the Open as AI-Related Stocks Rally",
-        "summary": "",
-        "url": "https://finance.yahoo.com/m/99879c2e-b8df-3eb0-8cd7-3231385b31d5/european-indexes-gain-at-the.html",
-        "source": "The Wall Street Journal",
-        "published_at": "2026-09-29T07:22:00Z",
-        "fetched_at": "2026-09-29T08:01:12Z",
-        "ticker": null,
-        "source_tier": "aggregator"
-      },
-      {
-        "title": "Australian central bank lifts key interest rate to 15-year high",
-        "summary": "",
-        "url": "https://finance.yahoo.com/economy/policy/articles/australian-central-bank-lifts-key-071825768.html",
+        "url": "https://finance.yahoo.com/markets/stocks/articles/stocks-temper-gains-oil-pares-024801869.html",
         "source": "AFP",
-        "published_at": "2026-09-29T07:18:25Z",
-        "fetched_at": "2026-09-29T08:01:12Z",
+        "published_at": "2026-09-30T07:38:45Z",
+        "fetched_at": "2026-09-30T08:01:04Z",
         "ticker": null,
         "source_tier": "aggregator"
       },
       {
-        "title": "Boeing (BA) Reaches Tentative Four Year Union Deal Covering 17,000 Engineers",
+        "title": "European shares set for first monthly loss in six as bond yields weigh",
         "summary": "",
-        "url": "https://finance.yahoo.com/markets/stocks/articles/boeing-ba-reaches-tentative-four-070815432.html",
-        "source": "Simply Wall St.",
-        "published_at": "2026-09-29T07:08:15Z",
-        "fetched_at": "2026-09-29T08:01:12Z",
+        "url": "https://finance.yahoo.com/markets/world-indices/articles/european-shares-set-first-monthly-073210619.html",
+        "source": "Reuters",
+        "published_at": "2026-09-30T07:32:10Z",
+        "fetched_at": "2026-09-30T08:01:04Z",
         "ticker": null,
         "source_tier": "aggregator"
       },
       {
-        "title": "Chevron (CVX) Signs Vietnam Energy Supply Agreement",
+        "title": "Oil Falls on Signs of Middle East Export Recovery",
         "summary": "",
-        "url": "https://finance.yahoo.com/energy/articles/chevron-cvx-signs-vietnam-energy-070802964.html",
-        "source": "Simply Wall St.",
-        "published_at": "2026-09-29T07:08:02Z",
-        "fetched_at": "2026-09-29T08:01:12Z",
-        "ticker": null,
-        "source_tier": "aggregator"
-      },
-      {
-        "title": "Treasury Yields Trade Close to Multidecade Highs",
-        "summary": "",
-        "url": "https://finance.yahoo.com/m/ef5f9143-8bb1-3bc7-bbb2-388ef9f76173/treasury-yields-trade-close.html",
+        "url": "https://finance.yahoo.com/m/89673ec3-f9dd-3cab-967b-969784ffe78b/oil-falls-on-signs-of-middle.html",
         "source": "The Wall Street Journal",
-        "published_at": "2026-09-29T06:35:00Z",
-        "fetched_at": "2026-09-29T08:01:12Z",
+        "published_at": "2026-09-30T07:32:00Z",
+        "fetched_at": "2026-09-30T08:01:04Z",
         "ticker": null,
         "source_tier": "aggregator"
       },
       {
-        "title": "U.S. Treasury Yields Edge Higher, Hover Near Recent Highs",
+        "title": "European Indexes Open Higher, Gains Across Sectors",
         "summary": "",
-        "url": "https://finance.yahoo.com/m/02686758-532d-3f82-bed3-35e052f2bcb7/u.s.-treasury-yields-edge.html",
+        "url": "https://finance.yahoo.com/m/50c3e932-fb9b-3409-9093-f85c2f8ac75f/european-indexes-open-higher%2C.html",
         "source": "The Wall Street Journal",
-        "published_at": "2026-09-29T06:26:00Z",
-        "fetched_at": "2026-09-29T08:01:12Z",
+        "published_at": "2026-09-30T07:31:00Z",
+        "fetched_at": "2026-09-30T08:01:04Z",
         "ticker": null,
         "source_tier": "aggregator"
       },
       {
-        "title": "Oil Stocks With Direct Brent And WTI Exposure Investors Should Watch",
+        "title": "Ulta Beauty (ULTA) Turns Wellness Boutiques Into A Bigger Beauty Aisle Fight",
         "summary": "",
-        "url": "https://finance.yahoo.com/energy/articles/oil-stocks-direct-brent-wti-061137600.html",
+        "url": "https://finance.yahoo.com/markets/stocks/articles/ulta-beauty-ulta-turns-wellness-070723461.html",
         "source": "Simply Wall St.",
-        "published_at": "2026-09-29T06:11:37Z",
-        "fetched_at": "2026-09-29T08:01:12Z",
+        "published_at": "2026-09-30T07:07:23Z",
+        "fetched_at": "2026-09-30T08:01:04Z",
+        "ticker": null,
+        "source_tier": "aggregator"
+      },
+      {
+        "title": "Oil gains after Trump denies he is willing to ease Iran sanctions",
+        "summary": "",
+        "url": "https://finance.yahoo.com/energy/articles/oil-gains-trump-denies-willing-043538093.html",
+        "source": "Reuters",
+        "published_at": "2026-09-30T07:06:28Z",
+        "fetched_at": "2026-09-30T08:01:04Z",
+        "ticker": null,
+        "source_tier": "aggregator"
+      },
+      {
+        "title": "Walmart (WMT) Says its Digital Shelf Labels Do Not Use Personal Data to Set Prices",
+        "summary": "",
+        "url": "https://finance.yahoo.com/markets/stocks/articles/walmart-wmt-says-digital-shelf-064751305.html",
+        "source": "Insider Monkey",
+        "published_at": "2026-09-30T06:47:51Z",
+        "fetched_at": "2026-09-30T08:01:04Z",
+        "ticker": null,
+        "source_tier": "aggregator"
+      },
+      {
+        "title": "Chariot says production pivot set to deliver cashflow in 2027",
+        "summary": "",
+        "url": "https://finance.yahoo.com/energy/articles/chariot-says-production-pivot-set-064600082.html",
+        "source": "Proactive",
+        "published_at": "2026-09-30T06:46:00Z",
+        "fetched_at": "2026-09-30T08:01:04Z",
+        "ticker": null,
+        "source_tier": "aggregator"
+      },
+      {
+        "title": "Tertiary Minerals raises £1m to advance deep drilling",
+        "summary": "",
+        "url": "https://finance.yahoo.com/markets/stocks/articles/tertiary-minerals-raises-1m-advance-063700000.html",
+        "source": "Proactive",
+        "published_at": "2026-09-30T06:37:00Z",
+        "fetched_at": "2026-09-30T08:01:04Z",
+        "ticker": null,
+        "source_tier": "aggregator"
+      },
+      {
+        "title": "Stock Market: Will S&P 500 Open Up or Down Today?",
+        "summary": "",
+        "url": "https://finance.yahoo.com/markets/stocks/articles/stock-market-p-500-open-051415288.html",
+        "source": "Benzinga Prediction Markets",
+        "published_at": "2026-09-30T05:14:15Z",
+        "fetched_at": "2026-09-30T08:01:04Z",
         "ticker": null,
         "source_tier": "aggregator"
       }
@@ -116,7 +116,7 @@
       {
         "source": "Yahoo Finance",
         "status": "ok",
-        "item_count": 49
+        "item_count": 50
       },
       {
         "source": "Federal Reserve",
@@ -127,24 +127,13 @@
   },
   "tickers": {
     "515880.SS": {
-      "status": "ok",
+      "status": "empty",
       "query_type": "ticker",
       "ticker": "515880.SS",
-      "start_date": "2026-09-29",
-      "end_date": "2026-09-29",
-      "fetched_at": "2026-09-29T08:01:14Z",
-      "items": [
-        {
-          "title": "9月28日通信ETF国泰（515880）份额增加24.66亿份，最新份额684.60亿份，最新规模430.48亿元",
-          "summary": "9月28日通信ETF国泰（515880）份额增加24.66亿份，最新份额684.60亿份，最新规模430.48亿元 finance.sina.com.cn",
-          "url": "https://news.google.com/rss/articles/CBMimwFBVV95cUxNQkpIcE10UzVIeDFfZWZJbWtZVmtGTFA5cVEwb0R1Wnk3bU5Id0ZKZGFmd05ybmQ5WTcwQjVrRDNxaG9HTTE5NTFaam5WdnlRczdyRjlxTWNCcC1QRWp5WjNyUW40VkZSS2wxcFNSR290U3F3d2c4N3BFcTVpU1V4dW81ZlluekRXSTVuZ0NGaG1nbkp5RDZNVXNRUQ?oc=5",
-          "source": "Google News / finance.sina.com.cn",
-          "published_at": "2026-09-29T01:00:00Z",
-          "fetched_at": "2026-09-29T08:01:14Z",
-          "ticker": "515880.SS",
-          "source_tier": "aggregator"
-        }
-      ],
+      "start_date": "2026-09-30",
+      "end_date": "2026-09-30",
+      "fetched_at": "2026-09-30T08:01:06Z",
+      "items": [],
       "source_statuses": [
         {
           "source": "Yahoo Finance",
@@ -153,8 +142,8 @@
         },
         {
           "source": "Google News RSS",
-          "status": "ok",
-          "item_count": 1
+          "status": "empty",
+          "item_count": 0
         },
         {
           "source": "SEC EDGAR",
@@ -164,24 +153,13 @@
       ]
     },
     "512480.SS": {
-      "status": "ok",
+      "status": "empty",
       "query_type": "ticker",
       "ticker": "512480.SS",
-      "start_date": "2026-09-29",
-      "end_date": "2026-09-29",
-      "fetched_at": "2026-09-29T08:01:16Z",
-      "items": [
-        {
-          "title": "9月28日半导体ETF国联安（512480）份额增加2.20亿份，最新份额199.26亿份，最新规模195.14亿元",
-          "summary": "9月28日半导体ETF国联安（512480）份额增加2.20亿份，最新份额199.26亿份，最新规模195.14亿元 finance.sina.com.cn",
-          "url": "https://news.google.com/rss/articles/CBMimwFBVV95cUxQSU56aFljODFSeEpWd1MxSFJOekZybzZmRHFrUHhLdlZhblpVakt5dXVVRWtLNDVka1NCTW9QYXp0U0syYmJSM3luX3ZpZ01JZ1hMcDlzNnFkbkg4eW9nWi1DZVJhZmRhdnd2TjJzMHZmcks5R3lUVThkdFVDUTBxS3BwZjltNlRoaEN6UF9vT2xmZ3RPa2doRjhqdw?oc=5",
-          "source": "Google News / finance.sina.com.cn",
-          "published_at": "2026-09-29T01:00:00Z",
-          "fetched_at": "2026-09-29T08:01:16Z",
-          "ticker": "512480.SS",
-          "source_tier": "aggregator"
-        }
-      ],
+      "start_date": "2026-09-30",
+      "end_date": "2026-09-30",
+      "fetched_at": "2026-09-30T08:01:23Z",
+      "items": [],
       "source_statuses": [
         {
           "source": "Yahoo Finance",
@@ -190,8 +168,8 @@
         },
         {
           "source": "Google News RSS",
-          "status": "ok",
-          "item_count": 1
+          "status": "empty",
+          "item_count": 0
         },
         {
           "source": "SEC EDGAR",
@@ -203,123 +181,103 @@
   },
   "items": [
     {
-      "title": "Oil Just Jumped on Trump's Iran Rejection -- and TotalEnergies Is Already Cashing In",
+      "title": "Most equities rise after oil price plunge, US data in focus",
       "summary": "",
-      "url": "https://finance.yahoo.com/energy/articles/oil-just-jumped-trumps-iran-074105321.html",
-      "source": "Motley Fool",
-      "published_at": "2026-09-29T07:41:05Z",
-      "fetched_at": "2026-09-29T08:01:12Z",
-      "ticker": null,
-      "source_tier": "aggregator"
-    },
-    {
-      "title": "European shares edge higher as tech stocks offset oil pressure",
-      "summary": "",
-      "url": "https://finance.yahoo.com/markets/stocks/articles/european-shares-edge-higher-tech-073205231.html",
-      "source": "Reuters",
-      "published_at": "2026-09-29T07:32:05Z",
-      "fetched_at": "2026-09-29T08:01:12Z",
-      "ticker": null,
-      "source_tier": "aggregator"
-    },
-    {
-      "title": "Oil prices rise as bond sell-off hits global markets",
-      "summary": "",
-      "url": "https://finance.yahoo.com/energy/articles/oil-prices-rise-bond-sell-060349286.html",
-      "source": "Euronews",
-      "published_at": "2026-09-29T07:28:05Z",
-      "fetched_at": "2026-09-29T08:01:12Z",
-      "ticker": null,
-      "source_tier": "aggregator"
-    },
-    {
-      "title": "European Indexes Gain at the Open as AI-Related Stocks Rally",
-      "summary": "",
-      "url": "https://finance.yahoo.com/m/99879c2e-b8df-3eb0-8cd7-3231385b31d5/european-indexes-gain-at-the.html",
-      "source": "The Wall Street Journal",
-      "published_at": "2026-09-29T07:22:00Z",
-      "fetched_at": "2026-09-29T08:01:12Z",
-      "ticker": null,
-      "source_tier": "aggregator"
-    },
-    {
-      "title": "Australian central bank lifts key interest rate to 15-year high",
-      "summary": "",
-      "url": "https://finance.yahoo.com/economy/policy/articles/australian-central-bank-lifts-key-071825768.html",
+      "url": "https://finance.yahoo.com/markets/stocks/articles/stocks-temper-gains-oil-pares-024801869.html",
       "source": "AFP",
-      "published_at": "2026-09-29T07:18:25Z",
-      "fetched_at": "2026-09-29T08:01:12Z",
+      "published_at": "2026-09-30T07:38:45Z",
+      "fetched_at": "2026-09-30T08:01:04Z",
       "ticker": null,
       "source_tier": "aggregator"
     },
     {
-      "title": "Boeing (BA) Reaches Tentative Four Year Union Deal Covering 17,000 Engineers",
+      "title": "European shares set for first monthly loss in six as bond yields weigh",
       "summary": "",
-      "url": "https://finance.yahoo.com/markets/stocks/articles/boeing-ba-reaches-tentative-four-070815432.html",
-      "source": "Simply Wall St.",
-      "published_at": "2026-09-29T07:08:15Z",
-      "fetched_at": "2026-09-29T08:01:12Z",
+      "url": "https://finance.yahoo.com/markets/world-indices/articles/european-shares-set-first-monthly-073210619.html",
+      "source": "Reuters",
+      "published_at": "2026-09-30T07:32:10Z",
+      "fetched_at": "2026-09-30T08:01:04Z",
       "ticker": null,
       "source_tier": "aggregator"
     },
     {
-      "title": "Chevron (CVX) Signs Vietnam Energy Supply Agreement",
+      "title": "Oil Falls on Signs of Middle East Export Recovery",
       "summary": "",
-      "url": "https://finance.yahoo.com/energy/articles/chevron-cvx-signs-vietnam-energy-070802964.html",
-      "source": "Simply Wall St.",
-      "published_at": "2026-09-29T07:08:02Z",
-      "fetched_at": "2026-09-29T08:01:12Z",
-      "ticker": null,
-      "source_tier": "aggregator"
-    },
-    {
-      "title": "Treasury Yields Trade Close to Multidecade Highs",
-      "summary": "",
-      "url": "https://finance.yahoo.com/m/ef5f9143-8bb1-3bc7-bbb2-388ef9f76173/treasury-yields-trade-close.html",
+      "url": "https://finance.yahoo.com/m/89673ec3-f9dd-3cab-967b-969784ffe78b/oil-falls-on-signs-of-middle.html",
       "source": "The Wall Street Journal",
-      "published_at": "2026-09-29T06:35:00Z",
-      "fetched_at": "2026-09-29T08:01:12Z",
+      "published_at": "2026-09-30T07:32:00Z",
+      "fetched_at": "2026-09-30T08:01:04Z",
       "ticker": null,
       "source_tier": "aggregator"
     },
     {
-      "title": "U.S. Treasury Yields Edge Higher, Hover Near Recent Highs",
+      "title": "European Indexes Open Higher, Gains Across Sectors",
       "summary": "",
-      "url": "https://finance.yahoo.com/m/02686758-532d-3f82-bed3-35e052f2bcb7/u.s.-treasury-yields-edge.html",
+      "url": "https://finance.yahoo.com/m/50c3e932-fb9b-3409-9093-f85c2f8ac75f/european-indexes-open-higher%2C.html",
       "source": "The Wall Street Journal",
-      "published_at": "2026-09-29T06:26:00Z",
-      "fetched_at": "2026-09-29T08:01:12Z",
+      "published_at": "2026-09-30T07:31:00Z",
+      "fetched_at": "2026-09-30T08:01:04Z",
       "ticker": null,
       "source_tier": "aggregator"
     },
     {
-      "title": "Oil Stocks With Direct Brent And WTI Exposure Investors Should Watch",
+      "title": "Ulta Beauty (ULTA) Turns Wellness Boutiques Into A Bigger Beauty Aisle Fight",
       "summary": "",
-      "url": "https://finance.yahoo.com/energy/articles/oil-stocks-direct-brent-wti-061137600.html",
+      "url": "https://finance.yahoo.com/markets/stocks/articles/ulta-beauty-ulta-turns-wellness-070723461.html",
       "source": "Simply Wall St.",
-      "published_at": "2026-09-29T06:11:37Z",
-      "fetched_at": "2026-09-29T08:01:12Z",
+      "published_at": "2026-09-30T07:07:23Z",
+      "fetched_at": "2026-09-30T08:01:04Z",
       "ticker": null,
       "source_tier": "aggregator"
     },
     {
-      "title": "9月28日通信ETF国泰（515880）份额增加24.66亿份，最新份额684.60亿份，最新规模430.48亿元",
-      "summary": "9月28日通信ETF国泰（515880）份额增加24.66亿份，最新份额684.60亿份，最新规模430.48亿元 finance.sina.com.cn",
-      "url": "https://news.google.com/rss/articles/CBMimwFBVV95cUxNQkpIcE10UzVIeDFfZWZJbWtZVmtGTFA5cVEwb0R1Wnk3bU5Id0ZKZGFmd05ybmQ5WTcwQjVrRDNxaG9HTTE5NTFaam5WdnlRczdyRjlxTWNCcC1QRWp5WjNyUW40VkZSS2wxcFNSR290U3F3d2c4N3BFcTVpU1V4dW81ZlluekRXSTVuZ0NGaG1nbkp5RDZNVXNRUQ?oc=5",
-      "source": "Google News / finance.sina.com.cn",
-      "published_at": "2026-09-29T01:00:00Z",
-      "fetched_at": "2026-09-29T08:01:14Z",
-      "ticker": "515880.SS",
+      "title": "Oil gains after Trump denies he is willing to ease Iran sanctions",
+      "summary": "",
+      "url": "https://finance.yahoo.com/energy/articles/oil-gains-trump-denies-willing-043538093.html",
+      "source": "Reuters",
+      "published_at": "2026-09-30T07:06:28Z",
+      "fetched_at": "2026-09-30T08:01:04Z",
+      "ticker": null,
       "source_tier": "aggregator"
     },
     {
-      "title": "9月28日半导体ETF国联安（512480）份额增加2.20亿份，最新份额199.26亿份，最新规模195.14亿元",
-      "summary": "9月28日半导体ETF国联安（512480）份额增加2.20亿份，最新份额199.26亿份，最新规模195.14亿元 finance.sina.com.cn",
-      "url": "https://news.google.com/rss/articles/CBMimwFBVV95cUxQSU56aFljODFSeEpWd1MxSFJOekZybzZmRHFrUHhLdlZhblpVakt5dXVVRWtLNDVka1NCTW9QYXp0U0syYmJSM3luX3ZpZ01JZ1hMcDlzNnFkbkg4eW9nWi1DZVJhZmRhdnd2TjJzMHZmcks5R3lUVThkdFVDUTBxS3BwZjltNlRoaEN6UF9vT2xmZ3RPa2doRjhqdw?oc=5",
-      "source": "Google News / finance.sina.com.cn",
-      "published_at": "2026-09-29T01:00:00Z",
-      "fetched_at": "2026-09-29T08:01:16Z",
-      "ticker": "512480.SS",
+      "title": "Walmart (WMT) Says its Digital Shelf Labels Do Not Use Personal Data to Set Prices",
+      "summary": "",
+      "url": "https://finance.yahoo.com/markets/stocks/articles/walmart-wmt-says-digital-shelf-064751305.html",
+      "source": "Insider Monkey",
+      "published_at": "2026-09-30T06:47:51Z",
+      "fetched_at": "2026-09-30T08:01:04Z",
+      "ticker": null,
+      "source_tier": "aggregator"
+    },
+    {
+      "title": "Chariot says production pivot set to deliver cashflow in 2027",
+      "summary": "",
+      "url": "https://finance.yahoo.com/energy/articles/chariot-says-production-pivot-set-064600082.html",
+      "source": "Proactive",
+      "published_at": "2026-09-30T06:46:00Z",
+      "fetched_at": "2026-09-30T08:01:04Z",
+      "ticker": null,
+      "source_tier": "aggregator"
+    },
+    {
+      "title": "Tertiary Minerals raises £1m to advance deep drilling",
+      "summary": "",
+      "url": "https://finance.yahoo.com/markets/stocks/articles/tertiary-minerals-raises-1m-advance-063700000.html",
+      "source": "Proactive",
+      "published_at": "2026-09-30T06:37:00Z",
+      "fetched_at": "2026-09-30T08:01:04Z",
+      "ticker": null,
+      "source_tier": "aggregator"
+    },
+    {
+      "title": "Stock Market: Will S&P 500 Open Up or Down Today?",
+      "summary": "",
+      "url": "https://finance.yahoo.com/markets/stocks/articles/stock-market-p-500-open-051415288.html",
+      "source": "Benzinga Prediction Markets",
+      "published_at": "2026-09-30T05:14:15Z",
+      "fetched_at": "2026-09-30T08:01:04Z",
+      "ticker": null,
       "source_tier": "aggregator"
     }
   ]

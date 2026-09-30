@@ -1,7 +1,7 @@
 {
   "status": "ok",
-  "generated_at": "2026-09-29T16:01:12+08:00",
-  "trade_date": "2026-09-29",
+  "generated_at": "2026-09-30T16:01:04+08:00",
+  "trade_date": "2026-09-30",
   "provider": "openai_compatible",
   "analysts": [
     "market",
@@ -19,19 +19,19 @@
     "kind": "monitor"
   },
   "run": {
-    "id": "36540021700",
+    "id": "36687015444",
     "attempt": "1",
     "workflow": "daily-analysis",
-    "url": "https://github.com/gaaiyun/TradingWorkbench/actions/runs/36540021700"
+    "url": "https://github.com/gaaiyun/TradingWorkbench/actions/runs/36687015444"
   },
   "identity": {
     "scope": "profile",
     "kind": "monitor",
-    "runId": "36540021700",
+    "runId": "36687015444",
     "profileId": "cn-semi-comms",
     "requestId": null,
-    "slotId": "slot-d6be5bd293fe2a796a7d16fdf9fa2314bfa73635f266c26c4ea963d0d3302269",
-    "scheduledFor": "2026-09-29T07:17:48.000Z"
+    "slotId": "slot-e7987c2ba27c595f2ed3882ed0a507c5b30c8e512300212f4162fdf006b9b1d0",
+    "scheduledFor": "2026-09-30T07:17:15.000Z"
   },
   "rating_tiers": [
     "Sell",
@@ -58,22 +58,22 @@
     {
       "ticker": "512480.SS",
       "rating": "Hold",
-      "report": "reports/512480.SS/2026-09-29/complete_report.md",
+      "report": "reports/512480.SS/2026-09-30/complete_report.md",
       "files": {
-        "fundamentals": "reports/512480.SS/2026-09-29/1_analysts/fundamentals.md",
-        "market": "reports/512480.SS/2026-09-29/1_analysts/market.md",
-        "news": "reports/512480.SS/2026-09-29/1_analysts/news.md",
-        "bear": "reports/512480.SS/2026-09-29/2_research/bear.md",
-        "bull": "reports/512480.SS/2026-09-29/2_research/bull.md",
-        "manager": "reports/512480.SS/2026-09-29/2_research/manager.md",
-        "trader": "reports/512480.SS/2026-09-29/3_trading/trader.md",
-        "aggressive": "reports/512480.SS/2026-09-29/4_risk/aggressive.md",
-        "conservative": "reports/512480.SS/2026-09-29/4_risk/conservative.md",
-        "neutral": "reports/512480.SS/2026-09-29/4_risk/neutral.md",
-        "decision": "reports/512480.SS/2026-09-29/5_portfolio/decision.md",
-        "complete_report": "reports/512480.SS/2026-09-29/complete_report.md"
+        "fundamentals": "reports/512480.SS/2026-09-30/1_analysts/fundamentals.md",
+        "market": "reports/512480.SS/2026-09-30/1_analysts/market.md",
+        "news": "reports/512480.SS/2026-09-30/1_analysts/news.md",
+        "bear": "reports/512480.SS/2026-09-30/2_research/bear.md",
+        "bull": "reports/512480.SS/2026-09-30/2_research/bull.md",
+        "manager": "reports/512480.SS/2026-09-30/2_research/manager.md",
+        "trader": "reports/512480.SS/2026-09-30/3_trading/trader.md",
+        "aggressive": "reports/512480.SS/2026-09-30/4_risk/aggressive.md",
+        "conservative": "reports/512480.SS/2026-09-30/4_risk/conservative.md",
+        "neutral": "reports/512480.SS/2026-09-30/4_risk/neutral.md",
+        "decision": "reports/512480.SS/2026-09-30/5_portfolio/decision.md",
+        "complete_report": "reports/512480.SS/2026-09-30/complete_report.md"
       },
-      "decision_excerpt": "**Rating**: 持有\n\n**Executive Summary**: 风险分析师辩论呈现混合视角。激进分析师强调半导体行业政府政策驱动和ETF份额拆分提升流动性。[N2][N3][CA1][CA2]\n保守分析师关注高实现波动率34.23516164%和不可用ETF持仓、NAV溢折价、跟踪误差、费用数据。[I10]\n中性分析师建议平衡看待并维持仓位同时监控。[neutral analyst summary]\n研究经理的投资计划明确推荐持有仓位。[Research Manager's investment plan: Hold]\n牛方论点因明确正面公司行动和政策支持而权重更强，超过中性不可用数据。[rules]\n\n**Investment Thesis**: 半导体行业受益于集成电路布图设计保护条例。[N2][N3]\nETF份额拆分公告已实施并调整最小申购赎回单位。[CA1][CA2]",
+      "decision_excerpt": "**Rating**: Hold\n\n**Executive Summary**: 短期技术面存在严格MA熊市对齐。[D7]\nMA20 为 0.99705。[I5]\nMA60 为 1.0331。[I6]\n最近八个交易日收盘变化百分比为 -7.78098059。[D2]\nMACD 指标值为 -0.00836434。[I7]\nRSI14 指标值为 38.75916513。[I11]\nRSI 未触及超卖阈值 30。[D8]\n长期政策支持公告存在。[N2]\n份额拆分事件已发生。[CA2]\n份额拆分事件已发生。[CA1]\n\n**Investment Thesis**: 维持 512480.SS 当前暴露以平衡短期波动与长期潜力。[D2]\n需持续监控 MA 对齐改善情况。[D7]\n政策公告本身未提供量化影响证据。[N2]\n基本面持仓 NAV 费用跟踪误差不可用。[unavailable]",
       "analysis_status": "rated",
       "audit_status": "verified",
       "evidence_publish": {
@@ -83,9 +83,9 @@
       "marketHistory": {
         "source": "tencent",
         "adjustment": "mixed",
-        "barCount": 696,
+        "barCount": 697,
         "startAt": "2023-11-29T16:00:00Z",
-        "endAt": "2026-09-28T16:00:00Z"
+        "endAt": "2026-09-29T16:00:00Z"
       },
       "error": null
     }

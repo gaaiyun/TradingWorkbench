@@ -1,0 +1,5 @@
+**Action**: Hold
+
+**Reasoning**: The bull analyst highlights long-term semiconductor policy support via IC design protection regulations (N2, N3) and share splits for liquidity (CA2, CA1) outweighing short-term technical weaknesses including strict MA bearish alignment (D7 using M697, I5, I6), recent 8-day close drop of -7.78098059% (D2 using M690-M697), and negative MACD (I7), with RSI at 38.76 (I11) not oversold. However, the bear analyst notes policies lack impact data while bearish signals persist (close < MA20 < MA60 per D7, drops per D2 and D3, high ATR per I10 and D4) and unavailable fundamentals like holdings, index tracking, NAV, fees, tracking error. Bear arguments on structural risks and missing data carry stronger weight, leading to a cautious hold stance per the research plan.
+
+FINAL TRANSACTION PROPOSAL: **HOLD**
