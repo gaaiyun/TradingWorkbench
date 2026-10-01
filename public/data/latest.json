@@ -1,7 +1,7 @@
 {
   "status": "ok",
-  "generated_at": "2026-09-30T16:01:04+08:00",
-  "trade_date": "2026-09-30",
+  "generated_at": "2026-10-01T16:01:19+08:00",
+  "trade_date": "2026-10-01",
   "provider": "openai_compatible",
   "analysts": [
     "market",
@@ -19,19 +19,19 @@
     "kind": "monitor"
   },
   "run": {
-    "id": "36687015444",
+    "id": "36833680929",
     "attempt": "1",
     "workflow": "daily-analysis",
-    "url": "https://github.com/gaaiyun/TradingWorkbench/actions/runs/36687015444"
+    "url": "https://github.com/gaaiyun/TradingWorkbench/actions/runs/36833680929"
   },
   "identity": {
     "scope": "profile",
     "kind": "monitor",
-    "runId": "36687015444",
+    "runId": "36833680929",
     "profileId": "cn-semi-comms",
     "requestId": null,
-    "slotId": "slot-e7987c2ba27c595f2ed3882ed0a507c5b30c8e512300212f4162fdf006b9b1d0",
-    "scheduledFor": "2026-09-30T07:17:15.000Z"
+    "slotId": "slot-e1d62aaf250d46d3ccf3942cf6874bd10255c0a1fe2b5a0ac2d36a8424997e58",
+    "scheduledFor": "2026-10-01T07:17:15.000Z"
   },
   "rating_tiers": [
     "Sell",
@@ -57,25 +57,25 @@
     },
     {
       "ticker": "512480.SS",
-      "rating": "Hold",
-      "report": "reports/512480.SS/2026-09-30/complete_report.md",
+      "rating": "Not Rated",
+      "report": "reports/512480.SS/2026-10-01/complete_report.md",
       "files": {
-        "fundamentals": "reports/512480.SS/2026-09-30/1_analysts/fundamentals.md",
-        "market": "reports/512480.SS/2026-09-30/1_analysts/market.md",
-        "news": "reports/512480.SS/2026-09-30/1_analysts/news.md",
-        "bear": "reports/512480.SS/2026-09-30/2_research/bear.md",
-        "bull": "reports/512480.SS/2026-09-30/2_research/bull.md",
-        "manager": "reports/512480.SS/2026-09-30/2_research/manager.md",
-        "trader": "reports/512480.SS/2026-09-30/3_trading/trader.md",
-        "aggressive": "reports/512480.SS/2026-09-30/4_risk/aggressive.md",
-        "conservative": "reports/512480.SS/2026-09-30/4_risk/conservative.md",
-        "neutral": "reports/512480.SS/2026-09-30/4_risk/neutral.md",
-        "decision": "reports/512480.SS/2026-09-30/5_portfolio/decision.md",
-        "complete_report": "reports/512480.SS/2026-09-30/complete_report.md"
+        "fundamentals": "reports/512480.SS/2026-10-01/1_analysts/fundamentals.md",
+        "market": "reports/512480.SS/2026-10-01/1_analysts/market.md",
+        "news": "reports/512480.SS/2026-10-01/1_analysts/news.md",
+        "bear": "reports/512480.SS/2026-10-01/2_research/bear.md",
+        "bull": "reports/512480.SS/2026-10-01/2_research/bull.md",
+        "manager": "reports/512480.SS/2026-10-01/2_research/manager.md",
+        "trader": "reports/512480.SS/2026-10-01/3_trading/trader.md",
+        "aggressive": "reports/512480.SS/2026-10-01/4_risk/aggressive.md",
+        "conservative": "reports/512480.SS/2026-10-01/4_risk/conservative.md",
+        "neutral": "reports/512480.SS/2026-10-01/4_risk/neutral.md",
+        "decision": "reports/512480.SS/2026-10-01/5_portfolio/decision.md",
+        "complete_report": "reports/512480.SS/2026-10-01/complete_report.md"
       },
-      "decision_excerpt": "**Rating**: Hold\n\n**Executive Summary**: 短期技术面存在严格MA熊市对齐。[D7]\nMA20 为 0.99705。[I5]\nMA60 为 1.0331。[I6]\n最近八个交易日收盘变化百分比为 -7.78098059。[D2]\nMACD 指标值为 -0.00836434。[I7]\nRSI14 指标值为 38.75916513。[I11]\nRSI 未触及超卖阈值 30。[D8]\n长期政策支持公告存在。[N2]\n份额拆分事件已发生。[CA2]\n份额拆分事件已发生。[CA1]\n\n**Investment Thesis**: 维持 512480.SS 当前暴露以平衡短期波动与长期潜力。[D2]\n需持续监控 MA 对齐改善情况。[D7]\n政策公告本身未提供量化影响证据。[N2]\n基本面持仓 NAV 费用跟踪误差不可用。[unavailable]",
-      "analysis_status": "rated",
-      "audit_status": "verified",
+      "decision_excerpt": "**Rating**: Hold\n**Executive Summary**:\n过去八个交易日的收盘价变化为-8.26128798%[D2]。\n最新一天的收盘价变化为-3.04568528%[D3]。\nMA20指标值为0.9968[I5]。\nMA60指标值为1.03301667[I6]。\nMA20与MA60呈现bearish对齐[D7]。\nRSI14指标值为37.99196883[I11]。\n过去二十天实现波动率为34.36217195%[I10]。\n持仓NAV、费用率、跟踪误差、持仓构成和流动性等数据均为unavailable[S1]。\n2026年6月28日发生基金份额拆分行动[CA2]。\n2026年7月2日发生基金份额拆分行动[CA1]。\n2026年8月30日发布中期报告[N1]。\n2026年7月20日发布季度报告[N4]。\n集成电路布图设计保护条例在2026年8月2日[N3]。\n集成",
+      "analysis_status": "insufficient_evidence",
+      "audit_status": "legacy_unverified",
       "evidence_publish": {
         "published": true,
         "status": 201
