@@ -1,7 +1,7 @@
 {
   "status": "ok",
-  "generated_at": "2026-10-01T16:01:19+08:00",
-  "trade_date": "2026-10-01",
+  "generated_at": "2026-10-02T16:01:02+08:00",
+  "trade_date": "2026-10-02",
   "provider": "openai_compatible",
   "analysts": [
     "market",
@@ -19,19 +19,19 @@
     "kind": "monitor"
   },
   "run": {
-    "id": "36833680929",
+    "id": "36981590087",
     "attempt": "1",
     "workflow": "daily-analysis",
-    "url": "https://github.com/gaaiyun/TradingWorkbench/actions/runs/36833680929"
+    "url": "https://github.com/gaaiyun/TradingWorkbench/actions/runs/36981590087"
   },
   "identity": {
     "scope": "profile",
     "kind": "monitor",
-    "runId": "36833680929",
+    "runId": "36981590087",
     "profileId": "cn-semi-comms",
     "requestId": null,
-    "slotId": "slot-e1d62aaf250d46d3ccf3942cf6874bd10255c0a1fe2b5a0ac2d36a8424997e58",
-    "scheduledFor": "2026-10-01T07:17:15.000Z"
+    "slotId": "slot-3ca29fb57684e17d7c825fbcef8df0bff08c323573f2a50143b09e4c6050f077",
+    "scheduledFor": "2026-10-02T07:17:15.000Z"
   },
   "rating_tiers": [
     "Sell",
@@ -57,25 +57,25 @@
     },
     {
       "ticker": "512480.SS",
-      "rating": "Not Rated",
-      "report": "reports/512480.SS/2026-10-01/complete_report.md",
+      "rating": "Hold",
+      "report": "reports/512480.SS/2026-10-02/complete_report.md",
       "files": {
-        "fundamentals": "reports/512480.SS/2026-10-01/1_analysts/fundamentals.md",
-        "market": "reports/512480.SS/2026-10-01/1_analysts/market.md",
-        "news": "reports/512480.SS/2026-10-01/1_analysts/news.md",
-        "bear": "reports/512480.SS/2026-10-01/2_research/bear.md",
-        "bull": "reports/512480.SS/2026-10-01/2_research/bull.md",
-        "manager": "reports/512480.SS/2026-10-01/2_research/manager.md",
-        "trader": "reports/512480.SS/2026-10-01/3_trading/trader.md",
-        "aggressive": "reports/512480.SS/2026-10-01/4_risk/aggressive.md",
-        "conservative": "reports/512480.SS/2026-10-01/4_risk/conservative.md",
-        "neutral": "reports/512480.SS/2026-10-01/4_risk/neutral.md",
-        "decision": "reports/512480.SS/2026-10-01/5_portfolio/decision.md",
-        "complete_report": "reports/512480.SS/2026-10-01/complete_report.md"
+        "fundamentals": "reports/512480.SS/2026-10-02/1_analysts/fundamentals.md",
+        "market": "reports/512480.SS/2026-10-02/1_analysts/market.md",
+        "news": "reports/512480.SS/2026-10-02/1_analysts/news.md",
+        "bear": "reports/512480.SS/2026-10-02/2_research/bear.md",
+        "bull": "reports/512480.SS/2026-10-02/2_research/bull.md",
+        "manager": "reports/512480.SS/2026-10-02/2_research/manager.md",
+        "trader": "reports/512480.SS/2026-10-02/3_trading/trader.md",
+        "aggressive": "reports/512480.SS/2026-10-02/4_risk/aggressive.md",
+        "conservative": "reports/512480.SS/2026-10-02/4_risk/conservative.md",
+        "neutral": "reports/512480.SS/2026-10-02/4_risk/neutral.md",
+        "decision": "reports/512480.SS/2026-10-02/5_portfolio/decision.md",
+        "complete_report": "reports/512480.SS/2026-10-02/complete_report.md"
       },
-      "decision_excerpt": "**Rating**: Hold\n**Executive Summary**:\n过去八个交易日的收盘价变化为-8.26128798%[D2]。\n最新一天的收盘价变化为-3.04568528%[D3]。\nMA20指标值为0.9968[I5]。\nMA60指标值为1.03301667[I6]。\nMA20与MA60呈现bearish对齐[D7]。\nRSI14指标值为37.99196883[I11]。\n过去二十天实现波动率为34.36217195%[I10]。\n持仓NAV、费用率、跟踪误差、持仓构成和流动性等数据均为unavailable[S1]。\n2026年6月28日发生基金份额拆分行动[CA2]。\n2026年7月2日发生基金份额拆分行动[CA1]。\n2026年8月30日发布中期报告[N1]。\n2026年7月20日发布季度报告[N4]。\n集成电路布图设计保护条例在2026年8月2日[N3]。\n集成",
-      "analysis_status": "insufficient_evidence",
-      "audit_status": "legacy_unverified",
+      "decision_excerpt": "**Rating**: Hold\n**Executive Summary**: 风险分析师辩论呈现平衡立场。激进分析师强调N2集成电路布图设计保护条例作为长期半导体增长驱动因素。[N2]\n保守分析师指出M690至M697八个交易日价格下跌。[M690][M697]\n中立分析师认为政策事件和拆分事件提供叙事但缺乏量化影响。[N1][N4][CA2]\n最终共识为维持持仓行动。[no ID]\n**Investment Thesis**: N2集成电路布图设计保护条例于2026-08-19发布。[N2]\nN3集成电路布图设计保护条例于2026-08-02发布。[N3]\nN1中期报告于2026-08-30发布。[N1]\nN4季度报告于2026-07-20发布。[N4]\nCA2基金份额拆分于2026-06-28实施并2026-07-02公告。[CA2][N6]\nCA1基金份额拆分于2026-07-02",
+      "analysis_status": "rated",
+      "audit_status": "verified",
       "evidence_publish": {
         "published": true,
         "status": 201

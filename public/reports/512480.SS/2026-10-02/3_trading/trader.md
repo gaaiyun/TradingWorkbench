@@ -1,0 +1,5 @@
+**Action**: Hold
+
+**Reasoning**: Bull Analyst highlights positive N2 N3 IC design protection regulations (2026-08-19, 2026-08-02) and N1 N4 reports as long-term semiconductor growth drivers, plus CA2 N6 share splits (2026-06-28, 2026-07-02) as liquidity enhancers via lower min units. Bear Analyst counters with M690-M697 price decline D2 -8.26128798% over 8 days, strict bearish MA alignment D7 (close 0.955 < MA20 0.9968 < MA60 1.03301667), RSI14 37.99196883 below midline, negative MACD histogram I8, and unavailable data (holdings, index, NAV, fees, tracking error, concentration) per rules. Policy and CA events provide bullish narrative but lack quantified impact on holdings or inflows; technical weakness and data gaps create balanced risk. No evidence favors one side decisively on fundamentals, so recommendation is Hold.
+
+FINAL TRANSACTION PROPOSAL: **HOLD**

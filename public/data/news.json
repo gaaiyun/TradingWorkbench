@@ -1,113 +1,113 @@
 {
   "version": 1,
   "status": "ok",
-  "generated_at": "2026-10-01T16:01:19+08:00",
-  "trade_date": "2026-10-01",
+  "generated_at": "2026-10-02T16:01:02+08:00",
+  "trade_date": "2026-10-02",
   "global": {
     "status": "ok",
     "query_type": "global",
     "ticker": null,
-    "start_date": "2026-09-24",
-    "end_date": "2026-10-01",
-    "fetched_at": "2026-10-01T08:01:20Z",
+    "start_date": "2026-09-25",
+    "end_date": "2026-10-02",
+    "fetched_at": "2026-10-02T08:01:03Z",
     "items": [
       {
-        "title": "European stocks slip as Q4 begins on soaring energy and inflation pain",
+        "title": "Oil retreats as market weighs mixed supply signals",
         "summary": "",
-        "url": "https://finance.yahoo.com/economy/articles/european-stocks-slip-q4-begins-073845162.html",
-        "source": "Investing.com",
-        "published_at": "2026-10-01T07:38:45Z",
-        "fetched_at": "2026-10-01T08:01:20Z",
-        "ticker": null,
-        "source_tier": "aggregator"
-      },
-      {
-        "title": "Asian tech firms stand out on mixed day for stocks",
-        "summary": "",
-        "url": "https://finance.yahoo.com/markets/world-indices/articles/asian-stocks-mixed-positive-us-030749694.html",
-        "source": "AFP",
-        "published_at": "2026-10-01T07:35:09Z",
-        "fetched_at": "2026-10-01T08:01:20Z",
-        "ticker": null,
-        "source_tier": "aggregator"
-      },
-      {
-        "title": "European stocks start quarter lower as global yields hit multi-year highs",
-        "summary": "",
-        "url": "https://finance.yahoo.com/markets/world-indices/articles/european-stocks-start-quarter-lower-073043128.html",
+        "url": "https://finance.yahoo.com/energy/articles/oil-rises-slightly-market-weighs-010952829.html",
         "source": "Reuters",
-        "published_at": "2026-10-01T07:30:43Z",
-        "fetched_at": "2026-10-01T08:01:20Z",
+        "published_at": "2026-10-02T06:40:26Z",
+        "fetched_at": "2026-10-02T08:01:03Z",
         "ticker": null,
         "source_tier": "aggregator"
       },
       {
-        "title": "This Fidelity Manager Likes Coca-Cola, Keurig Dr Pepper, and Other Consumer Staples Bargains",
+        "title": "Chevron Stock And 2 Top Energy Stocks",
         "summary": "",
-        "url": "https://finance.yahoo.com/m/7924773d-4acb-31ff-93ce-2822367b45d8/this-fidelity-manager-likes.html",
-        "source": "Barrons.com",
-        "published_at": "2026-10-01T07:30:00Z",
-        "fetched_at": "2026-10-01T08:01:20Z",
-        "ticker": null,
-        "source_tier": "aggregator"
-      },
-      {
-        "title": "If a Stock Market Crash Is Coming, History Says the Smartest Investors Are All Making the Same Move",
-        "summary": "",
-        "url": "https://finance.yahoo.com/markets/stocks/articles/stock-market-crash-coming-history-072000341.html",
-        "source": "Motley Fool",
-        "published_at": "2026-10-01T07:20:00Z",
-        "fetched_at": "2026-10-01T08:01:20Z",
-        "ticker": null,
-        "source_tier": "aggregator"
-      },
-      {
-        "title": "Oil steadies as Gulf exports recover, US-Iran diplomacy in focus",
-        "summary": "",
-        "url": "https://finance.yahoo.com/energy/articles/oil-dips-recovering-gulf-exports-044504275.html",
-        "source": "Reuters",
-        "published_at": "2026-10-01T07:18:26Z",
-        "fetched_at": "2026-10-01T08:01:20Z",
-        "ticker": null,
-        "source_tier": "aggregator"
-      },
-      {
-        "title": "Cenovus Energy And 2 Canadian Oil Stocks To Watch",
-        "summary": "",
-        "url": "https://finance.yahoo.com/energy/articles/cenovus-energy-2-canadian-oil-071108977.html",
+        "url": "https://finance.yahoo.com/energy/articles/chevron-stock-2-top-energy-060841830.html",
         "source": "Simply Wall St.",
-        "published_at": "2026-10-01T07:11:08Z",
-        "fetched_at": "2026-10-01T08:01:20Z",
+        "published_at": "2026-10-02T06:08:41Z",
+        "fetched_at": "2026-10-02T08:01:03Z",
         "ticker": null,
         "source_tier": "aggregator"
       },
       {
-        "title": "Delta (DAL) Stock May Be Undervalued On Falling Oil Prices",
+        "title": "Asian shares fall after wild swings in bonds, FX; US jobs data looms",
         "summary": "",
-        "url": "https://finance.yahoo.com/markets/stocks/articles/delta-dal-stock-may-undervalued-070841651.html",
-        "source": "Simply Wall St.",
-        "published_at": "2026-10-01T07:08:41Z",
-        "fetched_at": "2026-10-01T08:01:20Z",
-        "ticker": null,
-        "source_tier": "aggregator"
-      },
-      {
-        "title": "Bonds teeter after US Treasuries' worst quarter since 1994",
-        "summary": "",
-        "url": "https://finance.yahoo.com/economy/policy/articles/bonds-teeter-us-treasuries-worst-062456693.html",
+        "url": "https://finance.yahoo.com/markets/currencies/articles/asian-shares-fall-wild-swings-020953867.html",
         "source": "Reuters",
-        "published_at": "2026-10-01T06:24:56Z",
-        "fetched_at": "2026-10-01T08:01:20Z",
+        "published_at": "2026-10-02T06:04:46Z",
+        "fetched_at": "2026-10-02T08:01:03Z",
         "ticker": null,
         "source_tier": "aggregator"
       },
       {
-        "title": "Endeavour Silver Eyes 25M Ounces as Terronera, Kolpa and Pitarrilla Advance",
+        "title": "Comstock Launches 24/7 Solar Panel Recycling at Nevada Facility",
         "summary": "",
-        "url": "https://finance.yahoo.com/markets/commodities/articles/endeavour-silver-eyes-25m-ounces-060210427.html",
+        "url": "https://finance.yahoo.com/energy/articles/comstock-launches-24-7-solar-060203686.html",
         "source": "MarketBeat",
-        "published_at": "2026-10-01T06:02:10Z",
-        "fetched_at": "2026-10-01T08:01:20Z",
+        "published_at": "2026-10-02T06:02:03Z",
+        "fetched_at": "2026-10-02T08:01:03Z",
+        "ticker": null,
+        "source_tier": "aggregator"
+      },
+      {
+        "title": "Dollar at 17-month high as bond rout, French fiscal worries weigh on euro",
+        "summary": "",
+        "url": "https://finance.yahoo.com/markets/currencies/articles/dollar-17-month-high-global-014904581.html",
+        "source": "Reuters",
+        "published_at": "2026-10-02T05:49:06Z",
+        "fetched_at": "2026-10-02T08:01:03Z",
+        "ticker": null,
+        "source_tier": "aggregator"
+      },
+      {
+        "title": "Asia energy stocks rise as Middle East tensions lift oil",
+        "summary": "",
+        "url": "https://finance.yahoo.com/energy/articles/asia-energy-stocks-rise-middle-051039314.html",
+        "source": "Investing.com",
+        "published_at": "2026-10-02T05:10:39Z",
+        "fetched_at": "2026-10-02T08:01:03Z",
+        "ticker": null,
+        "source_tier": "aggregator"
+      },
+      {
+        "title": "Gulf oil is finally flowing again. But it might not stop a ‘terrifying’ winter",
+        "summary": "",
+        "url": "https://finance.yahoo.com/energy/articles/gulf-oil-finally-flowing-again-050000550.html",
+        "source": "The Telegraph",
+        "published_at": "2026-10-02T05:00:00Z",
+        "fetched_at": "2026-10-02T08:01:03Z",
+        "ticker": null,
+        "source_tier": "aggregator"
+      },
+      {
+        "title": "Asian shares mixed after global bond sell-off deepens and ahead of US jobs data",
+        "summary": "",
+        "url": "https://finance.yahoo.com/markets/world-indices/articles/asian-shares-mixed-global-bond-045348374.html",
+        "source": "Associated Press",
+        "published_at": "2026-10-02T04:53:48Z",
+        "fetched_at": "2026-10-02T08:01:03Z",
+        "ticker": null,
+        "source_tier": "aggregator"
+      },
+      {
+        "title": "Bond Markets Functioning In An ‘Orderly’ Manner? El-Erian Calls IMF's Reassurance 'Highly Unusual'",
+        "summary": "",
+        "url": "https://finance.yahoo.com/markets/articles/bond-markets-functioning-orderly-manner-044402307.html",
+        "source": "Stocktwits",
+        "published_at": "2026-10-02T04:44:02Z",
+        "fetched_at": "2026-10-02T08:01:03Z",
+        "ticker": null,
+        "source_tier": "aggregator"
+      },
+      {
+        "title": "Dollar rally stalls ahead of payrolls test; yen firms on strong Tokyo inflation",
+        "summary": "",
+        "url": "https://finance.yahoo.com/markets/currencies/articles/japanese-yen-firms-strong-inflation-040620760.html",
+        "source": "Investing.com",
+        "published_at": "2026-10-02T04:06:20Z",
+        "fetched_at": "2026-10-02T08:01:03Z",
         "ticker": null,
         "source_tier": "aggregator"
       }
@@ -116,12 +116,12 @@
       {
         "source": "Yahoo Finance",
         "status": "ok",
-        "item_count": 46
+        "item_count": 49
       },
       {
         "source": "Federal Reserve",
         "status": "ok",
-        "item_count": 5
+        "item_count": 3
       }
     ]
   },
@@ -130,9 +130,9 @@
       "status": "empty",
       "query_type": "ticker",
       "ticker": "515880.SS",
-      "start_date": "2026-10-01",
-      "end_date": "2026-10-01",
-      "fetched_at": "2026-10-01T08:01:22Z",
+      "start_date": "2026-10-02",
+      "end_date": "2026-10-02",
+      "fetched_at": "2026-10-02T08:01:04Z",
       "items": [],
       "source_statuses": [
         {
@@ -156,9 +156,9 @@
       "status": "empty",
       "query_type": "ticker",
       "ticker": "512480.SS",
-      "start_date": "2026-10-01",
-      "end_date": "2026-10-01",
-      "fetched_at": "2026-10-01T08:01:25Z",
+      "start_date": "2026-10-02",
+      "end_date": "2026-10-02",
+      "fetched_at": "2026-10-02T08:01:07Z",
       "items": [],
       "source_statuses": [
         {
@@ -181,102 +181,102 @@
   },
   "items": [
     {
-      "title": "European stocks slip as Q4 begins on soaring energy and inflation pain",
+      "title": "Oil retreats as market weighs mixed supply signals",
       "summary": "",
-      "url": "https://finance.yahoo.com/economy/articles/european-stocks-slip-q4-begins-073845162.html",
-      "source": "Investing.com",
-      "published_at": "2026-10-01T07:38:45Z",
-      "fetched_at": "2026-10-01T08:01:20Z",
-      "ticker": null,
-      "source_tier": "aggregator"
-    },
-    {
-      "title": "Asian tech firms stand out on mixed day for stocks",
-      "summary": "",
-      "url": "https://finance.yahoo.com/markets/world-indices/articles/asian-stocks-mixed-positive-us-030749694.html",
-      "source": "AFP",
-      "published_at": "2026-10-01T07:35:09Z",
-      "fetched_at": "2026-10-01T08:01:20Z",
-      "ticker": null,
-      "source_tier": "aggregator"
-    },
-    {
-      "title": "European stocks start quarter lower as global yields hit multi-year highs",
-      "summary": "",
-      "url": "https://finance.yahoo.com/markets/world-indices/articles/european-stocks-start-quarter-lower-073043128.html",
+      "url": "https://finance.yahoo.com/energy/articles/oil-rises-slightly-market-weighs-010952829.html",
       "source": "Reuters",
-      "published_at": "2026-10-01T07:30:43Z",
-      "fetched_at": "2026-10-01T08:01:20Z",
+      "published_at": "2026-10-02T06:40:26Z",
+      "fetched_at": "2026-10-02T08:01:03Z",
       "ticker": null,
       "source_tier": "aggregator"
     },
     {
-      "title": "This Fidelity Manager Likes Coca-Cola, Keurig Dr Pepper, and Other Consumer Staples Bargains",
+      "title": "Chevron Stock And 2 Top Energy Stocks",
       "summary": "",
-      "url": "https://finance.yahoo.com/m/7924773d-4acb-31ff-93ce-2822367b45d8/this-fidelity-manager-likes.html",
-      "source": "Barrons.com",
-      "published_at": "2026-10-01T07:30:00Z",
-      "fetched_at": "2026-10-01T08:01:20Z",
-      "ticker": null,
-      "source_tier": "aggregator"
-    },
-    {
-      "title": "If a Stock Market Crash Is Coming, History Says the Smartest Investors Are All Making the Same Move",
-      "summary": "",
-      "url": "https://finance.yahoo.com/markets/stocks/articles/stock-market-crash-coming-history-072000341.html",
-      "source": "Motley Fool",
-      "published_at": "2026-10-01T07:20:00Z",
-      "fetched_at": "2026-10-01T08:01:20Z",
-      "ticker": null,
-      "source_tier": "aggregator"
-    },
-    {
-      "title": "Oil steadies as Gulf exports recover, US-Iran diplomacy in focus",
-      "summary": "",
-      "url": "https://finance.yahoo.com/energy/articles/oil-dips-recovering-gulf-exports-044504275.html",
-      "source": "Reuters",
-      "published_at": "2026-10-01T07:18:26Z",
-      "fetched_at": "2026-10-01T08:01:20Z",
-      "ticker": null,
-      "source_tier": "aggregator"
-    },
-    {
-      "title": "Cenovus Energy And 2 Canadian Oil Stocks To Watch",
-      "summary": "",
-      "url": "https://finance.yahoo.com/energy/articles/cenovus-energy-2-canadian-oil-071108977.html",
+      "url": "https://finance.yahoo.com/energy/articles/chevron-stock-2-top-energy-060841830.html",
       "source": "Simply Wall St.",
-      "published_at": "2026-10-01T07:11:08Z",
-      "fetched_at": "2026-10-01T08:01:20Z",
+      "published_at": "2026-10-02T06:08:41Z",
+      "fetched_at": "2026-10-02T08:01:03Z",
       "ticker": null,
       "source_tier": "aggregator"
     },
     {
-      "title": "Delta (DAL) Stock May Be Undervalued On Falling Oil Prices",
+      "title": "Asian shares fall after wild swings in bonds, FX; US jobs data looms",
       "summary": "",
-      "url": "https://finance.yahoo.com/markets/stocks/articles/delta-dal-stock-may-undervalued-070841651.html",
-      "source": "Simply Wall St.",
-      "published_at": "2026-10-01T07:08:41Z",
-      "fetched_at": "2026-10-01T08:01:20Z",
-      "ticker": null,
-      "source_tier": "aggregator"
-    },
-    {
-      "title": "Bonds teeter after US Treasuries' worst quarter since 1994",
-      "summary": "",
-      "url": "https://finance.yahoo.com/economy/policy/articles/bonds-teeter-us-treasuries-worst-062456693.html",
+      "url": "https://finance.yahoo.com/markets/currencies/articles/asian-shares-fall-wild-swings-020953867.html",
       "source": "Reuters",
-      "published_at": "2026-10-01T06:24:56Z",
-      "fetched_at": "2026-10-01T08:01:20Z",
+      "published_at": "2026-10-02T06:04:46Z",
+      "fetched_at": "2026-10-02T08:01:03Z",
       "ticker": null,
       "source_tier": "aggregator"
     },
     {
-      "title": "Endeavour Silver Eyes 25M Ounces as Terronera, Kolpa and Pitarrilla Advance",
+      "title": "Comstock Launches 24/7 Solar Panel Recycling at Nevada Facility",
       "summary": "",
-      "url": "https://finance.yahoo.com/markets/commodities/articles/endeavour-silver-eyes-25m-ounces-060210427.html",
+      "url": "https://finance.yahoo.com/energy/articles/comstock-launches-24-7-solar-060203686.html",
       "source": "MarketBeat",
-      "published_at": "2026-10-01T06:02:10Z",
-      "fetched_at": "2026-10-01T08:01:20Z",
+      "published_at": "2026-10-02T06:02:03Z",
+      "fetched_at": "2026-10-02T08:01:03Z",
+      "ticker": null,
+      "source_tier": "aggregator"
+    },
+    {
+      "title": "Dollar at 17-month high as bond rout, French fiscal worries weigh on euro",
+      "summary": "",
+      "url": "https://finance.yahoo.com/markets/currencies/articles/dollar-17-month-high-global-014904581.html",
+      "source": "Reuters",
+      "published_at": "2026-10-02T05:49:06Z",
+      "fetched_at": "2026-10-02T08:01:03Z",
+      "ticker": null,
+      "source_tier": "aggregator"
+    },
+    {
+      "title": "Asia energy stocks rise as Middle East tensions lift oil",
+      "summary": "",
+      "url": "https://finance.yahoo.com/energy/articles/asia-energy-stocks-rise-middle-051039314.html",
+      "source": "Investing.com",
+      "published_at": "2026-10-02T05:10:39Z",
+      "fetched_at": "2026-10-02T08:01:03Z",
+      "ticker": null,
+      "source_tier": "aggregator"
+    },
+    {
+      "title": "Gulf oil is finally flowing again. But it might not stop a ‘terrifying’ winter",
+      "summary": "",
+      "url": "https://finance.yahoo.com/energy/articles/gulf-oil-finally-flowing-again-050000550.html",
+      "source": "The Telegraph",
+      "published_at": "2026-10-02T05:00:00Z",
+      "fetched_at": "2026-10-02T08:01:03Z",
+      "ticker": null,
+      "source_tier": "aggregator"
+    },
+    {
+      "title": "Asian shares mixed after global bond sell-off deepens and ahead of US jobs data",
+      "summary": "",
+      "url": "https://finance.yahoo.com/markets/world-indices/articles/asian-shares-mixed-global-bond-045348374.html",
+      "source": "Associated Press",
+      "published_at": "2026-10-02T04:53:48Z",
+      "fetched_at": "2026-10-02T08:01:03Z",
+      "ticker": null,
+      "source_tier": "aggregator"
+    },
+    {
+      "title": "Bond Markets Functioning In An ‘Orderly’ Manner? El-Erian Calls IMF's Reassurance 'Highly Unusual'",
+      "summary": "",
+      "url": "https://finance.yahoo.com/markets/articles/bond-markets-functioning-orderly-manner-044402307.html",
+      "source": "Stocktwits",
+      "published_at": "2026-10-02T04:44:02Z",
+      "fetched_at": "2026-10-02T08:01:03Z",
+      "ticker": null,
+      "source_tier": "aggregator"
+    },
+    {
+      "title": "Dollar rally stalls ahead of payrolls test; yen firms on strong Tokyo inflation",
+      "summary": "",
+      "url": "https://finance.yahoo.com/markets/currencies/articles/japanese-yen-firms-strong-inflation-040620760.html",
+      "source": "Investing.com",
+      "published_at": "2026-10-02T04:06:20Z",
+      "fetched_at": "2026-10-02T08:01:03Z",
       "ticker": null,
       "source_tier": "aggregator"
     }
