@@ -1,17 +1,113 @@
 {
   "version": 1,
-  "generatedAt": "2026-10-02T08:09:25.575Z",
+  "generatedAt": "2026-10-05T11:19:40.198Z",
   "summary": {
-    "successfulReports": 71,
-    "verifiedReports": 28,
-    "invalidatedReports": 4,
-    "legacyUnverifiedReports": 39,
-    "invalidRecords": 38,
-    "evidenceValidationFailures": 28,
+    "successfulReports": 70,
+    "verifiedReports": 29,
+    "invalidatedReports": 3,
+    "legacyUnverifiedReports": 38,
+    "invalidRecords": 39,
+    "evidenceValidationFailures": 29,
     "analysisExecutionFailures": 10,
     "invalidInputs": 0
   },
   "reports": [
+    {
+      "ticker": "515880.SS",
+      "tradeDate": "2026-10-05",
+      "generatedAt": "2026-10-05T19:06:30+08:00",
+      "provider": "openai_compatible",
+      "rating": null,
+      "analysisStatus": "data_validation_failed",
+      "report": null,
+      "auditStatus": "invalid_record",
+      "failureClass": "evidence_validation",
+      "problemCodes": [
+        "EVIDENCE_VALIDATION_FAILED"
+      ],
+      "evidence": {
+        "urlCount": 0,
+        "claimCitationCount": 0,
+        "finalProposalMarkers": 0,
+        "priceTargetCount": 0,
+        "valuationMethodCount": 0,
+        "publishedMarkerCount": 0
+      },
+      "claimValidation": null,
+      "evidencePacket": null,
+      "evidencePublish": {
+        "published": true,
+        "status": 201
+      },
+      "identity": {
+        "scope": "profile",
+        "kind": "monitor",
+        "runId": "37300718705",
+        "profileId": "cn-semi-comms",
+        "requestId": null,
+        "slotId": "slot-1b25880d17b9729f726badeb6aefa6f48d343ce957c446124e9036fc8b6873a9",
+        "scheduledFor": "2026-10-05T07:24:27.000Z"
+      },
+      "supersededBy": null
+    },
+    {
+      "ticker": "512480.SS",
+      "tradeDate": "2026-10-05",
+      "generatedAt": "2026-10-05T19:06:30+08:00",
+      "provider": "openai_compatible",
+      "rating": "Hold",
+      "analysisStatus": "rated",
+      "report": "reports/512480.SS/2026-10-05/complete_report.md",
+      "auditStatus": "verified",
+      "failureClass": null,
+      "problemCodes": [
+        "ETF_TEMPLATE_MISMATCH",
+        "MISSING_PUBLICATION_TIME"
+      ],
+      "evidence": {
+        "urlCount": 6,
+        "claimCitationCount": 0,
+        "finalProposalMarkers": 0,
+        "priceTargetCount": 0,
+        "valuationMethodCount": 0,
+        "publishedMarkerCount": 0
+      },
+      "claimValidation": {
+        "status": "passed",
+        "errorCodes": [],
+        "citationCount": 12,
+        "unknownEvidenceIds": [],
+        "invalidEvidenceCitations": [],
+        "uncitedNumericParagraphs": 0,
+        "unsupportedDerivedNumericParagraphs": 0,
+        "unsupportedSingleSnapshotTrendParagraphs": 0,
+        "contradictedMovingAverageAlignmentParagraphs": 0,
+        "unsupportedActorOrFlowAttributionParagraphs": 0,
+        "unsupportedWindowRankParagraphs": 0,
+        "unsupportedCausalOrPathParagraphs": 0,
+        "unsupportedFaceValueParagraphs": 0,
+        "omittedUnsafeParagraphs": 0
+      },
+      "evidencePacket": {
+        "status": "ok",
+        "asOf": "2026-10-05T11:06:40Z",
+        "contentHash": "523d8949476ac7e75038a966f0ee5253913649ea5937b273e67cf23fea3e1cf3"
+      },
+      "evidencePublish": {
+        "published": true,
+        "status": 201
+      },
+      "identity": {
+        "scope": "profile",
+        "kind": "monitor",
+        "runId": "37300718705",
+        "profileId": "cn-semi-comms",
+        "requestId": null,
+        "slotId": "slot-1b25880d17b9729f726badeb6aefa6f48d343ce957c446124e9036fc8b6873a9",
+        "scheduledFor": "2026-10-05T07:24:27.000Z"
+      },
+      "supersededBy": null
+    },
     {
       "ticker": "515880.SS",
       "tradeDate": "2026-10-02",
@@ -4843,7 +4939,7 @@
         "slotId": "slot-b5a0997e42a6ca0cf2408023fccf268195e84564b99cea357e256ef6d1c0f2da",
         "scheduledFor": "2026-08-05T07:20:00.000Z"
       },
-      "supersededBy": "reports/512480.SS/2026-10-02/complete_report.md"
+      "supersededBy": "reports/512480.SS/2026-10-05/complete_report.md"
     },
     {
       "ticker": "515880.SS",
@@ -5679,127 +5775,7 @@
         "slotId": null,
         "scheduledFor": null
       },
-      "supersededBy": "reports/512480.SS/2026-10-02/complete_report.md"
-    },
-    {
-      "ticker": "515880.SS",
-      "tradeDate": "2026-07-30",
-      "generatedAt": "2026-07-30T14:31:02+08:00",
-      "provider": "openai_compatible",
-      "rating": "Underweight",
-      "analysisStatus": "rated",
-      "report": "reports/515880.SS/2026-07-30-v5/complete_report.md",
-      "auditStatus": "invalidated",
-      "failureClass": null,
-      "problemCodes": [
-        "LEGACY_SEMANTIC_GATE_BYPASS",
-        "ETF_TEMPLATE_MISMATCH",
-        "MISSING_PUBLICATION_TIME"
-      ],
-      "evidence": {
-        "urlCount": 4,
-        "claimCitationCount": 0,
-        "finalProposalMarkers": 0,
-        "priceTargetCount": 0,
-        "valuationMethodCount": 0,
-        "publishedMarkerCount": 0
-      },
-      "claimValidation": {
-        "status": "passed",
-        "errorCodes": [],
-        "citationCount": 22,
-        "unknownEvidenceIds": [],
-        "invalidEvidenceCitations": [],
-        "uncitedNumericParagraphs": 0,
-        "unsupportedDerivedNumericParagraphs": 0,
-        "unsupportedSingleSnapshotTrendParagraphs": 0,
-        "contradictedMovingAverageAlignmentParagraphs": 0,
-        "unsupportedActorOrFlowAttributionParagraphs": 0,
-        "unsupportedWindowRankParagraphs": 0,
-        "unsupportedCausalOrPathParagraphs": 0,
-        "unsupportedFaceValueParagraphs": 0,
-        "omittedUnsafeParagraphs": 0
-      },
-      "evidencePacket": {
-        "status": "ok",
-        "asOf": "2026-07-30T06:31:11Z",
-        "contentHash": "a228781384eae76fb487f90dc247a89916a36ab49836a13405968d480371d2f2"
-      },
-      "evidencePublish": {
-        "published": true,
-        "status": 201
-      },
-      "identity": {
-        "scope": "profile",
-        "kind": "manual",
-        "runId": "30519776634",
-        "profileId": "cn-semi-comms",
-        "requestId": null,
-        "slotId": null,
-        "scheduledFor": null
-      },
-      "supersededBy": "reports/515880.SS/2026-08-25/complete_report.md"
-    },
-    {
-      "ticker": "512480.SS",
-      "tradeDate": "2026-07-30",
-      "generatedAt": "2026-07-30T14:31:02+08:00",
-      "provider": "openai_compatible",
-      "rating": "Not Rated",
-      "analysisStatus": "insufficient_evidence",
-      "report": "reports/512480.SS/2026-07-30-v5/complete_report.md",
-      "auditStatus": "legacy_unverified",
-      "failureClass": null,
-      "problemCodes": [
-        "ETF_TEMPLATE_MISMATCH",
-        "MISSING_CLAIM_EVIDENCE",
-        "MISSING_PUBLICATION_TIME"
-      ],
-      "evidence": {
-        "urlCount": 3,
-        "claimCitationCount": 0,
-        "finalProposalMarkers": 0,
-        "priceTargetCount": 0,
-        "valuationMethodCount": 0,
-        "publishedMarkerCount": 0
-      },
-      "claimValidation": {
-        "status": "failed",
-        "errorCodes": [
-          "MISSING_EVIDENCE_CITATION"
-        ],
-        "citationCount": 0,
-        "unknownEvidenceIds": [],
-        "invalidEvidenceCitations": [],
-        "uncitedNumericParagraphs": 0,
-        "unsupportedDerivedNumericParagraphs": 0,
-        "unsupportedSingleSnapshotTrendParagraphs": 0,
-        "contradictedMovingAverageAlignmentParagraphs": 0,
-        "unsupportedActorOrFlowAttributionParagraphs": 0,
-        "unsupportedWindowRankParagraphs": 0,
-        "unsupportedCausalOrPathParagraphs": 0,
-        "unsupportedFaceValueParagraphs": 0,
-        "omittedUnsafeParagraphs": 0
-      },
-      "evidencePacket": {
-        "status": "ok",
-        "asOf": "2026-07-30T06:42:29Z",
-        "contentHash": "cfe44947e089b7b5d0e612103c6bb8c9656397595c1d95009eff2799115d171e"
-      },
-      "evidencePublish": {
-        "published": true,
-        "status": 201
-      },
-      "identity": {
-        "scope": "profile",
-        "kind": "manual",
-        "runId": "30519776634",
-        "profileId": "cn-semi-comms",
-        "requestId": null,
-        "slotId": null,
-        "scheduledFor": null
-      },
-      "supersededBy": null
+      "supersededBy": "reports/512480.SS/2026-10-05/complete_report.md"
     }
   ]
 }

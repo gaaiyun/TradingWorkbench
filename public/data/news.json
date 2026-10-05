@@ -1,113 +1,113 @@
 {
   "version": 1,
   "status": "ok",
-  "generated_at": "2026-10-02T16:01:02+08:00",
-  "trade_date": "2026-10-02",
+  "generated_at": "2026-10-05T19:06:30+08:00",
+  "trade_date": "2026-10-05",
   "global": {
     "status": "ok",
     "query_type": "global",
     "ticker": null,
-    "start_date": "2026-09-25",
-    "end_date": "2026-10-02",
-    "fetched_at": "2026-10-02T08:01:03Z",
+    "start_date": "2026-09-28",
+    "end_date": "2026-10-05",
+    "fetched_at": "2026-10-05T11:06:30Z",
     "items": [
       {
-        "title": "Oil retreats as market weighs mixed supply signals",
+        "title": "Alvopetro Announces September Sales Volumes and an Operational Update",
         "summary": "",
-        "url": "https://finance.yahoo.com/energy/articles/oil-rises-slightly-market-weighs-010952829.html",
+        "url": "https://finance.yahoo.com/news/alvopetro-announces-september-sales-volumes-110200399.html",
+        "source": "CNW Group",
+        "published_at": "2026-10-05T11:02:00Z",
+        "fetched_at": "2026-10-05T11:06:30Z",
+        "ticker": null,
+        "source_tier": "aggregator"
+      },
+      {
+        "title": "AerCap Leased, Purchased and Sold 204 Assets in the Third Quarter 2026",
+        "summary": "",
+        "url": "https://finance.yahoo.com/markets/stocks/articles/aercap-leased-purchased-sold-204-110000520.html",
+        "source": "PR Newswire",
+        "published_at": "2026-10-05T11:00:00Z",
+        "fetched_at": "2026-10-05T11:06:30Z",
+        "ticker": null,
+        "source_tier": "aggregator"
+      },
+      {
+        "title": "Euro, French stocks slide on France debt concerns",
+        "summary": "",
+        "url": "https://finance.yahoo.com/markets/world-indices/articles/most-asia-stocks-rally-goldilocks-025417552.html",
+        "source": "AFP",
+        "published_at": "2026-10-05T10:56:51Z",
+        "fetched_at": "2026-10-05T11:06:30Z",
+        "ticker": null,
+        "source_tier": "aggregator"
+      },
+      {
+        "title": "Wall St futures dip as tech stocks take a breather",
+        "summary": "",
+        "url": "https://finance.yahoo.com/markets/stocks/articles/wall-st-futures-dip-tech-104659511.html",
         "source": "Reuters",
-        "published_at": "2026-10-02T06:40:26Z",
-        "fetched_at": "2026-10-02T08:01:03Z",
+        "published_at": "2026-10-05T10:46:59Z",
+        "fetched_at": "2026-10-05T11:06:30Z",
         "ticker": null,
         "source_tier": "aggregator"
       },
       {
-        "title": "Chevron Stock And 2 Top Energy Stocks",
+        "title": "Interest Rate Outlook Lifts Asian Stock Markets",
         "summary": "",
-        "url": "https://finance.yahoo.com/energy/articles/chevron-stock-2-top-energy-060841830.html",
-        "source": "Simply Wall St.",
-        "published_at": "2026-10-02T06:08:41Z",
-        "fetched_at": "2026-10-02T08:01:03Z",
+        "url": "https://finance.yahoo.com/markets/world-indices/articles/interest-rate-outlook-lifts-asian-104501427.html",
+        "source": "MT Newswires",
+        "published_at": "2026-10-05T10:45:01Z",
+        "fetched_at": "2026-10-05T11:06:30Z",
         "ticker": null,
         "source_tier": "aggregator"
       },
       {
-        "title": "Asian shares fall after wild swings in bonds, FX; US jobs data looms",
+        "title": "Zacatecas Silver Signs Option to Acquire the Lourdes Gold-Silver Project from Guanajuato Silver",
         "summary": "",
-        "url": "https://finance.yahoo.com/markets/currencies/articles/asian-shares-fall-wild-swings-020953867.html",
-        "source": "Reuters",
-        "published_at": "2026-10-02T06:04:46Z",
-        "fetched_at": "2026-10-02T08:01:03Z",
+        "url": "https://finance.yahoo.com/markets/commodities/articles/zacatecas-silver-signs-option-acquire-103000617.html",
+        "source": "GlobeNewswire",
+        "published_at": "2026-10-05T10:30:00Z",
+        "fetched_at": "2026-10-05T11:06:30Z",
         "ticker": null,
         "source_tier": "aggregator"
       },
       {
-        "title": "Comstock Launches 24/7 Solar Panel Recycling at Nevada Facility",
+        "title": "10-Year Yield Above 5%, Oil Near $90, And Bitcoin: 3 Charts That Could Test The Stock Rally",
         "summary": "",
-        "url": "https://finance.yahoo.com/energy/articles/comstock-launches-24-7-solar-060203686.html",
-        "source": "MarketBeat",
-        "published_at": "2026-10-02T06:02:03Z",
-        "fetched_at": "2026-10-02T08:01:03Z",
-        "ticker": null,
-        "source_tier": "aggregator"
-      },
-      {
-        "title": "Dollar at 17-month high as bond rout, French fiscal worries weigh on euro",
-        "summary": "",
-        "url": "https://finance.yahoo.com/markets/currencies/articles/dollar-17-month-high-global-014904581.html",
-        "source": "Reuters",
-        "published_at": "2026-10-02T05:49:06Z",
-        "fetched_at": "2026-10-02T08:01:03Z",
-        "ticker": null,
-        "source_tier": "aggregator"
-      },
-      {
-        "title": "Asia energy stocks rise as Middle East tensions lift oil",
-        "summary": "",
-        "url": "https://finance.yahoo.com/energy/articles/asia-energy-stocks-rise-middle-051039314.html",
-        "source": "Investing.com",
-        "published_at": "2026-10-02T05:10:39Z",
-        "fetched_at": "2026-10-02T08:01:03Z",
-        "ticker": null,
-        "source_tier": "aggregator"
-      },
-      {
-        "title": "Gulf oil is finally flowing again. But it might not stop a ‘terrifying’ winter",
-        "summary": "",
-        "url": "https://finance.yahoo.com/energy/articles/gulf-oil-finally-flowing-again-050000550.html",
-        "source": "The Telegraph",
-        "published_at": "2026-10-02T05:00:00Z",
-        "fetched_at": "2026-10-02T08:01:03Z",
-        "ticker": null,
-        "source_tier": "aggregator"
-      },
-      {
-        "title": "Asian shares mixed after global bond sell-off deepens and ahead of US jobs data",
-        "summary": "",
-        "url": "https://finance.yahoo.com/markets/world-indices/articles/asian-shares-mixed-global-bond-045348374.html",
-        "source": "Associated Press",
-        "published_at": "2026-10-02T04:53:48Z",
-        "fetched_at": "2026-10-02T08:01:03Z",
-        "ticker": null,
-        "source_tier": "aggregator"
-      },
-      {
-        "title": "Bond Markets Functioning In An ‘Orderly’ Manner? El-Erian Calls IMF's Reassurance 'Highly Unusual'",
-        "summary": "",
-        "url": "https://finance.yahoo.com/markets/articles/bond-markets-functioning-orderly-manner-044402307.html",
+        "url": "https://finance.yahoo.com/markets/stocks/articles/10-yield-above-5-oil-102344745.html",
         "source": "Stocktwits",
-        "published_at": "2026-10-02T04:44:02Z",
-        "fetched_at": "2026-10-02T08:01:03Z",
+        "published_at": "2026-10-05T10:23:44Z",
+        "fetched_at": "2026-10-05T11:06:30Z",
         "ticker": null,
         "source_tier": "aggregator"
       },
       {
-        "title": "Dollar rally stalls ahead of payrolls test; yen firms on strong Tokyo inflation",
+        "title": "Quantum Computing Market Report 2026: Size, Share, Trends, and Forecast to 2030 | Capitalize on 33.7% CAGR as Google, IBM, Intel, IonQ, and D-Wave Scale Cloud and Hybrid Quantum",
         "summary": "",
-        "url": "https://finance.yahoo.com/markets/currencies/articles/japanese-yen-firms-strong-inflation-040620760.html",
-        "source": "Investing.com",
-        "published_at": "2026-10-02T04:06:20Z",
-        "fetched_at": "2026-10-02T08:01:03Z",
+        "url": "https://finance.yahoo.com/technology/ai/articles/quantum-computing-market-report-2026-101800694.html",
+        "source": "GlobeNewswire",
+        "published_at": "2026-10-05T10:18:00Z",
+        "fetched_at": "2026-10-05T11:06:30Z",
+        "ticker": null,
+        "source_tier": "aggregator"
+      },
+      {
+        "title": "Commerzbank Says Treasuries Open Lower as Brent Falls; Euro at Weakest Since May 2025",
+        "summary": "",
+        "url": "https://finance.yahoo.com/economy/articles/commerzbank-says-treasuries-open-lower-101422968.html",
+        "source": "MT Newswires",
+        "published_at": "2026-10-05T10:14:22Z",
+        "fetched_at": "2026-10-05T11:06:30Z",
+        "ticker": null,
+        "source_tier": "aggregator"
+      },
+      {
+        "title": "US Equity Investors to Remain Focused on Treasury Yields Amid Light Macroeconomic, Corporate Calendar This Week",
+        "summary": "",
+        "url": "https://finance.yahoo.com/markets/stocks/articles/us-equity-investors-remain-focused-100753991.html",
+        "source": "MT Newswires",
+        "published_at": "2026-10-05T10:07:53Z",
+        "fetched_at": "2026-10-05T11:06:30Z",
         "ticker": null,
         "source_tier": "aggregator"
       }
@@ -116,12 +116,12 @@
       {
         "source": "Yahoo Finance",
         "status": "ok",
-        "item_count": 49
+        "item_count": 50
       },
       {
         "source": "Federal Reserve",
         "status": "ok",
-        "item_count": 3
+        "item_count": 5
       }
     ]
   },
@@ -130,9 +130,9 @@
       "status": "empty",
       "query_type": "ticker",
       "ticker": "515880.SS",
-      "start_date": "2026-10-02",
-      "end_date": "2026-10-02",
-      "fetched_at": "2026-10-02T08:01:04Z",
+      "start_date": "2026-10-05",
+      "end_date": "2026-10-05",
+      "fetched_at": "2026-10-05T11:06:32Z",
       "items": [],
       "source_statuses": [
         {
@@ -156,9 +156,9 @@
       "status": "empty",
       "query_type": "ticker",
       "ticker": "512480.SS",
-      "start_date": "2026-10-02",
-      "end_date": "2026-10-02",
-      "fetched_at": "2026-10-02T08:01:07Z",
+      "start_date": "2026-10-05",
+      "end_date": "2026-10-05",
+      "fetched_at": "2026-10-05T11:06:34Z",
       "items": [],
       "source_statuses": [
         {
@@ -181,102 +181,102 @@
   },
   "items": [
     {
-      "title": "Oil retreats as market weighs mixed supply signals",
+      "title": "Alvopetro Announces September Sales Volumes and an Operational Update",
       "summary": "",
-      "url": "https://finance.yahoo.com/energy/articles/oil-rises-slightly-market-weighs-010952829.html",
+      "url": "https://finance.yahoo.com/news/alvopetro-announces-september-sales-volumes-110200399.html",
+      "source": "CNW Group",
+      "published_at": "2026-10-05T11:02:00Z",
+      "fetched_at": "2026-10-05T11:06:30Z",
+      "ticker": null,
+      "source_tier": "aggregator"
+    },
+    {
+      "title": "AerCap Leased, Purchased and Sold 204 Assets in the Third Quarter 2026",
+      "summary": "",
+      "url": "https://finance.yahoo.com/markets/stocks/articles/aercap-leased-purchased-sold-204-110000520.html",
+      "source": "PR Newswire",
+      "published_at": "2026-10-05T11:00:00Z",
+      "fetched_at": "2026-10-05T11:06:30Z",
+      "ticker": null,
+      "source_tier": "aggregator"
+    },
+    {
+      "title": "Euro, French stocks slide on France debt concerns",
+      "summary": "",
+      "url": "https://finance.yahoo.com/markets/world-indices/articles/most-asia-stocks-rally-goldilocks-025417552.html",
+      "source": "AFP",
+      "published_at": "2026-10-05T10:56:51Z",
+      "fetched_at": "2026-10-05T11:06:30Z",
+      "ticker": null,
+      "source_tier": "aggregator"
+    },
+    {
+      "title": "Wall St futures dip as tech stocks take a breather",
+      "summary": "",
+      "url": "https://finance.yahoo.com/markets/stocks/articles/wall-st-futures-dip-tech-104659511.html",
       "source": "Reuters",
-      "published_at": "2026-10-02T06:40:26Z",
-      "fetched_at": "2026-10-02T08:01:03Z",
+      "published_at": "2026-10-05T10:46:59Z",
+      "fetched_at": "2026-10-05T11:06:30Z",
       "ticker": null,
       "source_tier": "aggregator"
     },
     {
-      "title": "Chevron Stock And 2 Top Energy Stocks",
+      "title": "Interest Rate Outlook Lifts Asian Stock Markets",
       "summary": "",
-      "url": "https://finance.yahoo.com/energy/articles/chevron-stock-2-top-energy-060841830.html",
-      "source": "Simply Wall St.",
-      "published_at": "2026-10-02T06:08:41Z",
-      "fetched_at": "2026-10-02T08:01:03Z",
+      "url": "https://finance.yahoo.com/markets/world-indices/articles/interest-rate-outlook-lifts-asian-104501427.html",
+      "source": "MT Newswires",
+      "published_at": "2026-10-05T10:45:01Z",
+      "fetched_at": "2026-10-05T11:06:30Z",
       "ticker": null,
       "source_tier": "aggregator"
     },
     {
-      "title": "Asian shares fall after wild swings in bonds, FX; US jobs data looms",
+      "title": "Zacatecas Silver Signs Option to Acquire the Lourdes Gold-Silver Project from Guanajuato Silver",
       "summary": "",
-      "url": "https://finance.yahoo.com/markets/currencies/articles/asian-shares-fall-wild-swings-020953867.html",
-      "source": "Reuters",
-      "published_at": "2026-10-02T06:04:46Z",
-      "fetched_at": "2026-10-02T08:01:03Z",
+      "url": "https://finance.yahoo.com/markets/commodities/articles/zacatecas-silver-signs-option-acquire-103000617.html",
+      "source": "GlobeNewswire",
+      "published_at": "2026-10-05T10:30:00Z",
+      "fetched_at": "2026-10-05T11:06:30Z",
       "ticker": null,
       "source_tier": "aggregator"
     },
     {
-      "title": "Comstock Launches 24/7 Solar Panel Recycling at Nevada Facility",
+      "title": "10-Year Yield Above 5%, Oil Near $90, And Bitcoin: 3 Charts That Could Test The Stock Rally",
       "summary": "",
-      "url": "https://finance.yahoo.com/energy/articles/comstock-launches-24-7-solar-060203686.html",
-      "source": "MarketBeat",
-      "published_at": "2026-10-02T06:02:03Z",
-      "fetched_at": "2026-10-02T08:01:03Z",
-      "ticker": null,
-      "source_tier": "aggregator"
-    },
-    {
-      "title": "Dollar at 17-month high as bond rout, French fiscal worries weigh on euro",
-      "summary": "",
-      "url": "https://finance.yahoo.com/markets/currencies/articles/dollar-17-month-high-global-014904581.html",
-      "source": "Reuters",
-      "published_at": "2026-10-02T05:49:06Z",
-      "fetched_at": "2026-10-02T08:01:03Z",
-      "ticker": null,
-      "source_tier": "aggregator"
-    },
-    {
-      "title": "Asia energy stocks rise as Middle East tensions lift oil",
-      "summary": "",
-      "url": "https://finance.yahoo.com/energy/articles/asia-energy-stocks-rise-middle-051039314.html",
-      "source": "Investing.com",
-      "published_at": "2026-10-02T05:10:39Z",
-      "fetched_at": "2026-10-02T08:01:03Z",
-      "ticker": null,
-      "source_tier": "aggregator"
-    },
-    {
-      "title": "Gulf oil is finally flowing again. But it might not stop a ‘terrifying’ winter",
-      "summary": "",
-      "url": "https://finance.yahoo.com/energy/articles/gulf-oil-finally-flowing-again-050000550.html",
-      "source": "The Telegraph",
-      "published_at": "2026-10-02T05:00:00Z",
-      "fetched_at": "2026-10-02T08:01:03Z",
-      "ticker": null,
-      "source_tier": "aggregator"
-    },
-    {
-      "title": "Asian shares mixed after global bond sell-off deepens and ahead of US jobs data",
-      "summary": "",
-      "url": "https://finance.yahoo.com/markets/world-indices/articles/asian-shares-mixed-global-bond-045348374.html",
-      "source": "Associated Press",
-      "published_at": "2026-10-02T04:53:48Z",
-      "fetched_at": "2026-10-02T08:01:03Z",
-      "ticker": null,
-      "source_tier": "aggregator"
-    },
-    {
-      "title": "Bond Markets Functioning In An ‘Orderly’ Manner? El-Erian Calls IMF's Reassurance 'Highly Unusual'",
-      "summary": "",
-      "url": "https://finance.yahoo.com/markets/articles/bond-markets-functioning-orderly-manner-044402307.html",
+      "url": "https://finance.yahoo.com/markets/stocks/articles/10-yield-above-5-oil-102344745.html",
       "source": "Stocktwits",
-      "published_at": "2026-10-02T04:44:02Z",
-      "fetched_at": "2026-10-02T08:01:03Z",
+      "published_at": "2026-10-05T10:23:44Z",
+      "fetched_at": "2026-10-05T11:06:30Z",
       "ticker": null,
       "source_tier": "aggregator"
     },
     {
-      "title": "Dollar rally stalls ahead of payrolls test; yen firms on strong Tokyo inflation",
+      "title": "Quantum Computing Market Report 2026: Size, Share, Trends, and Forecast to 2030 | Capitalize on 33.7% CAGR as Google, IBM, Intel, IonQ, and D-Wave Scale Cloud and Hybrid Quantum",
       "summary": "",
-      "url": "https://finance.yahoo.com/markets/currencies/articles/japanese-yen-firms-strong-inflation-040620760.html",
-      "source": "Investing.com",
-      "published_at": "2026-10-02T04:06:20Z",
-      "fetched_at": "2026-10-02T08:01:03Z",
+      "url": "https://finance.yahoo.com/technology/ai/articles/quantum-computing-market-report-2026-101800694.html",
+      "source": "GlobeNewswire",
+      "published_at": "2026-10-05T10:18:00Z",
+      "fetched_at": "2026-10-05T11:06:30Z",
+      "ticker": null,
+      "source_tier": "aggregator"
+    },
+    {
+      "title": "Commerzbank Says Treasuries Open Lower as Brent Falls; Euro at Weakest Since May 2025",
+      "summary": "",
+      "url": "https://finance.yahoo.com/economy/articles/commerzbank-says-treasuries-open-lower-101422968.html",
+      "source": "MT Newswires",
+      "published_at": "2026-10-05T10:14:22Z",
+      "fetched_at": "2026-10-05T11:06:30Z",
+      "ticker": null,
+      "source_tier": "aggregator"
+    },
+    {
+      "title": "US Equity Investors to Remain Focused on Treasury Yields Amid Light Macroeconomic, Corporate Calendar This Week",
+      "summary": "",
+      "url": "https://finance.yahoo.com/markets/stocks/articles/us-equity-investors-remain-focused-100753991.html",
+      "source": "MT Newswires",
+      "published_at": "2026-10-05T10:07:53Z",
+      "fetched_at": "2026-10-05T11:06:30Z",
       "ticker": null,
       "source_tier": "aggregator"
     }
