@@ -1,0 +1,53 @@
+{
+  "schemaVersion": 1,
+  "ticker": "512480.SS",
+  "tradeDate": "2026-10-06",
+  "generatedAt": "2026-10-06T08:01:20.118758+00:00",
+  "analysisStatus": "insufficient_evidence",
+  "auditStatus": "legacy_unverified",
+  "claimValidation": {
+    "status": "failed",
+    "errorCodes": [
+      "MISSING_EVIDENCE_CITATION",
+      "FILTERED_UNSAFE_PUBLIC_CLAIM",
+      "NO_SUBSTANTIVE_SUPPORTED_CONCLUSION",
+      "UNSUPPORTED_CAUSAL_OR_PATH_CLAIM",
+      "UNSUPPORTED_DERIVED_NUMERIC_CLAIM"
+    ],
+    "citationCount": 0,
+    "unknownEvidenceIds": [],
+    "invalidEvidenceCitations": [],
+    "uncitedNumericParagraphs": 0,
+    "unsupportedDerivedNumericParagraphs": 0,
+    "unsupportedSingleSnapshotTrendParagraphs": 0,
+    "contradictedMovingAverageAlignmentParagraphs": 0,
+    "unsupportedActorOrFlowAttributionParagraphs": 0,
+    "unsupportedWindowRankParagraphs": 0,
+    "unsupportedCausalOrPathParagraphs": 0,
+    "unsupportedFaceValueParagraphs": 0,
+    "omittedUnsafeParagraphs": 1
+  },
+  "evidence": {
+    "schemaVersion": "EvidencePacketV1",
+    "asOf": "2026-10-06T07:51:51Z",
+    "contentHash": "33b520ecab4254d22ea874940d491b10ee73a492faec6c366db7e35412c92ba0",
+    "packetFileHash": "3617d23653f38b823c81003681c5ac28308ca879d9ab062bb1e2b62931dd693a",
+    "status": "ok",
+    "marketHistory": {
+      "source": "yahoo",
+      "adjustment": "mixed",
+      "barCount": 699,
+      "startAt": "2023-11-29T16:00:00Z",
+      "endAt": "2026-09-30T01:30:00Z"
+    }
+  },
+  "identity": {
+    "scope": "profile",
+    "kind": "monitor",
+    "runId": "37432221637",
+    "profileId": "cn-semi-comms",
+    "requestId": null,
+    "slotId": "slot-e9f1595f3fd913ed71708075e25f83f03d33f7d5320aba2a723dcbb94ab92f95",
+    "scheduledFor": "2026-10-06T07:17:48.000Z"
+  }
+}

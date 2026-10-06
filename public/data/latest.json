@@ -1,7 +1,7 @@
 {
   "status": "ok",
-  "generated_at": "2026-10-05T19:06:30+08:00",
-  "trade_date": "2026-10-05",
+  "generated_at": "2026-10-06T15:51:35+08:00",
+  "trade_date": "2026-10-06",
   "provider": "openai_compatible",
   "analysts": [
     "market",
@@ -19,19 +19,19 @@
     "kind": "monitor"
   },
   "run": {
-    "id": "37300718705",
+    "id": "37432221637",
     "attempt": "1",
     "workflow": "daily-analysis",
-    "url": "https://github.com/gaaiyun/TradingWorkbench/actions/runs/37300718705"
+    "url": "https://github.com/gaaiyun/TradingWorkbench/actions/runs/37432221637"
   },
   "identity": {
     "scope": "profile",
     "kind": "monitor",
-    "runId": "37300718705",
+    "runId": "37432221637",
     "profileId": "cn-semi-comms",
     "requestId": null,
-    "slotId": "slot-1b25880d17b9729f726badeb6aefa6f48d343ce957c446124e9036fc8b6873a9",
-    "scheduledFor": "2026-10-05T07:24:27.000Z"
+    "slotId": "slot-e9f1595f3fd913ed71708075e25f83f03d33f7d5320aba2a723dcbb94ab92f95",
+    "scheduledFor": "2026-10-06T07:17:48.000Z"
   },
   "rating_tiers": [
     "Sell",
@@ -57,35 +57,35 @@
     },
     {
       "ticker": "512480.SS",
-      "rating": "Hold",
-      "report": "reports/512480.SS/2026-10-05/complete_report.md",
+      "rating": "Not Rated",
+      "report": "reports/512480.SS/2026-10-06/complete_report.md",
       "files": {
-        "fundamentals": "reports/512480.SS/2026-10-05/1_analysts/fundamentals.md",
-        "market": "reports/512480.SS/2026-10-05/1_analysts/market.md",
-        "news": "reports/512480.SS/2026-10-05/1_analysts/news.md",
-        "bear": "reports/512480.SS/2026-10-05/2_research/bear.md",
-        "bull": "reports/512480.SS/2026-10-05/2_research/bull.md",
-        "manager": "reports/512480.SS/2026-10-05/2_research/manager.md",
-        "trader": "reports/512480.SS/2026-10-05/3_trading/trader.md",
-        "aggressive": "reports/512480.SS/2026-10-05/4_risk/aggressive.md",
-        "conservative": "reports/512480.SS/2026-10-05/4_risk/conservative.md",
-        "neutral": "reports/512480.SS/2026-10-05/4_risk/neutral.md",
-        "decision": "reports/512480.SS/2026-10-05/5_portfolio/decision.md",
-        "complete_report": "reports/512480.SS/2026-10-05/complete_report.md"
+        "fundamentals": "reports/512480.SS/2026-10-06/1_analysts/fundamentals.md",
+        "market": "reports/512480.SS/2026-10-06/1_analysts/market.md",
+        "news": "reports/512480.SS/2026-10-06/1_analysts/news.md",
+        "bear": "reports/512480.SS/2026-10-06/2_research/bear.md",
+        "bull": "reports/512480.SS/2026-10-06/2_research/bull.md",
+        "manager": "reports/512480.SS/2026-10-06/2_research/manager.md",
+        "trader": "reports/512480.SS/2026-10-06/3_trading/trader.md",
+        "aggressive": "reports/512480.SS/2026-10-06/4_risk/aggressive.md",
+        "conservative": "reports/512480.SS/2026-10-06/4_risk/conservative.md",
+        "neutral": "reports/512480.SS/2026-10-06/4_risk/neutral.md",
+        "decision": "reports/512480.SS/2026-10-06/5_portfolio/decision.md",
+        "complete_report": "reports/512480.SS/2026-10-06/complete_report.md"
       },
-      "decision_excerpt": "**Rating**: Hold  \n\n**Executive Summary**: 短期技术面呈现严格熊市排列。 [D7]  \nMA20 为 0.9968。 [I5]  \nMA60 为 1.03301667。 [I6]  \n收盘价低于 MA20 且低于 MA60。 [D7]  \n过去 8 个交易日累计跌幅为 -8.26128798。 [D2]  \nMACD 值为 -0.0087632。 [I7]  \nMACD 柱状图为 -0.00139293。 [I8]  \nRSI14 值为 37.99196883。 [I11]  \n集成电路布图设计保护条例提供长期政策支持。 [N2]  \n集成电路布图设计保护条例提供长期政策支持。 [N3]  \n基金份额拆分公告体现管理层信心。 [CA1]  \n基金份额拆分公告体现管理层信心。 [CA2]  \n持仓构成、NAV、溢折价、费用率及跟踪误差等核心指标均为 ",
-      "analysis_status": "rated",
-      "audit_status": "verified",
+      "decision_excerpt": "**Rating** Underweight\n**Executive Summary** 研究计划明确推荐Underweight。短期8个交易日收盘较前期下跌-9.13415953% [D2]。收盘较MA20下跌-4.19342061% [D5]。收盘较MA60下跌-7.07555777% [D6]。严格熊市均线对齐 [D7]。MACD为-0.01184059 [I7]。MACD柱状图为-0.00439089 [I8]。RSI14为37.31831436低于50中线 [I11] [D9]。持仓NAV溢折价费用跟踪误差集中度全部 unavailable无法评估风险暴露 [S2] [S5] [S6] [S7] [S1]。\n**Investment Thesis** 短期技术弱势信号突出 [D2] [D5] [D6] [D7] [I7] [I8] [I11] [D9]。集成电路布图设计保护条例提",
+      "analysis_status": "insufficient_evidence",
+      "audit_status": "legacy_unverified",
       "evidence_publish": {
         "published": true,
         "status": 201
       },
       "marketHistory": {
-        "source": "tencent",
+        "source": "yahoo",
         "adjustment": "mixed",
-        "barCount": 697,
+        "barCount": 699,
         "startAt": "2023-11-29T16:00:00Z",
-        "endAt": "2026-09-29T16:00:00Z"
+        "endAt": "2026-09-30T01:30:00Z"
       },
       "error": null
     }
