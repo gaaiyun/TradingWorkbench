@@ -1,113 +1,113 @@
 {
   "version": 1,
   "status": "ok",
-  "generated_at": "2026-10-06T15:51:35+08:00",
-  "trade_date": "2026-10-06",
+  "generated_at": "2026-10-07T16:02:05+08:00",
+  "trade_date": "2026-10-07",
   "global": {
     "status": "ok",
     "query_type": "global",
     "ticker": null,
-    "start_date": "2026-09-29",
-    "end_date": "2026-10-06",
-    "fetched_at": "2026-10-06T07:51:37Z",
+    "start_date": "2026-09-30",
+    "end_date": "2026-10-07",
+    "fetched_at": "2026-10-07T08:02:06Z",
     "items": [
       {
-        "title": "What is Occidental’s (OXY) Economic Moat, and is it Widening or Narrowing?",
+        "title": "India joins global rate-tightening wave with first hike in nearly 4 years",
         "summary": "",
-        "url": "https://finance.yahoo.com/energy/articles/occidental-oxy-economic-moat-widening-071216046.html",
-        "source": "Insider Monkey",
-        "published_at": "2026-10-06T07:12:16Z",
-        "fetched_at": "2026-10-06T07:51:37Z",
+        "url": "https://finance.yahoo.com/economy/policy/articles/india-raises-rates-first-time-045256457.html",
+        "source": "Reuters",
+        "published_at": "2026-10-07T07:55:20Z",
+        "fetched_at": "2026-10-07T08:02:06Z",
         "ticker": null,
         "source_tier": "aggregator"
       },
       {
-        "title": "Australian Nuclear Stocks To Own In October 2026",
+        "title": "Oil rises and stocks fall as Hormuz worries flare",
         "summary": "",
-        "url": "https://finance.yahoo.com/energy/articles/australian-nuclear-stocks-own-october-070844427.html",
+        "url": "https://finance.yahoo.com/energy/articles/oil-rises-stocks-fall-hormuz-023838273.html",
+        "source": "AFP",
+        "published_at": "2026-10-07T07:50:04Z",
+        "fetched_at": "2026-10-07T08:02:06Z",
+        "ticker": null,
+        "source_tier": "aggregator"
+      },
+      {
+        "title": "FTSE 100 today: Stocks slip as U.S. bond yields climb, miners drag",
+        "summary": "",
+        "url": "https://finance.yahoo.com/markets/world-indices/articles/ftse-100-today-stocks-slip-074845443.html",
+        "source": "Investing.com",
+        "published_at": "2026-10-07T07:48:45Z",
+        "fetched_at": "2026-10-07T08:02:06Z",
+        "ticker": null,
+        "source_tier": "aggregator"
+      },
+      {
+        "title": "European stocks slip as Houthi threat lift oil ahead of FOMC minutes",
+        "summary": "",
+        "url": "https://finance.yahoo.com/markets/world-indices/articles/european-stocks-slip-houthi-threat-074052597.html",
+        "source": "Investing.com",
+        "published_at": "2026-10-07T07:40:52Z",
+        "fetched_at": "2026-10-07T08:02:06Z",
+        "ticker": null,
+        "source_tier": "aggregator"
+      },
+      {
+        "title": "European shares slip after three-day gain as rise in oil, yields weigh",
+        "summary": "",
+        "url": "https://finance.yahoo.com/markets/world-indices/articles/european-shares-slip-three-day-073928521.html",
+        "source": "Reuters",
+        "published_at": "2026-10-07T07:39:28Z",
+        "fetched_at": "2026-10-07T08:02:06Z",
+        "ticker": null,
+        "source_tier": "aggregator"
+      },
+      {
+        "title": "India hikes interest rates for first time in over three years as Iran war fuels inflation",
+        "summary": "",
+        "url": "https://finance.yahoo.com/economy/policy/articles/india-hikes-interest-rates-first-072744956.html",
+        "source": "Euronews",
+        "published_at": "2026-10-07T07:27:44Z",
+        "fetched_at": "2026-10-07T08:02:06Z",
+        "ticker": null,
+        "source_tier": "aggregator"
+      },
+      {
+        "title": "How Is Walmart (WMT) Turning Shopper Data Into A Bigger Advertising Business?",
+        "summary": "",
+        "url": "https://finance.yahoo.com/media-advertising/articles/walmart-wmt-turning-shopper-data-071444992.html",
         "source": "Simply Wall St.",
-        "published_at": "2026-10-06T07:08:44Z",
-        "fetched_at": "2026-10-06T07:51:37Z",
+        "published_at": "2026-10-07T07:14:44Z",
+        "fetched_at": "2026-10-07T08:02:06Z",
         "ticker": null,
         "source_tier": "aggregator"
       },
       {
-        "title": "Oil slips as Mideast exports, G7 stockpile ease supply concerns",
+        "title": "Shell’s Refining Margin Soars to Record High After Middle East Conflict Upends Fuel Markets",
         "summary": "",
-        "url": "https://finance.yahoo.com/news/oil-prices-slip-traders-weigh-003904233.html",
+        "url": "https://finance.yahoo.com/m/5787d317-9645-3475-a254-1aaed304a674/shell%E2%80%99s-refining-margin-soars.html",
+        "source": "The Wall Street Journal",
+        "published_at": "2026-10-07T07:00:00Z",
+        "fetched_at": "2026-10-07T08:02:06Z",
+        "ticker": null,
+        "source_tier": "aggregator"
+      },
+      {
+        "title": "Oil gains as US storm and Houthi air strikes threaten supply",
+        "summary": "",
+        "url": "https://finance.yahoo.com/energy/articles/oil-prices-rise-storms-air-004803079.html",
         "source": "Reuters",
-        "published_at": "2026-10-06T06:53:44Z",
-        "fetched_at": "2026-10-06T07:51:37Z",
+        "published_at": "2026-10-07T06:45:41Z",
+        "fetched_at": "2026-10-07T08:02:06Z",
         "ticker": null,
         "source_tier": "aggregator"
       },
       {
-        "title": "Asian shares track Wall Street higher; Treasury yields near multi-decade highs",
+        "title": "India stocks dip after RBI hikes rates for first time in nearly 4 yrs",
         "summary": "",
-        "url": "https://finance.yahoo.com/markets/world-indices/articles/asian-shares-track-wall-street-014758852.html",
-        "source": "Reuters",
-        "published_at": "2026-10-06T06:06:06Z",
-        "fetched_at": "2026-10-06T07:51:37Z",
-        "ticker": null,
-        "source_tier": "aggregator"
-      },
-      {
-        "title": "Asian shares mostly advance after Wall Street gains and oil prices fall",
-        "summary": "",
-        "url": "https://finance.yahoo.com/markets/world-indices/articles/asian-shares-mixed-wall-street-055325073.html",
-        "source": "Associated Press",
-        "published_at": "2026-10-06T05:53:25Z",
-        "fetched_at": "2026-10-06T07:51:37Z",
-        "ticker": null,
-        "source_tier": "aggregator"
-      },
-      {
-        "title": "This Week’s Treasury Auctions Could Send Yields Even Higher",
-        "summary": "",
-        "url": "https://finance.yahoo.com/m/daa3ad3a-2696-31df-adc6-9e39c153e6b6/this-week%E2%80%99s-treasury-auctions.html",
-        "source": "Barrons.com",
-        "published_at": "2026-10-06T05:00:00Z",
-        "fetched_at": "2026-10-06T07:51:37Z",
-        "ticker": null,
-        "source_tier": "aggregator"
-      },
-      {
-        "title": "Asia stocks rise tracking Wall Street gains; elevated yields limit upside",
-        "summary": "",
-        "url": "https://finance.yahoo.com/markets/world-indices/articles/asia-stocks-choppy-elevated-yields-042348925.html",
+        "url": "https://finance.yahoo.com/economy/policy/articles/india-stocks-dip-rbi-hikes-061508837.html",
         "source": "Investing.com",
-        "published_at": "2026-10-06T04:23:48Z",
-        "fetched_at": "2026-10-06T07:51:37Z",
-        "ticker": null,
-        "source_tier": "aggregator"
-      },
-      {
-        "title": "Hedge funds deliver mixed September results on AI swings",
-        "summary": "",
-        "url": "https://finance.yahoo.com/markets/stocks/articles/hedge-funds-deliver-mixed-september-093145562.html",
-        "source": "Reuters",
-        "published_at": "2026-10-06T03:39:36Z",
-        "fetched_at": "2026-10-06T07:51:37Z",
-        "ticker": null,
-        "source_tier": "aggregator"
-      },
-      {
-        "title": "NYSE’s Parent Just Filed to Tokenize 63 US Stocks on a Crypto-Native Exchange — And the SEC Already Gave It Permission",
-        "summary": "",
-        "url": "https://finance.yahoo.com/markets/crypto/articles/nyse-parent-just-filed-tokenize-025259404.html",
-        "source": "Forkast News",
-        "published_at": "2026-10-06T02:52:59Z",
-        "fetched_at": "2026-10-06T07:51:37Z",
-        "ticker": null,
-        "source_tier": "aggregator"
-      },
-      {
-        "title": "Gold slips as dollar, Treasury yields offset fading Fed hike bets ahead of minutes",
-        "summary": "",
-        "url": "https://finance.yahoo.com/markets/commodities/articles/gold-holds-near-4-140-012306866.html",
-        "source": "Investing.com",
-        "published_at": "2026-10-06T01:23:06Z",
-        "fetched_at": "2026-10-06T07:51:37Z",
+        "published_at": "2026-10-07T06:15:08Z",
+        "fetched_at": "2026-10-07T08:02:06Z",
         "ticker": null,
         "source_tier": "aggregator"
       }
@@ -116,12 +116,12 @@
       {
         "source": "Yahoo Finance",
         "status": "ok",
-        "item_count": 44
+        "item_count": 49
       },
       {
         "source": "Federal Reserve",
         "status": "ok",
-        "item_count": 6
+        "item_count": 5
       }
     ]
   },
@@ -130,9 +130,9 @@
       "status": "empty",
       "query_type": "ticker",
       "ticker": "515880.SS",
-      "start_date": "2026-10-06",
-      "end_date": "2026-10-06",
-      "fetched_at": "2026-10-06T07:51:39Z",
+      "start_date": "2026-10-07",
+      "end_date": "2026-10-07",
+      "fetched_at": "2026-10-07T08:02:07Z",
       "items": [],
       "source_statuses": [
         {
@@ -156,9 +156,9 @@
       "status": "empty",
       "query_type": "ticker",
       "ticker": "512480.SS",
-      "start_date": "2026-10-06",
-      "end_date": "2026-10-06",
-      "fetched_at": "2026-10-06T07:51:43Z",
+      "start_date": "2026-10-07",
+      "end_date": "2026-10-07",
+      "fetched_at": "2026-10-07T08:02:10Z",
       "items": [],
       "source_statuses": [
         {
@@ -181,102 +181,102 @@
   },
   "items": [
     {
-      "title": "What is Occidental’s (OXY) Economic Moat, and is it Widening or Narrowing?",
+      "title": "India joins global rate-tightening wave with first hike in nearly 4 years",
       "summary": "",
-      "url": "https://finance.yahoo.com/energy/articles/occidental-oxy-economic-moat-widening-071216046.html",
-      "source": "Insider Monkey",
-      "published_at": "2026-10-06T07:12:16Z",
-      "fetched_at": "2026-10-06T07:51:37Z",
+      "url": "https://finance.yahoo.com/economy/policy/articles/india-raises-rates-first-time-045256457.html",
+      "source": "Reuters",
+      "published_at": "2026-10-07T07:55:20Z",
+      "fetched_at": "2026-10-07T08:02:06Z",
       "ticker": null,
       "source_tier": "aggregator"
     },
     {
-      "title": "Australian Nuclear Stocks To Own In October 2026",
+      "title": "Oil rises and stocks fall as Hormuz worries flare",
       "summary": "",
-      "url": "https://finance.yahoo.com/energy/articles/australian-nuclear-stocks-own-october-070844427.html",
+      "url": "https://finance.yahoo.com/energy/articles/oil-rises-stocks-fall-hormuz-023838273.html",
+      "source": "AFP",
+      "published_at": "2026-10-07T07:50:04Z",
+      "fetched_at": "2026-10-07T08:02:06Z",
+      "ticker": null,
+      "source_tier": "aggregator"
+    },
+    {
+      "title": "FTSE 100 today: Stocks slip as U.S. bond yields climb, miners drag",
+      "summary": "",
+      "url": "https://finance.yahoo.com/markets/world-indices/articles/ftse-100-today-stocks-slip-074845443.html",
+      "source": "Investing.com",
+      "published_at": "2026-10-07T07:48:45Z",
+      "fetched_at": "2026-10-07T08:02:06Z",
+      "ticker": null,
+      "source_tier": "aggregator"
+    },
+    {
+      "title": "European stocks slip as Houthi threat lift oil ahead of FOMC minutes",
+      "summary": "",
+      "url": "https://finance.yahoo.com/markets/world-indices/articles/european-stocks-slip-houthi-threat-074052597.html",
+      "source": "Investing.com",
+      "published_at": "2026-10-07T07:40:52Z",
+      "fetched_at": "2026-10-07T08:02:06Z",
+      "ticker": null,
+      "source_tier": "aggregator"
+    },
+    {
+      "title": "European shares slip after three-day gain as rise in oil, yields weigh",
+      "summary": "",
+      "url": "https://finance.yahoo.com/markets/world-indices/articles/european-shares-slip-three-day-073928521.html",
+      "source": "Reuters",
+      "published_at": "2026-10-07T07:39:28Z",
+      "fetched_at": "2026-10-07T08:02:06Z",
+      "ticker": null,
+      "source_tier": "aggregator"
+    },
+    {
+      "title": "India hikes interest rates for first time in over three years as Iran war fuels inflation",
+      "summary": "",
+      "url": "https://finance.yahoo.com/economy/policy/articles/india-hikes-interest-rates-first-072744956.html",
+      "source": "Euronews",
+      "published_at": "2026-10-07T07:27:44Z",
+      "fetched_at": "2026-10-07T08:02:06Z",
+      "ticker": null,
+      "source_tier": "aggregator"
+    },
+    {
+      "title": "How Is Walmart (WMT) Turning Shopper Data Into A Bigger Advertising Business?",
+      "summary": "",
+      "url": "https://finance.yahoo.com/media-advertising/articles/walmart-wmt-turning-shopper-data-071444992.html",
       "source": "Simply Wall St.",
-      "published_at": "2026-10-06T07:08:44Z",
-      "fetched_at": "2026-10-06T07:51:37Z",
+      "published_at": "2026-10-07T07:14:44Z",
+      "fetched_at": "2026-10-07T08:02:06Z",
       "ticker": null,
       "source_tier": "aggregator"
     },
     {
-      "title": "Oil slips as Mideast exports, G7 stockpile ease supply concerns",
+      "title": "Shell’s Refining Margin Soars to Record High After Middle East Conflict Upends Fuel Markets",
       "summary": "",
-      "url": "https://finance.yahoo.com/news/oil-prices-slip-traders-weigh-003904233.html",
+      "url": "https://finance.yahoo.com/m/5787d317-9645-3475-a254-1aaed304a674/shell%E2%80%99s-refining-margin-soars.html",
+      "source": "The Wall Street Journal",
+      "published_at": "2026-10-07T07:00:00Z",
+      "fetched_at": "2026-10-07T08:02:06Z",
+      "ticker": null,
+      "source_tier": "aggregator"
+    },
+    {
+      "title": "Oil gains as US storm and Houthi air strikes threaten supply",
+      "summary": "",
+      "url": "https://finance.yahoo.com/energy/articles/oil-prices-rise-storms-air-004803079.html",
       "source": "Reuters",
-      "published_at": "2026-10-06T06:53:44Z",
-      "fetched_at": "2026-10-06T07:51:37Z",
+      "published_at": "2026-10-07T06:45:41Z",
+      "fetched_at": "2026-10-07T08:02:06Z",
       "ticker": null,
       "source_tier": "aggregator"
     },
     {
-      "title": "Asian shares track Wall Street higher; Treasury yields near multi-decade highs",
+      "title": "India stocks dip after RBI hikes rates for first time in nearly 4 yrs",
       "summary": "",
-      "url": "https://finance.yahoo.com/markets/world-indices/articles/asian-shares-track-wall-street-014758852.html",
-      "source": "Reuters",
-      "published_at": "2026-10-06T06:06:06Z",
-      "fetched_at": "2026-10-06T07:51:37Z",
-      "ticker": null,
-      "source_tier": "aggregator"
-    },
-    {
-      "title": "Asian shares mostly advance after Wall Street gains and oil prices fall",
-      "summary": "",
-      "url": "https://finance.yahoo.com/markets/world-indices/articles/asian-shares-mixed-wall-street-055325073.html",
-      "source": "Associated Press",
-      "published_at": "2026-10-06T05:53:25Z",
-      "fetched_at": "2026-10-06T07:51:37Z",
-      "ticker": null,
-      "source_tier": "aggregator"
-    },
-    {
-      "title": "This Week’s Treasury Auctions Could Send Yields Even Higher",
-      "summary": "",
-      "url": "https://finance.yahoo.com/m/daa3ad3a-2696-31df-adc6-9e39c153e6b6/this-week%E2%80%99s-treasury-auctions.html",
-      "source": "Barrons.com",
-      "published_at": "2026-10-06T05:00:00Z",
-      "fetched_at": "2026-10-06T07:51:37Z",
-      "ticker": null,
-      "source_tier": "aggregator"
-    },
-    {
-      "title": "Asia stocks rise tracking Wall Street gains; elevated yields limit upside",
-      "summary": "",
-      "url": "https://finance.yahoo.com/markets/world-indices/articles/asia-stocks-choppy-elevated-yields-042348925.html",
+      "url": "https://finance.yahoo.com/economy/policy/articles/india-stocks-dip-rbi-hikes-061508837.html",
       "source": "Investing.com",
-      "published_at": "2026-10-06T04:23:48Z",
-      "fetched_at": "2026-10-06T07:51:37Z",
-      "ticker": null,
-      "source_tier": "aggregator"
-    },
-    {
-      "title": "Hedge funds deliver mixed September results on AI swings",
-      "summary": "",
-      "url": "https://finance.yahoo.com/markets/stocks/articles/hedge-funds-deliver-mixed-september-093145562.html",
-      "source": "Reuters",
-      "published_at": "2026-10-06T03:39:36Z",
-      "fetched_at": "2026-10-06T07:51:37Z",
-      "ticker": null,
-      "source_tier": "aggregator"
-    },
-    {
-      "title": "NYSE’s Parent Just Filed to Tokenize 63 US Stocks on a Crypto-Native Exchange — And the SEC Already Gave It Permission",
-      "summary": "",
-      "url": "https://finance.yahoo.com/markets/crypto/articles/nyse-parent-just-filed-tokenize-025259404.html",
-      "source": "Forkast News",
-      "published_at": "2026-10-06T02:52:59Z",
-      "fetched_at": "2026-10-06T07:51:37Z",
-      "ticker": null,
-      "source_tier": "aggregator"
-    },
-    {
-      "title": "Gold slips as dollar, Treasury yields offset fading Fed hike bets ahead of minutes",
-      "summary": "",
-      "url": "https://finance.yahoo.com/markets/commodities/articles/gold-holds-near-4-140-012306866.html",
-      "source": "Investing.com",
-      "published_at": "2026-10-06T01:23:06Z",
-      "fetched_at": "2026-10-06T07:51:37Z",
+      "published_at": "2026-10-07T06:15:08Z",
+      "fetched_at": "2026-10-07T08:02:06Z",
       "ticker": null,
       "source_tier": "aggregator"
     }
