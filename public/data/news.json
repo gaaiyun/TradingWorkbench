@@ -1,113 +1,113 @@
 {
   "version": 1,
   "status": "ok",
-  "generated_at": "2026-10-07T16:02:05+08:00",
-  "trade_date": "2026-10-07",
+  "generated_at": "2026-10-08T16:01:49+08:00",
+  "trade_date": "2026-10-08",
   "global": {
     "status": "ok",
     "query_type": "global",
     "ticker": null,
-    "start_date": "2026-09-30",
-    "end_date": "2026-10-07",
-    "fetched_at": "2026-10-07T08:02:06Z",
+    "start_date": "2026-10-01",
+    "end_date": "2026-10-08",
+    "fetched_at": "2026-10-08T08:01:50Z",
     "items": [
       {
-        "title": "India joins global rate-tightening wave with first hike in nearly 4 years",
+        "title": "European shares dip as banks hit over 3-month low, oil prices weigh",
         "summary": "",
-        "url": "https://finance.yahoo.com/economy/policy/articles/india-raises-rates-first-time-045256457.html",
+        "url": "https://finance.yahoo.com/markets/articles/european-shares-dip-banks-hit-073637841.html",
         "source": "Reuters",
-        "published_at": "2026-10-07T07:55:20Z",
-        "fetched_at": "2026-10-07T08:02:06Z",
+        "published_at": "2026-10-08T07:36:37Z",
+        "fetched_at": "2026-10-08T08:01:50Z",
         "ticker": null,
         "source_tier": "aggregator"
       },
       {
-        "title": "Oil rises and stocks fall as Hormuz worries flare",
+        "title": "Stocks fall further as oil surge fans fresh inflation worries",
         "summary": "",
-        "url": "https://finance.yahoo.com/energy/articles/oil-rises-stocks-fall-hormuz-023838273.html",
+        "url": "https://finance.yahoo.com/markets/stocks/articles/stocks-fall-further-oil-spike-024956877.html",
         "source": "AFP",
-        "published_at": "2026-10-07T07:50:04Z",
-        "fetched_at": "2026-10-07T08:02:06Z",
+        "published_at": "2026-10-08T07:24:10Z",
+        "fetched_at": "2026-10-08T08:01:50Z",
         "ticker": null,
         "source_tier": "aggregator"
       },
       {
-        "title": "FTSE 100 today: Stocks slip as U.S. bond yields climb, miners drag",
+        "title": "Oil prices are climbing on concerns about an escalating Iran war",
         "summary": "",
-        "url": "https://finance.yahoo.com/markets/world-indices/articles/ftse-100-today-stocks-slip-074845443.html",
-        "source": "Investing.com",
-        "published_at": "2026-10-07T07:48:45Z",
-        "fetched_at": "2026-10-07T08:02:06Z",
-        "ticker": null,
-        "source_tier": "aggregator"
-      },
-      {
-        "title": "European stocks slip as Houthi threat lift oil ahead of FOMC minutes",
-        "summary": "",
-        "url": "https://finance.yahoo.com/markets/world-indices/articles/european-stocks-slip-houthi-threat-074052597.html",
-        "source": "Investing.com",
-        "published_at": "2026-10-07T07:40:52Z",
-        "fetched_at": "2026-10-07T08:02:06Z",
-        "ticker": null,
-        "source_tier": "aggregator"
-      },
-      {
-        "title": "European shares slip after three-day gain as rise in oil, yields weigh",
-        "summary": "",
-        "url": "https://finance.yahoo.com/markets/world-indices/articles/european-shares-slip-three-day-073928521.html",
-        "source": "Reuters",
-        "published_at": "2026-10-07T07:39:28Z",
-        "fetched_at": "2026-10-07T08:02:06Z",
-        "ticker": null,
-        "source_tier": "aggregator"
-      },
-      {
-        "title": "India hikes interest rates for first time in over three years as Iran war fuels inflation",
-        "summary": "",
-        "url": "https://finance.yahoo.com/economy/policy/articles/india-hikes-interest-rates-first-072744956.html",
+        "url": "https://finance.yahoo.com/energy/articles/oil-prices-climbing-concerns-escalating-063551545.html",
         "source": "Euronews",
-        "published_at": "2026-10-07T07:27:44Z",
-        "fetched_at": "2026-10-07T08:02:06Z",
+        "published_at": "2026-10-08T07:16:43Z",
+        "fetched_at": "2026-10-08T08:01:50Z",
         "ticker": null,
         "source_tier": "aggregator"
       },
       {
-        "title": "How Is Walmart (WMT) Turning Shopper Data Into A Bigger Advertising Business?",
+        "title": "Chevron Heads These 3 Top Pipeline Stocks To Watch",
         "summary": "",
-        "url": "https://finance.yahoo.com/media-advertising/articles/walmart-wmt-turning-shopper-data-071444992.html",
+        "url": "https://finance.yahoo.com/energy/articles/chevron-heads-3-top-pipeline-071123147.html",
         "source": "Simply Wall St.",
-        "published_at": "2026-10-07T07:14:44Z",
-        "fetched_at": "2026-10-07T08:02:06Z",
+        "published_at": "2026-10-08T07:11:23Z",
+        "fetched_at": "2026-10-08T08:01:50Z",
         "ticker": null,
         "source_tier": "aggregator"
       },
       {
-        "title": "Shell’s Refining Margin Soars to Record High After Middle East Conflict Upends Fuel Markets",
+        "title": "Bitcoin falls below $83k as M.East tensions, soaring yields dent crypto appetite",
         "summary": "",
-        "url": "https://finance.yahoo.com/m/5787d317-9645-3475-a254-1aaed304a674/shell%E2%80%99s-refining-margin-soars.html",
-        "source": "The Wall Street Journal",
-        "published_at": "2026-10-07T07:00:00Z",
-        "fetched_at": "2026-10-07T08:02:06Z",
-        "ticker": null,
-        "source_tier": "aggregator"
-      },
-      {
-        "title": "Oil gains as US storm and Houthi air strikes threaten supply",
-        "summary": "",
-        "url": "https://finance.yahoo.com/energy/articles/oil-prices-rise-storms-air-004803079.html",
-        "source": "Reuters",
-        "published_at": "2026-10-07T06:45:41Z",
-        "fetched_at": "2026-10-07T08:02:06Z",
-        "ticker": null,
-        "source_tier": "aggregator"
-      },
-      {
-        "title": "India stocks dip after RBI hikes rates for first time in nearly 4 yrs",
-        "summary": "",
-        "url": "https://finance.yahoo.com/economy/policy/articles/india-stocks-dip-rbi-hikes-061508837.html",
+        "url": "https://finance.yahoo.com/markets/crypto/articles/bitcoin-falls-below-83k-m-070724550.html",
         "source": "Investing.com",
-        "published_at": "2026-10-07T06:15:08Z",
-        "fetched_at": "2026-10-07T08:02:06Z",
+        "published_at": "2026-10-08T07:07:24Z",
+        "fetched_at": "2026-10-08T08:01:50Z",
+        "ticker": null,
+        "source_tier": "aggregator"
+      },
+      {
+        "title": "Dollar Stays Elevated as Treasury Yields, Oil Prices Rise",
+        "summary": "",
+        "url": "https://finance.yahoo.com/m/4449deb1-a716-3b73-a99d-120e732cf5dc/dollar-stays-elevated-as.html",
+        "source": "The Wall Street Journal",
+        "published_at": "2026-10-08T06:55:00Z",
+        "fetched_at": "2026-10-08T08:01:50Z",
+        "ticker": null,
+        "source_tier": "aggregator"
+      },
+      {
+        "title": "Tertiary Minerals plans to do deeper at Mushima North project",
+        "summary": "",
+        "url": "https://finance.yahoo.com/markets/commodities/articles/tertiary-minerals-plans-deeper-mushima-062300653.html",
+        "source": "Proactive",
+        "published_at": "2026-10-08T06:23:00Z",
+        "fetched_at": "2026-10-08T08:01:50Z",
+        "ticker": null,
+        "source_tier": "aggregator"
+      },
+      {
+        "title": "Clearway Energy And 2 Renewable Energy Stocks To Watch",
+        "summary": "",
+        "url": "https://finance.yahoo.com/energy/articles/clearway-energy-2-renewable-energy-061519379.html",
+        "source": "Simply Wall St.",
+        "published_at": "2026-10-08T06:15:19Z",
+        "fetched_at": "2026-10-08T08:01:50Z",
+        "ticker": null,
+        "source_tier": "aggregator"
+      },
+      {
+        "title": "Tamarack Valley Energy (TSX:TVE) Stock May Be Reasonable After Clearwater Shift",
+        "summary": "",
+        "url": "https://finance.yahoo.com/energy/articles/tamarack-valley-energy-tsx-tve-061351197.html",
+        "source": "Simply Wall St.",
+        "published_at": "2026-10-08T06:13:51Z",
+        "fetched_at": "2026-10-08T08:01:50Z",
+        "ticker": null,
+        "source_tier": "aggregator"
+      },
+      {
+        "title": "Chevron highlighted as Zacks Bull and Southwest Airlines Bear of the Day",
+        "summary": "",
+        "url": "https://finance.yahoo.com/markets/stocks/articles/chevron-highlighted-zacks-bull-southwest-060100171.html",
+        "source": "Zacks",
+        "published_at": "2026-10-08T06:01:00Z",
+        "fetched_at": "2026-10-08T08:01:50Z",
         "ticker": null,
         "source_tier": "aggregator"
       }
@@ -116,7 +116,7 @@
       {
         "source": "Yahoo Finance",
         "status": "ok",
-        "item_count": 49
+        "item_count": 34
       },
       {
         "source": "Federal Reserve",
@@ -127,13 +127,24 @@
   },
   "tickers": {
     "515880.SS": {
-      "status": "empty",
+      "status": "ok",
       "query_type": "ticker",
       "ticker": "515880.SS",
-      "start_date": "2026-10-07",
-      "end_date": "2026-10-07",
-      "fetched_at": "2026-10-07T08:02:07Z",
-      "items": [],
+      "start_date": "2026-10-08",
+      "end_date": "2026-10-08",
+      "fetched_at": "2026-10-08T08:01:51Z",
+      "items": [
+        {
+          "title": "9月30日通信ETF国泰（515880）份额减少6.48亿份，最新份额668.08亿份，最新规模418.55亿元",
+          "summary": "9月30日通信ETF国泰（515880）份额减少6.48亿份，最新份额668.08亿份，最新规模418.55亿元 新浪网",
+          "url": "https://news.google.com/rss/articles/CBMiggFBVV95cUxNWDlrLTFkb0J1WUphV3owZmRHelhtX25kVlhHOG1IY1VPTGNJajVUcEk0UkZVOUFCV1ZGZXp4aDRCTnpsQWNEajBFX0FXMmxWekRCZUUwTkw2NVJlUVNZRWxMNC1vUEhBa1lsVmwxWW1OUi1fSXhoMkgtcEgxMjE0WVBn?oc=5",
+          "source": "Google News / 新浪网",
+          "published_at": "2026-10-08T01:09:49Z",
+          "fetched_at": "2026-10-08T08:01:51Z",
+          "ticker": "515880.SS",
+          "source_tier": "aggregator"
+        }
+      ],
       "source_statuses": [
         {
           "source": "Yahoo Finance",
@@ -142,8 +153,8 @@
         },
         {
           "source": "Google News RSS",
-          "status": "empty",
-          "item_count": 0
+          "status": "ok",
+          "item_count": 1
         },
         {
           "source": "SEC EDGAR",
@@ -156,9 +167,9 @@
       "status": "empty",
       "query_type": "ticker",
       "ticker": "512480.SS",
-      "start_date": "2026-10-07",
-      "end_date": "2026-10-07",
-      "fetched_at": "2026-10-07T08:02:10Z",
+      "start_date": "2026-10-08",
+      "end_date": "2026-10-08",
+      "fetched_at": "2026-10-08T08:01:54Z",
       "items": [],
       "source_statuses": [
         {
@@ -181,103 +192,113 @@
   },
   "items": [
     {
-      "title": "India joins global rate-tightening wave with first hike in nearly 4 years",
+      "title": "European shares dip as banks hit over 3-month low, oil prices weigh",
       "summary": "",
-      "url": "https://finance.yahoo.com/economy/policy/articles/india-raises-rates-first-time-045256457.html",
+      "url": "https://finance.yahoo.com/markets/articles/european-shares-dip-banks-hit-073637841.html",
       "source": "Reuters",
-      "published_at": "2026-10-07T07:55:20Z",
-      "fetched_at": "2026-10-07T08:02:06Z",
+      "published_at": "2026-10-08T07:36:37Z",
+      "fetched_at": "2026-10-08T08:01:50Z",
       "ticker": null,
       "source_tier": "aggregator"
     },
     {
-      "title": "Oil rises and stocks fall as Hormuz worries flare",
+      "title": "Stocks fall further as oil surge fans fresh inflation worries",
       "summary": "",
-      "url": "https://finance.yahoo.com/energy/articles/oil-rises-stocks-fall-hormuz-023838273.html",
+      "url": "https://finance.yahoo.com/markets/stocks/articles/stocks-fall-further-oil-spike-024956877.html",
       "source": "AFP",
-      "published_at": "2026-10-07T07:50:04Z",
-      "fetched_at": "2026-10-07T08:02:06Z",
+      "published_at": "2026-10-08T07:24:10Z",
+      "fetched_at": "2026-10-08T08:01:50Z",
       "ticker": null,
       "source_tier": "aggregator"
     },
     {
-      "title": "FTSE 100 today: Stocks slip as U.S. bond yields climb, miners drag",
+      "title": "Oil prices are climbing on concerns about an escalating Iran war",
       "summary": "",
-      "url": "https://finance.yahoo.com/markets/world-indices/articles/ftse-100-today-stocks-slip-074845443.html",
-      "source": "Investing.com",
-      "published_at": "2026-10-07T07:48:45Z",
-      "fetched_at": "2026-10-07T08:02:06Z",
-      "ticker": null,
-      "source_tier": "aggregator"
-    },
-    {
-      "title": "European stocks slip as Houthi threat lift oil ahead of FOMC minutes",
-      "summary": "",
-      "url": "https://finance.yahoo.com/markets/world-indices/articles/european-stocks-slip-houthi-threat-074052597.html",
-      "source": "Investing.com",
-      "published_at": "2026-10-07T07:40:52Z",
-      "fetched_at": "2026-10-07T08:02:06Z",
-      "ticker": null,
-      "source_tier": "aggregator"
-    },
-    {
-      "title": "European shares slip after three-day gain as rise in oil, yields weigh",
-      "summary": "",
-      "url": "https://finance.yahoo.com/markets/world-indices/articles/european-shares-slip-three-day-073928521.html",
-      "source": "Reuters",
-      "published_at": "2026-10-07T07:39:28Z",
-      "fetched_at": "2026-10-07T08:02:06Z",
-      "ticker": null,
-      "source_tier": "aggregator"
-    },
-    {
-      "title": "India hikes interest rates for first time in over three years as Iran war fuels inflation",
-      "summary": "",
-      "url": "https://finance.yahoo.com/economy/policy/articles/india-hikes-interest-rates-first-072744956.html",
+      "url": "https://finance.yahoo.com/energy/articles/oil-prices-climbing-concerns-escalating-063551545.html",
       "source": "Euronews",
-      "published_at": "2026-10-07T07:27:44Z",
-      "fetched_at": "2026-10-07T08:02:06Z",
+      "published_at": "2026-10-08T07:16:43Z",
+      "fetched_at": "2026-10-08T08:01:50Z",
       "ticker": null,
       "source_tier": "aggregator"
     },
     {
-      "title": "How Is Walmart (WMT) Turning Shopper Data Into A Bigger Advertising Business?",
+      "title": "Chevron Heads These 3 Top Pipeline Stocks To Watch",
       "summary": "",
-      "url": "https://finance.yahoo.com/media-advertising/articles/walmart-wmt-turning-shopper-data-071444992.html",
+      "url": "https://finance.yahoo.com/energy/articles/chevron-heads-3-top-pipeline-071123147.html",
       "source": "Simply Wall St.",
-      "published_at": "2026-10-07T07:14:44Z",
-      "fetched_at": "2026-10-07T08:02:06Z",
+      "published_at": "2026-10-08T07:11:23Z",
+      "fetched_at": "2026-10-08T08:01:50Z",
       "ticker": null,
       "source_tier": "aggregator"
     },
     {
-      "title": "Shell’s Refining Margin Soars to Record High After Middle East Conflict Upends Fuel Markets",
+      "title": "Bitcoin falls below $83k as M.East tensions, soaring yields dent crypto appetite",
       "summary": "",
-      "url": "https://finance.yahoo.com/m/5787d317-9645-3475-a254-1aaed304a674/shell%E2%80%99s-refining-margin-soars.html",
-      "source": "The Wall Street Journal",
-      "published_at": "2026-10-07T07:00:00Z",
-      "fetched_at": "2026-10-07T08:02:06Z",
-      "ticker": null,
-      "source_tier": "aggregator"
-    },
-    {
-      "title": "Oil gains as US storm and Houthi air strikes threaten supply",
-      "summary": "",
-      "url": "https://finance.yahoo.com/energy/articles/oil-prices-rise-storms-air-004803079.html",
-      "source": "Reuters",
-      "published_at": "2026-10-07T06:45:41Z",
-      "fetched_at": "2026-10-07T08:02:06Z",
-      "ticker": null,
-      "source_tier": "aggregator"
-    },
-    {
-      "title": "India stocks dip after RBI hikes rates for first time in nearly 4 yrs",
-      "summary": "",
-      "url": "https://finance.yahoo.com/economy/policy/articles/india-stocks-dip-rbi-hikes-061508837.html",
+      "url": "https://finance.yahoo.com/markets/crypto/articles/bitcoin-falls-below-83k-m-070724550.html",
       "source": "Investing.com",
-      "published_at": "2026-10-07T06:15:08Z",
-      "fetched_at": "2026-10-07T08:02:06Z",
+      "published_at": "2026-10-08T07:07:24Z",
+      "fetched_at": "2026-10-08T08:01:50Z",
       "ticker": null,
+      "source_tier": "aggregator"
+    },
+    {
+      "title": "Dollar Stays Elevated as Treasury Yields, Oil Prices Rise",
+      "summary": "",
+      "url": "https://finance.yahoo.com/m/4449deb1-a716-3b73-a99d-120e732cf5dc/dollar-stays-elevated-as.html",
+      "source": "The Wall Street Journal",
+      "published_at": "2026-10-08T06:55:00Z",
+      "fetched_at": "2026-10-08T08:01:50Z",
+      "ticker": null,
+      "source_tier": "aggregator"
+    },
+    {
+      "title": "Tertiary Minerals plans to do deeper at Mushima North project",
+      "summary": "",
+      "url": "https://finance.yahoo.com/markets/commodities/articles/tertiary-minerals-plans-deeper-mushima-062300653.html",
+      "source": "Proactive",
+      "published_at": "2026-10-08T06:23:00Z",
+      "fetched_at": "2026-10-08T08:01:50Z",
+      "ticker": null,
+      "source_tier": "aggregator"
+    },
+    {
+      "title": "Clearway Energy And 2 Renewable Energy Stocks To Watch",
+      "summary": "",
+      "url": "https://finance.yahoo.com/energy/articles/clearway-energy-2-renewable-energy-061519379.html",
+      "source": "Simply Wall St.",
+      "published_at": "2026-10-08T06:15:19Z",
+      "fetched_at": "2026-10-08T08:01:50Z",
+      "ticker": null,
+      "source_tier": "aggregator"
+    },
+    {
+      "title": "Tamarack Valley Energy (TSX:TVE) Stock May Be Reasonable After Clearwater Shift",
+      "summary": "",
+      "url": "https://finance.yahoo.com/energy/articles/tamarack-valley-energy-tsx-tve-061351197.html",
+      "source": "Simply Wall St.",
+      "published_at": "2026-10-08T06:13:51Z",
+      "fetched_at": "2026-10-08T08:01:50Z",
+      "ticker": null,
+      "source_tier": "aggregator"
+    },
+    {
+      "title": "Chevron highlighted as Zacks Bull and Southwest Airlines Bear of the Day",
+      "summary": "",
+      "url": "https://finance.yahoo.com/markets/stocks/articles/chevron-highlighted-zacks-bull-southwest-060100171.html",
+      "source": "Zacks",
+      "published_at": "2026-10-08T06:01:00Z",
+      "fetched_at": "2026-10-08T08:01:50Z",
+      "ticker": null,
+      "source_tier": "aggregator"
+    },
+    {
+      "title": "9月30日通信ETF国泰（515880）份额减少6.48亿份，最新份额668.08亿份，最新规模418.55亿元",
+      "summary": "9月30日通信ETF国泰（515880）份额减少6.48亿份，最新份额668.08亿份，最新规模418.55亿元 新浪网",
+      "url": "https://news.google.com/rss/articles/CBMiggFBVV95cUxNWDlrLTFkb0J1WUphV3owZmRHelhtX25kVlhHOG1IY1VPTGNJajVUcEk0UkZVOUFCV1ZGZXp4aDRCTnpsQWNEajBFX0FXMmxWekRCZUUwTkw2NVJlUVNZRWxMNC1vUEhBa1lsVmwxWW1OUi1fSXhoMkgtcEgxMjE0WVBn?oc=5",
+      "source": "Google News / 新浪网",
+      "published_at": "2026-10-08T01:09:49Z",
+      "fetched_at": "2026-10-08T08:01:51Z",
+      "ticker": "515880.SS",
       "source_tier": "aggregator"
     }
   ]
