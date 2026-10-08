@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "generatedAt": "2026-10-07T17:48:35.283Z",
+  "generatedAt": "2026-10-08T17:52:15.507Z",
   "status": "degraded",
   "coverage": {
     "policy": "current-listed-best-effort-plus-configured-core",
@@ -16,13 +16,13 @@
       "id": "sina-market-center",
       "role": "CN current-listed discovery",
       "quality": "best_effort",
-      "asOf": "2026-10-07T17:48:35.283Z"
+      "asOf": "2026-10-08T17:52:15.507Z"
     },
     {
       "id": "workbench-settings",
       "role": "configured HK/US/CN core instruments",
       "quality": "declared",
-      "asOf": "2026-10-07T17:48:35.283Z"
+      "asOf": "2026-10-08T17:52:15.507Z"
     }
   ],
   "instruments": [
@@ -4945,7 +4945,7 @@
     },
     {
       "symbol": "001246.SZ",
-      "name": "N力勤",
+      "name": "C力勤",
       "market": "CN",
       "exchange": "SZ",
       "instrumentType": "stock",
@@ -32247,7 +32247,7 @@
     },
     {
       "symbol": "600028.SS",
-      "name": "XD中国石",
+      "name": "中国石化",
       "market": "CN",
       "exchange": "SS",
       "instrumentType": "stock",
@@ -35833,7 +35833,7 @@
     },
     {
       "symbol": "600486.SS",
-      "name": "XD扬农化",
+      "name": "扬农化工",
       "market": "CN",
       "exchange": "SS",
       "instrumentType": "stock",
@@ -36746,7 +36746,7 @@
     },
     {
       "symbol": "600585.SS",
-      "name": "XD海螺水",
+      "name": "海螺水泥",
       "market": "CN",
       "exchange": "SS",
       "instrumentType": "stock",
@@ -38154,7 +38154,7 @@
     },
     {
       "symbol": "600742.SS",
-      "name": "XD富维股",
+      "name": "富维股份",
       "market": "CN",
       "exchange": "SS",
       "instrumentType": "stock",
@@ -38473,7 +38473,7 @@
     },
     {
       "symbol": "600777.SS",
-      "name": "XD新潮能",
+      "name": "新潮能源",
       "market": "CN",
       "exchange": "SS",
       "instrumentType": "stock",
@@ -38990,7 +38990,7 @@
     },
     {
       "symbol": "600834.SS",
-      "name": "XD申通地",
+      "name": "申通地铁",
       "market": "CN",
       "exchange": "SS",
       "instrumentType": "stock",
@@ -39804,7 +39804,7 @@
     },
     {
       "symbol": "600941.SS",
-      "name": "XD中国移",
+      "name": "中国移动",
       "market": "CN",
       "exchange": "SS",
       "instrumentType": "stock",
@@ -40541,7 +40541,7 @@
     },
     {
       "symbol": "601069.SS",
-      "name": "XD西部黄",
+      "name": "西部黄金",
       "market": "CN",
       "exchange": "SS",
       "instrumentType": "stock",
@@ -41421,7 +41421,7 @@
     },
     {
       "symbol": "601390.SS",
-      "name": "中国中铁",
+      "name": "XD中国中",
       "market": "CN",
       "exchange": "SS",
       "instrumentType": "stock",
@@ -41575,7 +41575,7 @@
     },
     {
       "symbol": "601577.SS",
-      "name": "XD长沙银",
+      "name": "长沙银行",
       "market": "CN",
       "exchange": "SS",
       "instrumentType": "stock",
@@ -42279,7 +42279,7 @@
     },
     {
       "symbol": "601877.SS",
-      "name": "XD正泰电",
+      "name": "正泰电器",
       "market": "CN",
       "exchange": "SS",
       "instrumentType": "stock",
@@ -44820,7 +44820,7 @@
     },
     {
       "symbol": "603223.SS",
-      "name": "XD恒通股",
+      "name": "恒通股份",
       "market": "CN",
       "exchange": "SS",
       "instrumentType": "stock",
@@ -45337,7 +45337,7 @@
     },
     {
       "symbol": "603291.SS",
-      "name": "XD联合水",
+      "name": "联合水务",
       "market": "CN",
       "exchange": "SS",
       "instrumentType": "stock",
@@ -46635,7 +46635,7 @@
     },
     {
       "symbol": "603515.SS",
-      "name": "XD欧普照",
+      "name": "欧普照明",
       "market": "CN",
       "exchange": "SS",
       "instrumentType": "stock",
@@ -49132,7 +49132,7 @@
     },
     {
       "symbol": "603939.SS",
-      "name": "XD益丰药",
+      "name": "益丰药房",
       "market": "CN",
       "exchange": "SS",
       "instrumentType": "stock",
@@ -49495,7 +49495,7 @@
     },
     {
       "symbol": "603999.SS",
-      "name": "XD读者传",
+      "name": "读者传媒",
       "market": "CN",
       "exchange": "SS",
       "instrumentType": "stock",
@@ -50089,7 +50089,7 @@
     },
     {
       "symbol": "605183.SS",
-      "name": "XD确成股",
+      "name": "确成股份",
       "market": "CN",
       "exchange": "SS",
       "instrumentType": "stock",
@@ -50397,7 +50397,7 @@
     },
     {
       "symbol": "605319.SS",
-      "name": "XD无锡振",
+      "name": "无锡振华",
       "market": "CN",
       "exchange": "SS",
       "instrumentType": "stock",
@@ -50430,7 +50430,7 @@
     },
     {
       "symbol": "605337.SS",
-      "name": "李子园",
+      "name": "XD李子园",
       "market": "CN",
       "exchange": "SS",
       "instrumentType": "stock",
@@ -52740,7 +52740,7 @@
     },
     {
       "symbol": "688208.SS",
-      "name": "XD道通科",
+      "name": "道通科技",
       "market": "CN",
       "exchange": "SS",
       "instrumentType": "stock",
@@ -54599,7 +54599,7 @@
     },
     {
       "symbol": "688410.SS",
-      "name": "XD山外山",
+      "name": "山外山",
       "market": "CN",
       "exchange": "SS",
       "instrumentType": "stock",
@@ -56183,7 +56183,7 @@
     },
     {
       "symbol": "688629.SS",
-      "name": "XD华丰科",
+      "name": "华丰科技",
       "market": "CN",
       "exchange": "SS",
       "instrumentType": "stock",
@@ -56447,7 +56447,7 @@
     },
     {
       "symbol": "688668.SS",
-      "name": "XD鼎通科",
+      "name": "鼎通科技",
       "market": "CN",
       "exchange": "SS",
       "instrumentType": "stock",
@@ -56491,7 +56491,7 @@
     },
     {
       "symbol": "688676.SS",
-      "name": "金盘科技",
+      "name": "XD金盘科",
       "market": "CN",
       "exchange": "SS",
       "instrumentType": "stock",
@@ -56711,7 +56711,7 @@
     },
     {
       "symbol": "688699.SS",
-      "name": "XD明微电",
+      "name": "明微电子",
       "market": "CN",
       "exchange": "SS",
       "instrumentType": "stock",
@@ -57525,7 +57525,7 @@
     },
     {
       "symbol": "920000.BJ",
-      "name": "XD安徽凤",
+      "name": "安徽凤凰",
       "market": "CN",
       "exchange": "BJ",
       "instrumentType": "stock",
@@ -58086,7 +58086,7 @@
     },
     {
       "symbol": "920072.BJ",
-      "name": "XD科莱瑞",
+      "name": "科莱瑞迪",
       "market": "CN",
       "exchange": "BJ",
       "instrumentType": "stock",
@@ -58878,7 +58878,7 @@
     },
     {
       "symbol": "920186.BJ",
-      "name": "XD中科仪",
+      "name": "中科仪",
       "market": "CN",
       "exchange": "BJ",
       "instrumentType": "stock",
@@ -59120,7 +59120,7 @@
     },
     {
       "symbol": "920222.BJ",
-      "name": "XD益坤电",
+      "name": "益坤电气",
       "market": "CN",
       "exchange": "BJ",
       "instrumentType": "stock",
