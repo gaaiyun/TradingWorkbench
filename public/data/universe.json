@@ -1,10 +1,10 @@
 {
   "version": 1,
-  "generatedAt": "2026-10-08T17:52:15.507Z",
+  "generatedAt": "2026-10-09T17:26:28.575Z",
   "status": "degraded",
   "coverage": {
     "policy": "current-listed-best-effort-plus-configured-core",
-    "cnCurrentListedStocks": 5571,
+    "cnCurrentListedStocks": 5572,
     "cnConfiguredCore": 3,
     "usCore": 9,
     "hkCore": 1,
@@ -16,13 +16,13 @@
       "id": "sina-market-center",
       "role": "CN current-listed discovery",
       "quality": "best_effort",
-      "asOf": "2026-10-08T17:52:15.507Z"
+      "asOf": "2026-10-09T17:26:28.575Z"
     },
     {
       "id": "workbench-settings",
       "role": "configured HK/US/CN core instruments",
       "quality": "declared",
-      "asOf": "2026-10-08T17:52:15.507Z"
+      "asOf": "2026-10-09T17:26:28.575Z"
     }
   ],
   "instruments": [
@@ -41421,7 +41421,7 @@
     },
     {
       "symbol": "601390.SS",
-      "name": "XD中国中",
+      "name": "中国中铁",
       "market": "CN",
       "exchange": "SS",
       "instrumentType": "stock",
@@ -42785,7 +42785,7 @@
     },
     {
       "symbol": "603006.SS",
-      "name": "联明股份",
+      "name": "XD联明股",
       "market": "CN",
       "exchange": "SS",
       "instrumentType": "stock",
@@ -45425,7 +45425,7 @@
     },
     {
       "symbol": "603303.SS",
-      "name": "得邦照明",
+      "name": "XD得邦照",
       "market": "CN",
       "exchange": "SS",
       "instrumentType": "stock",
@@ -45458,7 +45458,7 @@
     },
     {
       "symbol": "603307.SS",
-      "name": "扬州金泉",
+      "name": "XD扬州金",
       "market": "CN",
       "exchange": "SS",
       "instrumentType": "stock",
@@ -45777,7 +45777,7 @@
     },
     {
       "symbol": "603337.SS",
-      "name": "杰克科技",
+      "name": "XD杰克科",
       "market": "CN",
       "exchange": "SS",
       "instrumentType": "stock",
@@ -50430,7 +50430,7 @@
     },
     {
       "symbol": "605337.SS",
-      "name": "XD李子园",
+      "name": "李子园",
       "market": "CN",
       "exchange": "SS",
       "instrumentType": "stock",
@@ -56491,7 +56491,7 @@
     },
     {
       "symbol": "688676.SS",
-      "name": "XD金盘科",
+      "name": "金盘科技",
       "market": "CN",
       "exchange": "SS",
       "instrumentType": "stock",
@@ -58626,6 +58626,17 @@
     {
       "symbol": "920156.BJ",
       "name": "海昌智能",
+      "market": "CN",
+      "exchange": "BJ",
+      "instrumentType": "stock",
+      "industry": null,
+      "listDate": null,
+      "source": "sina-market-center",
+      "coverage": "current_listed_best_effort"
+    },
+    {
+      "symbol": "920157.BJ",
+      "name": "N宇特",
       "market": "CN",
       "exchange": "BJ",
       "instrumentType": "stock",
