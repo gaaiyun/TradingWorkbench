@@ -1,113 +1,113 @@
 {
   "version": 1,
   "status": "ok",
-  "generated_at": "2026-10-08T16:01:49+08:00",
-  "trade_date": "2026-10-08",
+  "generated_at": "2026-10-09T16:01:24+08:00",
+  "trade_date": "2026-10-09",
   "global": {
     "status": "ok",
     "query_type": "global",
     "ticker": null,
-    "start_date": "2026-10-01",
-    "end_date": "2026-10-08",
-    "fetched_at": "2026-10-08T08:01:50Z",
+    "start_date": "2026-10-02",
+    "end_date": "2026-10-09",
+    "fetched_at": "2026-10-09T08:01:25Z",
     "items": [
       {
-        "title": "European shares dip as banks hit over 3-month low, oil prices weigh",
+        "title": "Oil Falls After Trump Says No Iran Attacks Before Midterms",
         "summary": "",
-        "url": "https://finance.yahoo.com/markets/articles/european-shares-dip-banks-hit-073637841.html",
-        "source": "Reuters",
-        "published_at": "2026-10-08T07:36:37Z",
-        "fetched_at": "2026-10-08T08:01:50Z",
-        "ticker": null,
-        "source_tier": "aggregator"
-      },
-      {
-        "title": "Stocks fall further as oil surge fans fresh inflation worries",
-        "summary": "",
-        "url": "https://finance.yahoo.com/markets/stocks/articles/stocks-fall-further-oil-spike-024956877.html",
-        "source": "AFP",
-        "published_at": "2026-10-08T07:24:10Z",
-        "fetched_at": "2026-10-08T08:01:50Z",
-        "ticker": null,
-        "source_tier": "aggregator"
-      },
-      {
-        "title": "Oil prices are climbing on concerns about an escalating Iran war",
-        "summary": "",
-        "url": "https://finance.yahoo.com/energy/articles/oil-prices-climbing-concerns-escalating-063551545.html",
-        "source": "Euronews",
-        "published_at": "2026-10-08T07:16:43Z",
-        "fetched_at": "2026-10-08T08:01:50Z",
-        "ticker": null,
-        "source_tier": "aggregator"
-      },
-      {
-        "title": "Chevron Heads These 3 Top Pipeline Stocks To Watch",
-        "summary": "",
-        "url": "https://finance.yahoo.com/energy/articles/chevron-heads-3-top-pipeline-071123147.html",
-        "source": "Simply Wall St.",
-        "published_at": "2026-10-08T07:11:23Z",
-        "fetched_at": "2026-10-08T08:01:50Z",
-        "ticker": null,
-        "source_tier": "aggregator"
-      },
-      {
-        "title": "Bitcoin falls below $83k as M.East tensions, soaring yields dent crypto appetite",
-        "summary": "",
-        "url": "https://finance.yahoo.com/markets/crypto/articles/bitcoin-falls-below-83k-m-070724550.html",
-        "source": "Investing.com",
-        "published_at": "2026-10-08T07:07:24Z",
-        "fetched_at": "2026-10-08T08:01:50Z",
-        "ticker": null,
-        "source_tier": "aggregator"
-      },
-      {
-        "title": "Dollar Stays Elevated as Treasury Yields, Oil Prices Rise",
-        "summary": "",
-        "url": "https://finance.yahoo.com/m/4449deb1-a716-3b73-a99d-120e732cf5dc/dollar-stays-elevated-as.html",
+        "url": "https://finance.yahoo.com/m/0d956c4d-fd44-30fe-948c-018185d2af86/oil-falls-after-trump-says-no.html",
         "source": "The Wall Street Journal",
-        "published_at": "2026-10-08T06:55:00Z",
-        "fetched_at": "2026-10-08T08:01:50Z",
+        "published_at": "2026-10-09T07:43:00Z",
+        "fetched_at": "2026-10-09T08:01:25Z",
         "ticker": null,
         "source_tier": "aggregator"
       },
       {
-        "title": "Tertiary Minerals plans to do deeper at Mushima North project",
+        "title": "Gold Rises on Softer U.S. Dollar, Lower Oil Prices",
         "summary": "",
-        "url": "https://finance.yahoo.com/markets/commodities/articles/tertiary-minerals-plans-deeper-mushima-062300653.html",
-        "source": "Proactive",
-        "published_at": "2026-10-08T06:23:00Z",
-        "fetched_at": "2026-10-08T08:01:50Z",
+        "url": "https://finance.yahoo.com/m/48f34614-a0d0-3cef-a85a-221f9b1b8c33/gold-rises-on-softer-u.s..html",
+        "source": "The Wall Street Journal",
+        "published_at": "2026-10-09T07:43:00Z",
+        "fetched_at": "2026-10-09T08:01:25Z",
         "ticker": null,
         "source_tier": "aggregator"
       },
       {
-        "title": "Clearway Energy And 2 Renewable Energy Stocks To Watch",
+        "title": "Barclays downgrades 2 European airline stocks into September quarter results",
         "summary": "",
-        "url": "https://finance.yahoo.com/energy/articles/clearway-energy-2-renewable-energy-061519379.html",
+        "url": "https://finance.yahoo.com/markets/stocks/articles/barclays-downgrades-2-european-airline-073533995.html",
+        "source": "Investing.com",
+        "published_at": "2026-10-09T07:35:33Z",
+        "fetched_at": "2026-10-09T08:01:25Z",
+        "ticker": null,
+        "source_tier": "aggregator"
+      },
+      {
+        "title": "Malaysia plans $112.5 billion budget for 2027 ahead of possible election",
+        "summary": "",
+        "url": "https://finance.yahoo.com/economy/policy/articles/malaysia-plans-112-5-billion-073131330.html",
+        "source": "Reuters",
+        "published_at": "2026-10-09T07:31:31Z",
+        "fetched_at": "2026-10-09T08:01:25Z",
+        "ticker": null,
+        "source_tier": "aggregator"
+      },
+      {
+        "title": "Asian stocks mostly up as traders weigh AI, oil dips after surge",
+        "summary": "",
+        "url": "https://finance.yahoo.com/markets/world-indices/articles/asian-stocks-mixed-amid-ai-031816763.html",
+        "source": "AFP",
+        "published_at": "2026-10-09T07:31:19Z",
+        "fetched_at": "2026-10-09T08:01:25Z",
+        "ticker": null,
+        "source_tier": "aggregator"
+      },
+      {
+        "title": "Oil relief lifts European stocks, telecoms a weak spot",
+        "summary": "",
+        "url": "https://finance.yahoo.com/markets/world-indices/articles/oil-relief-lifts-european-stocks-073047579.html",
+        "source": "Reuters",
+        "published_at": "2026-10-09T07:30:47Z",
+        "fetched_at": "2026-10-09T08:01:25Z",
+        "ticker": null,
+        "source_tier": "aggregator"
+      },
+      {
+        "title": "European Indexes Rise Sharply as Banks, Software Gain",
+        "summary": "",
+        "url": "https://finance.yahoo.com/m/c01b19be-d023-36fd-a888-f148bda4eec7/european-indexes-rise-sharply.html",
+        "source": "The Wall Street Journal",
+        "published_at": "2026-10-09T07:25:00Z",
+        "fetched_at": "2026-10-09T08:01:25Z",
+        "ticker": null,
+        "source_tier": "aggregator"
+      },
+      {
+        "title": "Oil falls as Trump comments on Iran talks ease supply concerns",
+        "summary": "",
+        "url": "https://finance.yahoo.com/news/oil-falls-trump-comments-iran-022757245.html",
+        "source": "Reuters",
+        "published_at": "2026-10-09T07:22:04Z",
+        "fetched_at": "2026-10-09T08:01:25Z",
+        "ticker": null,
+        "source_tier": "aggregator"
+      },
+      {
+        "title": "Crescent Energy (CRGY) Is Spending $4.2 Billion On Eagle Ford Assets",
+        "summary": "",
+        "url": "https://finance.yahoo.com/energy/articles/crescent-energy-crgy-spending-4-071709352.html",
         "source": "Simply Wall St.",
-        "published_at": "2026-10-08T06:15:19Z",
-        "fetched_at": "2026-10-08T08:01:50Z",
+        "published_at": "2026-10-09T07:17:09Z",
+        "fetched_at": "2026-10-09T08:01:25Z",
         "ticker": null,
         "source_tier": "aggregator"
       },
       {
-        "title": "Tamarack Valley Energy (TSX:TVE) Stock May Be Reasonable After Clearwater Shift",
+        "title": "Valero Energy (VLO) Faces A Fuel Margin Test From G7 Stock Releases",
         "summary": "",
-        "url": "https://finance.yahoo.com/energy/articles/tamarack-valley-energy-tsx-tve-061351197.html",
+        "url": "https://finance.yahoo.com/energy/articles/valero-energy-vlo-faces-fuel-071011550.html",
         "source": "Simply Wall St.",
-        "published_at": "2026-10-08T06:13:51Z",
-        "fetched_at": "2026-10-08T08:01:50Z",
-        "ticker": null,
-        "source_tier": "aggregator"
-      },
-      {
-        "title": "Chevron highlighted as Zacks Bull and Southwest Airlines Bear of the Day",
-        "summary": "",
-        "url": "https://finance.yahoo.com/markets/stocks/articles/chevron-highlighted-zacks-bull-southwest-060100171.html",
-        "source": "Zacks",
-        "published_at": "2026-10-08T06:01:00Z",
-        "fetched_at": "2026-10-08T08:01:50Z",
+        "published_at": "2026-10-09T07:10:11Z",
+        "fetched_at": "2026-10-09T08:01:25Z",
         "ticker": null,
         "source_tier": "aggregator"
       }
@@ -116,35 +116,24 @@
       {
         "source": "Yahoo Finance",
         "status": "ok",
-        "item_count": 34
+        "item_count": 49
       },
       {
         "source": "Federal Reserve",
         "status": "ok",
-        "item_count": 5
+        "item_count": 6
       }
     ]
   },
   "tickers": {
     "515880.SS": {
-      "status": "ok",
+      "status": "empty",
       "query_type": "ticker",
       "ticker": "515880.SS",
-      "start_date": "2026-10-08",
-      "end_date": "2026-10-08",
-      "fetched_at": "2026-10-08T08:01:51Z",
-      "items": [
-        {
-          "title": "9月30日通信ETF国泰（515880）份额减少6.48亿份，最新份额668.08亿份，最新规模418.55亿元",
-          "summary": "9月30日通信ETF国泰（515880）份额减少6.48亿份，最新份额668.08亿份，最新规模418.55亿元 新浪网",
-          "url": "https://news.google.com/rss/articles/CBMiggFBVV95cUxNWDlrLTFkb0J1WUphV3owZmRHelhtX25kVlhHOG1IY1VPTGNJajVUcEk0UkZVOUFCV1ZGZXp4aDRCTnpsQWNEajBFX0FXMmxWekRCZUUwTkw2NVJlUVNZRWxMNC1vUEhBa1lsVmwxWW1OUi1fSXhoMkgtcEgxMjE0WVBn?oc=5",
-          "source": "Google News / 新浪网",
-          "published_at": "2026-10-08T01:09:49Z",
-          "fetched_at": "2026-10-08T08:01:51Z",
-          "ticker": "515880.SS",
-          "source_tier": "aggregator"
-        }
-      ],
+      "start_date": "2026-10-09",
+      "end_date": "2026-10-09",
+      "fetched_at": "2026-10-09T08:01:27Z",
+      "items": [],
       "source_statuses": [
         {
           "source": "Yahoo Finance",
@@ -153,8 +142,8 @@
         },
         {
           "source": "Google News RSS",
-          "status": "ok",
-          "item_count": 1
+          "status": "empty",
+          "item_count": 0
         },
         {
           "source": "SEC EDGAR",
@@ -167,9 +156,9 @@
       "status": "empty",
       "query_type": "ticker",
       "ticker": "512480.SS",
-      "start_date": "2026-10-08",
-      "end_date": "2026-10-08",
-      "fetched_at": "2026-10-08T08:01:54Z",
+      "start_date": "2026-10-09",
+      "end_date": "2026-10-09",
+      "fetched_at": "2026-10-09T08:01:30Z",
       "items": [],
       "source_statuses": [
         {
@@ -192,113 +181,103 @@
   },
   "items": [
     {
-      "title": "European shares dip as banks hit over 3-month low, oil prices weigh",
+      "title": "Oil Falls After Trump Says No Iran Attacks Before Midterms",
       "summary": "",
-      "url": "https://finance.yahoo.com/markets/articles/european-shares-dip-banks-hit-073637841.html",
-      "source": "Reuters",
-      "published_at": "2026-10-08T07:36:37Z",
-      "fetched_at": "2026-10-08T08:01:50Z",
-      "ticker": null,
-      "source_tier": "aggregator"
-    },
-    {
-      "title": "Stocks fall further as oil surge fans fresh inflation worries",
-      "summary": "",
-      "url": "https://finance.yahoo.com/markets/stocks/articles/stocks-fall-further-oil-spike-024956877.html",
-      "source": "AFP",
-      "published_at": "2026-10-08T07:24:10Z",
-      "fetched_at": "2026-10-08T08:01:50Z",
-      "ticker": null,
-      "source_tier": "aggregator"
-    },
-    {
-      "title": "Oil prices are climbing on concerns about an escalating Iran war",
-      "summary": "",
-      "url": "https://finance.yahoo.com/energy/articles/oil-prices-climbing-concerns-escalating-063551545.html",
-      "source": "Euronews",
-      "published_at": "2026-10-08T07:16:43Z",
-      "fetched_at": "2026-10-08T08:01:50Z",
-      "ticker": null,
-      "source_tier": "aggregator"
-    },
-    {
-      "title": "Chevron Heads These 3 Top Pipeline Stocks To Watch",
-      "summary": "",
-      "url": "https://finance.yahoo.com/energy/articles/chevron-heads-3-top-pipeline-071123147.html",
-      "source": "Simply Wall St.",
-      "published_at": "2026-10-08T07:11:23Z",
-      "fetched_at": "2026-10-08T08:01:50Z",
-      "ticker": null,
-      "source_tier": "aggregator"
-    },
-    {
-      "title": "Bitcoin falls below $83k as M.East tensions, soaring yields dent crypto appetite",
-      "summary": "",
-      "url": "https://finance.yahoo.com/markets/crypto/articles/bitcoin-falls-below-83k-m-070724550.html",
-      "source": "Investing.com",
-      "published_at": "2026-10-08T07:07:24Z",
-      "fetched_at": "2026-10-08T08:01:50Z",
-      "ticker": null,
-      "source_tier": "aggregator"
-    },
-    {
-      "title": "Dollar Stays Elevated as Treasury Yields, Oil Prices Rise",
-      "summary": "",
-      "url": "https://finance.yahoo.com/m/4449deb1-a716-3b73-a99d-120e732cf5dc/dollar-stays-elevated-as.html",
+      "url": "https://finance.yahoo.com/m/0d956c4d-fd44-30fe-948c-018185d2af86/oil-falls-after-trump-says-no.html",
       "source": "The Wall Street Journal",
-      "published_at": "2026-10-08T06:55:00Z",
-      "fetched_at": "2026-10-08T08:01:50Z",
+      "published_at": "2026-10-09T07:43:00Z",
+      "fetched_at": "2026-10-09T08:01:25Z",
       "ticker": null,
       "source_tier": "aggregator"
     },
     {
-      "title": "Tertiary Minerals plans to do deeper at Mushima North project",
+      "title": "Gold Rises on Softer U.S. Dollar, Lower Oil Prices",
       "summary": "",
-      "url": "https://finance.yahoo.com/markets/commodities/articles/tertiary-minerals-plans-deeper-mushima-062300653.html",
-      "source": "Proactive",
-      "published_at": "2026-10-08T06:23:00Z",
-      "fetched_at": "2026-10-08T08:01:50Z",
+      "url": "https://finance.yahoo.com/m/48f34614-a0d0-3cef-a85a-221f9b1b8c33/gold-rises-on-softer-u.s..html",
+      "source": "The Wall Street Journal",
+      "published_at": "2026-10-09T07:43:00Z",
+      "fetched_at": "2026-10-09T08:01:25Z",
       "ticker": null,
       "source_tier": "aggregator"
     },
     {
-      "title": "Clearway Energy And 2 Renewable Energy Stocks To Watch",
+      "title": "Barclays downgrades 2 European airline stocks into September quarter results",
       "summary": "",
-      "url": "https://finance.yahoo.com/energy/articles/clearway-energy-2-renewable-energy-061519379.html",
+      "url": "https://finance.yahoo.com/markets/stocks/articles/barclays-downgrades-2-european-airline-073533995.html",
+      "source": "Investing.com",
+      "published_at": "2026-10-09T07:35:33Z",
+      "fetched_at": "2026-10-09T08:01:25Z",
+      "ticker": null,
+      "source_tier": "aggregator"
+    },
+    {
+      "title": "Malaysia plans $112.5 billion budget for 2027 ahead of possible election",
+      "summary": "",
+      "url": "https://finance.yahoo.com/economy/policy/articles/malaysia-plans-112-5-billion-073131330.html",
+      "source": "Reuters",
+      "published_at": "2026-10-09T07:31:31Z",
+      "fetched_at": "2026-10-09T08:01:25Z",
+      "ticker": null,
+      "source_tier": "aggregator"
+    },
+    {
+      "title": "Asian stocks mostly up as traders weigh AI, oil dips after surge",
+      "summary": "",
+      "url": "https://finance.yahoo.com/markets/world-indices/articles/asian-stocks-mixed-amid-ai-031816763.html",
+      "source": "AFP",
+      "published_at": "2026-10-09T07:31:19Z",
+      "fetched_at": "2026-10-09T08:01:25Z",
+      "ticker": null,
+      "source_tier": "aggregator"
+    },
+    {
+      "title": "Oil relief lifts European stocks, telecoms a weak spot",
+      "summary": "",
+      "url": "https://finance.yahoo.com/markets/world-indices/articles/oil-relief-lifts-european-stocks-073047579.html",
+      "source": "Reuters",
+      "published_at": "2026-10-09T07:30:47Z",
+      "fetched_at": "2026-10-09T08:01:25Z",
+      "ticker": null,
+      "source_tier": "aggregator"
+    },
+    {
+      "title": "European Indexes Rise Sharply as Banks, Software Gain",
+      "summary": "",
+      "url": "https://finance.yahoo.com/m/c01b19be-d023-36fd-a888-f148bda4eec7/european-indexes-rise-sharply.html",
+      "source": "The Wall Street Journal",
+      "published_at": "2026-10-09T07:25:00Z",
+      "fetched_at": "2026-10-09T08:01:25Z",
+      "ticker": null,
+      "source_tier": "aggregator"
+    },
+    {
+      "title": "Oil falls as Trump comments on Iran talks ease supply concerns",
+      "summary": "",
+      "url": "https://finance.yahoo.com/news/oil-falls-trump-comments-iran-022757245.html",
+      "source": "Reuters",
+      "published_at": "2026-10-09T07:22:04Z",
+      "fetched_at": "2026-10-09T08:01:25Z",
+      "ticker": null,
+      "source_tier": "aggregator"
+    },
+    {
+      "title": "Crescent Energy (CRGY) Is Spending $4.2 Billion On Eagle Ford Assets",
+      "summary": "",
+      "url": "https://finance.yahoo.com/energy/articles/crescent-energy-crgy-spending-4-071709352.html",
       "source": "Simply Wall St.",
-      "published_at": "2026-10-08T06:15:19Z",
-      "fetched_at": "2026-10-08T08:01:50Z",
+      "published_at": "2026-10-09T07:17:09Z",
+      "fetched_at": "2026-10-09T08:01:25Z",
       "ticker": null,
       "source_tier": "aggregator"
     },
     {
-      "title": "Tamarack Valley Energy (TSX:TVE) Stock May Be Reasonable After Clearwater Shift",
+      "title": "Valero Energy (VLO) Faces A Fuel Margin Test From G7 Stock Releases",
       "summary": "",
-      "url": "https://finance.yahoo.com/energy/articles/tamarack-valley-energy-tsx-tve-061351197.html",
+      "url": "https://finance.yahoo.com/energy/articles/valero-energy-vlo-faces-fuel-071011550.html",
       "source": "Simply Wall St.",
-      "published_at": "2026-10-08T06:13:51Z",
-      "fetched_at": "2026-10-08T08:01:50Z",
+      "published_at": "2026-10-09T07:10:11Z",
+      "fetched_at": "2026-10-09T08:01:25Z",
       "ticker": null,
-      "source_tier": "aggregator"
-    },
-    {
-      "title": "Chevron highlighted as Zacks Bull and Southwest Airlines Bear of the Day",
-      "summary": "",
-      "url": "https://finance.yahoo.com/markets/stocks/articles/chevron-highlighted-zacks-bull-southwest-060100171.html",
-      "source": "Zacks",
-      "published_at": "2026-10-08T06:01:00Z",
-      "fetched_at": "2026-10-08T08:01:50Z",
-      "ticker": null,
-      "source_tier": "aggregator"
-    },
-    {
-      "title": "9月30日通信ETF国泰（515880）份额减少6.48亿份，最新份额668.08亿份，最新规模418.55亿元",
-      "summary": "9月30日通信ETF国泰（515880）份额减少6.48亿份，最新份额668.08亿份，最新规模418.55亿元 新浪网",
-      "url": "https://news.google.com/rss/articles/CBMiggFBVV95cUxNWDlrLTFkb0J1WUphV3owZmRHelhtX25kVlhHOG1IY1VPTGNJajVUcEk0UkZVOUFCV1ZGZXp4aDRCTnpsQWNEajBFX0FXMmxWekRCZUUwTkw2NVJlUVNZRWxMNC1vUEhBa1lsVmwxWW1OUi1fSXhoMkgtcEgxMjE0WVBn?oc=5",
-      "source": "Google News / 新浪网",
-      "published_at": "2026-10-08T01:09:49Z",
-      "fetched_at": "2026-10-08T08:01:51Z",
-      "ticker": "515880.SS",
       "source_tier": "aggregator"
     }
   ]
