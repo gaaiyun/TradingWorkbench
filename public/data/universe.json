@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "generatedAt": "2026-10-09T17:26:28.575Z",
+  "generatedAt": "2026-10-12T20:16:29.815Z",
   "status": "degraded",
   "coverage": {
     "policy": "current-listed-best-effort-plus-configured-core",
@@ -16,13 +16,13 @@
       "id": "sina-market-center",
       "role": "CN current-listed discovery",
       "quality": "best_effort",
-      "asOf": "2026-10-09T17:26:28.575Z"
+      "asOf": "2026-10-12T20:16:29.815Z"
     },
     {
       "id": "workbench-settings",
       "role": "configured HK/US/CN core instruments",
       "quality": "declared",
-      "asOf": "2026-10-09T17:26:28.575Z"
+      "asOf": "2026-10-12T20:16:29.815Z"
     }
   ],
   "instruments": [
@@ -34634,7 +34634,7 @@
     },
     {
       "symbol": "600323.SS",
-      "name": "瀚蓝环境",
+      "name": "XD瀚蓝环",
       "market": "CN",
       "exchange": "SS",
       "instrumentType": "stock",
@@ -42785,7 +42785,7 @@
     },
     {
       "symbol": "603006.SS",
-      "name": "XD联明股",
+      "name": "联明股份",
       "market": "CN",
       "exchange": "SS",
       "instrumentType": "stock",
@@ -42906,7 +42906,7 @@
     },
     {
       "symbol": "603017.SS",
-      "name": "中衡设计",
+      "name": "XD中衡设",
       "market": "CN",
       "exchange": "SS",
       "instrumentType": "stock",
@@ -45425,7 +45425,7 @@
     },
     {
       "symbol": "603303.SS",
-      "name": "XD得邦照",
+      "name": "得邦照明",
       "market": "CN",
       "exchange": "SS",
       "instrumentType": "stock",
@@ -45458,7 +45458,7 @@
     },
     {
       "symbol": "603307.SS",
-      "name": "XD扬州金",
+      "name": "扬州金泉",
       "market": "CN",
       "exchange": "SS",
       "instrumentType": "stock",
@@ -45513,7 +45513,7 @@
     },
     {
       "symbol": "603312.SS",
-      "name": "西典新能",
+      "name": "XD西典新",
       "market": "CN",
       "exchange": "SS",
       "instrumentType": "stock",
@@ -45777,7 +45777,7 @@
     },
     {
       "symbol": "603337.SS",
-      "name": "XD杰克科",
+      "name": "杰克科技",
       "market": "CN",
       "exchange": "SS",
       "instrumentType": "stock",
@@ -46789,7 +46789,7 @@
     },
     {
       "symbol": "603551.SS",
-      "name": "奥普科技",
+      "name": "XD奥普科",
       "market": "CN",
       "exchange": "SS",
       "instrumentType": "stock",
@@ -48956,7 +48956,7 @@
     },
     {
       "symbol": "603915.SS",
-      "name": "国茂股份",
+      "name": "XD国茂股",
       "market": "CN",
       "exchange": "SS",
       "instrumentType": "stock",
@@ -49792,7 +49792,7 @@
     },
     {
       "symbol": "605090.SS",
-      "name": "九丰能源",
+      "name": "XD九丰能",
       "market": "CN",
       "exchange": "SS",
       "instrumentType": "stock",
@@ -51420,7 +51420,7 @@
     },
     {
       "symbol": "688072.SS",
-      "name": "拓荆科技",
+      "name": "XD拓荆科",
       "market": "CN",
       "exchange": "SS",
       "instrumentType": "stock",
@@ -51794,7 +51794,7 @@
     },
     {
       "symbol": "688110.SS",
-      "name": "东芯股份",
+      "name": "DR东芯股",
       "market": "CN",
       "exchange": "SS",
       "instrumentType": "stock",
@@ -58636,7 +58636,7 @@
     },
     {
       "symbol": "920157.BJ",
-      "name": "N宇特",
+      "name": "宇特光电",
       "market": "CN",
       "exchange": "BJ",
       "instrumentType": "stock",
