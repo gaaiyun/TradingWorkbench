@@ -1,113 +1,113 @@
 {
   "version": 1,
   "status": "ok",
-  "generated_at": "2026-10-13T16:01:34+08:00",
-  "trade_date": "2026-10-13",
+  "generated_at": "2026-10-14T16:01:55+08:00",
+  "trade_date": "2026-10-14",
   "global": {
     "status": "ok",
     "query_type": "global",
     "ticker": null,
-    "start_date": "2026-10-06",
-    "end_date": "2026-10-13",
-    "fetched_at": "2026-10-13T08:01:34Z",
+    "start_date": "2026-10-07",
+    "end_date": "2026-10-14",
+    "fetched_at": "2026-10-14T08:01:57Z",
     "items": [
       {
-        "title": "European stocks buck tech-led global rout, bank earnings in focus",
+        "title": "European shares edge higher as ASML's AI demand outlook boosts tech",
         "summary": "",
-        "url": "https://finance.yahoo.com/markets/stocks/articles/european-stocks-buck-tech-led-074231745.html",
+        "url": "https://finance.yahoo.com/technology/articles/european-shares-edge-higher-asmls-071828979.html",
+        "source": "Reuters",
+        "published_at": "2026-10-14T07:18:28Z",
+        "fetched_at": "2026-10-14T08:01:57Z",
+        "ticker": null,
+        "source_tier": "aggregator"
+      },
+      {
+        "title": "Oil prices rise after reported Iranian attacks on ships in Strait of Hormuz",
+        "summary": "",
+        "url": "https://finance.yahoo.com/energy/articles/oil-prices-rise-reported-attacks-062849696.html",
+        "source": "Euronews",
+        "published_at": "2026-10-14T07:17:41Z",
+        "fetched_at": "2026-10-14T08:01:57Z",
+        "ticker": null,
+        "source_tier": "aggregator"
+      },
+      {
+        "title": "Oil prices rise as Iran deploys new tactics to target ships transiting Hormuz",
+        "summary": "",
+        "url": "https://finance.yahoo.com/energy/articles/oil-prices-climb-traders-weigh-012735546.html",
+        "source": "Reuters",
+        "published_at": "2026-10-14T06:44:55Z",
+        "fetched_at": "2026-10-14T08:01:57Z",
+        "ticker": null,
+        "source_tier": "aggregator"
+      },
+      {
+        "title": "Market Remains Rates-Driven as High U.S. Treasury Yields Dominate",
+        "summary": "",
+        "url": "https://finance.yahoo.com/m/8d4f1f7c-a2b4-3f5d-9b59-02a73eb86bde/market-remains-rates-driven.html",
+        "source": "The Wall Street Journal",
+        "published_at": "2026-10-14T06:24:00Z",
+        "fetched_at": "2026-10-14T08:01:57Z",
+        "ticker": null,
+        "source_tier": "aggregator"
+      },
+      {
+        "title": "Agentic AI and Network Security Take Center Stage at Software Mind's Telco Days 2026 With Telefónica, Amdocs and IBM",
+        "summary": "",
+        "url": "https://finance.yahoo.com/technology/ai/articles/agentic-ai-network-security-center-061500160.html",
+        "source": "CNW Group",
+        "published_at": "2026-10-14T06:15:00Z",
+        "fetched_at": "2026-10-14T08:01:57Z",
+        "ticker": null,
+        "source_tier": "aggregator"
+      },
+      {
+        "title": "Aker BP production misses forecasts as realised gas prices jump",
+        "summary": "",
+        "url": "https://finance.yahoo.com/energy/articles/aker-bp-production-misses-forecasts-061340826.html",
         "source": "Investing.com",
-        "published_at": "2026-10-13T07:42:31Z",
-        "fetched_at": "2026-10-13T08:01:34Z",
+        "published_at": "2026-10-14T06:13:40Z",
+        "fetched_at": "2026-10-14T08:01:57Z",
         "ticker": null,
         "source_tier": "aggregator"
       },
       {
-        "title": "Seoul, Tokyo stocks plunge as Asia suffers fresh tech rout",
+        "title": "UNLEASH 2026 Hits Record Growth in Paris as AI Triggers Major Investments in Work and HR",
         "summary": "",
-        "url": "https://finance.yahoo.com/markets/world-indices/articles/seoul-tokyo-stocks-plunge-asia-024332072.html",
+        "url": "https://finance.yahoo.com/technology/ai/articles/unleash-2026-hits-record-growth-060000365.html",
+        "source": "PR Newswire",
+        "published_at": "2026-10-14T06:00:00Z",
+        "fetched_at": "2026-10-14T08:01:57Z",
+        "ticker": null,
+        "source_tier": "aggregator"
+      },
+      {
+        "title": "IMF chief says Saudi attacks could have negative spillover 'everywhere'",
+        "summary": "",
+        "url": "https://finance.yahoo.com/economy/articles/imf-chief-says-saudi-attacks-055622801.html",
         "source": "AFP",
-        "published_at": "2026-10-13T07:39:07Z",
-        "fetched_at": "2026-10-13T08:01:34Z",
+        "published_at": "2026-10-14T05:56:22Z",
+        "fetched_at": "2026-10-14T08:01:57Z",
         "ticker": null,
         "source_tier": "aggregator"
       },
       {
-        "title": "Oil Prices Fall as Traders Weigh Middle East Risks, Russian Diesel Supplies",
+        "title": "Oil Prices Climb Above $106 as Iran Threatens More Tanker Attacks",
         "summary": "",
-        "url": "https://finance.yahoo.com/m/36523b88-6b33-3ff0-9cfc-a097dcddead0/oil-prices-fall-as-traders.html",
-        "source": "The Wall Street Journal",
-        "published_at": "2026-10-13T07:35:00Z",
-        "fetched_at": "2026-10-13T08:01:34Z",
-        "ticker": null,
-        "source_tier": "aggregator"
-      },
-      {
-        "title": "Silver One's ZTEM Airborne Geophysical Survey Identifies 7 Additional Silver Targets and 6 Potential Porphyry Copper-Silver-Gold Systems at the Candelaria Project, Nevada",
-        "summary": "",
-        "url": "https://finance.yahoo.com/markets/commodities/articles/silver-ones-ztem-airborne-geophysical-071400350.html",
-        "source": "TMX Newsfile",
-        "published_at": "2026-10-13T07:14:00Z",
-        "fetched_at": "2026-10-13T08:01:34Z",
-        "ticker": null,
-        "source_tier": "aggregator"
-      },
-      {
-        "title": "Press release: CMB.TECH fleet update",
-        "summary": "",
-        "url": "https://finance.yahoo.com/energy/articles/press-release-cmb-tech-fleet-070800631.html",
-        "source": "GlobeNewswire",
-        "published_at": "2026-10-13T07:08:00Z",
-        "fetched_at": "2026-10-13T08:01:34Z",
-        "ticker": null,
-        "source_tier": "aggregator"
-      },
-      {
-        "title": "Dollar Stays Firm After Hitting 18-Month High",
-        "summary": "",
-        "url": "https://finance.yahoo.com/m/75e26fe8-815f-3e90-b3e0-c968b9aa4040/dollar-stays-firm-after.html",
-        "source": "The Wall Street Journal",
-        "published_at": "2026-10-13T06:57:00Z",
-        "fetched_at": "2026-10-13T08:01:34Z",
-        "ticker": null,
-        "source_tier": "aggregator"
-      },
-      {
-        "title": "Eurozone Bond Yields Open Lower, Track U.S. Treasury Yields",
-        "summary": "",
-        "url": "https://finance.yahoo.com/m/386b770c-6cae-3dc0-a89b-5964878711d7/eurozone-bond-yields-open.html",
-        "source": "The Wall Street Journal",
-        "published_at": "2026-10-13T06:53:00Z",
-        "fetched_at": "2026-10-13T08:01:34Z",
-        "ticker": null,
-        "source_tier": "aggregator"
-      },
-      {
-        "title": "BP Flags Up to $4.5 Billion in Impairments as Refining Margins Jump",
-        "summary": "",
-        "url": "https://finance.yahoo.com/energy/articles/bp-flags-4-5-billion-063600505.html",
+        "url": "https://finance.yahoo.com/energy/articles/oil-prices-climb-above-106-053131652.html",
         "source": "Oilprice.com",
-        "published_at": "2026-10-13T06:36:00Z",
-        "fetched_at": "2026-10-13T08:01:34Z",
+        "published_at": "2026-10-14T05:31:31Z",
+        "fetched_at": "2026-10-14T08:01:57Z",
         "ticker": null,
         "source_tier": "aggregator"
       },
       {
-        "title": "Jet engine jobs to stay in UK after taxpayers hand factory £33m",
+        "title": "Money laundering failures land Bank of America with a $1.2 billion fine",
         "summary": "",
-        "url": "https://finance.yahoo.com/economy/policy/articles/jet-engine-jobs-stay-uk-054500066.html",
-        "source": "The Telegraph",
-        "published_at": "2026-10-13T05:45:00Z",
-        "fetched_at": "2026-10-13T08:01:34Z",
-        "ticker": null,
-        "source_tier": "aggregator"
-      },
-      {
-        "title": "D-Wave Quantum vs. QuantumScape: Here Is the Better Innovative Technology Stock to Buy in 2026",
-        "summary": "",
-        "url": "https://finance.yahoo.com/technology/articles/d-wave-quantum-vs-quantumscape-054442750.html",
-        "source": "Motley Fool",
-        "published_at": "2026-10-13T05:44:42Z",
-        "fetched_at": "2026-10-13T08:01:34Z",
+        "url": "https://finance.yahoo.com/economy/policy/articles/money-laundering-failures-land-bank-052938961.html",
+        "source": "Euronews",
+        "published_at": "2026-10-14T05:29:38Z",
+        "fetched_at": "2026-10-14T08:01:57Z",
         "ticker": null,
         "source_tier": "aggregator"
       }
@@ -116,12 +116,12 @@
       {
         "source": "Yahoo Finance",
         "status": "ok",
-        "item_count": 50
+        "item_count": 48
       },
       {
         "source": "Federal Reserve",
         "status": "ok",
-        "item_count": 3
+        "item_count": 4
       }
     ]
   },
@@ -130,27 +130,17 @@
       "status": "ok",
       "query_type": "ticker",
       "ticker": "515880.SS",
-      "start_date": "2026-10-13",
-      "end_date": "2026-10-13",
-      "fetched_at": "2026-10-13T08:01:36Z",
+      "start_date": "2026-10-14",
+      "end_date": "2026-10-14",
+      "fetched_at": "2026-10-14T08:01:59Z",
       "items": [
         {
-          "title": "OCP峰会CPO验证窗口开启，通信ETF国泰（515880）标的指数涨超2%",
-          "summary": "OCP峰会CPO验证窗口开启，通信ETF国泰（515880）标的指数涨超2% 搜狐",
-          "url": "https://news.google.com/rss/articles/CBMiiAFBVV95cUxOUENUSjRnWGt3Ni1xYjdnU3MwWGNQazl0V2t5aTU1SWE4c1AtN0RwRWFLczg2anVFLWY2RkZPdTd6dkhKUTZnal9najBxaWJsQUJHSDhaZ0c4S1ViMnNCX0dXUXNuQUE5TU5EVXAzeFI3bXZWb1ZyNFhjcWFneUFhbE9wd2ladEl0?oc=5",
-          "source": "Google News / 搜狐",
-          "published_at": "2026-10-13T06:41:36Z",
-          "fetched_at": "2026-10-13T08:01:36Z",
-          "ticker": "515880.SS",
-          "source_tier": "aggregator"
-        },
-        {
-          "title": "财中ETF风向标｜通信ETF国泰(515880)盘中涨2.67%，光互连景气持续获研报关注",
-          "summary": "财中ETF风向标｜通信ETF国泰(515880)盘中涨2.67%，光互连景气持续获研报关注 财中社",
-          "url": "https://news.google.com/rss/articles/CBMiZEFVX3lxTE1SejRXYUR5enRlSnRkdW1TeFY5dE13TmgzQWMxX0h5UURoSHhPUGRibjN2WmtCZWdsdXVNOEE5dWJnYjdUbGZmaGpEUXUxQ1ZCLVRnWWJDRnZrblZCcmotYWRyWFk?oc=5",
+          "title": "财中ETF风向标｜通信ETF国泰(515880)盘中跌1.57%，光模块板块V型反转后再度承压",
+          "summary": "财中ETF风向标｜通信ETF国泰(515880)盘中跌1.57%，光模块板块V型反转后再度承压 财中社",
+          "url": "https://news.google.com/rss/articles/CBMiZEFVX3lxTE5mb3ljNU10dHlyQUVOR3FUdkJqbV9WRmQtYlhENTR1M0R5QUZhQW5oMkZkSG1qV0stR1dtbmpOcklNbUkzMzJpWWtYcW5rS0VsdXJyTEpSblpiZ3l0LWFNUnVxOGk?oc=5",
           "source": "Google News / 财中社",
-          "published_at": "2026-10-13T06:32:00Z",
-          "fetched_at": "2026-10-13T08:01:36Z",
+          "published_at": "2026-10-14T03:10:00Z",
+          "fetched_at": "2026-10-14T08:01:59Z",
           "ticker": "515880.SS",
           "source_tier": "aggregator"
         }
@@ -164,7 +154,7 @@
         {
           "source": "Google News RSS",
           "status": "ok",
-          "item_count": 2
+          "item_count": 1
         },
         {
           "source": "SEC EDGAR",
@@ -177,9 +167,9 @@
       "status": "empty",
       "query_type": "ticker",
       "ticker": "512480.SS",
-      "start_date": "2026-10-13",
-      "end_date": "2026-10-13",
-      "fetched_at": "2026-10-13T08:01:40Z",
+      "start_date": "2026-10-14",
+      "end_date": "2026-10-14",
+      "fetched_at": "2026-10-14T08:02:05Z",
       "items": [],
       "source_statuses": [
         {
@@ -202,123 +192,113 @@
   },
   "items": [
     {
-      "title": "European stocks buck tech-led global rout, bank earnings in focus",
+      "title": "European shares edge higher as ASML's AI demand outlook boosts tech",
       "summary": "",
-      "url": "https://finance.yahoo.com/markets/stocks/articles/european-stocks-buck-tech-led-074231745.html",
+      "url": "https://finance.yahoo.com/technology/articles/european-shares-edge-higher-asmls-071828979.html",
+      "source": "Reuters",
+      "published_at": "2026-10-14T07:18:28Z",
+      "fetched_at": "2026-10-14T08:01:57Z",
+      "ticker": null,
+      "source_tier": "aggregator"
+    },
+    {
+      "title": "Oil prices rise after reported Iranian attacks on ships in Strait of Hormuz",
+      "summary": "",
+      "url": "https://finance.yahoo.com/energy/articles/oil-prices-rise-reported-attacks-062849696.html",
+      "source": "Euronews",
+      "published_at": "2026-10-14T07:17:41Z",
+      "fetched_at": "2026-10-14T08:01:57Z",
+      "ticker": null,
+      "source_tier": "aggregator"
+    },
+    {
+      "title": "Oil prices rise as Iran deploys new tactics to target ships transiting Hormuz",
+      "summary": "",
+      "url": "https://finance.yahoo.com/energy/articles/oil-prices-climb-traders-weigh-012735546.html",
+      "source": "Reuters",
+      "published_at": "2026-10-14T06:44:55Z",
+      "fetched_at": "2026-10-14T08:01:57Z",
+      "ticker": null,
+      "source_tier": "aggregator"
+    },
+    {
+      "title": "Market Remains Rates-Driven as High U.S. Treasury Yields Dominate",
+      "summary": "",
+      "url": "https://finance.yahoo.com/m/8d4f1f7c-a2b4-3f5d-9b59-02a73eb86bde/market-remains-rates-driven.html",
+      "source": "The Wall Street Journal",
+      "published_at": "2026-10-14T06:24:00Z",
+      "fetched_at": "2026-10-14T08:01:57Z",
+      "ticker": null,
+      "source_tier": "aggregator"
+    },
+    {
+      "title": "Agentic AI and Network Security Take Center Stage at Software Mind's Telco Days 2026 With Telefónica, Amdocs and IBM",
+      "summary": "",
+      "url": "https://finance.yahoo.com/technology/ai/articles/agentic-ai-network-security-center-061500160.html",
+      "source": "CNW Group",
+      "published_at": "2026-10-14T06:15:00Z",
+      "fetched_at": "2026-10-14T08:01:57Z",
+      "ticker": null,
+      "source_tier": "aggregator"
+    },
+    {
+      "title": "Aker BP production misses forecasts as realised gas prices jump",
+      "summary": "",
+      "url": "https://finance.yahoo.com/energy/articles/aker-bp-production-misses-forecasts-061340826.html",
       "source": "Investing.com",
-      "published_at": "2026-10-13T07:42:31Z",
-      "fetched_at": "2026-10-13T08:01:34Z",
+      "published_at": "2026-10-14T06:13:40Z",
+      "fetched_at": "2026-10-14T08:01:57Z",
       "ticker": null,
       "source_tier": "aggregator"
     },
     {
-      "title": "Seoul, Tokyo stocks plunge as Asia suffers fresh tech rout",
+      "title": "UNLEASH 2026 Hits Record Growth in Paris as AI Triggers Major Investments in Work and HR",
       "summary": "",
-      "url": "https://finance.yahoo.com/markets/world-indices/articles/seoul-tokyo-stocks-plunge-asia-024332072.html",
+      "url": "https://finance.yahoo.com/technology/ai/articles/unleash-2026-hits-record-growth-060000365.html",
+      "source": "PR Newswire",
+      "published_at": "2026-10-14T06:00:00Z",
+      "fetched_at": "2026-10-14T08:01:57Z",
+      "ticker": null,
+      "source_tier": "aggregator"
+    },
+    {
+      "title": "IMF chief says Saudi attacks could have negative spillover 'everywhere'",
+      "summary": "",
+      "url": "https://finance.yahoo.com/economy/articles/imf-chief-says-saudi-attacks-055622801.html",
       "source": "AFP",
-      "published_at": "2026-10-13T07:39:07Z",
-      "fetched_at": "2026-10-13T08:01:34Z",
+      "published_at": "2026-10-14T05:56:22Z",
+      "fetched_at": "2026-10-14T08:01:57Z",
       "ticker": null,
       "source_tier": "aggregator"
     },
     {
-      "title": "Oil Prices Fall as Traders Weigh Middle East Risks, Russian Diesel Supplies",
+      "title": "Oil Prices Climb Above $106 as Iran Threatens More Tanker Attacks",
       "summary": "",
-      "url": "https://finance.yahoo.com/m/36523b88-6b33-3ff0-9cfc-a097dcddead0/oil-prices-fall-as-traders.html",
-      "source": "The Wall Street Journal",
-      "published_at": "2026-10-13T07:35:00Z",
-      "fetched_at": "2026-10-13T08:01:34Z",
-      "ticker": null,
-      "source_tier": "aggregator"
-    },
-    {
-      "title": "Silver One's ZTEM Airborne Geophysical Survey Identifies 7 Additional Silver Targets and 6 Potential Porphyry Copper-Silver-Gold Systems at the Candelaria Project, Nevada",
-      "summary": "",
-      "url": "https://finance.yahoo.com/markets/commodities/articles/silver-ones-ztem-airborne-geophysical-071400350.html",
-      "source": "TMX Newsfile",
-      "published_at": "2026-10-13T07:14:00Z",
-      "fetched_at": "2026-10-13T08:01:34Z",
-      "ticker": null,
-      "source_tier": "aggregator"
-    },
-    {
-      "title": "Press release: CMB.TECH fleet update",
-      "summary": "",
-      "url": "https://finance.yahoo.com/energy/articles/press-release-cmb-tech-fleet-070800631.html",
-      "source": "GlobeNewswire",
-      "published_at": "2026-10-13T07:08:00Z",
-      "fetched_at": "2026-10-13T08:01:34Z",
-      "ticker": null,
-      "source_tier": "aggregator"
-    },
-    {
-      "title": "Dollar Stays Firm After Hitting 18-Month High",
-      "summary": "",
-      "url": "https://finance.yahoo.com/m/75e26fe8-815f-3e90-b3e0-c968b9aa4040/dollar-stays-firm-after.html",
-      "source": "The Wall Street Journal",
-      "published_at": "2026-10-13T06:57:00Z",
-      "fetched_at": "2026-10-13T08:01:34Z",
-      "ticker": null,
-      "source_tier": "aggregator"
-    },
-    {
-      "title": "Eurozone Bond Yields Open Lower, Track U.S. Treasury Yields",
-      "summary": "",
-      "url": "https://finance.yahoo.com/m/386b770c-6cae-3dc0-a89b-5964878711d7/eurozone-bond-yields-open.html",
-      "source": "The Wall Street Journal",
-      "published_at": "2026-10-13T06:53:00Z",
-      "fetched_at": "2026-10-13T08:01:34Z",
-      "ticker": null,
-      "source_tier": "aggregator"
-    },
-    {
-      "title": "OCP峰会CPO验证窗口开启，通信ETF国泰（515880）标的指数涨超2%",
-      "summary": "OCP峰会CPO验证窗口开启，通信ETF国泰（515880）标的指数涨超2% 搜狐",
-      "url": "https://news.google.com/rss/articles/CBMiiAFBVV95cUxOUENUSjRnWGt3Ni1xYjdnU3MwWGNQazl0V2t5aTU1SWE4c1AtN0RwRWFLczg2anVFLWY2RkZPdTd6dkhKUTZnal9najBxaWJsQUJHSDhaZ0c4S1ViMnNCX0dXUXNuQUE5TU5EVXAzeFI3bXZWb1ZyNFhjcWFneUFhbE9wd2ladEl0?oc=5",
-      "source": "Google News / 搜狐",
-      "published_at": "2026-10-13T06:41:36Z",
-      "fetched_at": "2026-10-13T08:01:36Z",
-      "ticker": "515880.SS",
-      "source_tier": "aggregator"
-    },
-    {
-      "title": "BP Flags Up to $4.5 Billion in Impairments as Refining Margins Jump",
-      "summary": "",
-      "url": "https://finance.yahoo.com/energy/articles/bp-flags-4-5-billion-063600505.html",
+      "url": "https://finance.yahoo.com/energy/articles/oil-prices-climb-above-106-053131652.html",
       "source": "Oilprice.com",
-      "published_at": "2026-10-13T06:36:00Z",
-      "fetched_at": "2026-10-13T08:01:34Z",
+      "published_at": "2026-10-14T05:31:31Z",
+      "fetched_at": "2026-10-14T08:01:57Z",
       "ticker": null,
       "source_tier": "aggregator"
     },
     {
-      "title": "财中ETF风向标｜通信ETF国泰(515880)盘中涨2.67%，光互连景气持续获研报关注",
-      "summary": "财中ETF风向标｜通信ETF国泰(515880)盘中涨2.67%，光互连景气持续获研报关注 财中社",
-      "url": "https://news.google.com/rss/articles/CBMiZEFVX3lxTE1SejRXYUR5enRlSnRkdW1TeFY5dE13TmgzQWMxX0h5UURoSHhPUGRibjN2WmtCZWdsdXVNOEE5dWJnYjdUbGZmaGpEUXUxQ1ZCLVRnWWJDRnZrblZCcmotYWRyWFk?oc=5",
+      "title": "Money laundering failures land Bank of America with a $1.2 billion fine",
+      "summary": "",
+      "url": "https://finance.yahoo.com/economy/policy/articles/money-laundering-failures-land-bank-052938961.html",
+      "source": "Euronews",
+      "published_at": "2026-10-14T05:29:38Z",
+      "fetched_at": "2026-10-14T08:01:57Z",
+      "ticker": null,
+      "source_tier": "aggregator"
+    },
+    {
+      "title": "财中ETF风向标｜通信ETF国泰(515880)盘中跌1.57%，光模块板块V型反转后再度承压",
+      "summary": "财中ETF风向标｜通信ETF国泰(515880)盘中跌1.57%，光模块板块V型反转后再度承压 财中社",
+      "url": "https://news.google.com/rss/articles/CBMiZEFVX3lxTE5mb3ljNU10dHlyQUVOR3FUdkJqbV9WRmQtYlhENTR1M0R5QUZhQW5oMkZkSG1qV0stR1dtbmpOcklNbUkzMzJpWWtYcW5rS0VsdXJyTEpSblpiZ3l0LWFNUnVxOGk?oc=5",
       "source": "Google News / 财中社",
-      "published_at": "2026-10-13T06:32:00Z",
-      "fetched_at": "2026-10-13T08:01:36Z",
+      "published_at": "2026-10-14T03:10:00Z",
+      "fetched_at": "2026-10-14T08:01:59Z",
       "ticker": "515880.SS",
-      "source_tier": "aggregator"
-    },
-    {
-      "title": "Jet engine jobs to stay in UK after taxpayers hand factory £33m",
-      "summary": "",
-      "url": "https://finance.yahoo.com/economy/policy/articles/jet-engine-jobs-stay-uk-054500066.html",
-      "source": "The Telegraph",
-      "published_at": "2026-10-13T05:45:00Z",
-      "fetched_at": "2026-10-13T08:01:34Z",
-      "ticker": null,
-      "source_tier": "aggregator"
-    },
-    {
-      "title": "D-Wave Quantum vs. QuantumScape: Here Is the Better Innovative Technology Stock to Buy in 2026",
-      "summary": "",
-      "url": "https://finance.yahoo.com/technology/articles/d-wave-quantum-vs-quantumscape-054442750.html",
-      "source": "Motley Fool",
-      "published_at": "2026-10-13T05:44:42Z",
-      "fetched_at": "2026-10-13T08:01:34Z",
-      "ticker": null,
       "source_tier": "aggregator"
     }
   ]
