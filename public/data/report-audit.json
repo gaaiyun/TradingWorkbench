@@ -1,17 +1,90 @@
 {
   "version": 1,
-  "generatedAt": "2026-10-14T08:02:30.805Z",
+  "generatedAt": "2026-10-15T08:06:28.348Z",
   "summary": {
-    "successfulReports": 58,
+    "successfulReports": 56,
     "verifiedReports": 29,
-    "invalidatedReports": 1,
-    "legacyUnverifiedReports": 28,
-    "invalidRecords": 52,
-    "evidenceValidationFailures": 36,
-    "analysisExecutionFailures": 16,
+    "invalidatedReports": 0,
+    "legacyUnverifiedReports": 27,
+    "invalidRecords": 54,
+    "evidenceValidationFailures": 37,
+    "analysisExecutionFailures": 17,
     "invalidInputs": 0
   },
   "reports": [
+    {
+      "ticker": "515880.SS",
+      "tradeDate": "2026-10-15",
+      "generatedAt": "2026-10-15T16:01:12+08:00",
+      "provider": "openai_compatible",
+      "rating": null,
+      "analysisStatus": "data_validation_failed",
+      "report": null,
+      "auditStatus": "invalid_record",
+      "failureClass": "evidence_validation",
+      "problemCodes": [
+        "EVIDENCE_VALIDATION_FAILED"
+      ],
+      "evidence": {
+        "urlCount": 0,
+        "claimCitationCount": 0,
+        "finalProposalMarkers": 0,
+        "priceTargetCount": 0,
+        "valuationMethodCount": 0,
+        "publishedMarkerCount": 0
+      },
+      "claimValidation": null,
+      "evidencePacket": null,
+      "evidencePublish": {
+        "published": true,
+        "status": 201
+      },
+      "identity": {
+        "scope": "profile",
+        "kind": "monitor",
+        "runId": "38702621656",
+        "profileId": "cn-semi-comms",
+        "requestId": null,
+        "slotId": "slot-b9ddba93841f46dc588f22bdaab45cfc894d25b73eefa1e8e9089dbe189254ae",
+        "scheduledFor": "2026-10-15T07:17:15.000Z"
+      },
+      "supersededBy": null
+    },
+    {
+      "ticker": "512480.SS",
+      "tradeDate": "2026-10-15",
+      "generatedAt": "2026-10-15T16:01:12+08:00",
+      "provider": "openai_compatible",
+      "rating": null,
+      "analysisStatus": null,
+      "report": null,
+      "auditStatus": "invalid_record",
+      "failureClass": "analysis_execution",
+      "problemCodes": [
+        "ANALYSIS_EXECUTION_FAILED"
+      ],
+      "evidence": {
+        "urlCount": 0,
+        "claimCitationCount": 0,
+        "finalProposalMarkers": 0,
+        "priceTargetCount": 0,
+        "valuationMethodCount": 0,
+        "publishedMarkerCount": 0
+      },
+      "claimValidation": null,
+      "evidencePacket": null,
+      "evidencePublish": null,
+      "identity": {
+        "scope": "profile",
+        "kind": "monitor",
+        "runId": "38702621656",
+        "profileId": "cn-semi-comms",
+        "requestId": null,
+        "slotId": "slot-b9ddba93841f46dc588f22bdaab45cfc894d25b73eefa1e8e9089dbe189254ae",
+        "scheduledFor": "2026-10-15T07:17:15.000Z"
+      },
+      "supersededBy": null
+    },
     {
       "ticker": "515880.SS",
       "tradeDate": "2026-10-14",
@@ -5361,127 +5434,6 @@
         "scheduledFor": "2026-08-06T07:20:00.000Z"
       },
       "supersededBy": null
-    },
-    {
-      "ticker": "515880.SS",
-      "tradeDate": "2026-08-05",
-      "generatedAt": "2026-08-05T15:46:55+08:00",
-      "provider": "openai_compatible",
-      "rating": "Not Rated",
-      "analysisStatus": "insufficient_evidence",
-      "report": "reports/515880.SS/2026-08-05/complete_report.md",
-      "auditStatus": "legacy_unverified",
-      "failureClass": null,
-      "problemCodes": [
-        "ETF_TEMPLATE_MISMATCH",
-        "MISSING_CLAIM_EVIDENCE",
-        "MISSING_PUBLICATION_TIME"
-      ],
-      "evidence": {
-        "urlCount": 4,
-        "claimCitationCount": 0,
-        "finalProposalMarkers": 0,
-        "priceTargetCount": 0,
-        "valuationMethodCount": 1,
-        "publishedMarkerCount": 0
-      },
-      "claimValidation": {
-        "status": "failed",
-        "errorCodes": [
-          "MISSING_EVIDENCE_CITATION",
-          "NO_SUBSTANTIVE_SUPPORTED_CONCLUSION"
-        ],
-        "citationCount": 0,
-        "unknownEvidenceIds": [],
-        "invalidEvidenceCitations": [],
-        "uncitedNumericParagraphs": 0,
-        "unsupportedDerivedNumericParagraphs": 0,
-        "unsupportedSingleSnapshotTrendParagraphs": 0,
-        "contradictedMovingAverageAlignmentParagraphs": 0,
-        "unsupportedActorOrFlowAttributionParagraphs": 0,
-        "unsupportedWindowRankParagraphs": 0,
-        "unsupportedCausalOrPathParagraphs": 0,
-        "unsupportedFaceValueParagraphs": 0,
-        "omittedUnsafeParagraphs": 0
-      },
-      "evidencePacket": {
-        "status": "ok",
-        "asOf": "2026-08-05T07:47:03Z",
-        "contentHash": "2652de7d073b494542e2271a33112fd222fcc68dcfc0ca33fc948786303f9333"
-      },
-      "evidencePublish": {
-        "published": true,
-        "status": 201
-      },
-      "identity": {
-        "scope": "profile",
-        "kind": "monitor",
-        "runId": "30986291033",
-        "profileId": "cn-semi-comms",
-        "requestId": null,
-        "slotId": "slot-b5a0997e42a6ca0cf2408023fccf268195e84564b99cea357e256ef6d1c0f2da",
-        "scheduledFor": "2026-08-05T07:20:00.000Z"
-      },
-      "supersededBy": null
-    },
-    {
-      "ticker": "512480.SS",
-      "tradeDate": "2026-08-05",
-      "generatedAt": "2026-08-05T15:46:55+08:00",
-      "provider": "openai_compatible",
-      "rating": "Underweight",
-      "analysisStatus": "rated",
-      "report": "reports/512480.SS/2026-08-05/complete_report.md",
-      "auditStatus": "invalidated",
-      "failureClass": null,
-      "problemCodes": [
-        "TRUNCATED_AGENT_OUTPUT",
-        "ETF_TEMPLATE_MISMATCH",
-        "MISSING_PUBLICATION_TIME"
-      ],
-      "evidence": {
-        "urlCount": 4,
-        "claimCitationCount": 0,
-        "finalProposalMarkers": 0,
-        "priceTargetCount": 0,
-        "valuationMethodCount": 0,
-        "publishedMarkerCount": 0
-      },
-      "claimValidation": {
-        "status": "passed",
-        "errorCodes": [],
-        "citationCount": 4,
-        "unknownEvidenceIds": [],
-        "invalidEvidenceCitations": [],
-        "uncitedNumericParagraphs": 0,
-        "unsupportedDerivedNumericParagraphs": 0,
-        "unsupportedSingleSnapshotTrendParagraphs": 0,
-        "contradictedMovingAverageAlignmentParagraphs": 0,
-        "unsupportedActorOrFlowAttributionParagraphs": 0,
-        "unsupportedWindowRankParagraphs": 0,
-        "unsupportedCausalOrPathParagraphs": 0,
-        "unsupportedFaceValueParagraphs": 0,
-        "omittedUnsafeParagraphs": 0
-      },
-      "evidencePacket": {
-        "status": "ok",
-        "asOf": "2026-08-05T07:59:39Z",
-        "contentHash": "d420bf2b1a1530d23b475724bfefe1da74650c8e995cfeaeefef03e791a2711d"
-      },
-      "evidencePublish": {
-        "published": true,
-        "status": 201
-      },
-      "identity": {
-        "scope": "profile",
-        "kind": "monitor",
-        "runId": "30986291033",
-        "profileId": "cn-semi-comms",
-        "requestId": null,
-        "slotId": "slot-b5a0997e42a6ca0cf2408023fccf268195e84564b99cea357e256ef6d1c0f2da",
-        "scheduledFor": "2026-08-05T07:20:00.000Z"
-      },
-      "supersededBy": "reports/512480.SS/2026-10-05/complete_report.md"
     }
   ]
 }
