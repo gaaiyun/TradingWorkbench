@@ -1,113 +1,113 @@
 {
   "version": 1,
   "status": "ok",
-  "generated_at": "2026-10-15T16:01:12+08:00",
-  "trade_date": "2026-10-15",
+  "generated_at": "2026-10-16T16:01:12+08:00",
+  "trade_date": "2026-10-16",
   "global": {
     "status": "ok",
     "query_type": "global",
     "ticker": null,
-    "start_date": "2026-10-08",
-    "end_date": "2026-10-15",
-    "fetched_at": "2026-10-15T08:01:13Z",
+    "start_date": "2026-10-09",
+    "end_date": "2026-10-16",
+    "fetched_at": "2026-10-16T08:01:14Z",
     "items": [
       {
-        "title": "Norway's sovereign wealth fund should invest in major defence groups, commission concludes",
+        "title": "Global Fuel Oil Shortage Deepens as Middle East and Russia Supplies Collapse",
         "summary": "",
-        "url": "https://finance.yahoo.com/economy/policy/articles/norways-wealth-fund-set-overhaul-010618973.html",
-        "source": "Reuters",
-        "published_at": "2026-10-15T07:52:02Z",
-        "fetched_at": "2026-10-15T08:01:13Z",
-        "ticker": null,
-        "source_tier": "aggregator"
-      },
-      {
-        "title": "BAC Q3 Deep Dive: Regulatory Costs and Trading Slowdown Weigh on Results",
-        "summary": "",
-        "url": "https://finance.yahoo.com/markets/stocks/articles/bac-q3-deep-dive-regulatory-074427051.html",
-        "source": "StockStory",
-        "published_at": "2026-10-15T07:44:27Z",
-        "fetched_at": "2026-10-15T08:01:13Z",
-        "ticker": null,
-        "source_tier": "aggregator"
-      },
-      {
-        "title": "Tech stocks lead rout after US inflation fuels rate hike bets",
-        "summary": "",
-        "url": "https://finance.yahoo.com/markets/stocks/articles/tech-stock-lead-rout-us-025325296.html",
-        "source": "AFP",
-        "published_at": "2026-10-15T07:27:14Z",
-        "fetched_at": "2026-10-15T08:01:13Z",
-        "ticker": null,
-        "source_tier": "aggregator"
-      },
-      {
-        "title": "TotalEnergies sees Q3 European refining margin nearly 4x year earlier",
-        "summary": "",
-        "url": "https://finance.yahoo.com/energy/articles/totalenergies-sees-q3-european-refining-070641643.html",
-        "source": "Investing.com",
-        "published_at": "2026-10-15T07:06:41Z",
-        "fetched_at": "2026-10-15T08:01:13Z",
-        "ticker": null,
-        "source_tier": "aggregator"
-      },
-      {
-        "title": "The Biggest ‘Schumps:’ From SpaceX to IMAX, We Scored the Disruptors",
-        "summary": "",
-        "url": "https://finance.yahoo.com/m/3085e227-51a0-3002-aa0a-ab3951360432/the-biggest-%E2%80%98schumps%3A%E2%80%99-from.html",
-        "source": "Barrons.com",
-        "published_at": "2026-10-15T07:00:00Z",
-        "fetched_at": "2026-10-15T08:01:13Z",
-        "ticker": null,
-        "source_tier": "aggregator"
-      },
-      {
-        "title": "Oil prices ease as investors weigh supply outlook, Middle East tensions",
-        "summary": "",
-        "url": "https://finance.yahoo.com/energy/articles/oil-prices-fall-investors-weigh-012948990.html",
-        "source": "Reuters",
-        "published_at": "2026-10-15T06:36:08Z",
-        "fetched_at": "2026-10-15T08:01:13Z",
-        "ticker": null,
-        "source_tier": "aggregator"
-      },
-      {
-        "title": "Anglo Asian Mining reports Q3 jump in copper production as Demirli ramp-up continues",
-        "summary": "",
-        "url": "https://finance.yahoo.com/markets/commodities/articles/anglo-asian-mining-reports-q3-063400266.html",
-        "source": "Proactive",
-        "published_at": "2026-10-15T06:34:00Z",
-        "fetched_at": "2026-10-15T08:01:13Z",
-        "ticker": null,
-        "source_tier": "aggregator"
-      },
-      {
-        "title": "Southern Energy Corp. Announces Successful Cotton Valley Completion Results at Williamsburg",
-        "summary": "",
-        "url": "https://finance.yahoo.com/energy/articles/southern-energy-corp-announces-successful-060200604.html",
-        "source": "ACCESS Newswire",
-        "published_at": "2026-10-15T06:02:00Z",
-        "fetched_at": "2026-10-15T08:01:13Z",
-        "ticker": null,
-        "source_tier": "aggregator"
-      },
-      {
-        "title": "Oil Prices Fall as Trump Considers Easing Sanctions on Shadow Fleet Tankers",
-        "summary": "",
-        "url": "https://finance.yahoo.com/energy/articles/oil-prices-fall-trump-considers-051907774.html",
+        "url": "https://finance.yahoo.com/energy/articles/global-fuel-oil-shortage-deepens-070000097.html",
         "source": "Oilprice.com",
-        "published_at": "2026-10-15T05:19:07Z",
-        "fetched_at": "2026-10-15T08:01:13Z",
+        "published_at": "2026-10-16T07:00:00Z",
+        "fetched_at": "2026-10-16T08:01:14Z",
         "ticker": null,
         "source_tier": "aggregator"
       },
       {
-        "title": "Is Marathon Petroleum (MPC) Cheap Following Fresh Value Focus And Lower Volatility Attention?",
+        "title": "Bitcoin recovers to $82k but set for second week in red",
         "summary": "",
-        "url": "https://finance.yahoo.com/markets/stocks/articles/marathon-petroleum-mpc-cheap-following-051248409.html",
-        "source": "Simply Wall St.",
-        "published_at": "2026-10-15T05:12:48Z",
-        "fetched_at": "2026-10-15T08:01:13Z",
+        "url": "https://finance.yahoo.com/markets/crypto/articles/bitcoin-recovers-82k-set-second-065608980.html",
+        "source": "Investing.com",
+        "published_at": "2026-10-16T06:56:08Z",
+        "fetched_at": "2026-10-16T08:01:14Z",
+        "ticker": null,
+        "source_tier": "aggregator"
+      },
+      {
+        "title": "Bernstein Names Top Pick in U.S. Waste Sector",
+        "summary": "",
+        "url": "https://finance.yahoo.com/markets/stocks/articles/bernstein-names-top-pick-u-064946016.html",
+        "source": "Investing.com",
+        "published_at": "2026-10-16T06:49:46Z",
+        "fetched_at": "2026-10-16T08:01:14Z",
+        "ticker": null,
+        "source_tier": "aggregator"
+      },
+      {
+        "title": "Oil eases, but set for weekly gain on Mideast supply risks",
+        "summary": "",
+        "url": "https://finance.yahoo.com/energy/articles/oil-edges-down-investors-weigh-010642305.html",
+        "source": "Reuters",
+        "published_at": "2026-10-16T06:43:25Z",
+        "fetched_at": "2026-10-16T08:01:14Z",
+        "ticker": null,
+        "source_tier": "aggregator"
+      },
+      {
+        "title": "International Seaways Expands VLCC Fleet Through Strategic Combination with Bruton Limited.",
+        "summary": "",
+        "url": "https://finance.yahoo.com/markets/stocks/articles/international-seaways-expands-vlcc-fleet-063000630.html",
+        "source": "Business Wire",
+        "published_at": "2026-10-16T06:30:00Z",
+        "fetched_at": "2026-10-16T08:01:14Z",
+        "ticker": null,
+        "source_tier": "aggregator"
+      },
+      {
+        "title": "Oil Prices Head for Weekly Gain as Hormuz Attacks Rattle Markets",
+        "summary": "",
+        "url": "https://finance.yahoo.com/energy/articles/oil-prices-head-weekly-gain-053000638.html",
+        "source": "Oilprice.com",
+        "published_at": "2026-10-16T05:30:00Z",
+        "fetched_at": "2026-10-16T08:01:14Z",
+        "ticker": null,
+        "source_tier": "aggregator"
+      },
+      {
+        "title": "Prospera Energy Restarts Five Additional Luseland Wells at $6,400 per Flowing Barrel; First Ten Reactivations Return 1.92x Capital",
+        "summary": "",
+        "url": "https://finance.yahoo.com/energy/articles/prospera-energy-restarts-five-additional-043500084.html",
+        "source": "TMX Newsfile",
+        "published_at": "2026-10-16T04:35:00Z",
+        "fetched_at": "2026-10-16T08:01:14Z",
+        "ticker": null,
+        "source_tier": "aggregator"
+      },
+      {
+        "title": "Our BJ’s Wholesale Club Pick Is Playing Out. The Stock Has More Upside.",
+        "summary": "",
+        "url": "https://finance.yahoo.com/m/011d1640-0f4b-36d4-b5c0-83675d13c0e4/our-bj%E2%80%99s-wholesale-club-pick.html",
+        "source": "Barrons.com",
+        "published_at": "2026-10-16T04:10:00Z",
+        "fetched_at": "2026-10-16T08:01:14Z",
+        "ticker": null,
+        "source_tier": "aggregator"
+      },
+      {
+        "title": "Corrections & Amplifications",
+        "summary": "",
+        "url": "https://finance.yahoo.com/m/7c6c6a3c-74b6-34a4-94ed-faf2a801051f/corrections-%26-amplifications.html",
+        "source": "The Wall Street Journal",
+        "published_at": "2026-10-16T03:20:00Z",
+        "fetched_at": "2026-10-16T08:01:14Z",
+        "ticker": null,
+        "source_tier": "aggregator"
+      },
+      {
+        "title": "Kraft Heinz vs. Monster Beverage: Which Consumer Goods Stock Is a Better Buy in 2026?",
+        "summary": "",
+        "url": "https://finance.yahoo.com/markets/stocks/articles/kraft-heinz-vs-monster-beverage-025002497.html",
+        "source": "Motley Fool",
+        "published_at": "2026-10-16T02:50:02Z",
+        "fetched_at": "2026-10-16T08:01:14Z",
         "ticker": null,
         "source_tier": "aggregator"
       }
@@ -116,45 +116,24 @@
       {
         "source": "Yahoo Finance",
         "status": "ok",
-        "item_count": 46
+        "item_count": 49
       },
       {
         "source": "Federal Reserve",
         "status": "ok",
-        "item_count": 3
+        "item_count": 2
       }
     ]
   },
   "tickers": {
     "515880.SS": {
-      "status": "ok",
+      "status": "empty",
       "query_type": "ticker",
       "ticker": "515880.SS",
-      "start_date": "2026-10-15",
-      "end_date": "2026-10-15",
-      "fetched_at": "2026-10-15T08:01:15Z",
-      "items": [
-        {
-          "title": "10月14日通信ETF国泰（515880）份额减少3.92亿份，最新份额652.80亿份，最新规模357.60亿元",
-          "summary": "10月14日通信ETF国泰（515880）份额减少3.92亿份，最新份额652.80亿份，最新规模357.60亿元 搜狐",
-          "url": "https://news.google.com/rss/articles/CBMijAFBVV95cUxQZ2Q5NmxNNEM0c2xjLTFFMnVlN0ZXSFVLQndmZUF5RzNNVEFKRTI3cmwybS1pX25vckpRa0F5U2pXTm02Q2FBa2pHRHhVRWdTWHg4RzU5el9ES3BpRUUteThwVUpRNUJBRXNkYXFKcVo0SjVDcXBGMVdTVWRLMnVwTnl6Szd3TmNKX09SMg?oc=5",
-          "source": "Google News / 搜狐",
-          "published_at": "2026-10-15T01:00:45Z",
-          "fetched_at": "2026-10-15T08:01:15Z",
-          "ticker": "515880.SS",
-          "source_tier": "aggregator"
-        },
-        {
-          "title": "通信ETF国泰（515880）跌1.57%，半日成交额10.31亿元",
-          "summary": "通信ETF国泰（515880）跌1.57%，半日成交额10.31亿元 新浪财经",
-          "url": "https://news.google.com/rss/articles/CBMieEFVX3lxTE9YN280QXV2WmVpZk1LOFNhQ0V5Snlza2I3M3Z1bmFNTnRLSDN2dkZuSFllQjgxd1N6NG9PdC1DQjR0MDNEYkRQc2w3WGRUTVljcHB0RnFjLXdUV0ZQRkluazdNd0NVQi1pcUNZSmxRM2RSdm5ES3Nxcg?oc=5",
-          "source": "Google News / 新浪财经",
-          "published_at": "2026-10-14T23:04:02Z",
-          "fetched_at": "2026-10-15T08:01:15Z",
-          "ticker": "515880.SS",
-          "source_tier": "aggregator"
-        }
-      ],
+      "start_date": "2026-10-16",
+      "end_date": "2026-10-16",
+      "fetched_at": "2026-10-16T08:01:15Z",
+      "items": [],
       "source_statuses": [
         {
           "source": "Yahoo Finance",
@@ -163,8 +142,8 @@
         },
         {
           "source": "Google News RSS",
-          "status": "ok",
-          "item_count": 2
+          "status": "empty",
+          "item_count": 0
         },
         {
           "source": "SEC EDGAR",
@@ -177,9 +156,9 @@
       "status": "empty",
       "query_type": "ticker",
       "ticker": "512480.SS",
-      "start_date": "2026-10-15",
-      "end_date": "2026-10-15",
-      "fetched_at": "2026-10-15T08:01:18Z",
+      "start_date": "2026-10-16",
+      "end_date": "2026-10-16",
+      "fetched_at": "2026-10-16T08:01:18Z",
       "items": [],
       "source_statuses": [
         {
@@ -202,123 +181,103 @@
   },
   "items": [
     {
-      "title": "Norway's sovereign wealth fund should invest in major defence groups, commission concludes",
+      "title": "Global Fuel Oil Shortage Deepens as Middle East and Russia Supplies Collapse",
       "summary": "",
-      "url": "https://finance.yahoo.com/economy/policy/articles/norways-wealth-fund-set-overhaul-010618973.html",
-      "source": "Reuters",
-      "published_at": "2026-10-15T07:52:02Z",
-      "fetched_at": "2026-10-15T08:01:13Z",
-      "ticker": null,
-      "source_tier": "aggregator"
-    },
-    {
-      "title": "BAC Q3 Deep Dive: Regulatory Costs and Trading Slowdown Weigh on Results",
-      "summary": "",
-      "url": "https://finance.yahoo.com/markets/stocks/articles/bac-q3-deep-dive-regulatory-074427051.html",
-      "source": "StockStory",
-      "published_at": "2026-10-15T07:44:27Z",
-      "fetched_at": "2026-10-15T08:01:13Z",
-      "ticker": null,
-      "source_tier": "aggregator"
-    },
-    {
-      "title": "Tech stocks lead rout after US inflation fuels rate hike bets",
-      "summary": "",
-      "url": "https://finance.yahoo.com/markets/stocks/articles/tech-stock-lead-rout-us-025325296.html",
-      "source": "AFP",
-      "published_at": "2026-10-15T07:27:14Z",
-      "fetched_at": "2026-10-15T08:01:13Z",
-      "ticker": null,
-      "source_tier": "aggregator"
-    },
-    {
-      "title": "TotalEnergies sees Q3 European refining margin nearly 4x year earlier",
-      "summary": "",
-      "url": "https://finance.yahoo.com/energy/articles/totalenergies-sees-q3-european-refining-070641643.html",
-      "source": "Investing.com",
-      "published_at": "2026-10-15T07:06:41Z",
-      "fetched_at": "2026-10-15T08:01:13Z",
-      "ticker": null,
-      "source_tier": "aggregator"
-    },
-    {
-      "title": "The Biggest ‘Schumps:’ From SpaceX to IMAX, We Scored the Disruptors",
-      "summary": "",
-      "url": "https://finance.yahoo.com/m/3085e227-51a0-3002-aa0a-ab3951360432/the-biggest-%E2%80%98schumps%3A%E2%80%99-from.html",
-      "source": "Barrons.com",
-      "published_at": "2026-10-15T07:00:00Z",
-      "fetched_at": "2026-10-15T08:01:13Z",
-      "ticker": null,
-      "source_tier": "aggregator"
-    },
-    {
-      "title": "Oil prices ease as investors weigh supply outlook, Middle East tensions",
-      "summary": "",
-      "url": "https://finance.yahoo.com/energy/articles/oil-prices-fall-investors-weigh-012948990.html",
-      "source": "Reuters",
-      "published_at": "2026-10-15T06:36:08Z",
-      "fetched_at": "2026-10-15T08:01:13Z",
-      "ticker": null,
-      "source_tier": "aggregator"
-    },
-    {
-      "title": "Anglo Asian Mining reports Q3 jump in copper production as Demirli ramp-up continues",
-      "summary": "",
-      "url": "https://finance.yahoo.com/markets/commodities/articles/anglo-asian-mining-reports-q3-063400266.html",
-      "source": "Proactive",
-      "published_at": "2026-10-15T06:34:00Z",
-      "fetched_at": "2026-10-15T08:01:13Z",
-      "ticker": null,
-      "source_tier": "aggregator"
-    },
-    {
-      "title": "Southern Energy Corp. Announces Successful Cotton Valley Completion Results at Williamsburg",
-      "summary": "",
-      "url": "https://finance.yahoo.com/energy/articles/southern-energy-corp-announces-successful-060200604.html",
-      "source": "ACCESS Newswire",
-      "published_at": "2026-10-15T06:02:00Z",
-      "fetched_at": "2026-10-15T08:01:13Z",
-      "ticker": null,
-      "source_tier": "aggregator"
-    },
-    {
-      "title": "Oil Prices Fall as Trump Considers Easing Sanctions on Shadow Fleet Tankers",
-      "summary": "",
-      "url": "https://finance.yahoo.com/energy/articles/oil-prices-fall-trump-considers-051907774.html",
+      "url": "https://finance.yahoo.com/energy/articles/global-fuel-oil-shortage-deepens-070000097.html",
       "source": "Oilprice.com",
-      "published_at": "2026-10-15T05:19:07Z",
-      "fetched_at": "2026-10-15T08:01:13Z",
+      "published_at": "2026-10-16T07:00:00Z",
+      "fetched_at": "2026-10-16T08:01:14Z",
       "ticker": null,
       "source_tier": "aggregator"
     },
     {
-      "title": "Is Marathon Petroleum (MPC) Cheap Following Fresh Value Focus And Lower Volatility Attention?",
+      "title": "Bitcoin recovers to $82k but set for second week in red",
       "summary": "",
-      "url": "https://finance.yahoo.com/markets/stocks/articles/marathon-petroleum-mpc-cheap-following-051248409.html",
-      "source": "Simply Wall St.",
-      "published_at": "2026-10-15T05:12:48Z",
-      "fetched_at": "2026-10-15T08:01:13Z",
+      "url": "https://finance.yahoo.com/markets/crypto/articles/bitcoin-recovers-82k-set-second-065608980.html",
+      "source": "Investing.com",
+      "published_at": "2026-10-16T06:56:08Z",
+      "fetched_at": "2026-10-16T08:01:14Z",
       "ticker": null,
       "source_tier": "aggregator"
     },
     {
-      "title": "10月14日通信ETF国泰（515880）份额减少3.92亿份，最新份额652.80亿份，最新规模357.60亿元",
-      "summary": "10月14日通信ETF国泰（515880）份额减少3.92亿份，最新份额652.80亿份，最新规模357.60亿元 搜狐",
-      "url": "https://news.google.com/rss/articles/CBMijAFBVV95cUxQZ2Q5NmxNNEM0c2xjLTFFMnVlN0ZXSFVLQndmZUF5RzNNVEFKRTI3cmwybS1pX25vckpRa0F5U2pXTm02Q2FBa2pHRHhVRWdTWHg4RzU5el9ES3BpRUUteThwVUpRNUJBRXNkYXFKcVo0SjVDcXBGMVdTVWRLMnVwTnl6Szd3TmNKX09SMg?oc=5",
-      "source": "Google News / 搜狐",
-      "published_at": "2026-10-15T01:00:45Z",
-      "fetched_at": "2026-10-15T08:01:15Z",
-      "ticker": "515880.SS",
+      "title": "Bernstein Names Top Pick in U.S. Waste Sector",
+      "summary": "",
+      "url": "https://finance.yahoo.com/markets/stocks/articles/bernstein-names-top-pick-u-064946016.html",
+      "source": "Investing.com",
+      "published_at": "2026-10-16T06:49:46Z",
+      "fetched_at": "2026-10-16T08:01:14Z",
+      "ticker": null,
       "source_tier": "aggregator"
     },
     {
-      "title": "通信ETF国泰（515880）跌1.57%，半日成交额10.31亿元",
-      "summary": "通信ETF国泰（515880）跌1.57%，半日成交额10.31亿元 新浪财经",
-      "url": "https://news.google.com/rss/articles/CBMieEFVX3lxTE9YN280QXV2WmVpZk1LOFNhQ0V5Snlza2I3M3Z1bmFNTnRLSDN2dkZuSFllQjgxd1N6NG9PdC1DQjR0MDNEYkRQc2w3WGRUTVljcHB0RnFjLXdUV0ZQRkluazdNd0NVQi1pcUNZSmxRM2RSdm5ES3Nxcg?oc=5",
-      "source": "Google News / 新浪财经",
-      "published_at": "2026-10-14T23:04:02Z",
-      "fetched_at": "2026-10-15T08:01:15Z",
-      "ticker": "515880.SS",
+      "title": "Oil eases, but set for weekly gain on Mideast supply risks",
+      "summary": "",
+      "url": "https://finance.yahoo.com/energy/articles/oil-edges-down-investors-weigh-010642305.html",
+      "source": "Reuters",
+      "published_at": "2026-10-16T06:43:25Z",
+      "fetched_at": "2026-10-16T08:01:14Z",
+      "ticker": null,
+      "source_tier": "aggregator"
+    },
+    {
+      "title": "International Seaways Expands VLCC Fleet Through Strategic Combination with Bruton Limited.",
+      "summary": "",
+      "url": "https://finance.yahoo.com/markets/stocks/articles/international-seaways-expands-vlcc-fleet-063000630.html",
+      "source": "Business Wire",
+      "published_at": "2026-10-16T06:30:00Z",
+      "fetched_at": "2026-10-16T08:01:14Z",
+      "ticker": null,
+      "source_tier": "aggregator"
+    },
+    {
+      "title": "Oil Prices Head for Weekly Gain as Hormuz Attacks Rattle Markets",
+      "summary": "",
+      "url": "https://finance.yahoo.com/energy/articles/oil-prices-head-weekly-gain-053000638.html",
+      "source": "Oilprice.com",
+      "published_at": "2026-10-16T05:30:00Z",
+      "fetched_at": "2026-10-16T08:01:14Z",
+      "ticker": null,
+      "source_tier": "aggregator"
+    },
+    {
+      "title": "Prospera Energy Restarts Five Additional Luseland Wells at $6,400 per Flowing Barrel; First Ten Reactivations Return 1.92x Capital",
+      "summary": "",
+      "url": "https://finance.yahoo.com/energy/articles/prospera-energy-restarts-five-additional-043500084.html",
+      "source": "TMX Newsfile",
+      "published_at": "2026-10-16T04:35:00Z",
+      "fetched_at": "2026-10-16T08:01:14Z",
+      "ticker": null,
+      "source_tier": "aggregator"
+    },
+    {
+      "title": "Our BJ’s Wholesale Club Pick Is Playing Out. The Stock Has More Upside.",
+      "summary": "",
+      "url": "https://finance.yahoo.com/m/011d1640-0f4b-36d4-b5c0-83675d13c0e4/our-bj%E2%80%99s-wholesale-club-pick.html",
+      "source": "Barrons.com",
+      "published_at": "2026-10-16T04:10:00Z",
+      "fetched_at": "2026-10-16T08:01:14Z",
+      "ticker": null,
+      "source_tier": "aggregator"
+    },
+    {
+      "title": "Corrections & Amplifications",
+      "summary": "",
+      "url": "https://finance.yahoo.com/m/7c6c6a3c-74b6-34a4-94ed-faf2a801051f/corrections-%26-amplifications.html",
+      "source": "The Wall Street Journal",
+      "published_at": "2026-10-16T03:20:00Z",
+      "fetched_at": "2026-10-16T08:01:14Z",
+      "ticker": null,
+      "source_tier": "aggregator"
+    },
+    {
+      "title": "Kraft Heinz vs. Monster Beverage: Which Consumer Goods Stock Is a Better Buy in 2026?",
+      "summary": "",
+      "url": "https://finance.yahoo.com/markets/stocks/articles/kraft-heinz-vs-monster-beverage-025002497.html",
+      "source": "Motley Fool",
+      "published_at": "2026-10-16T02:50:02Z",
+      "fetched_at": "2026-10-16T08:01:14Z",
+      "ticker": null,
       "source_tier": "aggregator"
     }
   ]

@@ -1,7 +1,7 @@
 {
   "status": "failed",
-  "generated_at": "2026-10-15T16:01:12+08:00",
-  "trade_date": "2026-10-15",
+  "generated_at": "2026-10-16T16:01:12+08:00",
+  "trade_date": "2026-10-16",
   "provider": "openai_compatible",
   "analysts": [
     "market",
@@ -19,19 +19,19 @@
     "kind": "monitor"
   },
   "run": {
-    "id": "38702621656",
+    "id": "38870803349",
     "attempt": "1",
     "workflow": "daily-analysis",
-    "url": "https://github.com/gaaiyun/TradingWorkbench/actions/runs/38702621656"
+    "url": "https://github.com/gaaiyun/TradingWorkbench/actions/runs/38870803349"
   },
   "identity": {
     "scope": "profile",
     "kind": "monitor",
-    "runId": "38702621656",
+    "runId": "38870803349",
     "profileId": "cn-semi-comms",
     "requestId": null,
-    "slotId": "slot-b9ddba93841f46dc588f22bdaab45cfc894d25b73eefa1e8e9089dbe189254ae",
-    "scheduledFor": "2026-10-15T07:17:15.000Z"
+    "slotId": "slot-1721c6a60b494eb1e341eff439c73e2818e8441a9369758bdda58e5088b3e122",
+    "scheduledFor": "2026-10-16T07:17:15.000Z"
   },
   "rating_tiers": [
     "Sell",
