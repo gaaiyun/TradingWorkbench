@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "generatedAt": "2026-10-19T17:27:44.794Z",
+  "generatedAt": "2026-10-20T15:38:58.763Z",
   "status": "degraded",
   "coverage": {
     "policy": "current-listed-best-effort-plus-configured-core",
@@ -16,13 +16,13 @@
       "id": "sina-market-center",
       "role": "CN current-listed discovery",
       "quality": "best_effort",
-      "asOf": "2026-10-19T17:27:44.794Z"
+      "asOf": "2026-10-20T15:38:58.763Z"
     },
     {
       "id": "workbench-settings",
       "role": "configured HK/US/CN core instruments",
       "quality": "declared",
-      "asOf": "2026-10-19T17:27:44.794Z"
+      "asOf": "2026-10-20T15:38:58.763Z"
     }
   ],
   "instruments": [
@@ -31752,7 +31752,7 @@
     },
     {
       "symbol": "301660.SZ",
-      "name": "C粤芯",
+      "name": "粤芯半导",
       "market": "CN",
       "exchange": "SZ",
       "instrumentType": "stock",
@@ -34766,7 +34766,7 @@
     },
     {
       "symbol": "600335.SS",
-      "name": "XD国机汽",
+      "name": "国机汽车",
       "market": "CN",
       "exchange": "SS",
       "instrumentType": "stock",
@@ -35162,7 +35162,7 @@
     },
     {
       "symbol": "600380.SS",
-      "name": "健康元",
+      "name": "XD健康元",
       "market": "CN",
       "exchange": "SS",
       "instrumentType": "stock",
@@ -37494,7 +37494,7 @@
     },
     {
       "symbol": "600667.SS",
-      "name": "XD太极实",
+      "name": "太极实业",
       "market": "CN",
       "exchange": "SS",
       "instrumentType": "stock",
@@ -39628,7 +39628,7 @@
     },
     {
       "symbol": "600906.SS",
-      "name": "财达证券",
+      "name": "XD财达证",
       "market": "CN",
       "exchange": "SS",
       "instrumentType": "stock",
@@ -40310,7 +40310,7 @@
     },
     {
       "symbol": "601006.SS",
-      "name": "XD大秦铁",
+      "name": "大秦铁路",
       "market": "CN",
       "exchange": "SS",
       "instrumentType": "stock",
@@ -41619,7 +41619,7 @@
     },
     {
       "symbol": "601598.SS",
-      "name": "中国外运",
+      "name": "XD中国外",
       "market": "CN",
       "exchange": "SS",
       "instrumentType": "stock",
@@ -41762,7 +41762,7 @@
     },
     {
       "symbol": "601628.SS",
-      "name": "XD中国人",
+      "name": "中国人寿",
       "market": "CN",
       "exchange": "SS",
       "instrumentType": "stock",
@@ -42070,7 +42070,7 @@
     },
     {
       "symbol": "601799.SS",
-      "name": "XD星宇股",
+      "name": "星宇股份",
       "market": "CN",
       "exchange": "SS",
       "instrumentType": "stock",
@@ -42367,7 +42367,7 @@
     },
     {
       "symbol": "601898.SS",
-      "name": "中煤能源",
+      "name": "XD中煤能",
       "market": "CN",
       "exchange": "SS",
       "instrumentType": "stock",
@@ -44644,7 +44644,7 @@
     },
     {
       "symbol": "603207.SS",
-      "name": "小方制药",
+      "name": "XD小方制",
       "market": "CN",
       "exchange": "SS",
       "instrumentType": "stock",
@@ -44919,7 +44919,7 @@
     },
     {
       "symbol": "603233.SS",
-      "name": "XD大参林",
+      "name": "大参林",
       "market": "CN",
       "exchange": "SS",
       "instrumentType": "stock",
@@ -45194,7 +45194,7 @@
     },
     {
       "symbol": "603277.SS",
-      "name": "XD银都股",
+      "name": "银都股份",
       "market": "CN",
       "exchange": "SS",
       "instrumentType": "stock",
@@ -46657,7 +46657,7 @@
     },
     {
       "symbol": "603517.SS",
-      "name": "ST绝味",
+      "name": "绝味食品",
       "market": "CN",
       "exchange": "SS",
       "instrumentType": "stock",
@@ -47724,7 +47724,7 @@
     },
     {
       "symbol": "603699.SS",
-      "name": "纽威股份",
+      "name": "XD纽威股",
       "market": "CN",
       "exchange": "SS",
       "instrumentType": "stock",
@@ -48483,7 +48483,7 @@
     },
     {
       "symbol": "603838.SS",
-      "name": "*ST四通",
+      "name": "四通股份",
       "market": "CN",
       "exchange": "SS",
       "instrumentType": "stock",
@@ -50892,7 +50892,7 @@
     },
     {
       "symbol": "688016.SS",
-      "name": "心脉医疗",
+      "name": "XD心脉医",
       "market": "CN",
       "exchange": "SS",
       "instrumentType": "stock",
@@ -55996,7 +55996,7 @@
     },
     {
       "symbol": "688610.SS",
-      "name": "DR埃科光",
+      "name": "埃科光电",
       "market": "CN",
       "exchange": "SS",
       "instrumentType": "stock",
