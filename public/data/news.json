@@ -1,113 +1,113 @@
 {
   "version": 1,
   "status": "ok",
-  "generated_at": "2026-10-19T19:11:31+08:00",
-  "trade_date": "2026-10-19",
+  "generated_at": "2026-10-20T16:01:38+08:00",
+  "trade_date": "2026-10-20",
   "global": {
     "status": "ok",
     "query_type": "global",
     "ticker": null,
-    "start_date": "2026-10-12",
-    "end_date": "2026-10-19",
-    "fetched_at": "2026-10-19T11:11:32Z",
+    "start_date": "2026-10-13",
+    "end_date": "2026-10-20",
+    "fetched_at": "2026-10-20T08:01:39Z",
     "items": [
       {
-        "title": "Oil slips from five-month high with Hormuz transits in focus",
+        "title": "Discovery Energy Metals Corp. Samples 197 g/t Ag and 0.26% Cu in Outcrop at Crystal Lake Project, British Columbia",
         "summary": "",
-        "url": "https://finance.yahoo.com/energy/articles/oil-slips-trumps-sanction-waiver-222256196.html",
+        "url": "https://finance.yahoo.com/markets/commodities/articles/discovery-energy-metals-corp-samples-070100457.html",
+        "source": "ACCESS Newswire",
+        "published_at": "2026-10-20T07:01:00Z",
+        "fetched_at": "2026-10-20T08:01:39Z",
+        "ticker": null,
+        "source_tier": "aggregator"
+      },
+      {
+        "title": "Brent crude holds near five-month high on Middle East tension",
+        "summary": "",
+        "url": "https://finance.yahoo.com/energy/articles/oil-eases-markets-assess-potential-005750414.html",
         "source": "Reuters",
-        "published_at": "2026-10-19T11:08:12Z",
-        "fetched_at": "2026-10-19T11:11:32Z",
+        "published_at": "2026-10-20T06:35:42Z",
+        "fetched_at": "2026-10-20T08:01:39Z",
         "ticker": null,
         "source_tier": "aggregator"
       },
       {
-        "title": "What State Street Consumer Staples SPDR (XLP) Bought: Walmart Leads on Oct. 15",
+        "title": "Asian Stocks Fall, Bucking U.S. Tech Rebound",
         "summary": "",
-        "url": "https://finance.yahoo.com/markets/stocks/articles/state-street-consumer-staples-spdr-110458981.html",
+        "url": "https://finance.yahoo.com/m/e12c86a0-945b-3d91-b0df-2884023716c9/asian-stocks-fall%2C-bucking.html",
+        "source": "The Wall Street Journal",
+        "published_at": "2026-10-20T06:23:00Z",
+        "fetched_at": "2026-10-20T08:01:39Z",
+        "ticker": null,
+        "source_tier": "aggregator"
+      },
+      {
+        "title": "Top 3 Canadian Nuclear Stocks To Watch In October 2026",
+        "summary": "",
+        "url": "https://finance.yahoo.com/energy/articles/top-3-canadian-nuclear-stocks-061224986.html",
+        "source": "Simply Wall St.",
+        "published_at": "2026-10-20T06:12:24Z",
+        "fetched_at": "2026-10-20T08:01:39Z",
+        "ticker": null,
+        "source_tier": "aggregator"
+      },
+      {
+        "title": "The Changing Nature of China’s Influence on Commodity Markets",
+        "summary": "",
+        "url": "https://finance.yahoo.com/markets/commodities/articles/changing-nature-china-influence-commodity-060000373.html",
+        "source": "CME Group",
+        "published_at": "2026-10-20T06:00:00Z",
+        "fetched_at": "2026-10-20T08:01:39Z",
+        "ticker": null,
+        "source_tier": "aggregator"
+      },
+      {
+        "title": "Bank of Japan may raise inflation forecast, stand pat on rates, sources say",
+        "summary": "",
+        "url": "https://finance.yahoo.com/economy/policy/articles/bank-japan-may-raise-inflation-055159213.html",
+        "source": "Reuters",
+        "published_at": "2026-10-20T05:51:59Z",
+        "fetched_at": "2026-10-20T08:01:39Z",
+        "ticker": null,
+        "source_tier": "aggregator"
+      },
+      {
+        "title": "Shares stumble, oil rises as investors await AI sector earnings",
+        "summary": "",
+        "url": "https://finance.yahoo.com/markets/world-indices/articles/asian-shares-tumble-oil-rises-021045839.html",
+        "source": "Reuters",
+        "published_at": "2026-10-20T05:02:23Z",
+        "fetched_at": "2026-10-20T08:01:39Z",
+        "ticker": null,
+        "source_tier": "aggregator"
+      },
+      {
+        "title": "Hindustan Zinc Ltd (BOM:500188) (Q2 2027) Earnings Call Highlights: Record EBITDA, Lower Costs ...",
+        "summary": "",
+        "url": "https://finance.yahoo.com/markets/stocks/articles/hindustan-zinc-ltd-bom-500188-050020235.html",
         "source": "GuruFocus.com",
-        "published_at": "2026-10-19T11:04:58Z",
-        "fetched_at": "2026-10-19T11:11:32Z",
+        "published_at": "2026-10-20T05:00:20Z",
+        "fetched_at": "2026-10-20T08:01:39Z",
         "ticker": null,
         "source_tier": "aggregator"
       },
       {
-        "title": "SPDR Portfolio S&P 500 Value ETF (SPYV) Buys $15 Million More Apple on Oct. 15",
+        "title": "Brent Tops $110 as Tanker Attacks Threaten Persian Gulf Supply",
         "summary": "",
-        "url": "https://finance.yahoo.com/markets/stocks/articles/spdr-portfolio-p-500-value-110423648.html",
-        "source": "GuruFocus.com",
-        "published_at": "2026-10-19T11:04:23Z",
-        "fetched_at": "2026-10-19T11:11:32Z",
+        "url": "https://finance.yahoo.com/energy/articles/brent-tops-110-tanker-attacks-045606283.html",
+        "source": "Oilprice.com",
+        "published_at": "2026-10-20T04:56:06Z",
+        "fetched_at": "2026-10-20T08:01:39Z",
         "ticker": null,
         "source_tier": "aggregator"
       },
       {
-        "title": "ETFs Bought $18.0 Million of Walmart (WMT) on Oct. 15",
+        "title": "Why Did XOM, CVX, MPC Stocks Surge To 52-Week Highs Today?",
         "summary": "",
-        "url": "https://finance.yahoo.com/markets/stocks/articles/etfs-bought-18-0-million-110107158.html",
-        "source": "GuruFocus.com",
-        "published_at": "2026-10-19T11:01:07Z",
-        "fetched_at": "2026-10-19T11:11:32Z",
-        "ticker": null,
-        "source_tier": "aggregator"
-      },
-      {
-        "title": "Sun Summit Receives Positive Metallurgical Test Results for the JD Project",
-        "summary": "",
-        "url": "https://finance.yahoo.com/markets/commodities/articles/sun-summit-receives-positive-metallurgical-110000536.html",
-        "source": "TMX Newsfile",
-        "published_at": "2026-10-19T11:00:00Z",
-        "fetched_at": "2026-10-19T11:11:32Z",
-        "ticker": null,
-        "source_tier": "aggregator"
-      },
-      {
-        "title": "Asian Stock Markets Churn on Tech, China Economy Outlooks",
-        "summary": "",
-        "url": "https://finance.yahoo.com/markets/world-indices/articles/asian-stock-markets-churn-tech-104034829.html",
-        "source": "MT Newswires",
-        "published_at": "2026-10-19T10:40:34Z",
-        "fetched_at": "2026-10-19T11:11:32Z",
-        "ticker": null,
-        "source_tier": "aggregator"
-      },
-      {
-        "title": "Americas Gold and Silver Corporation Announces Record Quarterly Silver Production and Sales of 800,458 Ounces Produced and 860,850 Ounces Sold",
-        "summary": "",
-        "url": "https://finance.yahoo.com/markets/commodities/articles/americas-gold-silver-corporation-announces-103000361.html",
-        "source": "TMX Newsfile",
-        "published_at": "2026-10-19T10:30:00Z",
-        "fetched_at": "2026-10-19T11:11:32Z",
-        "ticker": null,
-        "source_tier": "aggregator"
-      },
-      {
-        "title": "Sunshine Silver Mining & Refining Advances Operational Readiness at the Sunshine Mine",
-        "summary": "",
-        "url": "https://finance.yahoo.com/markets/commodities/articles/sunshine-silver-mining-refining-advances-103000599.html",
-        "source": "PR Newswire",
-        "published_at": "2026-10-19T10:30:00Z",
-        "fetched_at": "2026-10-19T11:11:32Z",
-        "ticker": null,
-        "source_tier": "aggregator"
-      },
-      {
-        "title": "Saturn Oil & Gas Inc. Continues Strategic Core Area Expansion with Acquisition of 100% Light Oil-Weighted Corex Resources Ltd.",
-        "summary": "",
-        "url": "https://finance.yahoo.com/energy/articles/saturn-oil-gas-inc-continues-103000853.html",
-        "source": "TMX Newsfile",
-        "published_at": "2026-10-19T10:30:00Z",
-        "fetched_at": "2026-10-19T11:11:32Z",
-        "ticker": null,
-        "source_tier": "aggregator"
-      },
-      {
-        "title": "Commerzbank Says Treasuries Pare Gains, US Equity Futures Higher as Brent Crude Slips",
-        "summary": "",
-        "url": "https://finance.yahoo.com/economy/policy/articles/commerzbank-says-treasuries-pare-gains-102042026.html",
-        "source": "MT Newswires",
-        "published_at": "2026-10-19T10:20:42Z",
-        "fetched_at": "2026-10-19T11:11:32Z",
+        "url": "https://finance.yahoo.com/markets/stocks/articles/why-did-xom-cvx-mpc-041128720.html",
+        "source": "Stocktwits",
+        "published_at": "2026-10-20T04:11:28Z",
+        "fetched_at": "2026-10-20T08:01:39Z",
         "ticker": null,
         "source_tier": "aggregator"
       }
@@ -130,9 +130,9 @@
       "status": "empty",
       "query_type": "ticker",
       "ticker": "515880.SS",
-      "start_date": "2026-10-19",
-      "end_date": "2026-10-19",
-      "fetched_at": "2026-10-19T11:11:33Z",
+      "start_date": "2026-10-20",
+      "end_date": "2026-10-20",
+      "fetched_at": "2026-10-20T08:01:40Z",
       "items": [],
       "source_statuses": [
         {
@@ -153,13 +153,34 @@
       ]
     },
     "512480.SS": {
-      "status": "empty",
+      "status": "ok",
       "query_type": "ticker",
       "ticker": "512480.SS",
-      "start_date": "2026-10-19",
-      "end_date": "2026-10-19",
-      "fetched_at": "2026-10-19T11:11:36Z",
-      "items": [],
+      "start_date": "2026-10-20",
+      "end_date": "2026-10-20",
+      "fetched_at": "2026-10-20T08:01:43Z",
+      "items": [
+        {
+          "title": "半导体ETF国联安（512480）涨1.46%，半日成交额7.44亿元",
+          "summary": "半导体ETF国联安（512480）涨1.46%，半日成交额7.44亿元 新浪财经",
+          "url": "https://news.google.com/rss/articles/CBMimAFBVV95cUxNSmItQnU5cm02VWV0Nng5Z0RBNWNZdXdLd3pWbVpBdXNzdnE5SGRqaUF5MlV0dHZxT0s1a3pfSFM4UFg5R0RVUWJQSVp6RFNLSmpLb0xTNWJxN2h3aWs1cjYtekpPdzFpN3M5R2lOeFZ4VXVhRzdLTk1PSnp4NF9EeEhaV0lJTEl2eVp3SGJnTkk3WVJTX0k1UA?oc=5",
+          "source": "Google News / 新浪财经",
+          "published_at": "2026-10-20T03:31:41Z",
+          "fetched_at": "2026-10-20T08:01:43Z",
+          "ticker": "512480.SS",
+          "source_tier": "aggregator"
+        },
+        {
+          "title": "半导体ETF国联安：10月19日融资买入6053.02万元，融资融券余额6.31亿元",
+          "summary": "半导体ETF国联安：10月19日融资买入6053.02万元，融资融券余额6.31亿元 搜狐",
+          "url": "https://news.google.com/rss/articles/CBMiiAFBVV95cUxON3NTVWJPWEttSGxsQjZpNk01TzF2eHpLQzNfdEZpdlVyQU90VlVUWFFZUDVES1NueW1rY0FwMXhfS1lzVnppZ0QtLWlfSlZRM01DMm82Ykt5NkduS1ZLVU4xbDRSb29BbE4td3ZXeFljZlFUYkxUT3BsN280VmJrT3doaWtKNlpI?oc=5",
+          "source": "Google News / 搜狐",
+          "published_at": "2026-10-20T02:32:38Z",
+          "fetched_at": "2026-10-20T08:01:43Z",
+          "ticker": "512480.SS",
+          "source_tier": "aggregator"
+        }
+      ],
       "source_statuses": [
         {
           "source": "Yahoo Finance",
@@ -168,8 +189,8 @@
         },
         {
           "source": "Google News RSS",
-          "status": "empty",
-          "item_count": 0
+          "status": "ok",
+          "item_count": 2
         },
         {
           "source": "SEC EDGAR",
@@ -181,103 +202,123 @@
   },
   "items": [
     {
-      "title": "Oil slips from five-month high with Hormuz transits in focus",
+      "title": "Discovery Energy Metals Corp. Samples 197 g/t Ag and 0.26% Cu in Outcrop at Crystal Lake Project, British Columbia",
       "summary": "",
-      "url": "https://finance.yahoo.com/energy/articles/oil-slips-trumps-sanction-waiver-222256196.html",
+      "url": "https://finance.yahoo.com/markets/commodities/articles/discovery-energy-metals-corp-samples-070100457.html",
+      "source": "ACCESS Newswire",
+      "published_at": "2026-10-20T07:01:00Z",
+      "fetched_at": "2026-10-20T08:01:39Z",
+      "ticker": null,
+      "source_tier": "aggregator"
+    },
+    {
+      "title": "Brent crude holds near five-month high on Middle East tension",
+      "summary": "",
+      "url": "https://finance.yahoo.com/energy/articles/oil-eases-markets-assess-potential-005750414.html",
       "source": "Reuters",
-      "published_at": "2026-10-19T11:08:12Z",
-      "fetched_at": "2026-10-19T11:11:32Z",
+      "published_at": "2026-10-20T06:35:42Z",
+      "fetched_at": "2026-10-20T08:01:39Z",
       "ticker": null,
       "source_tier": "aggregator"
     },
     {
-      "title": "What State Street Consumer Staples SPDR (XLP) Bought: Walmart Leads on Oct. 15",
+      "title": "Asian Stocks Fall, Bucking U.S. Tech Rebound",
       "summary": "",
-      "url": "https://finance.yahoo.com/markets/stocks/articles/state-street-consumer-staples-spdr-110458981.html",
+      "url": "https://finance.yahoo.com/m/e12c86a0-945b-3d91-b0df-2884023716c9/asian-stocks-fall%2C-bucking.html",
+      "source": "The Wall Street Journal",
+      "published_at": "2026-10-20T06:23:00Z",
+      "fetched_at": "2026-10-20T08:01:39Z",
+      "ticker": null,
+      "source_tier": "aggregator"
+    },
+    {
+      "title": "Top 3 Canadian Nuclear Stocks To Watch In October 2026",
+      "summary": "",
+      "url": "https://finance.yahoo.com/energy/articles/top-3-canadian-nuclear-stocks-061224986.html",
+      "source": "Simply Wall St.",
+      "published_at": "2026-10-20T06:12:24Z",
+      "fetched_at": "2026-10-20T08:01:39Z",
+      "ticker": null,
+      "source_tier": "aggregator"
+    },
+    {
+      "title": "The Changing Nature of China’s Influence on Commodity Markets",
+      "summary": "",
+      "url": "https://finance.yahoo.com/markets/commodities/articles/changing-nature-china-influence-commodity-060000373.html",
+      "source": "CME Group",
+      "published_at": "2026-10-20T06:00:00Z",
+      "fetched_at": "2026-10-20T08:01:39Z",
+      "ticker": null,
+      "source_tier": "aggregator"
+    },
+    {
+      "title": "Bank of Japan may raise inflation forecast, stand pat on rates, sources say",
+      "summary": "",
+      "url": "https://finance.yahoo.com/economy/policy/articles/bank-japan-may-raise-inflation-055159213.html",
+      "source": "Reuters",
+      "published_at": "2026-10-20T05:51:59Z",
+      "fetched_at": "2026-10-20T08:01:39Z",
+      "ticker": null,
+      "source_tier": "aggregator"
+    },
+    {
+      "title": "Shares stumble, oil rises as investors await AI sector earnings",
+      "summary": "",
+      "url": "https://finance.yahoo.com/markets/world-indices/articles/asian-shares-tumble-oil-rises-021045839.html",
+      "source": "Reuters",
+      "published_at": "2026-10-20T05:02:23Z",
+      "fetched_at": "2026-10-20T08:01:39Z",
+      "ticker": null,
+      "source_tier": "aggregator"
+    },
+    {
+      "title": "Hindustan Zinc Ltd (BOM:500188) (Q2 2027) Earnings Call Highlights: Record EBITDA, Lower Costs ...",
+      "summary": "",
+      "url": "https://finance.yahoo.com/markets/stocks/articles/hindustan-zinc-ltd-bom-500188-050020235.html",
       "source": "GuruFocus.com",
-      "published_at": "2026-10-19T11:04:58Z",
-      "fetched_at": "2026-10-19T11:11:32Z",
+      "published_at": "2026-10-20T05:00:20Z",
+      "fetched_at": "2026-10-20T08:01:39Z",
       "ticker": null,
       "source_tier": "aggregator"
     },
     {
-      "title": "SPDR Portfolio S&P 500 Value ETF (SPYV) Buys $15 Million More Apple on Oct. 15",
+      "title": "Brent Tops $110 as Tanker Attacks Threaten Persian Gulf Supply",
       "summary": "",
-      "url": "https://finance.yahoo.com/markets/stocks/articles/spdr-portfolio-p-500-value-110423648.html",
-      "source": "GuruFocus.com",
-      "published_at": "2026-10-19T11:04:23Z",
-      "fetched_at": "2026-10-19T11:11:32Z",
+      "url": "https://finance.yahoo.com/energy/articles/brent-tops-110-tanker-attacks-045606283.html",
+      "source": "Oilprice.com",
+      "published_at": "2026-10-20T04:56:06Z",
+      "fetched_at": "2026-10-20T08:01:39Z",
       "ticker": null,
       "source_tier": "aggregator"
     },
     {
-      "title": "ETFs Bought $18.0 Million of Walmart (WMT) on Oct. 15",
+      "title": "Why Did XOM, CVX, MPC Stocks Surge To 52-Week Highs Today?",
       "summary": "",
-      "url": "https://finance.yahoo.com/markets/stocks/articles/etfs-bought-18-0-million-110107158.html",
-      "source": "GuruFocus.com",
-      "published_at": "2026-10-19T11:01:07Z",
-      "fetched_at": "2026-10-19T11:11:32Z",
+      "url": "https://finance.yahoo.com/markets/stocks/articles/why-did-xom-cvx-mpc-041128720.html",
+      "source": "Stocktwits",
+      "published_at": "2026-10-20T04:11:28Z",
+      "fetched_at": "2026-10-20T08:01:39Z",
       "ticker": null,
       "source_tier": "aggregator"
     },
     {
-      "title": "Sun Summit Receives Positive Metallurgical Test Results for the JD Project",
-      "summary": "",
-      "url": "https://finance.yahoo.com/markets/commodities/articles/sun-summit-receives-positive-metallurgical-110000536.html",
-      "source": "TMX Newsfile",
-      "published_at": "2026-10-19T11:00:00Z",
-      "fetched_at": "2026-10-19T11:11:32Z",
-      "ticker": null,
+      "title": "半导体ETF国联安（512480）涨1.46%，半日成交额7.44亿元",
+      "summary": "半导体ETF国联安（512480）涨1.46%，半日成交额7.44亿元 新浪财经",
+      "url": "https://news.google.com/rss/articles/CBMimAFBVV95cUxNSmItQnU5cm02VWV0Nng5Z0RBNWNZdXdLd3pWbVpBdXNzdnE5SGRqaUF5MlV0dHZxT0s1a3pfSFM4UFg5R0RVUWJQSVp6RFNLSmpLb0xTNWJxN2h3aWs1cjYtekpPdzFpN3M5R2lOeFZ4VXVhRzdLTk1PSnp4NF9EeEhaV0lJTEl2eVp3SGJnTkk3WVJTX0k1UA?oc=5",
+      "source": "Google News / 新浪财经",
+      "published_at": "2026-10-20T03:31:41Z",
+      "fetched_at": "2026-10-20T08:01:43Z",
+      "ticker": "512480.SS",
       "source_tier": "aggregator"
     },
     {
-      "title": "Asian Stock Markets Churn on Tech, China Economy Outlooks",
-      "summary": "",
-      "url": "https://finance.yahoo.com/markets/world-indices/articles/asian-stock-markets-churn-tech-104034829.html",
-      "source": "MT Newswires",
-      "published_at": "2026-10-19T10:40:34Z",
-      "fetched_at": "2026-10-19T11:11:32Z",
-      "ticker": null,
-      "source_tier": "aggregator"
-    },
-    {
-      "title": "Americas Gold and Silver Corporation Announces Record Quarterly Silver Production and Sales of 800,458 Ounces Produced and 860,850 Ounces Sold",
-      "summary": "",
-      "url": "https://finance.yahoo.com/markets/commodities/articles/americas-gold-silver-corporation-announces-103000361.html",
-      "source": "TMX Newsfile",
-      "published_at": "2026-10-19T10:30:00Z",
-      "fetched_at": "2026-10-19T11:11:32Z",
-      "ticker": null,
-      "source_tier": "aggregator"
-    },
-    {
-      "title": "Sunshine Silver Mining & Refining Advances Operational Readiness at the Sunshine Mine",
-      "summary": "",
-      "url": "https://finance.yahoo.com/markets/commodities/articles/sunshine-silver-mining-refining-advances-103000599.html",
-      "source": "PR Newswire",
-      "published_at": "2026-10-19T10:30:00Z",
-      "fetched_at": "2026-10-19T11:11:32Z",
-      "ticker": null,
-      "source_tier": "aggregator"
-    },
-    {
-      "title": "Saturn Oil & Gas Inc. Continues Strategic Core Area Expansion with Acquisition of 100% Light Oil-Weighted Corex Resources Ltd.",
-      "summary": "",
-      "url": "https://finance.yahoo.com/energy/articles/saturn-oil-gas-inc-continues-103000853.html",
-      "source": "TMX Newsfile",
-      "published_at": "2026-10-19T10:30:00Z",
-      "fetched_at": "2026-10-19T11:11:32Z",
-      "ticker": null,
-      "source_tier": "aggregator"
-    },
-    {
-      "title": "Commerzbank Says Treasuries Pare Gains, US Equity Futures Higher as Brent Crude Slips",
-      "summary": "",
-      "url": "https://finance.yahoo.com/economy/policy/articles/commerzbank-says-treasuries-pare-gains-102042026.html",
-      "source": "MT Newswires",
-      "published_at": "2026-10-19T10:20:42Z",
-      "fetched_at": "2026-10-19T11:11:32Z",
-      "ticker": null,
+      "title": "半导体ETF国联安：10月19日融资买入6053.02万元，融资融券余额6.31亿元",
+      "summary": "半导体ETF国联安：10月19日融资买入6053.02万元，融资融券余额6.31亿元 搜狐",
+      "url": "https://news.google.com/rss/articles/CBMiiAFBVV95cUxON3NTVWJPWEttSGxsQjZpNk01TzF2eHpLQzNfdEZpdlVyQU90VlVUWFFZUDVES1NueW1rY0FwMXhfS1lzVnppZ0QtLWlfSlZRM01DMm82Ykt5NkduS1ZLVU4xbDRSb29BbE4td3ZXeFljZlFUYkxUT3BsN280VmJrT3doaWtKNlpI?oc=5",
+      "source": "Google News / 搜狐",
+      "published_at": "2026-10-20T02:32:38Z",
+      "fetched_at": "2026-10-20T08:01:43Z",
+      "ticker": "512480.SS",
       "source_tier": "aggregator"
     }
   ]
