@@ -1,113 +1,113 @@
 {
   "version": 1,
   "status": "ok",
-  "generated_at": "2026-10-20T16:01:38+08:00",
-  "trade_date": "2026-10-20",
+  "generated_at": "2026-10-21T16:01:43+08:00",
+  "trade_date": "2026-10-21",
   "global": {
     "status": "ok",
     "query_type": "global",
     "ticker": null,
-    "start_date": "2026-10-13",
-    "end_date": "2026-10-20",
-    "fetched_at": "2026-10-20T08:01:39Z",
+    "start_date": "2026-10-14",
+    "end_date": "2026-10-21",
+    "fetched_at": "2026-10-21T08:01:44Z",
     "items": [
       {
-        "title": "Discovery Energy Metals Corp. Samples 197 g/t Ag and 0.26% Cu in Outcrop at Crystal Lake Project, British Columbia",
+        "title": "Dow Jones Futures: SpaceX, Supermicro Revive AI Stocks; Tesla, Meta On Deck",
         "summary": "",
-        "url": "https://finance.yahoo.com/markets/commodities/articles/discovery-energy-metals-corp-samples-070100457.html",
-        "source": "ACCESS Newswire",
-        "published_at": "2026-10-20T07:01:00Z",
-        "fetched_at": "2026-10-20T08:01:39Z",
+        "url": "https://finance.yahoo.com/m/40378091-9f13-35f6-a4eb-65961ef4434c/dow-jones-futures%3A-spacex%2C.html",
+        "source": "Investor's Business Daily",
+        "published_at": "2026-10-21T07:56:15Z",
+        "fetched_at": "2026-10-21T08:01:44Z",
         "ticker": null,
         "source_tier": "aggregator"
       },
       {
-        "title": "Brent crude holds near five-month high on Middle East tension",
+        "title": "Bitcoin firms to $82k but oil, AI jitters limit upside",
         "summary": "",
-        "url": "https://finance.yahoo.com/energy/articles/oil-eases-markets-assess-potential-005750414.html",
+        "url": "https://finance.yahoo.com/markets/crypto/articles/bitcoin-firms-82k-oil-ai-072522795.html",
+        "source": "Investing.com",
+        "published_at": "2026-10-21T07:25:22Z",
+        "fetched_at": "2026-10-21T08:01:44Z",
+        "ticker": null,
+        "source_tier": "aggregator"
+      },
+      {
+        "title": "Asian stocks climb as strong earnings buoy Wall Street",
+        "summary": "",
+        "url": "https://finance.yahoo.com/markets/world-indices/articles/asian-stocks-climb-strong-earnings-021016665.html",
         "source": "Reuters",
-        "published_at": "2026-10-20T06:35:42Z",
-        "fetched_at": "2026-10-20T08:01:39Z",
+        "published_at": "2026-10-21T07:17:27Z",
+        "fetched_at": "2026-10-21T08:01:44Z",
         "ticker": null,
         "source_tier": "aggregator"
       },
       {
-        "title": "Asian Stocks Fall, Bucking U.S. Tech Rebound",
+        "title": "Stocktwits Midweek Energy Roundup: Brent Crosses $110 A Barrel, Musk’s Comments On Power For AI, Key Earnings Check",
         "summary": "",
-        "url": "https://finance.yahoo.com/m/e12c86a0-945b-3d91-b0df-2884023716c9/asian-stocks-fall%2C-bucking.html",
-        "source": "The Wall Street Journal",
-        "published_at": "2026-10-20T06:23:00Z",
-        "fetched_at": "2026-10-20T08:01:39Z",
-        "ticker": null,
-        "source_tier": "aggregator"
-      },
-      {
-        "title": "Top 3 Canadian Nuclear Stocks To Watch In October 2026",
-        "summary": "",
-        "url": "https://finance.yahoo.com/energy/articles/top-3-canadian-nuclear-stocks-061224986.html",
-        "source": "Simply Wall St.",
-        "published_at": "2026-10-20T06:12:24Z",
-        "fetched_at": "2026-10-20T08:01:39Z",
-        "ticker": null,
-        "source_tier": "aggregator"
-      },
-      {
-        "title": "The Changing Nature of China’s Influence on Commodity Markets",
-        "summary": "",
-        "url": "https://finance.yahoo.com/markets/commodities/articles/changing-nature-china-influence-commodity-060000373.html",
-        "source": "CME Group",
-        "published_at": "2026-10-20T06:00:00Z",
-        "fetched_at": "2026-10-20T08:01:39Z",
-        "ticker": null,
-        "source_tier": "aggregator"
-      },
-      {
-        "title": "Bank of Japan may raise inflation forecast, stand pat on rates, sources say",
-        "summary": "",
-        "url": "https://finance.yahoo.com/economy/policy/articles/bank-japan-may-raise-inflation-055159213.html",
-        "source": "Reuters",
-        "published_at": "2026-10-20T05:51:59Z",
-        "fetched_at": "2026-10-20T08:01:39Z",
-        "ticker": null,
-        "source_tier": "aggregator"
-      },
-      {
-        "title": "Shares stumble, oil rises as investors await AI sector earnings",
-        "summary": "",
-        "url": "https://finance.yahoo.com/markets/world-indices/articles/asian-shares-tumble-oil-rises-021045839.html",
-        "source": "Reuters",
-        "published_at": "2026-10-20T05:02:23Z",
-        "fetched_at": "2026-10-20T08:01:39Z",
-        "ticker": null,
-        "source_tier": "aggregator"
-      },
-      {
-        "title": "Hindustan Zinc Ltd (BOM:500188) (Q2 2027) Earnings Call Highlights: Record EBITDA, Lower Costs ...",
-        "summary": "",
-        "url": "https://finance.yahoo.com/markets/stocks/articles/hindustan-zinc-ltd-bom-500188-050020235.html",
-        "source": "GuruFocus.com",
-        "published_at": "2026-10-20T05:00:20Z",
-        "fetched_at": "2026-10-20T08:01:39Z",
-        "ticker": null,
-        "source_tier": "aggregator"
-      },
-      {
-        "title": "Brent Tops $110 as Tanker Attacks Threaten Persian Gulf Supply",
-        "summary": "",
-        "url": "https://finance.yahoo.com/energy/articles/brent-tops-110-tanker-attacks-045606283.html",
-        "source": "Oilprice.com",
-        "published_at": "2026-10-20T04:56:06Z",
-        "fetched_at": "2026-10-20T08:01:39Z",
-        "ticker": null,
-        "source_tier": "aggregator"
-      },
-      {
-        "title": "Why Did XOM, CVX, MPC Stocks Surge To 52-Week Highs Today?",
-        "summary": "",
-        "url": "https://finance.yahoo.com/markets/stocks/articles/why-did-xom-cvx-mpc-041128720.html",
+        "url": "https://finance.yahoo.com/energy/articles/stocktwits-midweek-energy-roundup-brent-071343609.html",
         "source": "Stocktwits",
-        "published_at": "2026-10-20T04:11:28Z",
-        "fetched_at": "2026-10-20T08:01:39Z",
+        "published_at": "2026-10-21T07:13:43Z",
+        "fetched_at": "2026-10-21T08:01:44Z",
+        "ticker": null,
+        "source_tier": "aggregator"
+      },
+      {
+        "title": "Eurozone Bond Yields Rise in Opening Trade",
+        "summary": "",
+        "url": "https://finance.yahoo.com/m/07a3bee9-eea5-3f13-a9d5-0c252693dbdb/eurozone-bond-yields-rise-in.html",
+        "source": "The Wall Street Journal",
+        "published_at": "2026-10-21T07:00:00Z",
+        "fetched_at": "2026-10-21T08:01:44Z",
+        "ticker": null,
+        "source_tier": "aggregator"
+      },
+      {
+        "title": "Nordic Stocks Tipped to Open Slightly Higher",
+        "summary": "",
+        "url": "https://finance.yahoo.com/m/03fe6bf1-0f4a-3c60-b32a-7a3243cb51c7/nordic-stocks-tipped-to-open.html",
+        "source": "The Wall Street Journal",
+        "published_at": "2026-10-21T06:52:00Z",
+        "fetched_at": "2026-10-21T08:01:44Z",
+        "ticker": null,
+        "source_tier": "aggregator"
+      },
+      {
+        "title": "Dollar hovers near 3-wk low as volatile oil prices weigh, rupee extends rally",
+        "summary": "",
+        "url": "https://finance.yahoo.com/markets/currencies/articles/asia-fx-subdued-dollar-hovers-054841042.html",
+        "source": "Investing.com",
+        "published_at": "2026-10-21T05:48:41Z",
+        "fetched_at": "2026-10-21T08:01:44Z",
+        "ticker": null,
+        "source_tier": "aggregator"
+      },
+      {
+        "title": "Oil Prices Climb Above $110 as Middle East Supply Fears Persist",
+        "summary": "",
+        "url": "https://finance.yahoo.com/energy/articles/oil-prices-climb-above-110-051127951.html",
+        "source": "Oilprice.com",
+        "published_at": "2026-10-21T05:11:27Z",
+        "fetched_at": "2026-10-21T08:01:44Z",
+        "ticker": null,
+        "source_tier": "aggregator"
+      },
+      {
+        "title": "Japan records a trade deficit as oil imports soar because of conflict in the Middle East",
+        "summary": "",
+        "url": "https://finance.yahoo.com/economy/policy/articles/japan-records-trade-deficit-oil-043017045.html",
+        "source": "Associated Press",
+        "published_at": "2026-10-21T04:30:17Z",
+        "fetched_at": "2026-10-21T08:01:44Z",
+        "ticker": null,
+        "source_tier": "aggregator"
+      },
+      {
+        "title": "3 Great Australian Growth Stocks To Own In October 2026",
+        "summary": "",
+        "url": "https://finance.yahoo.com/markets/stocks/articles/3-great-australian-growth-stocks-042646660.html",
+        "source": "Simply Wall St.",
+        "published_at": "2026-10-21T04:26:46Z",
+        "fetched_at": "2026-10-21T08:01:44Z",
         "ticker": null,
         "source_tier": "aggregator"
       }
@@ -116,12 +116,12 @@
       {
         "source": "Yahoo Finance",
         "status": "ok",
-        "item_count": 49
+        "item_count": 48
       },
       {
         "source": "Federal Reserve",
         "status": "ok",
-        "item_count": 2
+        "item_count": 1
       }
     ]
   },
@@ -130,9 +130,9 @@
       "status": "empty",
       "query_type": "ticker",
       "ticker": "515880.SS",
-      "start_date": "2026-10-20",
-      "end_date": "2026-10-20",
-      "fetched_at": "2026-10-20T08:01:40Z",
+      "start_date": "2026-10-21",
+      "end_date": "2026-10-21",
+      "fetched_at": "2026-10-21T08:01:46Z",
       "items": [],
       "source_statuses": [
         {
@@ -153,34 +153,13 @@
       ]
     },
     "512480.SS": {
-      "status": "ok",
+      "status": "empty",
       "query_type": "ticker",
       "ticker": "512480.SS",
-      "start_date": "2026-10-20",
-      "end_date": "2026-10-20",
-      "fetched_at": "2026-10-20T08:01:43Z",
-      "items": [
-        {
-          "title": "半导体ETF国联安（512480）涨1.46%，半日成交额7.44亿元",
-          "summary": "半导体ETF国联安（512480）涨1.46%，半日成交额7.44亿元 新浪财经",
-          "url": "https://news.google.com/rss/articles/CBMimAFBVV95cUxNSmItQnU5cm02VWV0Nng5Z0RBNWNZdXdLd3pWbVpBdXNzdnE5SGRqaUF5MlV0dHZxT0s1a3pfSFM4UFg5R0RVUWJQSVp6RFNLSmpLb0xTNWJxN2h3aWs1cjYtekpPdzFpN3M5R2lOeFZ4VXVhRzdLTk1PSnp4NF9EeEhaV0lJTEl2eVp3SGJnTkk3WVJTX0k1UA?oc=5",
-          "source": "Google News / 新浪财经",
-          "published_at": "2026-10-20T03:31:41Z",
-          "fetched_at": "2026-10-20T08:01:43Z",
-          "ticker": "512480.SS",
-          "source_tier": "aggregator"
-        },
-        {
-          "title": "半导体ETF国联安：10月19日融资买入6053.02万元，融资融券余额6.31亿元",
-          "summary": "半导体ETF国联安：10月19日融资买入6053.02万元，融资融券余额6.31亿元 搜狐",
-          "url": "https://news.google.com/rss/articles/CBMiiAFBVV95cUxON3NTVWJPWEttSGxsQjZpNk01TzF2eHpLQzNfdEZpdlVyQU90VlVUWFFZUDVES1NueW1rY0FwMXhfS1lzVnppZ0QtLWlfSlZRM01DMm82Ykt5NkduS1ZLVU4xbDRSb29BbE4td3ZXeFljZlFUYkxUT3BsN280VmJrT3doaWtKNlpI?oc=5",
-          "source": "Google News / 搜狐",
-          "published_at": "2026-10-20T02:32:38Z",
-          "fetched_at": "2026-10-20T08:01:43Z",
-          "ticker": "512480.SS",
-          "source_tier": "aggregator"
-        }
-      ],
+      "start_date": "2026-10-21",
+      "end_date": "2026-10-21",
+      "fetched_at": "2026-10-21T08:01:49Z",
+      "items": [],
       "source_statuses": [
         {
           "source": "Yahoo Finance",
@@ -189,8 +168,8 @@
         },
         {
           "source": "Google News RSS",
-          "status": "ok",
-          "item_count": 2
+          "status": "empty",
+          "item_count": 0
         },
         {
           "source": "SEC EDGAR",
@@ -202,123 +181,103 @@
   },
   "items": [
     {
-      "title": "Discovery Energy Metals Corp. Samples 197 g/t Ag and 0.26% Cu in Outcrop at Crystal Lake Project, British Columbia",
+      "title": "Dow Jones Futures: SpaceX, Supermicro Revive AI Stocks; Tesla, Meta On Deck",
       "summary": "",
-      "url": "https://finance.yahoo.com/markets/commodities/articles/discovery-energy-metals-corp-samples-070100457.html",
-      "source": "ACCESS Newswire",
-      "published_at": "2026-10-20T07:01:00Z",
-      "fetched_at": "2026-10-20T08:01:39Z",
+      "url": "https://finance.yahoo.com/m/40378091-9f13-35f6-a4eb-65961ef4434c/dow-jones-futures%3A-spacex%2C.html",
+      "source": "Investor's Business Daily",
+      "published_at": "2026-10-21T07:56:15Z",
+      "fetched_at": "2026-10-21T08:01:44Z",
       "ticker": null,
       "source_tier": "aggregator"
     },
     {
-      "title": "Brent crude holds near five-month high on Middle East tension",
+      "title": "Bitcoin firms to $82k but oil, AI jitters limit upside",
       "summary": "",
-      "url": "https://finance.yahoo.com/energy/articles/oil-eases-markets-assess-potential-005750414.html",
+      "url": "https://finance.yahoo.com/markets/crypto/articles/bitcoin-firms-82k-oil-ai-072522795.html",
+      "source": "Investing.com",
+      "published_at": "2026-10-21T07:25:22Z",
+      "fetched_at": "2026-10-21T08:01:44Z",
+      "ticker": null,
+      "source_tier": "aggregator"
+    },
+    {
+      "title": "Asian stocks climb as strong earnings buoy Wall Street",
+      "summary": "",
+      "url": "https://finance.yahoo.com/markets/world-indices/articles/asian-stocks-climb-strong-earnings-021016665.html",
       "source": "Reuters",
-      "published_at": "2026-10-20T06:35:42Z",
-      "fetched_at": "2026-10-20T08:01:39Z",
+      "published_at": "2026-10-21T07:17:27Z",
+      "fetched_at": "2026-10-21T08:01:44Z",
       "ticker": null,
       "source_tier": "aggregator"
     },
     {
-      "title": "Asian Stocks Fall, Bucking U.S. Tech Rebound",
+      "title": "Stocktwits Midweek Energy Roundup: Brent Crosses $110 A Barrel, Musk’s Comments On Power For AI, Key Earnings Check",
       "summary": "",
-      "url": "https://finance.yahoo.com/m/e12c86a0-945b-3d91-b0df-2884023716c9/asian-stocks-fall%2C-bucking.html",
-      "source": "The Wall Street Journal",
-      "published_at": "2026-10-20T06:23:00Z",
-      "fetched_at": "2026-10-20T08:01:39Z",
-      "ticker": null,
-      "source_tier": "aggregator"
-    },
-    {
-      "title": "Top 3 Canadian Nuclear Stocks To Watch In October 2026",
-      "summary": "",
-      "url": "https://finance.yahoo.com/energy/articles/top-3-canadian-nuclear-stocks-061224986.html",
-      "source": "Simply Wall St.",
-      "published_at": "2026-10-20T06:12:24Z",
-      "fetched_at": "2026-10-20T08:01:39Z",
-      "ticker": null,
-      "source_tier": "aggregator"
-    },
-    {
-      "title": "The Changing Nature of China’s Influence on Commodity Markets",
-      "summary": "",
-      "url": "https://finance.yahoo.com/markets/commodities/articles/changing-nature-china-influence-commodity-060000373.html",
-      "source": "CME Group",
-      "published_at": "2026-10-20T06:00:00Z",
-      "fetched_at": "2026-10-20T08:01:39Z",
-      "ticker": null,
-      "source_tier": "aggregator"
-    },
-    {
-      "title": "Bank of Japan may raise inflation forecast, stand pat on rates, sources say",
-      "summary": "",
-      "url": "https://finance.yahoo.com/economy/policy/articles/bank-japan-may-raise-inflation-055159213.html",
-      "source": "Reuters",
-      "published_at": "2026-10-20T05:51:59Z",
-      "fetched_at": "2026-10-20T08:01:39Z",
-      "ticker": null,
-      "source_tier": "aggregator"
-    },
-    {
-      "title": "Shares stumble, oil rises as investors await AI sector earnings",
-      "summary": "",
-      "url": "https://finance.yahoo.com/markets/world-indices/articles/asian-shares-tumble-oil-rises-021045839.html",
-      "source": "Reuters",
-      "published_at": "2026-10-20T05:02:23Z",
-      "fetched_at": "2026-10-20T08:01:39Z",
-      "ticker": null,
-      "source_tier": "aggregator"
-    },
-    {
-      "title": "Hindustan Zinc Ltd (BOM:500188) (Q2 2027) Earnings Call Highlights: Record EBITDA, Lower Costs ...",
-      "summary": "",
-      "url": "https://finance.yahoo.com/markets/stocks/articles/hindustan-zinc-ltd-bom-500188-050020235.html",
-      "source": "GuruFocus.com",
-      "published_at": "2026-10-20T05:00:20Z",
-      "fetched_at": "2026-10-20T08:01:39Z",
-      "ticker": null,
-      "source_tier": "aggregator"
-    },
-    {
-      "title": "Brent Tops $110 as Tanker Attacks Threaten Persian Gulf Supply",
-      "summary": "",
-      "url": "https://finance.yahoo.com/energy/articles/brent-tops-110-tanker-attacks-045606283.html",
-      "source": "Oilprice.com",
-      "published_at": "2026-10-20T04:56:06Z",
-      "fetched_at": "2026-10-20T08:01:39Z",
-      "ticker": null,
-      "source_tier": "aggregator"
-    },
-    {
-      "title": "Why Did XOM, CVX, MPC Stocks Surge To 52-Week Highs Today?",
-      "summary": "",
-      "url": "https://finance.yahoo.com/markets/stocks/articles/why-did-xom-cvx-mpc-041128720.html",
+      "url": "https://finance.yahoo.com/energy/articles/stocktwits-midweek-energy-roundup-brent-071343609.html",
       "source": "Stocktwits",
-      "published_at": "2026-10-20T04:11:28Z",
-      "fetched_at": "2026-10-20T08:01:39Z",
+      "published_at": "2026-10-21T07:13:43Z",
+      "fetched_at": "2026-10-21T08:01:44Z",
       "ticker": null,
       "source_tier": "aggregator"
     },
     {
-      "title": "半导体ETF国联安（512480）涨1.46%，半日成交额7.44亿元",
-      "summary": "半导体ETF国联安（512480）涨1.46%，半日成交额7.44亿元 新浪财经",
-      "url": "https://news.google.com/rss/articles/CBMimAFBVV95cUxNSmItQnU5cm02VWV0Nng5Z0RBNWNZdXdLd3pWbVpBdXNzdnE5SGRqaUF5MlV0dHZxT0s1a3pfSFM4UFg5R0RVUWJQSVp6RFNLSmpLb0xTNWJxN2h3aWs1cjYtekpPdzFpN3M5R2lOeFZ4VXVhRzdLTk1PSnp4NF9EeEhaV0lJTEl2eVp3SGJnTkk3WVJTX0k1UA?oc=5",
-      "source": "Google News / 新浪财经",
-      "published_at": "2026-10-20T03:31:41Z",
-      "fetched_at": "2026-10-20T08:01:43Z",
-      "ticker": "512480.SS",
+      "title": "Eurozone Bond Yields Rise in Opening Trade",
+      "summary": "",
+      "url": "https://finance.yahoo.com/m/07a3bee9-eea5-3f13-a9d5-0c252693dbdb/eurozone-bond-yields-rise-in.html",
+      "source": "The Wall Street Journal",
+      "published_at": "2026-10-21T07:00:00Z",
+      "fetched_at": "2026-10-21T08:01:44Z",
+      "ticker": null,
       "source_tier": "aggregator"
     },
     {
-      "title": "半导体ETF国联安：10月19日融资买入6053.02万元，融资融券余额6.31亿元",
-      "summary": "半导体ETF国联安：10月19日融资买入6053.02万元，融资融券余额6.31亿元 搜狐",
-      "url": "https://news.google.com/rss/articles/CBMiiAFBVV95cUxON3NTVWJPWEttSGxsQjZpNk01TzF2eHpLQzNfdEZpdlVyQU90VlVUWFFZUDVES1NueW1rY0FwMXhfS1lzVnppZ0QtLWlfSlZRM01DMm82Ykt5NkduS1ZLVU4xbDRSb29BbE4td3ZXeFljZlFUYkxUT3BsN280VmJrT3doaWtKNlpI?oc=5",
-      "source": "Google News / 搜狐",
-      "published_at": "2026-10-20T02:32:38Z",
-      "fetched_at": "2026-10-20T08:01:43Z",
-      "ticker": "512480.SS",
+      "title": "Nordic Stocks Tipped to Open Slightly Higher",
+      "summary": "",
+      "url": "https://finance.yahoo.com/m/03fe6bf1-0f4a-3c60-b32a-7a3243cb51c7/nordic-stocks-tipped-to-open.html",
+      "source": "The Wall Street Journal",
+      "published_at": "2026-10-21T06:52:00Z",
+      "fetched_at": "2026-10-21T08:01:44Z",
+      "ticker": null,
+      "source_tier": "aggregator"
+    },
+    {
+      "title": "Dollar hovers near 3-wk low as volatile oil prices weigh, rupee extends rally",
+      "summary": "",
+      "url": "https://finance.yahoo.com/markets/currencies/articles/asia-fx-subdued-dollar-hovers-054841042.html",
+      "source": "Investing.com",
+      "published_at": "2026-10-21T05:48:41Z",
+      "fetched_at": "2026-10-21T08:01:44Z",
+      "ticker": null,
+      "source_tier": "aggregator"
+    },
+    {
+      "title": "Oil Prices Climb Above $110 as Middle East Supply Fears Persist",
+      "summary": "",
+      "url": "https://finance.yahoo.com/energy/articles/oil-prices-climb-above-110-051127951.html",
+      "source": "Oilprice.com",
+      "published_at": "2026-10-21T05:11:27Z",
+      "fetched_at": "2026-10-21T08:01:44Z",
+      "ticker": null,
+      "source_tier": "aggregator"
+    },
+    {
+      "title": "Japan records a trade deficit as oil imports soar because of conflict in the Middle East",
+      "summary": "",
+      "url": "https://finance.yahoo.com/economy/policy/articles/japan-records-trade-deficit-oil-043017045.html",
+      "source": "Associated Press",
+      "published_at": "2026-10-21T04:30:17Z",
+      "fetched_at": "2026-10-21T08:01:44Z",
+      "ticker": null,
+      "source_tier": "aggregator"
+    },
+    {
+      "title": "3 Great Australian Growth Stocks To Own In October 2026",
+      "summary": "",
+      "url": "https://finance.yahoo.com/markets/stocks/articles/3-great-australian-growth-stocks-042646660.html",
+      "source": "Simply Wall St.",
+      "published_at": "2026-10-21T04:26:46Z",
+      "fetched_at": "2026-10-21T08:01:44Z",
+      "ticker": null,
       "source_tier": "aggregator"
     }
   ]

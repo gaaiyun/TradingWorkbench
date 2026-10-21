@@ -1,5 +1,60 @@
 [
   {
+    "trade_date": "2026-10-21",
+    "generated_at": "2026-10-21T16:01:43+08:00",
+    "provider": "openai_compatible",
+    "results": [
+      {
+        "ticker": "515880.SS",
+        "rating": null,
+        "report": null,
+        "files": {},
+        "error": true,
+        "analysis_status": "data_validation_failed",
+        "audit_status": "invalidated",
+        "evidence_publish": {
+          "published": true,
+          "status": 201
+        }
+      },
+      {
+        "ticker": "512480.SS",
+        "rating": null,
+        "report": null,
+        "files": {},
+        "error": true,
+        "analysis_status": null,
+        "audit_status": null,
+        "evidence_publish": null
+      }
+    ],
+    "request": {
+      "requestId": null,
+      "analysts": [
+        "market",
+        "news",
+        "fundamentals"
+      ],
+      "researchDepth": "standard",
+      "kind": "monitor"
+    },
+    "run": {
+      "id": "39566103261",
+      "attempt": "1",
+      "workflow": "daily-analysis",
+      "url": "https://github.com/gaaiyun/TradingWorkbench/actions/runs/39566103261"
+    },
+    "identity": {
+      "scope": "profile",
+      "kind": "monitor",
+      "runId": "39566103261",
+      "profileId": "cn-semi-comms",
+      "requestId": null,
+      "slotId": "slot-4d20ae3d3eaee8fbde84c5e5a6f79c324657827bfaa4efd51fbebf3514f7bbc7",
+      "scheduledFor": "2026-10-21T07:17:15.000Z"
+    }
+  },
+  {
     "trade_date": "2026-10-20",
     "generated_at": "2026-10-20T16:01:38+08:00",
     "provider": "openai_compatible",
@@ -4212,81 +4267,6 @@
       "requestId": null,
       "slotId": "slot-0c3c408af74c43c8fc54a37e2cc17a8a1d4ac9bc2eb353171c62df7e1d3f8358",
       "scheduledFor": "2026-08-12T07:20:00.000Z"
-    }
-  },
-  {
-    "trade_date": "2026-08-11",
-    "generated_at": "2026-08-11T15:46:51+08:00",
-    "provider": "openai_compatible",
-    "results": [
-      {
-        "ticker": "515880.SS",
-        "rating": null,
-        "report": null,
-        "files": {},
-        "error": true,
-        "analysis_status": null,
-        "audit_status": null,
-        "evidence_publish": null
-      },
-      {
-        "ticker": "512480.SS",
-        "rating": "Not Rated",
-        "report": "reports/512480.SS/2026-08-11/complete_report.md",
-        "files": {
-          "fundamentals": "reports/512480.SS/2026-08-11/1_analysts/fundamentals.md",
-          "market": "reports/512480.SS/2026-08-11/1_analysts/market.md",
-          "news": "reports/512480.SS/2026-08-11/1_analysts/news.md",
-          "bear": "reports/512480.SS/2026-08-11/2_research/bear.md",
-          "bull": "reports/512480.SS/2026-08-11/2_research/bull.md",
-          "manager": "reports/512480.SS/2026-08-11/2_research/manager.md",
-          "trader": "reports/512480.SS/2026-08-11/3_trading/trader.md",
-          "aggressive": "reports/512480.SS/2026-08-11/4_risk/aggressive.md",
-          "conservative": "reports/512480.SS/2026-08-11/4_risk/conservative.md",
-          "neutral": "reports/512480.SS/2026-08-11/4_risk/neutral.md",
-          "decision": "reports/512480.SS/2026-08-11/5_portfolio/decision.md",
-          "complete_report": "reports/512480.SS/2026-08-11/complete_report.md"
-        },
-        "error": false,
-        "analysis_status": "insufficient_evidence",
-        "audit_status": "legacy_unverified",
-        "evidence_publish": {
-          "published": true,
-          "status": 201
-        },
-        "marketHistory": {
-          "source": "tencent",
-          "adjustment": "qfq",
-          "barCount": 653,
-          "startAt": "2023-11-29T16:00:00Z",
-          "endAt": "2026-08-10T16:00:00Z"
-        }
-      }
-    ],
-    "request": {
-      "requestId": null,
-      "analysts": [
-        "market",
-        "news",
-        "fundamentals"
-      ],
-      "researchDepth": "standard",
-      "kind": "monitor"
-    },
-    "run": {
-      "id": "31470313995",
-      "attempt": "1",
-      "workflow": "daily-analysis",
-      "url": "https://github.com/gaaiyun/TradingWorkbench/actions/runs/31470313995"
-    },
-    "identity": {
-      "scope": "profile",
-      "kind": "monitor",
-      "runId": "31470313995",
-      "profileId": "cn-semi-comms",
-      "requestId": null,
-      "slotId": "slot-6d57f8fc8b124e0f3b4fe7e71a2b811063584aa801942723d6caee5f880470bb",
-      "scheduledFor": "2026-08-11T07:20:00.000Z"
     }
   }
 ]
