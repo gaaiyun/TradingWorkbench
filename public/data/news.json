@@ -1,113 +1,113 @@
 {
   "version": 1,
   "status": "ok",
-  "generated_at": "2026-10-21T16:01:43+08:00",
-  "trade_date": "2026-10-21",
+  "generated_at": "2026-10-22T16:01:54+08:00",
+  "trade_date": "2026-10-22",
   "global": {
     "status": "ok",
     "query_type": "global",
     "ticker": null,
-    "start_date": "2026-10-14",
-    "end_date": "2026-10-21",
-    "fetched_at": "2026-10-21T08:01:44Z",
+    "start_date": "2026-10-15",
+    "end_date": "2026-10-22",
+    "fetched_at": "2026-10-22T08:01:54Z",
     "items": [
       {
-        "title": "Dow Jones Futures: SpaceX, Supermicro Revive AI Stocks; Tesla, Meta On Deck",
+        "title": "Asian stocks retreat as tech mood sours again",
         "summary": "",
-        "url": "https://finance.yahoo.com/m/40378091-9f13-35f6-a4eb-65961ef4434c/dow-jones-futures%3A-spacex%2C.html",
-        "source": "Investor's Business Daily",
-        "published_at": "2026-10-21T07:56:15Z",
-        "fetched_at": "2026-10-21T08:01:44Z",
+        "url": "https://finance.yahoo.com/markets/world-indices/articles/asian-stocks-back-retreat-tech-024129180.html",
+        "source": "AFP",
+        "published_at": "2026-10-22T07:31:45Z",
+        "fetched_at": "2026-10-22T08:01:54Z",
         "ticker": null,
         "source_tier": "aggregator"
       },
       {
-        "title": "Bitcoin firms to $82k but oil, AI jitters limit upside",
+        "title": "STOXX 600 slips as Barclays, Hermes disappoint; oil climbs",
         "summary": "",
-        "url": "https://finance.yahoo.com/markets/crypto/articles/bitcoin-firms-82k-oil-ai-072522795.html",
-        "source": "Investing.com",
-        "published_at": "2026-10-21T07:25:22Z",
-        "fetched_at": "2026-10-21T08:01:44Z",
-        "ticker": null,
-        "source_tier": "aggregator"
-      },
-      {
-        "title": "Asian stocks climb as strong earnings buoy Wall Street",
-        "summary": "",
-        "url": "https://finance.yahoo.com/markets/world-indices/articles/asian-stocks-climb-strong-earnings-021016665.html",
+        "url": "https://finance.yahoo.com/markets/world-indices/articles/stoxx-600-slips-barclays-hermes-072407788.html",
         "source": "Reuters",
-        "published_at": "2026-10-21T07:17:27Z",
-        "fetched_at": "2026-10-21T08:01:44Z",
+        "published_at": "2026-10-22T07:24:07Z",
+        "fetched_at": "2026-10-22T08:01:54Z",
         "ticker": null,
         "source_tier": "aggregator"
       },
       {
-        "title": "Stocktwits Midweek Energy Roundup: Brent Crosses $110 A Barrel, Musk’s Comments On Power For AI, Key Earnings Check",
+        "title": "Supply Network And 2 Other Australian Quality Stocks To Own",
         "summary": "",
-        "url": "https://finance.yahoo.com/energy/articles/stocktwits-midweek-energy-roundup-brent-071343609.html",
-        "source": "Stocktwits",
-        "published_at": "2026-10-21T07:13:43Z",
-        "fetched_at": "2026-10-21T08:01:44Z",
-        "ticker": null,
-        "source_tier": "aggregator"
-      },
-      {
-        "title": "Eurozone Bond Yields Rise in Opening Trade",
-        "summary": "",
-        "url": "https://finance.yahoo.com/m/07a3bee9-eea5-3f13-a9d5-0c252693dbdb/eurozone-bond-yields-rise-in.html",
-        "source": "The Wall Street Journal",
-        "published_at": "2026-10-21T07:00:00Z",
-        "fetched_at": "2026-10-21T08:01:44Z",
-        "ticker": null,
-        "source_tier": "aggregator"
-      },
-      {
-        "title": "Nordic Stocks Tipped to Open Slightly Higher",
-        "summary": "",
-        "url": "https://finance.yahoo.com/m/03fe6bf1-0f4a-3c60-b32a-7a3243cb51c7/nordic-stocks-tipped-to-open.html",
-        "source": "The Wall Street Journal",
-        "published_at": "2026-10-21T06:52:00Z",
-        "fetched_at": "2026-10-21T08:01:44Z",
-        "ticker": null,
-        "source_tier": "aggregator"
-      },
-      {
-        "title": "Dollar hovers near 3-wk low as volatile oil prices weigh, rupee extends rally",
-        "summary": "",
-        "url": "https://finance.yahoo.com/markets/currencies/articles/asia-fx-subdued-dollar-hovers-054841042.html",
-        "source": "Investing.com",
-        "published_at": "2026-10-21T05:48:41Z",
-        "fetched_at": "2026-10-21T08:01:44Z",
-        "ticker": null,
-        "source_tier": "aggregator"
-      },
-      {
-        "title": "Oil Prices Climb Above $110 as Middle East Supply Fears Persist",
-        "summary": "",
-        "url": "https://finance.yahoo.com/energy/articles/oil-prices-climb-above-110-051127951.html",
-        "source": "Oilprice.com",
-        "published_at": "2026-10-21T05:11:27Z",
-        "fetched_at": "2026-10-21T08:01:44Z",
-        "ticker": null,
-        "source_tier": "aggregator"
-      },
-      {
-        "title": "Japan records a trade deficit as oil imports soar because of conflict in the Middle East",
-        "summary": "",
-        "url": "https://finance.yahoo.com/economy/policy/articles/japan-records-trade-deficit-oil-043017045.html",
-        "source": "Associated Press",
-        "published_at": "2026-10-21T04:30:17Z",
-        "fetched_at": "2026-10-21T08:01:44Z",
-        "ticker": null,
-        "source_tier": "aggregator"
-      },
-      {
-        "title": "3 Great Australian Growth Stocks To Own In October 2026",
-        "summary": "",
-        "url": "https://finance.yahoo.com/markets/stocks/articles/3-great-australian-growth-stocks-042646660.html",
+        "url": "https://finance.yahoo.com/markets/stocks/articles/supply-network-2-other-australian-071307490.html",
         "source": "Simply Wall St.",
-        "published_at": "2026-10-21T04:26:46Z",
-        "fetched_at": "2026-10-21T08:01:44Z",
+        "published_at": "2026-10-22T07:13:07Z",
+        "fetched_at": "2026-10-22T08:01:54Z",
+        "ticker": null,
+        "source_tier": "aggregator"
+      },
+      {
+        "title": "Dollar Falls to 3-Week Low on Fresh AI Jitters",
+        "summary": "",
+        "url": "https://finance.yahoo.com/m/edd51a82-6a89-3ca4-84ba-884cf27916ca/dollar-falls-to-3-week-low-on.html",
+        "source": "The Wall Street Journal",
+        "published_at": "2026-10-22T07:02:00Z",
+        "fetched_at": "2026-10-22T08:01:54Z",
+        "ticker": null,
+        "source_tier": "aggregator"
+      },
+      {
+        "title": "Big Blue's Wild Wednesday Ride: IBM Crushes Q3 Earnings, So Why Did the Stock Tank Mid-Call?",
+        "summary": "",
+        "url": "https://finance.yahoo.com/markets/stocks/articles/big-blues-wild-wednesday-ride-065701343.html",
+        "source": "Motley Fool",
+        "published_at": "2026-10-22T06:57:01Z",
+        "fetched_at": "2026-10-22T08:01:54Z",
+        "ticker": null,
+        "source_tier": "aggregator"
+      },
+      {
+        "title": "Boeing's Turnaround Just Hit a Pivot Point. Here's What It Means for the Entire Aerospace Supply Chain.",
+        "summary": "",
+        "url": "https://finance.yahoo.com/markets/stocks/articles/boeings-turnaround-just-hit-pivot-065000767.html",
+        "source": "Motley Fool",
+        "published_at": "2026-10-22T06:50:00Z",
+        "fetched_at": "2026-10-22T08:01:54Z",
+        "ticker": null,
+        "source_tier": "aggregator"
+      },
+      {
+        "title": "Philippines Central Bank Delivers Jumbo Hike in Bid to Combat Inflation",
+        "summary": "",
+        "url": "https://finance.yahoo.com/m/68ddf3e7-a820-39ed-b346-fbd91effb379/philippines-central-bank.html",
+        "source": "The Wall Street Journal",
+        "published_at": "2026-10-22T06:50:00Z",
+        "fetched_at": "2026-10-22T08:01:54Z",
+        "ticker": null,
+        "source_tier": "aggregator"
+      },
+      {
+        "title": "Maurel & Prom: Activity for the First Nine Months of 2026",
+        "summary": "",
+        "url": "https://finance.yahoo.com/energy/articles/maurel-prom-activity-first-nine-064000209.html",
+        "source": "Business Wire",
+        "published_at": "2026-10-22T06:40:00Z",
+        "fetched_at": "2026-10-22T08:01:54Z",
+        "ticker": null,
+        "source_tier": "aggregator"
+      },
+      {
+        "title": "Oil jumps $2 on escalating Middle East tension",
+        "summary": "",
+        "url": "https://finance.yahoo.com/energy/articles/oil-climbs-over-1-more-052014906.html",
+        "source": "Reuters",
+        "published_at": "2026-10-22T06:39:12Z",
+        "fetched_at": "2026-10-22T08:01:54Z",
+        "ticker": null,
+        "source_tier": "aggregator"
+      },
+      {
+        "title": "Oil Rises, Asian Stocks Fall as Middle East Tensions Mount",
+        "summary": "",
+        "url": "https://finance.yahoo.com/m/5721956b-d619-3be3-957a-31ba456e6b5d/oil-rises%2C-asian-stocks-fall.html",
+        "source": "The Wall Street Journal",
+        "published_at": "2026-10-22T06:30:00Z",
+        "fetched_at": "2026-10-22T08:01:54Z",
         "ticker": null,
         "source_tier": "aggregator"
       }
@@ -116,7 +116,7 @@
       {
         "source": "Yahoo Finance",
         "status": "ok",
-        "item_count": 48
+        "item_count": 49
       },
       {
         "source": "Federal Reserve",
@@ -127,13 +127,24 @@
   },
   "tickers": {
     "515880.SS": {
-      "status": "empty",
+      "status": "ok",
       "query_type": "ticker",
       "ticker": "515880.SS",
-      "start_date": "2026-10-21",
-      "end_date": "2026-10-21",
-      "fetched_at": "2026-10-21T08:01:46Z",
-      "items": [],
+      "start_date": "2026-10-22",
+      "end_date": "2026-10-22",
+      "fetched_at": "2026-10-22T08:01:56Z",
+      "items": [
+        {
+          "title": "10月21日通信ETF国泰（515880）份额减少2.80亿份，最新份额633.80亿份，最新规模339.27亿元",
+          "summary": "10月21日通信ETF国泰（515880）份额减少2.80亿份，最新份额633.80亿份，最新规模339.27亿元 新浪财经",
+          "url": "https://news.google.com/rss/articles/CBMimwFBVV95cUxNbTZYeFNSMnZ0R0k5Y2ZmcXJ1Y1FZa2hrZEFaSmtCSzBCRTlFaE5mVlBBWWlGTHdqOExyaDJ1VFJWR3lUa0hMZWJZakF1amY1QXkyNmtURm9iemUwZGhiX0dBMWFjb3RCVFhaX29NUFJ2T1hnYnliWG00VksxRWZiU0lMM2hVZXlEYzJsNVppTjZNU29telVuSThjOA?oc=5",
+          "source": "Google News / 新浪财经",
+          "published_at": "2026-10-22T01:00:40Z",
+          "fetched_at": "2026-10-22T08:01:56Z",
+          "ticker": "515880.SS",
+          "source_tier": "aggregator"
+        }
+      ],
       "source_statuses": [
         {
           "source": "Yahoo Finance",
@@ -142,8 +153,8 @@
         },
         {
           "source": "Google News RSS",
-          "status": "empty",
-          "item_count": 0
+          "status": "ok",
+          "item_count": 2
         },
         {
           "source": "SEC EDGAR",
@@ -156,9 +167,9 @@
       "status": "empty",
       "query_type": "ticker",
       "ticker": "512480.SS",
-      "start_date": "2026-10-21",
-      "end_date": "2026-10-21",
-      "fetched_at": "2026-10-21T08:01:49Z",
+      "start_date": "2026-10-22",
+      "end_date": "2026-10-22",
+      "fetched_at": "2026-10-22T08:02:13Z",
       "items": [],
       "source_statuses": [
         {
@@ -181,103 +192,113 @@
   },
   "items": [
     {
-      "title": "Dow Jones Futures: SpaceX, Supermicro Revive AI Stocks; Tesla, Meta On Deck",
+      "title": "Asian stocks retreat as tech mood sours again",
       "summary": "",
-      "url": "https://finance.yahoo.com/m/40378091-9f13-35f6-a4eb-65961ef4434c/dow-jones-futures%3A-spacex%2C.html",
-      "source": "Investor's Business Daily",
-      "published_at": "2026-10-21T07:56:15Z",
-      "fetched_at": "2026-10-21T08:01:44Z",
+      "url": "https://finance.yahoo.com/markets/world-indices/articles/asian-stocks-back-retreat-tech-024129180.html",
+      "source": "AFP",
+      "published_at": "2026-10-22T07:31:45Z",
+      "fetched_at": "2026-10-22T08:01:54Z",
       "ticker": null,
       "source_tier": "aggregator"
     },
     {
-      "title": "Bitcoin firms to $82k but oil, AI jitters limit upside",
+      "title": "STOXX 600 slips as Barclays, Hermes disappoint; oil climbs",
       "summary": "",
-      "url": "https://finance.yahoo.com/markets/crypto/articles/bitcoin-firms-82k-oil-ai-072522795.html",
-      "source": "Investing.com",
-      "published_at": "2026-10-21T07:25:22Z",
-      "fetched_at": "2026-10-21T08:01:44Z",
-      "ticker": null,
-      "source_tier": "aggregator"
-    },
-    {
-      "title": "Asian stocks climb as strong earnings buoy Wall Street",
-      "summary": "",
-      "url": "https://finance.yahoo.com/markets/world-indices/articles/asian-stocks-climb-strong-earnings-021016665.html",
+      "url": "https://finance.yahoo.com/markets/world-indices/articles/stoxx-600-slips-barclays-hermes-072407788.html",
       "source": "Reuters",
-      "published_at": "2026-10-21T07:17:27Z",
-      "fetched_at": "2026-10-21T08:01:44Z",
+      "published_at": "2026-10-22T07:24:07Z",
+      "fetched_at": "2026-10-22T08:01:54Z",
       "ticker": null,
       "source_tier": "aggregator"
     },
     {
-      "title": "Stocktwits Midweek Energy Roundup: Brent Crosses $110 A Barrel, Musk’s Comments On Power For AI, Key Earnings Check",
+      "title": "Supply Network And 2 Other Australian Quality Stocks To Own",
       "summary": "",
-      "url": "https://finance.yahoo.com/energy/articles/stocktwits-midweek-energy-roundup-brent-071343609.html",
-      "source": "Stocktwits",
-      "published_at": "2026-10-21T07:13:43Z",
-      "fetched_at": "2026-10-21T08:01:44Z",
-      "ticker": null,
-      "source_tier": "aggregator"
-    },
-    {
-      "title": "Eurozone Bond Yields Rise in Opening Trade",
-      "summary": "",
-      "url": "https://finance.yahoo.com/m/07a3bee9-eea5-3f13-a9d5-0c252693dbdb/eurozone-bond-yields-rise-in.html",
-      "source": "The Wall Street Journal",
-      "published_at": "2026-10-21T07:00:00Z",
-      "fetched_at": "2026-10-21T08:01:44Z",
-      "ticker": null,
-      "source_tier": "aggregator"
-    },
-    {
-      "title": "Nordic Stocks Tipped to Open Slightly Higher",
-      "summary": "",
-      "url": "https://finance.yahoo.com/m/03fe6bf1-0f4a-3c60-b32a-7a3243cb51c7/nordic-stocks-tipped-to-open.html",
-      "source": "The Wall Street Journal",
-      "published_at": "2026-10-21T06:52:00Z",
-      "fetched_at": "2026-10-21T08:01:44Z",
-      "ticker": null,
-      "source_tier": "aggregator"
-    },
-    {
-      "title": "Dollar hovers near 3-wk low as volatile oil prices weigh, rupee extends rally",
-      "summary": "",
-      "url": "https://finance.yahoo.com/markets/currencies/articles/asia-fx-subdued-dollar-hovers-054841042.html",
-      "source": "Investing.com",
-      "published_at": "2026-10-21T05:48:41Z",
-      "fetched_at": "2026-10-21T08:01:44Z",
-      "ticker": null,
-      "source_tier": "aggregator"
-    },
-    {
-      "title": "Oil Prices Climb Above $110 as Middle East Supply Fears Persist",
-      "summary": "",
-      "url": "https://finance.yahoo.com/energy/articles/oil-prices-climb-above-110-051127951.html",
-      "source": "Oilprice.com",
-      "published_at": "2026-10-21T05:11:27Z",
-      "fetched_at": "2026-10-21T08:01:44Z",
-      "ticker": null,
-      "source_tier": "aggregator"
-    },
-    {
-      "title": "Japan records a trade deficit as oil imports soar because of conflict in the Middle East",
-      "summary": "",
-      "url": "https://finance.yahoo.com/economy/policy/articles/japan-records-trade-deficit-oil-043017045.html",
-      "source": "Associated Press",
-      "published_at": "2026-10-21T04:30:17Z",
-      "fetched_at": "2026-10-21T08:01:44Z",
-      "ticker": null,
-      "source_tier": "aggregator"
-    },
-    {
-      "title": "3 Great Australian Growth Stocks To Own In October 2026",
-      "summary": "",
-      "url": "https://finance.yahoo.com/markets/stocks/articles/3-great-australian-growth-stocks-042646660.html",
+      "url": "https://finance.yahoo.com/markets/stocks/articles/supply-network-2-other-australian-071307490.html",
       "source": "Simply Wall St.",
-      "published_at": "2026-10-21T04:26:46Z",
-      "fetched_at": "2026-10-21T08:01:44Z",
+      "published_at": "2026-10-22T07:13:07Z",
+      "fetched_at": "2026-10-22T08:01:54Z",
       "ticker": null,
+      "source_tier": "aggregator"
+    },
+    {
+      "title": "Dollar Falls to 3-Week Low on Fresh AI Jitters",
+      "summary": "",
+      "url": "https://finance.yahoo.com/m/edd51a82-6a89-3ca4-84ba-884cf27916ca/dollar-falls-to-3-week-low-on.html",
+      "source": "The Wall Street Journal",
+      "published_at": "2026-10-22T07:02:00Z",
+      "fetched_at": "2026-10-22T08:01:54Z",
+      "ticker": null,
+      "source_tier": "aggregator"
+    },
+    {
+      "title": "Big Blue's Wild Wednesday Ride: IBM Crushes Q3 Earnings, So Why Did the Stock Tank Mid-Call?",
+      "summary": "",
+      "url": "https://finance.yahoo.com/markets/stocks/articles/big-blues-wild-wednesday-ride-065701343.html",
+      "source": "Motley Fool",
+      "published_at": "2026-10-22T06:57:01Z",
+      "fetched_at": "2026-10-22T08:01:54Z",
+      "ticker": null,
+      "source_tier": "aggregator"
+    },
+    {
+      "title": "Boeing's Turnaround Just Hit a Pivot Point. Here's What It Means for the Entire Aerospace Supply Chain.",
+      "summary": "",
+      "url": "https://finance.yahoo.com/markets/stocks/articles/boeings-turnaround-just-hit-pivot-065000767.html",
+      "source": "Motley Fool",
+      "published_at": "2026-10-22T06:50:00Z",
+      "fetched_at": "2026-10-22T08:01:54Z",
+      "ticker": null,
+      "source_tier": "aggregator"
+    },
+    {
+      "title": "Philippines Central Bank Delivers Jumbo Hike in Bid to Combat Inflation",
+      "summary": "",
+      "url": "https://finance.yahoo.com/m/68ddf3e7-a820-39ed-b346-fbd91effb379/philippines-central-bank.html",
+      "source": "The Wall Street Journal",
+      "published_at": "2026-10-22T06:50:00Z",
+      "fetched_at": "2026-10-22T08:01:54Z",
+      "ticker": null,
+      "source_tier": "aggregator"
+    },
+    {
+      "title": "Maurel & Prom: Activity for the First Nine Months of 2026",
+      "summary": "",
+      "url": "https://finance.yahoo.com/energy/articles/maurel-prom-activity-first-nine-064000209.html",
+      "source": "Business Wire",
+      "published_at": "2026-10-22T06:40:00Z",
+      "fetched_at": "2026-10-22T08:01:54Z",
+      "ticker": null,
+      "source_tier": "aggregator"
+    },
+    {
+      "title": "Oil jumps $2 on escalating Middle East tension",
+      "summary": "",
+      "url": "https://finance.yahoo.com/energy/articles/oil-climbs-over-1-more-052014906.html",
+      "source": "Reuters",
+      "published_at": "2026-10-22T06:39:12Z",
+      "fetched_at": "2026-10-22T08:01:54Z",
+      "ticker": null,
+      "source_tier": "aggregator"
+    },
+    {
+      "title": "Oil Rises, Asian Stocks Fall as Middle East Tensions Mount",
+      "summary": "",
+      "url": "https://finance.yahoo.com/m/5721956b-d619-3be3-957a-31ba456e6b5d/oil-rises%2C-asian-stocks-fall.html",
+      "source": "The Wall Street Journal",
+      "published_at": "2026-10-22T06:30:00Z",
+      "fetched_at": "2026-10-22T08:01:54Z",
+      "ticker": null,
+      "source_tier": "aggregator"
+    },
+    {
+      "title": "10月21日通信ETF国泰（515880）份额减少2.80亿份，最新份额633.80亿份，最新规模339.27亿元",
+      "summary": "10月21日通信ETF国泰（515880）份额减少2.80亿份，最新份额633.80亿份，最新规模339.27亿元 新浪财经",
+      "url": "https://news.google.com/rss/articles/CBMimwFBVV95cUxNbTZYeFNSMnZ0R0k5Y2ZmcXJ1Y1FZa2hrZEFaSmtCSzBCRTlFaE5mVlBBWWlGTHdqOExyaDJ1VFJWR3lUa0hMZWJZakF1amY1QXkyNmtURm9iemUwZGhiX0dBMWFjb3RCVFhaX29NUFJ2T1hnYnliWG00VksxRWZiU0lMM2hVZXlEYzJsNVppTjZNU29telVuSThjOA?oc=5",
+      "source": "Google News / 新浪财经",
+      "published_at": "2026-10-22T01:00:40Z",
+      "fetched_at": "2026-10-22T08:01:56Z",
+      "ticker": "515880.SS",
       "source_tier": "aggregator"
     }
   ]
