@@ -1,113 +1,113 @@
 {
   "version": 1,
   "status": "ok",
-  "generated_at": "2026-10-23T16:01:54+08:00",
-  "trade_date": "2026-10-23",
+  "generated_at": "2026-10-26T16:06:47+08:00",
+  "trade_date": "2026-10-26",
   "global": {
     "status": "ok",
     "query_type": "global",
     "ticker": null,
-    "start_date": "2026-10-16",
-    "end_date": "2026-10-23",
-    "fetched_at": "2026-10-23T08:01:55Z",
+    "start_date": "2026-10-19",
+    "end_date": "2026-10-26",
+    "fetched_at": "2026-10-26T08:06:49Z",
     "items": [
       {
-        "title": "Euro set for weekly drop, yen eyes biggest gain since early September",
+        "title": "Galp Raises Full-Year View After Oil-Price Assumption Increase",
         "summary": "",
-        "url": "https://finance.yahoo.com/markets/currencies/articles/yen-shines-ai-jitters-spur-020808692.html",
-        "source": "Reuters",
-        "published_at": "2026-10-23T07:48:43Z",
-        "fetched_at": "2026-10-23T08:01:55Z",
-        "ticker": null,
-        "source_tier": "aggregator"
-      },
-      {
-        "title": "European Indexes Lower as Energy-Intensive Stocks Falter",
-        "summary": "",
-        "url": "https://finance.yahoo.com/m/8c0252d5-d469-354a-8235-8d0e89845be5/european-indexes-lower-as.html",
+        "url": "https://finance.yahoo.com/m/4322b381-ae04-3b52-b2b1-d711613dff0a/galp-raises-full-year-view.html",
         "source": "The Wall Street Journal",
-        "published_at": "2026-10-23T07:40:00Z",
-        "fetched_at": "2026-10-23T08:01:55Z",
+        "published_at": "2026-10-26T07:35:00Z",
+        "fetched_at": "2026-10-26T08:06:49Z",
         "ticker": null,
         "source_tier": "aggregator"
       },
       {
-        "title": "Asian stocks mixed ahead of weekend as tech recovers early losses",
+        "title": "Stocks sink as traders brace for tech earnings, central bank decisions",
         "summary": "",
-        "url": "https://finance.yahoo.com/markets/world-indices/articles/asian-stocks-head-weekend-low-024730943.html",
+        "url": "https://finance.yahoo.com/markets/stocks/articles/stocks-sink-traders-brace-tech-022128987.html",
         "source": "AFP",
-        "published_at": "2026-10-23T07:34:13Z",
-        "fetched_at": "2026-10-23T08:01:55Z",
+        "published_at": "2026-10-26T07:33:21Z",
+        "fetched_at": "2026-10-26T08:06:49Z",
         "ticker": null,
         "source_tier": "aggregator"
       },
       {
-        "title": "3 Energy Stocks Worth Watching As Oil Prices Rebound Above $113 Brent",
+        "title": "Boeing (BA) reports Q3: everything you need to know ahead of earnings",
         "summary": "",
-        "url": "https://finance.yahoo.com/energy/articles/3-energy-stocks-worth-watching-071406281.html",
+        "url": "https://finance.yahoo.com/markets/stocks/articles/boeing-ba-reports-q3-everything-071847584.html",
+        "source": "StockStory",
+        "published_at": "2026-10-26T07:18:47Z",
+        "fetched_at": "2026-10-26T08:06:49Z",
+        "ticker": null,
+        "source_tier": "aggregator"
+      },
+      {
+        "title": "Are You Overpaying For IBM Stock Versus Its Rivals?",
+        "summary": "",
+        "url": "https://finance.yahoo.com/markets/stocks/articles/overpaying-ibm-stock-versus-rivals-071149273.html",
+        "source": "Trefis",
+        "published_at": "2026-10-26T07:11:49Z",
+        "fetched_at": "2026-10-26T08:06:49Z",
+        "ticker": null,
+        "source_tier": "aggregator"
+      },
+      {
+        "title": "Bitcoin pinned at $80.2k as oil, rate jitters dent crypto appetite",
+        "summary": "",
+        "url": "https://finance.yahoo.com/markets/crypto/articles/bitcoin-pinned-80-2k-oil-065450923.html",
+        "source": "Investing.com",
+        "published_at": "2026-10-26T06:54:50Z",
+        "fetched_at": "2026-10-26T08:06:49Z",
+        "ticker": null,
+        "source_tier": "aggregator"
+      },
+      {
+        "title": "Range Resources (RRC) Q3 earnings report preview: what to look for",
+        "summary": "",
+        "url": "https://finance.yahoo.com/markets/stocks/articles/range-resources-rrc-q3-earnings-064647217.html",
+        "source": "StockStory",
+        "published_at": "2026-10-26T06:46:47Z",
+        "fetched_at": "2026-10-26T08:06:49Z",
+        "ticker": null,
+        "source_tier": "aggregator"
+      },
+      {
+        "title": "EQT earnings: what to look for from EQT",
+        "summary": "",
+        "url": "https://finance.yahoo.com/markets/stocks/articles/eqt-earnings-look-eqt-063047844.html",
+        "source": "StockStory",
+        "published_at": "2026-10-26T06:30:47Z",
+        "fetched_at": "2026-10-26T08:06:49Z",
+        "ticker": null,
+        "source_tier": "aggregator"
+      },
+      {
+        "title": "Top 3 Australian Growth Stocks To Watch In October 2026",
+        "summary": "",
+        "url": "https://finance.yahoo.com/markets/stocks/articles/top-3-australian-growth-stocks-060846013.html",
         "source": "Simply Wall St.",
-        "published_at": "2026-10-23T07:14:06Z",
-        "fetched_at": "2026-10-23T08:01:55Z",
+        "published_at": "2026-10-26T06:08:46Z",
+        "fetched_at": "2026-10-26T08:06:49Z",
         "ticker": null,
         "source_tier": "aggregator"
       },
       {
-        "title": "3 Great Canadian Nuclear Stocks To Own In October 2026",
+        "title": "Precious Metals Buffeted By Higher Interest Rates, Deficits and Geopolitics",
         "summary": "",
-        "url": "https://finance.yahoo.com/energy/articles/3-great-canadian-nuclear-stocks-071103866.html",
-        "source": "Simply Wall St.",
-        "published_at": "2026-10-23T07:11:03Z",
-        "fetched_at": "2026-10-23T08:01:55Z",
+        "url": "https://finance.yahoo.com/markets/commodities/articles/precious-metals-buffeted-higher-interest-060000368.html",
+        "source": "CME Group",
+        "published_at": "2026-10-26T06:00:00Z",
+        "fetched_at": "2026-10-26T08:06:49Z",
         "ticker": null,
         "source_tier": "aggregator"
       },
       {
-        "title": "Is D Wave Quantum (QBTS) A Bargain After Its Lawsuit And Expansion Updates?",
+        "title": "Currency markets subdued ahead of busy central bank week",
         "summary": "",
-        "url": "https://finance.yahoo.com/markets/stocks/articles/d-wave-quantum-qbts-bargain-071038849.html",
-        "source": "Simply Wall St.",
-        "published_at": "2026-10-23T07:10:38Z",
-        "fetched_at": "2026-10-23T08:01:55Z",
-        "ticker": null,
-        "source_tier": "aggregator"
-      },
-      {
-        "title": "Oil prices rise more than 1% as supply concerns linger",
-        "summary": "",
-        "url": "https://finance.yahoo.com/energy/articles/oil-prices-rise-supply-concerns-052617190.html",
+        "url": "https://finance.yahoo.com/markets/currencies/articles/currency-markets-subdued-ahead-busy-055845657.html",
         "source": "Reuters",
-        "published_at": "2026-10-23T06:46:52Z",
-        "fetched_at": "2026-10-23T08:01:55Z",
-        "ticker": null,
-        "source_tier": "aggregator"
-      },
-      {
-        "title": "Zacks.com featured highlights include Vince, Vera Bradley, Forum Energy, American Outdoor Brands and Swire Pacific",
-        "summary": "",
-        "url": "https://finance.yahoo.com/markets/stocks/articles/zacks-com-featured-highlights-vince-064200758.html",
-        "source": "Zacks",
-        "published_at": "2026-10-23T06:42:00Z",
-        "fetched_at": "2026-10-23T08:01:55Z",
-        "ticker": null,
-        "source_tier": "aggregator"
-      },
-      {
-        "title": "Stock Market: Will S&P 500 Open Up or Down Today?",
-        "summary": "",
-        "url": "https://finance.yahoo.com/markets/stocks/articles/stock-market-p-500-open-063608549.html",
-        "source": "Benzinga Prediction Markets",
-        "published_at": "2026-10-23T06:36:08Z",
-        "fetched_at": "2026-10-23T08:01:55Z",
-        "ticker": null,
-        "source_tier": "aggregator"
-      },
-      {
-        "title": "U.S. Treasury Yields Edge Up, Bond Market Focus to Stay on France",
-        "summary": "",
-        "url": "https://finance.yahoo.com/m/5a12b385-77f2-3bed-9968-2c2008fc2773/u.s.-treasury-yields-edge-up%2C.html",
-        "source": "The Wall Street Journal",
-        "published_at": "2026-10-23T06:17:00Z",
-        "fetched_at": "2026-10-23T08:01:55Z",
+        "published_at": "2026-10-26T05:58:45Z",
+        "fetched_at": "2026-10-26T08:06:49Z",
         "ticker": null,
         "source_tier": "aggregator"
       }
@@ -116,35 +116,24 @@
       {
         "source": "Yahoo Finance",
         "status": "ok",
-        "item_count": 48
+        "item_count": 50
       },
       {
         "source": "Federal Reserve",
-        "status": "ok",
-        "item_count": 1
+        "status": "empty",
+        "item_count": 0
       }
     ]
   },
   "tickers": {
     "515880.SS": {
-      "status": "ok",
+      "status": "empty",
       "query_type": "ticker",
       "ticker": "515880.SS",
-      "start_date": "2026-10-23",
-      "end_date": "2026-10-23",
-      "fetched_at": "2026-10-23T08:01:58Z",
-      "items": [
-        {
-          "title": "10月22日通信ETF国泰（515880）份额增加9600.00万份，最新份额634.76亿份，最新规模320.30亿元",
-          "summary": "10月22日通信ETF国泰（515880）份额增加9600.00万份，最新份额634.76亿份，最新规模320.30亿元 新浪财经",
-          "url": "https://news.google.com/rss/articles/CBMimwFBVV95cUxNZndMYWgtblQ0MktvT0JJRUpUNVRUZWl1dVplU2o5SGVUbUlxYWtGMGxlOGNHR2JLSHJzVlc1MG5DZHZta1RaVXdGYTFqS2dvc01kMWJlZUVjS0R3U1NQNWhUTnRXSGNUQzZrX056TUt6bWM1X1ZFNjJxSktEVWdXOHM3TlZIaE40dlZhRlhQMXZKbVpCcGk2Mm83dw?oc=5",
-          "source": "Google News / 新浪财经",
-          "published_at": "2026-10-23T01:00:45Z",
-          "fetched_at": "2026-10-23T08:01:58Z",
-          "ticker": "515880.SS",
-          "source_tier": "aggregator"
-        }
-      ],
+      "start_date": "2026-10-26",
+      "end_date": "2026-10-26",
+      "fetched_at": "2026-10-26T08:06:50Z",
+      "items": [],
       "source_statuses": [
         {
           "source": "Yahoo Finance",
@@ -153,8 +142,8 @@
         },
         {
           "source": "Google News RSS",
-          "status": "ok",
-          "item_count": 1
+          "status": "empty",
+          "item_count": 0
         },
         {
           "source": "SEC EDGAR",
@@ -167,9 +156,9 @@
       "status": "empty",
       "query_type": "ticker",
       "ticker": "512480.SS",
-      "start_date": "2026-10-23",
-      "end_date": "2026-10-23",
-      "fetched_at": "2026-10-23T08:02:01Z",
+      "start_date": "2026-10-26",
+      "end_date": "2026-10-26",
+      "fetched_at": "2026-10-26T08:06:52Z",
       "items": [],
       "source_statuses": [
         {
@@ -192,113 +181,103 @@
   },
   "items": [
     {
-      "title": "Euro set for weekly drop, yen eyes biggest gain since early September",
+      "title": "Galp Raises Full-Year View After Oil-Price Assumption Increase",
       "summary": "",
-      "url": "https://finance.yahoo.com/markets/currencies/articles/yen-shines-ai-jitters-spur-020808692.html",
-      "source": "Reuters",
-      "published_at": "2026-10-23T07:48:43Z",
-      "fetched_at": "2026-10-23T08:01:55Z",
-      "ticker": null,
-      "source_tier": "aggregator"
-    },
-    {
-      "title": "European Indexes Lower as Energy-Intensive Stocks Falter",
-      "summary": "",
-      "url": "https://finance.yahoo.com/m/8c0252d5-d469-354a-8235-8d0e89845be5/european-indexes-lower-as.html",
+      "url": "https://finance.yahoo.com/m/4322b381-ae04-3b52-b2b1-d711613dff0a/galp-raises-full-year-view.html",
       "source": "The Wall Street Journal",
-      "published_at": "2026-10-23T07:40:00Z",
-      "fetched_at": "2026-10-23T08:01:55Z",
+      "published_at": "2026-10-26T07:35:00Z",
+      "fetched_at": "2026-10-26T08:06:49Z",
       "ticker": null,
       "source_tier": "aggregator"
     },
     {
-      "title": "Asian stocks mixed ahead of weekend as tech recovers early losses",
+      "title": "Stocks sink as traders brace for tech earnings, central bank decisions",
       "summary": "",
-      "url": "https://finance.yahoo.com/markets/world-indices/articles/asian-stocks-head-weekend-low-024730943.html",
+      "url": "https://finance.yahoo.com/markets/stocks/articles/stocks-sink-traders-brace-tech-022128987.html",
       "source": "AFP",
-      "published_at": "2026-10-23T07:34:13Z",
-      "fetched_at": "2026-10-23T08:01:55Z",
+      "published_at": "2026-10-26T07:33:21Z",
+      "fetched_at": "2026-10-26T08:06:49Z",
       "ticker": null,
       "source_tier": "aggregator"
     },
     {
-      "title": "3 Energy Stocks Worth Watching As Oil Prices Rebound Above $113 Brent",
+      "title": "Boeing (BA) reports Q3: everything you need to know ahead of earnings",
       "summary": "",
-      "url": "https://finance.yahoo.com/energy/articles/3-energy-stocks-worth-watching-071406281.html",
+      "url": "https://finance.yahoo.com/markets/stocks/articles/boeing-ba-reports-q3-everything-071847584.html",
+      "source": "StockStory",
+      "published_at": "2026-10-26T07:18:47Z",
+      "fetched_at": "2026-10-26T08:06:49Z",
+      "ticker": null,
+      "source_tier": "aggregator"
+    },
+    {
+      "title": "Are You Overpaying For IBM Stock Versus Its Rivals?",
+      "summary": "",
+      "url": "https://finance.yahoo.com/markets/stocks/articles/overpaying-ibm-stock-versus-rivals-071149273.html",
+      "source": "Trefis",
+      "published_at": "2026-10-26T07:11:49Z",
+      "fetched_at": "2026-10-26T08:06:49Z",
+      "ticker": null,
+      "source_tier": "aggregator"
+    },
+    {
+      "title": "Bitcoin pinned at $80.2k as oil, rate jitters dent crypto appetite",
+      "summary": "",
+      "url": "https://finance.yahoo.com/markets/crypto/articles/bitcoin-pinned-80-2k-oil-065450923.html",
+      "source": "Investing.com",
+      "published_at": "2026-10-26T06:54:50Z",
+      "fetched_at": "2026-10-26T08:06:49Z",
+      "ticker": null,
+      "source_tier": "aggregator"
+    },
+    {
+      "title": "Range Resources (RRC) Q3 earnings report preview: what to look for",
+      "summary": "",
+      "url": "https://finance.yahoo.com/markets/stocks/articles/range-resources-rrc-q3-earnings-064647217.html",
+      "source": "StockStory",
+      "published_at": "2026-10-26T06:46:47Z",
+      "fetched_at": "2026-10-26T08:06:49Z",
+      "ticker": null,
+      "source_tier": "aggregator"
+    },
+    {
+      "title": "EQT earnings: what to look for from EQT",
+      "summary": "",
+      "url": "https://finance.yahoo.com/markets/stocks/articles/eqt-earnings-look-eqt-063047844.html",
+      "source": "StockStory",
+      "published_at": "2026-10-26T06:30:47Z",
+      "fetched_at": "2026-10-26T08:06:49Z",
+      "ticker": null,
+      "source_tier": "aggregator"
+    },
+    {
+      "title": "Top 3 Australian Growth Stocks To Watch In October 2026",
+      "summary": "",
+      "url": "https://finance.yahoo.com/markets/stocks/articles/top-3-australian-growth-stocks-060846013.html",
       "source": "Simply Wall St.",
-      "published_at": "2026-10-23T07:14:06Z",
-      "fetched_at": "2026-10-23T08:01:55Z",
+      "published_at": "2026-10-26T06:08:46Z",
+      "fetched_at": "2026-10-26T08:06:49Z",
       "ticker": null,
       "source_tier": "aggregator"
     },
     {
-      "title": "3 Great Canadian Nuclear Stocks To Own In October 2026",
+      "title": "Precious Metals Buffeted By Higher Interest Rates, Deficits and Geopolitics",
       "summary": "",
-      "url": "https://finance.yahoo.com/energy/articles/3-great-canadian-nuclear-stocks-071103866.html",
-      "source": "Simply Wall St.",
-      "published_at": "2026-10-23T07:11:03Z",
-      "fetched_at": "2026-10-23T08:01:55Z",
+      "url": "https://finance.yahoo.com/markets/commodities/articles/precious-metals-buffeted-higher-interest-060000368.html",
+      "source": "CME Group",
+      "published_at": "2026-10-26T06:00:00Z",
+      "fetched_at": "2026-10-26T08:06:49Z",
       "ticker": null,
       "source_tier": "aggregator"
     },
     {
-      "title": "Is D Wave Quantum (QBTS) A Bargain After Its Lawsuit And Expansion Updates?",
+      "title": "Currency markets subdued ahead of busy central bank week",
       "summary": "",
-      "url": "https://finance.yahoo.com/markets/stocks/articles/d-wave-quantum-qbts-bargain-071038849.html",
-      "source": "Simply Wall St.",
-      "published_at": "2026-10-23T07:10:38Z",
-      "fetched_at": "2026-10-23T08:01:55Z",
-      "ticker": null,
-      "source_tier": "aggregator"
-    },
-    {
-      "title": "Oil prices rise more than 1% as supply concerns linger",
-      "summary": "",
-      "url": "https://finance.yahoo.com/energy/articles/oil-prices-rise-supply-concerns-052617190.html",
+      "url": "https://finance.yahoo.com/markets/currencies/articles/currency-markets-subdued-ahead-busy-055845657.html",
       "source": "Reuters",
-      "published_at": "2026-10-23T06:46:52Z",
-      "fetched_at": "2026-10-23T08:01:55Z",
+      "published_at": "2026-10-26T05:58:45Z",
+      "fetched_at": "2026-10-26T08:06:49Z",
       "ticker": null,
-      "source_tier": "aggregator"
-    },
-    {
-      "title": "Zacks.com featured highlights include Vince, Vera Bradley, Forum Energy, American Outdoor Brands and Swire Pacific",
-      "summary": "",
-      "url": "https://finance.yahoo.com/markets/stocks/articles/zacks-com-featured-highlights-vince-064200758.html",
-      "source": "Zacks",
-      "published_at": "2026-10-23T06:42:00Z",
-      "fetched_at": "2026-10-23T08:01:55Z",
-      "ticker": null,
-      "source_tier": "aggregator"
-    },
-    {
-      "title": "Stock Market: Will S&P 500 Open Up or Down Today?",
-      "summary": "",
-      "url": "https://finance.yahoo.com/markets/stocks/articles/stock-market-p-500-open-063608549.html",
-      "source": "Benzinga Prediction Markets",
-      "published_at": "2026-10-23T06:36:08Z",
-      "fetched_at": "2026-10-23T08:01:55Z",
-      "ticker": null,
-      "source_tier": "aggregator"
-    },
-    {
-      "title": "U.S. Treasury Yields Edge Up, Bond Market Focus to Stay on France",
-      "summary": "",
-      "url": "https://finance.yahoo.com/m/5a12b385-77f2-3bed-9968-2c2008fc2773/u.s.-treasury-yields-edge-up%2C.html",
-      "source": "The Wall Street Journal",
-      "published_at": "2026-10-23T06:17:00Z",
-      "fetched_at": "2026-10-23T08:01:55Z",
-      "ticker": null,
-      "source_tier": "aggregator"
-    },
-    {
-      "title": "10月22日通信ETF国泰（515880）份额增加9600.00万份，最新份额634.76亿份，最新规模320.30亿元",
-      "summary": "10月22日通信ETF国泰（515880）份额增加9600.00万份，最新份额634.76亿份，最新规模320.30亿元 新浪财经",
-      "url": "https://news.google.com/rss/articles/CBMimwFBVV95cUxNZndMYWgtblQ0MktvT0JJRUpUNVRUZWl1dVplU2o5SGVUbUlxYWtGMGxlOGNHR2JLSHJzVlc1MG5DZHZta1RaVXdGYTFqS2dvc01kMWJlZUVjS0R3U1NQNWhUTnRXSGNUQzZrX056TUt6bWM1X1ZFNjJxSktEVWdXOHM3TlZIaE40dlZhRlhQMXZKbVpCcGk2Mm83dw?oc=5",
-      "source": "Google News / 新浪财经",
-      "published_at": "2026-10-23T01:00:45Z",
-      "fetched_at": "2026-10-23T08:01:58Z",
-      "ticker": "515880.SS",
       "source_tier": "aggregator"
     }
   ]
