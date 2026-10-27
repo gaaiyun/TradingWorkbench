@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "generatedAt": "2026-10-26T17:19:45.435Z",
+  "generatedAt": "2026-10-27T16:32:38.161Z",
   "status": "degraded",
   "coverage": {
     "policy": "current-listed-best-effort-plus-configured-core",
@@ -16,13 +16,13 @@
       "id": "sina-market-center",
       "role": "CN current-listed discovery",
       "quality": "best_effort",
-      "asOf": "2026-10-26T17:19:45.435Z"
+      "asOf": "2026-10-27T16:32:38.161Z"
     },
     {
       "id": "workbench-settings",
       "role": "configured HK/US/CN core instruments",
       "quality": "declared",
-      "asOf": "2026-10-26T17:19:45.435Z"
+      "asOf": "2026-10-27T16:32:38.161Z"
     }
   ],
   "instruments": [
@@ -32159,7 +32159,7 @@
     },
     {
       "symbol": "600017.SS",
-      "name": "日照港",
+      "name": "XD日照港",
       "market": "CN",
       "exchange": "SS",
       "instrumentType": "stock",
@@ -34964,7 +34964,7 @@
     },
     {
       "symbol": "600360.SS",
-      "name": "华微电子",
+      "name": "XD华微电",
       "market": "CN",
       "exchange": "SS",
       "instrumentType": "stock",
@@ -35800,7 +35800,7 @@
     },
     {
       "symbol": "600479.SS",
-      "name": "千金药业",
+      "name": "XD千金药",
       "market": "CN",
       "exchange": "SS",
       "instrumentType": "stock",
@@ -40596,7 +40596,7 @@
     },
     {
       "symbol": "601088.SS",
-      "name": "XD中国神",
+      "name": "中国神华",
       "market": "CN",
       "exchange": "SS",
       "instrumentType": "stock",
@@ -41157,7 +41157,7 @@
     },
     {
       "symbol": "601229.SS",
-      "name": "上海银行",
+      "name": "XD上海银",
       "market": "CN",
       "exchange": "SS",
       "instrumentType": "stock",
@@ -42235,7 +42235,7 @@
     },
     {
       "symbol": "601866.SS",
-      "name": "XD中远海",
+      "name": "中远海发",
       "market": "CN",
       "exchange": "SS",
       "instrumentType": "stock",
@@ -42642,7 +42642,7 @@
     },
     {
       "symbol": "601990.SS",
-      "name": "XD南京证",
+      "name": "南京证券",
       "market": "CN",
       "exchange": "SS",
       "instrumentType": "stock",
@@ -53521,7 +53521,7 @@
     },
     {
       "symbol": "688293.SS",
-      "name": "奥浦迈",
+      "name": "XD奥浦迈",
       "market": "CN",
       "exchange": "SS",
       "instrumentType": "stock",
@@ -54346,7 +54346,7 @@
     },
     {
       "symbol": "688379.SS",
-      "name": "XD华光新",
+      "name": "华光新材",
       "market": "CN",
       "exchange": "SS",
       "instrumentType": "stock",
