@@ -1,7 +1,7 @@
 {
   "status": "failed",
-  "generated_at": "2026-10-26T16:06:47+08:00",
-  "trade_date": "2026-10-26",
+  "generated_at": "2026-10-27T16:01:41+08:00",
+  "trade_date": "2026-10-27",
   "provider": "openai_compatible",
   "analysts": [
     "market",
@@ -19,19 +19,19 @@
     "kind": "monitor"
   },
   "run": {
-    "id": "40289936914",
+    "id": "40470646212",
     "attempt": "1",
     "workflow": "daily-analysis",
-    "url": "https://github.com/gaaiyun/TradingWorkbench/actions/runs/40289936914"
+    "url": "https://github.com/gaaiyun/TradingWorkbench/actions/runs/40470646212"
   },
   "identity": {
     "scope": "profile",
     "kind": "monitor",
-    "runId": "40289936914",
+    "runId": "40470646212",
     "profileId": "cn-semi-comms",
     "requestId": null,
-    "slotId": "slot-a5b84183ffe83aa6d9758a66b4f3ba4df836bf4f340e0ec81ea3e9dc552fc165",
-    "scheduledFor": "2026-10-26T07:19:27.000Z"
+    "slotId": "slot-6672bd573e8c92ec650e319635b75a9b7831b5c1bd00361f1a93c022756c7bb5",
+    "scheduledFor": "2026-10-27T07:17:48.000Z"
   },
   "rating_tiers": [
     "Sell",
@@ -60,7 +60,7 @@
       "rating": null,
       "report": null,
       "decision_excerpt": "",
-      "error": "OpenAIModelNotFoundError: Error code: 404 - {'error': {'message': 'Model \"gpt-5.4-mini\" is not supported by any configured account in this group', 'type': 'model_not_found'}}"
+      "error": "OpenAIModelNotFoundError: Error code: 404 - Model \"gpt-5.4-mini\" is not supported by any configured account in this group"
     }
   ]
 }

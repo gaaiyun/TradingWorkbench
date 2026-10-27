@@ -1,113 +1,113 @@
 {
   "version": 1,
   "status": "ok",
-  "generated_at": "2026-10-26T16:06:47+08:00",
-  "trade_date": "2026-10-26",
+  "generated_at": "2026-10-27T16:01:41+08:00",
+  "trade_date": "2026-10-27",
   "global": {
     "status": "ok",
     "query_type": "global",
     "ticker": null,
-    "start_date": "2026-10-19",
-    "end_date": "2026-10-26",
-    "fetched_at": "2026-10-26T08:06:49Z",
+    "start_date": "2026-10-20",
+    "end_date": "2026-10-27",
+    "fetched_at": "2026-10-27T08:01:42Z",
     "items": [
       {
-        "title": "Galp Raises Full-Year View After Oil-Price Assumption Increase",
+        "title": "Asian stocks advance following a rally on Wall Street and oil prices fall",
         "summary": "",
-        "url": "https://finance.yahoo.com/m/4322b381-ae04-3b52-b2b1-d711613dff0a/galp-raises-full-year-view.html",
-        "source": "The Wall Street Journal",
-        "published_at": "2026-10-26T07:35:00Z",
-        "fetched_at": "2026-10-26T08:06:49Z",
+        "url": "https://finance.yahoo.com/markets/world-indices/articles/asian-stocks-advance-following-rally-071057338.html",
+        "source": "Associated Press",
+        "published_at": "2026-10-27T07:10:57Z",
+        "fetched_at": "2026-10-27T08:01:42Z",
         "ticker": null,
         "source_tier": "aggregator"
       },
       {
-        "title": "Stocks sink as traders brace for tech earnings, central bank decisions",
+        "title": "Bitcoin dips below $80k as Strategy pauses buying, Fed caution weighs",
         "summary": "",
-        "url": "https://finance.yahoo.com/markets/stocks/articles/stocks-sink-traders-brace-tech-022128987.html",
-        "source": "AFP",
-        "published_at": "2026-10-26T07:33:21Z",
-        "fetched_at": "2026-10-26T08:06:49Z",
-        "ticker": null,
-        "source_tier": "aggregator"
-      },
-      {
-        "title": "Boeing (BA) reports Q3: everything you need to know ahead of earnings",
-        "summary": "",
-        "url": "https://finance.yahoo.com/markets/stocks/articles/boeing-ba-reports-q3-everything-071847584.html",
-        "source": "StockStory",
-        "published_at": "2026-10-26T07:18:47Z",
-        "fetched_at": "2026-10-26T08:06:49Z",
-        "ticker": null,
-        "source_tier": "aggregator"
-      },
-      {
-        "title": "Are You Overpaying For IBM Stock Versus Its Rivals?",
-        "summary": "",
-        "url": "https://finance.yahoo.com/markets/stocks/articles/overpaying-ibm-stock-versus-rivals-071149273.html",
-        "source": "Trefis",
-        "published_at": "2026-10-26T07:11:49Z",
-        "fetched_at": "2026-10-26T08:06:49Z",
-        "ticker": null,
-        "source_tier": "aggregator"
-      },
-      {
-        "title": "Bitcoin pinned at $80.2k as oil, rate jitters dent crypto appetite",
-        "summary": "",
-        "url": "https://finance.yahoo.com/markets/crypto/articles/bitcoin-pinned-80-2k-oil-065450923.html",
+        "url": "https://finance.yahoo.com/markets/crypto/articles/bitcoin-dips-below-80k-strategy-065649737.html",
         "source": "Investing.com",
-        "published_at": "2026-10-26T06:54:50Z",
-        "fetched_at": "2026-10-26T08:06:49Z",
+        "published_at": "2026-10-27T06:56:49Z",
+        "fetched_at": "2026-10-27T08:01:42Z",
         "ticker": null,
         "source_tier": "aggregator"
       },
       {
-        "title": "Range Resources (RRC) Q3 earnings report preview: what to look for",
+        "title": "Stock Market: Will S&P 500 Open Up or Down Today?",
         "summary": "",
-        "url": "https://finance.yahoo.com/markets/stocks/articles/range-resources-rrc-q3-earnings-064647217.html",
-        "source": "StockStory",
-        "published_at": "2026-10-26T06:46:47Z",
-        "fetched_at": "2026-10-26T08:06:49Z",
+        "url": "https://finance.yahoo.com/news/stock-market-p-500-open-060437028.html",
+        "source": "Benzinga Prediction Markets",
+        "published_at": "2026-10-27T06:04:37Z",
+        "fetched_at": "2026-10-27T08:01:42Z",
         "ticker": null,
         "source_tier": "aggregator"
       },
       {
-        "title": "EQT earnings: what to look for from EQT",
+        "title": "US futures and Asian stocks advance following a rally on Wall Street",
         "summary": "",
-        "url": "https://finance.yahoo.com/markets/stocks/articles/eqt-earnings-look-eqt-063047844.html",
-        "source": "StockStory",
-        "published_at": "2026-10-26T06:30:47Z",
-        "fetched_at": "2026-10-26T08:06:49Z",
+        "url": "https://finance.yahoo.com/markets/world-indices/articles/us-futures-asian-stocks-advance-040552073.html",
+        "source": "Associated Press",
+        "published_at": "2026-10-27T04:05:52Z",
+        "fetched_at": "2026-10-27T08:01:42Z",
         "ticker": null,
         "source_tier": "aggregator"
       },
       {
-        "title": "Top 3 Australian Growth Stocks To Watch In October 2026",
+        "title": "IBM Introduces Identity and Control for AI Agents, Securing Frontier Intelligence for the Enterprise",
         "summary": "",
-        "url": "https://finance.yahoo.com/markets/stocks/articles/top-3-australian-growth-stocks-060846013.html",
+        "url": "https://finance.yahoo.com/technology/ai/articles/ibm-introduces-identity-control-ai-040100417.html",
+        "source": "PR Newswire",
+        "published_at": "2026-10-27T04:01:00Z",
+        "fetched_at": "2026-10-27T08:01:42Z",
+        "ticker": null,
+        "source_tier": "aggregator"
+      },
+      {
+        "title": "KOSPI Jumps 4.5% as Seoul Halts Program Buying Before SK Hynix Earnings",
+        "summary": "",
+        "url": "https://finance.yahoo.com/markets/world-indices/articles/kospi-jumps-4-5-seoul-024617214.html",
+        "source": "BeInCrypto",
+        "published_at": "2026-10-27T02:46:17Z",
+        "fetched_at": "2026-10-27T08:01:42Z",
+        "ticker": null,
+        "source_tier": "aggregator"
+      },
+      {
+        "title": "Gold slips near $4,010 as traders await Fed decision, Iran diplomacy offers hope",
+        "summary": "",
+        "url": "https://finance.yahoo.com/markets/commodities/articles/gold-slips-near-4-010-013656079.html",
+        "source": "Investing.com",
+        "published_at": "2026-10-27T01:36:56Z",
+        "fetched_at": "2026-10-27T08:01:42Z",
+        "ticker": null,
+        "source_tier": "aggregator"
+      },
+      {
+        "title": "Greenfire Resources (NYSE:GFR) Stock Could Be Overvalued As Analyst Upgrades Land",
+        "summary": "",
+        "url": "https://finance.yahoo.com/markets/stocks/articles/greenfire-resources-nyse-gfr-stock-011315157.html",
         "source": "Simply Wall St.",
-        "published_at": "2026-10-26T06:08:46Z",
-        "fetched_at": "2026-10-26T08:06:49Z",
+        "published_at": "2026-10-27T01:13:15Z",
+        "fetched_at": "2026-10-27T08:01:42Z",
         "ticker": null,
         "source_tier": "aggregator"
       },
       {
-        "title": "Precious Metals Buffeted By Higher Interest Rates, Deficits and Geopolitics",
+        "title": "Cohesity Data Cloud Becomes the First Cloud Recovery Method Validated for Interoperability with IBM Terraform Self-Managed",
         "summary": "",
-        "url": "https://finance.yahoo.com/markets/commodities/articles/precious-metals-buffeted-higher-interest-060000368.html",
-        "source": "CME Group",
-        "published_at": "2026-10-26T06:00:00Z",
-        "fetched_at": "2026-10-26T08:06:49Z",
+        "url": "https://finance.yahoo.com/technology/ai/articles/cohesity-data-cloud-becomes-first-010000237.html",
+        "source": "PR Newswire",
+        "published_at": "2026-10-27T01:00:00Z",
+        "fetched_at": "2026-10-27T08:01:42Z",
         "ticker": null,
         "source_tier": "aggregator"
       },
       {
-        "title": "Currency markets subdued ahead of busy central bank week",
+        "title": "Oil extends losses as Iran mediation efforts ease escalation fears",
         "summary": "",
-        "url": "https://finance.yahoo.com/markets/currencies/articles/currency-markets-subdued-ahead-busy-055845657.html",
-        "source": "Reuters",
-        "published_at": "2026-10-26T05:58:45Z",
-        "fetched_at": "2026-10-26T08:06:49Z",
+        "url": "https://finance.yahoo.com/energy/articles/oil-extends-losses-iran-mediation-005423071.html",
+        "source": "Investing.com",
+        "published_at": "2026-10-27T00:54:23Z",
+        "fetched_at": "2026-10-27T08:01:42Z",
         "ticker": null,
         "source_tier": "aggregator"
       }
@@ -116,7 +116,7 @@
       {
         "source": "Yahoo Finance",
         "status": "ok",
-        "item_count": 50
+        "item_count": 48
       },
       {
         "source": "Federal Reserve",
@@ -127,13 +127,24 @@
   },
   "tickers": {
     "515880.SS": {
-      "status": "empty",
+      "status": "ok",
       "query_type": "ticker",
       "ticker": "515880.SS",
-      "start_date": "2026-10-26",
-      "end_date": "2026-10-26",
-      "fetched_at": "2026-10-26T08:06:50Z",
-      "items": [],
+      "start_date": "2026-10-27",
+      "end_date": "2026-10-27",
+      "fetched_at": "2026-10-27T08:01:43Z",
+      "items": [
+        {
+          "title": "10月26日通信ETF国泰（515880）份额减少5.80亿份，最新份额643.44亿份，最新规模318.50亿元",
+          "summary": "10月26日通信ETF国泰（515880）份额减少5.80亿份，最新份额643.44亿份，最新规模318.50亿元 新浪财经",
+          "url": "https://news.google.com/rss/articles/CBMimwFBVV95cUxOZ3o0Ym1MZ3d6ZE4zcFpQLUlpam5FZTNLem1Gdzk4bEpabE5KR1VPQ2UzaW5MdkFiSE1MVVNBbHg0TEhKSEsxMjVKXy1HcWk5LW1GcEZ2X1l5UXk5XzhTZjVQTjY5ZzZMWVpzUnM5R2dlWjN1M0VhN0o5MGxzNl9qcHY1aFNGeTgzaThNY1BwaDVtWW13aUVLR25yNA?oc=5",
+          "source": "Google News / 新浪财经",
+          "published_at": "2026-10-27T01:00:40Z",
+          "fetched_at": "2026-10-27T08:01:43Z",
+          "ticker": "515880.SS",
+          "source_tier": "aggregator"
+        }
+      ],
       "source_statuses": [
         {
           "source": "Yahoo Finance",
@@ -142,8 +153,8 @@
         },
         {
           "source": "Google News RSS",
-          "status": "empty",
-          "item_count": 0
+          "status": "ok",
+          "item_count": 1
         },
         {
           "source": "SEC EDGAR",
@@ -156,9 +167,9 @@
       "status": "empty",
       "query_type": "ticker",
       "ticker": "512480.SS",
-      "start_date": "2026-10-26",
-      "end_date": "2026-10-26",
-      "fetched_at": "2026-10-26T08:06:52Z",
+      "start_date": "2026-10-27",
+      "end_date": "2026-10-27",
+      "fetched_at": "2026-10-27T08:01:47Z",
       "items": [],
       "source_statuses": [
         {
@@ -181,102 +192,112 @@
   },
   "items": [
     {
-      "title": "Galp Raises Full-Year View After Oil-Price Assumption Increase",
+      "title": "Asian stocks advance following a rally on Wall Street and oil prices fall",
       "summary": "",
-      "url": "https://finance.yahoo.com/m/4322b381-ae04-3b52-b2b1-d711613dff0a/galp-raises-full-year-view.html",
-      "source": "The Wall Street Journal",
-      "published_at": "2026-10-26T07:35:00Z",
-      "fetched_at": "2026-10-26T08:06:49Z",
+      "url": "https://finance.yahoo.com/markets/world-indices/articles/asian-stocks-advance-following-rally-071057338.html",
+      "source": "Associated Press",
+      "published_at": "2026-10-27T07:10:57Z",
+      "fetched_at": "2026-10-27T08:01:42Z",
       "ticker": null,
       "source_tier": "aggregator"
     },
     {
-      "title": "Stocks sink as traders brace for tech earnings, central bank decisions",
+      "title": "Bitcoin dips below $80k as Strategy pauses buying, Fed caution weighs",
       "summary": "",
-      "url": "https://finance.yahoo.com/markets/stocks/articles/stocks-sink-traders-brace-tech-022128987.html",
-      "source": "AFP",
-      "published_at": "2026-10-26T07:33:21Z",
-      "fetched_at": "2026-10-26T08:06:49Z",
-      "ticker": null,
-      "source_tier": "aggregator"
-    },
-    {
-      "title": "Boeing (BA) reports Q3: everything you need to know ahead of earnings",
-      "summary": "",
-      "url": "https://finance.yahoo.com/markets/stocks/articles/boeing-ba-reports-q3-everything-071847584.html",
-      "source": "StockStory",
-      "published_at": "2026-10-26T07:18:47Z",
-      "fetched_at": "2026-10-26T08:06:49Z",
-      "ticker": null,
-      "source_tier": "aggregator"
-    },
-    {
-      "title": "Are You Overpaying For IBM Stock Versus Its Rivals?",
-      "summary": "",
-      "url": "https://finance.yahoo.com/markets/stocks/articles/overpaying-ibm-stock-versus-rivals-071149273.html",
-      "source": "Trefis",
-      "published_at": "2026-10-26T07:11:49Z",
-      "fetched_at": "2026-10-26T08:06:49Z",
-      "ticker": null,
-      "source_tier": "aggregator"
-    },
-    {
-      "title": "Bitcoin pinned at $80.2k as oil, rate jitters dent crypto appetite",
-      "summary": "",
-      "url": "https://finance.yahoo.com/markets/crypto/articles/bitcoin-pinned-80-2k-oil-065450923.html",
+      "url": "https://finance.yahoo.com/markets/crypto/articles/bitcoin-dips-below-80k-strategy-065649737.html",
       "source": "Investing.com",
-      "published_at": "2026-10-26T06:54:50Z",
-      "fetched_at": "2026-10-26T08:06:49Z",
+      "published_at": "2026-10-27T06:56:49Z",
+      "fetched_at": "2026-10-27T08:01:42Z",
       "ticker": null,
       "source_tier": "aggregator"
     },
     {
-      "title": "Range Resources (RRC) Q3 earnings report preview: what to look for",
+      "title": "Stock Market: Will S&P 500 Open Up or Down Today?",
       "summary": "",
-      "url": "https://finance.yahoo.com/markets/stocks/articles/range-resources-rrc-q3-earnings-064647217.html",
-      "source": "StockStory",
-      "published_at": "2026-10-26T06:46:47Z",
-      "fetched_at": "2026-10-26T08:06:49Z",
+      "url": "https://finance.yahoo.com/news/stock-market-p-500-open-060437028.html",
+      "source": "Benzinga Prediction Markets",
+      "published_at": "2026-10-27T06:04:37Z",
+      "fetched_at": "2026-10-27T08:01:42Z",
       "ticker": null,
       "source_tier": "aggregator"
     },
     {
-      "title": "EQT earnings: what to look for from EQT",
+      "title": "US futures and Asian stocks advance following a rally on Wall Street",
       "summary": "",
-      "url": "https://finance.yahoo.com/markets/stocks/articles/eqt-earnings-look-eqt-063047844.html",
-      "source": "StockStory",
-      "published_at": "2026-10-26T06:30:47Z",
-      "fetched_at": "2026-10-26T08:06:49Z",
+      "url": "https://finance.yahoo.com/markets/world-indices/articles/us-futures-asian-stocks-advance-040552073.html",
+      "source": "Associated Press",
+      "published_at": "2026-10-27T04:05:52Z",
+      "fetched_at": "2026-10-27T08:01:42Z",
       "ticker": null,
       "source_tier": "aggregator"
     },
     {
-      "title": "Top 3 Australian Growth Stocks To Watch In October 2026",
+      "title": "IBM Introduces Identity and Control for AI Agents, Securing Frontier Intelligence for the Enterprise",
       "summary": "",
-      "url": "https://finance.yahoo.com/markets/stocks/articles/top-3-australian-growth-stocks-060846013.html",
+      "url": "https://finance.yahoo.com/technology/ai/articles/ibm-introduces-identity-control-ai-040100417.html",
+      "source": "PR Newswire",
+      "published_at": "2026-10-27T04:01:00Z",
+      "fetched_at": "2026-10-27T08:01:42Z",
+      "ticker": null,
+      "source_tier": "aggregator"
+    },
+    {
+      "title": "KOSPI Jumps 4.5% as Seoul Halts Program Buying Before SK Hynix Earnings",
+      "summary": "",
+      "url": "https://finance.yahoo.com/markets/world-indices/articles/kospi-jumps-4-5-seoul-024617214.html",
+      "source": "BeInCrypto",
+      "published_at": "2026-10-27T02:46:17Z",
+      "fetched_at": "2026-10-27T08:01:42Z",
+      "ticker": null,
+      "source_tier": "aggregator"
+    },
+    {
+      "title": "Gold slips near $4,010 as traders await Fed decision, Iran diplomacy offers hope",
+      "summary": "",
+      "url": "https://finance.yahoo.com/markets/commodities/articles/gold-slips-near-4-010-013656079.html",
+      "source": "Investing.com",
+      "published_at": "2026-10-27T01:36:56Z",
+      "fetched_at": "2026-10-27T08:01:42Z",
+      "ticker": null,
+      "source_tier": "aggregator"
+    },
+    {
+      "title": "Greenfire Resources (NYSE:GFR) Stock Could Be Overvalued As Analyst Upgrades Land",
+      "summary": "",
+      "url": "https://finance.yahoo.com/markets/stocks/articles/greenfire-resources-nyse-gfr-stock-011315157.html",
       "source": "Simply Wall St.",
-      "published_at": "2026-10-26T06:08:46Z",
-      "fetched_at": "2026-10-26T08:06:49Z",
+      "published_at": "2026-10-27T01:13:15Z",
+      "fetched_at": "2026-10-27T08:01:42Z",
       "ticker": null,
       "source_tier": "aggregator"
     },
     {
-      "title": "Precious Metals Buffeted By Higher Interest Rates, Deficits and Geopolitics",
+      "title": "10月26日通信ETF国泰（515880）份额减少5.80亿份，最新份额643.44亿份，最新规模318.50亿元",
+      "summary": "10月26日通信ETF国泰（515880）份额减少5.80亿份，最新份额643.44亿份，最新规模318.50亿元 新浪财经",
+      "url": "https://news.google.com/rss/articles/CBMimwFBVV95cUxOZ3o0Ym1MZ3d6ZE4zcFpQLUlpam5FZTNLem1Gdzk4bEpabE5KR1VPQ2UzaW5MdkFiSE1MVVNBbHg0TEhKSEsxMjVKXy1HcWk5LW1GcEZ2X1l5UXk5XzhTZjVQTjY5ZzZMWVpzUnM5R2dlWjN1M0VhN0o5MGxzNl9qcHY1aFNGeTgzaThNY1BwaDVtWW13aUVLR25yNA?oc=5",
+      "source": "Google News / 新浪财经",
+      "published_at": "2026-10-27T01:00:40Z",
+      "fetched_at": "2026-10-27T08:01:43Z",
+      "ticker": "515880.SS",
+      "source_tier": "aggregator"
+    },
+    {
+      "title": "Cohesity Data Cloud Becomes the First Cloud Recovery Method Validated for Interoperability with IBM Terraform Self-Managed",
       "summary": "",
-      "url": "https://finance.yahoo.com/markets/commodities/articles/precious-metals-buffeted-higher-interest-060000368.html",
-      "source": "CME Group",
-      "published_at": "2026-10-26T06:00:00Z",
-      "fetched_at": "2026-10-26T08:06:49Z",
+      "url": "https://finance.yahoo.com/technology/ai/articles/cohesity-data-cloud-becomes-first-010000237.html",
+      "source": "PR Newswire",
+      "published_at": "2026-10-27T01:00:00Z",
+      "fetched_at": "2026-10-27T08:01:42Z",
       "ticker": null,
       "source_tier": "aggregator"
     },
     {
-      "title": "Currency markets subdued ahead of busy central bank week",
+      "title": "Oil extends losses as Iran mediation efforts ease escalation fears",
       "summary": "",
-      "url": "https://finance.yahoo.com/markets/currencies/articles/currency-markets-subdued-ahead-busy-055845657.html",
-      "source": "Reuters",
-      "published_at": "2026-10-26T05:58:45Z",
-      "fetched_at": "2026-10-26T08:06:49Z",
+      "url": "https://finance.yahoo.com/energy/articles/oil-extends-losses-iran-mediation-005423071.html",
+      "source": "Investing.com",
+      "published_at": "2026-10-27T00:54:23Z",
+      "fetched_at": "2026-10-27T08:01:42Z",
       "ticker": null,
       "source_tier": "aggregator"
     }

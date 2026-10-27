@@ -1,5 +1,60 @@
 [
   {
+    "trade_date": "2026-10-27",
+    "generated_at": "2026-10-27T16:01:41+08:00",
+    "provider": "openai_compatible",
+    "results": [
+      {
+        "ticker": "515880.SS",
+        "rating": null,
+        "report": null,
+        "files": {},
+        "error": true,
+        "analysis_status": "data_validation_failed",
+        "audit_status": "invalidated",
+        "evidence_publish": {
+          "published": true,
+          "status": 201
+        }
+      },
+      {
+        "ticker": "512480.SS",
+        "rating": null,
+        "report": null,
+        "files": {},
+        "error": true,
+        "analysis_status": null,
+        "audit_status": null,
+        "evidence_publish": null
+      }
+    ],
+    "request": {
+      "requestId": null,
+      "analysts": [
+        "market",
+        "news",
+        "fundamentals"
+      ],
+      "researchDepth": "standard",
+      "kind": "monitor"
+    },
+    "run": {
+      "id": "40470646212",
+      "attempt": "1",
+      "workflow": "daily-analysis",
+      "url": "https://github.com/gaaiyun/TradingWorkbench/actions/runs/40470646212"
+    },
+    "identity": {
+      "scope": "profile",
+      "kind": "monitor",
+      "runId": "40470646212",
+      "profileId": "cn-semi-comms",
+      "requestId": null,
+      "slotId": "slot-6672bd573e8c92ec650e319635b75a9b7831b5c1bd00361f1a93c022756c7bb5",
+      "scheduledFor": "2026-10-27T07:17:48.000Z"
+    }
+  },
+  {
     "trade_date": "2026-10-26",
     "generated_at": "2026-10-26T16:06:47+08:00",
     "provider": "openai_compatible",
@@ -4181,71 +4236,6 @@
       "scope": "legacy",
       "kind": "legacy",
       "runId": "31653398672",
-      "profileId": null,
-      "requestId": null,
-      "slotId": null,
-      "scheduledFor": null
-    }
-  },
-  {
-    "trade_date": "2026-08-12",
-    "generated_at": "2026-08-13T07:50:35+08:00",
-    "provider": "openai_compatible",
-    "results": [
-      {
-        "ticker": "512480.SS",
-        "rating": "Not Rated",
-        "report": "reports/512480.SS/2026-08-12-v3/complete_report.md",
-        "files": {
-          "fundamentals": "reports/512480.SS/2026-08-12-v3/1_analysts/fundamentals.md",
-          "market": "reports/512480.SS/2026-08-12-v3/1_analysts/market.md",
-          "news": "reports/512480.SS/2026-08-12-v3/1_analysts/news.md",
-          "bear": "reports/512480.SS/2026-08-12-v3/2_research/bear.md",
-          "bull": "reports/512480.SS/2026-08-12-v3/2_research/bull.md",
-          "manager": "reports/512480.SS/2026-08-12-v3/2_research/manager.md",
-          "trader": "reports/512480.SS/2026-08-12-v3/3_trading/trader.md",
-          "aggressive": "reports/512480.SS/2026-08-12-v3/4_risk/aggressive.md",
-          "conservative": "reports/512480.SS/2026-08-12-v3/4_risk/conservative.md",
-          "neutral": "reports/512480.SS/2026-08-12-v3/4_risk/neutral.md",
-          "decision": "reports/512480.SS/2026-08-12-v3/5_portfolio/decision.md",
-          "complete_report": "reports/512480.SS/2026-08-12-v3/complete_report.md"
-        },
-        "error": false,
-        "analysis_status": "insufficient_evidence",
-        "audit_status": "legacy_unverified",
-        "evidence_publish": {
-          "published": true,
-          "status": 201
-        },
-        "marketHistory": {
-          "source": "tencent",
-          "adjustment": "qfq",
-          "barCount": 654,
-          "startAt": "2023-11-29T16:00:00Z",
-          "endAt": "2026-08-11T16:00:00Z"
-        }
-      }
-    ],
-    "request": {
-      "requestId": null,
-      "analysts": [
-        "market",
-        "news",
-        "fundamentals"
-      ],
-      "researchDepth": "standard",
-      "kind": "legacy"
-    },
-    "run": {
-      "id": "31652286986",
-      "attempt": "1",
-      "workflow": "daily-analysis",
-      "url": "https://github.com/gaaiyun/TradingWorkbench/actions/runs/31652286986"
-    },
-    "identity": {
-      "scope": "legacy",
-      "kind": "legacy",
-      "runId": "31652286986",
       "profileId": null,
       "requestId": null,
       "slotId": null,
