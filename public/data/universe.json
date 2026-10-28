@@ -1,10 +1,10 @@
 {
   "version": 1,
-  "generatedAt": "2026-10-27T16:32:38.161Z",
+  "generatedAt": "2026-10-28T17:09:35.939Z",
   "status": "degraded",
   "coverage": {
     "policy": "current-listed-best-effort-plus-configured-core",
-    "cnCurrentListedStocks": 5576,
+    "cnCurrentListedStocks": 5575,
     "cnConfiguredCore": 3,
     "usCore": 9,
     "hkCore": 1,
@@ -16,13 +16,13 @@
       "id": "sina-market-center",
       "role": "CN current-listed discovery",
       "quality": "best_effort",
-      "asOf": "2026-10-27T16:32:38.161Z"
+      "asOf": "2026-10-28T17:09:35.939Z"
     },
     {
       "id": "workbench-settings",
       "role": "configured HK/US/CN core instruments",
       "quality": "declared",
-      "asOf": "2026-10-27T16:32:38.161Z"
+      "asOf": "2026-10-28T17:09:35.939Z"
     }
   ],
   "instruments": [
@@ -28165,17 +28165,6 @@
       "coverage": "current_listed_best_effort"
     },
     {
-      "symbol": "301139.SZ",
-      "name": "元道退",
-      "market": "CN",
-      "exchange": "SZ",
-      "instrumentType": "stock",
-      "industry": null,
-      "listDate": null,
-      "source": "sina-market-center",
-      "coverage": "current_listed_best_effort"
-    },
-    {
       "symbol": "301141.SZ",
       "name": "中科磁业",
       "market": "CN",
@@ -32159,7 +32148,7 @@
     },
     {
       "symbol": "600017.SS",
-      "name": "XD日照港",
+      "name": "日照港",
       "market": "CN",
       "exchange": "SS",
       "instrumentType": "stock",
@@ -34964,7 +34953,7 @@
     },
     {
       "symbol": "600360.SS",
-      "name": "XD华微电",
+      "name": "华微电子",
       "market": "CN",
       "exchange": "SS",
       "instrumentType": "stock",
@@ -35800,7 +35789,7 @@
     },
     {
       "symbol": "600479.SS",
-      "name": "XD千金药",
+      "name": "千金药业",
       "market": "CN",
       "exchange": "SS",
       "instrumentType": "stock",
@@ -41157,7 +41146,7 @@
     },
     {
       "symbol": "601229.SS",
-      "name": "XD上海银",
+      "name": "上海银行",
       "market": "CN",
       "exchange": "SS",
       "instrumentType": "stock",
@@ -41234,7 +41223,7 @@
     },
     {
       "symbol": "601298.SS",
-      "name": "青岛港",
+      "name": "XD青岛港",
       "market": "CN",
       "exchange": "SS",
       "instrumentType": "stock",
@@ -42653,7 +42642,7 @@
     },
     {
       "symbol": "601991.SS",
-      "name": "大唐发电",
+      "name": "XD大唐发",
       "market": "CN",
       "exchange": "SS",
       "instrumentType": "stock",
@@ -47658,7 +47647,7 @@
     },
     {
       "symbol": "603689.SS",
-      "name": "皖天然气",
+      "name": "XD皖天然",
       "market": "CN",
       "exchange": "SS",
       "instrumentType": "stock",
@@ -51563,7 +51552,7 @@
     },
     {
       "symbol": "688087.SS",
-      "name": "英科再生",
+      "name": "XD英科再",
       "market": "CN",
       "exchange": "SS",
       "instrumentType": "stock",
@@ -53521,7 +53510,7 @@
     },
     {
       "symbol": "688293.SS",
-      "name": "XD奥浦迈",
+      "name": "奥浦迈",
       "market": "CN",
       "exchange": "SS",
       "instrumentType": "stock",
