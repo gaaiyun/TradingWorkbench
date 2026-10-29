@@ -1,10 +1,10 @@
 {
   "version": 1,
-  "generatedAt": "2026-10-28T17:09:35.939Z",
+  "generatedAt": "2026-10-29T17:24:56.699Z",
   "status": "degraded",
   "coverage": {
     "policy": "current-listed-best-effort-plus-configured-core",
-    "cnCurrentListedStocks": 5575,
+    "cnCurrentListedStocks": 5576,
     "cnConfiguredCore": 3,
     "usCore": 9,
     "hkCore": 1,
@@ -16,13 +16,13 @@
       "id": "sina-market-center",
       "role": "CN current-listed discovery",
       "quality": "best_effort",
-      "asOf": "2026-10-28T17:09:35.939Z"
+      "asOf": "2026-10-29T17:24:56.699Z"
     },
     {
       "id": "workbench-settings",
       "role": "configured HK/US/CN core instruments",
       "quality": "declared",
-      "asOf": "2026-10-28T17:09:35.939Z"
+      "asOf": "2026-10-29T17:24:56.699Z"
     }
   ],
   "instruments": [
@@ -31972,7 +31972,7 @@
     },
     {
       "symbol": "301718.SZ",
-      "name": "C通则",
+      "name": "通则康威",
       "market": "CN",
       "exchange": "SZ",
       "instrumentType": "stock",
@@ -41223,7 +41223,7 @@
     },
     {
       "symbol": "601298.SS",
-      "name": "XD青岛港",
+      "name": "青岛港",
       "market": "CN",
       "exchange": "SS",
       "instrumentType": "stock",
@@ -42642,7 +42642,7 @@
     },
     {
       "symbol": "601991.SS",
-      "name": "XD大唐发",
+      "name": "大唐发电",
       "market": "CN",
       "exchange": "SS",
       "instrumentType": "stock",
@@ -46976,7 +46976,7 @@
     },
     {
       "symbol": "603588.SS",
-      "name": "高能环境",
+      "name": "高能时代",
       "market": "CN",
       "exchange": "SS",
       "instrumentType": "stock",
@@ -47647,7 +47647,7 @@
     },
     {
       "symbol": "603689.SS",
-      "name": "XD皖天然",
+      "name": "皖天然气",
       "market": "CN",
       "exchange": "SS",
       "instrumentType": "stock",
@@ -51552,7 +51552,7 @@
     },
     {
       "symbol": "688087.SS",
-      "name": "XD英科再",
+      "name": "英科再生",
       "market": "CN",
       "exchange": "SS",
       "instrumentType": "stock",
@@ -55534,7 +55534,7 @@
     },
     {
       "symbol": "688563.SS",
-      "name": "航材股份",
+      "name": "XD航材股",
       "market": "CN",
       "exchange": "SS",
       "instrumentType": "stock",
@@ -59550,6 +59550,17 @@
     {
       "symbol": "920304.BJ",
       "name": "迪尔化工",
+      "market": "CN",
+      "exchange": "BJ",
+      "instrumentType": "stock",
+      "industry": null,
+      "listDate": null,
+      "source": "sina-market-center",
+      "coverage": "current_listed_best_effort"
+    },
+    {
+      "symbol": "920306.BJ",
+      "name": "N天元",
       "market": "CN",
       "exchange": "BJ",
       "instrumentType": "stock",
