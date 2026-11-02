@@ -1,113 +1,113 @@
 {
   "version": 1,
   "status": "ok",
-  "generated_at": "2026-10-30T16:01:43+08:00",
-  "trade_date": "2026-10-30",
+  "generated_at": "2026-11-02T16:01:36+08:00",
+  "trade_date": "2026-11-02",
   "global": {
     "status": "ok",
     "query_type": "global",
     "ticker": null,
-    "start_date": "2026-10-23",
-    "end_date": "2026-10-30",
-    "fetched_at": "2026-10-30T08:01:44Z",
+    "start_date": "2026-10-26",
+    "end_date": "2026-11-02",
+    "fetched_at": "2026-11-02T08:01:37Z",
     "items": [
       {
-        "title": "Oil set for fourth monthly gain as Hormuz tanker attack highlights supply risks from war",
+        "title": "Asian stocks mixed as tech sector struggles to rebound from selloff",
         "summary": "",
-        "url": "https://finance.yahoo.com/news/oil-rises-supply-concerns-houthis-022725347.html",
+        "url": "https://finance.yahoo.com/markets/world-indices/articles/asian-stocks-mixed-tech-sector-024236684.html",
+        "source": "AFP",
+        "published_at": "2026-11-02T07:28:31Z",
+        "fetched_at": "2026-11-02T08:01:37Z",
+        "ticker": null,
+        "source_tier": "aggregator"
+      },
+      {
+        "title": "How Has Amazon's Story Changed?",
+        "summary": "",
+        "url": "https://finance.yahoo.com/markets/stocks/articles/amazons-story-changed-072722821.html",
+        "source": "Trefis",
+        "published_at": "2026-11-02T07:27:22Z",
+        "fetched_at": "2026-11-02T08:01:37Z",
+        "ticker": null,
+        "source_tier": "aggregator"
+      },
+      {
+        "title": "Oil prices ease 3% on optimism for Qatari-led talks on ending Iran war",
+        "summary": "",
+        "url": "https://finance.yahoo.com/energy/articles/oil-slips-more-1-talks-231257365.html",
         "source": "Reuters",
-        "published_at": "2026-10-30T07:38:26Z",
-        "fetched_at": "2026-10-30T08:01:44Z",
+        "published_at": "2026-11-02T07:20:19Z",
+        "fetched_at": "2026-11-02T08:01:37Z",
         "ticker": null,
         "source_tier": "aggregator"
       },
       {
-        "title": "What Albany International (AIN) Said on Its Q3 Earnings Call",
+        "title": "UK Stock Market Today: FTSE 100 Futures Edge Up As Traders Brace For BoE",
         "summary": "",
-        "url": "https://finance.yahoo.com/markets/stocks/articles/albany-international-ain-said-q3-071409006.html",
-        "source": "MarketBeat",
-        "published_at": "2026-10-30T07:14:09Z",
-        "fetched_at": "2026-10-30T08:01:44Z",
-        "ticker": null,
-        "source_tier": "aggregator"
-      },
-      {
-        "title": "MARKETS LIVE: FTSE 100 set to rise despite Wall Street sell-off and Asian technology rout",
-        "summary": "",
-        "url": "https://finance.yahoo.com/markets/world-indices/articles/markets-live-ftse-100-set-070500990.html",
-        "source": "Proactive",
-        "published_at": "2026-10-30T07:05:00Z",
-        "fetched_at": "2026-10-30T08:01:44Z",
-        "ticker": null,
-        "source_tier": "aggregator"
-      },
-      {
-        "title": "Silver Crown Royalties Reports Q3 Results and Record Quarterly Earnings",
-        "summary": "",
-        "url": "https://finance.yahoo.com/markets/commodities/articles/silver-crown-royalties-reports-q3-070000045.html",
-        "source": "NewMediaWire",
-        "published_at": "2026-10-30T07:00:00Z",
-        "fetched_at": "2026-10-30T08:01:44Z",
-        "ticker": null,
-        "source_tier": "aggregator"
-      },
-      {
-        "title": "Stock Market: Will S&P 500 Open Up or Down Today?",
-        "summary": "",
-        "url": "https://finance.yahoo.com/markets/stocks/articles/stock-market-p-500-open-062123942.html",
-        "source": "Benzinga Prediction Markets",
-        "published_at": "2026-10-30T06:21:23Z",
-        "fetched_at": "2026-10-30T08:01:44Z",
-        "ticker": null,
-        "source_tier": "aggregator"
-      },
-      {
-        "title": "Oil Prices Head for Fourth Monthly Gain as Middle East Tensions Escalate",
-        "summary": "",
-        "url": "https://finance.yahoo.com/energy/articles/oil-prices-head-fourth-monthly-062000939.html",
-        "source": "Oilprice.com",
-        "published_at": "2026-10-30T06:20:00Z",
-        "fetched_at": "2026-10-30T08:01:44Z",
-        "ticker": null,
-        "source_tier": "aggregator"
-      },
-      {
-        "title": "What Avery Dennison (AVY) Said on Its Q3 Earnings Call",
-        "summary": "",
-        "url": "https://finance.yahoo.com/markets/stocks/articles/avery-dennison-avy-said-q3-061412414.html",
-        "source": "MarketBeat",
-        "published_at": "2026-10-30T06:14:12Z",
-        "fetched_at": "2026-10-30T08:01:44Z",
-        "ticker": null,
-        "source_tier": "aggregator"
-      },
-      {
-        "title": "3 Canadian Energy Stocks With Net Margins Over 12%",
-        "summary": "",
-        "url": "https://finance.yahoo.com/energy/articles/3-canadian-energy-stocks-net-061226748.html",
+        "url": "https://finance.yahoo.com/markets/world-indices/articles/uk-stock-market-today-ftse-071030765.html",
         "source": "Simply Wall St.",
-        "published_at": "2026-10-30T06:12:26Z",
-        "fetched_at": "2026-10-30T08:01:44Z",
+        "published_at": "2026-11-02T07:10:30Z",
+        "fetched_at": "2026-11-02T08:01:37Z",
         "ticker": null,
         "source_tier": "aggregator"
       },
       {
-        "title": "EQT (EQT) Deal Sparks Fresh Marcellus And Utica Takeover Talk",
+        "title": "USO, UCO Slide As Brent Retreats On US-Iran De-escalation Hopes – But Goldman Reportedly Sees Oil At $105 In December",
         "summary": "",
-        "url": "https://finance.yahoo.com/energy/articles/eqt-eqt-deal-sparks-fresh-051711434.html",
-        "source": "Simply Wall St.",
-        "published_at": "2026-10-30T05:17:11Z",
-        "fetched_at": "2026-10-30T08:01:44Z",
-        "ticker": null,
-        "source_tier": "aggregator"
-      },
-      {
-        "title": "Dow, S&P 500, Nasdaq Futures Fall As Weak Tech Earnings Trigger Selloff: INTC, IOVA, SLS, AMZN Stocks In Focus",
-        "summary": "",
-        "url": "https://finance.yahoo.com/markets/stocks/articles/dow-p-500-nasdaq-futures-040305422.html",
+        "url": "https://finance.yahoo.com/energy/articles/uso-uco-slide-brent-retreats-070724268.html",
         "source": "Stocktwits",
-        "published_at": "2026-10-30T04:03:05Z",
-        "fetched_at": "2026-10-30T08:01:44Z",
+        "published_at": "2026-11-02T07:07:24Z",
+        "fetched_at": "2026-11-02T08:01:37Z",
+        "ticker": null,
+        "source_tier": "aggregator"
+      },
+      {
+        "title": "What Is The Case For Waiting On Rigetti Computing Stock?",
+        "summary": "",
+        "url": "https://finance.yahoo.com/markets/stocks/articles/case-waiting-rigetti-computing-stock-070409454.html",
+        "source": "Trefis",
+        "published_at": "2026-11-02T07:04:09Z",
+        "fetched_at": "2026-11-02T08:01:37Z",
+        "ticker": null,
+        "source_tier": "aggregator"
+      },
+      {
+        "title": "Is CVS Health Stock Worth More Than Its Competitors?",
+        "summary": "",
+        "url": "https://finance.yahoo.com/markets/stocks/articles/cvs-health-stock-worth-more-070404538.html",
+        "source": "Trefis",
+        "published_at": "2026-11-02T07:04:04Z",
+        "fetched_at": "2026-11-02T08:01:37Z",
+        "ticker": null,
+        "source_tier": "aggregator"
+      },
+      {
+        "title": "Why Is Everyone Ignoring Omnicom Stock's High Cash Yield?",
+        "summary": "",
+        "url": "https://finance.yahoo.com/markets/stocks/articles/why-everyone-ignoring-omnicom-stocks-070358565.html",
+        "source": "Trefis",
+        "published_at": "2026-11-02T07:03:58Z",
+        "fetched_at": "2026-11-02T08:01:37Z",
+        "ticker": null,
+        "source_tier": "aggregator"
+      },
+      {
+        "title": "Matador Resources earnings: what to look for from MTDR",
+        "summary": "",
+        "url": "https://finance.yahoo.com/markets/stocks/articles/matador-resources-earnings-look-mtdr-070136470.html",
+        "source": "StockStory",
+        "published_at": "2026-11-02T07:01:36Z",
+        "fetched_at": "2026-11-02T08:01:37Z",
+        "ticker": null,
+        "source_tier": "aggregator"
+      },
+      {
+        "title": "Maarmorilik Project Development Strategy and High-Grade Results from 2026 Exploration Programme",
+        "summary": "",
+        "url": "https://finance.yahoo.com/markets/commodities/articles/maarmorilik-project-development-strategy-high-070000897.html",
+        "source": "GlobeNewswire",
+        "published_at": "2026-11-02T07:00:00Z",
+        "fetched_at": "2026-11-02T08:01:37Z",
         "ticker": null,
         "source_tier": "aggregator"
       }
@@ -130,9 +130,9 @@
       "status": "empty",
       "query_type": "ticker",
       "ticker": "515880.SS",
-      "start_date": "2026-10-30",
-      "end_date": "2026-10-30",
-      "fetched_at": "2026-10-30T08:01:45Z",
+      "start_date": "2026-11-02",
+      "end_date": "2026-11-02",
+      "fetched_at": "2026-11-02T08:01:40Z",
       "items": [],
       "source_statuses": [
         {
@@ -156,9 +156,9 @@
       "status": "empty",
       "query_type": "ticker",
       "ticker": "512480.SS",
-      "start_date": "2026-10-30",
-      "end_date": "2026-10-30",
-      "fetched_at": "2026-10-30T08:01:48Z",
+      "start_date": "2026-11-02",
+      "end_date": "2026-11-02",
+      "fetched_at": "2026-11-02T08:01:56Z",
       "items": [],
       "source_statuses": [
         {
@@ -181,102 +181,102 @@
   },
   "items": [
     {
-      "title": "Oil set for fourth monthly gain as Hormuz tanker attack highlights supply risks from war",
+      "title": "Asian stocks mixed as tech sector struggles to rebound from selloff",
       "summary": "",
-      "url": "https://finance.yahoo.com/news/oil-rises-supply-concerns-houthis-022725347.html",
+      "url": "https://finance.yahoo.com/markets/world-indices/articles/asian-stocks-mixed-tech-sector-024236684.html",
+      "source": "AFP",
+      "published_at": "2026-11-02T07:28:31Z",
+      "fetched_at": "2026-11-02T08:01:37Z",
+      "ticker": null,
+      "source_tier": "aggregator"
+    },
+    {
+      "title": "How Has Amazon's Story Changed?",
+      "summary": "",
+      "url": "https://finance.yahoo.com/markets/stocks/articles/amazons-story-changed-072722821.html",
+      "source": "Trefis",
+      "published_at": "2026-11-02T07:27:22Z",
+      "fetched_at": "2026-11-02T08:01:37Z",
+      "ticker": null,
+      "source_tier": "aggregator"
+    },
+    {
+      "title": "Oil prices ease 3% on optimism for Qatari-led talks on ending Iran war",
+      "summary": "",
+      "url": "https://finance.yahoo.com/energy/articles/oil-slips-more-1-talks-231257365.html",
       "source": "Reuters",
-      "published_at": "2026-10-30T07:38:26Z",
-      "fetched_at": "2026-10-30T08:01:44Z",
+      "published_at": "2026-11-02T07:20:19Z",
+      "fetched_at": "2026-11-02T08:01:37Z",
       "ticker": null,
       "source_tier": "aggregator"
     },
     {
-      "title": "What Albany International (AIN) Said on Its Q3 Earnings Call",
+      "title": "UK Stock Market Today: FTSE 100 Futures Edge Up As Traders Brace For BoE",
       "summary": "",
-      "url": "https://finance.yahoo.com/markets/stocks/articles/albany-international-ain-said-q3-071409006.html",
-      "source": "MarketBeat",
-      "published_at": "2026-10-30T07:14:09Z",
-      "fetched_at": "2026-10-30T08:01:44Z",
-      "ticker": null,
-      "source_tier": "aggregator"
-    },
-    {
-      "title": "MARKETS LIVE: FTSE 100 set to rise despite Wall Street sell-off and Asian technology rout",
-      "summary": "",
-      "url": "https://finance.yahoo.com/markets/world-indices/articles/markets-live-ftse-100-set-070500990.html",
-      "source": "Proactive",
-      "published_at": "2026-10-30T07:05:00Z",
-      "fetched_at": "2026-10-30T08:01:44Z",
-      "ticker": null,
-      "source_tier": "aggregator"
-    },
-    {
-      "title": "Silver Crown Royalties Reports Q3 Results and Record Quarterly Earnings",
-      "summary": "",
-      "url": "https://finance.yahoo.com/markets/commodities/articles/silver-crown-royalties-reports-q3-070000045.html",
-      "source": "NewMediaWire",
-      "published_at": "2026-10-30T07:00:00Z",
-      "fetched_at": "2026-10-30T08:01:44Z",
-      "ticker": null,
-      "source_tier": "aggregator"
-    },
-    {
-      "title": "Stock Market: Will S&P 500 Open Up or Down Today?",
-      "summary": "",
-      "url": "https://finance.yahoo.com/markets/stocks/articles/stock-market-p-500-open-062123942.html",
-      "source": "Benzinga Prediction Markets",
-      "published_at": "2026-10-30T06:21:23Z",
-      "fetched_at": "2026-10-30T08:01:44Z",
-      "ticker": null,
-      "source_tier": "aggregator"
-    },
-    {
-      "title": "Oil Prices Head for Fourth Monthly Gain as Middle East Tensions Escalate",
-      "summary": "",
-      "url": "https://finance.yahoo.com/energy/articles/oil-prices-head-fourth-monthly-062000939.html",
-      "source": "Oilprice.com",
-      "published_at": "2026-10-30T06:20:00Z",
-      "fetched_at": "2026-10-30T08:01:44Z",
-      "ticker": null,
-      "source_tier": "aggregator"
-    },
-    {
-      "title": "What Avery Dennison (AVY) Said on Its Q3 Earnings Call",
-      "summary": "",
-      "url": "https://finance.yahoo.com/markets/stocks/articles/avery-dennison-avy-said-q3-061412414.html",
-      "source": "MarketBeat",
-      "published_at": "2026-10-30T06:14:12Z",
-      "fetched_at": "2026-10-30T08:01:44Z",
-      "ticker": null,
-      "source_tier": "aggregator"
-    },
-    {
-      "title": "3 Canadian Energy Stocks With Net Margins Over 12%",
-      "summary": "",
-      "url": "https://finance.yahoo.com/energy/articles/3-canadian-energy-stocks-net-061226748.html",
+      "url": "https://finance.yahoo.com/markets/world-indices/articles/uk-stock-market-today-ftse-071030765.html",
       "source": "Simply Wall St.",
-      "published_at": "2026-10-30T06:12:26Z",
-      "fetched_at": "2026-10-30T08:01:44Z",
+      "published_at": "2026-11-02T07:10:30Z",
+      "fetched_at": "2026-11-02T08:01:37Z",
       "ticker": null,
       "source_tier": "aggregator"
     },
     {
-      "title": "EQT (EQT) Deal Sparks Fresh Marcellus And Utica Takeover Talk",
+      "title": "USO, UCO Slide As Brent Retreats On US-Iran De-escalation Hopes – But Goldman Reportedly Sees Oil At $105 In December",
       "summary": "",
-      "url": "https://finance.yahoo.com/energy/articles/eqt-eqt-deal-sparks-fresh-051711434.html",
-      "source": "Simply Wall St.",
-      "published_at": "2026-10-30T05:17:11Z",
-      "fetched_at": "2026-10-30T08:01:44Z",
-      "ticker": null,
-      "source_tier": "aggregator"
-    },
-    {
-      "title": "Dow, S&P 500, Nasdaq Futures Fall As Weak Tech Earnings Trigger Selloff: INTC, IOVA, SLS, AMZN Stocks In Focus",
-      "summary": "",
-      "url": "https://finance.yahoo.com/markets/stocks/articles/dow-p-500-nasdaq-futures-040305422.html",
+      "url": "https://finance.yahoo.com/energy/articles/uso-uco-slide-brent-retreats-070724268.html",
       "source": "Stocktwits",
-      "published_at": "2026-10-30T04:03:05Z",
-      "fetched_at": "2026-10-30T08:01:44Z",
+      "published_at": "2026-11-02T07:07:24Z",
+      "fetched_at": "2026-11-02T08:01:37Z",
+      "ticker": null,
+      "source_tier": "aggregator"
+    },
+    {
+      "title": "What Is The Case For Waiting On Rigetti Computing Stock?",
+      "summary": "",
+      "url": "https://finance.yahoo.com/markets/stocks/articles/case-waiting-rigetti-computing-stock-070409454.html",
+      "source": "Trefis",
+      "published_at": "2026-11-02T07:04:09Z",
+      "fetched_at": "2026-11-02T08:01:37Z",
+      "ticker": null,
+      "source_tier": "aggregator"
+    },
+    {
+      "title": "Is CVS Health Stock Worth More Than Its Competitors?",
+      "summary": "",
+      "url": "https://finance.yahoo.com/markets/stocks/articles/cvs-health-stock-worth-more-070404538.html",
+      "source": "Trefis",
+      "published_at": "2026-11-02T07:04:04Z",
+      "fetched_at": "2026-11-02T08:01:37Z",
+      "ticker": null,
+      "source_tier": "aggregator"
+    },
+    {
+      "title": "Why Is Everyone Ignoring Omnicom Stock's High Cash Yield?",
+      "summary": "",
+      "url": "https://finance.yahoo.com/markets/stocks/articles/why-everyone-ignoring-omnicom-stocks-070358565.html",
+      "source": "Trefis",
+      "published_at": "2026-11-02T07:03:58Z",
+      "fetched_at": "2026-11-02T08:01:37Z",
+      "ticker": null,
+      "source_tier": "aggregator"
+    },
+    {
+      "title": "Matador Resources earnings: what to look for from MTDR",
+      "summary": "",
+      "url": "https://finance.yahoo.com/markets/stocks/articles/matador-resources-earnings-look-mtdr-070136470.html",
+      "source": "StockStory",
+      "published_at": "2026-11-02T07:01:36Z",
+      "fetched_at": "2026-11-02T08:01:37Z",
+      "ticker": null,
+      "source_tier": "aggregator"
+    },
+    {
+      "title": "Maarmorilik Project Development Strategy and High-Grade Results from 2026 Exploration Programme",
+      "summary": "",
+      "url": "https://finance.yahoo.com/markets/commodities/articles/maarmorilik-project-development-strategy-high-070000897.html",
+      "source": "GlobeNewswire",
+      "published_at": "2026-11-02T07:00:00Z",
+      "fetched_at": "2026-11-02T08:01:37Z",
       "ticker": null,
       "source_tier": "aggregator"
     }
