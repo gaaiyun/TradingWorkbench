@@ -1,10 +1,10 @@
 {
   "version": 1,
-  "generatedAt": "2026-11-02T20:44:31.530Z",
+  "generatedAt": "2026-11-03T18:24:31.937Z",
   "status": "degraded",
   "coverage": {
     "policy": "current-listed-best-effort-plus-configured-core",
-    "cnCurrentListedStocks": 5926,
+    "cnCurrentListedStocks": 5927,
     "cnConfiguredCore": 3,
     "usCore": 9,
     "hkCore": 1,
@@ -16,13 +16,13 @@
       "id": "eastmoney-clist",
       "role": "CN current-listed discovery",
       "quality": "best_effort",
-      "asOf": "2026-11-02T20:44:31.530Z"
+      "asOf": "2026-11-03T18:24:31.937Z"
     },
     {
       "id": "workbench-settings",
       "role": "configured HK/US/CN core instruments",
       "quality": "declared",
-      "asOf": "2026-11-02T20:44:31.530Z"
+      "asOf": "2026-11-03T18:24:31.937Z"
     }
   ],
   "instruments": [
@@ -6716,7 +6716,7 @@
     },
     {
       "symbol": "001381.SZ",
-      "name": "皇冠新材",
+      "name": "N皇冠",
       "market": "CN",
       "exchange": "SZ",
       "instrumentType": "stock",
@@ -53752,7 +53752,7 @@
     },
     {
       "symbol": "605179.SS",
-      "name": "一鸣食品",
+      "name": "XD一鸣食",
       "market": "CN",
       "exchange": "SS",
       "instrumentType": "stock",
@@ -54038,7 +54038,7 @@
     },
     {
       "symbol": "605300.SS",
-      "name": "佳禾食品",
+      "name": "XD佳禾食",
       "market": "CN",
       "exchange": "SS",
       "instrumentType": "stock",
@@ -59109,7 +59109,7 @@
     },
     {
       "symbol": "688548.SS",
-      "name": "XD广钢气",
+      "name": "广钢气体",
       "market": "CN",
       "exchange": "SS",
       "instrumentType": "stock",
@@ -63405,6 +63405,17 @@
       "instrumentType": "stock",
       "industry": "专业工程",
       "listDate": "2026-10-29",
+      "source": "eastmoney-clist",
+      "coverage": "current_listed_best_effort"
+    },
+    {
+      "symbol": "920309.BJ",
+      "name": "菊乐股份",
+      "market": "CN",
+      "exchange": "BJ",
+      "instrumentType": "stock",
+      "industry": "-",
+      "listDate": null,
       "source": "eastmoney-clist",
       "coverage": "current_listed_best_effort"
     },
