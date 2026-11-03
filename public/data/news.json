@@ -1,113 +1,113 @@
 {
   "version": 1,
-  "status": "ok",
-  "generated_at": "2026-11-02T16:01:36+08:00",
-  "trade_date": "2026-11-02",
+  "status": "partial",
+  "generated_at": "2026-11-03T16:01:44+08:00",
+  "trade_date": "2026-11-03",
   "global": {
     "status": "ok",
     "query_type": "global",
     "ticker": null,
-    "start_date": "2026-10-26",
-    "end_date": "2026-11-02",
-    "fetched_at": "2026-11-02T08:01:37Z",
+    "start_date": "2026-10-27",
+    "end_date": "2026-11-03",
+    "fetched_at": "2026-11-03T08:01:45Z",
     "items": [
       {
-        "title": "Asian stocks mixed as tech sector struggles to rebound from selloff",
+        "title": "Europe stocks set to fall as US-Iran tensions fuel oil rebound",
         "summary": "",
-        "url": "https://finance.yahoo.com/markets/world-indices/articles/asian-stocks-mixed-tech-sector-024236684.html",
-        "source": "AFP",
-        "published_at": "2026-11-02T07:28:31Z",
-        "fetched_at": "2026-11-02T08:01:37Z",
-        "ticker": null,
-        "source_tier": "aggregator"
-      },
-      {
-        "title": "How Has Amazon's Story Changed?",
-        "summary": "",
-        "url": "https://finance.yahoo.com/markets/stocks/articles/amazons-story-changed-072722821.html",
-        "source": "Trefis",
-        "published_at": "2026-11-02T07:27:22Z",
-        "fetched_at": "2026-11-02T08:01:37Z",
-        "ticker": null,
-        "source_tier": "aggregator"
-      },
-      {
-        "title": "Oil prices ease 3% on optimism for Qatari-led talks on ending Iran war",
-        "summary": "",
-        "url": "https://finance.yahoo.com/energy/articles/oil-slips-more-1-talks-231257365.html",
+        "url": "https://finance.yahoo.com/markets/stocks/articles/europe-stocks-set-fall-us-072424748.html",
         "source": "Reuters",
-        "published_at": "2026-11-02T07:20:19Z",
-        "fetched_at": "2026-11-02T08:01:37Z",
+        "published_at": "2026-11-03T07:24:24Z",
+        "fetched_at": "2026-11-03T08:01:45Z",
         "ticker": null,
         "source_tier": "aggregator"
       },
       {
-        "title": "UK Stock Market Today: FTSE 100 Futures Edge Up As Traders Brace For BoE",
+        "title": "Stocks mostly down as AI concerns drag on sentiment",
         "summary": "",
-        "url": "https://finance.yahoo.com/markets/world-indices/articles/uk-stock-market-today-ftse-071030765.html",
-        "source": "Simply Wall St.",
-        "published_at": "2026-11-02T07:10:30Z",
-        "fetched_at": "2026-11-02T08:01:37Z",
+        "url": "https://finance.yahoo.com/markets/stocks/articles/stocks-mostly-down-ai-concerns-025549205.html",
+        "source": "AFP",
+        "published_at": "2026-11-03T07:21:32Z",
+        "fetched_at": "2026-11-03T08:01:45Z",
         "ticker": null,
         "source_tier": "aggregator"
       },
       {
-        "title": "USO, UCO Slide As Brent Retreats On US-Iran De-escalation Hopes – But Goldman Reportedly Sees Oil At $105 In December",
+        "title": "Saudi Aramco profits jump 35% despite attacks on oil facilities",
         "summary": "",
-        "url": "https://finance.yahoo.com/energy/articles/uso-uco-slide-brent-retreats-070724268.html",
-        "source": "Stocktwits",
-        "published_at": "2026-11-02T07:07:24Z",
-        "fetched_at": "2026-11-02T08:01:37Z",
+        "url": "https://finance.yahoo.com/energy/articles/saudi-aramco-profits-jump-35-071136247.html",
+        "source": "Euronews",
+        "published_at": "2026-11-03T07:11:36Z",
+        "fetched_at": "2026-11-03T08:01:45Z",
         "ticker": null,
         "source_tier": "aggregator"
       },
       {
-        "title": "What Is The Case For Waiting On Rigetti Computing Stock?",
+        "title": "Dollar drifts on Mideast, midterm risks; Aussie dips after expected RBA hike",
         "summary": "",
-        "url": "https://finance.yahoo.com/markets/stocks/articles/case-waiting-rigetti-computing-stock-070409454.html",
-        "source": "Trefis",
-        "published_at": "2026-11-02T07:04:09Z",
-        "fetched_at": "2026-11-02T08:01:37Z",
+        "url": "https://finance.yahoo.com/markets/currencies/articles/dollar-drifts-mideast-midterm-risks-035756460.html",
+        "source": "Reuters",
+        "published_at": "2026-11-03T06:55:37Z",
+        "fetched_at": "2026-11-03T08:01:45Z",
         "ticker": null,
         "source_tier": "aggregator"
       },
       {
-        "title": "Is CVS Health Stock Worth More Than Its Competitors?",
+        "title": "International Petroleum Corporation Announces Third Quarter 2026 Financial and Operational Results",
         "summary": "",
-        "url": "https://finance.yahoo.com/markets/stocks/articles/cvs-health-stock-worth-more-070404538.html",
-        "source": "Trefis",
-        "published_at": "2026-11-02T07:04:04Z",
-        "fetched_at": "2026-11-02T08:01:37Z",
-        "ticker": null,
-        "source_tier": "aggregator"
-      },
-      {
-        "title": "Why Is Everyone Ignoring Omnicom Stock's High Cash Yield?",
-        "summary": "",
-        "url": "https://finance.yahoo.com/markets/stocks/articles/why-everyone-ignoring-omnicom-stocks-070358565.html",
-        "source": "Trefis",
-        "published_at": "2026-11-02T07:03:58Z",
-        "fetched_at": "2026-11-02T08:01:37Z",
-        "ticker": null,
-        "source_tier": "aggregator"
-      },
-      {
-        "title": "Matador Resources earnings: what to look for from MTDR",
-        "summary": "",
-        "url": "https://finance.yahoo.com/markets/stocks/articles/matador-resources-earnings-look-mtdr-070136470.html",
-        "source": "StockStory",
-        "published_at": "2026-11-02T07:01:36Z",
-        "fetched_at": "2026-11-02T08:01:37Z",
-        "ticker": null,
-        "source_tier": "aggregator"
-      },
-      {
-        "title": "Maarmorilik Project Development Strategy and High-Grade Results from 2026 Exploration Programme",
-        "summary": "",
-        "url": "https://finance.yahoo.com/markets/commodities/articles/maarmorilik-project-development-strategy-high-070000897.html",
+        "url": "https://finance.yahoo.com/energy/articles/international-petroleum-corporation-announces-third-063000640.html",
         "source": "GlobeNewswire",
-        "published_at": "2026-11-02T07:00:00Z",
-        "fetched_at": "2026-11-02T08:01:37Z",
+        "published_at": "2026-11-03T06:30:00Z",
+        "fetched_at": "2026-11-03T08:01:45Z",
+        "ticker": null,
+        "source_tier": "aggregator"
+      },
+      {
+        "title": "Aramco Q3 profit rises more than expected on oil price windfall",
+        "summary": "",
+        "url": "https://finance.yahoo.com/energy/articles/aramco-q3-profit-rises-more-061301506.html",
+        "source": "Investing.com",
+        "published_at": "2026-11-03T06:13:01Z",
+        "fetched_at": "2026-11-03T08:01:45Z",
+        "ticker": null,
+        "source_tier": "aggregator"
+      },
+      {
+        "title": "Asian stocks retreat ahead of US midterms, oil steadies",
+        "summary": "",
+        "url": "https://finance.yahoo.com/markets/world-indices/articles/asian-stocks-retreat-ahead-us-022420502.html",
+        "source": "Reuters",
+        "published_at": "2026-11-03T06:02:50Z",
+        "fetched_at": "2026-11-03T08:01:45Z",
+        "ticker": null,
+        "source_tier": "aggregator"
+      },
+      {
+        "title": "RUBIS: Q3 & 9M Trading update - Another quarter of strong operational performance - 2026 Guidance reaffirmed",
+        "summary": "",
+        "url": "https://finance.yahoo.com/energy/articles/rubis-q3-9m-trading-another-060000144.html",
+        "source": "GlobeNewswire",
+        "published_at": "2026-11-03T06:00:00Z",
+        "fetched_at": "2026-11-03T08:01:45Z",
+        "ticker": null,
+        "source_tier": "aggregator"
+      },
+      {
+        "title": "Australian, Chinese airline stocks jump as oil prices plunge more than 7%",
+        "summary": "",
+        "url": "https://finance.yahoo.com/markets/stocks/articles/australian-chinese-airline-stocks-jump-054914130.html",
+        "source": "Investing.com",
+        "published_at": "2026-11-03T05:49:14Z",
+        "fetched_at": "2026-11-03T08:01:45Z",
+        "ticker": null,
+        "source_tier": "aggregator"
+      },
+      {
+        "title": "Silver One Resources Announces Mobilization of Two Additional Drill Rigs to Accelerate Candelaria Drill Program",
+        "summary": "",
+        "url": "https://finance.yahoo.com/markets/commodities/articles/silver-one-resources-announces-mobilization-051500249.html",
+        "source": "TMX Newsfile",
+        "published_at": "2026-11-03T05:15:00Z",
+        "fetched_at": "2026-11-03T08:01:45Z",
         "ticker": null,
         "source_tier": "aggregator"
       }
@@ -116,7 +116,7 @@
       {
         "source": "Yahoo Finance",
         "status": "ok",
-        "item_count": 49
+        "item_count": 36
       },
       {
         "source": "Federal Reserve",
@@ -127,17 +127,17 @@
   },
   "tickers": {
     "515880.SS": {
-      "status": "empty",
+      "status": "partial_empty",
       "query_type": "ticker",
       "ticker": "515880.SS",
-      "start_date": "2026-11-02",
-      "end_date": "2026-11-02",
-      "fetched_at": "2026-11-02T08:01:40Z",
+      "start_date": "2026-11-03",
+      "end_date": "2026-11-03",
+      "fetched_at": "2026-11-03T08:01:47Z",
       "items": [],
       "source_statuses": [
         {
           "source": "Yahoo Finance",
-          "status": "empty",
+          "status": "failed",
           "item_count": 0
         },
         {
@@ -153,17 +153,17 @@
       ]
     },
     "512480.SS": {
-      "status": "empty",
+      "status": "partial_empty",
       "query_type": "ticker",
       "ticker": "512480.SS",
-      "start_date": "2026-11-02",
-      "end_date": "2026-11-02",
-      "fetched_at": "2026-11-02T08:01:56Z",
+      "start_date": "2026-11-03",
+      "end_date": "2026-11-03",
+      "fetched_at": "2026-11-03T08:01:50Z",
       "items": [],
       "source_statuses": [
         {
           "source": "Yahoo Finance",
-          "status": "empty",
+          "status": "failed",
           "item_count": 0
         },
         {
@@ -181,102 +181,102 @@
   },
   "items": [
     {
-      "title": "Asian stocks mixed as tech sector struggles to rebound from selloff",
+      "title": "Europe stocks set to fall as US-Iran tensions fuel oil rebound",
       "summary": "",
-      "url": "https://finance.yahoo.com/markets/world-indices/articles/asian-stocks-mixed-tech-sector-024236684.html",
-      "source": "AFP",
-      "published_at": "2026-11-02T07:28:31Z",
-      "fetched_at": "2026-11-02T08:01:37Z",
-      "ticker": null,
-      "source_tier": "aggregator"
-    },
-    {
-      "title": "How Has Amazon's Story Changed?",
-      "summary": "",
-      "url": "https://finance.yahoo.com/markets/stocks/articles/amazons-story-changed-072722821.html",
-      "source": "Trefis",
-      "published_at": "2026-11-02T07:27:22Z",
-      "fetched_at": "2026-11-02T08:01:37Z",
-      "ticker": null,
-      "source_tier": "aggregator"
-    },
-    {
-      "title": "Oil prices ease 3% on optimism for Qatari-led talks on ending Iran war",
-      "summary": "",
-      "url": "https://finance.yahoo.com/energy/articles/oil-slips-more-1-talks-231257365.html",
+      "url": "https://finance.yahoo.com/markets/stocks/articles/europe-stocks-set-fall-us-072424748.html",
       "source": "Reuters",
-      "published_at": "2026-11-02T07:20:19Z",
-      "fetched_at": "2026-11-02T08:01:37Z",
+      "published_at": "2026-11-03T07:24:24Z",
+      "fetched_at": "2026-11-03T08:01:45Z",
       "ticker": null,
       "source_tier": "aggregator"
     },
     {
-      "title": "UK Stock Market Today: FTSE 100 Futures Edge Up As Traders Brace For BoE",
+      "title": "Stocks mostly down as AI concerns drag on sentiment",
       "summary": "",
-      "url": "https://finance.yahoo.com/markets/world-indices/articles/uk-stock-market-today-ftse-071030765.html",
-      "source": "Simply Wall St.",
-      "published_at": "2026-11-02T07:10:30Z",
-      "fetched_at": "2026-11-02T08:01:37Z",
+      "url": "https://finance.yahoo.com/markets/stocks/articles/stocks-mostly-down-ai-concerns-025549205.html",
+      "source": "AFP",
+      "published_at": "2026-11-03T07:21:32Z",
+      "fetched_at": "2026-11-03T08:01:45Z",
       "ticker": null,
       "source_tier": "aggregator"
     },
     {
-      "title": "USO, UCO Slide As Brent Retreats On US-Iran De-escalation Hopes – But Goldman Reportedly Sees Oil At $105 In December",
+      "title": "Saudi Aramco profits jump 35% despite attacks on oil facilities",
       "summary": "",
-      "url": "https://finance.yahoo.com/energy/articles/uso-uco-slide-brent-retreats-070724268.html",
-      "source": "Stocktwits",
-      "published_at": "2026-11-02T07:07:24Z",
-      "fetched_at": "2026-11-02T08:01:37Z",
+      "url": "https://finance.yahoo.com/energy/articles/saudi-aramco-profits-jump-35-071136247.html",
+      "source": "Euronews",
+      "published_at": "2026-11-03T07:11:36Z",
+      "fetched_at": "2026-11-03T08:01:45Z",
       "ticker": null,
       "source_tier": "aggregator"
     },
     {
-      "title": "What Is The Case For Waiting On Rigetti Computing Stock?",
+      "title": "Dollar drifts on Mideast, midterm risks; Aussie dips after expected RBA hike",
       "summary": "",
-      "url": "https://finance.yahoo.com/markets/stocks/articles/case-waiting-rigetti-computing-stock-070409454.html",
-      "source": "Trefis",
-      "published_at": "2026-11-02T07:04:09Z",
-      "fetched_at": "2026-11-02T08:01:37Z",
+      "url": "https://finance.yahoo.com/markets/currencies/articles/dollar-drifts-mideast-midterm-risks-035756460.html",
+      "source": "Reuters",
+      "published_at": "2026-11-03T06:55:37Z",
+      "fetched_at": "2026-11-03T08:01:45Z",
       "ticker": null,
       "source_tier": "aggregator"
     },
     {
-      "title": "Is CVS Health Stock Worth More Than Its Competitors?",
+      "title": "International Petroleum Corporation Announces Third Quarter 2026 Financial and Operational Results",
       "summary": "",
-      "url": "https://finance.yahoo.com/markets/stocks/articles/cvs-health-stock-worth-more-070404538.html",
-      "source": "Trefis",
-      "published_at": "2026-11-02T07:04:04Z",
-      "fetched_at": "2026-11-02T08:01:37Z",
-      "ticker": null,
-      "source_tier": "aggregator"
-    },
-    {
-      "title": "Why Is Everyone Ignoring Omnicom Stock's High Cash Yield?",
-      "summary": "",
-      "url": "https://finance.yahoo.com/markets/stocks/articles/why-everyone-ignoring-omnicom-stocks-070358565.html",
-      "source": "Trefis",
-      "published_at": "2026-11-02T07:03:58Z",
-      "fetched_at": "2026-11-02T08:01:37Z",
-      "ticker": null,
-      "source_tier": "aggregator"
-    },
-    {
-      "title": "Matador Resources earnings: what to look for from MTDR",
-      "summary": "",
-      "url": "https://finance.yahoo.com/markets/stocks/articles/matador-resources-earnings-look-mtdr-070136470.html",
-      "source": "StockStory",
-      "published_at": "2026-11-02T07:01:36Z",
-      "fetched_at": "2026-11-02T08:01:37Z",
-      "ticker": null,
-      "source_tier": "aggregator"
-    },
-    {
-      "title": "Maarmorilik Project Development Strategy and High-Grade Results from 2026 Exploration Programme",
-      "summary": "",
-      "url": "https://finance.yahoo.com/markets/commodities/articles/maarmorilik-project-development-strategy-high-070000897.html",
+      "url": "https://finance.yahoo.com/energy/articles/international-petroleum-corporation-announces-third-063000640.html",
       "source": "GlobeNewswire",
-      "published_at": "2026-11-02T07:00:00Z",
-      "fetched_at": "2026-11-02T08:01:37Z",
+      "published_at": "2026-11-03T06:30:00Z",
+      "fetched_at": "2026-11-03T08:01:45Z",
+      "ticker": null,
+      "source_tier": "aggregator"
+    },
+    {
+      "title": "Aramco Q3 profit rises more than expected on oil price windfall",
+      "summary": "",
+      "url": "https://finance.yahoo.com/energy/articles/aramco-q3-profit-rises-more-061301506.html",
+      "source": "Investing.com",
+      "published_at": "2026-11-03T06:13:01Z",
+      "fetched_at": "2026-11-03T08:01:45Z",
+      "ticker": null,
+      "source_tier": "aggregator"
+    },
+    {
+      "title": "Asian stocks retreat ahead of US midterms, oil steadies",
+      "summary": "",
+      "url": "https://finance.yahoo.com/markets/world-indices/articles/asian-stocks-retreat-ahead-us-022420502.html",
+      "source": "Reuters",
+      "published_at": "2026-11-03T06:02:50Z",
+      "fetched_at": "2026-11-03T08:01:45Z",
+      "ticker": null,
+      "source_tier": "aggregator"
+    },
+    {
+      "title": "RUBIS: Q3 & 9M Trading update - Another quarter of strong operational performance - 2026 Guidance reaffirmed",
+      "summary": "",
+      "url": "https://finance.yahoo.com/energy/articles/rubis-q3-9m-trading-another-060000144.html",
+      "source": "GlobeNewswire",
+      "published_at": "2026-11-03T06:00:00Z",
+      "fetched_at": "2026-11-03T08:01:45Z",
+      "ticker": null,
+      "source_tier": "aggregator"
+    },
+    {
+      "title": "Australian, Chinese airline stocks jump as oil prices plunge more than 7%",
+      "summary": "",
+      "url": "https://finance.yahoo.com/markets/stocks/articles/australian-chinese-airline-stocks-jump-054914130.html",
+      "source": "Investing.com",
+      "published_at": "2026-11-03T05:49:14Z",
+      "fetched_at": "2026-11-03T08:01:45Z",
+      "ticker": null,
+      "source_tier": "aggregator"
+    },
+    {
+      "title": "Silver One Resources Announces Mobilization of Two Additional Drill Rigs to Accelerate Candelaria Drill Program",
+      "summary": "",
+      "url": "https://finance.yahoo.com/markets/commodities/articles/silver-one-resources-announces-mobilization-051500249.html",
+      "source": "TMX Newsfile",
+      "published_at": "2026-11-03T05:15:00Z",
+      "fetched_at": "2026-11-03T08:01:45Z",
       "ticker": null,
       "source_tier": "aggregator"
     }
