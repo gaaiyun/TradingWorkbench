@@ -1,5 +1,60 @@
 [
   {
+    "trade_date": "2026-11-04",
+    "generated_at": "2026-11-04T16:01:42+08:00",
+    "provider": "openai_compatible",
+    "results": [
+      {
+        "ticker": "515880.SS",
+        "rating": null,
+        "report": null,
+        "files": {},
+        "error": true,
+        "analysis_status": "data_validation_failed",
+        "audit_status": "invalidated",
+        "evidence_publish": {
+          "published": true,
+          "status": 201
+        }
+      },
+      {
+        "ticker": "512480.SS",
+        "rating": null,
+        "report": null,
+        "files": {},
+        "error": true,
+        "analysis_status": null,
+        "audit_status": null,
+        "evidence_publish": null
+      }
+    ],
+    "request": {
+      "requestId": null,
+      "analysts": [
+        "market",
+        "news",
+        "fundamentals"
+      ],
+      "researchDepth": "standard",
+      "kind": "monitor"
+    },
+    "run": {
+      "id": "41796270457",
+      "attempt": "1",
+      "workflow": "daily-analysis",
+      "url": "https://github.com/gaaiyun/TradingWorkbench/actions/runs/41796270457"
+    },
+    "identity": {
+      "scope": "profile",
+      "kind": "monitor",
+      "runId": "41796270457",
+      "profileId": "cn-semi-comms",
+      "requestId": null,
+      "slotId": "slot-38bf2892b3761a3501fd2cafe39c52608727fb682f5780d7416117a7703aa20b",
+      "scheduledFor": "2026-11-04T07:17:15.000Z"
+    }
+  },
+  {
     "trade_date": "2026-11-03",
     "generated_at": "2026-11-03T16:01:44+08:00",
     "provider": "openai_compatible",
@@ -4203,48 +4258,6 @@
       "scope": "legacy",
       "kind": "legacy",
       "runId": "31740098198",
-      "profileId": null,
-      "requestId": null,
-      "slotId": null,
-      "scheduledFor": null
-    }
-  },
-  {
-    "trade_date": "2026-08-13",
-    "generated_at": "2026-08-14T00:53:21+08:00",
-    "provider": "openai_compatible",
-    "results": [
-      {
-        "ticker": "512480.SS",
-        "rating": null,
-        "report": null,
-        "files": {},
-        "error": true,
-        "analysis_status": null,
-        "audit_status": null,
-        "evidence_publish": null
-      }
-    ],
-    "request": {
-      "requestId": null,
-      "analysts": [
-        "market",
-        "news",
-        "fundamentals"
-      ],
-      "researchDepth": "standard",
-      "kind": "legacy"
-    },
-    "run": {
-      "id": "31722886612",
-      "attempt": "1",
-      "workflow": "daily-analysis",
-      "url": "https://github.com/gaaiyun/TradingWorkbench/actions/runs/31722886612"
-    },
-    "identity": {
-      "scope": "legacy",
-      "kind": "legacy",
-      "runId": "31722886612",
       "profileId": null,
       "requestId": null,
       "slotId": null,

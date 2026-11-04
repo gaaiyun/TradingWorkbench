@@ -1,113 +1,113 @@
 {
   "version": 1,
-  "status": "partial",
-  "generated_at": "2026-11-03T16:01:44+08:00",
-  "trade_date": "2026-11-03",
+  "status": "ok",
+  "generated_at": "2026-11-04T16:01:42+08:00",
+  "trade_date": "2026-11-04",
   "global": {
     "status": "ok",
     "query_type": "global",
     "ticker": null,
-    "start_date": "2026-10-27",
-    "end_date": "2026-11-03",
-    "fetched_at": "2026-11-03T08:01:45Z",
+    "start_date": "2026-10-28",
+    "end_date": "2026-11-04",
+    "fetched_at": "2026-11-04T08:01:43Z",
     "items": [
       {
-        "title": "Europe stocks set to fall as US-Iran tensions fuel oil rebound",
+        "title": "Up 26% in October as Boeing stumbles: What’s powering this defense contractor?",
         "summary": "",
-        "url": "https://finance.yahoo.com/markets/stocks/articles/europe-stocks-set-fall-us-072424748.html",
-        "source": "Reuters",
-        "published_at": "2026-11-03T07:24:24Z",
-        "fetched_at": "2026-11-03T08:01:45Z",
-        "ticker": null,
-        "source_tier": "aggregator"
-      },
-      {
-        "title": "Stocks mostly down as AI concerns drag on sentiment",
-        "summary": "",
-        "url": "https://finance.yahoo.com/markets/stocks/articles/stocks-mostly-down-ai-concerns-025549205.html",
-        "source": "AFP",
-        "published_at": "2026-11-03T07:21:32Z",
-        "fetched_at": "2026-11-03T08:01:45Z",
-        "ticker": null,
-        "source_tier": "aggregator"
-      },
-      {
-        "title": "Saudi Aramco profits jump 35% despite attacks on oil facilities",
-        "summary": "",
-        "url": "https://finance.yahoo.com/energy/articles/saudi-aramco-profits-jump-35-071136247.html",
-        "source": "Euronews",
-        "published_at": "2026-11-03T07:11:36Z",
-        "fetched_at": "2026-11-03T08:01:45Z",
-        "ticker": null,
-        "source_tier": "aggregator"
-      },
-      {
-        "title": "Dollar drifts on Mideast, midterm risks; Aussie dips after expected RBA hike",
-        "summary": "",
-        "url": "https://finance.yahoo.com/markets/currencies/articles/dollar-drifts-mideast-midterm-risks-035756460.html",
-        "source": "Reuters",
-        "published_at": "2026-11-03T06:55:37Z",
-        "fetched_at": "2026-11-03T08:01:45Z",
-        "ticker": null,
-        "source_tier": "aggregator"
-      },
-      {
-        "title": "International Petroleum Corporation Announces Third Quarter 2026 Financial and Operational Results",
-        "summary": "",
-        "url": "https://finance.yahoo.com/energy/articles/international-petroleum-corporation-announces-third-063000640.html",
-        "source": "GlobeNewswire",
-        "published_at": "2026-11-03T06:30:00Z",
-        "fetched_at": "2026-11-03T08:01:45Z",
-        "ticker": null,
-        "source_tier": "aggregator"
-      },
-      {
-        "title": "Aramco Q3 profit rises more than expected on oil price windfall",
-        "summary": "",
-        "url": "https://finance.yahoo.com/energy/articles/aramco-q3-profit-rises-more-061301506.html",
+        "url": "https://finance.yahoo.com/markets/stocks/articles/26-october-boeing-stumbles-powering-075018614.html",
         "source": "Investing.com",
-        "published_at": "2026-11-03T06:13:01Z",
-        "fetched_at": "2026-11-03T08:01:45Z",
+        "published_at": "2026-11-04T07:50:18Z",
+        "fetched_at": "2026-11-04T08:01:43Z",
         "ticker": null,
         "source_tier": "aggregator"
       },
       {
-        "title": "Asian stocks retreat ahead of US midterms, oil steadies",
+        "title": "Oil rises on Iran war uncertainty after Trump's Republicans are routed in midterms",
         "summary": "",
-        "url": "https://finance.yahoo.com/markets/world-indices/articles/asian-stocks-retreat-ahead-us-022420502.html",
+        "url": "https://finance.yahoo.com/news/oil-rises-iran-war-uncertainty-051949081.html",
         "source": "Reuters",
-        "published_at": "2026-11-03T06:02:50Z",
-        "fetched_at": "2026-11-03T08:01:45Z",
+        "published_at": "2026-11-04T07:38:10Z",
+        "fetched_at": "2026-11-04T08:01:43Z",
         "ticker": null,
         "source_tier": "aggregator"
       },
       {
-        "title": "RUBIS: Q3 & 9M Trading update - Another quarter of strong operational performance - 2026 Guidance reaffirmed",
+        "title": "S-Oil Corp (XKRX:010950) (Q3 2026) Earnings Call Highlights: Record Lube Profit and Surging ...",
         "summary": "",
-        "url": "https://finance.yahoo.com/energy/articles/rubis-q3-9m-trading-another-060000144.html",
-        "source": "GlobeNewswire",
-        "published_at": "2026-11-03T06:00:00Z",
-        "fetched_at": "2026-11-03T08:01:45Z",
+        "url": "https://finance.yahoo.com/energy/articles/oil-corp-xkrx-010950-q3-070709109.html",
+        "source": "GuruFocus.com",
+        "published_at": "2026-11-04T07:07:09Z",
+        "fetched_at": "2026-11-04T08:01:43Z",
         "ticker": null,
         "source_tier": "aggregator"
       },
       {
-        "title": "Australian, Chinese airline stocks jump as oil prices plunge more than 7%",
+        "title": "Not IonQ. Not Rigetti. This Quantum Computing Stock Could Be the Next to Soar.",
         "summary": "",
-        "url": "https://finance.yahoo.com/markets/stocks/articles/australian-chinese-airline-stocks-jump-054914130.html",
-        "source": "Investing.com",
-        "published_at": "2026-11-03T05:49:14Z",
-        "fetched_at": "2026-11-03T08:01:45Z",
+        "url": "https://finance.yahoo.com/markets/stocks/articles/not-ionq-not-rigetti-quantum-062000666.html",
+        "source": "Motley Fool",
+        "published_at": "2026-11-04T06:20:00Z",
+        "fetched_at": "2026-11-04T08:01:43Z",
         "ticker": null,
         "source_tier": "aggregator"
       },
       {
-        "title": "Silver One Resources Announces Mobilization of Two Additional Drill Rigs to Accelerate Candelaria Drill Program",
+        "title": "What Investors Got Wrong About Americas Gold And Silver Before The Drop",
         "summary": "",
-        "url": "https://finance.yahoo.com/markets/commodities/articles/silver-one-resources-announces-mobilization-051500249.html",
-        "source": "TMX Newsfile",
-        "published_at": "2026-11-03T05:15:00Z",
-        "fetched_at": "2026-11-03T08:01:45Z",
+        "url": "https://finance.yahoo.com/markets/commodities/articles/investors-got-wrong-americas-gold-061845027.html",
+        "source": "Simply Wall St.",
+        "published_at": "2026-11-04T06:18:45Z",
+        "fetched_at": "2026-11-04T08:01:43Z",
+        "ticker": null,
+        "source_tier": "aggregator"
+      },
+      {
+        "title": "Oil Prices Rebound as Middle East Supply Fears Return",
+        "summary": "",
+        "url": "https://finance.yahoo.com/energy/articles/oil-prices-rebound-middle-east-061500190.html",
+        "source": "Oilprice.com",
+        "published_at": "2026-11-04T06:15:00Z",
+        "fetched_at": "2026-11-04T08:01:43Z",
+        "ticker": null,
+        "source_tier": "aggregator"
+      },
+      {
+        "title": "Pampa Energia Q3 Earnings Call Highlights",
+        "summary": "",
+        "url": "https://finance.yahoo.com/energy/articles/pampa-energia-q3-earnings-call-061414279.html",
+        "source": "MarketBeat",
+        "published_at": "2026-11-04T06:14:14Z",
+        "fetched_at": "2026-11-04T08:01:43Z",
+        "ticker": null,
+        "source_tier": "aggregator"
+      },
+      {
+        "title": "Acuity Analytics appoints Jon O'Donnell as Chief Executive to lead next phase of AI-enabled expansion",
+        "summary": "",
+        "url": "https://finance.yahoo.com/technology/ai/articles/acuity-analytics-appoints-jon-odonnell-055700701.html",
+        "source": "PR Newswire",
+        "published_at": "2026-11-04T05:57:00Z",
+        "fetched_at": "2026-11-04T08:01:43Z",
+        "ticker": null,
+        "source_tier": "aggregator"
+      },
+      {
+        "title": "Learn Why The Bull Case For Viper Energy Stock Could Change Following Earnings Beat",
+        "summary": "",
+        "url": "https://finance.yahoo.com/markets/stocks/articles/learn-why-bull-case-viper-051330975.html",
+        "source": "Simply Wall St.",
+        "published_at": "2026-11-04T05:13:30Z",
+        "fetched_at": "2026-11-04T08:01:43Z",
+        "ticker": null,
+        "source_tier": "aggregator"
+      },
+      {
+        "title": "Should Earnings Beat Require Action From Procore Technologies (PCOR) Investors?",
+        "summary": "",
+        "url": "https://finance.yahoo.com/markets/stocks/articles/earnings-beat-require-action-procore-051235879.html",
+        "source": "Simply Wall St.",
+        "published_at": "2026-11-04T05:12:35Z",
+        "fetched_at": "2026-11-04T08:01:43Z",
         "ticker": null,
         "source_tier": "aggregator"
       }
@@ -116,7 +116,7 @@
       {
         "source": "Yahoo Finance",
         "status": "ok",
-        "item_count": 36
+        "item_count": 49
       },
       {
         "source": "Federal Reserve",
@@ -127,17 +127,17 @@
   },
   "tickers": {
     "515880.SS": {
-      "status": "partial_empty",
+      "status": "empty",
       "query_type": "ticker",
       "ticker": "515880.SS",
-      "start_date": "2026-11-03",
-      "end_date": "2026-11-03",
-      "fetched_at": "2026-11-03T08:01:47Z",
+      "start_date": "2026-11-04",
+      "end_date": "2026-11-04",
+      "fetched_at": "2026-11-04T08:01:45Z",
       "items": [],
       "source_statuses": [
         {
           "source": "Yahoo Finance",
-          "status": "failed",
+          "status": "empty",
           "item_count": 0
         },
         {
@@ -153,17 +153,17 @@
       ]
     },
     "512480.SS": {
-      "status": "partial_empty",
+      "status": "empty",
       "query_type": "ticker",
       "ticker": "512480.SS",
-      "start_date": "2026-11-03",
-      "end_date": "2026-11-03",
-      "fetched_at": "2026-11-03T08:01:50Z",
+      "start_date": "2026-11-04",
+      "end_date": "2026-11-04",
+      "fetched_at": "2026-11-04T08:01:48Z",
       "items": [],
       "source_statuses": [
         {
           "source": "Yahoo Finance",
-          "status": "failed",
+          "status": "empty",
           "item_count": 0
         },
         {
@@ -181,102 +181,102 @@
   },
   "items": [
     {
-      "title": "Europe stocks set to fall as US-Iran tensions fuel oil rebound",
+      "title": "Up 26% in October as Boeing stumbles: What’s powering this defense contractor?",
       "summary": "",
-      "url": "https://finance.yahoo.com/markets/stocks/articles/europe-stocks-set-fall-us-072424748.html",
-      "source": "Reuters",
-      "published_at": "2026-11-03T07:24:24Z",
-      "fetched_at": "2026-11-03T08:01:45Z",
-      "ticker": null,
-      "source_tier": "aggregator"
-    },
-    {
-      "title": "Stocks mostly down as AI concerns drag on sentiment",
-      "summary": "",
-      "url": "https://finance.yahoo.com/markets/stocks/articles/stocks-mostly-down-ai-concerns-025549205.html",
-      "source": "AFP",
-      "published_at": "2026-11-03T07:21:32Z",
-      "fetched_at": "2026-11-03T08:01:45Z",
-      "ticker": null,
-      "source_tier": "aggregator"
-    },
-    {
-      "title": "Saudi Aramco profits jump 35% despite attacks on oil facilities",
-      "summary": "",
-      "url": "https://finance.yahoo.com/energy/articles/saudi-aramco-profits-jump-35-071136247.html",
-      "source": "Euronews",
-      "published_at": "2026-11-03T07:11:36Z",
-      "fetched_at": "2026-11-03T08:01:45Z",
-      "ticker": null,
-      "source_tier": "aggregator"
-    },
-    {
-      "title": "Dollar drifts on Mideast, midterm risks; Aussie dips after expected RBA hike",
-      "summary": "",
-      "url": "https://finance.yahoo.com/markets/currencies/articles/dollar-drifts-mideast-midterm-risks-035756460.html",
-      "source": "Reuters",
-      "published_at": "2026-11-03T06:55:37Z",
-      "fetched_at": "2026-11-03T08:01:45Z",
-      "ticker": null,
-      "source_tier": "aggregator"
-    },
-    {
-      "title": "International Petroleum Corporation Announces Third Quarter 2026 Financial and Operational Results",
-      "summary": "",
-      "url": "https://finance.yahoo.com/energy/articles/international-petroleum-corporation-announces-third-063000640.html",
-      "source": "GlobeNewswire",
-      "published_at": "2026-11-03T06:30:00Z",
-      "fetched_at": "2026-11-03T08:01:45Z",
-      "ticker": null,
-      "source_tier": "aggregator"
-    },
-    {
-      "title": "Aramco Q3 profit rises more than expected on oil price windfall",
-      "summary": "",
-      "url": "https://finance.yahoo.com/energy/articles/aramco-q3-profit-rises-more-061301506.html",
+      "url": "https://finance.yahoo.com/markets/stocks/articles/26-october-boeing-stumbles-powering-075018614.html",
       "source": "Investing.com",
-      "published_at": "2026-11-03T06:13:01Z",
-      "fetched_at": "2026-11-03T08:01:45Z",
+      "published_at": "2026-11-04T07:50:18Z",
+      "fetched_at": "2026-11-04T08:01:43Z",
       "ticker": null,
       "source_tier": "aggregator"
     },
     {
-      "title": "Asian stocks retreat ahead of US midterms, oil steadies",
+      "title": "Oil rises on Iran war uncertainty after Trump's Republicans are routed in midterms",
       "summary": "",
-      "url": "https://finance.yahoo.com/markets/world-indices/articles/asian-stocks-retreat-ahead-us-022420502.html",
+      "url": "https://finance.yahoo.com/news/oil-rises-iran-war-uncertainty-051949081.html",
       "source": "Reuters",
-      "published_at": "2026-11-03T06:02:50Z",
-      "fetched_at": "2026-11-03T08:01:45Z",
+      "published_at": "2026-11-04T07:38:10Z",
+      "fetched_at": "2026-11-04T08:01:43Z",
       "ticker": null,
       "source_tier": "aggregator"
     },
     {
-      "title": "RUBIS: Q3 & 9M Trading update - Another quarter of strong operational performance - 2026 Guidance reaffirmed",
+      "title": "S-Oil Corp (XKRX:010950) (Q3 2026) Earnings Call Highlights: Record Lube Profit and Surging ...",
       "summary": "",
-      "url": "https://finance.yahoo.com/energy/articles/rubis-q3-9m-trading-another-060000144.html",
-      "source": "GlobeNewswire",
-      "published_at": "2026-11-03T06:00:00Z",
-      "fetched_at": "2026-11-03T08:01:45Z",
+      "url": "https://finance.yahoo.com/energy/articles/oil-corp-xkrx-010950-q3-070709109.html",
+      "source": "GuruFocus.com",
+      "published_at": "2026-11-04T07:07:09Z",
+      "fetched_at": "2026-11-04T08:01:43Z",
       "ticker": null,
       "source_tier": "aggregator"
     },
     {
-      "title": "Australian, Chinese airline stocks jump as oil prices plunge more than 7%",
+      "title": "Not IonQ. Not Rigetti. This Quantum Computing Stock Could Be the Next to Soar.",
       "summary": "",
-      "url": "https://finance.yahoo.com/markets/stocks/articles/australian-chinese-airline-stocks-jump-054914130.html",
-      "source": "Investing.com",
-      "published_at": "2026-11-03T05:49:14Z",
-      "fetched_at": "2026-11-03T08:01:45Z",
+      "url": "https://finance.yahoo.com/markets/stocks/articles/not-ionq-not-rigetti-quantum-062000666.html",
+      "source": "Motley Fool",
+      "published_at": "2026-11-04T06:20:00Z",
+      "fetched_at": "2026-11-04T08:01:43Z",
       "ticker": null,
       "source_tier": "aggregator"
     },
     {
-      "title": "Silver One Resources Announces Mobilization of Two Additional Drill Rigs to Accelerate Candelaria Drill Program",
+      "title": "What Investors Got Wrong About Americas Gold And Silver Before The Drop",
       "summary": "",
-      "url": "https://finance.yahoo.com/markets/commodities/articles/silver-one-resources-announces-mobilization-051500249.html",
-      "source": "TMX Newsfile",
-      "published_at": "2026-11-03T05:15:00Z",
-      "fetched_at": "2026-11-03T08:01:45Z",
+      "url": "https://finance.yahoo.com/markets/commodities/articles/investors-got-wrong-americas-gold-061845027.html",
+      "source": "Simply Wall St.",
+      "published_at": "2026-11-04T06:18:45Z",
+      "fetched_at": "2026-11-04T08:01:43Z",
+      "ticker": null,
+      "source_tier": "aggregator"
+    },
+    {
+      "title": "Oil Prices Rebound as Middle East Supply Fears Return",
+      "summary": "",
+      "url": "https://finance.yahoo.com/energy/articles/oil-prices-rebound-middle-east-061500190.html",
+      "source": "Oilprice.com",
+      "published_at": "2026-11-04T06:15:00Z",
+      "fetched_at": "2026-11-04T08:01:43Z",
+      "ticker": null,
+      "source_tier": "aggregator"
+    },
+    {
+      "title": "Pampa Energia Q3 Earnings Call Highlights",
+      "summary": "",
+      "url": "https://finance.yahoo.com/energy/articles/pampa-energia-q3-earnings-call-061414279.html",
+      "source": "MarketBeat",
+      "published_at": "2026-11-04T06:14:14Z",
+      "fetched_at": "2026-11-04T08:01:43Z",
+      "ticker": null,
+      "source_tier": "aggregator"
+    },
+    {
+      "title": "Acuity Analytics appoints Jon O'Donnell as Chief Executive to lead next phase of AI-enabled expansion",
+      "summary": "",
+      "url": "https://finance.yahoo.com/technology/ai/articles/acuity-analytics-appoints-jon-odonnell-055700701.html",
+      "source": "PR Newswire",
+      "published_at": "2026-11-04T05:57:00Z",
+      "fetched_at": "2026-11-04T08:01:43Z",
+      "ticker": null,
+      "source_tier": "aggregator"
+    },
+    {
+      "title": "Learn Why The Bull Case For Viper Energy Stock Could Change Following Earnings Beat",
+      "summary": "",
+      "url": "https://finance.yahoo.com/markets/stocks/articles/learn-why-bull-case-viper-051330975.html",
+      "source": "Simply Wall St.",
+      "published_at": "2026-11-04T05:13:30Z",
+      "fetched_at": "2026-11-04T08:01:43Z",
+      "ticker": null,
+      "source_tier": "aggregator"
+    },
+    {
+      "title": "Should Earnings Beat Require Action From Procore Technologies (PCOR) Investors?",
+      "summary": "",
+      "url": "https://finance.yahoo.com/markets/stocks/articles/earnings-beat-require-action-procore-051235879.html",
+      "source": "Simply Wall St.",
+      "published_at": "2026-11-04T05:12:35Z",
+      "fetched_at": "2026-11-04T08:01:43Z",
       "ticker": null,
       "source_tier": "aggregator"
     }
