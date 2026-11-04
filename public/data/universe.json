@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "generatedAt": "2026-11-03T18:24:31.937Z",
+  "generatedAt": "2026-11-04T18:36:39.079Z",
   "status": "degraded",
   "coverage": {
     "policy": "current-listed-best-effort-plus-configured-core",
@@ -16,13 +16,13 @@
       "id": "eastmoney-clist",
       "role": "CN current-listed discovery",
       "quality": "best_effort",
-      "asOf": "2026-11-03T18:24:31.937Z"
+      "asOf": "2026-11-04T18:36:39.079Z"
     },
     {
       "id": "workbench-settings",
       "role": "configured HK/US/CN core instruments",
       "quality": "declared",
-      "asOf": "2026-11-03T18:24:31.937Z"
+      "asOf": "2026-11-04T18:36:39.079Z"
     }
   ],
   "instruments": [
@@ -5330,7 +5330,7 @@
     },
     {
       "symbol": "000972.SZ",
-      "name": "中基健康",
+      "name": "*ST中基",
       "market": "CN",
       "exchange": "SZ",
       "instrumentType": "stock",
@@ -6716,7 +6716,7 @@
     },
     {
       "symbol": "001381.SZ",
-      "name": "N皇冠",
+      "name": "C皇冠",
       "market": "CN",
       "exchange": "SZ",
       "instrumentType": "stock",
@@ -35921,7 +35921,7 @@
     },
     {
       "symbol": "600186.SS",
-      "name": "莲花控股",
+      "name": "XD莲花控",
       "market": "CN",
       "exchange": "SS",
       "instrumentType": "stock",
@@ -53752,7 +53752,7 @@
     },
     {
       "symbol": "605179.SS",
-      "name": "XD一鸣食",
+      "name": "一鸣食品",
       "market": "CN",
       "exchange": "SS",
       "instrumentType": "stock",
@@ -54038,7 +54038,7 @@
     },
     {
       "symbol": "605300.SS",
-      "name": "XD佳禾食",
+      "name": "佳禾食品",
       "market": "CN",
       "exchange": "SS",
       "instrumentType": "stock",
@@ -55864,7 +55864,7 @@
     },
     {
       "symbol": "688151.SS",
-      "name": "华强科技",
+      "name": "XD华强科",
       "market": "CN",
       "exchange": "SS",
       "instrumentType": "stock",
@@ -62007,7 +62007,7 @@
       "exchange": "BJ",
       "instrumentType": "stock",
       "industry": "自动化设备",
-      "listDate": null,
+      "listDate": "2026-11-06",
       "source": "eastmoney-clist",
       "coverage": "current_listed_best_effort"
     },
@@ -63414,7 +63414,7 @@
       "market": "CN",
       "exchange": "BJ",
       "instrumentType": "stock",
-      "industry": "-",
+      "industry": "饮料乳品",
       "listDate": null,
       "source": "eastmoney-clist",
       "coverage": "current_listed_best_effort"
@@ -64543,7 +64543,7 @@
     },
     {
       "symbol": "920726.BJ",
-      "name": "朱老六",
+      "name": "XD朱老六",
       "market": "CN",
       "exchange": "BJ",
       "instrumentType": "stock",
