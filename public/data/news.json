@@ -1,113 +1,113 @@
 {
   "version": 1,
   "status": "ok",
-  "generated_at": "2026-11-06T16:01:38+08:00",
-  "trade_date": "2026-11-06",
+  "generated_at": "2026-11-09T16:01:43+08:00",
+  "trade_date": "2026-11-09",
   "global": {
     "status": "ok",
     "query_type": "global",
     "ticker": null,
-    "start_date": "2026-10-30",
-    "end_date": "2026-11-06",
-    "fetched_at": "2026-11-06T08:01:39Z",
+    "start_date": "2026-11-02",
+    "end_date": "2026-11-09",
+    "fetched_at": "2026-11-09T08:01:44Z",
     "items": [
       {
-        "title": "Valeura Energy Eyes Transformational Deal With $700 Million in Liquidity",
+        "title": "TTWO Posts Its Best Week In 5 Months As Investors Expect Bumper Forecasts Ahead Of GTA VI Launch",
         "summary": "",
-        "url": "https://finance.yahoo.com/energy/articles/valeura-energy-eyes-transformational-deal-071431105.html",
-        "source": "MarketBeat",
-        "published_at": "2026-11-06T07:14:31Z",
-        "fetched_at": "2026-11-06T08:01:39Z",
+        "url": "https://finance.yahoo.com/markets/stocks/articles/ttwo-posts-best-week-5-073032817.html",
+        "source": "Stocktwits",
+        "published_at": "2026-11-09T07:30:32Z",
+        "fetched_at": "2026-11-09T08:01:44Z",
         "ticker": null,
         "source_tier": "aggregator"
       },
       {
-        "title": "Elite Canadian Energy Stocks To Own In November 2026",
+        "title": "APA Corp (APA) (Q3 2026) Earnings Call Highlights: $699 Million Free Cash Flow, Raised Outlook ...",
         "summary": "",
-        "url": "https://finance.yahoo.com/energy/articles/elite-canadian-energy-stocks-own-071103890.html",
-        "source": "Simply Wall St.",
-        "published_at": "2026-11-06T07:11:03Z",
-        "fetched_at": "2026-11-06T08:01:39Z",
-        "ticker": null,
-        "source_tier": "aggregator"
-      },
-      {
-        "title": "Innovation Drives Quality and Opens New Horizons: Sinochem Holdings Strengthens Global Partnerships and Showcases Innovation at the 9th CIIE",
-        "summary": "",
-        "url": "https://finance.yahoo.com/technology/articles/innovation-drives-quality-opens-horizons-062900680.html",
-        "source": "GlobeNewswire",
-        "published_at": "2026-11-06T06:29:00Z",
-        "fetched_at": "2026-11-06T08:01:39Z",
-        "ticker": null,
-        "source_tier": "aggregator"
-      },
-      {
-        "title": "Oil Prices Head for 12% Weekly Loss Despite Fresh Tanker Attacks",
-        "summary": "",
-        "url": "https://finance.yahoo.com/energy/articles/oil-prices-head-12-weekly-060500517.html",
-        "source": "Oilprice.com",
-        "published_at": "2026-11-06T06:05:00Z",
-        "fetched_at": "2026-11-06T08:01:39Z",
-        "ticker": null,
-        "source_tier": "aggregator"
-      },
-      {
-        "title": "Stock Market: Will S&P 500 Open Up or Down Today?",
-        "summary": "",
-        "url": "https://finance.yahoo.com/markets/stocks/articles/stock-market-p-500-open-055608096.html",
-        "source": "Benzinga Prediction Markets",
-        "published_at": "2026-11-06T05:56:08Z",
-        "fetched_at": "2026-11-06T08:01:39Z",
-        "ticker": null,
-        "source_tier": "aggregator"
-      },
-      {
-        "title": "Oil set for sharp weekly drop but Middle East supply concerns provide floor",
-        "summary": "",
-        "url": "https://finance.yahoo.com/energy/articles/oil-set-sharp-weekly-drop-052924519.html",
-        "source": "Reuters",
-        "published_at": "2026-11-06T05:29:24Z",
-        "fetched_at": "2026-11-06T08:01:39Z",
-        "ticker": null,
-        "source_tier": "aggregator"
-      },
-      {
-        "title": "Markets fret over growth and inflation despite easing oil prices",
-        "summary": "",
-        "url": "https://finance.yahoo.com/economy/articles/markets-fret-over-growth-inflation-050856510.html",
-        "source": "Reuters",
-        "published_at": "2026-11-06T05:23:43Z",
-        "fetched_at": "2026-11-06T08:01:39Z",
-        "ticker": null,
-        "source_tier": "aggregator"
-      },
-      {
-        "title": "First Majestic Silver Corp (AG) (Q3 2026) Earnings Call Highlights: Record Revenue, Robust ...",
-        "summary": "",
-        "url": "https://finance.yahoo.com/markets/commodities/articles/first-majestic-silver-corp-ag-051815505.html",
+        "url": "https://finance.yahoo.com/energy/articles/apa-corp-apa-q3-2026-070301873.html",
         "source": "GuruFocus.com",
-        "published_at": "2026-11-06T05:18:15Z",
-        "fetched_at": "2026-11-06T08:01:39Z",
+        "published_at": "2026-11-09T07:03:01Z",
+        "fetched_at": "2026-11-09T08:01:44Z",
         "ticker": null,
         "source_tier": "aggregator"
       },
       {
-        "title": "PRIO SA (PTRRY) (Q3 2026) Earnings Call Highlights: Record Production and Profit as PRIO SA ...",
+        "title": "The Reorientation of China's Sway Over Commodities",
         "summary": "",
-        "url": "https://finance.yahoo.com/markets/stocks/articles/prio-sa-ptrry-q3-2026-051649775.html",
-        "source": "GuruFocus.com",
-        "published_at": "2026-11-06T05:16:49Z",
-        "fetched_at": "2026-11-06T08:01:39Z",
+        "url": "https://finance.yahoo.com/markets/commodities/articles/reorientation-chinas-sway-over-commodities-070000326.html",
+        "source": "CME Group",
+        "published_at": "2026-11-09T07:00:00Z",
+        "fetched_at": "2026-11-09T08:01:44Z",
         "ticker": null,
         "source_tier": "aggregator"
       },
       {
-        "title": "3 Dividend Stocks To Watch With Yields Over 5%",
+        "title": "Strathcona to acquire Greenfire Resources in $2 bln deal",
         "summary": "",
-        "url": "https://finance.yahoo.com/markets/stocks/articles/3-dividend-stocks-watch-yields-051536696.html",
-        "source": "Simply Wall St.",
-        "published_at": "2026-11-06T05:15:36Z",
-        "fetched_at": "2026-11-06T08:01:39Z",
+        "url": "https://finance.yahoo.com/energy/articles/strathcona-acquire-greenfire-resources-2-061857554.html",
+        "source": "Investing.com",
+        "published_at": "2026-11-09T06:18:57Z",
+        "fetched_at": "2026-11-09T08:01:44Z",
+        "ticker": null,
+        "source_tier": "aggregator"
+      },
+      {
+        "title": "5 revealing analyst questions from Texas Pacific Land’s Q3 2026 earnings call",
+        "summary": "",
+        "url": "https://finance.yahoo.com/markets/stocks/articles/5-revealing-analyst-questions-texas-054936316.html",
+        "source": "StockStory",
+        "published_at": "2026-11-09T05:49:36Z",
+        "fetched_at": "2026-11-09T08:01:44Z",
+        "ticker": null,
+        "source_tier": "aggregator"
+      },
+      {
+        "title": "Bitcoin Price Stalls as Gold Surges: Is a Major Crypto Catch-Up Rally Coming?",
+        "summary": "",
+        "url": "https://finance.yahoo.com/markets/crypto/articles/bitcoin-price-stalls-gold-surges-053149134.html",
+        "source": "99bitcoins",
+        "published_at": "2026-11-09T05:31:49Z",
+        "fetched_at": "2026-11-09T08:01:44Z",
+        "ticker": null,
+        "source_tier": "aggregator"
+      },
+      {
+        "title": "GreenCore Solutions Rebrands as WeFetch.ai for the AI Shopping Market: gtinfetch.ai lead product",
+        "summary": "",
+        "url": "https://finance.yahoo.com/technology/ai/articles/greencore-solutions-rebrands-wefetch-ai-051500338.html",
+        "source": "PR Newswire",
+        "published_at": "2026-11-09T05:15:00Z",
+        "fetched_at": "2026-11-09T08:01:44Z",
+        "ticker": null,
+        "source_tier": "aggregator"
+      },
+      {
+        "title": "‘Sugar Daddies Are Us’: Ramsey to 50-Year-Old With $600K Begging for a Dating App",
+        "summary": "",
+        "url": "https://finance.yahoo.com/news/sugar-daddies-us-ramsey-50-040154268.html",
+        "source": "24/7 Wall St.",
+        "published_at": "2026-11-09T04:01:54Z",
+        "fetched_at": "2026-11-09T08:01:44Z",
+        "ticker": null,
+        "source_tier": "aggregator"
+      },
+      {
+        "title": "China's 5.7% Factory Inflation Could Complicate the Fed Path Before US CPI",
+        "summary": "",
+        "url": "https://finance.yahoo.com/economy/policy/articles/chinas-5-7-factory-inflation-032600590.html",
+        "source": "BeInCrypto",
+        "published_at": "2026-11-09T03:26:00Z",
+        "fetched_at": "2026-11-09T08:01:44Z",
+        "ticker": null,
+        "source_tier": "aggregator"
+      },
+      {
+        "title": "APA Corporation’s Q3 2026 earnings call: our top 5 analyst questions",
+        "summary": "",
+        "url": "https://finance.yahoo.com/markets/stocks/articles/apa-corporation-q3-2026-earnings-024536008.html",
+        "source": "StockStory",
+        "published_at": "2026-11-09T02:45:36Z",
+        "fetched_at": "2026-11-09T08:01:44Z",
         "ticker": null,
         "source_tier": "aggregator"
       }
@@ -116,7 +116,7 @@
       {
         "source": "Yahoo Finance",
         "status": "ok",
-        "item_count": 50
+        "item_count": 49
       },
       {
         "source": "Federal Reserve",
@@ -127,13 +127,24 @@
   },
   "tickers": {
     "515880.SS": {
-      "status": "empty",
+      "status": "ok",
       "query_type": "ticker",
       "ticker": "515880.SS",
-      "start_date": "2026-11-06",
-      "end_date": "2026-11-06",
-      "fetched_at": "2026-11-06T08:01:41Z",
-      "items": [],
+      "start_date": "2026-11-09",
+      "end_date": "2026-11-09",
+      "fetched_at": "2026-11-09T08:01:46Z",
+      "items": [
+        {
+          "title": "光模块行情活跃，通信ETF国泰（515880）标的指数大涨3.6%",
+          "summary": "光模块行情活跃，通信ETF国泰（515880）标的指数大涨3.6% 手机网易网",
+          "url": "https://news.google.com/rss/articles/CBMiYkFVX3lxTE5MWUI3U0JaSEdVSDhRc1l3WXZaQVNvaEJscm5QcWg1UEwzTERqbVlOQTQ5bWJUTksxMnZyNXY5aUNPNkNEanNmbzZpLTlFZkxQdlA3cVlveVJhT0d1Umxic0p3?oc=5",
+          "source": "Google News / 手机网易网",
+          "published_at": "2026-11-09T06:08:17Z",
+          "fetched_at": "2026-11-09T08:01:46Z",
+          "ticker": "515880.SS",
+          "source_tier": "aggregator"
+        }
+      ],
       "source_statuses": [
         {
           "source": "Yahoo Finance",
@@ -142,8 +153,8 @@
         },
         {
           "source": "Google News RSS",
-          "status": "empty",
-          "item_count": 0
+          "status": "ok",
+          "item_count": 1
         },
         {
           "source": "SEC EDGAR",
@@ -156,9 +167,9 @@
       "status": "empty",
       "query_type": "ticker",
       "ticker": "512480.SS",
-      "start_date": "2026-11-06",
-      "end_date": "2026-11-06",
-      "fetched_at": "2026-11-06T08:01:44Z",
+      "start_date": "2026-11-09",
+      "end_date": "2026-11-09",
+      "fetched_at": "2026-11-09T08:01:48Z",
       "items": [],
       "source_statuses": [
         {
@@ -181,102 +192,112 @@
   },
   "items": [
     {
-      "title": "Valeura Energy Eyes Transformational Deal With $700 Million in Liquidity",
+      "title": "TTWO Posts Its Best Week In 5 Months As Investors Expect Bumper Forecasts Ahead Of GTA VI Launch",
       "summary": "",
-      "url": "https://finance.yahoo.com/energy/articles/valeura-energy-eyes-transformational-deal-071431105.html",
-      "source": "MarketBeat",
-      "published_at": "2026-11-06T07:14:31Z",
-      "fetched_at": "2026-11-06T08:01:39Z",
+      "url": "https://finance.yahoo.com/markets/stocks/articles/ttwo-posts-best-week-5-073032817.html",
+      "source": "Stocktwits",
+      "published_at": "2026-11-09T07:30:32Z",
+      "fetched_at": "2026-11-09T08:01:44Z",
       "ticker": null,
       "source_tier": "aggregator"
     },
     {
-      "title": "Elite Canadian Energy Stocks To Own In November 2026",
+      "title": "APA Corp (APA) (Q3 2026) Earnings Call Highlights: $699 Million Free Cash Flow, Raised Outlook ...",
       "summary": "",
-      "url": "https://finance.yahoo.com/energy/articles/elite-canadian-energy-stocks-own-071103890.html",
-      "source": "Simply Wall St.",
-      "published_at": "2026-11-06T07:11:03Z",
-      "fetched_at": "2026-11-06T08:01:39Z",
-      "ticker": null,
-      "source_tier": "aggregator"
-    },
-    {
-      "title": "Innovation Drives Quality and Opens New Horizons: Sinochem Holdings Strengthens Global Partnerships and Showcases Innovation at the 9th CIIE",
-      "summary": "",
-      "url": "https://finance.yahoo.com/technology/articles/innovation-drives-quality-opens-horizons-062900680.html",
-      "source": "GlobeNewswire",
-      "published_at": "2026-11-06T06:29:00Z",
-      "fetched_at": "2026-11-06T08:01:39Z",
-      "ticker": null,
-      "source_tier": "aggregator"
-    },
-    {
-      "title": "Oil Prices Head for 12% Weekly Loss Despite Fresh Tanker Attacks",
-      "summary": "",
-      "url": "https://finance.yahoo.com/energy/articles/oil-prices-head-12-weekly-060500517.html",
-      "source": "Oilprice.com",
-      "published_at": "2026-11-06T06:05:00Z",
-      "fetched_at": "2026-11-06T08:01:39Z",
-      "ticker": null,
-      "source_tier": "aggregator"
-    },
-    {
-      "title": "Stock Market: Will S&P 500 Open Up or Down Today?",
-      "summary": "",
-      "url": "https://finance.yahoo.com/markets/stocks/articles/stock-market-p-500-open-055608096.html",
-      "source": "Benzinga Prediction Markets",
-      "published_at": "2026-11-06T05:56:08Z",
-      "fetched_at": "2026-11-06T08:01:39Z",
-      "ticker": null,
-      "source_tier": "aggregator"
-    },
-    {
-      "title": "Oil set for sharp weekly drop but Middle East supply concerns provide floor",
-      "summary": "",
-      "url": "https://finance.yahoo.com/energy/articles/oil-set-sharp-weekly-drop-052924519.html",
-      "source": "Reuters",
-      "published_at": "2026-11-06T05:29:24Z",
-      "fetched_at": "2026-11-06T08:01:39Z",
-      "ticker": null,
-      "source_tier": "aggregator"
-    },
-    {
-      "title": "Markets fret over growth and inflation despite easing oil prices",
-      "summary": "",
-      "url": "https://finance.yahoo.com/economy/articles/markets-fret-over-growth-inflation-050856510.html",
-      "source": "Reuters",
-      "published_at": "2026-11-06T05:23:43Z",
-      "fetched_at": "2026-11-06T08:01:39Z",
-      "ticker": null,
-      "source_tier": "aggregator"
-    },
-    {
-      "title": "First Majestic Silver Corp (AG) (Q3 2026) Earnings Call Highlights: Record Revenue, Robust ...",
-      "summary": "",
-      "url": "https://finance.yahoo.com/markets/commodities/articles/first-majestic-silver-corp-ag-051815505.html",
+      "url": "https://finance.yahoo.com/energy/articles/apa-corp-apa-q3-2026-070301873.html",
       "source": "GuruFocus.com",
-      "published_at": "2026-11-06T05:18:15Z",
-      "fetched_at": "2026-11-06T08:01:39Z",
+      "published_at": "2026-11-09T07:03:01Z",
+      "fetched_at": "2026-11-09T08:01:44Z",
       "ticker": null,
       "source_tier": "aggregator"
     },
     {
-      "title": "PRIO SA (PTRRY) (Q3 2026) Earnings Call Highlights: Record Production and Profit as PRIO SA ...",
+      "title": "The Reorientation of China's Sway Over Commodities",
       "summary": "",
-      "url": "https://finance.yahoo.com/markets/stocks/articles/prio-sa-ptrry-q3-2026-051649775.html",
-      "source": "GuruFocus.com",
-      "published_at": "2026-11-06T05:16:49Z",
-      "fetched_at": "2026-11-06T08:01:39Z",
+      "url": "https://finance.yahoo.com/markets/commodities/articles/reorientation-chinas-sway-over-commodities-070000326.html",
+      "source": "CME Group",
+      "published_at": "2026-11-09T07:00:00Z",
+      "fetched_at": "2026-11-09T08:01:44Z",
       "ticker": null,
       "source_tier": "aggregator"
     },
     {
-      "title": "3 Dividend Stocks To Watch With Yields Over 5%",
+      "title": "Strathcona to acquire Greenfire Resources in $2 bln deal",
       "summary": "",
-      "url": "https://finance.yahoo.com/markets/stocks/articles/3-dividend-stocks-watch-yields-051536696.html",
-      "source": "Simply Wall St.",
-      "published_at": "2026-11-06T05:15:36Z",
-      "fetched_at": "2026-11-06T08:01:39Z",
+      "url": "https://finance.yahoo.com/energy/articles/strathcona-acquire-greenfire-resources-2-061857554.html",
+      "source": "Investing.com",
+      "published_at": "2026-11-09T06:18:57Z",
+      "fetched_at": "2026-11-09T08:01:44Z",
+      "ticker": null,
+      "source_tier": "aggregator"
+    },
+    {
+      "title": "光模块行情活跃，通信ETF国泰（515880）标的指数大涨3.6%",
+      "summary": "光模块行情活跃，通信ETF国泰（515880）标的指数大涨3.6% 手机网易网",
+      "url": "https://news.google.com/rss/articles/CBMiYkFVX3lxTE5MWUI3U0JaSEdVSDhRc1l3WXZaQVNvaEJscm5QcWg1UEwzTERqbVlOQTQ5bWJUTksxMnZyNXY5aUNPNkNEanNmbzZpLTlFZkxQdlA3cVlveVJhT0d1Umxic0p3?oc=5",
+      "source": "Google News / 手机网易网",
+      "published_at": "2026-11-09T06:08:17Z",
+      "fetched_at": "2026-11-09T08:01:46Z",
+      "ticker": "515880.SS",
+      "source_tier": "aggregator"
+    },
+    {
+      "title": "5 revealing analyst questions from Texas Pacific Land’s Q3 2026 earnings call",
+      "summary": "",
+      "url": "https://finance.yahoo.com/markets/stocks/articles/5-revealing-analyst-questions-texas-054936316.html",
+      "source": "StockStory",
+      "published_at": "2026-11-09T05:49:36Z",
+      "fetched_at": "2026-11-09T08:01:44Z",
+      "ticker": null,
+      "source_tier": "aggregator"
+    },
+    {
+      "title": "Bitcoin Price Stalls as Gold Surges: Is a Major Crypto Catch-Up Rally Coming?",
+      "summary": "",
+      "url": "https://finance.yahoo.com/markets/crypto/articles/bitcoin-price-stalls-gold-surges-053149134.html",
+      "source": "99bitcoins",
+      "published_at": "2026-11-09T05:31:49Z",
+      "fetched_at": "2026-11-09T08:01:44Z",
+      "ticker": null,
+      "source_tier": "aggregator"
+    },
+    {
+      "title": "GreenCore Solutions Rebrands as WeFetch.ai for the AI Shopping Market: gtinfetch.ai lead product",
+      "summary": "",
+      "url": "https://finance.yahoo.com/technology/ai/articles/greencore-solutions-rebrands-wefetch-ai-051500338.html",
+      "source": "PR Newswire",
+      "published_at": "2026-11-09T05:15:00Z",
+      "fetched_at": "2026-11-09T08:01:44Z",
+      "ticker": null,
+      "source_tier": "aggregator"
+    },
+    {
+      "title": "‘Sugar Daddies Are Us’: Ramsey to 50-Year-Old With $600K Begging for a Dating App",
+      "summary": "",
+      "url": "https://finance.yahoo.com/news/sugar-daddies-us-ramsey-50-040154268.html",
+      "source": "24/7 Wall St.",
+      "published_at": "2026-11-09T04:01:54Z",
+      "fetched_at": "2026-11-09T08:01:44Z",
+      "ticker": null,
+      "source_tier": "aggregator"
+    },
+    {
+      "title": "China's 5.7% Factory Inflation Could Complicate the Fed Path Before US CPI",
+      "summary": "",
+      "url": "https://finance.yahoo.com/economy/policy/articles/chinas-5-7-factory-inflation-032600590.html",
+      "source": "BeInCrypto",
+      "published_at": "2026-11-09T03:26:00Z",
+      "fetched_at": "2026-11-09T08:01:44Z",
+      "ticker": null,
+      "source_tier": "aggregator"
+    },
+    {
+      "title": "APA Corporation’s Q3 2026 earnings call: our top 5 analyst questions",
+      "summary": "",
+      "url": "https://finance.yahoo.com/markets/stocks/articles/apa-corporation-q3-2026-earnings-024536008.html",
+      "source": "StockStory",
+      "published_at": "2026-11-09T02:45:36Z",
+      "fetched_at": "2026-11-09T08:01:44Z",
       "ticker": null,
       "source_tier": "aggregator"
     }
