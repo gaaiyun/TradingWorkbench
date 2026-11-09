@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "generatedAt": "2026-11-06T17:55:56.984Z",
+  "generatedAt": "2026-11-09T21:25:25.700Z",
   "status": "degraded",
   "coverage": {
     "policy": "current-listed-best-effort-plus-configured-core",
@@ -16,13 +16,13 @@
       "id": "eastmoney-clist",
       "role": "CN current-listed discovery",
       "quality": "best_effort",
-      "asOf": "2026-11-06T17:55:56.984Z"
+      "asOf": "2026-11-09T21:25:25.700Z"
     },
     {
       "id": "workbench-settings",
       "role": "configured HK/US/CN core instruments",
       "quality": "declared",
-      "asOf": "2026-11-06T17:55:56.984Z"
+      "asOf": "2026-11-09T21:25:25.700Z"
     }
   ],
   "instruments": [
@@ -38396,7 +38396,7 @@
     },
     {
       "symbol": "600459.SS",
-      "name": "XD贵研铂",
+      "name": "贵研铂业",
       "market": "CN",
       "exchange": "SS",
       "instrumentType": "stock",
@@ -38913,7 +38913,7 @@
     },
     {
       "symbol": "600516.SS",
-      "name": "XD方大炭",
+      "name": "方大炭素",
       "market": "CN",
       "exchange": "SS",
       "instrumentType": "stock",
@@ -39243,7 +39243,7 @@
     },
     {
       "symbol": "600551.SS",
-      "name": "XD时代出",
+      "name": "时代出版",
       "market": "CN",
       "exchange": "SS",
       "instrumentType": "stock",
@@ -44820,7 +44820,7 @@
     },
     {
       "symbol": "601319.SS",
-      "name": "XD中国人",
+      "name": "中国人保",
       "market": "CN",
       "exchange": "SS",
       "instrumentType": "stock",
@@ -45469,7 +45469,7 @@
     },
     {
       "symbol": "601696.SS",
-      "name": "XD中银证",
+      "name": "中银证券",
       "market": "CN",
       "exchange": "SS",
       "instrumentType": "stock",
@@ -47416,7 +47416,7 @@
     },
     {
       "symbol": "603112.SS",
-      "name": "华翔股份",
+      "name": "XD华翔股",
       "market": "CN",
       "exchange": "SS",
       "instrumentType": "stock",
@@ -51222,7 +51222,7 @@
     },
     {
       "symbol": "603680.SS",
-      "name": "今创集团",
+      "name": "XD今创集",
       "market": "CN",
       "exchange": "SS",
       "instrumentType": "stock",
@@ -52366,7 +52366,7 @@
     },
     {
       "symbol": "603881.SS",
-      "name": "XD数据港",
+      "name": "数据港",
       "market": "CN",
       "exchange": "SS",
       "instrumentType": "stock",
@@ -56601,7 +56601,7 @@
     },
     {
       "symbol": "688225.SS",
-      "name": "亚信安全",
+      "name": "亚信集团",
       "market": "CN",
       "exchange": "SS",
       "instrumentType": "stock",
@@ -57668,7 +57668,7 @@
     },
     {
       "symbol": "688336.SS",
-      "name": "XD三生国",
+      "name": "三生国健",
       "market": "CN",
       "exchange": "SS",
       "instrumentType": "stock",
@@ -61193,7 +61193,7 @@
       "exchange": "SS",
       "instrumentType": "stock",
       "industry": "通用设备",
-      "listDate": null,
+      "listDate": "2026-11-10",
       "source": "eastmoney-clist",
       "coverage": "current_listed_best_effort"
     },
@@ -62002,7 +62002,7 @@
     },
     {
       "symbol": "920085.BJ",
-      "name": "N森峰",
+      "name": "森峰激光",
       "market": "CN",
       "exchange": "BJ",
       "instrumentType": "stock",
@@ -64642,7 +64642,7 @@
     },
     {
       "symbol": "920779.BJ",
-      "name": "XD武汉蓝",
+      "name": "武汉蓝电",
       "market": "CN",
       "exchange": "BJ",
       "instrumentType": "stock",
