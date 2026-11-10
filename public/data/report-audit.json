@@ -1,17 +1,90 @@
 {
   "version": 1,
-  "generatedAt": "2026-11-09T08:12:15.587Z",
+  "generatedAt": "2026-11-10T08:12:13.219Z",
   "summary": {
-    "successfulReports": 39,
-    "verifiedReports": 27,
+    "successfulReports": 38,
+    "verifiedReports": 26,
     "invalidatedReports": 0,
     "legacyUnverifiedReports": 12,
-    "invalidRecords": 80,
-    "evidenceValidationFailures": 54,
-    "analysisExecutionFailures": 26,
+    "invalidRecords": 82,
+    "evidenceValidationFailures": 55,
+    "analysisExecutionFailures": 27,
     "invalidInputs": 0
   },
   "reports": [
+    {
+      "ticker": "515880.SS",
+      "tradeDate": "2026-11-10",
+      "generatedAt": "2026-11-10T16:01:38+08:00",
+      "provider": "openai_compatible",
+      "rating": null,
+      "analysisStatus": "data_validation_failed",
+      "report": null,
+      "auditStatus": "invalid_record",
+      "failureClass": "evidence_validation",
+      "problemCodes": [
+        "EVIDENCE_VALIDATION_FAILED"
+      ],
+      "evidence": {
+        "urlCount": 0,
+        "claimCitationCount": 0,
+        "finalProposalMarkers": 0,
+        "priceTargetCount": 0,
+        "valuationMethodCount": 0,
+        "publishedMarkerCount": 0
+      },
+      "claimValidation": null,
+      "evidencePacket": null,
+      "evidencePublish": {
+        "published": true,
+        "status": 201
+      },
+      "identity": {
+        "scope": "profile",
+        "kind": "monitor",
+        "runId": "42779346376",
+        "profileId": "cn-semi-comms",
+        "requestId": null,
+        "slotId": "slot-9b13a0192865713ff4549f7d186f2eaa6e64fe040aed5e90662e3b7dbf245236",
+        "scheduledFor": "2026-11-10T07:17:48.000Z"
+      },
+      "supersededBy": null
+    },
+    {
+      "ticker": "512480.SS",
+      "tradeDate": "2026-11-10",
+      "generatedAt": "2026-11-10T16:01:38+08:00",
+      "provider": "openai_compatible",
+      "rating": null,
+      "analysisStatus": null,
+      "report": null,
+      "auditStatus": "invalid_record",
+      "failureClass": "analysis_execution",
+      "problemCodes": [
+        "ANALYSIS_EXECUTION_FAILED"
+      ],
+      "evidence": {
+        "urlCount": 0,
+        "claimCitationCount": 0,
+        "finalProposalMarkers": 0,
+        "priceTargetCount": 0,
+        "valuationMethodCount": 0,
+        "publishedMarkerCount": 0
+      },
+      "claimValidation": null,
+      "evidencePacket": null,
+      "evidencePublish": null,
+      "identity": {
+        "scope": "profile",
+        "kind": "monitor",
+        "runId": "42779346376",
+        "profileId": "cn-semi-comms",
+        "requestId": null,
+        "slotId": "slot-9b13a0192865713ff4549f7d186f2eaa6e64fe040aed5e90662e3b7dbf245236",
+        "scheduledFor": "2026-11-10T07:17:48.000Z"
+      },
+      "supersededBy": null
+    },
     {
       "ticker": "515880.SS",
       "tradeDate": "2026-11-09",
@@ -5255,64 +5328,6 @@
         "requestId": null,
         "slotId": "slot-41a35eb1730160cdd6636a703f5da524f46b59196e0a8f8234e7e65cddac80ee",
         "scheduledFor": "2026-08-19T07:17:15.000Z"
-      },
-      "supersededBy": null
-    },
-    {
-      "ticker": "512480.SS",
-      "tradeDate": "2026-08-18",
-      "generatedAt": "2026-08-18T18:33:32+08:00",
-      "provider": "openai_compatible",
-      "rating": "Hold",
-      "analysisStatus": "rated",
-      "report": "reports/512480.SS/2026-08-18-v2/complete_report.md",
-      "auditStatus": "verified",
-      "failureClass": null,
-      "problemCodes": [
-        "ETF_TEMPLATE_MISMATCH",
-        "MISSING_PUBLICATION_TIME"
-      ],
-      "evidence": {
-        "urlCount": 4,
-        "claimCitationCount": 0,
-        "finalProposalMarkers": 0,
-        "priceTargetCount": 0,
-        "valuationMethodCount": 0,
-        "publishedMarkerCount": 0
-      },
-      "claimValidation": {
-        "status": "passed",
-        "errorCodes": [],
-        "citationCount": 24,
-        "unknownEvidenceIds": [],
-        "invalidEvidenceCitations": [],
-        "uncitedNumericParagraphs": 0,
-        "unsupportedDerivedNumericParagraphs": 0,
-        "unsupportedSingleSnapshotTrendParagraphs": 0,
-        "contradictedMovingAverageAlignmentParagraphs": 0,
-        "unsupportedActorOrFlowAttributionParagraphs": 0,
-        "unsupportedWindowRankParagraphs": 0,
-        "unsupportedCausalOrPathParagraphs": 0,
-        "unsupportedFaceValueParagraphs": 0,
-        "omittedUnsafeParagraphs": 0
-      },
-      "evidencePacket": {
-        "status": "ok",
-        "asOf": "2026-08-18T10:33:39Z",
-        "contentHash": "092c5787f7d920a17bce2408c1585d1a7009ff19c793a91803a42e9de5305fe7"
-      },
-      "evidencePublish": {
-        "published": true,
-        "status": 201
-      },
-      "identity": {
-        "scope": "legacy",
-        "kind": "legacy",
-        "runId": null,
-        "profileId": null,
-        "requestId": null,
-        "slotId": null,
-        "scheduledFor": null
       },
       "supersededBy": null
     }

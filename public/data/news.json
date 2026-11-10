@@ -1,113 +1,113 @@
 {
   "version": 1,
   "status": "ok",
-  "generated_at": "2026-11-09T16:01:43+08:00",
-  "trade_date": "2026-11-09",
+  "generated_at": "2026-11-10T16:01:38+08:00",
+  "trade_date": "2026-11-10",
   "global": {
     "status": "ok",
     "query_type": "global",
     "ticker": null,
-    "start_date": "2026-11-02",
-    "end_date": "2026-11-09",
-    "fetched_at": "2026-11-09T08:01:44Z",
+    "start_date": "2026-11-03",
+    "end_date": "2026-11-10",
+    "fetched_at": "2026-11-10T08:01:39Z",
     "items": [
       {
-        "title": "TTWO Posts Its Best Week In 5 Months As Investors Expect Bumper Forecasts Ahead Of GTA VI Launch",
+        "title": "Bighorn Metals Corp. Advances Phase I Exploration Program for Marietta Project",
         "summary": "",
-        "url": "https://finance.yahoo.com/markets/stocks/articles/ttwo-posts-best-week-5-073032817.html",
+        "url": "https://finance.yahoo.com/markets/commodities/articles/bighorn-metals-corp-advances-phase-071500154.html",
+        "source": "NewMediaWire",
+        "published_at": "2026-11-10T07:15:00Z",
+        "fetched_at": "2026-11-10T08:01:39Z",
+        "ticker": null,
+        "source_tier": "aggregator"
+      },
+      {
+        "title": "Tech leads Asian stock rally as traders track Wall St rebound",
+        "summary": "",
+        "url": "https://finance.yahoo.com/markets/world-indices/articles/tech-leads-asian-stock-rally-023930562.html",
+        "source": "AFP",
+        "published_at": "2026-11-10T07:08:38Z",
+        "fetched_at": "2026-11-10T08:01:39Z",
+        "ticker": null,
+        "source_tier": "aggregator"
+      },
+      {
+        "title": "The Trade Desk (TTD) Q3 2026 Earnings Call Transcript",
+        "summary": "",
+        "url": "https://finance.yahoo.com/markets/stocks/articles/trade-desk-ttd-q3-2026-064650853.html",
+        "source": "Motley Fool",
+        "published_at": "2026-11-10T06:46:50Z",
+        "fetched_at": "2026-11-10T08:01:39Z",
+        "ticker": null,
+        "source_tier": "aggregator"
+      },
+      {
+        "title": "Take-Two (TTWO) Q2 2027 Earnings Call Transcript",
+        "summary": "",
+        "url": "https://finance.yahoo.com/markets/stocks/articles/two-ttwo-q2-2027-earnings-064641141.html",
+        "source": "Motley Fool",
+        "published_at": "2026-11-10T06:46:41Z",
+        "fetched_at": "2026-11-10T08:01:39Z",
+        "ticker": null,
+        "source_tier": "aggregator"
+      },
+      {
+        "title": "The Zacks Analyst Blog Highlights Nucor, UCB and Cheniere Energy",
+        "summary": "",
+        "url": "https://finance.yahoo.com/markets/stocks/articles/zacks-analyst-blog-highlights-nucor-062000448.html",
+        "source": "Zacks",
+        "published_at": "2026-11-10T06:20:00Z",
+        "fetched_at": "2026-11-10T08:01:39Z",
+        "ticker": null,
+        "source_tier": "aggregator"
+      },
+      {
+        "title": "Dollar sellers hit pause for US inflation data",
+        "summary": "",
+        "url": "https://finance.yahoo.com/news/dollar-sellers-hit-pause-us-004226493.html",
+        "source": "Reuters",
+        "published_at": "2026-11-10T06:10:32Z",
+        "fetched_at": "2026-11-10T08:01:39Z",
+        "ticker": null,
+        "source_tier": "aggregator"
+      },
+      {
+        "title": "ACHR Stock Tumbles Overnight On Earnings Miss: Archer CEO Calls Midnight’s LA Push Its ‘Most Important’ Milestone Yet",
+        "summary": "",
+        "url": "https://finance.yahoo.com/markets/stocks/articles/achr-stock-tumbles-overnight-earnings-055743419.html",
         "source": "Stocktwits",
-        "published_at": "2026-11-09T07:30:32Z",
-        "fetched_at": "2026-11-09T08:01:44Z",
+        "published_at": "2026-11-10T05:57:43Z",
+        "fetched_at": "2026-11-10T08:01:39Z",
         "ticker": null,
         "source_tier": "aggregator"
       },
       {
-        "title": "APA Corp (APA) (Q3 2026) Earnings Call Highlights: $699 Million Free Cash Flow, Raised Outlook ...",
+        "title": "Yuan Rally Likely to Cool, Not Reverse",
         "summary": "",
-        "url": "https://finance.yahoo.com/energy/articles/apa-corp-apa-q3-2026-070301873.html",
-        "source": "GuruFocus.com",
-        "published_at": "2026-11-09T07:03:01Z",
-        "fetched_at": "2026-11-09T08:01:44Z",
+        "url": "https://finance.yahoo.com/m/13598207-73b7-3af8-a3ad-90fccd460c85/yuan-rally-likely-to-cool%2C.html",
+        "source": "The Wall Street Journal",
+        "published_at": "2026-11-10T05:55:00Z",
+        "fetched_at": "2026-11-10T08:01:39Z",
         "ticker": null,
         "source_tier": "aggregator"
       },
       {
-        "title": "The Reorientation of China's Sway Over Commodities",
+        "title": "Morning Bid: Anthropic IPO: Please try again",
         "summary": "",
-        "url": "https://finance.yahoo.com/markets/commodities/articles/reorientation-chinas-sway-over-commodities-070000326.html",
-        "source": "CME Group",
-        "published_at": "2026-11-09T07:00:00Z",
-        "fetched_at": "2026-11-09T08:01:44Z",
+        "url": "https://finance.yahoo.com/technology/ai/articles/morning-bid-anthropic-ipo-please-055353155.html",
+        "source": "Reuters",
+        "published_at": "2026-11-10T05:53:53Z",
+        "fetched_at": "2026-11-10T08:01:39Z",
         "ticker": null,
         "source_tier": "aggregator"
       },
       {
-        "title": "Strathcona to acquire Greenfire Resources in $2 bln deal",
+        "title": "Asian airline stocks surge as oil prices slide on Iran peace hopes",
         "summary": "",
-        "url": "https://finance.yahoo.com/energy/articles/strathcona-acquire-greenfire-resources-2-061857554.html",
+        "url": "https://finance.yahoo.com/markets/stocks/articles/asian-airline-stocks-surge-oil-053231788.html",
         "source": "Investing.com",
-        "published_at": "2026-11-09T06:18:57Z",
-        "fetched_at": "2026-11-09T08:01:44Z",
-        "ticker": null,
-        "source_tier": "aggregator"
-      },
-      {
-        "title": "5 revealing analyst questions from Texas Pacific Land’s Q3 2026 earnings call",
-        "summary": "",
-        "url": "https://finance.yahoo.com/markets/stocks/articles/5-revealing-analyst-questions-texas-054936316.html",
-        "source": "StockStory",
-        "published_at": "2026-11-09T05:49:36Z",
-        "fetched_at": "2026-11-09T08:01:44Z",
-        "ticker": null,
-        "source_tier": "aggregator"
-      },
-      {
-        "title": "Bitcoin Price Stalls as Gold Surges: Is a Major Crypto Catch-Up Rally Coming?",
-        "summary": "",
-        "url": "https://finance.yahoo.com/markets/crypto/articles/bitcoin-price-stalls-gold-surges-053149134.html",
-        "source": "99bitcoins",
-        "published_at": "2026-11-09T05:31:49Z",
-        "fetched_at": "2026-11-09T08:01:44Z",
-        "ticker": null,
-        "source_tier": "aggregator"
-      },
-      {
-        "title": "GreenCore Solutions Rebrands as WeFetch.ai for the AI Shopping Market: gtinfetch.ai lead product",
-        "summary": "",
-        "url": "https://finance.yahoo.com/technology/ai/articles/greencore-solutions-rebrands-wefetch-ai-051500338.html",
-        "source": "PR Newswire",
-        "published_at": "2026-11-09T05:15:00Z",
-        "fetched_at": "2026-11-09T08:01:44Z",
-        "ticker": null,
-        "source_tier": "aggregator"
-      },
-      {
-        "title": "‘Sugar Daddies Are Us’: Ramsey to 50-Year-Old With $600K Begging for a Dating App",
-        "summary": "",
-        "url": "https://finance.yahoo.com/news/sugar-daddies-us-ramsey-50-040154268.html",
-        "source": "24/7 Wall St.",
-        "published_at": "2026-11-09T04:01:54Z",
-        "fetched_at": "2026-11-09T08:01:44Z",
-        "ticker": null,
-        "source_tier": "aggregator"
-      },
-      {
-        "title": "China's 5.7% Factory Inflation Could Complicate the Fed Path Before US CPI",
-        "summary": "",
-        "url": "https://finance.yahoo.com/economy/policy/articles/chinas-5-7-factory-inflation-032600590.html",
-        "source": "BeInCrypto",
-        "published_at": "2026-11-09T03:26:00Z",
-        "fetched_at": "2026-11-09T08:01:44Z",
-        "ticker": null,
-        "source_tier": "aggregator"
-      },
-      {
-        "title": "APA Corporation’s Q3 2026 earnings call: our top 5 analyst questions",
-        "summary": "",
-        "url": "https://finance.yahoo.com/markets/stocks/articles/apa-corporation-q3-2026-earnings-024536008.html",
-        "source": "StockStory",
-        "published_at": "2026-11-09T02:45:36Z",
-        "fetched_at": "2026-11-09T08:01:44Z",
+        "published_at": "2026-11-10T05:32:31Z",
+        "fetched_at": "2026-11-10T08:01:39Z",
         "ticker": null,
         "source_tier": "aggregator"
       }
@@ -116,32 +116,58 @@
       {
         "source": "Yahoo Finance",
         "status": "ok",
-        "item_count": 49
+        "item_count": 50
       },
       {
         "source": "Federal Reserve",
         "status": "ok",
-        "item_count": 1
+        "item_count": 2
       }
     ]
   },
   "tickers": {
     "515880.SS": {
-      "status": "ok",
+      "status": "empty",
       "query_type": "ticker",
       "ticker": "515880.SS",
-      "start_date": "2026-11-09",
-      "end_date": "2026-11-09",
-      "fetched_at": "2026-11-09T08:01:46Z",
+      "start_date": "2026-11-10",
+      "end_date": "2026-11-10",
+      "fetched_at": "2026-11-10T08:01:41Z",
+      "items": [],
+      "source_statuses": [
+        {
+          "source": "Yahoo Finance",
+          "status": "empty",
+          "item_count": 0
+        },
+        {
+          "source": "Google News RSS",
+          "status": "empty",
+          "item_count": 0
+        },
+        {
+          "source": "SEC EDGAR",
+          "status": "empty",
+          "item_count": 0
+        }
+      ]
+    },
+    "512480.SS": {
+      "status": "ok",
+      "query_type": "ticker",
+      "ticker": "512480.SS",
+      "start_date": "2026-11-10",
+      "end_date": "2026-11-10",
+      "fetched_at": "2026-11-10T08:01:44Z",
       "items": [
         {
-          "title": "光模块行情活跃，通信ETF国泰（515880）标的指数大涨3.6%",
-          "summary": "光模块行情活跃，通信ETF国泰（515880）标的指数大涨3.6% 手机网易网",
-          "url": "https://news.google.com/rss/articles/CBMiYkFVX3lxTE5MWUI3U0JaSEdVSDhRc1l3WXZaQVNvaEJscm5QcWg1UEwzTERqbVlOQTQ5bWJUTksxMnZyNXY5aUNPNkNEanNmbzZpLTlFZkxQdlA3cVlveVJhT0d1Umxic0p3?oc=5",
-          "source": "Google News / 手机网易网",
-          "published_at": "2026-11-09T06:08:17Z",
-          "fetched_at": "2026-11-09T08:01:46Z",
-          "ticker": "515880.SS",
+          "title": "谷歌发布两款全新TPU芯片，半导体ETF国联安(512480)跟踪指数涨超2%",
+          "summary": "谷歌发布两款全新TPU芯片，半导体ETF国联安(512480)跟踪指数涨超2% Jiemian.com",
+          "url": "https://news.google.com/rss/articles/CBMiWEFVX3lxTFBrdW1CZzY0ejYxMGxoaThsTVJycjFSU0xpUkprV2dDQTZha05MZF84cUlzMjhRTUJQeFJkZlZ3N3ZhbExDdmliUl9LTU9meU9KX1JfMDVJRk0?oc=5",
+          "source": "Google News / Jiemian.com",
+          "published_at": "2026-11-10T01:36:00Z",
+          "fetched_at": "2026-11-10T08:01:44Z",
+          "ticker": "512480.SS",
           "source_tier": "aggregator"
         }
       ],
@@ -162,143 +188,117 @@
           "item_count": 0
         }
       ]
-    },
-    "512480.SS": {
-      "status": "empty",
-      "query_type": "ticker",
-      "ticker": "512480.SS",
-      "start_date": "2026-11-09",
-      "end_date": "2026-11-09",
-      "fetched_at": "2026-11-09T08:01:48Z",
-      "items": [],
-      "source_statuses": [
-        {
-          "source": "Yahoo Finance",
-          "status": "empty",
-          "item_count": 0
-        },
-        {
-          "source": "Google News RSS",
-          "status": "empty",
-          "item_count": 0
-        },
-        {
-          "source": "SEC EDGAR",
-          "status": "empty",
-          "item_count": 0
-        }
-      ]
     }
   },
   "items": [
     {
-      "title": "TTWO Posts Its Best Week In 5 Months As Investors Expect Bumper Forecasts Ahead Of GTA VI Launch",
+      "title": "Bighorn Metals Corp. Advances Phase I Exploration Program for Marietta Project",
       "summary": "",
-      "url": "https://finance.yahoo.com/markets/stocks/articles/ttwo-posts-best-week-5-073032817.html",
+      "url": "https://finance.yahoo.com/markets/commodities/articles/bighorn-metals-corp-advances-phase-071500154.html",
+      "source": "NewMediaWire",
+      "published_at": "2026-11-10T07:15:00Z",
+      "fetched_at": "2026-11-10T08:01:39Z",
+      "ticker": null,
+      "source_tier": "aggregator"
+    },
+    {
+      "title": "Tech leads Asian stock rally as traders track Wall St rebound",
+      "summary": "",
+      "url": "https://finance.yahoo.com/markets/world-indices/articles/tech-leads-asian-stock-rally-023930562.html",
+      "source": "AFP",
+      "published_at": "2026-11-10T07:08:38Z",
+      "fetched_at": "2026-11-10T08:01:39Z",
+      "ticker": null,
+      "source_tier": "aggregator"
+    },
+    {
+      "title": "The Trade Desk (TTD) Q3 2026 Earnings Call Transcript",
+      "summary": "",
+      "url": "https://finance.yahoo.com/markets/stocks/articles/trade-desk-ttd-q3-2026-064650853.html",
+      "source": "Motley Fool",
+      "published_at": "2026-11-10T06:46:50Z",
+      "fetched_at": "2026-11-10T08:01:39Z",
+      "ticker": null,
+      "source_tier": "aggregator"
+    },
+    {
+      "title": "Take-Two (TTWO) Q2 2027 Earnings Call Transcript",
+      "summary": "",
+      "url": "https://finance.yahoo.com/markets/stocks/articles/two-ttwo-q2-2027-earnings-064641141.html",
+      "source": "Motley Fool",
+      "published_at": "2026-11-10T06:46:41Z",
+      "fetched_at": "2026-11-10T08:01:39Z",
+      "ticker": null,
+      "source_tier": "aggregator"
+    },
+    {
+      "title": "The Zacks Analyst Blog Highlights Nucor, UCB and Cheniere Energy",
+      "summary": "",
+      "url": "https://finance.yahoo.com/markets/stocks/articles/zacks-analyst-blog-highlights-nucor-062000448.html",
+      "source": "Zacks",
+      "published_at": "2026-11-10T06:20:00Z",
+      "fetched_at": "2026-11-10T08:01:39Z",
+      "ticker": null,
+      "source_tier": "aggregator"
+    },
+    {
+      "title": "Dollar sellers hit pause for US inflation data",
+      "summary": "",
+      "url": "https://finance.yahoo.com/news/dollar-sellers-hit-pause-us-004226493.html",
+      "source": "Reuters",
+      "published_at": "2026-11-10T06:10:32Z",
+      "fetched_at": "2026-11-10T08:01:39Z",
+      "ticker": null,
+      "source_tier": "aggregator"
+    },
+    {
+      "title": "ACHR Stock Tumbles Overnight On Earnings Miss: Archer CEO Calls Midnight’s LA Push Its ‘Most Important’ Milestone Yet",
+      "summary": "",
+      "url": "https://finance.yahoo.com/markets/stocks/articles/achr-stock-tumbles-overnight-earnings-055743419.html",
       "source": "Stocktwits",
-      "published_at": "2026-11-09T07:30:32Z",
-      "fetched_at": "2026-11-09T08:01:44Z",
+      "published_at": "2026-11-10T05:57:43Z",
+      "fetched_at": "2026-11-10T08:01:39Z",
       "ticker": null,
       "source_tier": "aggregator"
     },
     {
-      "title": "APA Corp (APA) (Q3 2026) Earnings Call Highlights: $699 Million Free Cash Flow, Raised Outlook ...",
+      "title": "Yuan Rally Likely to Cool, Not Reverse",
       "summary": "",
-      "url": "https://finance.yahoo.com/energy/articles/apa-corp-apa-q3-2026-070301873.html",
-      "source": "GuruFocus.com",
-      "published_at": "2026-11-09T07:03:01Z",
-      "fetched_at": "2026-11-09T08:01:44Z",
+      "url": "https://finance.yahoo.com/m/13598207-73b7-3af8-a3ad-90fccd460c85/yuan-rally-likely-to-cool%2C.html",
+      "source": "The Wall Street Journal",
+      "published_at": "2026-11-10T05:55:00Z",
+      "fetched_at": "2026-11-10T08:01:39Z",
       "ticker": null,
       "source_tier": "aggregator"
     },
     {
-      "title": "The Reorientation of China's Sway Over Commodities",
+      "title": "Morning Bid: Anthropic IPO: Please try again",
       "summary": "",
-      "url": "https://finance.yahoo.com/markets/commodities/articles/reorientation-chinas-sway-over-commodities-070000326.html",
-      "source": "CME Group",
-      "published_at": "2026-11-09T07:00:00Z",
-      "fetched_at": "2026-11-09T08:01:44Z",
+      "url": "https://finance.yahoo.com/technology/ai/articles/morning-bid-anthropic-ipo-please-055353155.html",
+      "source": "Reuters",
+      "published_at": "2026-11-10T05:53:53Z",
+      "fetched_at": "2026-11-10T08:01:39Z",
       "ticker": null,
       "source_tier": "aggregator"
     },
     {
-      "title": "Strathcona to acquire Greenfire Resources in $2 bln deal",
+      "title": "Asian airline stocks surge as oil prices slide on Iran peace hopes",
       "summary": "",
-      "url": "https://finance.yahoo.com/energy/articles/strathcona-acquire-greenfire-resources-2-061857554.html",
+      "url": "https://finance.yahoo.com/markets/stocks/articles/asian-airline-stocks-surge-oil-053231788.html",
       "source": "Investing.com",
-      "published_at": "2026-11-09T06:18:57Z",
-      "fetched_at": "2026-11-09T08:01:44Z",
+      "published_at": "2026-11-10T05:32:31Z",
+      "fetched_at": "2026-11-10T08:01:39Z",
       "ticker": null,
       "source_tier": "aggregator"
     },
     {
-      "title": "光模块行情活跃，通信ETF国泰（515880）标的指数大涨3.6%",
-      "summary": "光模块行情活跃，通信ETF国泰（515880）标的指数大涨3.6% 手机网易网",
-      "url": "https://news.google.com/rss/articles/CBMiYkFVX3lxTE5MWUI3U0JaSEdVSDhRc1l3WXZaQVNvaEJscm5QcWg1UEwzTERqbVlOQTQ5bWJUTksxMnZyNXY5aUNPNkNEanNmbzZpLTlFZkxQdlA3cVlveVJhT0d1Umxic0p3?oc=5",
-      "source": "Google News / 手机网易网",
-      "published_at": "2026-11-09T06:08:17Z",
-      "fetched_at": "2026-11-09T08:01:46Z",
-      "ticker": "515880.SS",
-      "source_tier": "aggregator"
-    },
-    {
-      "title": "5 revealing analyst questions from Texas Pacific Land’s Q3 2026 earnings call",
-      "summary": "",
-      "url": "https://finance.yahoo.com/markets/stocks/articles/5-revealing-analyst-questions-texas-054936316.html",
-      "source": "StockStory",
-      "published_at": "2026-11-09T05:49:36Z",
-      "fetched_at": "2026-11-09T08:01:44Z",
-      "ticker": null,
-      "source_tier": "aggregator"
-    },
-    {
-      "title": "Bitcoin Price Stalls as Gold Surges: Is a Major Crypto Catch-Up Rally Coming?",
-      "summary": "",
-      "url": "https://finance.yahoo.com/markets/crypto/articles/bitcoin-price-stalls-gold-surges-053149134.html",
-      "source": "99bitcoins",
-      "published_at": "2026-11-09T05:31:49Z",
-      "fetched_at": "2026-11-09T08:01:44Z",
-      "ticker": null,
-      "source_tier": "aggregator"
-    },
-    {
-      "title": "GreenCore Solutions Rebrands as WeFetch.ai for the AI Shopping Market: gtinfetch.ai lead product",
-      "summary": "",
-      "url": "https://finance.yahoo.com/technology/ai/articles/greencore-solutions-rebrands-wefetch-ai-051500338.html",
-      "source": "PR Newswire",
-      "published_at": "2026-11-09T05:15:00Z",
-      "fetched_at": "2026-11-09T08:01:44Z",
-      "ticker": null,
-      "source_tier": "aggregator"
-    },
-    {
-      "title": "‘Sugar Daddies Are Us’: Ramsey to 50-Year-Old With $600K Begging for a Dating App",
-      "summary": "",
-      "url": "https://finance.yahoo.com/news/sugar-daddies-us-ramsey-50-040154268.html",
-      "source": "24/7 Wall St.",
-      "published_at": "2026-11-09T04:01:54Z",
-      "fetched_at": "2026-11-09T08:01:44Z",
-      "ticker": null,
-      "source_tier": "aggregator"
-    },
-    {
-      "title": "China's 5.7% Factory Inflation Could Complicate the Fed Path Before US CPI",
-      "summary": "",
-      "url": "https://finance.yahoo.com/economy/policy/articles/chinas-5-7-factory-inflation-032600590.html",
-      "source": "BeInCrypto",
-      "published_at": "2026-11-09T03:26:00Z",
-      "fetched_at": "2026-11-09T08:01:44Z",
-      "ticker": null,
-      "source_tier": "aggregator"
-    },
-    {
-      "title": "APA Corporation’s Q3 2026 earnings call: our top 5 analyst questions",
-      "summary": "",
-      "url": "https://finance.yahoo.com/markets/stocks/articles/apa-corporation-q3-2026-earnings-024536008.html",
-      "source": "StockStory",
-      "published_at": "2026-11-09T02:45:36Z",
-      "fetched_at": "2026-11-09T08:01:44Z",
-      "ticker": null,
+      "title": "谷歌发布两款全新TPU芯片，半导体ETF国联安(512480)跟踪指数涨超2%",
+      "summary": "谷歌发布两款全新TPU芯片，半导体ETF国联安(512480)跟踪指数涨超2% Jiemian.com",
+      "url": "https://news.google.com/rss/articles/CBMiWEFVX3lxTFBrdW1CZzY0ejYxMGxoaThsTVJycjFSU0xpUkprV2dDQTZha05MZF84cUlzMjhRTUJQeFJkZlZ3N3ZhbExDdmliUl9LTU9meU9KX1JfMDVJRk0?oc=5",
+      "source": "Google News / Jiemian.com",
+      "published_at": "2026-11-10T01:36:00Z",
+      "fetched_at": "2026-11-10T08:01:44Z",
+      "ticker": "512480.SS",
       "source_tier": "aggregator"
     }
   ]

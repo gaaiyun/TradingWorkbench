@@ -1,5 +1,60 @@
 [
   {
+    "trade_date": "2026-11-10",
+    "generated_at": "2026-11-10T16:01:38+08:00",
+    "provider": "openai_compatible",
+    "results": [
+      {
+        "ticker": "515880.SS",
+        "rating": null,
+        "report": null,
+        "files": {},
+        "error": true,
+        "analysis_status": "data_validation_failed",
+        "audit_status": "invalidated",
+        "evidence_publish": {
+          "published": true,
+          "status": 201
+        }
+      },
+      {
+        "ticker": "512480.SS",
+        "rating": null,
+        "report": null,
+        "files": {},
+        "error": true,
+        "analysis_status": null,
+        "audit_status": null,
+        "evidence_publish": null
+      }
+    ],
+    "request": {
+      "requestId": null,
+      "analysts": [
+        "market",
+        "news",
+        "fundamentals"
+      ],
+      "researchDepth": "standard",
+      "kind": "monitor"
+    },
+    "run": {
+      "id": "42779346376",
+      "attempt": "1",
+      "workflow": "daily-analysis",
+      "url": "https://github.com/gaaiyun/TradingWorkbench/actions/runs/42779346376"
+    },
+    "identity": {
+      "scope": "profile",
+      "kind": "monitor",
+      "runId": "42779346376",
+      "profileId": "cn-semi-comms",
+      "requestId": null,
+      "slotId": "slot-9b13a0192865713ff4549f7d186f2eaa6e64fe040aed5e90662e3b7dbf245236",
+      "scheduledFor": "2026-11-10T07:17:48.000Z"
+    }
+  },
+  {
     "trade_date": "2026-11-09",
     "generated_at": "2026-11-09T16:01:43+08:00",
     "provider": "openai_compatible",
@@ -4101,71 +4156,6 @@
       "requestId": null,
       "slotId": "slot-41a35eb1730160cdd6636a703f5da524f46b59196e0a8f8234e7e65cddac80ee",
       "scheduledFor": "2026-08-19T07:17:15.000Z"
-    }
-  },
-  {
-    "trade_date": "2026-08-18",
-    "generated_at": "2026-08-18T18:33:32+08:00",
-    "provider": "openai_compatible",
-    "results": [
-      {
-        "ticker": "512480.SS",
-        "rating": "Hold",
-        "report": "reports/512480.SS/2026-08-18-v2/complete_report.md",
-        "files": {
-          "fundamentals": "reports/512480.SS/2026-08-18-v2/1_analysts/fundamentals.md",
-          "market": "reports/512480.SS/2026-08-18-v2/1_analysts/market.md",
-          "news": "reports/512480.SS/2026-08-18-v2/1_analysts/news.md",
-          "bear": "reports/512480.SS/2026-08-18-v2/2_research/bear.md",
-          "bull": "reports/512480.SS/2026-08-18-v2/2_research/bull.md",
-          "manager": "reports/512480.SS/2026-08-18-v2/2_research/manager.md",
-          "trader": "reports/512480.SS/2026-08-18-v2/3_trading/trader.md",
-          "aggressive": "reports/512480.SS/2026-08-18-v2/4_risk/aggressive.md",
-          "conservative": "reports/512480.SS/2026-08-18-v2/4_risk/conservative.md",
-          "neutral": "reports/512480.SS/2026-08-18-v2/4_risk/neutral.md",
-          "decision": "reports/512480.SS/2026-08-18-v2/5_portfolio/decision.md",
-          "complete_report": "reports/512480.SS/2026-08-18-v2/complete_report.md"
-        },
-        "error": false,
-        "analysis_status": "rated",
-        "audit_status": "verified",
-        "evidence_publish": {
-          "published": true,
-          "status": 201
-        },
-        "marketHistory": {
-          "source": "tencent",
-          "adjustment": "qfq",
-          "barCount": 658,
-          "startAt": "2023-11-29T16:00:00Z",
-          "endAt": "2026-08-17T16:00:00Z"
-        }
-      }
-    ],
-    "request": {
-      "requestId": null,
-      "analysts": [
-        "market",
-        "news",
-        "fundamentals"
-      ],
-      "researchDepth": "standard",
-      "kind": "legacy"
-    },
-    "run": {
-      "id": "32127279215",
-      "attempt": "1",
-      "workflow": "daily-analysis",
-      "url": "https://github.com/gaaiyun/TradingWorkbench/actions/runs/32127279215"
-    },
-    "identity": {
-      "scope": "legacy",
-      "kind": "legacy",
-      "runId": "32127279215",
-      "profileId": null,
-      "requestId": null,
-      "slotId": null,
-      "scheduledFor": null
     }
   }
 ]
