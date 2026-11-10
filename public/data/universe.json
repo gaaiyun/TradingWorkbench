@@ -1,10 +1,10 @@
 {
   "version": 1,
-  "generatedAt": "2026-11-09T21:25:25.700Z",
+  "generatedAt": "2026-11-10T18:39:18.681Z",
   "status": "degraded",
   "coverage": {
     "policy": "current-listed-best-effort-plus-configured-core",
-    "cnCurrentListedStocks": 5927,
+    "cnCurrentListedStocks": 5928,
     "cnConfiguredCore": 3,
     "usCore": 9,
     "hkCore": 1,
@@ -16,13 +16,13 @@
       "id": "eastmoney-clist",
       "role": "CN current-listed discovery",
       "quality": "best_effort",
-      "asOf": "2026-11-09T21:25:25.700Z"
+      "asOf": "2026-11-10T18:39:18.681Z"
     },
     {
       "id": "workbench-settings",
       "role": "configured HK/US/CN core instruments",
       "quality": "declared",
-      "asOf": "2026-11-09T21:25:25.700Z"
+      "asOf": "2026-11-10T18:39:18.681Z"
     }
   ],
   "instruments": [
@@ -6716,7 +6716,7 @@
     },
     {
       "symbol": "001381.SZ",
-      "name": "C皇冠",
+      "name": "皇冠新材",
       "market": "CN",
       "exchange": "SZ",
       "instrumentType": "stock",
@@ -36570,7 +36570,7 @@
     },
     {
       "symbol": "600251.SS",
-      "name": "冠农股份",
+      "name": "新疆冠农",
       "market": "CN",
       "exchange": "SS",
       "instrumentType": "stock",
@@ -45656,7 +45656,7 @@
     },
     {
       "symbol": "601801.SS",
-      "name": "皖新传媒",
+      "name": "XD皖新传",
       "market": "CN",
       "exchange": "SS",
       "instrumentType": "stock",
@@ -45678,7 +45678,7 @@
     },
     {
       "symbol": "601811.SS",
-      "name": "新华文轩",
+      "name": "XD新华文",
       "market": "CN",
       "exchange": "SS",
       "instrumentType": "stock",
@@ -45821,7 +45821,7 @@
     },
     {
       "symbol": "601869.SS",
-      "name": "长飞光纤",
+      "name": "XD长飞光",
       "market": "CN",
       "exchange": "SS",
       "instrumentType": "stock",
@@ -47416,7 +47416,7 @@
     },
     {
       "symbol": "603112.SS",
-      "name": "XD华翔股",
+      "name": "华翔股份",
       "market": "CN",
       "exchange": "SS",
       "instrumentType": "stock",
@@ -49099,7 +49099,7 @@
     },
     {
       "symbol": "603309.SS",
-      "name": "维力医疗",
+      "name": "XD维力医",
       "market": "CN",
       "exchange": "SS",
       "instrumentType": "stock",
@@ -50672,7 +50672,7 @@
     },
     {
       "symbol": "603596.SS",
-      "name": "伯特利",
+      "name": "XR伯特利",
       "market": "CN",
       "exchange": "SS",
       "instrumentType": "stock",
@@ -51222,7 +51222,7 @@
     },
     {
       "symbol": "603680.SS",
-      "name": "XD今创集",
+      "name": "今创集团",
       "market": "CN",
       "exchange": "SS",
       "instrumentType": "stock",
@@ -53312,7 +53312,7 @@
     },
     {
       "symbol": "605033.SS",
-      "name": "美邦股份",
+      "name": "XD美邦股",
       "market": "CN",
       "exchange": "SS",
       "instrumentType": "stock",
@@ -61188,7 +61188,7 @@
     },
     {
       "symbol": "688827.SS",
-      "name": "钶锐锶",
+      "name": "N钶锐",
       "market": "CN",
       "exchange": "SS",
       "instrumentType": "stock",
@@ -61854,6 +61854,17 @@
       "instrumentType": "stock",
       "industry": "塑料",
       "listDate": "2024-10-31",
+      "source": "eastmoney-clist",
+      "coverage": "current_listed_best_effort"
+    },
+    {
+      "symbol": "920067.BJ",
+      "name": "华晟智能",
+      "market": "CN",
+      "exchange": "BJ",
+      "instrumentType": "stock",
+      "industry": "-",
+      "listDate": null,
       "source": "eastmoney-clist",
       "coverage": "current_listed_best_effort"
     },
