@@ -1,10 +1,10 @@
 {
   "version": 1,
-  "generatedAt": "2026-11-12T18:52:43.337Z",
+  "generatedAt": "2026-11-13T18:30:22.566Z",
   "status": "degraded",
   "coverage": {
     "policy": "current-listed-best-effort-plus-configured-core",
-    "cnCurrentListedStocks": 5579,
+    "cnCurrentListedStocks": 5578,
     "cnConfiguredCore": 3,
     "usCore": 9,
     "hkCore": 1,
@@ -16,13 +16,13 @@
       "id": "sina-market-center",
       "role": "CN current-listed discovery",
       "quality": "best_effort",
-      "asOf": "2026-11-12T18:52:43.337Z"
+      "asOf": "2026-11-13T18:30:22.566Z"
     },
     {
       "id": "workbench-settings",
       "role": "configured HK/US/CN core instruments",
       "quality": "declared",
-      "asOf": "2026-11-12T18:52:43.337Z"
+      "asOf": "2026-11-13T18:30:22.566Z"
     }
   ],
   "instruments": [
@@ -13361,17 +13361,6 @@
     {
       "symbol": "002730.SZ",
       "name": "电光科技",
-      "market": "CN",
-      "exchange": "SZ",
-      "instrumentType": "stock",
-      "industry": null,
-      "listDate": null,
-      "source": "sina-market-center",
-      "coverage": "current_listed_best_effort"
-    },
-    {
-      "symbol": "002731.SZ",
-      "name": "萃华退",
       "market": "CN",
       "exchange": "SZ",
       "instrumentType": "stock",
@@ -35261,7 +35250,7 @@
     },
     {
       "symbol": "600392.SS",
-      "name": "盛和资源",
+      "name": "XD盛和资",
       "market": "CN",
       "exchange": "SS",
       "instrumentType": "stock",
@@ -39551,7 +39540,7 @@
     },
     {
       "symbol": "600894.SS",
-      "name": "广日股份",
+      "name": "XD广日股",
       "market": "CN",
       "exchange": "SS",
       "instrumentType": "stock",
@@ -40827,7 +40816,7 @@
     },
     {
       "symbol": "601128.SS",
-      "name": "常熟银行",
+      "name": "XD常熟银",
       "market": "CN",
       "exchange": "SS",
       "instrumentType": "stock",
@@ -46415,7 +46404,7 @@
     },
     {
       "symbol": "603444.SS",
-      "name": "吉比特",
+      "name": "XD吉比特",
       "market": "CN",
       "exchange": "SS",
       "instrumentType": "stock",
@@ -49484,7 +49473,7 @@
     },
     {
       "symbol": "603998.SS",
-      "name": "XD方盛制",
+      "name": "方盛制药",
       "market": "CN",
       "exchange": "SS",
       "instrumentType": "stock",
@@ -57107,7 +57096,7 @@
     },
     {
       "symbol": "688777.SS",
-      "name": "XD中控技",
+      "name": "中控技术",
       "market": "CN",
       "exchange": "SS",
       "instrumentType": "stock",
