@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "generatedAt": "2026-11-13T18:30:22.566Z",
+  "generatedAt": "2026-11-16T21:00:22.539Z",
   "status": "degraded",
   "coverage": {
     "policy": "current-listed-best-effort-plus-configured-core",
@@ -16,13 +16,13 @@
       "id": "sina-market-center",
       "role": "CN current-listed discovery",
       "quality": "best_effort",
-      "asOf": "2026-11-13T18:30:22.566Z"
+      "asOf": "2026-11-16T21:00:22.539Z"
     },
     {
       "id": "workbench-settings",
       "role": "configured HK/US/CN core instruments",
       "quality": "declared",
-      "asOf": "2026-11-13T18:30:22.566Z"
+      "asOf": "2026-11-16T21:00:22.539Z"
     }
   ],
   "instruments": [
@@ -35250,7 +35250,7 @@
     },
     {
       "symbol": "600392.SS",
-      "name": "XD盛和资",
+      "name": "盛和资源",
       "market": "CN",
       "exchange": "SS",
       "instrumentType": "stock",
@@ -39540,7 +39540,7 @@
     },
     {
       "symbol": "600894.SS",
-      "name": "XD广日股",
+      "name": "广日股份",
       "market": "CN",
       "exchange": "SS",
       "instrumentType": "stock",
@@ -40816,7 +40816,7 @@
     },
     {
       "symbol": "601128.SS",
-      "name": "XD常熟银",
+      "name": "常熟银行",
       "market": "CN",
       "exchange": "SS",
       "instrumentType": "stock",
@@ -42301,7 +42301,7 @@
     },
     {
       "symbol": "601881.SS",
-      "name": "中国银河",
+      "name": "XD中国银",
       "market": "CN",
       "exchange": "SS",
       "instrumentType": "stock",
@@ -45150,7 +45150,7 @@
     },
     {
       "symbol": "603273.SS",
-      "name": "天元智能",
+      "name": "XD天元智",
       "market": "CN",
       "exchange": "SS",
       "instrumentType": "stock",
@@ -46404,7 +46404,7 @@
     },
     {
       "symbol": "603444.SS",
-      "name": "XD吉比特",
+      "name": "吉比特",
       "market": "CN",
       "exchange": "SS",
       "instrumentType": "stock",
@@ -52531,7 +52531,7 @@
     },
     {
       "symbol": "688188.SS",
-      "name": "柏楚电子",
+      "name": "XD柏楚电",
       "market": "CN",
       "exchange": "SS",
       "instrumentType": "stock",
