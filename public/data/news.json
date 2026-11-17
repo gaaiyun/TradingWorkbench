@@ -1,113 +1,113 @@
 {
   "version": 1,
   "status": "ok",
-  "generated_at": "2026-11-16T16:06:38+08:00",
-  "trade_date": "2026-11-16",
+  "generated_at": "2026-11-17T16:01:39+08:00",
+  "trade_date": "2026-11-17",
   "global": {
     "status": "ok",
     "query_type": "global",
     "ticker": null,
-    "start_date": "2026-11-09",
-    "end_date": "2026-11-16",
-    "fetched_at": "2026-11-16T08:06:39Z",
+    "start_date": "2026-11-10",
+    "end_date": "2026-11-17",
+    "fetched_at": "2026-11-17T08:01:40Z",
     "items": [
       {
-        "title": "Apex Samples High-Grade Gold and Tungsten Mineralization at its Jersey-Emerald Property",
+        "title": "Oil slips as recovering Middle East exports blunt Gulf tensions",
         "summary": "",
-        "url": "https://finance.yahoo.com/markets/commodities/articles/apex-samples-high-grade-gold-080000636.html",
-        "source": "TMX Newsfile",
-        "published_at": "2026-11-16T08:00:00Z",
-        "fetched_at": "2026-11-16T08:06:39Z",
-        "ticker": null,
-        "source_tier": "aggregator"
-      },
-      {
-        "title": "Stock Market: Will S&P 500 Open Up or Down Today?",
-        "summary": "",
-        "url": "https://finance.yahoo.com/markets/stocks/articles/stock-market-p-500-open-062759813.html",
-        "source": "Benzinga Prediction Markets",
-        "published_at": "2026-11-16T06:27:59Z",
-        "fetched_at": "2026-11-16T08:06:39Z",
-        "ticker": null,
-        "source_tier": "aggregator"
-      },
-      {
-        "title": "U.S. 10-Year Treasurys Seen Attractive to Buy on Dips",
-        "summary": "",
-        "url": "https://finance.yahoo.com/m/6f1cea55-af30-37b3-8243-4cee0dcdeb91/u.s.-10-year-treasurys-seen.html",
-        "source": "The Wall Street Journal",
-        "published_at": "2026-11-16T06:14:00Z",
-        "fetched_at": "2026-11-16T08:06:39Z",
-        "ticker": null,
-        "source_tier": "aggregator"
-      },
-      {
-        "title": "Silver Breaks Below $48 for the First Time in a Year, and Buyers Aren’t Rushing In",
-        "summary": "",
-        "url": "https://finance.yahoo.com/markets/commodities/articles/silver-breaks-below-48-first-060000394.html",
-        "source": "BeInCrypto",
-        "published_at": "2026-11-16T06:00:00Z",
-        "fetched_at": "2026-11-16T08:06:39Z",
-        "ticker": null,
-        "source_tier": "aggregator"
-      },
-      {
-        "title": "Aurania Intersects 10.10 g/t Gold over 4.15 Metres in Initial Drill Results from the Thormodsdalur Gold Project in Iceland",
-        "summary": "",
-        "url": "https://finance.yahoo.com/markets/commodities/articles/aurania-intersects-10-10-g-060000428.html",
-        "source": "TMX Newsfile",
-        "published_at": "2026-11-16T06:00:00Z",
-        "fetched_at": "2026-11-16T08:06:39Z",
-        "ticker": null,
-        "source_tier": "aggregator"
-      },
-      {
-        "title": "NABEP selects Sulzer to rebuild Petrocedeño tower destroyed in 2025 incident",
-        "summary": "",
-        "url": "https://finance.yahoo.com/energy/articles/nabep-selects-sulzer-rebuild-petrocede-053000409.html",
-        "source": "PR Newswire",
-        "published_at": "2026-11-16T05:30:00Z",
-        "fetched_at": "2026-11-16T08:06:39Z",
-        "ticker": null,
-        "source_tier": "aggregator"
-      },
-      {
-        "title": "Oil Prices Fall as Fears of a Global Supply Glut Return",
-        "summary": "",
-        "url": "https://finance.yahoo.com/energy/articles/oil-prices-fall-fears-global-052532522.html",
-        "source": "Oilprice.com",
-        "published_at": "2026-11-16T05:25:32Z",
-        "fetched_at": "2026-11-16T08:06:39Z",
-        "ticker": null,
-        "source_tier": "aggregator"
-      },
-      {
-        "title": "Silver Falls Below $50: Hawkish Fed Bets, Rising Yields And Dollar Trigger Fresh Selloff",
-        "summary": "",
-        "url": "https://finance.yahoo.com/markets/commodities/articles/silver-falls-below-50-hawkish-052326954.html",
-        "source": "Stocktwits",
-        "published_at": "2026-11-16T05:23:26Z",
-        "fetched_at": "2026-11-16T08:06:39Z",
-        "ticker": null,
-        "source_tier": "aggregator"
-      },
-      {
-        "title": "Oil prices fall on expectations of coming supply surplus",
-        "summary": "",
-        "url": "https://finance.yahoo.com/energy/articles/oil-prices-fall-expectations-coming-020042042.html",
+        "url": "https://finance.yahoo.com/energy/articles/oil-slips-supply-surplus-outlook-013927034.html",
         "source": "Reuters",
-        "published_at": "2026-11-16T04:29:34Z",
-        "fetched_at": "2026-11-16T08:06:39Z",
+        "published_at": "2026-11-17T07:26:21Z",
+        "fetched_at": "2026-11-17T08:01:40Z",
         "ticker": null,
         "source_tier": "aggregator"
       },
       {
-        "title": "SPCX Stock Climbs After Starship Catch — Musk Taunts Bezos, Boeing And Lockheed Martin For Trailing SpaceX",
+        "title": "What Does Woodside Energy Group (ASX:WDS) Face In A Global Oil Surplus?",
         "summary": "",
-        "url": "https://finance.yahoo.com/markets/stocks/articles/spcx-stock-climbs-starship-catch-041957770.html",
-        "source": "Stocktwits",
-        "published_at": "2026-11-16T04:19:57Z",
-        "fetched_at": "2026-11-16T08:06:39Z",
+        "url": "https://finance.yahoo.com/energy/articles/does-woodside-energy-group-asx-071126078.html",
+        "source": "Simply Wall St.",
+        "published_at": "2026-11-17T07:11:26Z",
+        "fetched_at": "2026-11-17T08:01:40Z",
+        "ticker": null,
+        "source_tier": "aggregator"
+      },
+      {
+        "title": "Goldman Sachs starts SBM Offshore at Buy, sees 25% upside on deepwater wave",
+        "summary": "",
+        "url": "https://finance.yahoo.com/markets/stocks/articles/goldman-sachs-starts-sbm-offshore-070512040.html",
+        "source": "Investing.com",
+        "published_at": "2026-11-17T07:05:12Z",
+        "fetched_at": "2026-11-17T08:01:40Z",
+        "ticker": null,
+        "source_tier": "aggregator"
+      },
+      {
+        "title": "ExxonMobil's Uaru Startup Lifts Guyana Oil Capacity to 1.1 Million Bpd",
+        "summary": "",
+        "url": "https://finance.yahoo.com/energy/articles/exxonmobils-uaru-startup-lifts-guyana-064000242.html",
+        "source": "Oilprice.com",
+        "published_at": "2026-11-17T06:40:00Z",
+        "fetched_at": "2026-11-17T08:01:40Z",
+        "ticker": null,
+        "source_tier": "aggregator"
+      },
+      {
+        "title": "Lies, spies and sex are just one part of the Nvidia story. The real stakes are much bigger",
+        "summary": "",
+        "url": "https://finance.yahoo.com/technology/ai/articles/lies-spies-sex-just-one-093004759.html",
+        "source": "CNN Business",
+        "published_at": "2026-11-17T06:38:46Z",
+        "fetched_at": "2026-11-17T08:01:40Z",
+        "ticker": null,
+        "source_tier": "aggregator"
+      },
+      {
+        "title": "Walmart Reports Earnings on Nov. 19 2026. Here's What Investors Should Be Watching.",
+        "summary": "",
+        "url": "https://finance.yahoo.com/markets/stocks/articles/walmart-reports-earnings-nov-19-061658834.html",
+        "source": "Motley Fool",
+        "published_at": "2026-11-17T06:16:58Z",
+        "fetched_at": "2026-11-17T08:01:40Z",
+        "ticker": null,
+        "source_tier": "aggregator"
+      },
+      {
+        "title": "Chart of the Day: Walmart Is a Defensive Giant With Offensive Upside",
+        "summary": "",
+        "url": "https://finance.yahoo.com/m/166e5e75-b575-3afe-83d4-6bb484f29683/chart-of-the-day%3A-walmart-is.html",
+        "source": "Barrons.com",
+        "published_at": "2026-11-17T05:07:00Z",
+        "fetched_at": "2026-11-17T08:01:40Z",
+        "ticker": null,
+        "source_tier": "aggregator"
+      },
+      {
+        "title": "3 US Oil And Gas Stocks Investors Are Watching As Jet Fuel Prices Stay High",
+        "summary": "",
+        "url": "https://finance.yahoo.com/energy/articles/3-us-oil-gas-stocks-043936633.html",
+        "source": "Simply Wall St.",
+        "published_at": "2026-11-17T04:39:36Z",
+        "fetched_at": "2026-11-17T08:01:40Z",
+        "ticker": null,
+        "source_tier": "aggregator"
+      },
+      {
+        "title": "Why Is Suncor Energy (TSX:SU) Rethinking Its In Situ Growth Plans?",
+        "summary": "",
+        "url": "https://finance.yahoo.com/energy/articles/why-suncor-energy-tsx-su-043414518.html",
+        "source": "Simply Wall St.",
+        "published_at": "2026-11-17T04:34:14Z",
+        "fetched_at": "2026-11-17T08:01:40Z",
+        "ticker": null,
+        "source_tier": "aggregator"
+      },
+      {
+        "title": "Gold Heads for Worst Year Since 2015. Why Is It Losing to a 5% Treasury?",
+        "summary": "",
+        "url": "https://finance.yahoo.com/markets/commodities/articles/gold-heads-worst-since-2015-043000698.html",
+        "source": "BeInCrypto",
+        "published_at": "2026-11-17T04:30:00Z",
+        "fetched_at": "2026-11-17T08:01:40Z",
         "ticker": null,
         "source_tier": "aggregator"
       }
@@ -116,12 +116,12 @@
       {
         "source": "Yahoo Finance",
         "status": "ok",
-        "item_count": 50
+        "item_count": 48
       },
       {
         "source": "Federal Reserve",
         "status": "ok",
-        "item_count": 5
+        "item_count": 4
       }
     ]
   },
@@ -130,9 +130,9 @@
       "status": "empty",
       "query_type": "ticker",
       "ticker": "515880.SS",
-      "start_date": "2026-11-16",
-      "end_date": "2026-11-16",
-      "fetched_at": "2026-11-16T08:06:40Z",
+      "start_date": "2026-11-17",
+      "end_date": "2026-11-17",
+      "fetched_at": "2026-11-17T08:01:42Z",
       "items": [],
       "source_statuses": [
         {
@@ -156,9 +156,9 @@
       "status": "empty",
       "query_type": "ticker",
       "ticker": "512480.SS",
-      "start_date": "2026-11-16",
-      "end_date": "2026-11-16",
-      "fetched_at": "2026-11-16T08:06:43Z",
+      "start_date": "2026-11-17",
+      "end_date": "2026-11-17",
+      "fetched_at": "2026-11-17T08:01:47Z",
       "items": [],
       "source_statuses": [
         {
@@ -181,102 +181,102 @@
   },
   "items": [
     {
-      "title": "Apex Samples High-Grade Gold and Tungsten Mineralization at its Jersey-Emerald Property",
+      "title": "Oil slips as recovering Middle East exports blunt Gulf tensions",
       "summary": "",
-      "url": "https://finance.yahoo.com/markets/commodities/articles/apex-samples-high-grade-gold-080000636.html",
-      "source": "TMX Newsfile",
-      "published_at": "2026-11-16T08:00:00Z",
-      "fetched_at": "2026-11-16T08:06:39Z",
-      "ticker": null,
-      "source_tier": "aggregator"
-    },
-    {
-      "title": "Stock Market: Will S&P 500 Open Up or Down Today?",
-      "summary": "",
-      "url": "https://finance.yahoo.com/markets/stocks/articles/stock-market-p-500-open-062759813.html",
-      "source": "Benzinga Prediction Markets",
-      "published_at": "2026-11-16T06:27:59Z",
-      "fetched_at": "2026-11-16T08:06:39Z",
-      "ticker": null,
-      "source_tier": "aggregator"
-    },
-    {
-      "title": "U.S. 10-Year Treasurys Seen Attractive to Buy on Dips",
-      "summary": "",
-      "url": "https://finance.yahoo.com/m/6f1cea55-af30-37b3-8243-4cee0dcdeb91/u.s.-10-year-treasurys-seen.html",
-      "source": "The Wall Street Journal",
-      "published_at": "2026-11-16T06:14:00Z",
-      "fetched_at": "2026-11-16T08:06:39Z",
-      "ticker": null,
-      "source_tier": "aggregator"
-    },
-    {
-      "title": "Silver Breaks Below $48 for the First Time in a Year, and Buyers Aren’t Rushing In",
-      "summary": "",
-      "url": "https://finance.yahoo.com/markets/commodities/articles/silver-breaks-below-48-first-060000394.html",
-      "source": "BeInCrypto",
-      "published_at": "2026-11-16T06:00:00Z",
-      "fetched_at": "2026-11-16T08:06:39Z",
-      "ticker": null,
-      "source_tier": "aggregator"
-    },
-    {
-      "title": "Aurania Intersects 10.10 g/t Gold over 4.15 Metres in Initial Drill Results from the Thormodsdalur Gold Project in Iceland",
-      "summary": "",
-      "url": "https://finance.yahoo.com/markets/commodities/articles/aurania-intersects-10-10-g-060000428.html",
-      "source": "TMX Newsfile",
-      "published_at": "2026-11-16T06:00:00Z",
-      "fetched_at": "2026-11-16T08:06:39Z",
-      "ticker": null,
-      "source_tier": "aggregator"
-    },
-    {
-      "title": "NABEP selects Sulzer to rebuild Petrocedeño tower destroyed in 2025 incident",
-      "summary": "",
-      "url": "https://finance.yahoo.com/energy/articles/nabep-selects-sulzer-rebuild-petrocede-053000409.html",
-      "source": "PR Newswire",
-      "published_at": "2026-11-16T05:30:00Z",
-      "fetched_at": "2026-11-16T08:06:39Z",
-      "ticker": null,
-      "source_tier": "aggregator"
-    },
-    {
-      "title": "Oil Prices Fall as Fears of a Global Supply Glut Return",
-      "summary": "",
-      "url": "https://finance.yahoo.com/energy/articles/oil-prices-fall-fears-global-052532522.html",
-      "source": "Oilprice.com",
-      "published_at": "2026-11-16T05:25:32Z",
-      "fetched_at": "2026-11-16T08:06:39Z",
-      "ticker": null,
-      "source_tier": "aggregator"
-    },
-    {
-      "title": "Silver Falls Below $50: Hawkish Fed Bets, Rising Yields And Dollar Trigger Fresh Selloff",
-      "summary": "",
-      "url": "https://finance.yahoo.com/markets/commodities/articles/silver-falls-below-50-hawkish-052326954.html",
-      "source": "Stocktwits",
-      "published_at": "2026-11-16T05:23:26Z",
-      "fetched_at": "2026-11-16T08:06:39Z",
-      "ticker": null,
-      "source_tier": "aggregator"
-    },
-    {
-      "title": "Oil prices fall on expectations of coming supply surplus",
-      "summary": "",
-      "url": "https://finance.yahoo.com/energy/articles/oil-prices-fall-expectations-coming-020042042.html",
+      "url": "https://finance.yahoo.com/energy/articles/oil-slips-supply-surplus-outlook-013927034.html",
       "source": "Reuters",
-      "published_at": "2026-11-16T04:29:34Z",
-      "fetched_at": "2026-11-16T08:06:39Z",
+      "published_at": "2026-11-17T07:26:21Z",
+      "fetched_at": "2026-11-17T08:01:40Z",
       "ticker": null,
       "source_tier": "aggregator"
     },
     {
-      "title": "SPCX Stock Climbs After Starship Catch — Musk Taunts Bezos, Boeing And Lockheed Martin For Trailing SpaceX",
+      "title": "What Does Woodside Energy Group (ASX:WDS) Face In A Global Oil Surplus?",
       "summary": "",
-      "url": "https://finance.yahoo.com/markets/stocks/articles/spcx-stock-climbs-starship-catch-041957770.html",
-      "source": "Stocktwits",
-      "published_at": "2026-11-16T04:19:57Z",
-      "fetched_at": "2026-11-16T08:06:39Z",
+      "url": "https://finance.yahoo.com/energy/articles/does-woodside-energy-group-asx-071126078.html",
+      "source": "Simply Wall St.",
+      "published_at": "2026-11-17T07:11:26Z",
+      "fetched_at": "2026-11-17T08:01:40Z",
+      "ticker": null,
+      "source_tier": "aggregator"
+    },
+    {
+      "title": "Goldman Sachs starts SBM Offshore at Buy, sees 25% upside on deepwater wave",
+      "summary": "",
+      "url": "https://finance.yahoo.com/markets/stocks/articles/goldman-sachs-starts-sbm-offshore-070512040.html",
+      "source": "Investing.com",
+      "published_at": "2026-11-17T07:05:12Z",
+      "fetched_at": "2026-11-17T08:01:40Z",
+      "ticker": null,
+      "source_tier": "aggregator"
+    },
+    {
+      "title": "ExxonMobil's Uaru Startup Lifts Guyana Oil Capacity to 1.1 Million Bpd",
+      "summary": "",
+      "url": "https://finance.yahoo.com/energy/articles/exxonmobils-uaru-startup-lifts-guyana-064000242.html",
+      "source": "Oilprice.com",
+      "published_at": "2026-11-17T06:40:00Z",
+      "fetched_at": "2026-11-17T08:01:40Z",
+      "ticker": null,
+      "source_tier": "aggregator"
+    },
+    {
+      "title": "Lies, spies and sex are just one part of the Nvidia story. The real stakes are much bigger",
+      "summary": "",
+      "url": "https://finance.yahoo.com/technology/ai/articles/lies-spies-sex-just-one-093004759.html",
+      "source": "CNN Business",
+      "published_at": "2026-11-17T06:38:46Z",
+      "fetched_at": "2026-11-17T08:01:40Z",
+      "ticker": null,
+      "source_tier": "aggregator"
+    },
+    {
+      "title": "Walmart Reports Earnings on Nov. 19 2026. Here's What Investors Should Be Watching.",
+      "summary": "",
+      "url": "https://finance.yahoo.com/markets/stocks/articles/walmart-reports-earnings-nov-19-061658834.html",
+      "source": "Motley Fool",
+      "published_at": "2026-11-17T06:16:58Z",
+      "fetched_at": "2026-11-17T08:01:40Z",
+      "ticker": null,
+      "source_tier": "aggregator"
+    },
+    {
+      "title": "Chart of the Day: Walmart Is a Defensive Giant With Offensive Upside",
+      "summary": "",
+      "url": "https://finance.yahoo.com/m/166e5e75-b575-3afe-83d4-6bb484f29683/chart-of-the-day%3A-walmart-is.html",
+      "source": "Barrons.com",
+      "published_at": "2026-11-17T05:07:00Z",
+      "fetched_at": "2026-11-17T08:01:40Z",
+      "ticker": null,
+      "source_tier": "aggregator"
+    },
+    {
+      "title": "3 US Oil And Gas Stocks Investors Are Watching As Jet Fuel Prices Stay High",
+      "summary": "",
+      "url": "https://finance.yahoo.com/energy/articles/3-us-oil-gas-stocks-043936633.html",
+      "source": "Simply Wall St.",
+      "published_at": "2026-11-17T04:39:36Z",
+      "fetched_at": "2026-11-17T08:01:40Z",
+      "ticker": null,
+      "source_tier": "aggregator"
+    },
+    {
+      "title": "Why Is Suncor Energy (TSX:SU) Rethinking Its In Situ Growth Plans?",
+      "summary": "",
+      "url": "https://finance.yahoo.com/energy/articles/why-suncor-energy-tsx-su-043414518.html",
+      "source": "Simply Wall St.",
+      "published_at": "2026-11-17T04:34:14Z",
+      "fetched_at": "2026-11-17T08:01:40Z",
+      "ticker": null,
+      "source_tier": "aggregator"
+    },
+    {
+      "title": "Gold Heads for Worst Year Since 2015. Why Is It Losing to a 5% Treasury?",
+      "summary": "",
+      "url": "https://finance.yahoo.com/markets/commodities/articles/gold-heads-worst-since-2015-043000698.html",
+      "source": "BeInCrypto",
+      "published_at": "2026-11-17T04:30:00Z",
+      "fetched_at": "2026-11-17T08:01:40Z",
       "ticker": null,
       "source_tier": "aggregator"
     }
