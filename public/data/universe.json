@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "generatedAt": "2026-11-18T19:24:02.049Z",
+  "generatedAt": "2026-11-19T19:28:48.121Z",
   "status": "degraded",
   "coverage": {
     "policy": "current-listed-best-effort-plus-configured-core",
@@ -16,13 +16,13 @@
       "id": "sina-market-center",
       "role": "CN current-listed discovery",
       "quality": "best_effort",
-      "asOf": "2026-11-18T19:24:02.049Z"
+      "asOf": "2026-11-19T19:28:48.121Z"
     },
     {
       "id": "workbench-settings",
       "role": "configured HK/US/CN core instruments",
       "quality": "declared",
-      "asOf": "2026-11-18T19:24:02.049Z"
+      "asOf": "2026-11-19T19:28:48.121Z"
     }
   ],
   "instruments": [
@@ -33171,7 +33171,7 @@
     },
     {
       "symbol": "600141.SS",
-      "name": "兴发集团",
+      "name": "XD兴发集",
       "market": "CN",
       "exchange": "SS",
       "instrumentType": "stock",
@@ -40563,7 +40563,7 @@
     },
     {
       "symbol": "601083.SS",
-      "name": "XD锦江航",
+      "name": "锦江航运",
       "market": "CN",
       "exchange": "SS",
       "instrumentType": "stock",
@@ -41135,7 +41135,7 @@
     },
     {
       "symbol": "601228.SS",
-      "name": "XD广州港",
+      "name": "广州港",
       "market": "CN",
       "exchange": "SS",
       "instrumentType": "stock",
@@ -41696,7 +41696,7 @@
     },
     {
       "symbol": "601611.SS",
-      "name": "XD中国核",
+      "name": "中国核建",
       "market": "CN",
       "exchange": "SS",
       "instrumentType": "stock",
@@ -43159,7 +43159,7 @@
     },
     {
       "symbol": "603043.SS",
-      "name": "广州酒家",
+      "name": "XD广州酒",
       "market": "CN",
       "exchange": "SS",
       "instrumentType": "stock",
@@ -46954,7 +46954,7 @@
     },
     {
       "symbol": "603586.SS",
-      "name": "XD金麒麟",
+      "name": "金麒麟",
       "market": "CN",
       "exchange": "SS",
       "instrumentType": "stock",
@@ -47790,7 +47790,7 @@
     },
     {
       "symbol": "603709.SS",
-      "name": "中源家居",
+      "name": "XD中源家",
       "market": "CN",
       "exchange": "SS",
       "instrumentType": "stock",
@@ -48593,7 +48593,7 @@
     },
     {
       "symbol": "603866.SS",
-      "name": "桃李面包",
+      "name": "XD桃李面",
       "market": "CN",
       "exchange": "SS",
       "instrumentType": "stock",
