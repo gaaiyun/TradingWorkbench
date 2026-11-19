@@ -1,113 +1,113 @@
 {
   "version": 1,
   "status": "ok",
-  "generated_at": "2026-11-17T16:01:39+08:00",
-  "trade_date": "2026-11-17",
+  "generated_at": "2026-11-19T08:16:56+08:00",
+  "trade_date": "2026-11-19",
   "global": {
     "status": "ok",
     "query_type": "global",
     "ticker": null,
-    "start_date": "2026-11-10",
-    "end_date": "2026-11-17",
-    "fetched_at": "2026-11-17T08:01:40Z",
+    "start_date": "2026-11-12",
+    "end_date": "2026-11-19",
+    "fetched_at": "2026-11-19T00:16:58Z",
     "items": [
       {
-        "title": "Oil slips as recovering Middle East exports blunt Gulf tensions",
+        "title": "Dow Jones Futures Rise; Anthropic IPO Prices High, Palo Alto And Everpure Rally On Earnings",
         "summary": "",
-        "url": "https://finance.yahoo.com/energy/articles/oil-slips-supply-surplus-outlook-013927034.html",
+        "url": "https://finance.yahoo.com/m/107e5a2c-4fba-3df3-b2fd-5d1160e65516/dow-jones-futures-rise%3B.html",
+        "source": "Investor's Business Daily",
+        "published_at": "2026-11-19T00:05:12Z",
+        "fetched_at": "2026-11-19T00:16:58Z",
+        "ticker": null,
+        "source_tier": "aggregator"
+      },
+      {
+        "title": "What Moved Coupang Stock Over 5% Lower?",
+        "summary": "",
+        "url": "https://finance.yahoo.com/markets/stocks/articles/moved-coupang-stock-over-5-234256391.html",
+        "source": "Trefis",
+        "published_at": "2026-11-18T23:42:56Z",
+        "fetched_at": "2026-11-19T00:16:58Z",
+        "ticker": null,
+        "source_tier": "aggregator"
+      },
+      {
+        "title": "Wall Street Bullish on The Boeing Company (BA) as Backlog Grows to $745B",
+        "summary": "",
+        "url": "https://finance.yahoo.com/markets/stocks/articles/wall-street-bullish-boeing-company-233606659.html",
+        "source": "Insider Monkey",
+        "published_at": "2026-11-18T23:36:06Z",
+        "fetched_at": "2026-11-19T00:16:58Z",
+        "ticker": null,
+        "source_tier": "aggregator"
+      },
+      {
+        "title": "Boeing Insider Bought Shares Worth $500,067, According to a Recent SEC Filing",
+        "summary": "",
+        "url": "https://finance.yahoo.com/markets/stocks/articles/boeing-insider-bought-shares-worth-224619162.html",
+        "source": "MT Newswires",
+        "published_at": "2026-11-18T22:46:19Z",
+        "fetched_at": "2026-11-19T00:16:58Z",
+        "ticker": null,
+        "source_tier": "aggregator"
+      },
+      {
+        "title": "Stocks to Watch Recap: Palo Alto, Nvidia, Target",
+        "summary": "",
+        "url": "https://finance.yahoo.com/m/d06f4039-17ca-3b5c-8d4c-195520837b84/stocks-to-watch-recap%3A-palo.html",
+        "source": "The Wall Street Journal",
+        "published_at": "2026-11-18T22:45:52Z",
+        "fetched_at": "2026-11-19T00:16:58Z",
+        "ticker": null,
+        "source_tier": "aggregator"
+      },
+      {
+        "title": "Dan Ives’ Top 10 AI Revolution Stock Picks: Inside The IVES ETF",
+        "summary": "",
+        "url": "https://finance.yahoo.com/technology/ai/articles/dan-ives-top-10-ai-223943794.html",
+        "source": "Insider Monkey",
+        "published_at": "2026-11-18T22:39:43Z",
+        "fetched_at": "2026-11-19T00:16:58Z",
+        "ticker": null,
+        "source_tier": "aggregator"
+      },
+      {
+        "title": "Can Accenture Stock Jump 30%?",
+        "summary": "",
+        "url": "https://finance.yahoo.com/markets/stocks/articles/accenture-stock-jump-30-222709005.html",
+        "source": "Trefis",
+        "published_at": "2026-11-18T22:27:09Z",
+        "fetched_at": "2026-11-19T00:16:58Z",
+        "ticker": null,
+        "source_tier": "aggregator"
+      },
+      {
+        "title": "European stocks hit two-week low on weak miners, caution ahead of Anthropic IPO",
+        "summary": "",
+        "url": "https://finance.yahoo.com/markets/stocks/articles/european-shares-muted-tech-offsets-082501845.html",
         "source": "Reuters",
-        "published_at": "2026-11-17T07:26:21Z",
-        "fetched_at": "2026-11-17T08:01:40Z",
+        "published_at": "2026-11-18T22:21:36Z",
+        "fetched_at": "2026-11-19T00:16:58Z",
         "ticker": null,
         "source_tier": "aggregator"
       },
       {
-        "title": "What Does Woodside Energy Group (ASX:WDS) Face In A Global Oil Surplus?",
+        "title": "Trading Day: Markets mixed in a Nvidia, Anthropic, minutes swirl",
         "summary": "",
-        "url": "https://finance.yahoo.com/energy/articles/does-woodside-energy-group-asx-071126078.html",
-        "source": "Simply Wall St.",
-        "published_at": "2026-11-17T07:11:26Z",
-        "fetched_at": "2026-11-17T08:01:40Z",
+        "url": "https://finance.yahoo.com/markets/stocks/articles/trading-day-markets-mixed-nvidia-221528504.html",
+        "source": "Reuters",
+        "published_at": "2026-11-18T22:15:28Z",
+        "fetched_at": "2026-11-19T00:16:58Z",
         "ticker": null,
         "source_tier": "aggregator"
       },
       {
-        "title": "Goldman Sachs starts SBM Offshore at Buy, sees 25% upside on deepwater wave",
+        "title": "Hafnia Limited Q3 2026 Earnings Call Summary",
         "summary": "",
-        "url": "https://finance.yahoo.com/markets/stocks/articles/goldman-sachs-starts-sbm-offshore-070512040.html",
-        "source": "Investing.com",
-        "published_at": "2026-11-17T07:05:12Z",
-        "fetched_at": "2026-11-17T08:01:40Z",
-        "ticker": null,
-        "source_tier": "aggregator"
-      },
-      {
-        "title": "ExxonMobil's Uaru Startup Lifts Guyana Oil Capacity to 1.1 Million Bpd",
-        "summary": "",
-        "url": "https://finance.yahoo.com/energy/articles/exxonmobils-uaru-startup-lifts-guyana-064000242.html",
-        "source": "Oilprice.com",
-        "published_at": "2026-11-17T06:40:00Z",
-        "fetched_at": "2026-11-17T08:01:40Z",
-        "ticker": null,
-        "source_tier": "aggregator"
-      },
-      {
-        "title": "Lies, spies and sex are just one part of the Nvidia story. The real stakes are much bigger",
-        "summary": "",
-        "url": "https://finance.yahoo.com/technology/ai/articles/lies-spies-sex-just-one-093004759.html",
-        "source": "CNN Business",
-        "published_at": "2026-11-17T06:38:46Z",
-        "fetched_at": "2026-11-17T08:01:40Z",
-        "ticker": null,
-        "source_tier": "aggregator"
-      },
-      {
-        "title": "Walmart Reports Earnings on Nov. 19 2026. Here's What Investors Should Be Watching.",
-        "summary": "",
-        "url": "https://finance.yahoo.com/markets/stocks/articles/walmart-reports-earnings-nov-19-061658834.html",
-        "source": "Motley Fool",
-        "published_at": "2026-11-17T06:16:58Z",
-        "fetched_at": "2026-11-17T08:01:40Z",
-        "ticker": null,
-        "source_tier": "aggregator"
-      },
-      {
-        "title": "Chart of the Day: Walmart Is a Defensive Giant With Offensive Upside",
-        "summary": "",
-        "url": "https://finance.yahoo.com/m/166e5e75-b575-3afe-83d4-6bb484f29683/chart-of-the-day%3A-walmart-is.html",
-        "source": "Barrons.com",
-        "published_at": "2026-11-17T05:07:00Z",
-        "fetched_at": "2026-11-17T08:01:40Z",
-        "ticker": null,
-        "source_tier": "aggregator"
-      },
-      {
-        "title": "3 US Oil And Gas Stocks Investors Are Watching As Jet Fuel Prices Stay High",
-        "summary": "",
-        "url": "https://finance.yahoo.com/energy/articles/3-us-oil-gas-stocks-043936633.html",
-        "source": "Simply Wall St.",
-        "published_at": "2026-11-17T04:39:36Z",
-        "fetched_at": "2026-11-17T08:01:40Z",
-        "ticker": null,
-        "source_tier": "aggregator"
-      },
-      {
-        "title": "Why Is Suncor Energy (TSX:SU) Rethinking Its In Situ Growth Plans?",
-        "summary": "",
-        "url": "https://finance.yahoo.com/energy/articles/why-suncor-energy-tsx-su-043414518.html",
-        "source": "Simply Wall St.",
-        "published_at": "2026-11-17T04:34:14Z",
-        "fetched_at": "2026-11-17T08:01:40Z",
-        "ticker": null,
-        "source_tier": "aggregator"
-      },
-      {
-        "title": "Gold Heads for Worst Year Since 2015. Why Is It Losing to a 5% Treasury?",
-        "summary": "",
-        "url": "https://finance.yahoo.com/markets/commodities/articles/gold-heads-worst-since-2015-043000698.html",
-        "source": "BeInCrypto",
-        "published_at": "2026-11-17T04:30:00Z",
-        "fetched_at": "2026-11-17T08:01:40Z",
+        "url": "https://finance.yahoo.com/markets/stocks/articles/hafnia-limited-q3-2026-earnings-220249716.html",
+        "source": "Moby",
+        "published_at": "2026-11-18T22:02:49Z",
+        "fetched_at": "2026-11-19T00:16:58Z",
         "ticker": null,
         "source_tier": "aggregator"
       }
@@ -116,12 +116,12 @@
       {
         "source": "Yahoo Finance",
         "status": "ok",
-        "item_count": 48
+        "item_count": 49
       },
       {
         "source": "Federal Reserve",
         "status": "ok",
-        "item_count": 4
+        "item_count": 5
       }
     ]
   },
@@ -130,9 +130,9 @@
       "status": "empty",
       "query_type": "ticker",
       "ticker": "515880.SS",
-      "start_date": "2026-11-17",
-      "end_date": "2026-11-17",
-      "fetched_at": "2026-11-17T08:01:42Z",
+      "start_date": "2026-11-19",
+      "end_date": "2026-11-19",
+      "fetched_at": "2026-11-19T00:16:59Z",
       "items": [],
       "source_statuses": [
         {
@@ -156,9 +156,9 @@
       "status": "empty",
       "query_type": "ticker",
       "ticker": "512480.SS",
-      "start_date": "2026-11-17",
-      "end_date": "2026-11-17",
-      "fetched_at": "2026-11-17T08:01:47Z",
+      "start_date": "2026-11-19",
+      "end_date": "2026-11-19",
+      "fetched_at": "2026-11-19T00:17:01Z",
       "items": [],
       "source_statuses": [
         {
@@ -181,102 +181,102 @@
   },
   "items": [
     {
-      "title": "Oil slips as recovering Middle East exports blunt Gulf tensions",
+      "title": "Dow Jones Futures Rise; Anthropic IPO Prices High, Palo Alto And Everpure Rally On Earnings",
       "summary": "",
-      "url": "https://finance.yahoo.com/energy/articles/oil-slips-supply-surplus-outlook-013927034.html",
+      "url": "https://finance.yahoo.com/m/107e5a2c-4fba-3df3-b2fd-5d1160e65516/dow-jones-futures-rise%3B.html",
+      "source": "Investor's Business Daily",
+      "published_at": "2026-11-19T00:05:12Z",
+      "fetched_at": "2026-11-19T00:16:58Z",
+      "ticker": null,
+      "source_tier": "aggregator"
+    },
+    {
+      "title": "What Moved Coupang Stock Over 5% Lower?",
+      "summary": "",
+      "url": "https://finance.yahoo.com/markets/stocks/articles/moved-coupang-stock-over-5-234256391.html",
+      "source": "Trefis",
+      "published_at": "2026-11-18T23:42:56Z",
+      "fetched_at": "2026-11-19T00:16:58Z",
+      "ticker": null,
+      "source_tier": "aggregator"
+    },
+    {
+      "title": "Wall Street Bullish on The Boeing Company (BA) as Backlog Grows to $745B",
+      "summary": "",
+      "url": "https://finance.yahoo.com/markets/stocks/articles/wall-street-bullish-boeing-company-233606659.html",
+      "source": "Insider Monkey",
+      "published_at": "2026-11-18T23:36:06Z",
+      "fetched_at": "2026-11-19T00:16:58Z",
+      "ticker": null,
+      "source_tier": "aggregator"
+    },
+    {
+      "title": "Boeing Insider Bought Shares Worth $500,067, According to a Recent SEC Filing",
+      "summary": "",
+      "url": "https://finance.yahoo.com/markets/stocks/articles/boeing-insider-bought-shares-worth-224619162.html",
+      "source": "MT Newswires",
+      "published_at": "2026-11-18T22:46:19Z",
+      "fetched_at": "2026-11-19T00:16:58Z",
+      "ticker": null,
+      "source_tier": "aggregator"
+    },
+    {
+      "title": "Stocks to Watch Recap: Palo Alto, Nvidia, Target",
+      "summary": "",
+      "url": "https://finance.yahoo.com/m/d06f4039-17ca-3b5c-8d4c-195520837b84/stocks-to-watch-recap%3A-palo.html",
+      "source": "The Wall Street Journal",
+      "published_at": "2026-11-18T22:45:52Z",
+      "fetched_at": "2026-11-19T00:16:58Z",
+      "ticker": null,
+      "source_tier": "aggregator"
+    },
+    {
+      "title": "Dan Ives’ Top 10 AI Revolution Stock Picks: Inside The IVES ETF",
+      "summary": "",
+      "url": "https://finance.yahoo.com/technology/ai/articles/dan-ives-top-10-ai-223943794.html",
+      "source": "Insider Monkey",
+      "published_at": "2026-11-18T22:39:43Z",
+      "fetched_at": "2026-11-19T00:16:58Z",
+      "ticker": null,
+      "source_tier": "aggregator"
+    },
+    {
+      "title": "Can Accenture Stock Jump 30%?",
+      "summary": "",
+      "url": "https://finance.yahoo.com/markets/stocks/articles/accenture-stock-jump-30-222709005.html",
+      "source": "Trefis",
+      "published_at": "2026-11-18T22:27:09Z",
+      "fetched_at": "2026-11-19T00:16:58Z",
+      "ticker": null,
+      "source_tier": "aggregator"
+    },
+    {
+      "title": "European stocks hit two-week low on weak miners, caution ahead of Anthropic IPO",
+      "summary": "",
+      "url": "https://finance.yahoo.com/markets/stocks/articles/european-shares-muted-tech-offsets-082501845.html",
       "source": "Reuters",
-      "published_at": "2026-11-17T07:26:21Z",
-      "fetched_at": "2026-11-17T08:01:40Z",
+      "published_at": "2026-11-18T22:21:36Z",
+      "fetched_at": "2026-11-19T00:16:58Z",
       "ticker": null,
       "source_tier": "aggregator"
     },
     {
-      "title": "What Does Woodside Energy Group (ASX:WDS) Face In A Global Oil Surplus?",
+      "title": "Trading Day: Markets mixed in a Nvidia, Anthropic, minutes swirl",
       "summary": "",
-      "url": "https://finance.yahoo.com/energy/articles/does-woodside-energy-group-asx-071126078.html",
-      "source": "Simply Wall St.",
-      "published_at": "2026-11-17T07:11:26Z",
-      "fetched_at": "2026-11-17T08:01:40Z",
+      "url": "https://finance.yahoo.com/markets/stocks/articles/trading-day-markets-mixed-nvidia-221528504.html",
+      "source": "Reuters",
+      "published_at": "2026-11-18T22:15:28Z",
+      "fetched_at": "2026-11-19T00:16:58Z",
       "ticker": null,
       "source_tier": "aggregator"
     },
     {
-      "title": "Goldman Sachs starts SBM Offshore at Buy, sees 25% upside on deepwater wave",
+      "title": "Hafnia Limited Q3 2026 Earnings Call Summary",
       "summary": "",
-      "url": "https://finance.yahoo.com/markets/stocks/articles/goldman-sachs-starts-sbm-offshore-070512040.html",
-      "source": "Investing.com",
-      "published_at": "2026-11-17T07:05:12Z",
-      "fetched_at": "2026-11-17T08:01:40Z",
-      "ticker": null,
-      "source_tier": "aggregator"
-    },
-    {
-      "title": "ExxonMobil's Uaru Startup Lifts Guyana Oil Capacity to 1.1 Million Bpd",
-      "summary": "",
-      "url": "https://finance.yahoo.com/energy/articles/exxonmobils-uaru-startup-lifts-guyana-064000242.html",
-      "source": "Oilprice.com",
-      "published_at": "2026-11-17T06:40:00Z",
-      "fetched_at": "2026-11-17T08:01:40Z",
-      "ticker": null,
-      "source_tier": "aggregator"
-    },
-    {
-      "title": "Lies, spies and sex are just one part of the Nvidia story. The real stakes are much bigger",
-      "summary": "",
-      "url": "https://finance.yahoo.com/technology/ai/articles/lies-spies-sex-just-one-093004759.html",
-      "source": "CNN Business",
-      "published_at": "2026-11-17T06:38:46Z",
-      "fetched_at": "2026-11-17T08:01:40Z",
-      "ticker": null,
-      "source_tier": "aggregator"
-    },
-    {
-      "title": "Walmart Reports Earnings on Nov. 19 2026. Here's What Investors Should Be Watching.",
-      "summary": "",
-      "url": "https://finance.yahoo.com/markets/stocks/articles/walmart-reports-earnings-nov-19-061658834.html",
-      "source": "Motley Fool",
-      "published_at": "2026-11-17T06:16:58Z",
-      "fetched_at": "2026-11-17T08:01:40Z",
-      "ticker": null,
-      "source_tier": "aggregator"
-    },
-    {
-      "title": "Chart of the Day: Walmart Is a Defensive Giant With Offensive Upside",
-      "summary": "",
-      "url": "https://finance.yahoo.com/m/166e5e75-b575-3afe-83d4-6bb484f29683/chart-of-the-day%3A-walmart-is.html",
-      "source": "Barrons.com",
-      "published_at": "2026-11-17T05:07:00Z",
-      "fetched_at": "2026-11-17T08:01:40Z",
-      "ticker": null,
-      "source_tier": "aggregator"
-    },
-    {
-      "title": "3 US Oil And Gas Stocks Investors Are Watching As Jet Fuel Prices Stay High",
-      "summary": "",
-      "url": "https://finance.yahoo.com/energy/articles/3-us-oil-gas-stocks-043936633.html",
-      "source": "Simply Wall St.",
-      "published_at": "2026-11-17T04:39:36Z",
-      "fetched_at": "2026-11-17T08:01:40Z",
-      "ticker": null,
-      "source_tier": "aggregator"
-    },
-    {
-      "title": "Why Is Suncor Energy (TSX:SU) Rethinking Its In Situ Growth Plans?",
-      "summary": "",
-      "url": "https://finance.yahoo.com/energy/articles/why-suncor-energy-tsx-su-043414518.html",
-      "source": "Simply Wall St.",
-      "published_at": "2026-11-17T04:34:14Z",
-      "fetched_at": "2026-11-17T08:01:40Z",
-      "ticker": null,
-      "source_tier": "aggregator"
-    },
-    {
-      "title": "Gold Heads for Worst Year Since 2015. Why Is It Losing to a 5% Treasury?",
-      "summary": "",
-      "url": "https://finance.yahoo.com/markets/commodities/articles/gold-heads-worst-since-2015-043000698.html",
-      "source": "BeInCrypto",
-      "published_at": "2026-11-17T04:30:00Z",
-      "fetched_at": "2026-11-17T08:01:40Z",
+      "url": "https://finance.yahoo.com/markets/stocks/articles/hafnia-limited-q3-2026-earnings-220249716.html",
+      "source": "Moby",
+      "published_at": "2026-11-18T22:02:49Z",
+      "fetched_at": "2026-11-19T00:16:58Z",
       "ticker": null,
       "source_tier": "aggregator"
     }
