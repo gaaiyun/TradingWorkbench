@@ -1,7 +1,7 @@
 {
   "version": 1,
-  "status": "ok",
-  "generated_at": "2026-11-19T08:16:56+08:00",
+  "status": "partial",
+  "generated_at": "2026-11-19T16:01:37+08:00",
   "trade_date": "2026-11-19",
   "global": {
     "status": "ok",
@@ -9,105 +9,105 @@
     "ticker": null,
     "start_date": "2026-11-12",
     "end_date": "2026-11-19",
-    "fetched_at": "2026-11-19T00:16:58Z",
+    "fetched_at": "2026-11-19T08:01:38Z",
     "items": [
       {
-        "title": "Dow Jones Futures Rise; Anthropic IPO Prices High, Palo Alto And Everpure Rally On Earnings",
+        "title": "Grand Theft Auto VI draws rave reviews as gamers enter Vice City",
         "summary": "",
-        "url": "https://finance.yahoo.com/m/107e5a2c-4fba-3df3-b2fd-5d1160e65516/dow-jones-futures-rise%3B.html",
-        "source": "Investor's Business Daily",
-        "published_at": "2026-11-19T00:05:12Z",
-        "fetched_at": "2026-11-19T00:16:58Z",
-        "ticker": null,
-        "source_tier": "aggregator"
-      },
-      {
-        "title": "What Moved Coupang Stock Over 5% Lower?",
-        "summary": "",
-        "url": "https://finance.yahoo.com/markets/stocks/articles/moved-coupang-stock-over-5-234256391.html",
-        "source": "Trefis",
-        "published_at": "2026-11-18T23:42:56Z",
-        "fetched_at": "2026-11-19T00:16:58Z",
-        "ticker": null,
-        "source_tier": "aggregator"
-      },
-      {
-        "title": "Wall Street Bullish on The Boeing Company (BA) as Backlog Grows to $745B",
-        "summary": "",
-        "url": "https://finance.yahoo.com/markets/stocks/articles/wall-street-bullish-boeing-company-233606659.html",
-        "source": "Insider Monkey",
-        "published_at": "2026-11-18T23:36:06Z",
-        "fetched_at": "2026-11-19T00:16:58Z",
-        "ticker": null,
-        "source_tier": "aggregator"
-      },
-      {
-        "title": "Boeing Insider Bought Shares Worth $500,067, According to a Recent SEC Filing",
-        "summary": "",
-        "url": "https://finance.yahoo.com/markets/stocks/articles/boeing-insider-bought-shares-worth-224619162.html",
-        "source": "MT Newswires",
-        "published_at": "2026-11-18T22:46:19Z",
-        "fetched_at": "2026-11-19T00:16:58Z",
-        "ticker": null,
-        "source_tier": "aggregator"
-      },
-      {
-        "title": "Stocks to Watch Recap: Palo Alto, Nvidia, Target",
-        "summary": "",
-        "url": "https://finance.yahoo.com/m/d06f4039-17ca-3b5c-8d4c-195520837b84/stocks-to-watch-recap%3A-palo.html",
-        "source": "The Wall Street Journal",
-        "published_at": "2026-11-18T22:45:52Z",
-        "fetched_at": "2026-11-19T00:16:58Z",
-        "ticker": null,
-        "source_tier": "aggregator"
-      },
-      {
-        "title": "Dan Ives’ Top 10 AI Revolution Stock Picks: Inside The IVES ETF",
-        "summary": "",
-        "url": "https://finance.yahoo.com/technology/ai/articles/dan-ives-top-10-ai-223943794.html",
-        "source": "Insider Monkey",
-        "published_at": "2026-11-18T22:39:43Z",
-        "fetched_at": "2026-11-19T00:16:58Z",
-        "ticker": null,
-        "source_tier": "aggregator"
-      },
-      {
-        "title": "Can Accenture Stock Jump 30%?",
-        "summary": "",
-        "url": "https://finance.yahoo.com/markets/stocks/articles/accenture-stock-jump-30-222709005.html",
-        "source": "Trefis",
-        "published_at": "2026-11-18T22:27:09Z",
-        "fetched_at": "2026-11-19T00:16:58Z",
-        "ticker": null,
-        "source_tier": "aggregator"
-      },
-      {
-        "title": "European stocks hit two-week low on weak miners, caution ahead of Anthropic IPO",
-        "summary": "",
-        "url": "https://finance.yahoo.com/markets/stocks/articles/european-shares-muted-tech-offsets-082501845.html",
+        "url": "https://finance.yahoo.com/news/gamers-ready-enter-vice-city-110339411.html",
         "source": "Reuters",
-        "published_at": "2026-11-18T22:21:36Z",
-        "fetched_at": "2026-11-19T00:16:58Z",
+        "published_at": "2026-11-19T07:43:10Z",
+        "fetched_at": "2026-11-19T08:01:38Z",
         "ticker": null,
         "source_tier": "aggregator"
       },
       {
-        "title": "Trading Day: Markets mixed in a Nvidia, Anthropic, minutes swirl",
+        "title": "GME Stock In Focus: GameStop Bulls Want ‘GTA 6 Squeeze’ Even As CEO Ryan Cohen Questions Digital-Only Games Play",
         "summary": "",
-        "url": "https://finance.yahoo.com/markets/stocks/articles/trading-day-markets-mixed-nvidia-221528504.html",
+        "url": "https://finance.yahoo.com/markets/stocks/articles/gme-stock-focus-gamestop-bulls-073405321.html",
+        "source": "Stocktwits",
+        "published_at": "2026-11-19T07:34:05Z",
+        "fetched_at": "2026-11-19T08:01:38Z",
+        "ticker": null,
+        "source_tier": "aggregator"
+      },
+      {
+        "title": "Tech firms rise after record Anthropic IPO but Nvidia casts shadow",
+        "summary": "",
+        "url": "https://finance.yahoo.com/markets/world-indices/articles/asian-stocks-drop-anthropics-record-025108034.html",
+        "source": "AFP",
+        "published_at": "2026-11-19T07:16:21Z",
+        "fetched_at": "2026-11-19T08:01:38Z",
+        "ticker": null,
+        "source_tier": "aggregator"
+      },
+      {
+        "title": "Oil prices steady as Middle East shipping attacks counter supply surplus outlook",
+        "summary": "",
+        "url": "https://finance.yahoo.com/energy/articles/oil-prices-steady-supply-surplus-024608326.html",
         "source": "Reuters",
-        "published_at": "2026-11-18T22:15:28Z",
-        "fetched_at": "2026-11-19T00:16:58Z",
+        "published_at": "2026-11-19T07:13:09Z",
+        "fetched_at": "2026-11-19T08:01:38Z",
         "ticker": null,
         "source_tier": "aggregator"
       },
       {
-        "title": "Hafnia Limited Q3 2026 Earnings Call Summary",
+        "title": "Take Two Interactive Software (TTWO) Stock Looks Reasonable After Cash Flow Review",
         "summary": "",
-        "url": "https://finance.yahoo.com/markets/stocks/articles/hafnia-limited-q3-2026-earnings-220249716.html",
-        "source": "Moby",
-        "published_at": "2026-11-18T22:02:49Z",
-        "fetched_at": "2026-11-19T00:16:58Z",
+        "url": "https://finance.yahoo.com/markets/stocks/articles/two-interactive-software-ttwo-stock-070952885.html",
+        "source": "Simply Wall St.",
+        "published_at": "2026-11-19T07:09:52Z",
+        "fetched_at": "2026-11-19T08:01:38Z",
+        "ticker": null,
+        "source_tier": "aggregator"
+      },
+      {
+        "title": "Sony shares rise as Playstation dominates GTA VI sales",
+        "summary": "",
+        "url": "https://finance.yahoo.com/markets/stocks/articles/sony-shares-rise-playstation-dominates-063734369.html",
+        "source": "Investing.com",
+        "published_at": "2026-11-19T06:37:34Z",
+        "fetched_at": "2026-11-19T08:01:38Z",
+        "ticker": null,
+        "source_tier": "aggregator"
+      },
+      {
+        "title": "Oil Prices Steady as Hormuz Tanker Threats Offset Supply Glut Fears",
+        "summary": "",
+        "url": "https://finance.yahoo.com/energy/articles/oil-prices-steady-hormuz-tanker-060000012.html",
+        "source": "Oilprice.com",
+        "published_at": "2026-11-19T06:00:00Z",
+        "fetched_at": "2026-11-19T08:01:38Z",
+        "ticker": null,
+        "source_tier": "aggregator"
+      },
+      {
+        "title": "Japan posts sixth straight monthly trade deficit",
+        "summary": "",
+        "url": "https://finance.yahoo.com/economy/articles/japan-posts-sixth-straight-monthly-055129767.html",
+        "source": "IntelliNews",
+        "published_at": "2026-11-19T05:51:29Z",
+        "fetched_at": "2026-11-19T08:01:38Z",
+        "ticker": null,
+        "source_tier": "aggregator"
+      },
+      {
+        "title": "Gold, Silver and Crude Slide Hard as Volatility Jumps on the Week",
+        "summary": "",
+        "url": "https://finance.yahoo.com/markets/commodities/articles/gold-silver-crude-slide-hard-052600245.html",
+        "source": "CNW Group",
+        "published_at": "2026-11-19T05:26:00Z",
+        "fetched_at": "2026-11-19T08:01:38Z",
+        "ticker": null,
+        "source_tier": "aggregator"
+      },
+      {
+        "title": "Should You Buy Take-Two Interactive After the GTA VI Release?",
+        "summary": "",
+        "url": "https://finance.yahoo.com/markets/stocks/articles/buy-two-interactive-gta-vi-052102661.html",
+        "source": "Motley Fool",
+        "published_at": "2026-11-19T05:21:02Z",
+        "fetched_at": "2026-11-19T08:01:38Z",
         "ticker": null,
         "source_tier": "aggregator"
       }
@@ -116,7 +116,7 @@
       {
         "source": "Yahoo Finance",
         "status": "ok",
-        "item_count": 49
+        "item_count": 50
       },
       {
         "source": "Federal Reserve",
@@ -127,12 +127,12 @@
   },
   "tickers": {
     "515880.SS": {
-      "status": "empty",
+      "status": "partial_empty",
       "query_type": "ticker",
       "ticker": "515880.SS",
       "start_date": "2026-11-19",
       "end_date": "2026-11-19",
-      "fetched_at": "2026-11-19T00:16:59Z",
+      "fetched_at": "2026-11-19T08:01:40Z",
       "items": [],
       "source_statuses": [
         {
@@ -142,7 +142,7 @@
         },
         {
           "source": "Google News RSS",
-          "status": "empty",
+          "status": "failed",
           "item_count": 0
         },
         {
@@ -153,12 +153,12 @@
       ]
     },
     "512480.SS": {
-      "status": "empty",
+      "status": "partial_empty",
       "query_type": "ticker",
       "ticker": "512480.SS",
       "start_date": "2026-11-19",
       "end_date": "2026-11-19",
-      "fetched_at": "2026-11-19T00:17:01Z",
+      "fetched_at": "2026-11-19T08:01:42Z",
       "items": [],
       "source_statuses": [
         {
@@ -168,7 +168,7 @@
         },
         {
           "source": "Google News RSS",
-          "status": "empty",
+          "status": "failed",
           "item_count": 0
         },
         {
@@ -181,102 +181,102 @@
   },
   "items": [
     {
-      "title": "Dow Jones Futures Rise; Anthropic IPO Prices High, Palo Alto And Everpure Rally On Earnings",
+      "title": "Grand Theft Auto VI draws rave reviews as gamers enter Vice City",
       "summary": "",
-      "url": "https://finance.yahoo.com/m/107e5a2c-4fba-3df3-b2fd-5d1160e65516/dow-jones-futures-rise%3B.html",
-      "source": "Investor's Business Daily",
-      "published_at": "2026-11-19T00:05:12Z",
-      "fetched_at": "2026-11-19T00:16:58Z",
-      "ticker": null,
-      "source_tier": "aggregator"
-    },
-    {
-      "title": "What Moved Coupang Stock Over 5% Lower?",
-      "summary": "",
-      "url": "https://finance.yahoo.com/markets/stocks/articles/moved-coupang-stock-over-5-234256391.html",
-      "source": "Trefis",
-      "published_at": "2026-11-18T23:42:56Z",
-      "fetched_at": "2026-11-19T00:16:58Z",
-      "ticker": null,
-      "source_tier": "aggregator"
-    },
-    {
-      "title": "Wall Street Bullish on The Boeing Company (BA) as Backlog Grows to $745B",
-      "summary": "",
-      "url": "https://finance.yahoo.com/markets/stocks/articles/wall-street-bullish-boeing-company-233606659.html",
-      "source": "Insider Monkey",
-      "published_at": "2026-11-18T23:36:06Z",
-      "fetched_at": "2026-11-19T00:16:58Z",
-      "ticker": null,
-      "source_tier": "aggregator"
-    },
-    {
-      "title": "Boeing Insider Bought Shares Worth $500,067, According to a Recent SEC Filing",
-      "summary": "",
-      "url": "https://finance.yahoo.com/markets/stocks/articles/boeing-insider-bought-shares-worth-224619162.html",
-      "source": "MT Newswires",
-      "published_at": "2026-11-18T22:46:19Z",
-      "fetched_at": "2026-11-19T00:16:58Z",
-      "ticker": null,
-      "source_tier": "aggregator"
-    },
-    {
-      "title": "Stocks to Watch Recap: Palo Alto, Nvidia, Target",
-      "summary": "",
-      "url": "https://finance.yahoo.com/m/d06f4039-17ca-3b5c-8d4c-195520837b84/stocks-to-watch-recap%3A-palo.html",
-      "source": "The Wall Street Journal",
-      "published_at": "2026-11-18T22:45:52Z",
-      "fetched_at": "2026-11-19T00:16:58Z",
-      "ticker": null,
-      "source_tier": "aggregator"
-    },
-    {
-      "title": "Dan Ives’ Top 10 AI Revolution Stock Picks: Inside The IVES ETF",
-      "summary": "",
-      "url": "https://finance.yahoo.com/technology/ai/articles/dan-ives-top-10-ai-223943794.html",
-      "source": "Insider Monkey",
-      "published_at": "2026-11-18T22:39:43Z",
-      "fetched_at": "2026-11-19T00:16:58Z",
-      "ticker": null,
-      "source_tier": "aggregator"
-    },
-    {
-      "title": "Can Accenture Stock Jump 30%?",
-      "summary": "",
-      "url": "https://finance.yahoo.com/markets/stocks/articles/accenture-stock-jump-30-222709005.html",
-      "source": "Trefis",
-      "published_at": "2026-11-18T22:27:09Z",
-      "fetched_at": "2026-11-19T00:16:58Z",
-      "ticker": null,
-      "source_tier": "aggregator"
-    },
-    {
-      "title": "European stocks hit two-week low on weak miners, caution ahead of Anthropic IPO",
-      "summary": "",
-      "url": "https://finance.yahoo.com/markets/stocks/articles/european-shares-muted-tech-offsets-082501845.html",
+      "url": "https://finance.yahoo.com/news/gamers-ready-enter-vice-city-110339411.html",
       "source": "Reuters",
-      "published_at": "2026-11-18T22:21:36Z",
-      "fetched_at": "2026-11-19T00:16:58Z",
+      "published_at": "2026-11-19T07:43:10Z",
+      "fetched_at": "2026-11-19T08:01:38Z",
       "ticker": null,
       "source_tier": "aggregator"
     },
     {
-      "title": "Trading Day: Markets mixed in a Nvidia, Anthropic, minutes swirl",
+      "title": "GME Stock In Focus: GameStop Bulls Want ‘GTA 6 Squeeze’ Even As CEO Ryan Cohen Questions Digital-Only Games Play",
       "summary": "",
-      "url": "https://finance.yahoo.com/markets/stocks/articles/trading-day-markets-mixed-nvidia-221528504.html",
+      "url": "https://finance.yahoo.com/markets/stocks/articles/gme-stock-focus-gamestop-bulls-073405321.html",
+      "source": "Stocktwits",
+      "published_at": "2026-11-19T07:34:05Z",
+      "fetched_at": "2026-11-19T08:01:38Z",
+      "ticker": null,
+      "source_tier": "aggregator"
+    },
+    {
+      "title": "Tech firms rise after record Anthropic IPO but Nvidia casts shadow",
+      "summary": "",
+      "url": "https://finance.yahoo.com/markets/world-indices/articles/asian-stocks-drop-anthropics-record-025108034.html",
+      "source": "AFP",
+      "published_at": "2026-11-19T07:16:21Z",
+      "fetched_at": "2026-11-19T08:01:38Z",
+      "ticker": null,
+      "source_tier": "aggregator"
+    },
+    {
+      "title": "Oil prices steady as Middle East shipping attacks counter supply surplus outlook",
+      "summary": "",
+      "url": "https://finance.yahoo.com/energy/articles/oil-prices-steady-supply-surplus-024608326.html",
       "source": "Reuters",
-      "published_at": "2026-11-18T22:15:28Z",
-      "fetched_at": "2026-11-19T00:16:58Z",
+      "published_at": "2026-11-19T07:13:09Z",
+      "fetched_at": "2026-11-19T08:01:38Z",
       "ticker": null,
       "source_tier": "aggregator"
     },
     {
-      "title": "Hafnia Limited Q3 2026 Earnings Call Summary",
+      "title": "Take Two Interactive Software (TTWO) Stock Looks Reasonable After Cash Flow Review",
       "summary": "",
-      "url": "https://finance.yahoo.com/markets/stocks/articles/hafnia-limited-q3-2026-earnings-220249716.html",
-      "source": "Moby",
-      "published_at": "2026-11-18T22:02:49Z",
-      "fetched_at": "2026-11-19T00:16:58Z",
+      "url": "https://finance.yahoo.com/markets/stocks/articles/two-interactive-software-ttwo-stock-070952885.html",
+      "source": "Simply Wall St.",
+      "published_at": "2026-11-19T07:09:52Z",
+      "fetched_at": "2026-11-19T08:01:38Z",
+      "ticker": null,
+      "source_tier": "aggregator"
+    },
+    {
+      "title": "Sony shares rise as Playstation dominates GTA VI sales",
+      "summary": "",
+      "url": "https://finance.yahoo.com/markets/stocks/articles/sony-shares-rise-playstation-dominates-063734369.html",
+      "source": "Investing.com",
+      "published_at": "2026-11-19T06:37:34Z",
+      "fetched_at": "2026-11-19T08:01:38Z",
+      "ticker": null,
+      "source_tier": "aggregator"
+    },
+    {
+      "title": "Oil Prices Steady as Hormuz Tanker Threats Offset Supply Glut Fears",
+      "summary": "",
+      "url": "https://finance.yahoo.com/energy/articles/oil-prices-steady-hormuz-tanker-060000012.html",
+      "source": "Oilprice.com",
+      "published_at": "2026-11-19T06:00:00Z",
+      "fetched_at": "2026-11-19T08:01:38Z",
+      "ticker": null,
+      "source_tier": "aggregator"
+    },
+    {
+      "title": "Japan posts sixth straight monthly trade deficit",
+      "summary": "",
+      "url": "https://finance.yahoo.com/economy/articles/japan-posts-sixth-straight-monthly-055129767.html",
+      "source": "IntelliNews",
+      "published_at": "2026-11-19T05:51:29Z",
+      "fetched_at": "2026-11-19T08:01:38Z",
+      "ticker": null,
+      "source_tier": "aggregator"
+    },
+    {
+      "title": "Gold, Silver and Crude Slide Hard as Volatility Jumps on the Week",
+      "summary": "",
+      "url": "https://finance.yahoo.com/markets/commodities/articles/gold-silver-crude-slide-hard-052600245.html",
+      "source": "CNW Group",
+      "published_at": "2026-11-19T05:26:00Z",
+      "fetched_at": "2026-11-19T08:01:38Z",
+      "ticker": null,
+      "source_tier": "aggregator"
+    },
+    {
+      "title": "Should You Buy Take-Two Interactive After the GTA VI Release?",
+      "summary": "",
+      "url": "https://finance.yahoo.com/markets/stocks/articles/buy-two-interactive-gta-vi-052102661.html",
+      "source": "Motley Fool",
+      "published_at": "2026-11-19T05:21:02Z",
+      "fetched_at": "2026-11-19T08:01:38Z",
       "ticker": null,
       "source_tier": "aggregator"
     }
