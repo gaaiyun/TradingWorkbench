@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "generatedAt": "2026-11-19T19:28:48.121Z",
+  "generatedAt": "2026-11-20T19:04:36.351Z",
   "status": "degraded",
   "coverage": {
     "policy": "current-listed-best-effort-plus-configured-core",
@@ -16,13 +16,13 @@
       "id": "sina-market-center",
       "role": "CN current-listed discovery",
       "quality": "best_effort",
-      "asOf": "2026-11-19T19:28:48.121Z"
+      "asOf": "2026-11-20T19:04:36.351Z"
     },
     {
       "id": "workbench-settings",
       "role": "configured HK/US/CN core instruments",
       "quality": "declared",
-      "asOf": "2026-11-19T19:28:48.121Z"
+      "asOf": "2026-11-20T19:04:36.351Z"
     }
   ],
   "instruments": [
@@ -33171,7 +33171,7 @@
     },
     {
       "symbol": "600141.SS",
-      "name": "XD兴发集",
+      "name": "兴发集团",
       "market": "CN",
       "exchange": "SS",
       "instrumentType": "stock",
@@ -42334,7 +42334,7 @@
     },
     {
       "symbol": "601888.SS",
-      "name": "中国中免",
+      "name": "XD中国中",
       "market": "CN",
       "exchange": "SS",
       "instrumentType": "stock",
@@ -42697,7 +42697,7 @@
     },
     {
       "symbol": "601998.SS",
-      "name": "中信银行",
+      "name": "XD中信银",
       "market": "CN",
       "exchange": "SS",
       "instrumentType": "stock",
@@ -43159,7 +43159,7 @@
     },
     {
       "symbol": "603043.SS",
-      "name": "XD广州酒",
+      "name": "广州酒家",
       "market": "CN",
       "exchange": "SS",
       "instrumentType": "stock",
@@ -44226,7 +44226,7 @@
     },
     {
       "symbol": "603167.SS",
-      "name": "渤海轮渡",
+      "name": "XD渤海轮",
       "market": "CN",
       "exchange": "SS",
       "instrumentType": "stock",
@@ -47790,7 +47790,7 @@
     },
     {
       "symbol": "603709.SS",
-      "name": "XD中源家",
+      "name": "中源家居",
       "market": "CN",
       "exchange": "SS",
       "instrumentType": "stock",
@@ -48593,7 +48593,7 @@
     },
     {
       "symbol": "603866.SS",
-      "name": "XD桃李面",
+      "name": "桃李面包",
       "market": "CN",
       "exchange": "SS",
       "instrumentType": "stock",
@@ -52432,7 +52432,7 @@
     },
     {
       "symbol": "688179.SS",
-      "name": "阿拉丁",
+      "name": "XD阿拉丁",
       "market": "CN",
       "exchange": "SS",
       "instrumentType": "stock",
@@ -58812,7 +58812,7 @@
     },
     {
       "symbol": "920176.BJ",
-      "name": "维琪科技",
+      "name": "XD维琪科",
       "market": "CN",
       "exchange": "BJ",
       "instrumentType": "stock",
@@ -59043,7 +59043,7 @@
     },
     {
       "symbol": "920201.BJ",
-      "name": "百瑞吉",
+      "name": "XD百瑞吉",
       "market": "CN",
       "exchange": "BJ",
       "instrumentType": "stock",
