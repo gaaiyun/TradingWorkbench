@@ -1,113 +1,113 @@
 {
   "version": 1,
-  "status": "partial",
-  "generated_at": "2026-11-19T16:01:37+08:00",
-  "trade_date": "2026-11-19",
+  "status": "ok",
+  "generated_at": "2026-11-21T08:16:52+08:00",
+  "trade_date": "2026-11-20",
   "global": {
     "status": "ok",
     "query_type": "global",
     "ticker": null,
-    "start_date": "2026-11-12",
-    "end_date": "2026-11-19",
-    "fetched_at": "2026-11-19T08:01:38Z",
+    "start_date": "2026-11-13",
+    "end_date": "2026-11-20",
+    "fetched_at": "2026-11-21T00:16:53Z",
     "items": [
       {
-        "title": "Grand Theft Auto VI draws rave reviews as gamers enter Vice City",
+        "title": "Goldman Sachs issues sobering verdict on S&P 500 year-end rally",
         "summary": "",
-        "url": "https://finance.yahoo.com/news/gamers-ready-enter-vice-city-110339411.html",
-        "source": "Reuters",
-        "published_at": "2026-11-19T07:43:10Z",
-        "fetched_at": "2026-11-19T08:01:38Z",
+        "url": "https://finance.yahoo.com/markets/stocks/articles/goldman-sachs-issues-sobering-verdict-233300371.html",
+        "source": "TheStreet",
+        "published_at": "2026-11-20T23:33:00Z",
+        "fetched_at": "2026-11-21T00:16:53Z",
         "ticker": null,
         "source_tier": "aggregator"
       },
       {
-        "title": "GME Stock In Focus: GameStop Bulls Want ‘GTA 6 Squeeze’ Even As CEO Ryan Cohen Questions Digital-Only Games Play",
+        "title": "'Grand Theft Auto VI' Drives Comcast, Charter to Record Traffic",
         "summary": "",
-        "url": "https://finance.yahoo.com/markets/stocks/articles/gme-stock-focus-gamestop-bulls-073405321.html",
-        "source": "Stocktwits",
-        "published_at": "2026-11-19T07:34:05Z",
-        "fetched_at": "2026-11-19T08:01:38Z",
+        "url": "https://finance.yahoo.com/media-advertising/articles/apos-grand-theft-auto-vi-232202435.html",
+        "source": "MT Newswires",
+        "published_at": "2026-11-20T23:22:02Z",
+        "fetched_at": "2026-11-21T00:16:53Z",
         "ticker": null,
         "source_tier": "aggregator"
       },
       {
-        "title": "Tech firms rise after record Anthropic IPO but Nvidia casts shadow",
+        "title": "Dow Jones Futures: Market Has Worst Week Since Covid Amid Nvidia, Anthropic. Does Fear Gauge Offer Hope?",
         "summary": "",
-        "url": "https://finance.yahoo.com/markets/world-indices/articles/asian-stocks-drop-anthropics-record-025108034.html",
-        "source": "AFP",
-        "published_at": "2026-11-19T07:16:21Z",
-        "fetched_at": "2026-11-19T08:01:38Z",
+        "url": "https://finance.yahoo.com/m/9ef9da98-bccf-3565-9a30-9bc3e57ad4b9/dow-jones-futures%3A-market-has.html",
+        "source": "Investor's Business Daily",
+        "published_at": "2026-11-20T23:15:09Z",
+        "fetched_at": "2026-11-21T00:16:53Z",
         "ticker": null,
         "source_tier": "aggregator"
       },
       {
-        "title": "Oil prices steady as Middle East shipping attacks counter supply surplus outlook",
+        "title": "Walmart (WMT) Q3 Results Meet Sales Growth But Profitability Cools",
         "summary": "",
-        "url": "https://finance.yahoo.com/energy/articles/oil-prices-steady-supply-surplus-024608326.html",
-        "source": "Reuters",
-        "published_at": "2026-11-19T07:13:09Z",
-        "fetched_at": "2026-11-19T08:01:38Z",
-        "ticker": null,
-        "source_tier": "aggregator"
-      },
-      {
-        "title": "Take Two Interactive Software (TTWO) Stock Looks Reasonable After Cash Flow Review",
-        "summary": "",
-        "url": "https://finance.yahoo.com/markets/stocks/articles/two-interactive-software-ttwo-stock-070952885.html",
+        "url": "https://finance.yahoo.com/markets/stocks/articles/walmart-wmt-q3-results-meet-231353428.html",
         "source": "Simply Wall St.",
-        "published_at": "2026-11-19T07:09:52Z",
-        "fetched_at": "2026-11-19T08:01:38Z",
+        "published_at": "2026-11-20T23:13:53Z",
+        "fetched_at": "2026-11-21T00:16:53Z",
         "ticker": null,
         "source_tier": "aggregator"
       },
       {
-        "title": "Sony shares rise as Playstation dominates GTA VI sales",
+        "title": "Jim Cramer warns Anthropic investors were 'fooled badly' as Cathie Wood's Ark scoops up $90.8M in shares",
         "summary": "",
-        "url": "https://finance.yahoo.com/markets/stocks/articles/sony-shares-rise-playstation-dominates-063734369.html",
+        "url": "https://finance.yahoo.com/markets/stocks/articles/jim-cramer-warns-anthropic-investors-230000036.html",
+        "source": "Moneywise",
+        "published_at": "2026-11-20T23:00:00Z",
+        "fetched_at": "2026-11-21T00:16:53Z",
+        "ticker": null,
+        "source_tier": "aggregator"
+      },
+      {
+        "title": "S&P affirms Kuwait’s ‘AA-’ rating as wealth buffers offset war-driven GDP slump",
+        "summary": "",
+        "url": "https://finance.yahoo.com/economy/policy/articles/p-affirms-kuwait-aa-rating-225336469.html",
         "source": "Investing.com",
-        "published_at": "2026-11-19T06:37:34Z",
-        "fetched_at": "2026-11-19T08:01:38Z",
+        "published_at": "2026-11-20T22:53:36Z",
+        "fetched_at": "2026-11-21T00:16:53Z",
         "ticker": null,
         "source_tier": "aggregator"
       },
       {
-        "title": "Oil Prices Steady as Hormuz Tanker Threats Offset Supply Glut Fears",
+        "title": "Stock Market Today, Nov. 20: Amazon Shares Slide on AI and Mega-Cap Tech Sell-Off",
         "summary": "",
-        "url": "https://finance.yahoo.com/energy/articles/oil-prices-steady-hormuz-tanker-060000012.html",
-        "source": "Oilprice.com",
-        "published_at": "2026-11-19T06:00:00Z",
-        "fetched_at": "2026-11-19T08:01:38Z",
-        "ticker": null,
-        "source_tier": "aggregator"
-      },
-      {
-        "title": "Japan posts sixth straight monthly trade deficit",
-        "summary": "",
-        "url": "https://finance.yahoo.com/economy/articles/japan-posts-sixth-straight-monthly-055129767.html",
-        "source": "IntelliNews",
-        "published_at": "2026-11-19T05:51:29Z",
-        "fetched_at": "2026-11-19T08:01:38Z",
-        "ticker": null,
-        "source_tier": "aggregator"
-      },
-      {
-        "title": "Gold, Silver and Crude Slide Hard as Volatility Jumps on the Week",
-        "summary": "",
-        "url": "https://finance.yahoo.com/markets/commodities/articles/gold-silver-crude-slide-hard-052600245.html",
-        "source": "CNW Group",
-        "published_at": "2026-11-19T05:26:00Z",
-        "fetched_at": "2026-11-19T08:01:38Z",
-        "ticker": null,
-        "source_tier": "aggregator"
-      },
-      {
-        "title": "Should You Buy Take-Two Interactive After the GTA VI Release?",
-        "summary": "",
-        "url": "https://finance.yahoo.com/markets/stocks/articles/buy-two-interactive-gta-vi-052102661.html",
+        "url": "https://finance.yahoo.com/markets/stocks/articles/stock-market-today-nov-20-225002397.html",
         "source": "Motley Fool",
-        "published_at": "2026-11-19T05:21:02Z",
-        "fetched_at": "2026-11-19T08:01:38Z",
+        "published_at": "2026-11-20T22:50:02Z",
+        "fetched_at": "2026-11-21T00:16:53Z",
+        "ticker": null,
+        "source_tier": "aggregator"
+      },
+      {
+        "title": "Walt Disney Insider Sold Shares Worth $597,819, According to a Recent SEC Filing",
+        "summary": "",
+        "url": "https://finance.yahoo.com/markets/stocks/articles/walt-disney-insider-sold-shares-224938505.html",
+        "source": "MT Newswires",
+        "published_at": "2026-11-20T22:49:38Z",
+        "fetched_at": "2026-11-21T00:16:53Z",
+        "ticker": null,
+        "source_tier": "aggregator"
+      },
+      {
+        "title": "Target Shines, Walmart Merely Fine: Two Retail Giants Split on Q3 Results",
+        "summary": "",
+        "url": "https://finance.yahoo.com/markets/stocks/articles/target-shines-walmart-merely-fine-224900183.html",
+        "source": "Zacks",
+        "published_at": "2026-11-20T22:49:00Z",
+        "fetched_at": "2026-11-21T00:16:53Z",
+        "ticker": null,
+        "source_tier": "aggregator"
+      },
+      {
+        "title": "Walt Disney Insider Sold Shares Worth $39,510,457, According to a Recent SEC Filing",
+        "summary": "",
+        "url": "https://finance.yahoo.com/markets/stocks/articles/walt-disney-insider-sold-shares-224851693.html",
+        "source": "MT Newswires",
+        "published_at": "2026-11-20T22:48:51Z",
+        "fetched_at": "2026-11-21T00:16:53Z",
         "ticker": null,
         "source_tier": "aggregator"
       }
@@ -116,7 +116,7 @@
       {
         "source": "Yahoo Finance",
         "status": "ok",
-        "item_count": 50
+        "item_count": 48
       },
       {
         "source": "Federal Reserve",
@@ -127,12 +127,12 @@
   },
   "tickers": {
     "515880.SS": {
-      "status": "partial_empty",
+      "status": "empty",
       "query_type": "ticker",
       "ticker": "515880.SS",
-      "start_date": "2026-11-19",
-      "end_date": "2026-11-19",
-      "fetched_at": "2026-11-19T08:01:40Z",
+      "start_date": "2026-11-20",
+      "end_date": "2026-11-20",
+      "fetched_at": "2026-11-21T00:16:55Z",
       "items": [],
       "source_statuses": [
         {
@@ -142,7 +142,7 @@
         },
         {
           "source": "Google News RSS",
-          "status": "failed",
+          "status": "empty",
           "item_count": 0
         },
         {
@@ -153,12 +153,12 @@
       ]
     },
     "512480.SS": {
-      "status": "partial_empty",
+      "status": "empty",
       "query_type": "ticker",
       "ticker": "512480.SS",
-      "start_date": "2026-11-19",
-      "end_date": "2026-11-19",
-      "fetched_at": "2026-11-19T08:01:42Z",
+      "start_date": "2026-11-20",
+      "end_date": "2026-11-20",
+      "fetched_at": "2026-11-21T00:16:58Z",
       "items": [],
       "source_statuses": [
         {
@@ -168,7 +168,7 @@
         },
         {
           "source": "Google News RSS",
-          "status": "failed",
+          "status": "empty",
           "item_count": 0
         },
         {
@@ -181,102 +181,102 @@
   },
   "items": [
     {
-      "title": "Grand Theft Auto VI draws rave reviews as gamers enter Vice City",
+      "title": "Goldman Sachs issues sobering verdict on S&P 500 year-end rally",
       "summary": "",
-      "url": "https://finance.yahoo.com/news/gamers-ready-enter-vice-city-110339411.html",
-      "source": "Reuters",
-      "published_at": "2026-11-19T07:43:10Z",
-      "fetched_at": "2026-11-19T08:01:38Z",
+      "url": "https://finance.yahoo.com/markets/stocks/articles/goldman-sachs-issues-sobering-verdict-233300371.html",
+      "source": "TheStreet",
+      "published_at": "2026-11-20T23:33:00Z",
+      "fetched_at": "2026-11-21T00:16:53Z",
       "ticker": null,
       "source_tier": "aggregator"
     },
     {
-      "title": "GME Stock In Focus: GameStop Bulls Want ‘GTA 6 Squeeze’ Even As CEO Ryan Cohen Questions Digital-Only Games Play",
+      "title": "'Grand Theft Auto VI' Drives Comcast, Charter to Record Traffic",
       "summary": "",
-      "url": "https://finance.yahoo.com/markets/stocks/articles/gme-stock-focus-gamestop-bulls-073405321.html",
-      "source": "Stocktwits",
-      "published_at": "2026-11-19T07:34:05Z",
-      "fetched_at": "2026-11-19T08:01:38Z",
+      "url": "https://finance.yahoo.com/media-advertising/articles/apos-grand-theft-auto-vi-232202435.html",
+      "source": "MT Newswires",
+      "published_at": "2026-11-20T23:22:02Z",
+      "fetched_at": "2026-11-21T00:16:53Z",
       "ticker": null,
       "source_tier": "aggregator"
     },
     {
-      "title": "Tech firms rise after record Anthropic IPO but Nvidia casts shadow",
+      "title": "Dow Jones Futures: Market Has Worst Week Since Covid Amid Nvidia, Anthropic. Does Fear Gauge Offer Hope?",
       "summary": "",
-      "url": "https://finance.yahoo.com/markets/world-indices/articles/asian-stocks-drop-anthropics-record-025108034.html",
-      "source": "AFP",
-      "published_at": "2026-11-19T07:16:21Z",
-      "fetched_at": "2026-11-19T08:01:38Z",
+      "url": "https://finance.yahoo.com/m/9ef9da98-bccf-3565-9a30-9bc3e57ad4b9/dow-jones-futures%3A-market-has.html",
+      "source": "Investor's Business Daily",
+      "published_at": "2026-11-20T23:15:09Z",
+      "fetched_at": "2026-11-21T00:16:53Z",
       "ticker": null,
       "source_tier": "aggregator"
     },
     {
-      "title": "Oil prices steady as Middle East shipping attacks counter supply surplus outlook",
+      "title": "Walmart (WMT) Q3 Results Meet Sales Growth But Profitability Cools",
       "summary": "",
-      "url": "https://finance.yahoo.com/energy/articles/oil-prices-steady-supply-surplus-024608326.html",
-      "source": "Reuters",
-      "published_at": "2026-11-19T07:13:09Z",
-      "fetched_at": "2026-11-19T08:01:38Z",
-      "ticker": null,
-      "source_tier": "aggregator"
-    },
-    {
-      "title": "Take Two Interactive Software (TTWO) Stock Looks Reasonable After Cash Flow Review",
-      "summary": "",
-      "url": "https://finance.yahoo.com/markets/stocks/articles/two-interactive-software-ttwo-stock-070952885.html",
+      "url": "https://finance.yahoo.com/markets/stocks/articles/walmart-wmt-q3-results-meet-231353428.html",
       "source": "Simply Wall St.",
-      "published_at": "2026-11-19T07:09:52Z",
-      "fetched_at": "2026-11-19T08:01:38Z",
+      "published_at": "2026-11-20T23:13:53Z",
+      "fetched_at": "2026-11-21T00:16:53Z",
       "ticker": null,
       "source_tier": "aggregator"
     },
     {
-      "title": "Sony shares rise as Playstation dominates GTA VI sales",
+      "title": "Jim Cramer warns Anthropic investors were 'fooled badly' as Cathie Wood's Ark scoops up $90.8M in shares",
       "summary": "",
-      "url": "https://finance.yahoo.com/markets/stocks/articles/sony-shares-rise-playstation-dominates-063734369.html",
+      "url": "https://finance.yahoo.com/markets/stocks/articles/jim-cramer-warns-anthropic-investors-230000036.html",
+      "source": "Moneywise",
+      "published_at": "2026-11-20T23:00:00Z",
+      "fetched_at": "2026-11-21T00:16:53Z",
+      "ticker": null,
+      "source_tier": "aggregator"
+    },
+    {
+      "title": "S&P affirms Kuwait’s ‘AA-’ rating as wealth buffers offset war-driven GDP slump",
+      "summary": "",
+      "url": "https://finance.yahoo.com/economy/policy/articles/p-affirms-kuwait-aa-rating-225336469.html",
       "source": "Investing.com",
-      "published_at": "2026-11-19T06:37:34Z",
-      "fetched_at": "2026-11-19T08:01:38Z",
+      "published_at": "2026-11-20T22:53:36Z",
+      "fetched_at": "2026-11-21T00:16:53Z",
       "ticker": null,
       "source_tier": "aggregator"
     },
     {
-      "title": "Oil Prices Steady as Hormuz Tanker Threats Offset Supply Glut Fears",
+      "title": "Stock Market Today, Nov. 20: Amazon Shares Slide on AI and Mega-Cap Tech Sell-Off",
       "summary": "",
-      "url": "https://finance.yahoo.com/energy/articles/oil-prices-steady-hormuz-tanker-060000012.html",
-      "source": "Oilprice.com",
-      "published_at": "2026-11-19T06:00:00Z",
-      "fetched_at": "2026-11-19T08:01:38Z",
-      "ticker": null,
-      "source_tier": "aggregator"
-    },
-    {
-      "title": "Japan posts sixth straight monthly trade deficit",
-      "summary": "",
-      "url": "https://finance.yahoo.com/economy/articles/japan-posts-sixth-straight-monthly-055129767.html",
-      "source": "IntelliNews",
-      "published_at": "2026-11-19T05:51:29Z",
-      "fetched_at": "2026-11-19T08:01:38Z",
-      "ticker": null,
-      "source_tier": "aggregator"
-    },
-    {
-      "title": "Gold, Silver and Crude Slide Hard as Volatility Jumps on the Week",
-      "summary": "",
-      "url": "https://finance.yahoo.com/markets/commodities/articles/gold-silver-crude-slide-hard-052600245.html",
-      "source": "CNW Group",
-      "published_at": "2026-11-19T05:26:00Z",
-      "fetched_at": "2026-11-19T08:01:38Z",
-      "ticker": null,
-      "source_tier": "aggregator"
-    },
-    {
-      "title": "Should You Buy Take-Two Interactive After the GTA VI Release?",
-      "summary": "",
-      "url": "https://finance.yahoo.com/markets/stocks/articles/buy-two-interactive-gta-vi-052102661.html",
+      "url": "https://finance.yahoo.com/markets/stocks/articles/stock-market-today-nov-20-225002397.html",
       "source": "Motley Fool",
-      "published_at": "2026-11-19T05:21:02Z",
-      "fetched_at": "2026-11-19T08:01:38Z",
+      "published_at": "2026-11-20T22:50:02Z",
+      "fetched_at": "2026-11-21T00:16:53Z",
+      "ticker": null,
+      "source_tier": "aggregator"
+    },
+    {
+      "title": "Walt Disney Insider Sold Shares Worth $597,819, According to a Recent SEC Filing",
+      "summary": "",
+      "url": "https://finance.yahoo.com/markets/stocks/articles/walt-disney-insider-sold-shares-224938505.html",
+      "source": "MT Newswires",
+      "published_at": "2026-11-20T22:49:38Z",
+      "fetched_at": "2026-11-21T00:16:53Z",
+      "ticker": null,
+      "source_tier": "aggregator"
+    },
+    {
+      "title": "Target Shines, Walmart Merely Fine: Two Retail Giants Split on Q3 Results",
+      "summary": "",
+      "url": "https://finance.yahoo.com/markets/stocks/articles/target-shines-walmart-merely-fine-224900183.html",
+      "source": "Zacks",
+      "published_at": "2026-11-20T22:49:00Z",
+      "fetched_at": "2026-11-21T00:16:53Z",
+      "ticker": null,
+      "source_tier": "aggregator"
+    },
+    {
+      "title": "Walt Disney Insider Sold Shares Worth $39,510,457, According to a Recent SEC Filing",
+      "summary": "",
+      "url": "https://finance.yahoo.com/markets/stocks/articles/walt-disney-insider-sold-shares-224851693.html",
+      "source": "MT Newswires",
+      "published_at": "2026-11-20T22:48:51Z",
+      "fetched_at": "2026-11-21T00:16:53Z",
       "ticker": null,
       "source_tier": "aggregator"
     }
