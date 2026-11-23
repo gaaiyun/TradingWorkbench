@@ -1,7 +1,7 @@
 {
   "status": "failed",
-  "generated_at": "2026-11-21T08:16:52+08:00",
-  "trade_date": "2026-11-20",
+  "generated_at": "2026-11-23T16:01:48+08:00",
+  "trade_date": "2026-11-23",
   "provider": "openai_compatible",
   "analysts": [
     "market",
@@ -19,19 +19,19 @@
     "kind": "monitor"
   },
   "run": {
-    "id": "44842646036",
+    "id": "45135264909",
     "attempt": "1",
     "workflow": "daily-analysis",
-    "url": "https://github.com/gaaiyun/TradingWorkbench/actions/runs/44842646036"
+    "url": "https://github.com/gaaiyun/TradingWorkbench/actions/runs/45135264909"
   },
   "identity": {
     "scope": "profile",
     "kind": "monitor",
-    "runId": "44842646036",
+    "runId": "45135264909",
     "profileId": "cn-semi-comms",
     "requestId": null,
-    "slotId": "slot-84100e44b10bb8ddef237218b8ab7b8af379abe9db67d5549b92ff6262d136f3",
-    "scheduledFor": "2026-11-20T23:58:54.000Z"
+    "slotId": "slot-a1e4a8d8f55bab49f3bb914f5d2a634df2d6c99d3822b3fdc645c2f2b13c8992",
+    "scheduledFor": "2026-11-23T07:19:27.000Z"
   },
   "rating_tiers": [
     "Sell",
@@ -60,7 +60,7 @@
       "rating": null,
       "report": null,
       "decision_excerpt": "",
-      "error": "OpenAIModelNotFoundError: Error code: 404 - Model \"gpt-5.4-mini\" is not supported by any configured account in this group"
+      "error": "OpenAIPermissionDeniedError: Error code: 403 - Insufficient account balance"
     }
   ]
 }
