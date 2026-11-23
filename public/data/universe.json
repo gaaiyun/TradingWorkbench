@@ -1,10 +1,10 @@
 {
   "version": 1,
-  "generatedAt": "2026-11-20T19:04:36.351Z",
+  "generatedAt": "2026-11-23T22:36:00.100Z",
   "status": "degraded",
   "coverage": {
     "policy": "current-listed-best-effort-plus-configured-core",
-    "cnCurrentListedStocks": 5579,
+    "cnCurrentListedStocks": 5580,
     "cnConfiguredCore": 3,
     "usCore": 9,
     "hkCore": 1,
@@ -16,13 +16,13 @@
       "id": "sina-market-center",
       "role": "CN current-listed discovery",
       "quality": "best_effort",
-      "asOf": "2026-11-20T19:04:36.351Z"
+      "asOf": "2026-11-23T22:36:00.100Z"
     },
     {
       "id": "workbench-settings",
       "role": "configured HK/US/CN core instruments",
       "quality": "declared",
-      "asOf": "2026-11-20T19:04:36.351Z"
+      "asOf": "2026-11-23T22:36:00.100Z"
     }
   ],
   "instruments": [
@@ -7134,7 +7134,7 @@
     },
     {
       "symbol": "002122.SZ",
-      "name": "ST汇洲",
+      "name": "汇洲智能",
       "market": "CN",
       "exchange": "SZ",
       "instrumentType": "stock",
@@ -19993,7 +19993,7 @@
     },
     {
       "symbol": "300351.SZ",
-      "name": "永贵电器",
+      "name": "永贵智能",
       "market": "CN",
       "exchange": "SZ",
       "instrumentType": "stock",
@@ -42334,7 +42334,7 @@
     },
     {
       "symbol": "601888.SS",
-      "name": "XD中国中",
+      "name": "中国中免",
       "market": "CN",
       "exchange": "SS",
       "instrumentType": "stock",
@@ -42697,7 +42697,7 @@
     },
     {
       "symbol": "601998.SS",
-      "name": "XD中信银",
+      "name": "中信银行",
       "market": "CN",
       "exchange": "SS",
       "instrumentType": "stock",
@@ -43126,7 +43126,7 @@
     },
     {
       "symbol": "603040.SS",
-      "name": "新坐标",
+      "name": "XD新坐标",
       "market": "CN",
       "exchange": "SS",
       "instrumentType": "stock",
@@ -44226,7 +44226,7 @@
     },
     {
       "symbol": "603167.SS",
-      "name": "XD渤海轮",
+      "name": "渤海轮渡",
       "market": "CN",
       "exchange": "SS",
       "instrumentType": "stock",
@@ -49165,7 +49165,7 @@
     },
     {
       "symbol": "603955.SS",
-      "name": "大千生态",
+      "name": "灵动股份",
       "market": "CN",
       "exchange": "SS",
       "instrumentType": "stock",
@@ -52432,7 +52432,7 @@
     },
     {
       "symbol": "688179.SS",
-      "name": "XD阿拉丁",
+      "name": "阿拉丁",
       "market": "CN",
       "exchange": "SS",
       "instrumentType": "stock",
@@ -58052,6 +58052,17 @@
       "coverage": "current_listed_best_effort"
     },
     {
+      "symbol": "920067.BJ",
+      "name": "N华晟",
+      "market": "CN",
+      "exchange": "BJ",
+      "instrumentType": "stock",
+      "industry": null,
+      "listDate": null,
+      "source": "sina-market-center",
+      "coverage": "current_listed_best_effort"
+    },
+    {
       "symbol": "920068.BJ",
       "name": "天工股份",
       "market": "CN",
@@ -58812,7 +58823,7 @@
     },
     {
       "symbol": "920176.BJ",
-      "name": "XD维琪科",
+      "name": "维琪科技",
       "market": "CN",
       "exchange": "BJ",
       "instrumentType": "stock",
@@ -59043,7 +59054,7 @@
     },
     {
       "symbol": "920201.BJ",
-      "name": "XD百瑞吉",
+      "name": "百瑞吉",
       "market": "CN",
       "exchange": "BJ",
       "instrumentType": "stock",
@@ -61375,7 +61386,7 @@
     },
     {
       "symbol": "920976.BJ",
-      "name": "视声智能",
+      "name": "XD视声智",
       "market": "CN",
       "exchange": "BJ",
       "instrumentType": "stock",
