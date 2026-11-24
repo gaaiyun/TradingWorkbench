@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "generatedAt": "2026-11-23T22:36:00.100Z",
+  "generatedAt": "2026-11-24T21:08:14.650Z",
   "status": "degraded",
   "coverage": {
     "policy": "current-listed-best-effort-plus-configured-core",
@@ -16,13 +16,13 @@
       "id": "sina-market-center",
       "role": "CN current-listed discovery",
       "quality": "best_effort",
-      "asOf": "2026-11-23T22:36:00.100Z"
+      "asOf": "2026-11-24T21:08:14.650Z"
     },
     {
       "id": "workbench-settings",
       "role": "configured HK/US/CN core instruments",
       "quality": "declared",
-      "asOf": "2026-11-23T22:36:00.100Z"
+      "asOf": "2026-11-24T21:08:14.650Z"
     }
   ],
   "instruments": [
@@ -3724,7 +3724,7 @@
     },
     {
       "symbol": "000892.SZ",
-      "name": "欢瑞世纪",
+      "name": "ST欢瑞",
       "market": "CN",
       "exchange": "SZ",
       "instrumentType": "stock",
@@ -14724,7 +14724,7 @@
     },
     {
       "symbol": "002872.SZ",
-      "name": "ST天圣",
+      "name": "天圣制药",
       "market": "CN",
       "exchange": "SZ",
       "instrumentType": "stock",
@@ -21522,7 +21522,7 @@
     },
     {
       "symbol": "300500.SZ",
-      "name": "启迪设计",
+      "name": "ST启设",
       "market": "CN",
       "exchange": "SZ",
       "instrumentType": "stock",
@@ -35041,7 +35041,7 @@
     },
     {
       "symbol": "600369.SS",
-      "name": "西南证券",
+      "name": "XD西南证",
       "market": "CN",
       "exchange": "SS",
       "instrumentType": "stock",
@@ -35745,7 +35745,7 @@
     },
     {
       "symbol": "600475.SS",
-      "name": "华光环能",
+      "name": "XD华光环",
       "market": "CN",
       "exchange": "SS",
       "instrumentType": "stock",
@@ -43126,7 +43126,7 @@
     },
     {
       "symbol": "603040.SS",
-      "name": "XD新坐标",
+      "name": "新坐标",
       "market": "CN",
       "exchange": "SS",
       "instrumentType": "stock",
@@ -58053,7 +58053,7 @@
     },
     {
       "symbol": "920067.BJ",
-      "name": "N华晟",
+      "name": "华晟智能",
       "market": "CN",
       "exchange": "BJ",
       "instrumentType": "stock",
@@ -61386,7 +61386,7 @@
     },
     {
       "symbol": "920976.BJ",
-      "name": "XD视声智",
+      "name": "视声智能",
       "market": "CN",
       "exchange": "BJ",
       "instrumentType": "stock",
