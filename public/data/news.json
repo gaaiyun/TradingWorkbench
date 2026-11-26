@@ -1,113 +1,113 @@
 {
   "version": 1,
-  "status": "partial",
-  "generated_at": "2026-11-25T16:01:31+08:00",
-  "trade_date": "2026-11-25",
+  "status": "ok",
+  "generated_at": "2026-11-26T16:01:42+08:00",
+  "trade_date": "2026-11-26",
   "global": {
     "status": "ok",
     "query_type": "global",
     "ticker": null,
-    "start_date": "2026-11-18",
-    "end_date": "2026-11-25",
-    "fetched_at": "2026-11-25T08:01:31Z",
+    "start_date": "2026-11-19",
+    "end_date": "2026-11-26",
+    "fetched_at": "2026-11-26T08:01:43Z",
     "items": [
       {
-        "title": "Oil Prices Fall as Traders Weigh Supply Outlook, Renewed Middle East Tensions",
+        "title": "Oil rises on supply concerns as Iran claims mine strikes on ships",
         "summary": "",
-        "url": "https://finance.yahoo.com/m/6315b182-a0b7-3674-84d6-efcd68443f9c/oil-prices-fall-as-traders.html",
-        "source": "The Wall Street Journal",
-        "published_at": "2026-11-25T07:18:00Z",
-        "fetched_at": "2026-11-25T08:01:31Z",
+        "url": "https://finance.yahoo.com/energy/articles/oil-rises-supply-concerns-iran-030849858.html",
+        "source": "Reuters",
+        "published_at": "2026-11-26T06:54:29Z",
+        "fetched_at": "2026-11-26T08:01:43Z",
         "ticker": null,
         "source_tier": "aggregator"
       },
       {
-        "title": "Advantest Stock And 2 Chip Equipment Exporters Gaining From A Softer US Dollar",
+        "title": "Enbridge Eyes $1 Billion Pipeline Deal With Indigenous Communities",
         "summary": "",
-        "url": "https://finance.yahoo.com/markets/stocks/articles/advantest-stock-2-chip-equipment-071236234.html",
+        "url": "https://finance.yahoo.com/energy/articles/enbridge-eyes-1-billion-pipeline-064500452.html",
+        "source": "Oilprice.com",
+        "published_at": "2026-11-26T06:45:00Z",
+        "fetched_at": "2026-11-26T08:01:43Z",
+        "ticker": null,
+        "source_tier": "aggregator"
+      },
+      {
+        "title": "AFYREN Ranks First in EthiFinance’s Worldwide ESG Assessment in the Chemicals Category",
+        "summary": "",
+        "url": "https://finance.yahoo.com/healthcare/articles/afyren-ranks-first-ethifinance-worldwide-063000987.html",
+        "source": "Business Wire",
+        "published_at": "2026-11-26T06:30:00Z",
+        "fetched_at": "2026-11-26T08:01:43Z",
+        "ticker": null,
+        "source_tier": "aggregator"
+      },
+      {
+        "title": "BOJ policymaker signals chance of faster-paced interest rate hikes",
+        "summary": "",
+        "url": "https://finance.yahoo.com/economy/policy/articles/bojs-tamura-signals-chance-faster-013537147.html",
+        "source": "Reuters",
+        "published_at": "2026-11-26T06:24:12Z",
+        "fetched_at": "2026-11-26T08:01:43Z",
+        "ticker": null,
+        "source_tier": "aggregator"
+      },
+      {
+        "title": "3 Oil Stocks With Direct Exposure To Higher Crude Prices",
+        "summary": "",
+        "url": "https://finance.yahoo.com/energy/articles/3-oil-stocks-direct-exposure-061445059.html",
         "source": "Simply Wall St.",
-        "published_at": "2026-11-25T07:12:36Z",
-        "fetched_at": "2026-11-25T08:01:31Z",
+        "published_at": "2026-11-26T06:14:45Z",
+        "fetched_at": "2026-11-26T08:01:43Z",
         "ticker": null,
         "source_tier": "aggregator"
       },
       {
-        "title": "Mining carries Ecuador's export growth as third-quarter non-oil sales jump 19.1%",
+        "title": "Oil Crashed 20% Three Times This Year. Is a Fourth Coming?",
         "summary": "",
-        "url": "https://finance.yahoo.com/markets/commodities/articles/mining-carries-ecuadors-export-growth-065122888.html",
-        "source": "IntelliNews",
-        "published_at": "2026-11-25T06:51:22Z",
-        "fetched_at": "2026-11-25T08:01:31Z",
+        "url": "https://finance.yahoo.com/energy/articles/oil-crashed-20-three-times-060000499.html",
+        "source": "BeInCrypto",
+        "published_at": "2026-11-26T06:00:00Z",
+        "fetched_at": "2026-11-26T08:01:43Z",
         "ticker": null,
         "source_tier": "aggregator"
       },
       {
-        "title": "Oil Market Midweek Wrap: Brent Holds Near $90 Despite Iran Tensions – OPEC Meeting, ConocoPhillips Sale In Focus",
+        "title": "What’s Behind Take Two Interactive Software (TTWO) Stock’s Latest Move?",
         "summary": "",
-        "url": "https://finance.yahoo.com/energy/articles/oil-market-midweek-wrap-brent-054825883.html",
-        "source": "Stocktwits",
-        "published_at": "2026-11-25T05:48:25Z",
-        "fetched_at": "2026-11-25T08:01:31Z",
+        "url": "https://finance.yahoo.com/markets/stocks/articles/behind-two-interactive-software-ttwo-051940943.html",
+        "source": "Simply Wall St.",
+        "published_at": "2026-11-26T05:19:40Z",
+        "fetched_at": "2026-11-26T08:01:43Z",
         "ticker": null,
         "source_tier": "aggregator"
       },
       {
-        "title": "Malaysia Aviation Group Commits to Order up to 16 Boeing 787 Dreamliner Jets",
+        "title": "Oil Rallies as Hormuz Mine Strikes Rattle Global Markets",
         "summary": "",
-        "url": "https://finance.yahoo.com/markets/stocks/articles/malaysia-aviation-group-commits-order-054800332.html",
-        "source": "PR Newswire",
-        "published_at": "2026-11-25T05:48:00Z",
-        "fetched_at": "2026-11-25T08:01:31Z",
+        "url": "https://finance.yahoo.com/energy/articles/oil-rallies-hormuz-mine-strikes-051859077.html",
+        "source": "Oilprice.com",
+        "published_at": "2026-11-26T05:18:59Z",
+        "fetched_at": "2026-11-26T08:01:43Z",
         "ticker": null,
         "source_tier": "aggregator"
       },
       {
-        "title": "Malaysia Airlines’ parent to buy 10 Boeing Dreamliners, with options for 6 more",
+        "title": "BOJ’s Tamura flags faster pace of rate hikes amid inflation risk",
         "summary": "",
-        "url": "https://finance.yahoo.com/technology/articles/malaysia-airlines-parent-buy-10-053816438.html",
-        "source": "Associated Press",
-        "published_at": "2026-11-25T05:38:16Z",
-        "fetched_at": "2026-11-25T08:01:31Z",
+        "url": "https://finance.yahoo.com/economy/policy/articles/boj-tamura-flags-faster-pace-042528798.html",
+        "source": "Investing.com",
+        "published_at": "2026-11-26T04:25:28Z",
+        "fetched_at": "2026-11-26T08:01:43Z",
         "ticker": null,
         "source_tier": "aggregator"
       },
       {
-        "title": "Symbotic: 3 Key Takeaways for Long-Term Investors",
+        "title": "Gold spot prices slip as dollar firms, while U.S. futures gain",
         "summary": "",
-        "url": "https://finance.yahoo.com/markets/stocks/articles/symbotic-3-key-takeaways-long-051230785.html",
-        "source": "Motley Fool",
-        "published_at": "2026-11-25T05:12:30Z",
-        "fetched_at": "2026-11-25T08:01:31Z",
-        "ticker": null,
-        "source_tier": "aggregator"
-      },
-      {
-        "title": "Trump says buy American. Manila asks: where's the rice?",
-        "summary": "",
-        "url": "https://finance.yahoo.com/economy/policy/articles/trump-says-buy-american-manila-045122292.html",
-        "source": "IntelliNews",
-        "published_at": "2026-11-25T04:51:22Z",
-        "fetched_at": "2026-11-25T08:01:31Z",
-        "ticker": null,
-        "source_tier": "aggregator"
-      },
-      {
-        "title": "S&P 500 Target: Wall Street Split On How The Benchmark Index Will Move In 2027",
-        "summary": "",
-        "url": "https://finance.yahoo.com/markets/stocks/articles/p-500-target-wall-street-044316801.html",
-        "source": "Stocktwits",
-        "published_at": "2026-11-25T04:43:16Z",
-        "fetched_at": "2026-11-25T08:01:31Z",
-        "ticker": null,
-        "source_tier": "aggregator"
-      },
-      {
-        "title": "Asian stocks mostly decline as AI shares tumble after a retreat on Wall Street",
-        "summary": "",
-        "url": "https://finance.yahoo.com/markets/stocks/articles/asian-stocks-mostly-decline-ai-040526833.html",
-        "source": "Associated Press",
-        "published_at": "2026-11-25T04:05:26Z",
-        "fetched_at": "2026-11-25T08:01:31Z",
+        "url": "https://finance.yahoo.com/markets/commodities/articles/gold-eases-u-inflation-data-035043521.html",
+        "source": "Investing.com",
+        "published_at": "2026-11-26T03:50:43Z",
+        "fetched_at": "2026-11-26T08:01:43Z",
         "ticker": null,
         "source_tier": "aggregator"
       }
@@ -116,24 +116,35 @@
       {
         "source": "Yahoo Finance",
         "status": "ok",
-        "item_count": 49
+        "item_count": 47
       },
       {
         "source": "Federal Reserve",
         "status": "ok",
-        "item_count": 5
+        "item_count": 6
       }
     ]
   },
   "tickers": {
     "515880.SS": {
-      "status": "empty",
+      "status": "ok",
       "query_type": "ticker",
       "ticker": "515880.SS",
-      "start_date": "2026-11-25",
-      "end_date": "2026-11-25",
-      "fetched_at": "2026-11-25T08:01:33Z",
-      "items": [],
+      "start_date": "2026-11-26",
+      "end_date": "2026-11-26",
+      "fetched_at": "2026-11-26T08:01:45Z",
+      "items": [
+        {
+          "title": "光模块行情回归？通信ETF国泰（515880）标的指数涨2.25%",
+          "summary": "光模块行情回归？通信ETF国泰（515880）标的指数涨2.25% 每日经济新闻",
+          "url": "https://news.google.com/rss/articles/CBMiaEFVX3lxTE1zRllhUU4xeGhaNlNPN1JSZzRBVTBqSnNnaTk3NXlUaFM5dXAwb09kNTlUTkNPZlRUcnZJamF5M2MwR0JXN2JZV2xMY3NycWhUY2V5WWdNbjh6MWliaDdWQVZKenpjTnoy?oc=5",
+          "source": "Google News / 每日经济新闻",
+          "published_at": "2026-11-26T02:17:00Z",
+          "fetched_at": "2026-11-26T08:01:45Z",
+          "ticker": "515880.SS",
+          "source_tier": "aggregator"
+        }
+      ],
       "source_statuses": [
         {
           "source": "Yahoo Finance",
@@ -142,8 +153,8 @@
         },
         {
           "source": "Google News RSS",
-          "status": "empty",
-          "item_count": 0
+          "status": "ok",
+          "item_count": 1
         },
         {
           "source": "SEC EDGAR",
@@ -153,12 +164,12 @@
       ]
     },
     "512480.SS": {
-      "status": "partial_empty",
+      "status": "empty",
       "query_type": "ticker",
       "ticker": "512480.SS",
-      "start_date": "2026-11-25",
-      "end_date": "2026-11-25",
-      "fetched_at": "2026-11-25T08:01:36Z",
+      "start_date": "2026-11-26",
+      "end_date": "2026-11-26",
+      "fetched_at": "2026-11-26T08:01:47Z",
       "items": [],
       "source_statuses": [
         {
@@ -168,7 +179,7 @@
         },
         {
           "source": "Google News RSS",
-          "status": "failed",
+          "status": "empty",
           "item_count": 0
         },
         {
@@ -181,103 +192,113 @@
   },
   "items": [
     {
-      "title": "Oil Prices Fall as Traders Weigh Supply Outlook, Renewed Middle East Tensions",
+      "title": "Oil rises on supply concerns as Iran claims mine strikes on ships",
       "summary": "",
-      "url": "https://finance.yahoo.com/m/6315b182-a0b7-3674-84d6-efcd68443f9c/oil-prices-fall-as-traders.html",
-      "source": "The Wall Street Journal",
-      "published_at": "2026-11-25T07:18:00Z",
-      "fetched_at": "2026-11-25T08:01:31Z",
+      "url": "https://finance.yahoo.com/energy/articles/oil-rises-supply-concerns-iran-030849858.html",
+      "source": "Reuters",
+      "published_at": "2026-11-26T06:54:29Z",
+      "fetched_at": "2026-11-26T08:01:43Z",
       "ticker": null,
       "source_tier": "aggregator"
     },
     {
-      "title": "Advantest Stock And 2 Chip Equipment Exporters Gaining From A Softer US Dollar",
+      "title": "Enbridge Eyes $1 Billion Pipeline Deal With Indigenous Communities",
       "summary": "",
-      "url": "https://finance.yahoo.com/markets/stocks/articles/advantest-stock-2-chip-equipment-071236234.html",
+      "url": "https://finance.yahoo.com/energy/articles/enbridge-eyes-1-billion-pipeline-064500452.html",
+      "source": "Oilprice.com",
+      "published_at": "2026-11-26T06:45:00Z",
+      "fetched_at": "2026-11-26T08:01:43Z",
+      "ticker": null,
+      "source_tier": "aggregator"
+    },
+    {
+      "title": "AFYREN Ranks First in EthiFinance’s Worldwide ESG Assessment in the Chemicals Category",
+      "summary": "",
+      "url": "https://finance.yahoo.com/healthcare/articles/afyren-ranks-first-ethifinance-worldwide-063000987.html",
+      "source": "Business Wire",
+      "published_at": "2026-11-26T06:30:00Z",
+      "fetched_at": "2026-11-26T08:01:43Z",
+      "ticker": null,
+      "source_tier": "aggregator"
+    },
+    {
+      "title": "BOJ policymaker signals chance of faster-paced interest rate hikes",
+      "summary": "",
+      "url": "https://finance.yahoo.com/economy/policy/articles/bojs-tamura-signals-chance-faster-013537147.html",
+      "source": "Reuters",
+      "published_at": "2026-11-26T06:24:12Z",
+      "fetched_at": "2026-11-26T08:01:43Z",
+      "ticker": null,
+      "source_tier": "aggregator"
+    },
+    {
+      "title": "3 Oil Stocks With Direct Exposure To Higher Crude Prices",
+      "summary": "",
+      "url": "https://finance.yahoo.com/energy/articles/3-oil-stocks-direct-exposure-061445059.html",
       "source": "Simply Wall St.",
-      "published_at": "2026-11-25T07:12:36Z",
-      "fetched_at": "2026-11-25T08:01:31Z",
+      "published_at": "2026-11-26T06:14:45Z",
+      "fetched_at": "2026-11-26T08:01:43Z",
       "ticker": null,
       "source_tier": "aggregator"
     },
     {
-      "title": "Mining carries Ecuador's export growth as third-quarter non-oil sales jump 19.1%",
+      "title": "Oil Crashed 20% Three Times This Year. Is a Fourth Coming?",
       "summary": "",
-      "url": "https://finance.yahoo.com/markets/commodities/articles/mining-carries-ecuadors-export-growth-065122888.html",
-      "source": "IntelliNews",
-      "published_at": "2026-11-25T06:51:22Z",
-      "fetched_at": "2026-11-25T08:01:31Z",
+      "url": "https://finance.yahoo.com/energy/articles/oil-crashed-20-three-times-060000499.html",
+      "source": "BeInCrypto",
+      "published_at": "2026-11-26T06:00:00Z",
+      "fetched_at": "2026-11-26T08:01:43Z",
       "ticker": null,
       "source_tier": "aggregator"
     },
     {
-      "title": "Oil Market Midweek Wrap: Brent Holds Near $90 Despite Iran Tensions – OPEC Meeting, ConocoPhillips Sale In Focus",
+      "title": "What’s Behind Take Two Interactive Software (TTWO) Stock’s Latest Move?",
       "summary": "",
-      "url": "https://finance.yahoo.com/energy/articles/oil-market-midweek-wrap-brent-054825883.html",
-      "source": "Stocktwits",
-      "published_at": "2026-11-25T05:48:25Z",
-      "fetched_at": "2026-11-25T08:01:31Z",
+      "url": "https://finance.yahoo.com/markets/stocks/articles/behind-two-interactive-software-ttwo-051940943.html",
+      "source": "Simply Wall St.",
+      "published_at": "2026-11-26T05:19:40Z",
+      "fetched_at": "2026-11-26T08:01:43Z",
       "ticker": null,
       "source_tier": "aggregator"
     },
     {
-      "title": "Malaysia Aviation Group Commits to Order up to 16 Boeing 787 Dreamliner Jets",
+      "title": "Oil Rallies as Hormuz Mine Strikes Rattle Global Markets",
       "summary": "",
-      "url": "https://finance.yahoo.com/markets/stocks/articles/malaysia-aviation-group-commits-order-054800332.html",
-      "source": "PR Newswire",
-      "published_at": "2026-11-25T05:48:00Z",
-      "fetched_at": "2026-11-25T08:01:31Z",
+      "url": "https://finance.yahoo.com/energy/articles/oil-rallies-hormuz-mine-strikes-051859077.html",
+      "source": "Oilprice.com",
+      "published_at": "2026-11-26T05:18:59Z",
+      "fetched_at": "2026-11-26T08:01:43Z",
       "ticker": null,
       "source_tier": "aggregator"
     },
     {
-      "title": "Malaysia Airlines’ parent to buy 10 Boeing Dreamliners, with options for 6 more",
+      "title": "BOJ’s Tamura flags faster pace of rate hikes amid inflation risk",
       "summary": "",
-      "url": "https://finance.yahoo.com/technology/articles/malaysia-airlines-parent-buy-10-053816438.html",
-      "source": "Associated Press",
-      "published_at": "2026-11-25T05:38:16Z",
-      "fetched_at": "2026-11-25T08:01:31Z",
+      "url": "https://finance.yahoo.com/economy/policy/articles/boj-tamura-flags-faster-pace-042528798.html",
+      "source": "Investing.com",
+      "published_at": "2026-11-26T04:25:28Z",
+      "fetched_at": "2026-11-26T08:01:43Z",
       "ticker": null,
       "source_tier": "aggregator"
     },
     {
-      "title": "Symbotic: 3 Key Takeaways for Long-Term Investors",
+      "title": "Gold spot prices slip as dollar firms, while U.S. futures gain",
       "summary": "",
-      "url": "https://finance.yahoo.com/markets/stocks/articles/symbotic-3-key-takeaways-long-051230785.html",
-      "source": "Motley Fool",
-      "published_at": "2026-11-25T05:12:30Z",
-      "fetched_at": "2026-11-25T08:01:31Z",
+      "url": "https://finance.yahoo.com/markets/commodities/articles/gold-eases-u-inflation-data-035043521.html",
+      "source": "Investing.com",
+      "published_at": "2026-11-26T03:50:43Z",
+      "fetched_at": "2026-11-26T08:01:43Z",
       "ticker": null,
       "source_tier": "aggregator"
     },
     {
-      "title": "Trump says buy American. Manila asks: where's the rice?",
-      "summary": "",
-      "url": "https://finance.yahoo.com/economy/policy/articles/trump-says-buy-american-manila-045122292.html",
-      "source": "IntelliNews",
-      "published_at": "2026-11-25T04:51:22Z",
-      "fetched_at": "2026-11-25T08:01:31Z",
-      "ticker": null,
-      "source_tier": "aggregator"
-    },
-    {
-      "title": "S&P 500 Target: Wall Street Split On How The Benchmark Index Will Move In 2027",
-      "summary": "",
-      "url": "https://finance.yahoo.com/markets/stocks/articles/p-500-target-wall-street-044316801.html",
-      "source": "Stocktwits",
-      "published_at": "2026-11-25T04:43:16Z",
-      "fetched_at": "2026-11-25T08:01:31Z",
-      "ticker": null,
-      "source_tier": "aggregator"
-    },
-    {
-      "title": "Asian stocks mostly decline as AI shares tumble after a retreat on Wall Street",
-      "summary": "",
-      "url": "https://finance.yahoo.com/markets/stocks/articles/asian-stocks-mostly-decline-ai-040526833.html",
-      "source": "Associated Press",
-      "published_at": "2026-11-25T04:05:26Z",
-      "fetched_at": "2026-11-25T08:01:31Z",
-      "ticker": null,
+      "title": "光模块行情回归？通信ETF国泰（515880）标的指数涨2.25%",
+      "summary": "光模块行情回归？通信ETF国泰（515880）标的指数涨2.25% 每日经济新闻",
+      "url": "https://news.google.com/rss/articles/CBMiaEFVX3lxTE1zRllhUU4xeGhaNlNPN1JSZzRBVTBqSnNnaTk3NXlUaFM5dXAwb09kNTlUTkNPZlRUcnZJamF5M2MwR0JXN2JZV2xMY3NycWhUY2V5WWdNbjh6MWliaDdWQVZKenpjTnoy?oc=5",
+      "source": "Google News / 每日经济新闻",
+      "published_at": "2026-11-26T02:17:00Z",
+      "fetched_at": "2026-11-26T08:01:45Z",
+      "ticker": "515880.SS",
       "source_tier": "aggregator"
     }
   ]
