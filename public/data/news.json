@@ -1,113 +1,113 @@
 {
   "version": 1,
   "status": "ok",
-  "generated_at": "2026-11-26T16:01:42+08:00",
-  "trade_date": "2026-11-26",
+  "generated_at": "2026-11-27T16:01:41+08:00",
+  "trade_date": "2026-11-27",
   "global": {
     "status": "ok",
     "query_type": "global",
     "ticker": null,
-    "start_date": "2026-11-19",
-    "end_date": "2026-11-26",
-    "fetched_at": "2026-11-26T08:01:43Z",
+    "start_date": "2026-11-20",
+    "end_date": "2026-11-27",
+    "fetched_at": "2026-11-27T08:01:42Z",
     "items": [
       {
-        "title": "Oil rises on supply concerns as Iran claims mine strikes on ships",
+        "title": "PhonePe resumes IPO plans with $15bn valuation target- report",
         "summary": "",
-        "url": "https://finance.yahoo.com/energy/articles/oil-rises-supply-concerns-iran-030849858.html",
-        "source": "Reuters",
-        "published_at": "2026-11-26T06:54:29Z",
-        "fetched_at": "2026-11-26T08:01:43Z",
+        "url": "https://finance.yahoo.com/news/phonepe-resumes-ipo-plans-15bn-074036619.html",
+        "source": "Electronic Payments",
+        "published_at": "2026-11-27T07:40:36Z",
+        "fetched_at": "2026-11-27T08:01:42Z",
         "ticker": null,
         "source_tier": "aggregator"
       },
       {
-        "title": "Enbridge Eyes $1 Billion Pipeline Deal With Indigenous Communities",
+        "title": "LIVE – Crypto News Today: Why Is Bitcoin Up? Gold and Wall Street Rally Fuel BTC Bounce",
         "summary": "",
-        "url": "https://finance.yahoo.com/energy/articles/enbridge-eyes-1-billion-pipeline-064500452.html",
-        "source": "Oilprice.com",
-        "published_at": "2026-11-26T06:45:00Z",
-        "fetched_at": "2026-11-26T08:01:43Z",
+        "url": "https://finance.yahoo.com/markets/crypto/articles/live-crypto-news-today-why-071834129.html",
+        "source": "Cryptonews",
+        "published_at": "2026-11-27T07:18:34Z",
+        "fetched_at": "2026-11-27T08:01:42Z",
         "ticker": null,
         "source_tier": "aggregator"
       },
       {
-        "title": "AFYREN Ranks First in EthiFinance’s Worldwide ESG Assessment in the Chemicals Category",
+        "title": "Top 3 Undervalued Tech Stocks To Watch In November 2026",
         "summary": "",
-        "url": "https://finance.yahoo.com/healthcare/articles/afyren-ranks-first-ethifinance-worldwide-063000987.html",
-        "source": "Business Wire",
-        "published_at": "2026-11-26T06:30:00Z",
-        "fetched_at": "2026-11-26T08:01:43Z",
-        "ticker": null,
-        "source_tier": "aggregator"
-      },
-      {
-        "title": "BOJ policymaker signals chance of faster-paced interest rate hikes",
-        "summary": "",
-        "url": "https://finance.yahoo.com/economy/policy/articles/bojs-tamura-signals-chance-faster-013537147.html",
-        "source": "Reuters",
-        "published_at": "2026-11-26T06:24:12Z",
-        "fetched_at": "2026-11-26T08:01:43Z",
-        "ticker": null,
-        "source_tier": "aggregator"
-      },
-      {
-        "title": "3 Oil Stocks With Direct Exposure To Higher Crude Prices",
-        "summary": "",
-        "url": "https://finance.yahoo.com/energy/articles/3-oil-stocks-direct-exposure-061445059.html",
+        "url": "https://finance.yahoo.com/technology/articles/top-3-undervalued-tech-stocks-071100555.html",
         "source": "Simply Wall St.",
-        "published_at": "2026-11-26T06:14:45Z",
-        "fetched_at": "2026-11-26T08:01:43Z",
+        "published_at": "2026-11-27T07:11:00Z",
+        "fetched_at": "2026-11-27T08:01:42Z",
         "ticker": null,
         "source_tier": "aggregator"
       },
       {
-        "title": "Oil Crashed 20% Three Times This Year. Is a Fourth Coming?",
+        "title": "Our Pick Of The Best Australian Energy Stocks In November 2026",
         "summary": "",
-        "url": "https://finance.yahoo.com/energy/articles/oil-crashed-20-three-times-060000499.html",
-        "source": "BeInCrypto",
-        "published_at": "2026-11-26T06:00:00Z",
-        "fetched_at": "2026-11-26T08:01:43Z",
-        "ticker": null,
-        "source_tier": "aggregator"
-      },
-      {
-        "title": "What’s Behind Take Two Interactive Software (TTWO) Stock’s Latest Move?",
-        "summary": "",
-        "url": "https://finance.yahoo.com/markets/stocks/articles/behind-two-interactive-software-ttwo-051940943.html",
+        "url": "https://finance.yahoo.com/energy/articles/pick-best-australian-energy-stocks-061054788.html",
         "source": "Simply Wall St.",
-        "published_at": "2026-11-26T05:19:40Z",
-        "fetched_at": "2026-11-26T08:01:43Z",
+        "published_at": "2026-11-27T06:10:54Z",
+        "fetched_at": "2026-11-27T08:01:42Z",
         "ticker": null,
         "source_tier": "aggregator"
       },
       {
-        "title": "Oil Rallies as Hormuz Mine Strikes Rattle Global Markets",
+        "title": "Oil Prices Climb as Middle East Supply Risks Overshadow Glut Fears",
         "summary": "",
-        "url": "https://finance.yahoo.com/energy/articles/oil-rallies-hormuz-mine-strikes-051859077.html",
+        "url": "https://finance.yahoo.com/energy/articles/oil-prices-climb-middle-east-051844030.html",
         "source": "Oilprice.com",
-        "published_at": "2026-11-26T05:18:59Z",
-        "fetched_at": "2026-11-26T08:01:43Z",
+        "published_at": "2026-11-27T05:18:44Z",
+        "fetched_at": "2026-11-27T08:01:42Z",
         "ticker": null,
         "source_tier": "aggregator"
       },
       {
-        "title": "BOJ’s Tamura flags faster pace of rate hikes amid inflation risk",
+        "title": "3 Oil Stocks With Direct Leverage To High Crude Prices",
         "summary": "",
-        "url": "https://finance.yahoo.com/economy/policy/articles/boj-tamura-flags-faster-pace-042528798.html",
-        "source": "Investing.com",
-        "published_at": "2026-11-26T04:25:28Z",
-        "fetched_at": "2026-11-26T08:01:43Z",
+        "url": "https://finance.yahoo.com/energy/articles/3-oil-stocks-direct-leverage-051324910.html",
+        "source": "Simply Wall St.",
+        "published_at": "2026-11-27T05:13:24Z",
+        "fetched_at": "2026-11-27T08:01:42Z",
         "ticker": null,
         "source_tier": "aggregator"
       },
       {
-        "title": "Gold spot prices slip as dollar firms, while U.S. futures gain",
+        "title": "British Energy Stocks To Watch In November 2026",
         "summary": "",
-        "url": "https://finance.yahoo.com/markets/commodities/articles/gold-eases-u-inflation-data-035043521.html",
+        "url": "https://finance.yahoo.com/energy/articles/british-energy-stocks-watch-november-051209541.html",
+        "source": "Simply Wall St.",
+        "published_at": "2026-11-27T05:12:09Z",
+        "fetched_at": "2026-11-27T08:01:42Z",
+        "ticker": null,
+        "source_tier": "aggregator"
+      },
+      {
+        "title": "Dollar drifts lower in holiday-thinned trade, set to snap 4-wk winning streak",
+        "summary": "",
+        "url": "https://finance.yahoo.com/markets/currencies/articles/asia-fx-weakens-high-oil-044524263.html",
         "source": "Investing.com",
-        "published_at": "2026-11-26T03:50:43Z",
-        "fetched_at": "2026-11-26T08:01:43Z",
+        "published_at": "2026-11-27T04:45:24Z",
+        "fetched_at": "2026-11-27T08:01:42Z",
+        "ticker": null,
+        "source_tier": "aggregator"
+      },
+      {
+        "title": "IMF urges RBA to maintain rate hike bias as inflation risks persist",
+        "summary": "",
+        "url": "https://finance.yahoo.com/economy/policy/articles/imf-urges-rba-maintain-rate-043609646.html",
+        "source": "Investing.com",
+        "published_at": "2026-11-27T04:36:09Z",
+        "fetched_at": "2026-11-27T08:01:42Z",
+        "ticker": null,
+        "source_tier": "aggregator"
+      },
+      {
+        "title": "D-Wave Quantum (QBTS): One of the Top Quantum Computing Stocks to Buy for 2027",
+        "summary": "",
+        "url": "https://finance.yahoo.com/technology/ai/articles/d-wave-quantum-qbts-one-033110587.html",
+        "source": "Insider Monkey",
+        "published_at": "2026-11-27T03:31:10Z",
+        "fetched_at": "2026-11-27T08:01:42Z",
         "ticker": null,
         "source_tier": "aggregator"
       }
@@ -116,32 +116,58 @@
       {
         "source": "Yahoo Finance",
         "status": "ok",
-        "item_count": 47
+        "item_count": 40
       },
       {
         "source": "Federal Reserve",
         "status": "ok",
-        "item_count": 6
+        "item_count": 5
       }
     ]
   },
   "tickers": {
     "515880.SS": {
-      "status": "ok",
+      "status": "empty",
       "query_type": "ticker",
       "ticker": "515880.SS",
-      "start_date": "2026-11-26",
-      "end_date": "2026-11-26",
-      "fetched_at": "2026-11-26T08:01:45Z",
+      "start_date": "2026-11-27",
+      "end_date": "2026-11-27",
+      "fetched_at": "2026-11-27T08:01:44Z",
+      "items": [],
+      "source_statuses": [
+        {
+          "source": "Yahoo Finance",
+          "status": "empty",
+          "item_count": 0
+        },
+        {
+          "source": "Google News RSS",
+          "status": "empty",
+          "item_count": 0
+        },
+        {
+          "source": "SEC EDGAR",
+          "status": "empty",
+          "item_count": 0
+        }
+      ]
+    },
+    "512480.SS": {
+      "status": "ok",
+      "query_type": "ticker",
+      "ticker": "512480.SS",
+      "start_date": "2026-11-27",
+      "end_date": "2026-11-27",
+      "fetched_at": "2026-11-27T08:01:46Z",
       "items": [
         {
-          "title": "光模块行情回归？通信ETF国泰（515880）标的指数涨2.25%",
-          "summary": "光模块行情回归？通信ETF国泰（515880）标的指数涨2.25% 每日经济新闻",
-          "url": "https://news.google.com/rss/articles/CBMiaEFVX3lxTE1zRllhUU4xeGhaNlNPN1JSZzRBVTBqSnNnaTk3NXlUaFM5dXAwb09kNTlUTkNPZlRUcnZJamF5M2MwR0JXN2JZV2xMY3NycWhUY2V5WWdNbjh6MWliaDdWQVZKenpjTnoy?oc=5",
-          "source": "Google News / 每日经济新闻",
-          "published_at": "2026-11-26T02:17:00Z",
-          "fetched_at": "2026-11-26T08:01:45Z",
-          "ticker": "515880.SS",
+          "title": "半导体ETF国联安（512480）开盘涨0.72%，重仓股寒武纪涨0.75%，北方华创涨1.44%",
+          "summary": "半导体ETF国联安（512480）开盘涨0.72%，重仓股寒武纪涨0.75%，北方华创涨1.44% 新浪财经",
+          "url": "https://news.google.com/rss/articles/CBMimAFBVV95cUxQOUdNVTYwa2Z5Z2pQaWx6OEtWR2tZWTFlczBiNWZjY3pOQjk4SE1hRFZRdXRQWTgtZFBvV1JWcU5jX0lNdDBZTjcwdjZRczYydkV6VFdfbzVqdzluMUh0NkM3YzNhMGhIRkNLRUhKdmhBYXNtRXBqR29DdEZtd0t6WTdmalVIVjlGOFB2SEFFckZkZ2ZxXzdLUQ?oc=5",
+          "source": "Google News / 新浪财经",
+          "published_at": "2026-11-27T01:30:51Z",
+          "fetched_at": "2026-11-27T08:01:46Z",
+          "ticker": "512480.SS",
           "source_tier": "aggregator"
         }
       ],
@@ -162,143 +188,117 @@
           "item_count": 0
         }
       ]
-    },
-    "512480.SS": {
-      "status": "empty",
-      "query_type": "ticker",
-      "ticker": "512480.SS",
-      "start_date": "2026-11-26",
-      "end_date": "2026-11-26",
-      "fetched_at": "2026-11-26T08:01:47Z",
-      "items": [],
-      "source_statuses": [
-        {
-          "source": "Yahoo Finance",
-          "status": "empty",
-          "item_count": 0
-        },
-        {
-          "source": "Google News RSS",
-          "status": "empty",
-          "item_count": 0
-        },
-        {
-          "source": "SEC EDGAR",
-          "status": "empty",
-          "item_count": 0
-        }
-      ]
     }
   },
   "items": [
     {
-      "title": "Oil rises on supply concerns as Iran claims mine strikes on ships",
+      "title": "PhonePe resumes IPO plans with $15bn valuation target- report",
       "summary": "",
-      "url": "https://finance.yahoo.com/energy/articles/oil-rises-supply-concerns-iran-030849858.html",
-      "source": "Reuters",
-      "published_at": "2026-11-26T06:54:29Z",
-      "fetched_at": "2026-11-26T08:01:43Z",
+      "url": "https://finance.yahoo.com/news/phonepe-resumes-ipo-plans-15bn-074036619.html",
+      "source": "Electronic Payments",
+      "published_at": "2026-11-27T07:40:36Z",
+      "fetched_at": "2026-11-27T08:01:42Z",
       "ticker": null,
       "source_tier": "aggregator"
     },
     {
-      "title": "Enbridge Eyes $1 Billion Pipeline Deal With Indigenous Communities",
+      "title": "LIVE – Crypto News Today: Why Is Bitcoin Up? Gold and Wall Street Rally Fuel BTC Bounce",
       "summary": "",
-      "url": "https://finance.yahoo.com/energy/articles/enbridge-eyes-1-billion-pipeline-064500452.html",
-      "source": "Oilprice.com",
-      "published_at": "2026-11-26T06:45:00Z",
-      "fetched_at": "2026-11-26T08:01:43Z",
+      "url": "https://finance.yahoo.com/markets/crypto/articles/live-crypto-news-today-why-071834129.html",
+      "source": "Cryptonews",
+      "published_at": "2026-11-27T07:18:34Z",
+      "fetched_at": "2026-11-27T08:01:42Z",
       "ticker": null,
       "source_tier": "aggregator"
     },
     {
-      "title": "AFYREN Ranks First in EthiFinance’s Worldwide ESG Assessment in the Chemicals Category",
+      "title": "Top 3 Undervalued Tech Stocks To Watch In November 2026",
       "summary": "",
-      "url": "https://finance.yahoo.com/healthcare/articles/afyren-ranks-first-ethifinance-worldwide-063000987.html",
-      "source": "Business Wire",
-      "published_at": "2026-11-26T06:30:00Z",
-      "fetched_at": "2026-11-26T08:01:43Z",
-      "ticker": null,
-      "source_tier": "aggregator"
-    },
-    {
-      "title": "BOJ policymaker signals chance of faster-paced interest rate hikes",
-      "summary": "",
-      "url": "https://finance.yahoo.com/economy/policy/articles/bojs-tamura-signals-chance-faster-013537147.html",
-      "source": "Reuters",
-      "published_at": "2026-11-26T06:24:12Z",
-      "fetched_at": "2026-11-26T08:01:43Z",
-      "ticker": null,
-      "source_tier": "aggregator"
-    },
-    {
-      "title": "3 Oil Stocks With Direct Exposure To Higher Crude Prices",
-      "summary": "",
-      "url": "https://finance.yahoo.com/energy/articles/3-oil-stocks-direct-exposure-061445059.html",
+      "url": "https://finance.yahoo.com/technology/articles/top-3-undervalued-tech-stocks-071100555.html",
       "source": "Simply Wall St.",
-      "published_at": "2026-11-26T06:14:45Z",
-      "fetched_at": "2026-11-26T08:01:43Z",
+      "published_at": "2026-11-27T07:11:00Z",
+      "fetched_at": "2026-11-27T08:01:42Z",
       "ticker": null,
       "source_tier": "aggregator"
     },
     {
-      "title": "Oil Crashed 20% Three Times This Year. Is a Fourth Coming?",
+      "title": "Our Pick Of The Best Australian Energy Stocks In November 2026",
       "summary": "",
-      "url": "https://finance.yahoo.com/energy/articles/oil-crashed-20-three-times-060000499.html",
-      "source": "BeInCrypto",
-      "published_at": "2026-11-26T06:00:00Z",
-      "fetched_at": "2026-11-26T08:01:43Z",
-      "ticker": null,
-      "source_tier": "aggregator"
-    },
-    {
-      "title": "What’s Behind Take Two Interactive Software (TTWO) Stock’s Latest Move?",
-      "summary": "",
-      "url": "https://finance.yahoo.com/markets/stocks/articles/behind-two-interactive-software-ttwo-051940943.html",
+      "url": "https://finance.yahoo.com/energy/articles/pick-best-australian-energy-stocks-061054788.html",
       "source": "Simply Wall St.",
-      "published_at": "2026-11-26T05:19:40Z",
-      "fetched_at": "2026-11-26T08:01:43Z",
+      "published_at": "2026-11-27T06:10:54Z",
+      "fetched_at": "2026-11-27T08:01:42Z",
       "ticker": null,
       "source_tier": "aggregator"
     },
     {
-      "title": "Oil Rallies as Hormuz Mine Strikes Rattle Global Markets",
+      "title": "Oil Prices Climb as Middle East Supply Risks Overshadow Glut Fears",
       "summary": "",
-      "url": "https://finance.yahoo.com/energy/articles/oil-rallies-hormuz-mine-strikes-051859077.html",
+      "url": "https://finance.yahoo.com/energy/articles/oil-prices-climb-middle-east-051844030.html",
       "source": "Oilprice.com",
-      "published_at": "2026-11-26T05:18:59Z",
-      "fetched_at": "2026-11-26T08:01:43Z",
+      "published_at": "2026-11-27T05:18:44Z",
+      "fetched_at": "2026-11-27T08:01:42Z",
       "ticker": null,
       "source_tier": "aggregator"
     },
     {
-      "title": "BOJ’s Tamura flags faster pace of rate hikes amid inflation risk",
+      "title": "3 Oil Stocks With Direct Leverage To High Crude Prices",
       "summary": "",
-      "url": "https://finance.yahoo.com/economy/policy/articles/boj-tamura-flags-faster-pace-042528798.html",
-      "source": "Investing.com",
-      "published_at": "2026-11-26T04:25:28Z",
-      "fetched_at": "2026-11-26T08:01:43Z",
+      "url": "https://finance.yahoo.com/energy/articles/3-oil-stocks-direct-leverage-051324910.html",
+      "source": "Simply Wall St.",
+      "published_at": "2026-11-27T05:13:24Z",
+      "fetched_at": "2026-11-27T08:01:42Z",
       "ticker": null,
       "source_tier": "aggregator"
     },
     {
-      "title": "Gold spot prices slip as dollar firms, while U.S. futures gain",
+      "title": "British Energy Stocks To Watch In November 2026",
       "summary": "",
-      "url": "https://finance.yahoo.com/markets/commodities/articles/gold-eases-u-inflation-data-035043521.html",
-      "source": "Investing.com",
-      "published_at": "2026-11-26T03:50:43Z",
-      "fetched_at": "2026-11-26T08:01:43Z",
+      "url": "https://finance.yahoo.com/energy/articles/british-energy-stocks-watch-november-051209541.html",
+      "source": "Simply Wall St.",
+      "published_at": "2026-11-27T05:12:09Z",
+      "fetched_at": "2026-11-27T08:01:42Z",
       "ticker": null,
       "source_tier": "aggregator"
     },
     {
-      "title": "光模块行情回归？通信ETF国泰（515880）标的指数涨2.25%",
-      "summary": "光模块行情回归？通信ETF国泰（515880）标的指数涨2.25% 每日经济新闻",
-      "url": "https://news.google.com/rss/articles/CBMiaEFVX3lxTE1zRllhUU4xeGhaNlNPN1JSZzRBVTBqSnNnaTk3NXlUaFM5dXAwb09kNTlUTkNPZlRUcnZJamF5M2MwR0JXN2JZV2xMY3NycWhUY2V5WWdNbjh6MWliaDdWQVZKenpjTnoy?oc=5",
-      "source": "Google News / 每日经济新闻",
-      "published_at": "2026-11-26T02:17:00Z",
-      "fetched_at": "2026-11-26T08:01:45Z",
-      "ticker": "515880.SS",
+      "title": "Dollar drifts lower in holiday-thinned trade, set to snap 4-wk winning streak",
+      "summary": "",
+      "url": "https://finance.yahoo.com/markets/currencies/articles/asia-fx-weakens-high-oil-044524263.html",
+      "source": "Investing.com",
+      "published_at": "2026-11-27T04:45:24Z",
+      "fetched_at": "2026-11-27T08:01:42Z",
+      "ticker": null,
+      "source_tier": "aggregator"
+    },
+    {
+      "title": "IMF urges RBA to maintain rate hike bias as inflation risks persist",
+      "summary": "",
+      "url": "https://finance.yahoo.com/economy/policy/articles/imf-urges-rba-maintain-rate-043609646.html",
+      "source": "Investing.com",
+      "published_at": "2026-11-27T04:36:09Z",
+      "fetched_at": "2026-11-27T08:01:42Z",
+      "ticker": null,
+      "source_tier": "aggregator"
+    },
+    {
+      "title": "D-Wave Quantum (QBTS): One of the Top Quantum Computing Stocks to Buy for 2027",
+      "summary": "",
+      "url": "https://finance.yahoo.com/technology/ai/articles/d-wave-quantum-qbts-one-033110587.html",
+      "source": "Insider Monkey",
+      "published_at": "2026-11-27T03:31:10Z",
+      "fetched_at": "2026-11-27T08:01:42Z",
+      "ticker": null,
+      "source_tier": "aggregator"
+    },
+    {
+      "title": "半导体ETF国联安（512480）开盘涨0.72%，重仓股寒武纪涨0.75%，北方华创涨1.44%",
+      "summary": "半导体ETF国联安（512480）开盘涨0.72%，重仓股寒武纪涨0.75%，北方华创涨1.44% 新浪财经",
+      "url": "https://news.google.com/rss/articles/CBMimAFBVV95cUxQOUdNVTYwa2Z5Z2pQaWx6OEtWR2tZWTFlczBiNWZjY3pOQjk4SE1hRFZRdXRQWTgtZFBvV1JWcU5jX0lNdDBZTjcwdjZRczYydkV6VFdfbzVqdzluMUh0NkM3YzNhMGhIRkNLRUhKdmhBYXNtRXBqR29DdEZtd0t6WTdmalVIVjlGOFB2SEFFckZkZ2ZxXzdLUQ?oc=5",
+      "source": "Google News / 新浪财经",
+      "published_at": "2026-11-27T01:30:51Z",
+      "fetched_at": "2026-11-27T08:01:46Z",
+      "ticker": "512480.SS",
       "source_tier": "aggregator"
     }
   ]
