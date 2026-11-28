@@ -1,0 +1,22 @@
+name: add-anthropic-monitor
+on: workflow_dispatch
+permissions:
+  contents: read
+jobs:
+  append:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Append only to the matching live profile
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID || vars.CLOUDFLARE_ACCOUNT_ID }}
+        run: |
+          npx --yes wrangler@4.113.0 d1 execute tradingagents-workbench --remote --command "
+            UPDATE workbench_settings AS w
+            SET settings_json=json_insert(settings_json,'$.profiles[' || p.key || '].targets[#]',
+                json_object('symbol','ANT','name','Anthropic','market','US','role','driver','analysis','signal')),
+                updated_at=strftime('%Y-%m-%dT%H:%M:%fZ','now')
+            FROM json_each((SELECT settings_json FROM workbench_settings WHERE id=1),'$.profiles') AS p
+            WHERE w.id=1 AND json_extract(p.value,'$.id')='cn-semi-comms'
+              AND NOT EXISTS(SELECT 1 FROM json_each(p.value,'$.targets') t WHERE json_extract(t.value,'$.symbol')='ANT');"
