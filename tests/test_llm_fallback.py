@@ -10,10 +10,9 @@ key on the same relay routed to cheap GPT models (gpt-5.4-mini) and asked for
 an automatic default-to-GPT fallback for exactly this situation, favoring the
 cheap model.
 
-Only genuinely transient conditions fall back (connection failure, 5xx,
-429) — a 400/401/403 must still surface normally, since retrying those
-against a different backend would silently mask a real misconfiguration
-(bad request shape, revoked key) instead of failing loudly.
+Connection failures, 5xx and 429 can fall back. An explicit primary billing
+exhaustion can also fall back when a separate billing key was configured;
+bad requests, revoked keys and unrelated denials must still surface.
 """
 
 from __future__ import annotations
@@ -24,7 +23,7 @@ import httpx
 import openai
 import pytest
 from langchain_core.messages import AIMessage, HumanMessage
-from pydantic import BaseModel
+from pydantic import BaseModel, SecretStr
 
 from tradingagents.graph.trading_graph import TradingAgentsGraph
 from tradingagents.llm_clients.openai_client import NormalizedChatOpenAI
@@ -52,6 +51,7 @@ TRANSIENT_ERRORS = [
 NON_TRANSIENT_ERRORS = [
     pytest.param(_status_error(openai.BadRequestError, 400), id="400-bad-request"),
     pytest.param(_status_error(openai.AuthenticationError, 401), id="401-bad-key"),
+    pytest.param(_status_error(openai.PermissionDeniedError, 403), id="403-forbidden"),
 ]
 
 
@@ -103,6 +103,63 @@ def test_non_transient_error_is_not_masked_by_fallback(error):
         llm.invoke([HumanMessage(content="hi")])
 
     fallback.invoke.assert_not_called()
+
+
+def _denial(detail):
+    return openai.PermissionDeniedError(
+        f"Error code: 403 - {detail}",
+        response=httpx.Response(403, request=_request()),
+        body=detail,
+    )
+
+
+@pytest.mark.unit
+@pytest.mark.parametrize(("explicit_key", "fallback_key", "detail", "retry"), [
+    ("secondary-dummy", "secondary-dummy", "Insufficient account balance", True),
+    ("secondary-dummy", "secondary-dummy", {"message": "Insufficient account balance"}, True),
+    ("primary-dummy", "primary-dummy", "Insufficient account balance", False),
+    (None, "secondary-dummy", "Insufficient account balance", False),
+    ("another-dummy", "secondary-dummy", "Insufficient account balance", False),
+    ("secondary-dummy", "secondary-dummy", "Model access denied", False),
+    ("secondary-dummy", "secondary-dummy", "Not an insufficient account balance error", False),
+])
+def test_only_explicit_balance_denial_retries_with_a_separate_key(
+    monkeypatch, explicit_key, fallback_key, detail, retry,
+):
+    if explicit_key is None:
+        monkeypatch.delenv("TRADINGAGENTS_LLM_FALLBACK_API_KEY", raising=False)
+    else:
+        monkeypatch.setenv("TRADINGAGENTS_LLM_FALLBACK_API_KEY", explicit_key)
+    primary = _primary()
+    secondary = MagicMock(spec=NormalizedChatOpenAI)
+    secondary.openai_api_key = SecretStr(fallback_key)
+    secondary.invoke.return_value = AIMessage(content="secondary answer")
+    primary.fallback_llm = secondary
+    with patch.object(primary, "_generate", side_effect=_denial(detail)):
+        if retry:
+            assert primary.invoke("hi").content == "secondary answer"
+            secondary.invoke.assert_called_once()
+        else:
+            with pytest.raises(openai.PermissionDeniedError):
+                primary.invoke("hi")
+            secondary.invoke.assert_not_called()
+
+
+@pytest.mark.unit
+def test_secondary_balance_failure_propagates_without_another_retry(monkeypatch):
+    monkeypatch.setenv("TRADINGAGENTS_LLM_FALLBACK_API_KEY", "secondary-dummy")
+    primary = _primary()
+    secondary = MagicMock(spec=NormalizedChatOpenAI)
+    secondary.openai_api_key = SecretStr("secondary-dummy")
+    primary.fallback_llm = secondary
+    exhausted = _denial("Insufficient account balance")
+    secondary.invoke.side_effect = exhausted
+    with patch.object(primary, "_generate", side_effect=_denial("Insufficient account balance")), pytest.raises(
+        openai.PermissionDeniedError,
+    ) as caught:
+        primary.invoke("hi")
+    assert caught.value is exhausted
+    secondary.invoke.assert_called_once()
 
 
 @pytest.mark.unit

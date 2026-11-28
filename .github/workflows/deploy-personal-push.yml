@@ -1,0 +1,46 @@
+name: deploy-personal-push
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: cloudflare-personal-push
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - name: Test signed relay
+        run: node --test tests/test_personal_push.mjs
+      - name: Deploy relay with fixed recipient secret
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID || vars.CLOUDFLARE_ACCOUNT_ID }}
+          PUSHPLUS_TOKEN: ${{ secrets.PUSHPLUS_TOKEN }}
+          RADAR_SIGNING_PUBLIC_KEY: ${{ vars.RADAR_SIGNING_PUBLIC_KEY }}
+          WRANGLER_SEND_METRICS: "false"
+        run: |
+          set -euo pipefail
+          : "${CLOUDFLARE_API_TOKEN:?Missing Cloudflare token}" "${CLOUDFLARE_ACCOUNT_ID:?Missing account ID}"
+          : "${PUSHPLUS_TOKEN:?Missing PushPlus token}" "${RADAR_SIGNING_PUBLIC_KEY:?Missing radar public key}"
+          umask 077
+          bindings="$(mktemp "$RUNNER_TEMP/personal-push.XXXXXX.json")"
+          trap 'rm -f -- "$bindings"' EXIT
+          node -e '
+            const { createPublicKey } = require("node:crypto");
+            const pub = createPublicKey({ key: Buffer.from(process.env.RADAR_SIGNING_PUBLIC_KEY, "base64"), type: "spki", format: "der" });
+            if (pub.asymmetricKeyType !== "ed25519") throw Error("Expected Ed25519 SPKI");
+            require("node:fs").writeFileSync(process.argv[1], JSON.stringify({ PUSHPLUS_TOKEN: process.env.PUSHPLUS_TOKEN }));
+          ' "$bindings"
+          unset PUSHPLUS_TOKEN
+          npx --yes wrangler@4.154.0 deploy --config wrangler.personal-push.toml \
+            --var RADAR_SIGNING_PUBLIC_KEY:"$RADAR_SIGNING_PUBLIC_KEY" --secrets-file "$bindings"

@@ -28,10 +28,6 @@ test("audit index classifies every archived report and any retained ISSUE record
   const allResults = history.flatMap((batch) => batch.results || []);
   const successful = allResults.filter((result) => !result.error && result.report);
   assert.equal(audit.summary.successfulReports, successful.length);
-  // New daily reports may add another genuinely invalidated entry. The
-  // invariant is that known invalidations remain classified, not that the
-  // historical count stays frozen forever.
-  assert.ok(audit.summary.invalidatedReports >= EXPECTED_INVALIDATED_REPORTS.size);
   assert.equal(
     audit.summary.verifiedReports
       + audit.summary.legacyUnverifiedReports
@@ -50,8 +46,10 @@ test("audit index classifies every archived report and any retained ISSUE record
     audit.reports.filter((entry) => entry.auditStatus === "invalidated")
       .map((entry) => entry.report),
   );
-  for (const expectedPath of EXPECTED_INVALIDATED_REPORTS) {
-    assert.equal(invalidatedPaths.has(expectedPath), true, expectedPath);
+  for (const { report } of successful) {
+    if (EXPECTED_INVALIDATED_REPORTS.has(report)) {
+      assert.ok(invalidatedPaths.has(report), report);
+    }
   }
 
   const issue = audit.reports.find((entry) => entry.ticker === "ISSUE");
@@ -59,6 +57,24 @@ test("audit index classifies every archived report and any retained ISSUE record
     assert.equal(issue.auditStatus, "invalid_record");
     assert.equal(issue.failureClass, "invalid_input");
     assert.match(issue.problemCodes.join(","), /INVALID_TICKER_INPUT/);
+  }
+});
+
+test("known invalidated archives remain invalid even after rolling out of history", async () => {
+  const history = Array.from(EXPECTED_INVALIDATED_REPORTS, (report) => {
+    const [, ticker, directory] = report.split("/");
+    return {
+      trade_date: directory.slice(0, 10),
+      results: [{ ticker, report, error: false }],
+    };
+  });
+  const audit = await buildReportAudit({
+    history, reportsRoot: path.join(repoRoot, "public", "reports"),
+  });
+  assert.equal(audit.summary.invalidatedReports, EXPECTED_INVALIDATED_REPORTS.size);
+  for (const entry of audit.reports) {
+    assert.equal(entry.auditStatus, "invalidated", entry.report);
+    assert.ok(!entry.problemCodes.includes("REPORT_MISSING"), entry.report);
   }
 });
 

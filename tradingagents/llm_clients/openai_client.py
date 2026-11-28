@@ -8,6 +8,7 @@ from urllib.parse import urlparse
 import openai
 from langchain_core.messages import AIMessage
 from langchain_openai import ChatOpenAI
+from pydantic import SecretStr
 
 from .api_key_env import get_api_key_env
 from .base_client import BaseLLMClient, normalize_content
@@ -16,17 +17,39 @@ from .validators import validate_model
 
 logger = logging.getLogger(__name__)
 
-# Conditions worth retrying against a fallback model (see NormalizedChatOpenAI
-# .fallback_llm): connection failures (incl. APITimeoutError, a subclass),
-# 5xx, and 429. Deliberately excludes 400/401/403/404/422 — those indicate a
-# real bug (malformed request, revoked key) that a different backend would
-# not fix, and silently retrying them would hide the problem instead of
-# failing loudly.
-_FALLBACK_TRANSIENT_ERRORS = (
+# Connection failures, 5xx and 429 can retry. A 403 must additionally pass
+# the narrowly scoped billing and credential check below.
+_FALLBACK_CANDIDATES = (
     openai.APIConnectionError,
     openai.InternalServerError,
     openai.RateLimitError,
+    openai.PermissionDeniedError,
 )
+
+
+def _separately_keyed_balance_failure(error, primary, fallback):
+    """Recognize the relay's precise 403, never an arbitrary permission error."""
+    if not isinstance(error, openai.PermissionDeniedError) or error.status_code != 403:
+        return False
+    detail = error.body
+    if isinstance(detail, dict):
+        detail = detail.get("error", detail)
+        if isinstance(detail, dict):
+            detail = detail.get("message")
+    if detail is None:
+        detail = error.message.removeprefix("Error code: 403 - ")
+    if not isinstance(detail, str) or detail.strip().casefold() != "insufficient account balance":
+        return False
+    configured = os.environ.get("TRADINGAGENTS_LLM_FALLBACK_API_KEY")
+    primary_key = getattr(primary, "openai_api_key", None)
+    fallback_key = getattr(fallback, "openai_api_key", None)
+    return (
+        bool(configured)
+        and isinstance(primary_key, SecretStr)
+        and isinstance(fallback_key, SecretStr)
+        and fallback_key.get_secret_value() == configured
+        and primary_key.get_secret_value() != configured
+    )
 
 
 class NormalizedChatOpenAI(ChatOpenAI):
@@ -48,7 +71,8 @@ class NormalizedChatOpenAI(ChatOpenAI):
     stays small.
 
     ``fallback_llm``: an optional second chat model to retry through when
-    this one raises a transient error (connection failure, 5xx, 429) — see
+    this one raises a transient error (connection failure, 5xx, 429) or
+    explicitly exhausts its balance with a separate fallback key configured — see
     ``TradingAgentsGraph._build_fallback_llm``. None (the default) preserves
     prior behavior exactly. Reached identically whether the caller invokes
     directly or through a with_structured_output/bind_tools-bound chain,
@@ -60,14 +84,20 @@ class NormalizedChatOpenAI(ChatOpenAI):
     def invoke(self, input, config=None, **kwargs):
         try:
             return normalize_content(super().invoke(input, config, **kwargs))
-        except _FALLBACK_TRANSIENT_ERRORS:
+        except _FALLBACK_CANDIDATES as error:
             if self.fallback_llm is None:
                 raise
+            reason = "a transient error"
+            if isinstance(error, openai.PermissionDeniedError):
+                if not _separately_keyed_balance_failure(error, self, self.fallback_llm):
+                    raise
+                reason = "insufficient account balance"
             logger.warning(
-                "Primary model '%s' failed with a transient error; retrying "
+                "Primary model '%s' failed with %s; retrying "
                 "via fallback '%s'.",
                 self.model_name,
-                getattr(self.fallback_llm, "model_name", self.fallback_llm),
+                reason,
+                getattr(self.fallback_llm, "model_name", "configured fallback"),
             )
             return normalize_content(self.fallback_llm.invoke(input, config, **kwargs))
 

@@ -1,0 +1,13 @@
+name = "tradingworkbench-personal-push"
+main = "workers/personal-push/index.mjs"
+compatibility_date = "2026-07-23"
+workers_dev = true
+preview_urls = false
+
+[[durable_objects.bindings]]
+name = "LEDGER"
+class_name = "DeliveryLedger"
+
+[[migrations]]
+tag = "v1"
+new_sqlite_classes = ["DeliveryLedger"]
