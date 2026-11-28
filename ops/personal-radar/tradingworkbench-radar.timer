@@ -1,0 +1,10 @@
+[Unit]
+Description=Check market disclosures and price moves every minute
+
+[Timer]
+OnCalendar=*-*-* *:*:00
+AccuracySec=2s
+Unit=tradingworkbench-radar.service
+
+[Install]
+WantedBy=timers.target

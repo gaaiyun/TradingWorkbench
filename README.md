@@ -6,7 +6,7 @@ Trading Workbench 是面向 A 股 ETF 研究的多智能体工作台。它把主
 - 期权数据站：[sh50-volguard.pages.dev](https://sh50-volguard.pages.dev/)
 - 主仓库：[gaaiyun/TradingWorkbench](https://github.com/gaaiyun/TradingWorkbench)
 - 上游框架：[TauricResearch/TradingAgents](https://github.com/TauricResearch/TradingAgents)
-- 当前代码版本：2026-07-28
+- 当前网页版本：[生产部署信息](https://tradingagents-board.pages.dev/data/deployment.json)。
 
 > 本项目只做研究、解释和提醒，不连接券商，也不自动交易。“实时”表示数据带来源和时间戳，不代表交易所逐笔行情。
 
@@ -272,13 +272,17 @@ Evidence GET 必须选择一个范围：
 
 migration `0015_notification_deliveries.sql` 建立 `eventId + channel` 唯一的投递账本。事件还记录 provider、provider 时间、质量和规则版本。
 
-当前生产能力边界：
+网页监控组的行为：
 
 - Web 渠道的 `sent` 表示事件已写入 D1，可在网页看到。
 - PushPlus 固定为 `shadow`，只记录策略判定和 `SHADOW_MODE`，尚未开启 live 发送。
 - 阈值、静默时段、critical 例外和缺 token 的状态机已实现并有测试，但切换 live 前仍需 canary 和生产对账。
 
 页面会显示 `SHADOW`、延期、失败、结果不确定或已发送等状态。当前看到 `PushPlus · SHADOW` 不代表手机已收到消息。
+
+个人雷达走另一条线路：按 **60 秒**轮询公开快讯、美国证监会（SEC）披露和关注标的报价，把符合条件的新事件送到 PushPlus 绑定的微信私聊，不发群。轮询、消息源和微信都有延迟，不能保证秒级到达。回执只证明 PushPlus 接单，手机送达须由收件人确认。
+
+消息保留时间与来源链接。选举机关正式结果、媒体开票测算、候选人自行宣布胜选分开标注；通过媒体获知的正式结果仍标明转述。行情提醒写明报价、昨收或实际比较时段；新闻和价格同时发生，不代表新闻导致涨跌。部署验收与停用方法见[运维手册](docs/operations-and-deployment.md#个人雷达的验收和回滚)。
 
 ## 本地运行和验证
 

@@ -617,6 +617,31 @@ test("daily market API keeps one provider bar per trading date", async () => {
   assert.equal(payload.indicators.bars, 2);
 });
 
+test("Shanghai and Shenzhen daily bars preserve distinct local dates across UTC midnight", async () => {
+  for (const symbol of ["515880.SS", "159995.SZ"]) {
+    const rows = [
+      ["2026-11-27T01:30:00Z", "yahoo", 0.421],
+      ["2026-11-26T16:00:00Z", "tencent", 0.420], // Shanghai Nov 27
+      ["2026-11-25T16:00:00Z", "tencent", 0.383], // Shanghai Nov 26
+      ["2026-11-25T01:30:00Z", "yahoo", 0.373],
+    ].map(([ts, source, close]) => ({
+      symbol, timeframe: "1d", ts, as_of: ts, source, close,
+      open: close, high: close, low: close, volume: 1000, quality: "good",
+      fetched_at: source === "yahoo" ? "2026-11-27T07:45:00Z" : "2026-11-27T07:30:00Z",
+    }));
+    const response = await marketApi.onRequestGet({
+      request: request(`/api/market?symbol=${symbol}&timeframe=1d&limit=3`),
+      env: { DB: new FakeD1({ rows: { market_bars: rows } }) },
+    });
+    const { data } = await response.json();
+    assert.deepEqual(data.map(({ ts, close }) => [ts, close]), [
+      ["2026-11-27T01:30:00Z", 0.421],
+      ["2026-11-25T16:00:00Z", 0.383],
+      ["2026-11-25T01:30:00Z", 0.373],
+    ], symbol);
+  }
+});
+
 test("daily market API removes a disconnected legacy seed before calculating change", async () => {
   const base = {
     symbol: "NVDA",

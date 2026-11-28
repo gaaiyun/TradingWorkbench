@@ -52,6 +52,9 @@ const SHANGHAI_INTRADAY_FORMATTER = new Intl.DateTimeFormat("en-CA", {
   minute: "2-digit",
   hourCycle: "h23",
 });
+const SHANGHAI_TRADING_DATE = new Intl.DateTimeFormat("en-CA", {
+  timeZone: "Asia/Shanghai", year: "numeric", month: "2-digit", day: "2-digit",
+});
 
 function laterTimestamp(left, right) {
   return String(left || "") >= String(right || "") ? left : right;
@@ -84,9 +87,15 @@ function aggregateGroup(group, timeframe, bucketTimestamp) {
 function distinctMarketBars(rows, limit, daily = false) {
   const byTimestamp = new Map();
   for (const row of rows) {
-    const key = daily && /^\d{4}-\d{2}-\d{2}/.test(row.ts)
-      ? row.ts.slice(0, 10)
-      : row.ts;
+    let key = row.ts;
+    if (daily && /^\d{4}-\d{2}-\d{2}/.test(row.ts)) {
+      key = row.ts.slice(0, 10);
+      // Tencent's Shanghai midnight and Yahoo's session open use different UTC dates.
+      if (/\.(SS|SZ)$/i.test(row.symbol)) {
+        const timestamp = Date.parse(row.ts);
+        if (Number.isFinite(timestamp)) key = SHANGHAI_TRADING_DATE.format(timestamp);
+      }
+    }
     const current = byTimestamp.get(key);
     if (!current || String(row.fetched_at || "") > String(current.fetched_at || "")) {
       byTimestamp.set(key, row);

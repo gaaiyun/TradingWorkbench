@@ -1,6 +1,6 @@
 # 部署、验收与回退
 
-更新日期：2026-08-18
+更新日期：2026-11-28
 
 代码基线：`main`。精确版本以 `git rev-parse origin/main`、Pages `/api/health` 和 Worker `/health` 三方回读为准，不在文档中维护容易失真的固定 SHA。
 
@@ -112,7 +112,7 @@ OpenAI-compatible free-text 回退若把 `Rating / Executive Summary / Investmen
 页面仍显示换 key 前的旧失败时，先比较失败 run 的开始时间与 secret/variables 更新时间，
 再检查是否已有新报告覆盖；不能把历史失败直接归因于当前 key。
 
-当前 PushPlus 只运行 shadow 策略。即使环境中存在 `PUSHPLUS_TOKEN`，现有信号写入路径也不会 live 发送。
+网页监控组只运行 shadow 策略。即使环境中存在 `PUSHPLUS_TOKEN`，该信号写入路径也不会 live 发送；个人雷达的微信私聊使用独立中继。
 
 ### 2.2 股票宇宙刷新
 
@@ -441,6 +441,15 @@ Invoke-RestMethod `
 
 不要执行 live PushPlus canary，除非用户另行授权，并且已经准备回退、去重和结果不确定处理。
 
+### 个人雷达的验收和回滚
+
+部署使用仓库的 `ops/personal-radar/` 两个 systemd unit。将三个 `scripts/personal_radar*.py` 安装在版本化目录，从 `/opt/tradingworkbench-radar/current` 指向该版本。`/etc/default/tradingworkbench-radar` 的 `RADAR_IMAGE` 固定为已验证、包含 Python 与 cryptography 的本机镜像 ID。签名私钥仅在运行主机，公开仓库不保存收件人身份或推送 token。
+
+- 先核对 `tradingworkbench-radar.timer` 的最近/下次触发（`systemctl list-timers tradingworkbench-radar.timer`）；从 `journalctl -u tradingworkbench-radar.service --since '30 minutes ago'` 看实际轮询、报价覆盖、源错误与待投递记录。没有候选不等于采集失败；只见定时器也不证明查询成功。
+- 查看实际部署的中继 `/health`、Pages 对无签名请求的拒绝及服务绑定；这些检查不发送消息。只有收件人授权后才运行一次 `--canary`。按同一消息 ID 核对本地 outbox 回执、PushPlus 接单和手机实际收到三项；不要把回执当作已读。若结果为 `unconfirmed`，先查渠道记录，勿改 ID 重发。
+- 停发新轮询：在运行主机执行 `sudo systemctl disable --now tradingworkbench-radar.timer`；已启动的一轮仍可能完成。确认 service 已退出后再恢复上个已验证的采集/中继版本；保留 `/var/lib/tradingworkbench-radar` 的账本和密钥，不清空去重状态。恢复前先核对部署身份及只读健康状态；这条回退不需要改网页 D1 账本或日报。
+- 日报是另一项验收。11 月 27 日主模型返回 `403 Insufficient account balance`；仅明确的余额不足且配置了不同备用 key 才会就此原因改走备用一次，普通 403 仍失败。余额修复需用真实单标的日报验证，分别看执行结果和 Manifest 的证据评级。
+
 ## 11. Worker 手工补跑
 
 入口使用 Bearer token：
@@ -671,7 +680,7 @@ SHA 不符时按未部署处理。
 
 ### 提醒没有到手机
 
-当前 PushPlus 是 shadow，手机不会收到消息。检查网页事件和 `notification_deliveries` 中的 `SHADOW_MODE`。不要把 shadow 当作故障，也不要在排障时私自开启 live。
+网页监控组的 PushPlus 是 shadow，手机不会收到这条线路的消息。检查网页事件和 `notification_deliveries` 中的 `SHADOW_MODE`。个人雷达另查私聊中继回执；不要为了修私聊而切换网页监控组的策略。
 
 ## 14. 回退
 

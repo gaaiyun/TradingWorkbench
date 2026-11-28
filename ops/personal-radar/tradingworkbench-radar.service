@@ -1,0 +1,10 @@
+[Unit]
+Description=TradingWorkbench personal investment alerts
+After=docker.service network-online.target
+Requires=docker.service
+
+[Service]
+Type=oneshot
+EnvironmentFile=/etc/default/tradingworkbench-radar
+ExecStart=/usr/bin/docker run --rm --name tradingworkbench-radar-tick --network host --read-only --cap-drop=ALL --security-opt=no-new-privileges --memory=192m --pids-limit=48 --env NO_PROXY=* --env PYTHONDONTWRITEBYTECODE=1 --mount type=bind,src=/opt/tradingworkbench-radar/current,dst=/app,readonly --mount type=bind,src=/var/lib/tradingworkbench-radar,dst=/state --entrypoint /opt/hermes/.venv/bin/python ${RADAR_IMAGE} /app/personal_radar.py
+TimeoutStartSec=90
