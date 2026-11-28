@@ -51,7 +51,7 @@ jobs:
       - name: Install Playwright
         run: |
           python -m pip install playwright
-          python -m playwright install --with-deps chromium
+          python -m playwright install --with-deps --only-shell chromium
       - name: Run browser acceptance
         env:
           WORKBENCH_SCREENSHOT_DIR: test-results/workbench

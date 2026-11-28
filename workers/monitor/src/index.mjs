@@ -88,25 +88,6 @@ async function readSettings(db) {
   }
 }
 
-function bootstrapIdentity(row) {
-  return [
-    "bootstrap",
-    row.profile_id,
-    row.symbol,
-    row.timeframe,
-    row.schema_version,
-    row.target_hash,
-  ].join(":");
-}
-
-async function readBootstrapIdentities(db) {
-  const result = await db.prepare(`
-    SELECT profile_id, symbol, timeframe, schema_version, target_hash
-    FROM monitor_bootstrap_targets
-  `).bind().all();
-  return new Set((result?.results ?? []).map(bootstrapIdentity));
-}
-
 async function shortHash(value) {
   const digest = await crypto.subtle.digest(
     "SHA-256",
@@ -118,11 +99,27 @@ async function shortHash(value) {
     .join("");
 }
 
-async function bootstrapTasks(profile, scheduledTime, completedIdentities) {
-  const requirements = await bootstrapRequirementsForProfile(
-    profile,
-    completedIdentities,
-  );
+async function bootstrapTasks(profile, scheduledTime, db) {
+  const candidates = await bootstrapRequirementsForProfile(profile);
+  if (candidates.length === 0) return [];
+  // Probe this tick's targets via the existing primary key. Historical target
+  // revisions and other profiles must not add rows to every five-minute read.
+  const keys = candidates.map((item) => [
+    item.profileId, item.symbol, item.timeframe, item.schemaVersion, item.targetHash,
+  ]);
+  const result = await db.prepare(`
+    SELECT wanted.key AS candidate_index FROM json_each(?) AS wanted
+    WHERE EXISTS (
+      SELECT 1 FROM monitor_bootstrap_targets AS target
+      WHERE target.profile_id = json_extract(wanted.value, '$[0]')
+        AND target.symbol = json_extract(wanted.value, '$[1]')
+        AND target.timeframe = json_extract(wanted.value, '$[2]')
+        AND target.schema_version = json_extract(wanted.value, '$[3]')
+        AND target.target_hash = json_extract(wanted.value, '$[4]')
+    )
+  `).bind(JSON.stringify(keys)).all();
+  const completed = new Set((result?.results ?? []).map((row) => row.candidate_index));
+  const requirements = candidates.filter((_, index) => !completed.has(index));
   const grouped = new Map();
   for (const requirement of requirements) {
     if (!grouped.has(requirement.taskType)) {
@@ -540,7 +537,6 @@ async function stageDiscoveredSlots({
     cn: parseHolidaySet(deps.cnHolidays ?? env.CN_HOLIDAY_DATES),
     us: parseHolidaySet(deps.usHolidays ?? env.US_HOLIDAY_DATES),
   };
-  const completedBootstrap = await readBootstrapIdentities(env.DB);
   const enabledProfiles = loaded.settings.profiles.filter(({ enabled }) => enabled);
   const bootstrapProfileIds = new Set(
     enabledProfiles.length === 0
@@ -565,7 +561,7 @@ async function stageDiscoveredSlots({
           : []
       ),
       ...(bootstrapProfileIds.has(profile.id)
-        ? await bootstrapTasks(profile, scheduledTime, completedBootstrap)
+        ? await bootstrapTasks(profile, scheduledTime, env.DB)
         : []),
     ];
     const rawTasks = [...new Map(

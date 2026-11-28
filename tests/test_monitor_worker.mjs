@@ -202,7 +202,12 @@ class WorkerD1 {
                   })));
                 }
               }
-              return { results: structuredClone(db.bootstrapRows) };
+              const completed = new Set(db.bootstrapRows.map((row) => JSON.stringify([
+                row.profile_id, row.symbol, row.timeframe, row.schema_version, row.target_hash,
+              ])));
+              const keys = JSON.parse(params[0]);
+              return { results: keys.flatMap((key, candidate_index) =>
+                completed.has(JSON.stringify(key)) ? [{ candidate_index }] : []) };
             }
             if (/SELECT\s+id,\s*profile_id,\s*profile_revision/i.test(sql)) {
               const [leaseAt] = params;
@@ -633,6 +638,34 @@ test("bootstrap discovery advances one of eight profiles per cron tick", async (
     new Set([...db.slots.values()].map(({ profile_id: profileId }) => profileId)),
     new Set(["profile-0"]),
   );
+});
+
+test("bootstrap completion probes current composite keys without scanning history", async () => {
+  const { runScheduled } = await import(workerUrl);
+  const settings = monitorSettings();
+  const db = sqliteWorkerD1(settings);
+  await markBootstrapComplete(db, settings);
+  const requirement = (await bootstrapRequirementsForProfile(settings.profiles[0]))[0];
+  // Old target hashes must not mark their replacements as complete.
+  db.sqlite.prepare(`UPDATE monitor_bootstrap_targets SET target_hash = 'old-revision'
+    WHERE profile_id = ? AND symbol = ? AND timeframe = ? AND schema_version = ? AND target_hash = ?`)
+    .run(requirement.profileId, requirement.symbol, requirement.timeframe,
+      requirement.schemaVersion, requirement.targetHash);
+  const prepare = db.prepare.bind(db);
+  let plan;
+  db.prepare = (sql) => {
+    if (/SELECT[\s\S]+FROM monitor_bootstrap_targets/i.test(sql)) {
+      plan = db.sqlite.prepare(`EXPLAIN QUERY PLAN ${sql}`)
+        .all(...(sql.includes("?") ? ["[]"] : [])).map(({ detail }) => detail).join("\n");
+    }
+    return prepare(sql);
+  };
+  const now = new Date("2026-07-23T18:20:00Z");
+  const result = await runScheduled(now.getTime(), { DB: db, DIRECT_EXTERNAL_REQUEST_BUDGET: "0" }, { now: () => now });
+  assert.match(plan, /SEARCH .*\(profile_id=\? AND symbol=\? AND timeframe=\? AND schema_version=\? AND target_hash=\?\)/);
+  assert.equal(result.discovered, 1);
+  const pending = JSON.parse(db.sqlite.prepare("SELECT payload_json FROM scheduled_slots").get().payload_json);
+  assert.deepEqual(pending.task.bootstrapRequirements.map(({ identity }) => identity), [requirement.identity]);
 });
 
 test("daily recovery stages only missed critical semantic slots after a failed cron", async () => {

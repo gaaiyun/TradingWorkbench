@@ -42,15 +42,33 @@ def parse_quotes(raw):
     return quotes
 
 
-def fetch_quotes():
-    url = "https://qt.gtimg.cn/q=" + ",".join(WATCH)
+def active_symbols(now):
+    """Eligible venues only; provider timestamps still guard holidays/early closes."""
+    active = []
+    for key in WATCH:
+        zone, _, sessions = SESSIONS.get(key[:2], SESSIONS["cn"])
+        local = now.astimezone(ZoneInfo(zone))
+        minute = local.hour * 60 + local.minute
+        if local.weekday() < 5 and any(start <= minute <= end for start, end in sessions):
+            active.append(key)
+    return active
+
+
+def fetch_quotes(symbols=None):
+    keys = WATCH if symbols is None else symbols
+    if not keys:
+        return {}
+    url = "https://qt.gtimg.cn/q=" + ",".join(keys)
     with urllib.request.urlopen(url, timeout=6) as res:
         return parse_quotes(res.read(120000).decode("gb18030", errors="replace"))
 
 
 def market_events(db, quotes, now):
     db.execute("CREATE TABLE IF NOT EXISTS samples (symbol TEXT, t INTEGER, price REAL, PRIMARY KEY(symbol,t))")
-    db.execute("DELETE FROM samples WHERE t < ?", (int(now.timestamp()) - 1800,))
+    # Retain a real pre-lunch observation, so the first afternoon move is not called a five-minute return.
+    db.execute("DELETE FROM samples WHERE t < ?", (int(now.timestamp()) - 7200,))
+    db.execute("CREATE TABLE IF NOT EXISTS day_peak (id TEXT PRIMARY KEY, tier INTEGER, t INTEGER)")
+    db.execute("DELETE FROM day_peak WHERE t < ?", (int(now.timestamp()) - 3 * 86400,))
     events = []
     for symbol, (price, prev, at, sessions) in quotes.items():
         local_now = now.astimezone(at.tzinfo)
@@ -70,8 +88,21 @@ def market_events(db, quotes, now):
         sign = "up" if daily > 0 else "down"
         steps = int(abs(daily) // day_threshold)
         tags = []
-        if steps:
+        peak_key = f"{symbol}/{at.date()}/{sign}"
+        peak = db.execute("SELECT tier FROM day_peak WHERE id=?", (peak_key,)).fetchone() if steps else None
+        if steps and (not peak or steps >= peak[0]):
+            if not peak or steps > peak[0]:
+                db.execute("INSERT OR REPLACE INTO day_peak VALUES (?,?,?)", (peak_key, steps, stamp))
             tags.append((f"day/{sign}/{steps}", f"较昨收 {daily:+.2f}%"))
+        if len(sessions) == 2 and sessions[1][0] <= minute <= sessions[1][0] + 5:
+            end_hour, end_minute = divmod(sessions[0][1], 60)
+            end = int(at.replace(hour=end_hour, minute=end_minute, second=0, microsecond=0).timestamp())
+            before = db.execute("SELECT price FROM samples WHERE symbol=? AND t BETWEEN ? AND ? ORDER BY t DESC LIMIT 1",
+                                (symbol, end - 120, end)).fetchone()
+            if before:
+                gap = (price / before[0] - 1) * 100
+                if abs(gap) >= fast_threshold:
+                    tags.append(("reopen/" + ("up" if gap > 0 else "down"), f"午后较午休前报价 {gap:+.2f}%"))
         if anchor:
             move = (price / anchor[1] - 1) * 100
             if abs(move) >= fast_threshold:

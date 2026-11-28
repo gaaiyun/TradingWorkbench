@@ -443,7 +443,9 @@ Invoke-RestMethod `
 
 ### 个人雷达的验收和回滚
 
-部署使用仓库的 `ops/personal-radar/` 两个 systemd unit。将三个 `scripts/personal_radar*.py` 安装在版本化目录，从 `/opt/tradingworkbench-radar/current` 指向该版本。`/etc/default/tradingworkbench-radar` 的 `RADAR_IMAGE` 固定为已验证、包含 Python 与 cryptography 的本机镜像 ID。签名私钥仅在运行主机，公开仓库不保存收件人身份或推送 token。
+部署使用仓库的 `ops/personal-radar/` 两个 systemd unit。将 `scripts/personal_radar*.py` 的五个模块放入新的版本目录，从 `/opt/tradingworkbench-radar/current` 切换。上线前在不挂载生产账本及密钥的临时容器只调用 `tick`，不要调用 `deliver`。`/etc/default/tradingworkbench-radar` 的 `RADAR_IMAGE` 固定为已验证、包含 Python 与 cryptography 的本机镜像 ID。签名私钥仅在运行主机。
+
+每轮看 `polled` 和 `errors` 区分按计划跳过、源错误和没有新快讯；`wall:stale` 等表示窗口内没有新稿，可能只是新闻清淡。比对 `quoteExpected / quoteCount / freshQuoteCount`，休市为零正常。网络未确定时保持同一 ID 退避重试；中继明确返回已占位但未确认时停止重复请求，不记为成功。官方来源故障恢复可在一小时内补报，超过 20 分钟的补报单独标明，未补齐更早历史不冒充实时。
 
 - 先核对 `tradingworkbench-radar.timer` 的最近/下次触发（`systemctl list-timers tradingworkbench-radar.timer`）；从 `journalctl -u tradingworkbench-radar.service --since '30 minutes ago'` 看实际轮询、报价覆盖、源错误与待投递记录。没有候选不等于采集失败；只见定时器也不证明查询成功。
 - 查看实际部署的中继 `/health`、Pages 对无签名请求的拒绝及服务绑定；这些检查不发送消息。只有收件人授权后才运行一次 `--canary`。按同一消息 ID 核对本地 outbox 回执、PushPlus 接单和手机实际收到三项；不要把回执当作已读。若结果为 `unconfirmed`，先查渠道记录，勿改 ID 重发。
