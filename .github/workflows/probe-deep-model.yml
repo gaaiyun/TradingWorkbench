@@ -1,0 +1,31 @@
+name: probe-deep-model
+on: workflow_dispatch
+permissions: {}
+jobs:
+  probe:
+    runs-on: ubuntu-latest
+    timeout-minutes: 3
+    steps:
+      - name: Check authenticated catalog and exact model echo
+        env:
+          MODEL_KEY: ${{ secrets.OPENAI_COMPATIBLE_API_KEY }}
+        run: |
+          python - <<'PY'
+          import json, os, re, urllib.request
+          base = "https://sub.anzhiyu.com/v1/"
+          class NoRedirect(urllib.request.HTTPRedirectHandler):
+              def redirect_request(self, *args): return None
+          client = urllib.request.build_opener(NoRedirect())
+          def call(path, data=None):
+              req = urllib.request.Request(base + path, data=json.dumps(data).encode() if data else None,
+                  headers={"Authorization": "Bearer " + os.environ["MODEL_KEY"], "Content-Type": "application/json"})
+              with client.open(req, timeout=40) as res: return json.load(res)
+          rows = call("models")["data"]
+          grok = sorted({r["id"] for r in rows if re.fullmatch(r"[A-Za-z0-9._/-]{1,100}",r["id"]) and "grok" in r["id"].lower()})
+          print("CATALOG", len(rows), "GROK", json.dumps(grok), flush=True)
+          candidates = [m for m in grok if re.fullmatch(r"(?:xai/)?grok[-_.]?4[.-]7(?:[-.]thinking)?", m, re.I)]
+          if candidates:
+              m = min(candidates, key=len)
+              res = call("chat/completions", {"model":m,"messages":[{"role":"user","content":"Reply only OK."}],"stream":False})
+              print("EXACT_ECHO", res.get("model")==m, "REQUESTED",m, "HAS_REPLY", bool(res.get("choices")))
+          PY
