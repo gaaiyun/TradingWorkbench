@@ -1,7 +1,7 @@
 {
   "version": 1,
   "status": "ok",
-  "generated_at": "2026-11-27T16:01:41+08:00",
+  "generated_at": "2026-11-28T13:44:00+08:00",
   "trade_date": "2026-11-27",
   "global": {
     "status": "ok",
@@ -9,105 +9,105 @@
     "ticker": null,
     "start_date": "2026-11-20",
     "end_date": "2026-11-27",
-    "fetched_at": "2026-11-27T08:01:42Z",
+    "fetched_at": "2026-11-28T05:44:01Z",
     "items": [
       {
-        "title": "PhonePe resumes IPO plans with $15bn valuation target- report",
+        "title": "e.l.f. Beauty vs. Wendy's: Which Consumer Goods Stock Is a Better Buy for 2027?",
         "summary": "",
-        "url": "https://finance.yahoo.com/news/phonepe-resumes-ipo-plans-15bn-074036619.html",
-        "source": "Electronic Payments",
-        "published_at": "2026-11-27T07:40:36Z",
-        "fetched_at": "2026-11-27T08:01:42Z",
+        "url": "https://finance.yahoo.com/markets/stocks/articles/e-l-f-beauty-vs-235853335.html",
+        "source": "Motley Fool",
+        "published_at": "2026-11-27T23:58:53Z",
+        "fetched_at": "2026-11-28T05:44:01Z",
         "ticker": null,
         "source_tier": "aggregator"
       },
       {
-        "title": "LIVE – Crypto News Today: Why Is Bitcoin Up? Gold and Wall Street Rally Fuel BTC Bounce",
+        "title": "Meta’s (META) Muse Could Unlock a New Revenue Stream",
         "summary": "",
-        "url": "https://finance.yahoo.com/markets/crypto/articles/live-crypto-news-today-why-071834129.html",
-        "source": "Cryptonews",
-        "published_at": "2026-11-27T07:18:34Z",
-        "fetched_at": "2026-11-27T08:01:42Z",
+        "url": "https://finance.yahoo.com/technology/ai/articles/meta-meta-muse-could-unlock-232353308.html",
+        "source": "TipRanks",
+        "published_at": "2026-11-27T23:23:53Z",
+        "fetched_at": "2026-11-28T05:44:01Z",
         "ticker": null,
         "source_tier": "aggregator"
       },
       {
-        "title": "Top 3 Undervalued Tech Stocks To Watch In November 2026",
+        "title": "Soybeans Rally on the Short Friday Session",
         "summary": "",
-        "url": "https://finance.yahoo.com/technology/articles/top-3-undervalued-tech-stocks-071100555.html",
-        "source": "Simply Wall St.",
-        "published_at": "2026-11-27T07:11:00Z",
-        "fetched_at": "2026-11-27T08:01:42Z",
+        "url": "https://finance.yahoo.com/markets/commodities/articles/soybeans-rally-short-friday-session-211409692.html",
+        "source": "Barchart",
+        "published_at": "2026-11-27T21:14:09Z",
+        "fetched_at": "2026-11-28T05:44:01Z",
         "ticker": null,
         "source_tier": "aggregator"
       },
       {
-        "title": "Our Pick Of The Best Australian Energy Stocks In November 2026",
+        "title": "Treasury Yields Gain As U.S. Equities Rally",
         "summary": "",
-        "url": "https://finance.yahoo.com/energy/articles/pick-best-australian-energy-stocks-061054788.html",
-        "source": "Simply Wall St.",
-        "published_at": "2026-11-27T06:10:54Z",
-        "fetched_at": "2026-11-27T08:01:42Z",
+        "url": "https://finance.yahoo.com/m/16548d8f-c0e1-3f33-ba6c-11c2e0ddb8e8/treasury-yields-gain-as-u.s..html",
+        "source": "The Wall Street Journal",
+        "published_at": "2026-11-27T21:10:00Z",
+        "fetched_at": "2026-11-28T05:44:01Z",
         "ticker": null,
         "source_tier": "aggregator"
       },
       {
-        "title": "Oil Prices Climb as Middle East Supply Risks Overshadow Glut Fears",
+        "title": "Oil Futures Settle Lower Ahead of OPEC+ Policy Meeting",
         "summary": "",
-        "url": "https://finance.yahoo.com/energy/articles/oil-prices-climb-middle-east-051844030.html",
-        "source": "Oilprice.com",
-        "published_at": "2026-11-27T05:18:44Z",
-        "fetched_at": "2026-11-27T08:01:42Z",
+        "url": "https://finance.yahoo.com/m/56fae783-b0c5-3ee1-8a03-9bb9a00bfa03/oil-futures-settle-lower.html",
+        "source": "The Wall Street Journal",
+        "published_at": "2026-11-27T20:47:00Z",
+        "fetched_at": "2026-11-28T05:44:01Z",
         "ticker": null,
         "source_tier": "aggregator"
       },
       {
-        "title": "3 Oil Stocks With Direct Leverage To High Crude Prices",
+        "title": "Market Swings Spooked Retail Traders—And Lifted CME Group Up 18%",
         "summary": "",
-        "url": "https://finance.yahoo.com/energy/articles/3-oil-stocks-direct-leverage-051324910.html",
-        "source": "Simply Wall St.",
-        "published_at": "2026-11-27T05:13:24Z",
-        "fetched_at": "2026-11-27T08:01:42Z",
-        "ticker": null,
-        "source_tier": "aggregator"
-      },
-      {
-        "title": "British Energy Stocks To Watch In November 2026",
-        "summary": "",
-        "url": "https://finance.yahoo.com/energy/articles/british-energy-stocks-watch-november-051209541.html",
-        "source": "Simply Wall St.",
-        "published_at": "2026-11-27T05:12:09Z",
-        "fetched_at": "2026-11-27T08:01:42Z",
-        "ticker": null,
-        "source_tier": "aggregator"
-      },
-      {
-        "title": "Dollar drifts lower in holiday-thinned trade, set to snap 4-wk winning streak",
-        "summary": "",
-        "url": "https://finance.yahoo.com/markets/currencies/articles/asia-fx-weakens-high-oil-044524263.html",
+        "url": "https://finance.yahoo.com/markets/options/articles/market-swings-spooked-retail-traders-204136574.html",
         "source": "Investing.com",
-        "published_at": "2026-11-27T04:45:24Z",
-        "fetched_at": "2026-11-27T08:01:42Z",
+        "published_at": "2026-11-27T20:41:36Z",
+        "fetched_at": "2026-11-28T05:44:01Z",
         "ticker": null,
         "source_tier": "aggregator"
       },
       {
-        "title": "IMF urges RBA to maintain rate hike bias as inflation risks persist",
+        "title": "Precious Metals Rally as AI Trade Revives Risk Appetite",
         "summary": "",
-        "url": "https://finance.yahoo.com/economy/policy/articles/imf-urges-rba-maintain-rate-043609646.html",
-        "source": "Investing.com",
-        "published_at": "2026-11-27T04:36:09Z",
-        "fetched_at": "2026-11-27T08:01:42Z",
+        "url": "https://finance.yahoo.com/m/713c049b-780a-3e4b-b84e-162b4e7d87df/precious-metals-rally-as-ai.html",
+        "source": "The Wall Street Journal",
+        "published_at": "2026-11-27T20:20:00Z",
+        "fetched_at": "2026-11-28T05:44:01Z",
         "ticker": null,
         "source_tier": "aggregator"
       },
       {
-        "title": "D-Wave Quantum (QBTS): One of the Top Quantum Computing Stocks to Buy for 2027",
+        "title": "Oil notches first weekly gain in November on supply fears",
         "summary": "",
-        "url": "https://finance.yahoo.com/technology/ai/articles/d-wave-quantum-qbts-one-033110587.html",
-        "source": "Insider Monkey",
-        "published_at": "2026-11-27T03:31:10Z",
-        "fetched_at": "2026-11-27T08:01:42Z",
+        "url": "https://finance.yahoo.com/energy/articles/oil-track-snap-3-week-082519990.html",
+        "source": "Reuters",
+        "published_at": "2026-11-27T20:12:39Z",
+        "fetched_at": "2026-11-28T05:44:01Z",
+        "ticker": null,
+        "source_tier": "aggregator"
+      },
+      {
+        "title": "Crude Prices Retreat on Possible Increase in OPEC Crude Output",
+        "summary": "",
+        "url": "https://finance.yahoo.com/energy/articles/crude-prices-retreat-possible-increase-201114789.html",
+        "source": "Barchart",
+        "published_at": "2026-11-27T20:11:14Z",
+        "fetched_at": "2026-11-28T05:44:01Z",
+        "ticker": null,
+        "source_tier": "aggregator"
+      },
+      {
+        "title": "Amazon, Target and Walmart Chase Holiday Toy Spending",
+        "summary": "",
+        "url": "https://finance.yahoo.com/markets/stocks/articles/amazon-target-walmart-chase-holiday-195308961.html",
+        "source": "GuruFocus.com",
+        "published_at": "2026-11-27T19:53:08Z",
+        "fetched_at": "2026-11-28T05:44:01Z",
         "ticker": null,
         "source_tier": "aggregator"
       }
@@ -116,7 +116,7 @@
       {
         "source": "Yahoo Finance",
         "status": "ok",
-        "item_count": 40
+        "item_count": 41
       },
       {
         "source": "Federal Reserve",
@@ -126,13 +126,13 @@
     ]
   },
   "tickers": {
-    "515880.SS": {
+    "512480.SS": {
       "status": "empty",
       "query_type": "ticker",
-      "ticker": "515880.SS",
+      "ticker": "512480.SS",
       "start_date": "2026-11-27",
       "end_date": "2026-11-27",
-      "fetched_at": "2026-11-27T08:01:44Z",
+      "fetched_at": "2026-11-28T05:44:03Z",
       "items": [],
       "source_statuses": [
         {
@@ -151,154 +151,107 @@
           "item_count": 0
         }
       ]
-    },
-    "512480.SS": {
-      "status": "ok",
-      "query_type": "ticker",
-      "ticker": "512480.SS",
-      "start_date": "2026-11-27",
-      "end_date": "2026-11-27",
-      "fetched_at": "2026-11-27T08:01:46Z",
-      "items": [
-        {
-          "title": "半导体ETF国联安（512480）开盘涨0.72%，重仓股寒武纪涨0.75%，北方华创涨1.44%",
-          "summary": "半导体ETF国联安（512480）开盘涨0.72%，重仓股寒武纪涨0.75%，北方华创涨1.44% 新浪财经",
-          "url": "https://news.google.com/rss/articles/CBMimAFBVV95cUxQOUdNVTYwa2Z5Z2pQaWx6OEtWR2tZWTFlczBiNWZjY3pOQjk4SE1hRFZRdXRQWTgtZFBvV1JWcU5jX0lNdDBZTjcwdjZRczYydkV6VFdfbzVqdzluMUh0NkM3YzNhMGhIRkNLRUhKdmhBYXNtRXBqR29DdEZtd0t6WTdmalVIVjlGOFB2SEFFckZkZ2ZxXzdLUQ?oc=5",
-          "source": "Google News / 新浪财经",
-          "published_at": "2026-11-27T01:30:51Z",
-          "fetched_at": "2026-11-27T08:01:46Z",
-          "ticker": "512480.SS",
-          "source_tier": "aggregator"
-        }
-      ],
-      "source_statuses": [
-        {
-          "source": "Yahoo Finance",
-          "status": "empty",
-          "item_count": 0
-        },
-        {
-          "source": "Google News RSS",
-          "status": "ok",
-          "item_count": 1
-        },
-        {
-          "source": "SEC EDGAR",
-          "status": "empty",
-          "item_count": 0
-        }
-      ]
     }
   },
   "items": [
     {
-      "title": "PhonePe resumes IPO plans with $15bn valuation target- report",
+      "title": "e.l.f. Beauty vs. Wendy's: Which Consumer Goods Stock Is a Better Buy for 2027?",
       "summary": "",
-      "url": "https://finance.yahoo.com/news/phonepe-resumes-ipo-plans-15bn-074036619.html",
-      "source": "Electronic Payments",
-      "published_at": "2026-11-27T07:40:36Z",
-      "fetched_at": "2026-11-27T08:01:42Z",
+      "url": "https://finance.yahoo.com/markets/stocks/articles/e-l-f-beauty-vs-235853335.html",
+      "source": "Motley Fool",
+      "published_at": "2026-11-27T23:58:53Z",
+      "fetched_at": "2026-11-28T05:44:01Z",
       "ticker": null,
       "source_tier": "aggregator"
     },
     {
-      "title": "LIVE – Crypto News Today: Why Is Bitcoin Up? Gold and Wall Street Rally Fuel BTC Bounce",
+      "title": "Meta’s (META) Muse Could Unlock a New Revenue Stream",
       "summary": "",
-      "url": "https://finance.yahoo.com/markets/crypto/articles/live-crypto-news-today-why-071834129.html",
-      "source": "Cryptonews",
-      "published_at": "2026-11-27T07:18:34Z",
-      "fetched_at": "2026-11-27T08:01:42Z",
+      "url": "https://finance.yahoo.com/technology/ai/articles/meta-meta-muse-could-unlock-232353308.html",
+      "source": "TipRanks",
+      "published_at": "2026-11-27T23:23:53Z",
+      "fetched_at": "2026-11-28T05:44:01Z",
       "ticker": null,
       "source_tier": "aggregator"
     },
     {
-      "title": "Top 3 Undervalued Tech Stocks To Watch In November 2026",
+      "title": "Soybeans Rally on the Short Friday Session",
       "summary": "",
-      "url": "https://finance.yahoo.com/technology/articles/top-3-undervalued-tech-stocks-071100555.html",
-      "source": "Simply Wall St.",
-      "published_at": "2026-11-27T07:11:00Z",
-      "fetched_at": "2026-11-27T08:01:42Z",
+      "url": "https://finance.yahoo.com/markets/commodities/articles/soybeans-rally-short-friday-session-211409692.html",
+      "source": "Barchart",
+      "published_at": "2026-11-27T21:14:09Z",
+      "fetched_at": "2026-11-28T05:44:01Z",
       "ticker": null,
       "source_tier": "aggregator"
     },
     {
-      "title": "Our Pick Of The Best Australian Energy Stocks In November 2026",
+      "title": "Treasury Yields Gain As U.S. Equities Rally",
       "summary": "",
-      "url": "https://finance.yahoo.com/energy/articles/pick-best-australian-energy-stocks-061054788.html",
-      "source": "Simply Wall St.",
-      "published_at": "2026-11-27T06:10:54Z",
-      "fetched_at": "2026-11-27T08:01:42Z",
+      "url": "https://finance.yahoo.com/m/16548d8f-c0e1-3f33-ba6c-11c2e0ddb8e8/treasury-yields-gain-as-u.s..html",
+      "source": "The Wall Street Journal",
+      "published_at": "2026-11-27T21:10:00Z",
+      "fetched_at": "2026-11-28T05:44:01Z",
       "ticker": null,
       "source_tier": "aggregator"
     },
     {
-      "title": "Oil Prices Climb as Middle East Supply Risks Overshadow Glut Fears",
+      "title": "Oil Futures Settle Lower Ahead of OPEC+ Policy Meeting",
       "summary": "",
-      "url": "https://finance.yahoo.com/energy/articles/oil-prices-climb-middle-east-051844030.html",
-      "source": "Oilprice.com",
-      "published_at": "2026-11-27T05:18:44Z",
-      "fetched_at": "2026-11-27T08:01:42Z",
+      "url": "https://finance.yahoo.com/m/56fae783-b0c5-3ee1-8a03-9bb9a00bfa03/oil-futures-settle-lower.html",
+      "source": "The Wall Street Journal",
+      "published_at": "2026-11-27T20:47:00Z",
+      "fetched_at": "2026-11-28T05:44:01Z",
       "ticker": null,
       "source_tier": "aggregator"
     },
     {
-      "title": "3 Oil Stocks With Direct Leverage To High Crude Prices",
+      "title": "Market Swings Spooked Retail Traders—And Lifted CME Group Up 18%",
       "summary": "",
-      "url": "https://finance.yahoo.com/energy/articles/3-oil-stocks-direct-leverage-051324910.html",
-      "source": "Simply Wall St.",
-      "published_at": "2026-11-27T05:13:24Z",
-      "fetched_at": "2026-11-27T08:01:42Z",
-      "ticker": null,
-      "source_tier": "aggregator"
-    },
-    {
-      "title": "British Energy Stocks To Watch In November 2026",
-      "summary": "",
-      "url": "https://finance.yahoo.com/energy/articles/british-energy-stocks-watch-november-051209541.html",
-      "source": "Simply Wall St.",
-      "published_at": "2026-11-27T05:12:09Z",
-      "fetched_at": "2026-11-27T08:01:42Z",
-      "ticker": null,
-      "source_tier": "aggregator"
-    },
-    {
-      "title": "Dollar drifts lower in holiday-thinned trade, set to snap 4-wk winning streak",
-      "summary": "",
-      "url": "https://finance.yahoo.com/markets/currencies/articles/asia-fx-weakens-high-oil-044524263.html",
+      "url": "https://finance.yahoo.com/markets/options/articles/market-swings-spooked-retail-traders-204136574.html",
       "source": "Investing.com",
-      "published_at": "2026-11-27T04:45:24Z",
-      "fetched_at": "2026-11-27T08:01:42Z",
+      "published_at": "2026-11-27T20:41:36Z",
+      "fetched_at": "2026-11-28T05:44:01Z",
       "ticker": null,
       "source_tier": "aggregator"
     },
     {
-      "title": "IMF urges RBA to maintain rate hike bias as inflation risks persist",
+      "title": "Precious Metals Rally as AI Trade Revives Risk Appetite",
       "summary": "",
-      "url": "https://finance.yahoo.com/economy/policy/articles/imf-urges-rba-maintain-rate-043609646.html",
-      "source": "Investing.com",
-      "published_at": "2026-11-27T04:36:09Z",
-      "fetched_at": "2026-11-27T08:01:42Z",
+      "url": "https://finance.yahoo.com/m/713c049b-780a-3e4b-b84e-162b4e7d87df/precious-metals-rally-as-ai.html",
+      "source": "The Wall Street Journal",
+      "published_at": "2026-11-27T20:20:00Z",
+      "fetched_at": "2026-11-28T05:44:01Z",
       "ticker": null,
       "source_tier": "aggregator"
     },
     {
-      "title": "D-Wave Quantum (QBTS): One of the Top Quantum Computing Stocks to Buy for 2027",
+      "title": "Oil notches first weekly gain in November on supply fears",
       "summary": "",
-      "url": "https://finance.yahoo.com/technology/ai/articles/d-wave-quantum-qbts-one-033110587.html",
-      "source": "Insider Monkey",
-      "published_at": "2026-11-27T03:31:10Z",
-      "fetched_at": "2026-11-27T08:01:42Z",
+      "url": "https://finance.yahoo.com/energy/articles/oil-track-snap-3-week-082519990.html",
+      "source": "Reuters",
+      "published_at": "2026-11-27T20:12:39Z",
+      "fetched_at": "2026-11-28T05:44:01Z",
       "ticker": null,
       "source_tier": "aggregator"
     },
     {
-      "title": "半导体ETF国联安（512480）开盘涨0.72%，重仓股寒武纪涨0.75%，北方华创涨1.44%",
-      "summary": "半导体ETF国联安（512480）开盘涨0.72%，重仓股寒武纪涨0.75%，北方华创涨1.44% 新浪财经",
-      "url": "https://news.google.com/rss/articles/CBMimAFBVV95cUxQOUdNVTYwa2Z5Z2pQaWx6OEtWR2tZWTFlczBiNWZjY3pOQjk4SE1hRFZRdXRQWTgtZFBvV1JWcU5jX0lNdDBZTjcwdjZRczYydkV6VFdfbzVqdzluMUh0NkM3YzNhMGhIRkNLRUhKdmhBYXNtRXBqR29DdEZtd0t6WTdmalVIVjlGOFB2SEFFckZkZ2ZxXzdLUQ?oc=5",
-      "source": "Google News / 新浪财经",
-      "published_at": "2026-11-27T01:30:51Z",
-      "fetched_at": "2026-11-27T08:01:46Z",
-      "ticker": "512480.SS",
+      "title": "Crude Prices Retreat on Possible Increase in OPEC Crude Output",
+      "summary": "",
+      "url": "https://finance.yahoo.com/energy/articles/crude-prices-retreat-possible-increase-201114789.html",
+      "source": "Barchart",
+      "published_at": "2026-11-27T20:11:14Z",
+      "fetched_at": "2026-11-28T05:44:01Z",
+      "ticker": null,
+      "source_tier": "aggregator"
+    },
+    {
+      "title": "Amazon, Target and Walmart Chase Holiday Toy Spending",
+      "summary": "",
+      "url": "https://finance.yahoo.com/markets/stocks/articles/amazon-target-walmart-chase-holiday-195308961.html",
+      "source": "GuruFocus.com",
+      "published_at": "2026-11-27T19:53:08Z",
+      "fetched_at": "2026-11-28T05:44:01Z",
+      "ticker": null,
       "source_tier": "aggregator"
     }
   ]

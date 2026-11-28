@@ -1,6 +1,6 @@
 {
   "status": "failed",
-  "generated_at": "2026-11-27T16:01:41+08:00",
+  "generated_at": "2026-11-28T13:44:00+08:00",
   "trade_date": "2026-11-27",
   "provider": "openai_compatible",
   "analysts": [
@@ -16,22 +16,22 @@
       "fundamentals"
     ],
     "researchDepth": "standard",
-    "kind": "monitor"
+    "kind": "manual"
   },
   "run": {
-    "id": "45962442209",
+    "id": "46113371151",
     "attempt": "1",
     "workflow": "daily-analysis",
-    "url": "https://github.com/gaaiyun/TradingWorkbench/actions/runs/45962442209"
+    "url": "https://github.com/gaaiyun/TradingWorkbench/actions/runs/46113371151"
   },
   "identity": {
     "scope": "profile",
-    "kind": "monitor",
-    "runId": "45962442209",
+    "kind": "manual",
+    "runId": "46113371151",
     "profileId": "cn-semi-comms",
     "requestId": null,
-    "slotId": "slot-90bbdf89ff5622f0df40f8e130bd215b4663205ac1a47bc94fe8ccafaf973055",
-    "scheduledFor": "2026-11-27T07:17:15.000Z"
+    "slotId": null,
+    "scheduledFor": null
   },
   "rating_tiers": [
     "Sell",
@@ -42,25 +42,11 @@
   ],
   "results": [
     {
-      "ticker": "515880.SS",
-      "rating": null,
-      "report": null,
-      "files": {},
-      "decision_excerpt": "",
-      "analysis_status": "data_validation_failed",
-      "audit_status": "invalidated",
-      "evidence_publish": {
-        "published": true,
-        "status": 201
-      },
-      "error": "evidence validation failed; model run skipped"
-    },
-    {
       "ticker": "512480.SS",
       "rating": null,
       "report": null,
       "decision_excerpt": "",
-      "error": "OpenAIPermissionDeniedError: Error code: 403 - Insufficient account balance"
+      "error": "OpenAIModelNotFoundError: Error code: 404 - Model \"gpt-5.4-mini\" is not supported by any configured account in this group"
     }
   ]
 }
