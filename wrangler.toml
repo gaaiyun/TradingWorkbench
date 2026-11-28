@@ -10,3 +10,7 @@ binding = "DB"
 database_name = "tradingagents-workbench"
 database_id = "0ac720b0-3779-457c-8bee-4168ae43581f"
 migrations_dir = "migrations"
+
+[[services]]
+binding = "PERSONAL_PUSH"
+service = "tradingworkbench-personal-push"

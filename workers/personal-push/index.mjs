@@ -86,7 +86,7 @@ export class DeliveryLedger {
     let receipt;
     try {
       const upstream = await fetch("https://www.pushplus.plus/send", {
-        method: "POST", redirect: "error", signal: AbortSignal.timeout(12_000),
+        method: "POST", redirect: "manual", signal: AbortSignal.timeout(12_000),
         headers: { "content-type": "application/json" },
         body: JSON.stringify({ token: this.env.PUSHPLUS_TOKEN, channel: "wechat", template: "txt", title, content }),
       });

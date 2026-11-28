@@ -9,7 +9,7 @@ test("signatures protect a single-recipient relay; ambiguous submissions are nev
   const upstream = [];
   t.mock.method(globalThis, "fetch", async (url, options) => {
     assert.equal(url, "https://www.pushplus.plus/send");
-    assert.equal(options.redirect, "error");
+    assert.equal(options.redirect, "manual");
     upstream.push(JSON.parse(options.body));
     return Response.json({ code: 200, data: upstream.length === 1 ? receipt : null });
   });
